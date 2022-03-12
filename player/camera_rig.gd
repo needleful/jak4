@@ -8,6 +8,9 @@ onready var pitch : Spatial = $yaw/pitch
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
 
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_accum += event.relative

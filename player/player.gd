@@ -13,9 +13,11 @@ var coyote_timer := 0.0
 
 const BASE_JUMP_TIME := 0.25
 const BASE_JUMP_VEL := 10.0
-const CROUCH_JUMP_VEL := 12.5
+const CROUCH_JUMP_VEL := 14.5
 const ROLL_JUMP_VEL := 7.0
 const ROLL_JUMP_LURCH := 5.0
+const ROLL_JUMP_STEER := 2.5
+const CROUCH_JUMP_TIME := 0.5
 var air_timer := 0.0
 
 const MIN_SPEED_ROLL := 2.0
@@ -97,9 +99,13 @@ func _physics_process(delta):
 					next_state = State.Fall
 			else:
 				coyote_timer = 0
-		State.BaseJump, State.CrouchJump, State.RollJump:
+		State.BaseJump:
 			air_timer += delta
 			if air_timer > BASE_JUMP_TIME:
+				next_state = State.Fall
+		State.CrouchJump, State.RollJump:
+			air_timer += delta
+			if air_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
 		State.Fall:
 			if best_floor_dot > MIN_GROUND_DOT:
@@ -141,14 +147,13 @@ func _physics_process(delta):
 			var face_normal = best_normal.slide(Vector3.UP).normalized()
 			if face_normal.is_normalized():
 				desired_velocity = desired_velocity.slide(best_normal)
-			
 			accel(delta, desired_velocity)
-		State.Crouch:
-			accel(delta, desired_velocity * CROUCH_SPEED)
-		State.Roll, State.RollJump:
-			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, 0, 0)
-		State.BaseJump, State.CrouchJump:
+		State.BaseJump:
 			accel(delta, desired_velocity*RUN_SPEED)
+		State.Roll, State.RollJump:
+			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.05)
+		State.Crouch, State.CrouchJump:
+			accel(delta, desired_velocity*CROUCH_SPEED)
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	var hvel := velocity
@@ -185,7 +190,9 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 func set_state(next_state: int):
 	if state == next_state:
 		return
-	coyote_timer = 0
+	coyote_timer = 0.0
+	roll_timer = 0.0
+	air_timer = 0.0
 	match next_state:
 		State.BaseJump:
 			velocity.y = BASE_JUMP_VEL
@@ -195,7 +202,6 @@ func set_state(next_state: int):
 		State.Slide:
 			pass
 		State.Crouch, State.Roll:
-			roll_timer = 0.0
 			$standing_mesh.visible = false
 			$crouch_mesh.visible = true
 		State.CrouchJump:
