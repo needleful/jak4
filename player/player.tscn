@@ -1,0 +1,95 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://player/player.gd" type="Script" id=1]
+[ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
+
+[sub_resource type="CapsuleMesh" id=1]
+radius = 0.35
+mid_height = 0.8
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.827451, 0.435294, 0.435294, 1 )
+
+[sub_resource type="SphereMesh" id=4]
+radius = 0.35
+height = 0.7
+
+[sub_resource type="CapsuleShape" id=2]
+radius = 0.35
+height = 0.8
+
+[node name="player" type="KinematicBody"]
+script = ExtResource( 1 )
+
+[node name="standing_mesh" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.75, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="crouch_mesh" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.366351, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )
+shape = SubResource( 2 )
+
+[node name="camera_rig" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="yaw" type="Spatial" parent="camera_rig"]
+
+[node name="pitch" type="Spatial" parent="camera_rig/yaw"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06476, 0 )
+
+[node name="SpringArm" type="SpringArm" parent="camera_rig/yaw/pitch"]
+transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0 )
+spring_length = 5.0
+
+[node name="Camera" type="Camera" parent="camera_rig/yaw/pitch/SpringArm"]
+transform = Transform( 1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0 )
+
+[node name="ui" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="debug" type="Panel" parent="ui"]
+margin_right = 131.0
+margin_bottom = 256.0
+
+[node name="stats" type="VBoxContainer" parent="ui/debug"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="ui/debug/stats"]
+margin_right = 131.0
+margin_bottom = 14.0
+text = "Debug Data"
+
+[node name="a1" type="Label" parent="ui/debug/stats"]
+margin_top = 18.0
+margin_right = 131.0
+margin_bottom = 32.0
+text = "Debug Data"
+
+[node name="a2" type="Label" parent="ui/debug/stats"]
+margin_top = 36.0
+margin_right = 131.0
+margin_bottom = 50.0
+text = "Debug Data"
+
+[node name="a3" type="Label" parent="ui/debug/stats"]
+margin_top = 54.0
+margin_right = 131.0
+margin_bottom = 68.0
+text = "Debug Data"
+
+[node name="a4" type="Label" parent="ui/debug/stats"]
+margin_top = 72.0
+margin_right = 131.0
+margin_bottom = 86.0
+text = "Debug Data"
