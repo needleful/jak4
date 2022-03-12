@@ -82,14 +82,13 @@ func _physics_process(delta):
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
-			elif best_floor_dot < MIN_SLIDE_DOT:
+			elif !$groundArea.get_overlapping_bodies().size() > 0:
 				coyote_timer += delta
 				if coyote_timer > COYOTE_TIME:
 					next_state = State.Fall
-			elif best_floor_dot < MIN_GROUND_DOT:
+			elif best_normal != Vector3.ZERO and best_floor_dot < MIN_GROUND_DOT:
 				next_state = State.Slide
 			else:
-				ground_normal = best_normal
 				coyote_timer = 0
 		State.Slide:
 			if best_floor_dot > MIN_GROUND_DOT:
@@ -142,6 +141,7 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
+			ground_normal = best_normal
 			accel_ground(delta, desired_velocity*RUN_SPEED)
 		State.Fall:
 			accel(delta, desired_velocity*RUN_SPEED)
@@ -154,9 +154,9 @@ func _physics_process(delta):
 		State.Crouch, State.CrouchJump:
 			accel(delta, desired_velocity*CROUCH_SPEED)
 
-func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
-	var angle = Vector3.UP.angle_to(wall_normal)
-	var axis = Vector3.UP.cross(wall_normal).normalized()
+func accel_slide(delta: float, desired_velocity: Vector3, ground_normal: Vector3):
+	var angle = Vector3.UP.angle_to(ground_normal)
+	var axis = Vector3.UP.cross(ground_normal).normalized()
 	if axis != Vector3.ZERO:
 		desired_velocity = desired_velocity.rotated(axis, angle)
 	desired_velocity.y = 0
@@ -208,8 +208,8 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		velocity.z = hvel.z
 		
 		var gravity = GRAVITY
-		if state == State.Ground:
-			gravity = Vector3.ZERO
+		if state == State.Ground and ground_normal != Vector3.ZERO:
+			gravity = gravity.project(ground_normal.normalized())
 		velocity = move_and_slide(velocity + delta*gravity)
 
 func set_state(next_state: int):
