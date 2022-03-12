@@ -5,12 +5,13 @@ onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 
 const MIN_CAMERA_DIFF = -1
-const MAX_CAMERA_DIFF = 1.5
+const MAX_CAMERA_DIFF = 1.0
 const MIN_CAMERA_DIFF_GROUND = -1
 const CORRECTION_VELOCITY = 2
 
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
+var analog_sns := Vector2(-0.1, 0.1)
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -21,6 +22,7 @@ func _input(event):
 
 
 func _physics_process(delta):
+	#Camera Movement
 	var target_origin: Vector3 = player.global_transform.origin
 	var difference = target_origin.y - yaw.global_transform.origin.y
 	
@@ -47,8 +49,16 @@ func _physics_process(delta):
 		target_origin.z
 	)
 	
+	# Camera Rotation
 	var mouse_aim = -mouse_accum*mouse_sns
 	mouse_accum = Vector2.ZERO
 	
-	yaw.rotate_y(mouse_aim.x)
-	pitch.rotate_x(mouse_aim.y)
+	var analog_aim = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
+	analog_aim *= analog_sns
+	
+	yaw.rotate_y(mouse_aim.x + analog_aim.x)
+	pitch.rotate_x(mouse_aim.y + analog_aim.y)
+	if pitch.rotation_degrees.x > 80:
+		pitch.rotation_degrees.x = 80
+	elif pitch.rotation_degrees.x < -80:
+		pitch.rotation_degrees.x = -80
