@@ -5,7 +5,8 @@ onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 
 const MIN_CAMERA_DIFF = -1
-const MAX_CAMERA_DIFF = 1.0
+const MAX_CAMERA_DIFF = 10.0
+const MAX_CAMERA_DIFF_GROUND = 1.25
 const MIN_CAMERA_DIFF_GROUND = -1
 const CORRECTION_VELOCITY = 2
 
@@ -30,8 +31,9 @@ func _physics_process(delta):
 	
 	var bound_low = MIN_CAMERA_DIFF
 	var bound_high = MAX_CAMERA_DIFF
-	if player.state == player.State.Ground or player.state == player.State.Slide:
+	if player.is_grounded():
 		bound_low = MIN_CAMERA_DIFF_GROUND
+		bound_high = MAX_CAMERA_DIFF_GROUND
 
 	if difference < bound_low:
 		target_y += difference - bound_low
@@ -40,7 +42,7 @@ func _physics_process(delta):
 		target_y += difference - bound_high
 		difference = bound_high
 	
-	target_y += difference*CORRECTION_VELOCITY*delta
+	target_y += (difference*CORRECTION_VELOCITY*delta)
 	
 	yaw.global_transform.origin = Vector3(
 		target_origin.x,

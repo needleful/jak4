@@ -37,6 +37,7 @@ const DECEL_AGAINST := 45.0
 const DECEL_WITH := 15.0
 
 onready var cam_yaw := $camera_rig/yaw
+onready var mesh := $jackie
 
 var velocity := Vector3.ZERO
 
@@ -222,12 +223,12 @@ func set_state(next_state: int):
 		State.BaseJump:
 			velocity.y = BASE_JUMP_VEL
 		State.Ground:
-			$standing_mesh.visible = true
+			mesh.visible = true
 			$crouch_mesh.visible = false
 		State.Slide:
 			pass
 		State.Crouch, State.Roll:
-			$standing_mesh.visible = false
+			mesh.visible = false
 			$crouch_mesh.visible = true
 		State.CrouchJump:
 			velocity.y = CROUCH_JUMP_VEL
@@ -236,3 +237,9 @@ func set_state(next_state: int):
 			velocity += -cam_yaw.global_transform.basis.z*ROLL_JUMP_LURCH
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
+
+func is_grounded():
+	return ( state == State.Ground
+		or state == State.Slide
+		or state == State.Roll
+		or state == State.Crouch)
