@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -11,6 +11,31 @@ roughness_texture = ExtResource( 3 )
 roughness_texture_channel = 2
 uv1_triplanar = true
 
+[sub_resource type="ProceduralSky" id=2]
+sky_top_color = Color( 0.360784, 0.760784, 1, 1 )
+ground_bottom_color = Color( 0.0392157, 0.141176, 0.247059, 1 )
+ground_horizon_color = Color( 0.588235, 0.619608, 0.545098, 1 )
+ground_curve = 0.171484
+
+[sub_resource type="Environment" id=3]
+background_mode = 2
+background_sky = SubResource( 2 )
+ambient_light_color = Color( 0.890196, 0.588235, 1, 1 )
+ambient_light_sky_contribution = 0.54
+fog_enabled = true
+fog_additive = true
+fog_color = Color( 0.5, 0.75, 2.5, 1 )
+fog_depth_end = 8192.0
+glow_enabled = true
+glow_intensity = 8.0
+glow_strength = 0.53
+
+[sub_resource type="CubeMesh" id=4]
+size = Vector3( 2000, 2000, 2000 )
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_texture = ExtResource( 3 )
+
 [node name="test_world" instance=ExtResource( 2 )]
 
 [node name="test-world" parent="." index="0"]
@@ -18,8 +43,22 @@ material_override = SubResource( 1 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
 transform = Transform( 0.944737, -0.0500852, -0.323979, 0.29632, 0.55321, 0.778559, 0.140234, -0.831535, 0.537479, 0, 0, 0 )
+light_color = Color( 1, 0.988235, 0.878431, 1 )
 shadow_enabled = true
 directional_shadow_normal_bias = 0.5
 directional_shadow_max_distance = 50.0
 
 [node name="player" parent="." index="2" instance=ExtResource( 1 )]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3"]
+environment = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="." index="4"]
+transform = Transform( 0.894722, -0.0251325, 0.445917, 0.0280787, 0.999606, 0, -0.445741, 0.0125207, 0.895074, 0, 0, -4208.7 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="." index="5"]
+transform = Transform( 0.999378, 0.0298597, 0.0187801, -0.0290658, 0.998728, -0.041213, -0.0199868, 0.0406415, 0.998974, 0, -1200, -2000 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )

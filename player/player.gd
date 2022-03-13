@@ -31,6 +31,7 @@ var roll_timer := 0.0
 const ACCEL_START := 50.0
 # Accelerating when moving above some speed
 const ACCEL := 20.0
+const ACCEL_SLIDE := 10.0
 # Decelerate against velocity
 const DECEL_AGAINST := 45.0
 # Decelerate with velocity
@@ -147,6 +148,8 @@ func _physics_process(delta):
 		State.Fall:
 			accel(delta, desired_velocity*RUN_SPEED)
 		State.Slide:
+			if best_normal != Vector3.ZERO:
+				ground_normal = best_normal
 			accel_slide(delta, desired_velocity*RUN_SPEED, best_normal)
 		State.BaseJump:
 			accel(delta, desired_velocity*RUN_SPEED)
@@ -155,19 +158,16 @@ func _physics_process(delta):
 		State.Crouch, State.CrouchJump:
 			accel(delta, desired_velocity*CROUCH_SPEED)
 
-func accel_slide(delta: float, desired_velocity: Vector3, ground_normal: Vector3):
-	var angle = Vector3.UP.angle_to(ground_normal)
-	var axis = Vector3.UP.cross(ground_normal).normalized()
-	if axis != Vector3.ZERO:
-		desired_velocity = desired_velocity.rotated(axis, angle)
-	desired_velocity.y = 0
-	accel(delta, desired_velocity)
-
 func accel_ground(delta: float, desired_velocity: Vector3):
 	var angle = Vector3.UP.angle_to(ground_normal)
 	var axis = Vector3.UP.cross(ground_normal).normalized()
-	if axis != Vector3.ZERO:
-		desired_velocity = desired_velocity.rotated(axis, angle)
+	#if axis != Vector3.ZERO:
+	#	desired_velocity = desired_velocity.rotated(axis, angle)
+	$ui/debug/stats/a4.text = "Ground: (%f, %f, %f)" % [
+		ground_normal.x,
+		ground_normal.y,
+		ground_normal.z
+	]
 	accel(delta, desired_velocity)
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
@@ -180,8 +180,12 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.y,
 		desired_velocity.z
 	]
-	var charge_accel = accel_normal
+	var gravity = GRAVITY
+	if state == State.Ground and ground_normal != Vector3.ZERO:
+		gravity = gravity.project(ground_normal.normalized())
+
 	if hvel.length() > WALKING_SPEED and desired_velocity != Vector3.ZERO:
+		var charge_accel = accel_normal
 		# Direction parellel to current (horizontal) velocity
 		var charge := desired_velocity.project(hdir)
 		# Direction perpendicular to (horizontal) velocity
@@ -198,8 +202,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		velocity += delta*(
 			(charge - hvel)/RUN_SPEED*charge_accel 
 			+ (steer*steer_accel) 
-			+ GRAVITY )
-		velocity = move_and_slide(velocity)
+			+ gravity )
 	else:
 		if desired_velocity.length_squared() < 0.05:
 			hvel = hvel.move_toward(desired_velocity, DECEL_AGAINST*decel_factor)
@@ -207,11 +210,30 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 			hvel = hvel.move_toward(desired_velocity, ACCEL_START)
 		velocity.x = hvel.x
 		velocity.z = hvel.z
-		
-		var gravity = GRAVITY
-		if state == State.Ground and ground_normal != Vector3.ZERO:
-			gravity = gravity.project(ground_normal.normalized())
-		velocity = move_and_slide(velocity + delta*gravity)
+		velocity += delta*gravity
+	
+	if state == State.Ground:
+		velocity = move_and_slide_with_snap(velocity, Vector3.DOWN*0.125, Vector3.UP)
+	else:
+		velocity = move_and_slide(velocity)
+
+func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
+	if desired_velocity.dot(wall_normal) < 0:
+		desired_velocity = desired_velocity.slide(wall_normal)
+	var angle = Vector3.UP.angle_to(wall_normal)
+	var axis = Vector3.UP.cross(wall_normal).normalized()
+	if axis != Vector3.ZERO:
+		desired_velocity = desired_velocity.rotated(axis, angle)
+	desired_velocity.y = -1
+	
+	var hvel := velocity
+	hvel = hvel.move_toward(desired_velocity, ACCEL_SLIDE*delta)
+	
+	velocity = Vector3(
+		hvel.x,
+		min(hvel.y, velocity.y),
+		hvel.z)
+	velocity = move_and_slide(velocity + delta*GRAVITY)
 
 func set_state(next_state: int):
 	if state == next_state:
