@@ -12,9 +12,9 @@ const COYOTE_TIME := 0.1
 var coyote_timer := 0.0
 
 const BASE_JUMP_TIME := 0.25
-const BASE_JUMP_VEL := 10.0
-const CROUCH_JUMP_VEL := 14.5
-const ROLL_JUMP_VEL := 7.0
+const BASE_JUMP_VEL := 8.0
+const CROUCH_JUMP_VEL := 12.5
+const ROLL_JUMP_VEL := 6.0
 const ROLL_JUMP_LURCH := 5.0
 const ROLL_JUMP_STEER := 2.5
 const CROUCH_JUMP_TIME := 0.5
