@@ -25,6 +25,7 @@ const MIN_SPEED_ROLL := 2.0
 const CROUCH_SPEED := 2.0
 const ROLL_SPEED := 15.0
 const ROLL_TIME := 0.5
+const ROLL_MIN_TIME_JUMP := 0.3
 var roll_timer := 0.0
 
 # Accelerating from zero
@@ -128,7 +129,10 @@ func _physics_process(delta):
 			elif best_floor_dot < MIN_SLIDE_DOT:
 				next_state = State.Fall
 		State.Roll:
-			if Input.is_action_just_pressed("mv_jump"):
+			roll_timer += delta
+			if (roll_timer > ROLL_MIN_TIME_JUMP 
+				and Input.is_action_just_pressed("mv_jump")
+			):
 				next_state = State.RollJump
 			elif best_floor_dot < MIN_SLIDE_DOT:
 				coyote_timer += delta
@@ -136,7 +140,6 @@ func _physics_process(delta):
 					next_state = State.Fall
 			else:
 				coyote_timer = 0
-				roll_timer += delta
 				if roll_timer > ROLL_TIME:
 					next_state = State.Crouch
 	set_state(next_state)
