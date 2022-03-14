@@ -12,23 +12,29 @@ roughness_texture_channel = 2
 uv1_triplanar = true
 
 [sub_resource type="ProceduralSky" id=2]
-sky_top_color = Color( 0.360784, 0.760784, 1, 1 )
+sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
+sky_horizon_color = Color( 1.8, 1.9, 2, 1 )
+sky_curve = 0.0998612
 ground_bottom_color = Color( 0.0392157, 0.141176, 0.247059, 1 )
-ground_horizon_color = Color( 0.588235, 0.619608, 0.545098, 1 )
+ground_horizon_color = Color( 1.2, 1.2, 1.2, 1 )
 ground_curve = 0.171484
+sun_color = Color( 5.2, 2.33, 0.05, 1 )
+sun_latitude = 49.55
+sun_longitude = 69.09
 
 [sub_resource type="Environment" id=3]
 background_mode = 2
 background_sky = SubResource( 2 )
-ambient_light_color = Color( 0.890196, 0.588235, 1, 1 )
-ambient_light_sky_contribution = 0.54
+ambient_light_color = Color( 0.12549, 0, 0.172549, 1 )
+ambient_light_sky_contribution = 0.25
 fog_enabled = true
 fog_additive = true
-fog_color = Color( 0.5, 0.75, 2.5, 1 )
+fog_color = Color( 1, 1.5, 2.5, 1 )
 fog_depth_end = 8192.0
 glow_enabled = true
 glow_intensity = 8.0
 glow_strength = 0.53
+glow_bloom = 0.47
 
 [sub_resource type="CubeMesh" id=4]
 size = Vector3( 2000, 2000, 2000 )
@@ -42,7 +48,7 @@ albedo_texture = ExtResource( 3 )
 material_override = SubResource( 1 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
-transform = Transform( 0.944737, -0.0500852, -0.323979, 0.29632, 0.55321, 0.778559, 0.140234, -0.831535, 0.537479, 0, 0, 0 )
+transform = Transform( -0.74805, -0.372392, 0.549314, 0.29632, 0.55321, 0.778558, -0.593815, 0.745173, -0.303481, 0, 0, 0 )
 light_color = Color( 1, 0.988235, 0.878431, 1 )
 shadow_enabled = true
 directional_shadow_normal_bias = 0.5

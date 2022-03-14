@@ -144,7 +144,7 @@ func _physics_process(delta):
 	match state:
 		State.Ground:
 			ground_normal = best_normal
-			accel_ground(delta, desired_velocity*RUN_SPEED)
+			accel(delta, desired_velocity*RUN_SPEED)
 		State.Fall:
 			accel(delta, desired_velocity*RUN_SPEED)
 		State.Slide:
@@ -157,18 +157,18 @@ func _physics_process(delta):
 			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
 		State.Crouch, State.CrouchJump:
 			accel(delta, desired_velocity*CROUCH_SPEED)
+	update_visuals()
 
-func accel_ground(delta: float, desired_velocity: Vector3):
-	var angle = Vector3.UP.angle_to(ground_normal)
-	var axis = Vector3.UP.cross(ground_normal).normalized()
-	#if axis != Vector3.ZERO:
-	#	desired_velocity = desired_velocity.rotated(axis, angle)
-	$ui/debug/stats/a4.text = "Ground: (%f, %f, %f)" % [
-		ground_normal.x,
-		ground_normal.y,
-		ground_normal.z
-	]
-	accel(delta, desired_velocity)
+func update_visuals():
+	mesh.set_movement_animation(velocity.length()/RUN_SPEED, state == State.Crouch)
+	if abs(velocity.x) + abs(velocity.z) > 0.01:
+		var target := Vector3(velocity.x, 0, velocity.z).normalized()
+		var forward = mesh.global_transform.basis.z
+		var axis = forward.cross(target).normalized()
+		if axis.is_normalized():
+			var angle = forward.angle_to(target)
+			mesh.global_rotate(axis, angle)
+
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	var hvel := velocity
@@ -242,18 +242,20 @@ func set_state(next_state: int):
 	roll_timer = 0.0
 	air_timer = 0.0
 	match next_state:
+		State.Fall:
+			mesh.transition_to("Fall")
 		State.BaseJump:
 			velocity.y = BASE_JUMP_VEL
-		State.Ground:
-			mesh.visible = true
-			$crouch_mesh.visible = false
+			mesh.transition_to("BaseJump")
+		State.Ground,State.Crouch:
+			mesh.transition_to("Ground")
 		State.Slide:
 			pass
-		State.Crouch, State.Roll:
-			mesh.visible = false
-			$crouch_mesh.visible = true
+		State.Roll:
+			mesh.transition_to("Roll")
 		State.CrouchJump:
 			velocity.y = CROUCH_JUMP_VEL
+			mesh.transition_to("BaseJump")
 		State.RollJump:
 			velocity.y = ROLL_JUMP_VEL
 			velocity += -cam_yaw.global_transform.basis.z*ROLL_JUMP_LURCH
