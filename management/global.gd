@@ -5,7 +5,7 @@ var coat_textures: Array
 func _ready():
 	var coat_dir := Directory.new()
 	if coat_dir.open("res://material/coat/") == OK:
-		coat_dir.list_dir_begin()
+		var _x = coat_dir.list_dir_begin()
 		var file_name = coat_dir.get_next()
 		while file_name != "":
 			print("Coat: ", file_name)
