@@ -6,7 +6,7 @@ onready var pitch : Spatial = $yaw/pitch
 onready var groundCast: RayCast = player.get_node("groundCast")
 
 const MIN_CAMERA_DIFF := -1.0
-const MAX_CAMERA_DIFF := 1.0
+const MAX_CAMERA_DIFF := 0.9
 const CORRECTION_VELOCITY := 2.0
 const CORRECTION_VELOCITY_GROUND := 4.0
 

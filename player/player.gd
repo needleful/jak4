@@ -160,7 +160,10 @@ func _physics_process(delta):
 	update_visuals()
 
 func update_visuals():
-	mesh.set_movement_animation(velocity.length()/CROUCH_SPEED, state == State.Crouch)
+	mesh.set_movement_animation(
+		velocity.length()/(CROUCH_SPEED if state == State.Crouch else RUN_SPEED), 
+		state == State.Crouch)
+	
 	if abs(velocity.x) + abs(velocity.z) > 0.01:
 		var target := Vector3(velocity.x, 0, velocity.z).normalized()
 		var forward = mesh.global_transform.basis.z
