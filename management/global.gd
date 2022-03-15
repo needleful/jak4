@@ -8,13 +8,11 @@ func _ready():
 		var _x = coat_dir.list_dir_begin()
 		var file_name = coat_dir.get_next()
 		while file_name != "":
-			print("Coat: ", file_name)
 			if !coat_dir.current_is_dir() and !file_name.ends_with("import"):
 				var texture = load("res://material/coat/" + file_name) as Texture
 				if texture:
 					coat_textures.append(texture)
 			file_name = coat_dir.get_next()
-		print("Coat textures: ", coat_textures.size())
 	else:
 		print_debug("Could not open coat directory!")
 
@@ -30,16 +28,16 @@ func get_coat(cgen_seed: int) -> ShaderMaterial:
 	s.shader = load("res://material/coat.shader")
 	
 	var colors: int
-	if cgen_seed < (1 << 32):
-		colors = 2
-	elif cgen_seed < (1 << 48):
-		colors = 3
+	if cgen_seed < (1 << 16):
+		colors = 7
+	elif cgen_seed < (1 << 32):
+		colors = 5
 	elif cgen_seed < (1 << 56):
 		colors = 4
 	elif cgen_seed < (1 << 60):
-		colors = 5
+		colors = 3
 	else:
-		colors = 7
+		colors = 2
 	
 	var g := Gradient.new()
 	

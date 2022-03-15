@@ -1,7 +1,7 @@
 extends KinematicBody
 class_name PlayerBody
 
-const RUN_SPEED := 7.0
+const RUN_SPEED := 70.0
 const WALKING_SPEED := 1.5
 const GRAVITY := Vector3.DOWN*24
 
@@ -12,7 +12,7 @@ const COYOTE_TIME := 0.1
 var coyote_timer := 0.0
 
 const BASE_JUMP_TIME := 0.25
-const BASE_JUMP_VEL := 8.0
+const BASE_JUMP_VEL := 80.0
 const CROUCH_JUMP_VEL := 12.5
 const ROLL_JUMP_VEL := 6.0
 const ROLL_JUMP_LURCH := 5.0
@@ -73,7 +73,7 @@ func _physics_process(delta):
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
-	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
+	$ui/debug/stats/a2.text = "Floor Dot: %f" % velocity.y
 	
 	var next_state := state
 	match state:
