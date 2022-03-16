@@ -1,7 +1,7 @@
 extends Spatial
 
 const MIN_DIST_LOAD := 325
-const MIN_SQDIST_UPDATE := 25
+const MIN_SQDIST_UPDATE := 5
 
 const LOAD_TIME := 5.0
 const UNLOAD_TIME := 4.0

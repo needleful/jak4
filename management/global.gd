@@ -32,9 +32,9 @@ func get_coat(cgen_seed: int) -> ShaderMaterial:
 		colors = 7
 	elif cgen_seed < (1 << 32):
 		colors = 5
-	elif cgen_seed < (1 << 56):
+	elif cgen_seed < (1 << 36):
 		colors = 4
-	elif cgen_seed < (1 << 60):
+	elif cgen_seed < (1 << 56):
 		colors = 3
 	else:
 		colors = 2

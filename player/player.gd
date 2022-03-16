@@ -1,7 +1,7 @@
 extends KinematicBody
 class_name PlayerBody
 
-const RUN_SPEED := 70.0
+const RUN_SPEED := 7.0
 const WALKING_SPEED := 1.5
 const GRAVITY := Vector3.DOWN*24
 
@@ -12,10 +12,10 @@ const COYOTE_TIME := 0.1
 var coyote_timer := 0.0
 
 const BASE_JUMP_TIME := 0.25
-const BASE_JUMP_VEL := 80.0
+const BASE_JUMP_VEL := 8.0
 const CROUCH_JUMP_VEL := 12.5
-const ROLL_JUMP_VEL := 6.0
-const ROLL_JUMP_LURCH := 5.0
+const ROLL_JUMP_VEL := 7.0
+const ROLL_JUMP_LURCH := 7.0
 const ROLL_JUMP_STEER := 2.5
 const CROUCH_JUMP_TIME := 0.5
 var air_timer := 0.0
@@ -159,15 +159,16 @@ func _physics_process(delta):
 		State.Roll, State.RollJump:
 			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
 		State.Crouch, State.CrouchJump:
+			ground_normal = best_normal
 			accel(delta, desired_velocity*CROUCH_SPEED)
-	update_visuals()
+	update_visuals(desired_velocity)
 
-func update_visuals():
+func update_visuals(input_dir: Vector3):
 	mesh.set_movement_animation(
 		velocity.length()/(CROUCH_SPEED if state == State.Crouch else RUN_SPEED), 
 		state == State.Crouch)
 	
-	if abs(velocity.x) + abs(velocity.z) > 0.01:
+	if abs(velocity.x) + abs(velocity.z) > 0.1 and input_dir != Vector3.ZERO:
 		var target := Vector3(velocity.x, 0, velocity.z).normalized()
 		var forward = mesh.global_transform.basis.z
 		var axis = forward.cross(target).normalized()
@@ -187,7 +188,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.z
 	]
 	var gravity = GRAVITY
-	if state == State.Ground and ground_normal != Vector3.ZERO:
+	if (state == State.Ground or state == State.Crouch) and ground_normal != Vector3.ZERO:
 		gravity = gravity.project(ground_normal.normalized())
 
 	if hvel.length() > WALKING_SPEED and desired_velocity != Vector3.ZERO:
@@ -218,7 +219,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		velocity.z = hvel.z
 		velocity += delta*gravity
 	
-	if state == State.Ground:
+	if state == State.Ground or state == State.Crouch:
 		velocity = move_and_slide_with_snap(velocity, Vector3.DOWN*0.125, Vector3.UP)
 	else:
 		velocity = move_and_slide(velocity)
