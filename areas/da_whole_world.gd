@@ -13,6 +13,7 @@ var chunk_load_waitlist : Dictionary = {}
 var chunk_unload_waitlist : Dictionary = {}
 var active_chunks: Array
 onready var player: PlayerBody = $player
+var lowres_chunks: Dictionary
 
 onready var player_last_postion: Vector3 = player.global_transform.origin
 
@@ -20,11 +21,19 @@ export(Material) var debug_active_chunk_material
 export(Material) var debug_inactive_chunk_material
 
 const PATH_CONTENT := "res://areas/chunks/%s.tscn"
+const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
 func _ready():
 	for c in get_children():
 		if c.name.begins_with("chunk"):
 			chunks.append(c)
+			var lowres_file: String = PATH_LOWRES % c.name
+			if ResourceLoader.exists(lowres_file):
+				var scn: PackedScene = load(lowres_file)
+				if scn:
+					var node = scn.instance()
+					node.name = "lowres"
+					lowres_chunks[c.name] = node 
 	print(chunks.size(), " chunks")
 	update_active_chunks(player_last_postion, true)
 
@@ -59,7 +68,7 @@ func update_active_chunks(position: Vector3, instant := false):
 				chunk_load_waitlist[ch.name] = 0.0 
 			if ch.name in chunk_unload_waitlist:
 				chunk_unload_waitlist.erase(ch.name)
-			#ch.material_override = debug_active_chunk_material
+			ch.material_override = debug_active_chunk_material
 		else:
 			if instant:
 				mark_inactive(ch)
@@ -68,7 +77,7 @@ func update_active_chunks(position: Vector3, instant := false):
 				chunk_unload_waitlist[ch.name] = 0.0 
 			if ch.name in chunk_load_waitlist:
 				chunk_load_waitlist.erase(ch.name)
-			#ch.material_override = debug_inactive_chunk_material
+			ch.material_override = debug_inactive_chunk_material
 
 func mark_active(chunk: Spatial):
 	if (chunk in active_chunks):
@@ -84,6 +93,8 @@ func mark_active(chunk: Spatial):
 			chunk.add_child(node)
 		else:
 			print_debug("Loading %s failed!!" % content_file)
+		if chunk.has_node("lowres"):
+			chunk.remove_child(chunk.get_node("lowres"))
 
 func mark_inactive(chunk: Spatial):
 	if !(chunk in active_chunks):
@@ -91,3 +102,7 @@ func mark_inactive(chunk: Spatial):
 	active_chunks.remove(active_chunks.find(chunk))
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
+		if chunk.name in lowres_chunks:
+			chunk.add_child(lowres_chunks[chunk.name])
+	
+	
