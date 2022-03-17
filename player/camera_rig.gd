@@ -3,12 +3,13 @@ extends Node
 onready var player: PlayerBody = get_parent()
 onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
-onready var groundCast: RayCast = player.get_node("groundCast")
+onready var groundCast: RayCast = get_parent().get_node("groundCast")
 
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 0.8
 const CORRECTION_VELOCITY := 2.0
 const CORRECTION_VELOCITY_GROUND := 4.0
+const MIN_FLOOR_HEIGHT := 0.5
 
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
@@ -29,6 +30,7 @@ func _physics_process(delta):
 	var difference = target_origin.y - yaw.global_transform.origin.y
 	
 	var target_y = yaw.global_transform.origin.y
+
 	
 	if player.is_grounded():
 		cv = lerp(cv, CORRECTION_VELOCITY_GROUND, 0.1)
@@ -43,6 +45,8 @@ func _physics_process(delta):
 		difference = MAX_CAMERA_DIFF
 	
 	target_y += (difference*cv*delta)
+	if groundCast.is_colliding():
+		target_y = max(groundCast.get_collision_point().y + MIN_FLOOR_HEIGHT, target_y)
 	
 	yaw.global_transform.origin = Vector3(
 		target_origin.x,

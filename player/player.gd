@@ -87,7 +87,7 @@ func _physics_process(delta):
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
-			elif !$groundArea.get_overlapping_bodies().size() > 0:
+			elif $groundArea.get_overlapping_bodies().size() == 0:
 				coyote_timer += delta
 				if coyote_timer > COYOTE_TIME:
 					next_state = State.Fall
@@ -179,6 +179,7 @@ func _physics_process(delta):
 		State.BaseJump:
 			accel(delta, desired_velocity*RUN_SPEED)
 		State.Roll, State.RollJump, State.RollFall:
+			ground_normal = best_normal
 			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
 		State.Crouch, State.CrouchJump:
 			ground_normal = best_normal
@@ -210,7 +211,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.z
 	]
 	var gravity = GRAVITY
-	if (state == State.Ground or state == State.Crouch) and ground_normal != Vector3.ZERO:
+	if is_grounded() and ground_normal != Vector3.ZERO:
 		gravity = gravity.project(ground_normal.normalized())
 
 	if hvel.length() > WALKING_SPEED and desired_velocity != Vector3.ZERO:

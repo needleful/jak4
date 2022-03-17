@@ -1,6 +1,7 @@
 extends Spatial
 
 const MIN_DIST_LOAD := 325
+const MIN_DIST_MUST_LOAD := 260
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0
@@ -14,6 +15,7 @@ var chunk_unload_waitlist : Dictionary = {}
 var active_chunks: Array
 onready var player: PlayerBody = $player
 var lowres_chunks: Dictionary
+var chunk_collider: Dictionary
 
 onready var player_last_postion: Vector3 = player.global_transform.origin
 
@@ -33,7 +35,9 @@ func _ready():
 				if scn:
 					var node = scn.instance()
 					node.name = "lowres"
-					lowres_chunks[c.name] = node 
+					lowres_chunks[c.name] = node
+			if c.has_node("static_collision"):
+				chunk_collider[c.name] = c.get_node("static_collision")
 	print(chunks.size(), " chunks")
 	update_active_chunks(player_last_postion, true)
 
@@ -46,42 +50,51 @@ func _process(delta):
 	for ch in chunk_load_waitlist:
 		chunk_load_waitlist[ch] += delta
 		if chunk_load_waitlist[ch] > LOAD_TIME:
-			chunk_load_waitlist.erase(ch)
 			mark_active(get_node(ch))
 			
 	for ch in chunk_unload_waitlist:
 		chunk_unload_waitlist[ch] += delta
 		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
-			chunk_unload_waitlist.erase(ch)
 			mark_inactive(get_node(ch))
-		
 
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:
 		var diff = ch.global_transform.origin - position
 		if abs(diff.x) < MIN_DIST_LOAD and abs(diff.z) < MIN_DIST_LOAD:
-			if instant:
+			if instant or (
+				abs(diff.x) < MIN_DIST_MUST_LOAD and abs(diff.z) < MIN_DIST_MUST_LOAD
+			):
 				mark_active(ch)
-				continue
-			
-			if !(ch.name in chunk_load_waitlist):
-				chunk_load_waitlist[ch.name] = 0.0 
-			if ch.name in chunk_unload_waitlist:
-				chunk_unload_waitlist.erase(ch.name)
-			ch.material_override = debug_active_chunk_material
+			else:
+				queue_load(ch)
 		else:
 			if instant:
 				mark_inactive(ch)
-				continue
-			if !(ch.name in chunk_unload_waitlist):
-				chunk_unload_waitlist[ch.name] = 0.0 
-			if ch.name in chunk_load_waitlist:
-				chunk_load_waitlist.erase(ch.name)
-			ch.material_override = debug_inactive_chunk_material
+			else:
+				queue_unload(ch)
+
+func queue_load(ch: Spatial):
+	if !(ch.name in chunk_load_waitlist):
+		chunk_load_waitlist[ch.name] = 0.0 
+	if ch.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(ch.name)
+	ch.material_override = debug_active_chunk_material
+	
+	if ch.name in chunk_collider and !ch.has_node("static_collision"):
+		ch.add_child(chunk_collider[ch.name])
+
+func queue_unload(ch: Spatial):
+	if !(ch.name in chunk_unload_waitlist):
+		chunk_unload_waitlist[ch.name] = 0.0 
+	if ch.name in chunk_load_waitlist:
+		var _x = chunk_load_waitlist.erase(ch.name)
+	ch.material_override = debug_inactive_chunk_material
 
 func mark_active(chunk: Spatial):
 	if (chunk in active_chunks):
 		return
+	if chunk.name in chunk_load_waitlist:
+		var _x = chunk_load_waitlist.erase(chunk.name)
 	active_chunks.append(chunk)
 	# Dynamic chunk loading
 	var content_file: String = PATH_CONTENT % chunk.name
@@ -99,10 +112,15 @@ func mark_active(chunk: Spatial):
 func mark_inactive(chunk: Spatial):
 	if !(chunk in active_chunks):
 		return
+	if chunk.name in chunk_unload_waitlist:
+		var _x = chunk_load_waitlist.erase(chunk.name)
 	active_chunks.remove(active_chunks.find(chunk))
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
 		if chunk.name in lowres_chunks:
 			chunk.add_child(lowres_chunks[chunk.name])
+	
+	if chunk.has_node("static_collision"):
+		chunk.remove_child(chunk.get_node("static_collision"))
 	
 	
