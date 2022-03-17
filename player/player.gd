@@ -40,6 +40,7 @@ const DECEL_WITH := 15.0
 
 onready var cam_yaw := $camera_rig/yaw
 onready var mesh := $jackie
+onready var crouch_head := $crouchHeadArea
 
 var velocity := Vector3.ZERO
 
@@ -51,7 +52,8 @@ enum State {
 	Crouch,
 	Roll,
 	CrouchJump,
-	RollJump
+	RollJump,
+	RollFall
 }
 
 var state: int = State.Ground
@@ -106,10 +108,17 @@ func _physics_process(delta):
 			air_timer += delta
 			if air_timer > BASE_JUMP_TIME:
 				next_state = State.Fall
-		State.CrouchJump, State.RollJump:
+		State.CrouchJump:
 			air_timer += delta
 			if air_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
+		State.RollJump:
+			air_timer += delta
+			if air_timer > CROUCH_JUMP_TIME:
+				if best_floor_dot > MIN_GROUND_DOT:
+					next_state = State.Ground
+				else:
+					next_state = State.RollFall
 		State.Fall:
 			if best_floor_dot > MIN_GROUND_DOT:
 				if Input.is_action_pressed("mv_crouch"):
@@ -121,10 +130,23 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Slide
+		State.RollFall:
+			if best_floor_dot > MIN_GROUND_DOT:
+				if Input.is_action_pressed("mv_crouch"):
+					next_state = State.Crouch
+				elif crouch_head.get_overlapping_bodies().size() == 0:
+					next_state = State.Ground
+			elif best_floor_dot > MIN_SLIDE_DOT:
+				if Input.is_action_pressed("mv_crouch"):
+					next_state = State.Crouch
+				elif crouch_head.get_overlapping_bodies().size() == 0:
+					next_state = State.Slide
 		State.Crouch:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.CrouchJump
-			elif !Input.is_action_pressed("mv_crouch"):
+			elif !Input.is_action_pressed("mv_crouch") and (
+				crouch_head.get_overlapping_bodies().size() == 0
+			):
 				next_state = State.Ground
 			elif best_floor_dot < MIN_SLIDE_DOT:
 				next_state = State.Fall
@@ -156,7 +178,7 @@ func _physics_process(delta):
 			accel_slide(delta, desired_velocity*RUN_SPEED, best_normal)
 		State.BaseJump:
 			accel(delta, desired_velocity*RUN_SPEED)
-		State.Roll, State.RollJump:
+		State.Roll, State.RollJump, State.RollFall:
 			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
 		State.Crouch, State.CrouchJump:
 			ground_normal = best_normal
@@ -248,22 +270,35 @@ func set_state(next_state: int):
 	coyote_timer = 0.0
 	roll_timer = 0.0
 	air_timer = 0.0
+	$crouching_col.disabled = true
+	$standing_col.disabled = false
+	
 	match next_state:
 		State.Fall:
 			mesh.transition_to("Fall")
 		State.BaseJump:
 			velocity.y = BASE_JUMP_VEL
 			mesh.transition_to("BaseJump")
-		State.Ground,State.Crouch:
+		State.Ground:
 			mesh.transition_to("Ground")
 		State.Slide:
 			pass
+		State.Crouch:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
+			mesh.transition_to("Ground")
 		State.Roll:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			mesh.transition_to("Roll")
 		State.CrouchJump:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			velocity.y = CROUCH_JUMP_VEL
 			mesh.transition_to("BaseJump")
 		State.RollJump:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			velocity.y = ROLL_JUMP_VEL
 			velocity += -cam_yaw.global_transform.basis.z*ROLL_JUMP_LURCH
 			mesh.transition_to("RollJump")
