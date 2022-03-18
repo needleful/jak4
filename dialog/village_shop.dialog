@@ -1,0 +1,48 @@
+// When starting a dialog, you can either start from the first line, or a named section like this.
+// Also it supports comments lol.
+:shop_entry
+{talked == 0} Ahh, Jackie!
+{talked == 0} Welcome to my shop!
+{talked > 0} Welcome back, Jackie!
+{talked > 0 and Global.flags["left_village"]} I'm glad you have returned safely.
+Did you need anything?
+
+// A named section lets us go back to this component
+:shop_replies
+> What do you sell?
+	Ammo! Water! Eggs!
+	// In text entries, an expression is validated.  The return value decides if the text is shown
+	> {!Global.has_gun} Ammo? There are guns in the village?
+		Of course!
+		It's pretty dangerous out there.
+		If you want to leave the city, you'll need to be trained to use one.
+
+	> What are the eggs for?
+		Oh lots of things.
+		They're like money, but different, because you use money to buy eggs, and the eggs to buy other things, like capacitors.
+		// Expressions that return false are skipped
+		{Global.count("eggs") == 0} You don't have any eggs, but I'm sure you'll find some!
+		{Global.count("eggs") == 1} I see you've found an egg. There are many more to find!
+		// Expressions starting with '#' will take the result, convert it to a string, and insert it into the text right when it's shown.
+		{Global.count("eggs") > 1} You've got #{Global.inventory["eggs"]} eggs. Way to go!
+
+		> ... What are the capacitors for?
+			Lots of ancient machines, like doors and elevators, need them for power. We only have so many, so make sure to get any you find!
+			So do you want to buy some eggs?
+		> Okay, I think I understand.
+			Great! Let me know if you want one. Once it's gone, it's gone!
+	> Ah ok, that makes sense.
+		It does!
+	// On an isolated line, an expression is validated and instantly skips to the next item
+	// goto will go to the label
+	{goto(shop_replies)}
+> Show me what you got!
+	Can do!
+	// How should I handle custom events where we need to resume from a specific point?
+	// I think I'll have it emit an event and resume later
+	// This could automatically hook into an animation player as well.
+	{pause_for_event("shop_opened")}
+	Hope you found what you're looking for...
+> See you later!
+	Take care...
+	// Automatically exists, since there's no more stuff to read.

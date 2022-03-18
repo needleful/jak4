@@ -1,6 +1,17 @@
 extends Node
 
+var game_state := GameState.new()
+
 var coat_textures: Array
+
+const save_path := "user://autosave.tres"
+var valid_game_state := false
+
+func _input(event):
+	if event.is_action_pressed("quick_save"):
+		save_sync()
+	elif event.is_action_pressed("quick_load"):
+		load_sync()
 
 func _ready():
 	var coat_dir := Directory.new()
@@ -16,6 +27,17 @@ func _ready():
 	else:
 		print_debug("Could not open coat directory!")
 
+func stat(index: String):
+	if index in game_state.stats:
+		return game_state.stats[index]
+	else:
+		return 0
+
+func count(item: String) -> int:
+	if item in game_state.inventory:
+		return game_state.inventory[item]
+	else:
+		return 0
 
 func get_coat(cgen_seed: int) -> ShaderMaterial:
 	if coat_textures.size() == 0:
@@ -54,3 +76,17 @@ func get_coat(cgen_seed: int) -> ShaderMaterial:
 	s.set_shader_param("palette", pt)
 	
 	return s
+
+func load_sync():
+	if ResourceLoader.exists(save_path):
+		game_state = ResourceLoader.load(save_path, "", true)
+		valid_game_state = true
+		var _x = get_tree().reload_current_scene()
+	else:
+		print_debug("Tried to load with no save at ", save_path)
+		valid_game_state = false
+
+func save_sync():
+	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
+	var _x = ResourceSaver.save(save_path, game_state)
+	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "post_save_object", "complete_save")

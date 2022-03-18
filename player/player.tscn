@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -22,6 +22,149 @@ height = 0.2
 [sub_resource type="SphereShape" id=6]
 radius = 0.25
 
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("save:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("saving:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("saving:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("save:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "save_complete"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("save:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("save:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.9, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("saving:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.9, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "save_start"
+length = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("save:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("saving:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("saving:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("save:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
 [sub_resource type="SphereShape" id=5]
 radius = 0.35
 
@@ -29,7 +172,7 @@ radius = 0.35
 radius = 0.32775
 height = 0.269648
 
-[node name="player" type="KinematicBody"]
+[node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
 collision_layer = 2
 script = ExtResource( 1 )
 
@@ -68,45 +211,80 @@ near = 0.3
 far = 8192.0
 
 [node name="ui" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="debug" type="Panel" parent="ui"]
-margin_right = 131.0
-margin_bottom = 256.0
+margin_left = 13.0
+margin_top = 21.0
+margin_right = 465.0
+margin_bottom = 188.0
 
 [node name="stats" type="VBoxContainer" parent="ui/debug"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -218.0
 
 [node name="Label" type="Label" parent="ui/debug/stats"]
-margin_right = 131.0
+margin_right = 234.0
 margin_bottom = 14.0
 text = "Debug Data"
 
 [node name="a1" type="Label" parent="ui/debug/stats"]
 margin_top = 18.0
-margin_right = 131.0
+margin_right = 234.0
 margin_bottom = 32.0
 text = "Debug Data"
 
 [node name="a2" type="Label" parent="ui/debug/stats"]
 margin_top = 36.0
-margin_right = 131.0
+margin_right = 234.0
 margin_bottom = 50.0
 text = "Debug Data"
 
 [node name="a3" type="Label" parent="ui/debug/stats"]
 margin_top = 54.0
-margin_right = 131.0
+margin_right = 234.0
 margin_bottom = 68.0
 text = "Debug Data"
 
 [node name="a4" type="Label" parent="ui/debug/stats"]
 margin_top = 72.0
-margin_right = 131.0
+margin_right = 234.0
 margin_bottom = 86.0
 text = "Debug Data"
+
+[node name="game_state" type="VBoxContainer" parent="ui/debug"]
+margin_left = 210.0
+margin_right = 452.0
+margin_bottom = 167.0
+
+[node name="saveStats" type="VBoxContainer" parent="ui"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -182.0
+margin_top = -20.0
+margin_bottom = 20.0
+
+[node name="saving" type="Label" parent="ui/saveStats"]
+visible = false
+margin_right = 182.0
+margin_bottom = 14.0
+text = "Saving..."
+
+[node name="save" type="Label" parent="ui/saveStats"]
+visible = false
+margin_top = 18.0
+margin_right = 182.0
+margin_bottom = 32.0
+text = "SAVED!"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/saveStats"]
+anims/RESET = SubResource( 9 )
+anims/save_complete = SubResource( 10 )
+anims/save_start = SubResource( 11 )
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )

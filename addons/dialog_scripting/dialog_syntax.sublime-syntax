@@ -1,0 +1,59 @@
+%YAML 1.2
+---
+name: Dialog Script
+file_extensions: [dialog]
+scope: source.dialog
+
+contexts:
+  main:
+    - match: '^\s*>'
+      scope: punctuation.accessor
+      push: reply
+    - match: '^\s*:'
+      scope: entity.name
+      push: section_name
+    - match: '{'
+      scope: punctuation.section.interpolation.begin
+      push: expression
+    - match: '#{'
+      scope: punctuation.section.interpolation.begin
+      push: expression
+    - match: ^\s*//
+      scope: comment
+      push: line_comment
+  expression:
+    - meta_scope: markup.italic
+    - match: '}'
+      scope: punctuation.section.interpolation.end
+      pop: true
+    - match: "'"
+      scope: punctuation.definition.string.begin
+      push: single_quoted
+    - match: '"'
+      scope: punctuation.definition.string.begin
+      push: double_quoted
+  single_quoted:
+    - meta_scope: string.quoted.single
+    - match: "'"
+      scope: punctuation.definition.string.end
+      pop: true
+  double_quoted:
+    - meta_scope: string.quoted.double
+    - match: '"'
+      scope: punctuation.definition.string.end
+      pop: true
+  reply:
+    - meta_scope: markup.bold
+    - match: $
+      pop: true
+    - match: '{'
+      scope: punctuation.section.interpolation.begin
+      push: expression
+  section_name:
+    - meta_scope: entity.name
+    - match: $
+      pop: true
+  line_comment:
+    - meta_scope: comment
+    - match: $
+      pop: true

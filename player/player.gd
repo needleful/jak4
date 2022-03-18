@@ -59,6 +59,35 @@ enum State {
 var state: int = State.Ground
 var ground_normal:Vector3 = Vector3.UP
 
+func _ready():
+	if Global.valid_game_state:
+		global_transform = Global.game_state.player_transform
+
+func prepare_save():
+	Global.game_state.player_transform = global_transform
+	assert(Global.game_state.player_transform == global_transform)
+	print("Saving...")
+	$ui/saveStats/AnimationPlayer.play("save_start")
+
+func complete_save():
+	$ui/saveStats/AnimationPlayer.play("save_complete")
+
+func _process(_delta):
+	var state_viewer: Control = $ui/debug/game_state
+	for c in state_viewer.get_children():
+		state_viewer.remove_child(c)
+	add_label(state_viewer, "Stats:")
+	for s in Global.game_state.stats:
+		add_label(state_viewer, "\t%s: %d" % [s, Global.stat(s)])
+	add_label(state_viewer, "Inventory:")
+	for i in Global.game_state.inventory:
+		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
+
+func add_label(box: Control, text: String):
+	var l := Label.new()
+	l.text = text
+	box.add_child(l)
+
 func _physics_process(delta):
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
 	
