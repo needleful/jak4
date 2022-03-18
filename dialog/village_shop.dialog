@@ -1,48 +1,90 @@
-// When starting a dialog, you can either start from the first line, or a named section like this.
+// When starting a dialog, you can either start from the first line, or a named section.
 // Also it supports comments lol.
-:shop_entry
-{talked == 0} Ahh, Jackie!
-{talked == 0} Welcome to my shop!
-{talked > 0} Welcome back, Jackie!
-{talked > 0 and Global.flags["left_village"]} I'm glad you have returned safely.
-Did you need anything?
+// In text entries, expressions formatted as `{text}` are run in GDScript.  The return value decides if the text is shown
+// The indentation here indicates the indented items also depend on the expression
+// So if "talked" is not zero, these lines are skipped.
+// If there's no expression, indentation means nothing for regular text. It just runs each line sequentially.
+// `talked` is a varaible tracking how many times you've talked to this specific NPC
+{talked == 0} Ahh, the tourist has found fit to visit me!
+	// The first whitespace characters on a non-empty, non-comment line indicate what's used for indentation.
+	// A star indicates narration
+	* The shop smells of burning incense. It's different from home. A stronger, more bitter smell.
+	// Square brackets mark who is speaking.
+	// `[You]` has special properties, and will make the text bold to mark the player's speech.
+	// Indenting changes the default character to the one named for the indented text
+	[You] Hi, I'm Jackie!
+		It's nice to meet you!
+	Welcome to my shop, Jackie! I am Lonus. I see you are wearing suitable protection from the elements.
+	Would you like to browse my humble wares?
 
-// A named section lets us go back to this component
+// `otherwise` is set to true if we're coming from a failed check. It's essentially "else" but due to technical constraints I have to use another word
+{otherwise} Welcome back, Jackie!
+	// An expression can be anywhere on the line. It's removed before formatting the text.
+	* {talked > 10} The familiar smell of the incense comforts you.
+	// "otherwise if X" is not actually valid GDScript. 
+	// It detects this construct and uses custom logic to make its behavior consistent with "elif" in Godot
+	// Here's the logic:
+	// if 'otherwise' is true:
+		// the expression is run without 'otherwise if'
+		// the statement is shown if the result is true
+		// `otherwise` is assigned 'true' if the result is false 
+	// else:
+		// no expression is checked
+		// statement isn't shown
+		// otherwise is kept 'false'
+	* {otherwise if talked > 7} The burning incense is not unpleasent.
+	* {otherwise if talked > 4} The incense is strong.
+	* {otherwise} The bitter incense burns at your sinuses.
+	
+	{Global.stat("left_village")} I am glad you have returned safely.
+	Do let me know if you need anything.
+
+// A named section lets us go back to this using "goto"
 :shop_replies
 > What do you sell?
-	Ammo! Water! Eggs!
-	// In text entries, an expression is validated.  The return value decides if the text is shown
-	> {!Global.has_gun} Ammo? There are guns in the village?
+	Ammunition! Water! Eggs!
+	// Replies are all shown in a list, and the indented text is what follows that choice.
+	// Replies are also conditional
+	> {not Global.stat("has_gun")} Ammo? There are guns in the village?
 		Of course!
-		It's pretty dangerous out there.
-		If you want to leave the city, you'll need to be trained to use one.
+		It is dangerous beyond these walls.
+		If you want to leave the city, you will need to be trained to use one.
+		{animation("show_cave")} You can ask Uule, who tends the caves. He manages the firearms here.
 
 	> What are the eggs for?
-		Oh lots of things.
-		They're like money, but different, because you use money to buy eggs, and the eggs to buy other things, like capacitors.
+		Many things.
+		They are a currency. You use gems to buy eggs, and the eggs to buy other items, such as capacitors.
 		// Expressions that return false are skipped
-		{Global.count("eggs") == 0} You don't have any eggs, but I'm sure you'll find some!
-		{Global.count("eggs") == 1} I see you've found an egg. There are many more to find!
-		// Expressions starting with '#' will take the result, convert it to a string, and insert it into the text right when it's shown.
-		{Global.count("eggs") > 1} You've got #{Global.inventory["eggs"]} eggs. Way to go!
+		{Global.stat("egg") == 0} You do not have any eggs, but I'm sure you shall find some.
+		{Global.stat("egg") == 1 if otherwise} I see you have found an egg. There are many more to find!
+		// Expressions starting with '#{' will take the result, convert it to text, and insert it into the text right when it's shown.
+		{otherwise} You have #{Global.count("egg")} eggs on your person, and have found a total of #{Global.stat("egg")}.
+			Commendable work!
 
 		> ... What are the capacitors for?
-			Lots of ancient machines, like doors and elevators, need them for power. We only have so many, so make sure to get any you find!
-			So do you want to buy some eggs?
+			Many ancient machines, doors and elevators and such, need them for power. We only have so many, so make sure to retrieve all you find!
+			So would you like to buy an egg?
+			// Nothing needed here, it'll automatically go to the goto a few lines down
 		> Okay, I think I understand.
-			Great! Let me know if you want one. Once it's gone, it's gone!
+			Immaculate! Let me know if you want one. Once it is gone, it is gone!
 	> Ah ok, that makes sense.
 		It does!
-	// On an isolated line, an expression is validated and instantly skips to the next item
-	// goto will go to the label
-	{goto(shop_replies)}
+	// An expression with no text is validated and skip to the next item, regardless of result
+	// goto will go to the labeled item
+	{goto("shop_replies")}
 > Show me what you got!
-	Can do!
+	With pleasure, Jackie!
 	// How should I handle custom events where we need to resume from a specific point?
-	// I think I'll have it emit an event and resume later
+	// I think I'll have it emit an event and let some handler take care of it
 	// This could automatically hook into an animation player as well.
-	{pause_for_event("shop_opened")}
-	Hope you found what you're looking for...
+	{event("shop_opened")}
+	I hope you found what you were looking for...
 > See you later!
 	Take care...
-	// Automatically exists, since there's no more stuff to read.
+// An explicit exit.  Necessary to avoid hitting the text further below
+{exit()}
+
+// A default label for when the player presses a button to instantly exit the dialog
+// If `_exit` isn't set, the dialog viewer just closes.
+:_exit
+[You] Gotta go, see you!
