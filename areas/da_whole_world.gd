@@ -78,17 +78,17 @@ func queue_load(ch: Spatial):
 		chunk_load_waitlist[ch.name] = 0.0 
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
-	ch.material_override = debug_active_chunk_material
 	
 	if ch.name in chunk_collider and !ch.has_node("static_collision"):
 		ch.add_child(chunk_collider[ch.name])
+	#ch.material_override = debug_active_chunk_material
 
 func queue_unload(ch: Spatial):
 	if !(ch.name in chunk_unload_waitlist):
 		chunk_unload_waitlist[ch.name] = 0.0 
 	if ch.name in chunk_load_waitlist:
 		var _x = chunk_load_waitlist.erase(ch.name)
-	ch.material_override = debug_inactive_chunk_material
+	#ch.material_override = debug_inactive_chunk_material
 
 func mark_active(chunk: Spatial):
 	if (chunk in active_chunks):

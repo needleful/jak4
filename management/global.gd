@@ -1,5 +1,7 @@
 extends Node
 
+signal inventory_changed
+
 var game_state := GameState.new()
 
 var coat_textures: Array
@@ -47,10 +49,10 @@ func add_item(item: String):
 		game_state.inventory[item] += 1
 	else:
 		game_state.inventory[item] = 1
+	emit_signal("inventory_changed")
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)
-	print("Player has %d coats" % game_state.all_coats.size())
 
 func mark_picked(path: NodePath):
 	game_state.picked_items.append(path)
@@ -64,8 +66,8 @@ func get_coat(cgen_seed: int) -> Coat:
 	if coat_textures.size() == 0:
 		print_debug("No coat textures!")
 		return null
-	var coat = Coat.new()
-	var rng = RandomNumberGenerator.new()
+	var coat := Coat.new()
+	var rng := RandomNumberGenerator.new()
 	rng.seed = cgen_seed
 	
 	var colors: int
@@ -87,8 +89,14 @@ func get_coat(cgen_seed: int) -> Coat:
 	
 	coat.gradient = Gradient.new()
 	
-	for _x in range(colors):
-		coat.gradient.add_point(rng.randf(), Color(rng.randf(), rng.randf(), rng.randf()))
+	for p in range(colors):
+		var o := rng.randf()
+		var c := Color(rng.randf(), rng.randf(), rng.randf())
+		if p <= 1:
+			coat.gradient.colors[p] = c
+			coat.gradient.offsets[p] = o
+		else:
+			coat.gradient.add_point(o, c)
 	
 	coat.palette = coat_textures[cgen_seed % coat_textures.size()]
 	return coat

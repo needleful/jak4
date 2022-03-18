@@ -65,6 +65,14 @@ func _ready():
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
 		set_current_coat(Global.game_state.current_coat)
+	else:
+		# Generate a random Common coat
+		var i = (1 << 56) + (randi() & 0xFFFFFFFFFFF)
+		var coat = Global.get_coat(i)
+		set_current_coat(coat)
+		Global.add_coat(coat)
+	Global.connect("inventory_changed", self, "redraw_inventory")
+	redraw_inventory()
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
@@ -81,7 +89,7 @@ func prepare_save():
 func complete_save():
 	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
-func _process(_delta):
+func redraw_inventory():
 	var state_viewer: Control = $ui/debug/game_state
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
