@@ -76,11 +76,10 @@ func prepare_save():
 	Global.game_state.player_transform = global_transform
 	Global.game_state.current_coat = current_coat
 	assert(Global.game_state.player_transform == global_transform)
-	print("Saving...")
 	$ui/saveStats/AnimationPlayer.play("save_start")
 
 func complete_save():
-	$ui/saveStats/AnimationPlayer.play("save_complete")
+	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
 func _process(_delta):
 	var state_viewer: Control = $ui/debug/game_state
