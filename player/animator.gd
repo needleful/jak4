@@ -3,7 +3,6 @@ extends Spatial
 var crouch_blend := 0.0
 
 onready var anim: AnimationTree = $AnimationTree
-
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 
 func set_movement_animation(speed: float, is_crouch: bool):
@@ -12,3 +11,7 @@ func set_movement_animation(speed: float, is_crouch: bool):
 
 func transition_to(state):
 	body.travel(state)
+
+func show_coat(coat: Coat):
+	var mat = coat.generate_material()
+	$Armature/Skeleton/coat.material_override = mat

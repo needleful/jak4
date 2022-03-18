@@ -59,12 +59,22 @@ enum State {
 var state: int = State.Ground
 var ground_normal:Vector3 = Vector3.UP
 
+var current_coat: Coat
+
 func _ready():
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
+		current_coat = Global.game_state.current_coat
+		mesh.show_coat(current_coat)
 
+func _input(event):
+	if event.is_action_pressed("debug_randomize_coat"):
+		current_coat = Global.get_coat(randi())
+		mesh.show_coat(current_coat)
+		
 func prepare_save():
 	Global.game_state.player_transform = global_transform
+	Global.game_state.current_coat = current_coat
 	assert(Global.game_state.player_transform == global_transform)
 	print("Saving...")
 	$ui/saveStats/AnimationPlayer.play("save_start")

@@ -7,13 +7,8 @@ var coat_textures: Array
 const save_path := "user://autosave.tres"
 var valid_game_state := false
 
-func _input(event):
-	if event.is_action_pressed("quick_save"):
-		save_sync()
-	elif event.is_action_pressed("quick_load"):
-		load_sync()
-
 func _ready():
+	randomize()
 	var coat_dir := Directory.new()
 	if coat_dir.open("res://material/coat/") == OK:
 		var _x = coat_dir.list_dir_begin()
@@ -27,6 +22,14 @@ func _ready():
 	else:
 		print_debug("Could not open coat directory!")
 
+func _input(event):
+	if event.is_action_pressed("quick_save"):
+		save_sync()
+	elif event.is_action_pressed("quick_load"):
+		load_sync()
+
+# Game state management
+
 func stat(index: String):
 	if index in game_state.stats:
 		return game_state.stats[index]
@@ -39,43 +42,46 @@ func count(item: String) -> int:
 	else:
 		return 0
 
-func get_coat(cgen_seed: int) -> ShaderMaterial:
+func add_item(item: String):
+	if item in game_state.inventory:
+		game_state.inventory[item] += 1
+	else:
+		game_state.inventory[item] = 1
+
+func get_coat(cgen_seed: int) -> Coat:
 	if coat_textures.size() == 0:
 		print_debug("No coat textures!")
 		return null
+	var coat = Coat.new()
 	var rng = RandomNumberGenerator.new()
 	rng.seed = cgen_seed
-	
-	var s = ShaderMaterial.new()
-	s.shader = load("res://material/coat.shader")
 	
 	var colors: int
 	if cgen_seed < (1 << 16):
 		colors = 7
+		coat.rarity = coat.Rarity.Sublime
 	elif cgen_seed < (1 << 32):
 		colors = 5
+		coat.rarity = coat.Rarity.SuperRare
 	elif cgen_seed < (1 << 36):
 		colors = 4
+		coat.rarity = coat.Rarity.Rare
 	elif cgen_seed < (1 << 56):
 		colors = 3
+		coat.rarity = coat.Rarity.Uncommon
 	else:
 		colors = 2
+		coat.rarity = coat.Rarity.Uncommon
 	
-	var g := Gradient.new()
+	coat.gradient = Gradient.new()
 	
 	for _x in range(colors):
-		g.add_point(rng.randf(), Color(rng.randf(), rng.randf(), rng.randf()))
+		coat.gradient.add_point(rng.randf(), Color(rng.randf(), rng.randf(), rng.randf()))
 	
-	var gt := GradientTexture.new()
-	gt.gradient = g
-	
-	var pt: Texture = coat_textures[cgen_seed % coat_textures.size()]
-	
-	s.set_shader_param("gradient", gt)
-	s.set_shader_param("softness", 0.25)
-	s.set_shader_param("palette", pt)
-	
-	return s
+	coat.palette = coat_textures[cgen_seed % coat_textures.size()]
+	return coat
+
+#Saving and loading
 
 func load_sync():
 	if ResourceLoader.exists(save_path):

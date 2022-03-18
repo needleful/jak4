@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=1]
+
+[sub_resource type="CapsuleMesh" id=1]
+radius = 0.1
+mid_height = 0.2
+radial_segments = 12
+rings = 6
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("MeshInstance:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.45446, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "bob"
+length = 3.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("MeshInstance:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.45446, 0 ), Vector3( 0, 0.38726, 0 ), Vector3( 0, 0.45446, 0 ) ]
+}
+
+[node name="egg_pickup" instance=ExtResource( 1 )]
+item_id = "egg"
+
+[node name="MeshInstance" type="MeshInstance" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.45446, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+anims/RESET = SubResource( 2 )
+anims/bob = SubResource( 3 )
