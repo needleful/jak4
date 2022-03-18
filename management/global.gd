@@ -50,6 +50,7 @@ func add_item(item: String):
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)
+	print("Player has %d coats" % game_state.all_coats.size())
 
 func mark_picked(path: NodePath):
 	game_state.picked_items.append(path)

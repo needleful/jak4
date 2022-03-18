@@ -68,7 +68,9 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
-		set_current_coat(Global.get_coat(randi()))
+		var coat = Global.get_coat(randi())
+		set_current_coat(coat)
+		Global.add_coat(coat)
 		
 func prepare_save():
 	Global.game_state.player_transform = global_transform

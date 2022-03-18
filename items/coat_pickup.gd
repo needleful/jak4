@@ -7,14 +7,13 @@ var coat: Coat
 
 func _ready():
 	if persistent and Global.is_picked(get_path()):
-		get_parent().remove_child(self)
 		queue_free()
 		return
 	if random_seed < 0:
 		random_seed = randi()
 	coat = Global.get_coat(random_seed)
 	$MeshInstance.material_override = coat.generate_material()
-	connect("body_entered", self, "_on_body_entered")
+	var _x = connect("body_entered", self, "_on_body_entered")
 
 func _on_body_entered(b):
 	Global.add_coat(coat)
