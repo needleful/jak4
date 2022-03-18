@@ -48,6 +48,17 @@ func add_item(item: String):
 	else:
 		game_state.inventory[item] = 1
 
+func add_coat(coat: Coat):
+	game_state.all_coats.append(coat)
+
+func mark_picked(path: NodePath):
+	game_state.picked_items.append(path)
+
+func is_picked(path: NodePath) -> bool:
+	return path in game_state.picked_items
+
+# Coats
+
 func get_coat(cgen_seed: int) -> Coat:
 	if coat_textures.size() == 0:
 		print_debug("No coat textures!")

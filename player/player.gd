@@ -64,13 +64,11 @@ var current_coat: Coat
 func _ready():
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
-		current_coat = Global.game_state.current_coat
-		mesh.show_coat(current_coat)
+		set_current_coat(Global.game_state.current_coat)
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
-		current_coat = Global.get_coat(randi())
-		mesh.show_coat(current_coat)
+		set_current_coat(Global.get_coat(randi()))
 		
 func prepare_save():
 	Global.game_state.player_transform = global_transform
@@ -97,6 +95,10 @@ func add_label(box: Control, text: String):
 	var l := Label.new()
 	l.text = text
 	box.add_child(l)
+
+func set_current_coat(coat: Coat):
+	current_coat = coat
+	mesh.show_coat(coat)
 
 func _physics_process(delta):
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
@@ -304,6 +306,12 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.z)
 	velocity = move_and_slide(velocity + delta*GRAVITY)
 
+func is_grounded():
+	return ( state == State.Ground
+		or state == State.Slide
+		or state == State.Roll
+		or state == State.Crouch)
+
 func set_state(next_state: int):
 	if state == next_state:
 		return
@@ -345,8 +353,3 @@ func set_state(next_state: int):
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
 
-func is_grounded():
-	return ( state == State.Ground
-		or state == State.Slide
-		or state == State.Roll
-		or state == State.Crouch)
