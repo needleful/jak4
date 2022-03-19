@@ -6,10 +6,15 @@ onready var pitch : Spatial = $yaw/pitch
 onready var groundCast: RayCast = get_parent().get_node("groundCast")
 
 const MIN_CAMERA_DIFF := -1.0
-const MAX_CAMERA_DIFF := 0.8
-const CORRECTION_VELOCITY := 2.0
-const CORRECTION_VELOCITY_GROUND := 4.0
+const MAX_CAMERA_DIFF := 1.0
+const CORRECTION_VELOCITY := 4.0
+const CORRECTION_VELOCITY_GROUND := 8.0
 const MIN_FLOOR_HEIGHT := 0.5
+const H_CORRECTION := 24.0
+const H_DIFF_BOUND := 1.5
+
+const LEDGE_GRAB_RAISE := 1.0
+var raise := 0.0
 
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
@@ -26,33 +31,48 @@ func _input(event):
 
 func _physics_process(delta):
 	#Camera Movement
-	var target_origin: Vector3 = player.global_transform.origin
-	var difference = target_origin.y - yaw.global_transform.origin.y
+	var target: Vector3 = player.global_transform.origin
+	var pos: Vector3 = yaw.global_transform.origin
 	
-	var target_y = yaw.global_transform.origin.y
-
+	
+	if player.state == player.State.LedgeHang:
+		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.1)
+	else:
+		raise = lerp(raise, 0.0, 0.1)
+		if groundCast.is_colliding():
+			target.y = max(groundCast.get_collision_point().y + MIN_FLOOR_HEIGHT, target.y)
+	
+	target.y += raise
 	
 	if player.is_grounded():
 		cv = lerp(cv, CORRECTION_VELOCITY_GROUND, 0.1)
 	else:
 		cv = lerp(cv, CORRECTION_VELOCITY, 0.1)
-
-	if difference < MIN_CAMERA_DIFF:
-		target_y += difference - MIN_CAMERA_DIFF
-		difference = MIN_CAMERA_DIFF
-	elif difference > MAX_CAMERA_DIFF:
-		target_y += difference - MAX_CAMERA_DIFF
-		difference = MAX_CAMERA_DIFF
-	
-	target_y += (difference*cv*delta)
-	if groundCast.is_colliding():
-		target_y = max(groundCast.get_collision_point().y + MIN_FLOOR_HEIGHT, target_y)
-	
-	yaw.global_transform.origin = Vector3(
-		target_origin.x,
-		target_y,
-		target_origin.z
+		
+	var diff := target - pos
+	var movement := Vector3(
+		diff.x*min(delta*H_CORRECTION, 1),
+		diff.y*min(delta*cv, 1),
+		diff.z*min(delta*H_CORRECTION, 1)
 	)
+	
+	pos += movement
+	
+	pos.y = clamp(
+		pos.y,
+		target.y + MIN_CAMERA_DIFF,
+		target.y + MAX_CAMERA_DIFF)
+	
+	var hT = Vector3(target.x, 0, target.z)
+	var hP = Vector3(pos.x, 0, pos.z)
+	var hDiff = hP - hT
+	if hDiff.length() > H_DIFF_BOUND:
+		var dir = H_DIFF_BOUND*hDiff.normalized()
+		
+		hP = hT + dir
+		pos.x = hP.x
+		pos.z = hP.z
+	yaw.global_transform.origin = pos
 	
 	# Camera Rotation
 	var mouse_aim = -mouse_accum*mouse_sns

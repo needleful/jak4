@@ -1,15 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
 [ext_resource path="res://player/jackie.tscn" type="PackedScene" id=3]
-
-[sub_resource type="SphereMesh" id=4]
-radius = 0.35
-height = 0.7
-
-[sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.827451, 0.435294, 0.435294, 1 )
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.35
@@ -172,17 +165,14 @@ radius = 0.35
 radius = 0.32775
 height = 0.269648
 
+[sub_resource type="PrismMesh" id=12]
+size = Vector3( 0.2, 0.2, 0.2 )
+
 [node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
 collision_layer = 2
 script = ExtResource( 1 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
-
-[node name="crouch_mesh" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.366351, 0 )
-visible = false
-mesh = SubResource( 4 )
-material/0 = SubResource( 3 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )
@@ -203,7 +193,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.863214, 0 )
 [node name="SpringArm" type="SpringArm" parent="camera_rig/yaw/pitch"]
 transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.134417, 0.276053 )
 shape = SubResource( 6 )
-spring_length = 3.0
+spring_length = 2.5
 
 [node name="Camera" type="Camera" parent="camera_rig/yaw/pitch/SpringArm"]
 transform = Transform( 1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0 )
@@ -303,3 +293,30 @@ collision_layer = 0
 [node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.996834, 0 )
 shape = SubResource( 8 )
+
+[node name="intention" type="Spatial" parent="."]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="intention"]
+transform = Transform( -1, 1.50996e-07, -6.60024e-15, 0, -4.37114e-08, -1, -1.50996e-07, -1, 4.37114e-08, 1.32709e-07, 1, -0.431523 )
+visible = false
+mesh = SubResource( 12 )
+material/0 = null
+
+[node name="leftHandCast" type="RayCast" parent="intention"]
+transform = Transform( -1, 0, -1.80798e-07, 0, 1, 0, 1.80798e-07, 0, -1, -0.12053, 1.58791, -0.360712 )
+enabled = true
+cast_to = Vector3( 0, -0.25, 0 )
+
+[node name="rightHandCast" type="RayCast" parent="intention"]
+transform = Transform( -1, 0, -1.80798e-07, 0, 1, 0, 1.80798e-07, 0, -1, 0.0903584, 1.58791, -0.360712 )
+enabled = true
+cast_to = Vector3( 0, -0.25, 0 )
+
+[node name="centerCast" type="RayCast" parent="intention"]
+transform = Transform( -1, 0, -1.80798e-07, 0, 1, 0, 1.80798e-07, 0, -1, -0.00444607, 1.58881, -0.405134 )
+enabled = true
+cast_to = Vector3( 0, -0.25, 0 )
+
+[node name="reference" type="Position3D" parent="intention"]
+transform = Transform( -1, 0, -1.80798e-07, 0, 1, 0, 1.80798e-07, 0, -1, -0.00444607, 1.48563, -0.405134 )
