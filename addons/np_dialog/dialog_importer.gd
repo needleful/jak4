@@ -79,40 +79,33 @@ func parse_text(text: String, src_path = "<local>"):
 	
 	for line in text.split("\n", true):
 		line_number += 1
-		if r_comment.search(line) or line.length() == 0:
+		if r_comment.search(line) or line.strip_edges() == "":
 			continue
 		
 		var label_search := r_label.search(line)
 		if label_search:
 			label = label_search.get_string(1)
 			continue
-		
 		# Whitespace and indentation
 		var wspe := extract_whitespace(line, indent, src_path, line_number)
 
-		
 		var wd := DialogItem.new()
 		seq.dialog[line_number] = wd
+		
+		var sp := extract_conditions(line)
+		line = sp.line
+		wd.conditions = sp.conditions
 		
 		var td := extract_type(line)
 		line = td.line
 		wd.type = td.type
-		
+
 		var nd := extract_speaker(line)
 		if "line" in nd:
 			line = nd.line
 			nd.speaker = nd.speaker
 		
-		line = line.strip_edges()
-		# If there's nothing at this point, it's ignored.
-		if line.length() == 0:
-			continue
-			
-		var sp := extract_conditions(line)
-		line = sp.line
-		wd.conditions = sp.conditions
-		
-		wd.text = line
+		wd.text = line.strip_edges()
 		
 		if "indent" in wspe:
 			indent = wspe.indent
