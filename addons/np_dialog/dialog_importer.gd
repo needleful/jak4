@@ -1,0 +1,194 @@
+tool
+extends EditorImportPlugin
+class_name NPDialogImportPlugin
+
+var NPSequence = preload("res://addons/np_dialog/resource/sequence.gd")
+
+var r_comment := RegEx.new()
+var r_whitespace_start := RegEx.new()
+var r_label := RegEx.new()
+var r_condition := RegEx.new()
+
+func _init():
+	r_comment.compile("^\\s*//")
+	r_whitespace_start.compile("^(\\s+)")
+	r_label.compile("^\\s*:(\\w+)")
+	r_condition.compile("#?\\{([^\\}]+)\\}")
+
+func get_importer_name():
+	return "np.dialog"
+
+func get_visible_name():
+	return "NP Dialog"
+
+func get_recognized_extensions():
+	return ["dialog"]
+
+func get_save_extension():
+	return "tres"
+
+func get_resource_type():
+	return "NPSequence"
+
+func import(src_path: String, 
+	dest_path: String,
+	options: Dictionary, 
+	r_platform_variants: Array, 
+	r_gen_files: Array
+):
+	var in_file := File.new()
+	var err := in_file.open(src_path, File.READ)
+	if err != OK:
+		print_debug("NP Dialog failed to import %s, error code %d" 
+			% [src_path, err])
+		return err
+	
+	var text := in_file.get_as_text()
+	in_file.close()
+	
+	var seq = parse_text(text, src_path)
+	if !(seq is Resource) or !("dialog" in seq):
+		print_debug("Encountered an error: ", seq)
+		return seq
+
+	print("Imported ", src_path)
+
+	var out_path: String = "%s.%s" % [dest_path, get_save_extension()]
+	err = ResourceSaver.save(out_path, seq)
+	if err != OK:
+		print_debug("NP Dialog failed to save %s, error code %d" 
+			% [out_path, err])
+		return err
+
+	print("Wrote to ", out_path)
+	return OK
+
+func parse_text(text: String, src_path = "<local>"):
+	var seq = NPSequence.new()
+	
+	var current_dialog := -1
+	var prev: DialogItem
+	var current_level := 0
+	var indent := ""
+	var label := ""
+	
+	var line_number := 0
+	
+	for line in text.split("\n", true):
+		line_number += 1
+		if r_comment.search(line) or line.length() == 0:
+			continue
+		
+		var label_search := r_label.search(line)
+		if label_search:
+			label = label_search.get_string(1)
+			continue
+		
+		# Whitespace and indentation
+		var wspe := extract_whitespace(line, indent, src_path, line_number)
+		line = wspe.line
+		
+		if line.length() == 0:
+			continue
+		
+		var wd := DialogItem.new()
+		seq.dialog[line_number] = wd
+		
+		var sp := extract_conditions(line)
+		line = sp.line
+		wd.conditions = sp.conditions
+		
+		wd.text = line
+		
+		print(line_number, ": ", line)
+		
+		if "indent" in wspe:
+			indent = wspe.indent
+		var level_change: int = wspe.indent_level - current_level
+		if level_change > 1:
+			print_debug("ERROR %s [line %d]: Extra indentation" % [
+				src_path, line_number
+			])
+			level_change = 1
+		
+		print('\t%d [%d + %d]' % [wspe.indent_level, current_level, level_change])
+
+		# Inserting the working dialog item into the tree
+		if current_dialog == -1:
+			# No parent issues
+			pass
+		elif level_change == 0:
+			prev.next = line_number
+			wd.parent = prev.parent
+			print("\tAfter ", current_dialog, ", ", prev.text)
+		elif level_change == 1:
+			prev.child = line_number
+			wd.parent = current_dialog
+			print("\t Child of ", current_dialog, ", ", prev.text)
+		else:
+			var lv:int = level_change
+			var previous: DialogItem = prev
+			while lv < 0:
+				if previous.parent == -1:
+					print_debug("BUG %s [line %d]: Indented block with no parent" % [
+						src_path, line_number
+					])
+					return ERR_BUG
+				previous = seq.dialog[previous.parent]
+				lv += 1
+			previous.next = line_number
+			wd.parent = previous.parent
+			print("\tAfter ", previous.text)
+		current_dialog = line_number
+		current_level += level_change
+		prev = wd
+		if label != "":
+			seq.labeled_items[label] = line_number
+		label = ""
+	return seq
+
+func extract_whitespace(line: String, indent: String, src_path, line_number) -> Dictionary:
+	var dict := {}
+	var space := ""
+	
+	var whitespace := r_whitespace_start.search(line)
+	if whitespace:
+		space = whitespace.get_string(1)
+		if indent == "":
+			dict.indent = space
+			indent = space
+
+	if space != "" and (space.length() % indent.length() != 0):
+		print_debug("ERROR %s [line %d]: Invalid indentation of length %d" % [
+			src_path, line_number, space.length()
+		])
+
+	if space.length() != 0:
+		dict.indent_level = space.length() / indent.length()
+	else:
+		dict.indent_level = 0
+
+	dict.line = line.strip_edges()
+	return dict
+
+func extract_conditions(line: String) -> Dictionary:
+	var dict = {}
+	dict.line = dict.line
+	dict.conditions = []
+	var matches = r_condition.search_all(line)
+	for rm in matches:
+		var s: String=  rm.get_string()
+		if s.begins_with("#"):
+			continue
+		else:
+			dict.line = dict.line.replace(s, "")
+			dict.conditions.append(rm.get_string(1))
+	return dict
+func get_preset_count():
+	return 1
+
+func get_preset_name(_preset):
+	return "NP Dialog"
+
+func get_import_options(preset):
+	return []

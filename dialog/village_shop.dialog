@@ -1,5 +1,6 @@
-// When starting a dialog, you can either start from the first line, or a named section.
+// When starting a dialog, you can either start from the first line, or a named item like this.
 // Also it supports comments lol.
+:shop_entry
 // In text entries, expressions formatted as `{text}` are run in GDScript.  The return value decides if the text is shown
 // The indentation here indicates the indented items also depend on the expression
 // So if "talked" is not zero, these lines are skipped.
@@ -56,7 +57,7 @@
 		They are a currency. You use gems to buy eggs, and the eggs to buy other items, such as capacitors.
 		// Expressions that return false are skipped
 		{Global.stat("egg") == 0} You do not have any eggs, but I'm sure you shall find some.
-		{Global.stat("egg") == 1 if otherwise} I see you have found an egg. There are many more to find!
+		{otherwise if Global.stat("egg") == 1} I see you have found an egg. There are many more to find!
 		// Expressions starting with '#{' will take the result, convert it to text, and insert it into the text right when it's shown.
 		{otherwise} You have #{Global.count("egg")} eggs on your person, and have found a total of #{Global.stat("egg")}.
 			Commendable work!
