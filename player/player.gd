@@ -11,12 +11,14 @@ const MIN_SLIDE_DOT := 0.12
 const COYOTE_TIME := 0.1
 var coyote_timer := 0.0
 
-const BASE_JUMP_TIME := 0.25
 const BASE_JUMP_VEL := 8.0
 const CROUCH_JUMP_VEL := 12.5
+const LEDGE_JUMP_VEL := 9.0
 const ROLL_JUMP_VEL := 7.0
-const ROLL_JUMP_STEER := 2.5
 const ROLL_JUMP_LURCH := 7.0
+
+const BASE_JUMP_TIME := 0.25
+const ROLL_JUMP_STEER := 2.5
 const CROUCH_JUMP_TIME := 0.5
 var air_timer := 0.0
 
@@ -67,6 +69,7 @@ enum State {
 	RollFall,
 	LedgeHang,
 	LedgeFall,
+	LedgeJump,
 	BonkFall
 }
 
@@ -170,14 +173,40 @@ func _physics_process(delta):
 					next_state = State.Fall
 			else:
 				coyote_timer = 0
-		State.BaseJump:
+		State.BaseJump, State.LedgeJump:
 			air_timer += delta
 			if air_timer > BASE_JUMP_TIME:
+				next_state = State.Fall
+		State.Crouch:
+			if Input.is_action_just_pressed("mv_jump"):
+				next_state = State.CrouchJump
+			elif !Input.is_action_pressed("mv_crouch") and (
+				crouch_head.get_overlapping_bodies().size() == 0
+			):
+				next_state = State.Ground
+			elif best_floor_dot < MIN_SLIDE_DOT:
 				next_state = State.Fall
 		State.CrouchJump:
 			air_timer += delta
 			if air_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
+		State.Roll:
+			roll_timer += delta
+			if (roll_timer > ROLL_MIN_TIME_JUMP 
+				and Input.is_action_just_pressed("mv_jump")
+			):
+				next_state = State.RollJump
+			elif best_floor_dot < MIN_SLIDE_DOT:
+				if best_normal != Vector3.ZERO:
+					next_state = State.BonkFall
+				else:
+					coyote_timer += delta
+					if coyote_timer > COYOTE_TIME:
+						next_state = State.Fall
+			else:
+				coyote_timer = 0
+				if roll_timer > ROLL_TIME:
+					next_state = State.Crouch
 		State.RollJump:
 			air_timer += delta
 			if air_timer > CROUCH_JUMP_TIME:
@@ -219,6 +248,12 @@ func _physics_process(delta):
 					next_state = State.Slide
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
+		State.LedgeHang:
+			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
+			if Input.is_action_just_pressed("mv_jump"):
+				next_state = State.LedgeJump
+			elif Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
+				next_state = State.LedgeFall
 		State.LedgeFall, State.BonkFall:
 			if best_floor_dot > MIN_GROUND_DOT:
 				if Input.is_action_pressed("mv_crouch"):
@@ -234,35 +269,6 @@ func _physics_process(delta):
 				air_timer += delta
 				if air_timer >= TIME_LEDGE_FALL:
 					next_state = State.Fall
-		State.Crouch:
-			if Input.is_action_just_pressed("mv_jump"):
-				next_state = State.CrouchJump
-			elif !Input.is_action_pressed("mv_crouch") and (
-				crouch_head.get_overlapping_bodies().size() == 0
-			):
-				next_state = State.Ground
-			elif best_floor_dot < MIN_SLIDE_DOT:
-				next_state = State.Fall
-		State.Roll:
-			roll_timer += delta
-			if (roll_timer > ROLL_MIN_TIME_JUMP 
-				and Input.is_action_just_pressed("mv_jump")
-			):
-				next_state = State.RollJump
-			elif best_floor_dot < MIN_SLIDE_DOT:
-				coyote_timer += delta
-				if coyote_timer > COYOTE_TIME:
-					next_state = State.Fall
-			else:
-				coyote_timer = 0
-				if roll_timer > ROLL_TIME:
-					next_state = State.Crouch
-		State.LedgeHang:
-			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
-			if Input.is_action_just_pressed("mv_jump"):
-				next_state = State.CrouchJump
-			elif Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
-				next_state = State.LedgeFall
 	set_state(next_state)
 	
 	match state:
@@ -287,8 +293,10 @@ func _physics_process(delta):
 		State.Crouch:
 			ground_normal = best_normal
 			accel(delta, desired_velocity*CROUCH_SPEED)
-		State.CrouchJump:
+		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL)
+		State.LedgeHang:
+			desired_velocity = Vector3.ZERO
 	update_visuals(desired_velocity)
 
 func update_visuals(input_dir: Vector3, var flip = false):
@@ -436,25 +444,28 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
-		State.Roll:
-			$crouching_col.disabled = false
-			$standing_col.disabled = true
-			mesh.transition_to("Roll")
 		State.CrouchJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity.y = CROUCH_JUMP_VEL
 			mesh.transition_to("BaseJump")
+		State.LedgeHang:
+			mesh.transition_to("LedgeGrab")
+			snap_to_ledge()
+			velocity = Vector3.ZERO
+		State.LedgeJump:
+			velocity.y += LEDGE_JUMP_VEL
+			mesh.transition_to("BaseJump")
+		State.Roll:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
+			mesh.transition_to("Roll")
 		State.RollJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity.y = ROLL_JUMP_VEL
 			velocity += -cam_yaw.global_transform.basis.z*ROLL_JUMP_LURCH
 			mesh.transition_to("RollJump")
-		State.LedgeHang:
-			mesh.transition_to("LedgeGrab")
-			snap_to_ledge()
-			velocity = Vector3.ZERO
 		State.BonkFall:
 			mesh.transition_to("Fall")
 			var dir = ground_normal
