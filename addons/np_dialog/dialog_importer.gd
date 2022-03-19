@@ -8,12 +8,18 @@ var r_comment := RegEx.new()
 var r_whitespace_start := RegEx.new()
 var r_label := RegEx.new()
 var r_condition := RegEx.new()
+var r_narrate := RegEx.new()
+var r_reply := RegEx.new()
+var r_speaker := RegEx.new()
 
 func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
 	r_label.compile("^\\s*:(\\w+)")
 	r_condition.compile("#?\\{([^\\}]+)\\}")
+	r_narrate.compile("^\\s*\\*\\s*")
+	r_reply.compile("^\\s*>\\s*")
+	r_speaker.compile("^\\s*\\[\\s*(\\w+)\\s*\\]\\s*")
 
 func get_importer_name():
 	return "np.dialog"
@@ -51,8 +57,6 @@ func import(src_path: String,
 		print_debug("Encountered an error: ", seq)
 		return seq
 
-	print("Imported ", src_path)
-
 	var out_path: String = "%s.%s" % [dest_path, get_save_extension()]
 	err = ResourceSaver.save(out_path, seq)
 	if err != OK:
@@ -60,7 +64,6 @@ func import(src_path: String,
 			% [out_path, err])
 		return err
 
-	print("Wrote to ", out_path)
 	return OK
 
 func parse_text(text: String, src_path = "<local>"):
@@ -86,21 +89,30 @@ func parse_text(text: String, src_path = "<local>"):
 		
 		# Whitespace and indentation
 		var wspe := extract_whitespace(line, indent, src_path, line_number)
-		line = wspe.line
-		
-		if line.length() == 0:
-			continue
+
 		
 		var wd := DialogItem.new()
 		seq.dialog[line_number] = wd
 		
+		var td := extract_type(line)
+		line = td.line
+		wd.type = td.type
+		
+		var nd := extract_speaker(line)
+		if "line" in nd:
+			line = nd.line
+			nd.speaker = nd.speaker
+		
+		line = line.strip_edges()
+		# If there's nothing at this point, it's ignored.
+		if line.length() == 0:
+			continue
+			
 		var sp := extract_conditions(line)
 		line = sp.line
 		wd.conditions = sp.conditions
 		
 		wd.text = line
-		
-		print(line_number, ": ", line)
 		
 		if "indent" in wspe:
 			indent = wspe.indent
@@ -110,8 +122,6 @@ func parse_text(text: String, src_path = "<local>"):
 				src_path, line_number
 			])
 			level_change = 1
-		
-		print('\t%d [%d + %d]' % [wspe.indent_level, current_level, level_change])
 
 		# Inserting the working dialog item into the tree
 		if current_dialog == -1:
@@ -120,11 +130,9 @@ func parse_text(text: String, src_path = "<local>"):
 		elif level_change == 0:
 			prev.next = line_number
 			wd.parent = prev.parent
-			print("\tAfter ", current_dialog, ", ", prev.text)
 		elif level_change == 1:
 			prev.child = line_number
 			wd.parent = current_dialog
-			print("\t Child of ", current_dialog, ", ", prev.text)
 		else:
 			var lv:int = level_change
 			var previous: DialogItem = prev
@@ -138,12 +146,11 @@ func parse_text(text: String, src_path = "<local>"):
 				lv += 1
 			previous.next = line_number
 			wd.parent = previous.parent
-			print("\tAfter ", previous.text)
 		current_dialog = line_number
 		current_level += level_change
 		prev = wd
 		if label != "":
-			seq.labeled_items[label] = line_number
+			seq.labels[label] = line_number
 		label = ""
 	return seq
 
@@ -167,13 +174,11 @@ func extract_whitespace(line: String, indent: String, src_path, line_number) -> 
 		dict.indent_level = space.length() / indent.length()
 	else:
 		dict.indent_level = 0
-
-	dict.line = line.strip_edges()
 	return dict
 
 func extract_conditions(line: String) -> Dictionary:
 	var dict = {}
-	dict.line = dict.line
+	dict.line = line
 	dict.conditions = []
 	var matches = r_condition.search_all(line)
 	for rm in matches:
@@ -184,6 +189,31 @@ func extract_conditions(line: String) -> Dictionary:
 			dict.line = dict.line.replace(s, "")
 			dict.conditions.append(rm.get_string(1))
 	return dict
+
+func extract_type(line: String) -> Dictionary:
+	var dict = {}
+	var nm = r_narrate.search(line)
+	if nm:
+		dict.type = DialogItem.Type.NARRATION
+		dict.line = line.replace(nm.get_string(), "")
+	else:
+		var rm = r_reply.search(line)
+		if rm:
+			dict.type = DialogItem.Type.REPLY
+			dict.line = line.replace(rm.get_string(), "")
+		else:
+			dict.type = DialogItem.Type.MESSAGE
+			dict.line = line
+	return dict
+
+func extract_speaker(line: String) -> Dictionary:
+	var dict = {}
+	var m = r_speaker.search(line)
+	if m:
+		dict.speaker = m.get_string(1)
+		dict.line = line.replace(m.get_string(), "")
+	return dict
+
 func get_preset_count():
 	return 1
 
