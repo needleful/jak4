@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
 [ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://material/coat/checkers1.jpg" type="Texture" id=4]
+[ext_resource path="res://material/coat.shader" type="Shader" id=5]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -39,6 +41,23 @@ size = Vector3( 2000, 2000, 2000 )
 
 [sub_resource type="SpatialMaterial" id=5]
 albedo_texture = ExtResource( 3 )
+
+[sub_resource type="CubeMesh" id=6]
+
+[sub_resource type="Gradient" id=7]
+colors = PoolColorArray( 0, 0, 0, 1, 53.18, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 5 )
+shader_param/light_bias = null
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 4 )
+shader_param/gradient = SubResource( 8 )
 
 [node name="test_world" instance=ExtResource( 2 )]
 
@@ -78,3 +97,8 @@ use_collision = true
 [node name="CSGBox3" type="CSGBox" parent="." index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74158, 8.07134 )
 use_collision = true
+
+[node name="MeshInstance3" type="MeshInstance" parent="." index="9"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0 )
+mesh = SubResource( 6 )
+material/0 = SubResource( 9 )

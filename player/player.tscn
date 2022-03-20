@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -175,6 +175,12 @@ radius = 0.631892
 radius = 0.847281
 height = 0.804826
 
+[sub_resource type="SphereShape" id=15]
+radius = 0.613997
+
+[sub_resource type="SphereShape" id=16]
+radius = 0.689781
+
 [node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
 collision_layer = 10
 script = ExtResource( 1 )
@@ -330,6 +336,7 @@ transform = Transform( -1, 5.08355e-08, -1.42181e-07, 0, 0.941623, 0.336668, 1.5
 
 [node name="attack_lunge" type="Area" parent="intention"]
 transform = Transform( -1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 8.01283e-08, 0.65977, -0.530665 )
+visible = false
 collision_layer = 0
 collision_mask = 4
 
@@ -338,9 +345,26 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0254159, 0, -0.0763994 )
 shape = SubResource( 13 )
 
 [node name="attack_spin" type="Area" parent="intention"]
+visible = false
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="intention/attack_spin"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.701608, 0 )
 shape = SubResource( 14 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="intention/attack_spin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.283345, 0 )
+shape = SubResource( 15 )
+
+[node name="attack_roll" type="Area" parent="intention"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43397, 0 )
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="intention/attack_roll"]
+shape = SubResource( 16 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="intention/attack_roll"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8422e-07, -0.0204051, -0.358943 )
+shape = SubResource( 16 )

@@ -57,6 +57,7 @@ const AIR_SPIN_VEL := 5.0
 
 const LUNGE_DAMAGE := 15
 const SPIN_DAMAGE := 10
+const ROLL_JUMP_DAMAGE := 5
 
 const VEL_H_DAMAGED := 5
 const VEL_V_DAMAGED := 6
@@ -77,6 +78,7 @@ onready var ledgeRef := $intention/reference
 
 onready var lunge_hitbox := $intention/attack_lunge
 onready var spin_hitbox := $intention/attack_spin
+onready var roll_hitbox := $intention/attack_roll
 
 var velocity := Vector3.ZERO
 
@@ -200,7 +202,7 @@ func _physics_process(delta):
 			if Input.is_action_just_released("combat_lunge"):
 				next_state = State.LungeKick
 			elif Input.is_action_just_pressed("combat_spin"):
-				next_state = State.SpinKick
+				next_state = State.AirSpinKick
 			elif best_floor_dot > MIN_GROUND_DOT:
 				next_state = State.Ground
 			elif best_floor_dot < MIN_SLIDE_DOT:
@@ -327,6 +329,8 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Slide
+			elif can_ledge_grab():
+				next_state = State.LedgeHang
 			else:
 				if state_timer >= SPIN_KICK_TIME:
 					next_state = State.Fall
@@ -356,6 +360,7 @@ func _physics_process(delta):
 			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
 		State.RollJump, State.RollFall:
 			accel_air(delta, desired_velocity * ROLL_SPEED, ACCEL_ROLL, true)
+			damage_point(roll_hitbox, ROLL_JUMP_DAMAGE, global_transform.origin)
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL_ROLL)
 		State.Crouch:
@@ -373,16 +378,10 @@ func _physics_process(delta):
 				damage(g, LUNGE_DAMAGE, damage_dir)
 		State.SpinKick:
 			accel(delta, desired_velocity*RUN_SPEED)
-			for g in spin_hitbox.get_overlapping_bodies():
-				var damage_dir = g.global_transform.origin - global_transform.origin
-				damage_dir = damage_dir.normalized()
-				damage(g, SPIN_DAMAGE, damage_dir)
+			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*RUN_SPEED, 0.75)
-			for g in spin_hitbox.get_overlapping_bodies():
-				var damage_dir = g.global_transform.origin - global_transform.origin
-				damage_dir = damage_dir.normalized()
-				damage(g, SPIN_DAMAGE, damage_dir)
+			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
 	update_visuals(desired_velocity)
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
@@ -451,7 +450,7 @@ func accel_low_gravity(delta, desired_velocity, gravity_factor):
 	velocity += gravity_factor*GRAVITY*delta
 	var pre_slide_vel := velocity
 	velocity = move_and_slide(velocity)
-	velocity.y = pre_slide_vel.y
+	velocity.y = min(pre_slide_vel.y, velocity.y)
 
 func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 	if desired_velocity.dot(wall_normal) < 0:
@@ -538,7 +537,13 @@ func rotate_intention(dir: Vector3):
 			Vector3.UP
 		)
 
-func damage(node: Node, damage: float, dir: Vector3):
+func damage_point(area: Area, damage: int, point: Vector3):
+	for g in area.get_overlapping_bodies():
+		var damage_dir = g.global_transform.origin - point
+		damage_dir = damage_dir.normalized()
+		damage(g, damage, damage_dir)
+
+func damage(node: Node, damage: int, dir: Vector3):
 	if node in damaged_objects:
 		return
 	damaged_objects.append(node)
@@ -594,7 +599,7 @@ func set_state(next_state: int):
 		State.RollJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			var dir = -intention.global_transform.basis.z
+			var dir = mesh.global_transform.basis.z
 			velocity = dir*ROLL_JUMP_LURCH
 			velocity.y = ROLL_JUMP_VEL
 			

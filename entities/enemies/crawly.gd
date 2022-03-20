@@ -29,10 +29,9 @@ var velocity := Vector3.ZERO
 var WINDUP_TIME := .5
 var ATTACK_TIME := 0.75
 var ALERT_TIME := 2.0
-var DAMAGED_TIME := 0.75
+var DAMAGED_TIME := 1.0
 var COOLDOWN_TIME := 2.0
 var EXTRA_CHASE_TIME := 4.0
-var DEAD_TIME := 30.0
 var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
@@ -102,8 +101,7 @@ func _physics_process(delta):
 			velocity.z = move_dir.z
 			velocity = move_and_slide(velocity + GRAVITY*delta)
 		AI.Dead:
-			if state_timer > DEAD_TIME:
-				queue_free()
+			
 			var best_normal = Vector3.ZERO
 			for c in get_slide_count():
 				var n = get_slide_collision(c).normal

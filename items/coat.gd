@@ -19,6 +19,7 @@ func generate_material() -> Material:
 	
 	var gt := GradientTexture.new()
 	gt.gradient = gradient
+	gt.width = 64
 	mat.set_shader_param("gradient", gt)
 	mat.set_shader_param("softness", 0.25)
 	mat.set_shader_param("palette", palette)
