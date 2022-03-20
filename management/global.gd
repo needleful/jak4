@@ -57,6 +57,14 @@ func add_item(item: String):
 		game_state.inventory[item] = 1
 	emit_signal("inventory_changed")
 
+func remove_item(item: String, amount := 1) -> bool:
+	if count(item) >= amount:
+		game_state.inventory[item] -= amount
+		emit_signal("inventory_changed")
+		return true
+	else:
+		return false
+
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)
 
@@ -65,6 +73,13 @@ func mark_picked(path: NodePath):
 
 func is_picked(path: NodePath) -> bool:
 	return path in game_state.picked_items
+
+func is_activated(node: Node) -> bool:
+	return node.get_path() in game_state.activated
+
+func mark_activated(node: Node):
+	if !node.get_path() in game_state.activated:
+		game_state.activated.append(node.get_path())
 
 # Coats
 

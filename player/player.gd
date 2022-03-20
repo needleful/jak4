@@ -31,8 +31,7 @@ const ROLL_MIN_TIME_JUMP := 0.3
 const BONK_SPEED := 5.0
 
 const CLIMB_STAMINA_DRAIN := 25.0
-const STAMINA_RECOVER := 15.0
-const MIN_CLIMB_STAMINA := 20.0
+const MIN_CLIMB_STAMINA := 10.0
 
 # Accelerating from zero
 const ACCEL_START := 50.0
@@ -71,6 +70,7 @@ var health := max_health
 var damaged_objects: Array = []
 
 var max_stamina := 20.0
+var stamina_recover := 8.0
 var stamina := max_stamina
 
 onready var cam_yaw := $camera_rig/yaw
@@ -81,6 +81,7 @@ onready var intention := $intention
 onready var ledgeCastLeft := $jackie/leftHandCast
 onready var ledgeCastRight := $jackie/rightHandCast
 onready var ledgeCastCenter := $jackie/centerCast
+onready var ledgeCastCeiling := $jackie/ceilingCast
 onready var ledgeRef := $jackie/reference
 
 onready var lunge_hitbox := $jackie/attack_lunge
@@ -110,12 +111,13 @@ enum State {
 	Damaged
 }
 
-var state: int = State.Ground
+var state: int = State.Fall
 var ground_normal:Vector3 = Vector3.UP
 
 var current_coat: Coat
 
 func _ready():
+	set_state(State.Ground)
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
 		set_current_coat(Global.game_state.current_coat)
@@ -167,7 +169,7 @@ func set_current_coat(coat: Coat):
 func _physics_process(delta):
 	state_timer += delta
 	if state != State.Climb:
-		stamina += STAMINA_RECOVER*delta
+		stamina += stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
@@ -186,7 +188,7 @@ func _physics_process(delta):
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
-	$ui/debug/stats/a2.text = "Floor Dot: %f" % velocity.y
+	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
 	match state:
@@ -240,8 +242,11 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif best_floor_dot < MIN_SLIDE_DOT:
 				next_state = State.Fall
-			elif stamina > MIN_CLIMB_STAMINA and best_floor_dot < MIN_GROUND_DOT:
-				next_state = State.Climb
+			elif best_floor_dot < MIN_GROUND_DOT:
+				if stamina > MIN_CLIMB_STAMINA:
+					next_state = State.Climb
+				else:
+					next_state = State.Slide
 		State.CrouchJump:
 			if state_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
@@ -517,6 +522,10 @@ func is_grounded():
 		or state == State.Crouch)
 
 func can_ledge_grab() -> bool:
+	if (ledgeCastCeiling.is_colliding() 
+		and ledgeCastCeiling.get_collision_normal().y < 0
+	):
+		return false
 	var left:bool = (
 		ledgeCastLeft.is_colliding()
 		and ledgeCastLeft.get_collision_normal().y > LEDGE_MIN_Y)

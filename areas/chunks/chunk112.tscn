@@ -1,15 +1,14 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=2]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=3]
 [ext_resource path="res://items/egg_pickup.tscn" type="PackedScene" id=4]
-[ext_resource path="res://items/item_pickup.gd" type="Script" id=5]
-[ext_resource path="res://entities/enemies/crawly.gd" type="Script" id=6]
+[ext_resource path="res://material/bricks.material" type="Material" id=5]
+[ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=6]
 [ext_resource path="res://_glb/chunks/chunk112.glb" type="PackedScene" id=7]
-[ext_resource path="res://material/env/sand1.jpg" type="Texture" id=8]
-[ext_resource path="res://material/env/sand_brick1.jpg" type="Texture" id=9]
-[ext_resource path="res://material/triplanar.shader" type="Shader" id=10]
+[ext_resource path="res://entities/power_thing.tscn" type="PackedScene" id=8]
+[ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ArrayMesh" id=225]
 resource_name = "world_Plane401"
@@ -26,78 +25,138 @@ surfaces/0 = {
 "vertex_count": 3005
 }
 
-[sub_resource type="ShaderMaterial" id=226]
-shader = ExtResource( 10 )
-shader_param/uv_scale = 0.35
-shader_param/wall = ExtResource( 9 )
-shader_param/ground = ExtResource( 8 )
+[sub_resource type="ConvexPolygonShape" id=227]
+points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
+
+[sub_resource type="Animation" id=226]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../door:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 119.317, -239.278, -57.297 ), Vector3( 119.317, -251.655, -57.297 ) ]
+}
+
+[sub_resource type="Animation" id=228]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../door:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 119.317, -239.278, -57.297 ) ]
+}
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
 preview_mesh = SubResource( 225 )
 
 [node name="wall" parent="." index="0"]
-material_override = SubResource( 226 )
+material_override = ExtResource( 5 )
 
-[node name="crawly" type="KinematicBody" parent="." index="1" instance=ExtResource( 3 )]
+[node name="crawly" parent="." index="1" instance=ExtResource( 3 )]
 transform = Transform( -0.120033, 0, -0.99277, 0, 1, 0, 0.99277, 0, -0.120033, 248, -198.34, -190 )
-collision_layer = 5
-script = ExtResource( 6 )
 drops_coat = true
 health = 45
 attack_damage = 15
 
-[node name="crawly2" type="KinematicBody" parent="." index="2" instance=ExtResource( 3 )]
+[node name="crawly2" parent="." index="2" instance=ExtResource( 3 )]
 transform = Transform( -0.812297, 0, 0.583243, 0, 1, 0, -0.583243, 0, -0.812297, 233.381, -199.035, -185.724 )
-collision_layer = 5
-script = ExtResource( 6 )
 
-[node name="crawly3" type="KinematicBody" parent="." index="3" instance=ExtResource( 3 )]
+[node name="crawly3" parent="." index="3" instance=ExtResource( 3 )]
 transform = Transform( 0.495428, 0, 0.868649, 0, 1, 0, -0.868649, 0, 0.495428, 233.666, -198.528, -191.459 )
-collision_layer = 5
-script = ExtResource( 6 )
 
-[node name="crawly4" type="KinematicBody" parent="." index="4" instance=ExtResource( 3 )]
+[node name="crawly4" parent="." index="4" instance=ExtResource( 3 )]
 transform = Transform( 0.649156, 0, -0.760655, 0, 1, 0, 0.760655, 0, 0.649156, 239.799, -198.528, -191.973 )
-collision_layer = 5
-script = ExtResource( 6 )
 
-[node name="crawly5" type="KinematicBody" parent="." index="5" instance=ExtResource( 3 )]
+[node name="crawly5" parent="." index="5" instance=ExtResource( 3 )]
 transform = Transform( -0.535753, 0, -0.844375, 0, 1, 0, 0.844375, 0, -0.535753, 238.593, -198.528, -185.684 )
-collision_layer = 5
-script = ExtResource( 6 )
 
-[node name="egg_pickup" type="Area" parent="." index="6" instance=ExtResource( 4 )]
+[node name="egg_pickup" parent="." index="6" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.917, -198.762, -189.086 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 5 )
-item_id = "egg"
 
-[node name="egg_pickup2" type="Area" parent="." index="7" instance=ExtResource( 4 )]
+[node name="egg_pickup2" parent="." index="7" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.878, -198.762, -188.412 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 5 )
-item_id = "egg"
 
-[node name="egg_pickup3" type="Area" parent="." index="8" instance=ExtResource( 4 )]
+[node name="egg_pickup3" parent="." index="8" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.184, -198.762, -188.193 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 5 )
-item_id = "egg"
 
-[node name="egg_pickup4" type="Area" parent="." index="9" instance=ExtResource( 4 )]
+[node name="egg_pickup4" parent="." index="9" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.169, -198.762, -189.225 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 5 )
-item_id = "egg"
 
-[node name="egg_pickup5" type="Area" parent="." index="10" instance=ExtResource( 4 )]
+[node name="egg_pickup5" parent="." index="10" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 235.765, -198.762, -188.804 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 5 )
-item_id = "egg"
+
+[node name="hut" parent="." index="11"]
+material_override = ExtResource( 5 )
+
+[node name="hut001" parent="." index="12"]
+material_override = ExtResource( 5 )
+
+[node name="hut002" parent="." index="13"]
+material_override = ExtResource( 5 )
+
+[node name="door_frame" parent="." index="14"]
+material_override = ExtResource( 5 )
+
+[node name="egg_pickup6" parent="." index="15" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 173.928, -219, -63.7619 )
+
+[node name="egg_pickup7" parent="." index="16" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 158.05, -219.53, -53.5611 )
+
+[node name="egg_pickup8" parent="." index="17" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.868, -218.818, -53.8967 )
+
+[node name="egg_pickup9" parent="." index="18" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.926, -217.243, -50.4955 )
+
+[node name="egg_pickup10" parent="." index="19" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 124.83, -217.145, -65.8646 )
+
+[node name="egg_pickup11" parent="." index="20" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 110.191, -207.998, -61.475 )
+
+[node name="egg_pickup12" parent="." index="21" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 108.988, -208.22, -57.4413 )
+
+[node name="coat_pickup" parent="." index="22" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 107.839, -209.062, -60.4016 )
+random_seed = 288230176151711744
+
+[node name="door" parent="." index="23"]
+material_override = ExtResource( 5 )
+
+[node name="KinematicBody" type="KinematicBody" parent="door" index="0"]
+
+[node name="CollisionShape2" type="CollisionShape" parent="door/KinematicBody" index="0"]
+shape = SubResource( 227 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="." index="25"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 126.189, -238.07, -55.6988 )
+use_collision = true
+radius = 1.90478
+height = 2.2606
+material = ExtResource( 5 )
+
+[node name="capacitor_pickup" parent="." index="26" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 186.431, -225.184, -53.9475 )
+
+[node name="power_thing" parent="." index="27" instance=ExtResource( 8 )]
+transform = Transform( 0.580149, 0, -0.814511, 0, 1, 0, 0.814511, 0, 0.580149, 125.38, -236.94, -56.8135 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="power_thing" index="3"]
+anims/Activate = SubResource( 226 )
+anims/RESET = SubResource( 228 )
