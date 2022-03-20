@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -168,8 +168,15 @@ height = 0.269648
 [sub_resource type="PrismMesh" id=12]
 size = Vector3( 0.2, 0.2, 0.2 )
 
+[sub_resource type="SphereShape" id=13]
+radius = 0.631892
+
+[sub_resource type="CylinderShape" id=14]
+radius = 0.847281
+height = 0.804826
+
 [node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
-collision_layer = 2
+collision_layer = 10
 script = ExtResource( 1 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
@@ -320,3 +327,20 @@ cast_to = Vector3( 0, -0.35, 0 )
 
 [node name="reference" type="Position3D" parent="intention"]
 transform = Transform( -1, 5.08355e-08, -1.42181e-07, 0, 0.941623, 0.336668, 1.50996e-07, 0.336668, -0.941623, -0.00444607, 1.49646, -0.464695 )
+
+[node name="attack_lunge" type="Area" parent="intention"]
+transform = Transform( -1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 8.01283e-08, 0.65977, -0.530665 )
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="intention/attack_lunge"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0254159, 0, -0.0763994 )
+shape = SubResource( 13 )
+
+[node name="attack_spin" type="Area" parent="intention"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="intention/attack_spin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.701608, 0 )
+shape = SubResource( 14 )

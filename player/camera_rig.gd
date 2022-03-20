@@ -10,8 +10,9 @@ const MAX_CAMERA_DIFF := 1.0
 const CORRECTION_VELOCITY := 4.0
 const CORRECTION_VELOCITY_GROUND := 8.0
 const MIN_FLOOR_HEIGHT := 0.5
-const H_CORRECTION := 24.0
-const H_DIFF_BOUND := 1.5
+const H_CORRECTION := 30.0
+const H_SLOW_CORRECTION := 15.0
+const H_DIFF_BOUND := 2.5
 
 const LEDGE_GRAB_RAISE := 1.0
 var raise := 0.0
@@ -48,12 +49,16 @@ func _physics_process(delta):
 		cv = lerp(cv, CORRECTION_VELOCITY_GROUND, 0.1)
 	else:
 		cv = lerp(cv, CORRECTION_VELOCITY, 0.1)
-		
+	
+	var hv = H_CORRECTION
+	if player.should_slow_follow():
+		hv = H_SLOW_CORRECTION
+	
 	var diff := target - pos
 	var movement := Vector3(
-		diff.x*min(delta*H_CORRECTION, 1),
+		diff.x*min(delta*hv, 1),
 		diff.y*min(delta*cv, 1),
-		diff.z*min(delta*H_CORRECTION, 1)
+		diff.z*min(delta*hv, 1)
 	)
 	
 	pos += movement
