@@ -1,6 +1,7 @@
 extends KinematicBody
 
-export(int) var health = 10
+export(bool) var drops_coat = false
+export(int) var health = 15
 export(int) var attack_damage = 10
 export(float) var run_speed = 7.5
 export(float) var lunge_speed = 15.0
@@ -13,6 +14,7 @@ onready var anim := $crawly/AnimationPlayer
 
 enum AI {
 	Idle,
+	Alerted,
 	Chasing,
 	Windup,
 	Attacking,
@@ -26,10 +28,11 @@ var velocity := Vector3.ZERO
 
 var WINDUP_TIME := .5
 var ATTACK_TIME := 0.75
+var ALERT_TIME := 2.0
 var DAMAGED_TIME := 0.75
 var COOLDOWN_TIME := 2.0
 var EXTRA_CHASE_TIME := 4.0
-var DEAD_TIME := 8.0
+var DEAD_TIME := 30.0
 var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
@@ -38,6 +41,14 @@ var target: Spatial
 var move_dir: Vector3
 
 var damaged:= []
+
+var coat = null
+
+func _ready():
+	set_state(ai)
+	if drops_coat:
+		coat = Global.get_coat(randi())
+		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
 
 func _physics_process(delta):
 	state_timer += delta
@@ -48,6 +59,9 @@ func _physics_process(delta):
 		AI.Idle:
 			for b in $awareness.get_overlapping_bodies():
 				target = b
+				next = AI.Alerted
+		AI.Alerted:
+			if state_timer > ALERT_TIME:
 				next = AI.Chasing
 		AI.Chasing:
 			if !target:
@@ -105,7 +119,7 @@ func _physics_process(delta):
 			velocity = move_and_slide(velocity + gravity*delta)
 		AI.Idle:
 			walk(delta, 0)
-		AI.Windup:
+		AI.Windup, AI.Alerted:
 			look_at_target(turn_speed_windup*delta)
 			walk(delta, 0)
 
@@ -140,11 +154,21 @@ func set_state(new_ai):
 	state_timer = 0
 	damaged = []
 	match ai:
+		AI.Alerted:
+			anim.play("Alert")
 		AI.Chasing:
 			anim.play("Run-loop")
 		AI.Damaged:
 			anim.play("Damaged")
 		AI.Dead:
+			collision_layer = 0
+			if drops_coat:
+				var coat_scene: PackedScene = load("res://items/coat_pickup.tscn")
+				var c = coat_scene.instance()
+				c.coat = coat
+				c.persistent = false
+				get_parent().add_child(c)
+				c.global_transform = global_transform
 			anim.play("Die")
 			anim.queue("Dead-loop")
 		AI.Idle:

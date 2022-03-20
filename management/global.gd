@@ -9,6 +9,12 @@ var coat_textures: Array
 const save_path := "user://autosave.tres"
 var valid_game_state := false
 
+var color_common := Color.white
+var color_uncommon := Color.chartreuse
+var color_rare := Color.mediumblue
+var color_super_rare := Color.darkorchid
+var color_sublime := Color.coral
+
 func _ready():
 	randomize()
 	var coat_dir := Directory.new()

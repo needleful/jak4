@@ -53,7 +53,7 @@ const STEER_KICK := 5.0
 const DECEL_KICK := 75.0
 
 const SPIN_KICK_TIME := 0.75
-const AIR_SPIN_VEL := 2.0
+const AIR_SPIN_VEL := 5.0
 
 const LUNGE_DAMAGE := 15
 const SPIN_DAMAGE := 10
@@ -197,7 +197,11 @@ func _physics_process(delta):
 			else:
 				coyote_timer = 0
 		State.Slide:
-			if best_floor_dot > MIN_GROUND_DOT:
+			if Input.is_action_just_released("combat_lunge"):
+				next_state = State.LungeKick
+			elif Input.is_action_just_pressed("combat_spin"):
+				next_state = State.SpinKick
+			elif best_floor_dot > MIN_GROUND_DOT:
 				next_state = State.Ground
 			elif best_floor_dot < MIN_SLIDE_DOT:
 				coyote_timer += delta
@@ -213,6 +217,9 @@ func _physics_process(delta):
 		State.Crouch:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.CrouchJump
+			elif Input.is_action_just_released("combat_lunge"):
+				# TODO: HighKick
+				next_state = State.LungeKick
 			elif !Input.is_action_pressed("mv_crouch") and (
 				crouch_head.get_overlapping_bodies().size() == 0
 			):
@@ -223,7 +230,10 @@ func _physics_process(delta):
 			if state_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
 		State.Roll:
-			if (state_timer > ROLL_MIN_TIME_JUMP 
+			if Input.is_action_just_released("combat_lunge"):
+				# TODO: Something cool
+				next_state = State.LungeKick
+			elif (state_timer > ROLL_MIN_TIME_JUMP 
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.RollJump
@@ -321,7 +331,11 @@ func _physics_process(delta):
 				if state_timer >= SPIN_KICK_TIME:
 					next_state = State.Fall
 		State.Damaged:
-			if state_timer > TIME_DAMAGED:
+			if Input.is_action_just_released("combat_lunge"):
+				next_state = State.LungeKick
+			elif Input.is_action_just_pressed("combat_spin"):
+				next_state = State.AirSpinKick
+			elif state_timer > TIME_DAMAGED:
 				next_state = State.Fall
 	set_state(next_state)
 	
