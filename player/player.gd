@@ -49,6 +49,7 @@ const MAX_HEALTH := 50
 
 const LUNGE_KICK_VEL := 25.0
 const LUNGE_KICK_TIME := 0.6
+const STEER_KICK := 5.0
 const DECEL_KICK := 75.0
 
 const SPIN_KICK_TIME := 0.75
@@ -351,9 +352,8 @@ func _physics_process(delta):
 		State.LedgeHang:
 			desired_velocity = Vector3.ZERO
 		State.LungeKick:
-			desired_velocity = Vector3.ZERO
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta)
+			accel_lunge(delta, desired_velocity*LUNGE_KICK_VEL)
 			var damage_dir = -intention.global_transform.basis.z
 			for g in lunge_hitbox.get_overlapping_bodies():
 				damage(g, LUNGE_DAMAGE, damage_dir)
@@ -457,7 +457,11 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.z)
 	velocity = move_and_slide(velocity + delta*GRAVITY)
 
-func accel_lunge(delta):
+func accel_lunge(delta, desired_velocity):
+	var hvel = velocity
+	hvel.y = 0
+	desired_velocity.y = 0
+	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
 	var v2 := move_and_slide(velocity + GRAVITY*delta)
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
