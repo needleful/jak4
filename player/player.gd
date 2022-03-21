@@ -26,7 +26,8 @@ const MIN_SPEED_ROLL := 2.0
 
 const CROUCH_SPEED := 2.0
 const ROLL_SPEED := 15.0
-const ROLL_TIME := 0.5
+const ROLL_MIN_TIME := 0.25
+const ROLL_MAX_TIME := 0.5
 const ROLL_MIN_TIME_JUMP := 0.3
 const BONK_SPEED := 5.0
 
@@ -49,13 +50,15 @@ const LEDGE_MIN_Y := 0.6
 
 # Combat
 
-const LUNGE_KICK_TIME := 0.6
+const LUNGE_KICK_MAX_TIME := 0.6
+const LUNGE_KICK_MIN_TIME := 0.4
 const SPIN_KICK_TIME := 0.7
 const UPPERCUT_WINDUP_TIME := 0.25
 const UPPERCUT_MIN_TIME := 0.4
 const UPPERCUT_MAX_TIME := 0.8
 const DIVE_WINDUP_TIME := 0.2
-const DIVE_END_TIME := 0.75
+const DIVE_MIN_END_TIME := 0.4
+const DIVE_MAX_END_TIME := 0.5
 
 const LUNGE_KICK_VEL := 25.0
 const AIR_SPIN_VEL := 5.0
@@ -297,7 +300,9 @@ func _physics_process(delta):
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.RollJump
-			elif best_floor_dot < MIN_SLIDE_DOT:
+			elif (state_timer > ROLL_MIN_TIME
+				and best_floor_dot < MIN_SLIDE_DOT
+			):
 				if best_normal != Vector3.ZERO:
 					next_state = State.BonkFall
 				else:
@@ -306,7 +311,7 @@ func _physics_process(delta):
 						next_state = State.Fall
 			else:
 				coyote_timer = 0
-				if state_timer > ROLL_TIME:
+				if state_timer > ROLL_MAX_TIME:
 					next_state = State.Crouch
 		State.RollJump:
 			if Input.is_action_just_pressed("combat_lunge"):
@@ -377,10 +382,13 @@ func _physics_process(delta):
 				if state_timer >= TIME_LEDGE_FALL:
 					next_state = State.Fall
 		State.LungeKick:
-			if Input.is_action_just_pressed("mv_jump"):
-				next_state = State.UppercutWindup
-			elif state_timer >= LUNGE_KICK_TIME:
+			if state_timer >= LUNGE_KICK_MAX_TIME:
 				next_state = State.Ground
+			elif state_timer >= LUNGE_KICK_MIN_TIME:
+				if Input.is_action_just_pressed("mv_jump"):
+					next_state = State.UppercutWindup
+				elif Input.is_action_just_pressed("combat_spin"):
+					next_state = State.SpinKick
 		State.SpinKick:
 			if state_timer >= SPIN_KICK_TIME:
 				next_state = State.Ground
@@ -399,7 +407,11 @@ func _physics_process(delta):
 			if state_timer > UPPERCUT_WINDUP_TIME:
 				next_state = State.Uppercut
 		State.Uppercut:
-			if state_timer > UPPERCUT_MIN_TIME and best_floor_dot > MIN_GROUND_DOT:
+			if Input.is_action_just_released("combat_lunge"):
+				next_state = State.DiveWindup
+			elif Input.is_action_just_released("combat_spin"):
+				next_state = State.AirSpinKick
+			elif state_timer > UPPERCUT_MIN_TIME and best_floor_dot > MIN_GROUND_DOT:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
@@ -413,7 +425,12 @@ func _physics_process(delta):
 			if best_floor_dot > MIN_SLIDE_DOT:
 				next_state = State.DiveEnd
 		State.DiveEnd:
-			if state_timer > DIVE_END_TIME:
+			if state_timer > DIVE_MIN_END_TIME:
+				if Input.is_action_just_pressed("combat_lunge"):
+					next_state = State.LungeKick
+				elif Input.is_action_just_pressed("combat_spin"):
+					next_state = State.AirSpinKick
+			if state_timer > DIVE_MAX_END_TIME:
 				next_state = State.Ground
 		State.Damaged:
 			if Input.is_action_just_released("combat_lunge"):

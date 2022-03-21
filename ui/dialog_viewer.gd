@@ -4,6 +4,7 @@ signal exited
 
 var main_speaker: Node
 var source_node: Node
+var last_speaker: String
 
 var current_item : DialogItem
 var sequence: Resource
@@ -52,7 +53,8 @@ func _ready():
 	r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
 	end()
 
-func start(source_node: Node, p_sequence: Resource, speaker: Node):
+func start(p_source_node: Node, p_sequence: Resource, speaker: Node):
+	source_node = p_source_node
 	sequence = p_sequence
 	main_speaker = speaker
 	set_process(true)
@@ -153,19 +155,26 @@ func _on_reply_timer_timeout():
 func choose_reply(item: DialogItem, skip: bool):
 	if !skip:
 		insert_label("You: %s" % item.text, player_font, player_color)
+		last_speaker = "You"
 	current_item = item
 	get_next()
 
 func show_message():
-	var speaker = current_item.speaker
+	var speaker = current_item.speaker	
 	if speaker == "":
 		speaker = main_speaker.name.capitalize()
-	if speaker == "You":
-		insert_label("%s: %s" % [speaker, current_item.text],
-			player_font, player_color)
+
+	var text := ""
+	if speaker != last_speaker:
+		text = "%s: %s" % [speaker, current_item.text]
 	else:
-		insert_label("%s: %s" % [speaker, current_item.text],
-			speaker_font, speaker_color)
+		text = "    " + current_item.text
+	last_speaker = speaker
+	
+	if speaker == "You":
+		insert_label(text, player_font, player_color)
+	else:
+		insert_label(text, speaker_font, speaker_color)
 
 func show_narration():
 	insert_label(current_item.text, narration_font, narration_color)
@@ -215,13 +224,13 @@ func evaluate(cond: String):
 		otherwise = result != Result.TRUE
 	return result
 
-func format(style: String):
+func format(_style: String):
 	return Result.TRUE
 
-func animation(anim: String):
+func animation(_anim: String):
 	return Result.TRUE
 
-func event(tag: String):
+func event(_tag: String):
 	return Result.TRUE
 
 func goto(label: String):
