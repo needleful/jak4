@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -16,6 +16,9 @@ radius = 0.613997
 
 [sub_resource type="SphereShape" id=16]
 radius = 0.689781
+
+[sub_resource type="CapsuleShape" id=21]
+radius = 0.581727
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.35
@@ -257,6 +260,14 @@ shape = SubResource( 16 )
 [node name="CollisionShape2" type="CollisionShape" parent="jackie/attack_roll"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8422e-07, -0.0204051, -0.358943 )
 shape = SubResource( 16 )
+
+[node name="attack_uppercut" type="Area" parent="jackie"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_uppercut"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.920029, -4.02157e-08 )
+shape = SubResource( 21 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )

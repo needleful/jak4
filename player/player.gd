@@ -49,14 +49,21 @@ const LEDGE_MIN_Y := 0.6
 
 # Combat
 
-const LUNGE_KICK_VEL := 25.0
 const LUNGE_KICK_TIME := 0.6
+const SPIN_KICK_TIME := 0.7
+const UPPERCUT_WINDUP_TIME := 0.25
+const UPPERCUT_MIN_TIME := 0.4
+const UPPERCUT_MAX_TIME := 0.8
+
+const LUNGE_KICK_VEL := 25.0
+const AIR_SPIN_VEL := 5.0
+const UPPERCUT_VEL := 10.0
+const UPPERCUT_EXTRA_GRAVITY := 0.2
+
 const STEER_KICK := 5.0
 const DECEL_KICK := 75.0
 
-const SPIN_KICK_TIME := 0.7
-const AIR_SPIN_VEL := 5.0
-
+const UPPERCUT_DAMAGE := 20
 const LUNGE_DAMAGE := 15
 const SPIN_DAMAGE := 10
 const ROLL_JUMP_DAMAGE := 5
@@ -87,6 +94,7 @@ onready var ledgeRef := $jackie/reference
 onready var lunge_hitbox := $jackie/attack_lunge
 onready var spin_hitbox := $jackie/attack_spin
 onready var roll_hitbox := $jackie/attack_roll
+onready var uppercut_hitbox := $jackie/attack_uppercut
 
 var velocity := Vector3.ZERO
 
@@ -108,6 +116,8 @@ enum State {
 	LungeKick,
 	SpinKick,
 	AirSpinKick,
+	UppercutWindup,
+	Uppercut,
 	Damaged
 }
 
@@ -235,7 +245,7 @@ func _physics_process(delta):
 				next_state = State.CrouchJump
 			elif Input.is_action_just_released("combat_lunge"):
 				# TODO: HighKick
-				next_state = State.LungeKick
+				next_state = State.UppercutWindup
 			elif !Input.is_action_pressed("mv_crouch") and (
 				crouch_head.get_overlapping_bodies().size() == 0
 			):
@@ -259,10 +269,7 @@ func _physics_process(delta):
 			elif stamina <= 0 or !Input.is_action_pressed("mv_crouch"):
 				next_state = State.Slide
 		State.Roll:
-			if Input.is_action_just_released("combat_lunge"):
-				# TODO: Something cool
-				next_state = State.LungeKick
-			elif (state_timer > ROLL_MIN_TIME_JUMP 
+			if (state_timer > ROLL_MIN_TIME_JUMP 
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.RollJump
@@ -340,7 +347,9 @@ func _physics_process(delta):
 				if state_timer >= TIME_LEDGE_FALL:
 					next_state = State.Fall
 		State.LungeKick:
-			if state_timer >= LUNGE_KICK_TIME:
+			if Input.is_action_just_pressed("mv_jump"):
+				next_state = State.UppercutWindup
+			elif state_timer >= LUNGE_KICK_TIME:
 				next_state = State.Ground
 		State.SpinKick:
 			if state_timer >= SPIN_KICK_TIME:
@@ -356,6 +365,17 @@ func _physics_process(delta):
 			else:
 				if state_timer >= SPIN_KICK_TIME:
 					next_state = State.Fall
+		State.UppercutWindup:
+			if state_timer > UPPERCUT_WINDUP_TIME:
+				next_state = State.Uppercut
+		State.Uppercut:
+			if state_timer > UPPERCUT_MIN_TIME and best_floor_dot > MIN_GROUND_DOT:
+				if Input.is_action_pressed("mv_crouch"):
+					next_state = State.Crouch
+				else:
+					next_state = State.Ground
+			elif state_timer > UPPERCUT_MAX_TIME:
+				next_state = State.Fall
 		State.Damaged:
 			if Input.is_action_just_released("combat_lunge"):
 				next_state = State.LungeKick
@@ -395,15 +415,19 @@ func _physics_process(delta):
 		State.LungeKick:
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*LUNGE_KICK_VEL)
-			var damage_dir = get_visual_forward()
-			for g in lunge_hitbox.get_overlapping_bodies():
-				damage(g, LUNGE_DAMAGE, damage_dir)
+			damage_directed(lunge_hitbox, LUNGE_DAMAGE, get_visual_forward())
 		State.SpinKick:
 			accel(delta, desired_velocity*RUN_SPEED)
 			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*RUN_SPEED, 0.75)
 			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
+		State.UppercutWindup:
+			accel(delta, 0.5*desired_velocity*CROUCH_SPEED)
+		State.Uppercut:
+			velocity += delta*GRAVITY*UPPERCUT_EXTRA_GRAVITY
+			accel_air(delta, desired_velocity*RUN_SPEED, ACCEL)
+			damage_directed(uppercut_hitbox, UPPERCUT_DAMAGE, Vector3.UP)
 	update_visuals(desired_velocity)
 
 func _process(_delta):
@@ -584,6 +608,10 @@ func damage_point(area: Area, damage: int, point: Vector3):
 		damage_dir = damage_dir.normalized()
 		damage(g, damage, damage_dir)
 
+func damage_directed(area: Area, damage: int, damage_dir: Vector3):
+	for g in area.get_overlapping_bodies():
+		damage(g, damage, damage_dir)
+
 func damage(node: Node, damage: int, dir: Vector3):
 	if node in damaged_objects:
 		return
@@ -662,6 +690,11 @@ func set_state(next_state: int):
 			damaged_objects = []
 			velocity.y = AIR_SPIN_VEL
 			mesh.transition_to("SpinKickLeft")
+		State.UppercutWindup:
+			damaged_objects = []
+			mesh.transition_to("Uppercut")
+		State.Uppercut:
+			velocity.y = UPPERCUT_VEL
 		State.Damaged:
 			velocity.y = VEL_V_DAMAGED
 			mesh.transition_to("Fall")
