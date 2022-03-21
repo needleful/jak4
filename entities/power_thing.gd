@@ -13,7 +13,7 @@ func _ready():
 		else:
 			print("NOT activated")
 
-func _on_Area_body_entered(body):
+func _on_Area_body_entered(_body):
 	if active:
 		return
 	if Global.remove_item("capacitor"):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -19,6 +19,13 @@ radius = 0.689781
 
 [sub_resource type="CapsuleShape" id=21]
 radius = 0.581727
+
+[sub_resource type="SphereShape" id=22]
+radius = 0.691998
+
+[sub_resource type="CylinderShape" id=23]
+radius = 1.19018
+height = 0.948043
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.35
@@ -222,6 +229,11 @@ transform = Transform( 1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 1.47
 enabled = true
 cast_to = Vector3( 0, -0.25, 0 )
 
+[node name="wallCast" type="RayCast" parent="jackie"]
+transform = Transform( 1, 0, 0, 0, -0.0123042, 0.999924, 0, -0.999924, -0.0123042, 0, 1.60708, 0.176383 )
+enabled = true
+cast_to = Vector3( 0, -0.5, 0 )
+
 [node name="reference" type="Position3D" parent="jackie"]
 transform = Transform( 1, -1.01671e-07, 2.84362e-07, 0, 0.941623, 0.336668, -3.01992e-07, -0.336668, 0.941623, 0.00444614, 1.49646, 0.464695 )
 
@@ -251,6 +263,7 @@ shape = SubResource( 15 )
 
 [node name="attack_roll" type="Area" parent="jackie"]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.43397, 0 )
+visible = false
 collision_layer = 0
 collision_mask = 4
 
@@ -262,12 +275,29 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8422e-07, -0.0204051, -0.35
 shape = SubResource( 16 )
 
 [node name="attack_uppercut" type="Area" parent="jackie"]
+visible = false
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="jackie/attack_uppercut"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.920029, -4.02157e-08 )
 shape = SubResource( 21 )
+
+[node name="attack_dive_start" type="Area" parent="jackie"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_dive_start"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.347216, 0.265631 )
+shape = SubResource( 22 )
+
+[node name="attack_dive_end" type="Area" parent="jackie"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_dive_end"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.198498, 0.265631 )
+shape = SubResource( 23 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )

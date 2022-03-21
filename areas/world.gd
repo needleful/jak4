@@ -1,7 +1,8 @@
 extends Spatial
 
-const MIN_DIST_LOAD := 325
-const MIN_DIST_MUST_LOAD := 260
+# Distance from the bounding box edge
+const MIN_DIST_LOAD := 75
+const MIN_DIST_MUST_LOAD := 20
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0
@@ -59,11 +60,12 @@ func _process(delta):
 
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:
-		var diff = ch.global_transform.origin - position
-		if abs(diff.x) < MIN_DIST_LOAD and abs(diff.z) < MIN_DIST_LOAD:
-			if instant or (
-				abs(diff.x) < MIN_DIST_MUST_LOAD and abs(diff.z) < MIN_DIST_MUST_LOAD
-			):
+		var local : Vector3 = position - ch.global_transform.origin
+		var load_zone: AABB = ch.get_aabb().grow(MIN_DIST_LOAD)
+		var must_load_zone: AABB = ch.get_aabb().grow(MIN_DIST_MUST_LOAD)
+		
+		if load_zone.has_point(local):
+			if instant or must_load_zone.has_point(local):
 				mark_active(ch)
 			else:
 				queue_load(ch)
@@ -72,6 +74,7 @@ func update_active_chunks(position: Vector3, instant := false):
 				mark_inactive(ch)
 			else:
 				queue_unload(ch)
+	player.get_node("ui/debug/stats/a4").text = "%d active chunks" % active_chunks.size()
 
 func queue_load(ch: Spatial):
 	if !(ch.name in chunk_load_waitlist):
@@ -122,5 +125,4 @@ func mark_inactive(chunk: Spatial):
 	
 	if chunk.has_node("static_collision"):
 		chunk.remove_child(chunk.get_node("static_collision"))
-	
-	
+
