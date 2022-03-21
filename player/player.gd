@@ -133,7 +133,8 @@ enum State {
 	DiveWindup,
 	DiveStart,
 	DiveEnd,
-	Damaged
+	Damaged,
+	DialogLocked
 }
 
 var state: int = State.Fall
@@ -153,8 +154,10 @@ func _ready():
 		set_current_coat(coat)
 		Global.add_coat(coat)
 	var _x = Global.connect("inventory_changed", self, "redraw_inventory")
+	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	redraw_inventory()
 	update_health()
+	
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
@@ -677,6 +680,18 @@ func take_damage(damage: int, direction: Vector3):
 	velocity = VEL_H_DAMAGED*direction
 	set_state(State.Damaged)
 
+func can_talk():
+	return state == State.Ground
+
+func start_dialog(source: Node, sequence: Resource, speaker: Node):
+	$ui/dialog_viewer.start(source, sequence, speaker)
+	set_process_input(false)
+	set_state(State.DialogLocked)
+
+func _on_dialog_exited():
+	$ui/dialog_viewer.end()
+	set_state(State.Ground)
+
 func set_state(next_state: int):
 	if state == next_state:
 		return
@@ -752,6 +767,9 @@ func set_state(next_state: int):
 		State.Damaged:
 			velocity.y = move_speed*VEL_V_DAMAGED
 			mesh.transition_to("Fall")
+		State.DialogLocked:
+			mesh.transition_to("Ground")
+			velocity = Vector3.ZERO
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
 

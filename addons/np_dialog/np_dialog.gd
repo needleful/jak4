@@ -1,6 +1,5 @@
 tool
 extends EditorPlugin
-class_name NPDialog
 
 var import : NPDialogImportPlugin
 

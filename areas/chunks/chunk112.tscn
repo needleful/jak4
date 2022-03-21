@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://_glb/chunks/chunk112.glb" type="PackedScene" id=7]
 [ext_resource path="res://entities/power_thing.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=10]
+[ext_resource path="res://dialog/village_shop.dialog" type="Resource" id=11]
 
 [sub_resource type="ArrayMesh" id=225]
 resource_name = "world_Plane401"
@@ -58,6 +60,13 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector3( 119.317, -239.278, -57.297 ) ]
 }
+
+[sub_resource type="CylinderMesh" id=230]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 1.0
+
+[sub_resource type="BoxShape" id=229]
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
@@ -171,5 +180,21 @@ material_override = ExtResource( 5 )
 [node name="palace" parent="." index="30"]
 material_override = ExtResource( 5 )
 
-[node name="crawly6" parent="." index="32" instance=ExtResource( 3 )]
+[node name="crawly6" parent="." index="31" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.3886, -243.307, -147.95 )
+
+[node name="shop_keeper" type="MeshInstance" parent="." index="32"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.259, -229.722, 12.9293 )
+mesh = SubResource( 230 )
+material/0 = null
+
+[node name="shop_dialog" type="Area" parent="." index="33"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.259, -228.87, 12.9293 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 10 )
+dialog_sequence = ExtResource( 11 )
+main_speaker = NodePath("../shop_keeper")
+
+[node name="CollisionShape" type="CollisionShape" parent="shop_dialog" index="0"]
+shape = SubResource( 229 )

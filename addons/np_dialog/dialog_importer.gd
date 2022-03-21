@@ -101,9 +101,10 @@ func parse_text(text: String, src_path = "<local>"):
 		wd.type = td.type
 
 		var nd := extract_speaker(line)
+		if "speaker" in nd:
+			wd.speaker = nd.speaker
 		if "line" in nd:
 			line = nd.line
-			nd.speaker = nd.speaker
 		
 		wd.text = line.strip_edges()
 		
@@ -126,6 +127,9 @@ func parse_text(text: String, src_path = "<local>"):
 		elif level_change == 1:
 			prev.child = line_number
 			wd.parent = current_dialog
+			if wd.speaker == "" and prev.speaker != "":
+				print("Overwriting '%s' for '%s'" % [wd.speaker, prev.speaker])
+				wd.speaker = prev.speaker
 		else:
 			var lv:int = level_change
 			var previous: DialogItem = prev
@@ -205,6 +209,7 @@ func extract_speaker(line: String) -> Dictionary:
 	if m:
 		dict.speaker = m.get_string(1)
 		dict.line = line.replace(m.get_string(), "")
+		print("Speaker : ", dict.speaker)
 	return dict
 
 func get_preset_count():

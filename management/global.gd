@@ -8,6 +8,7 @@ var coat_textures: Array
 
 const save_path := "user://autosave.tres"
 var valid_game_state := false
+var can_pause := true
 
 var color_common := Color.white
 var color_uncommon := Color.chartreuse
