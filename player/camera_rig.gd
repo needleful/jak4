@@ -92,3 +92,6 @@ func _physics_process(delta):
 		pitch.rotation_degrees.x = 80
 	elif pitch.rotation_degrees.x < -80:
 		pitch.rotation_degrees.x = -80
+
+func play_animation(anim: String):
+	$AnimationPlayer.play(anim)

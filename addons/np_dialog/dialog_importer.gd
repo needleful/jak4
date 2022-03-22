@@ -128,7 +128,6 @@ func parse_text(text: String, src_path = "<local>"):
 			prev.child = line_number
 			wd.parent = current_dialog
 			if wd.speaker == "" and prev.speaker != "":
-				print("Overwriting '%s' for '%s'" % [wd.speaker, prev.speaker])
 				wd.speaker = prev.speaker
 		else:
 			var lv:int = level_change

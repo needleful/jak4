@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -39,6 +39,51 @@ height = 0.2
 
 [sub_resource type="SphereShape" id=6]
 radius = 0.25
+
+[sub_resource type="Animation" id=24]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.863214, 0 ) ]
+}
+
+[sub_resource type="Animation" id=25]
+resource_name = "dialog_end"
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.466517, 1 ),
+"update": 0,
+"values": [ Vector3( 1, 0.863, 0 ), Vector3( 0, 0.863, 0 ) ]
+}
+
+[sub_resource type="Animation" id=26]
+resource_name = "dialog_start"
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.329877, 0.120742 ),
+"update": 0,
+"values": [ Vector3( 0, 0.863214, 0 ), Vector3( 1, 0.863, 0 ) ]
+}
 
 [sub_resource type="Animation" id=9]
 length = 0.001
@@ -327,6 +372,11 @@ transform = Transform( 1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0
 near = 0.3
 far = 8192.0
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="camera_rig"]
+anims/RESET = SubResource( 24 )
+anims/dialog_end = SubResource( 25 )
+anims/dialog_start = SubResource( 26 )
+
 [node name="ui" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -432,6 +482,12 @@ value = 100.0
 percent_visible = false
 
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
+anchor_left = 0.67
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+rect_min_size = Vector2( 500, 0 )
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )

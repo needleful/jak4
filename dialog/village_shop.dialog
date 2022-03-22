@@ -1,25 +1,13 @@
-// When starting a dialog, you can either start from the first line, or a named item like this.
-// Also it supports comments lol.
 :shop_entry
-// In text entries, expressions formatted as `{text}` are run in GDScript.  The return value decides if the text is shown
-// The indentation here indicates the indented items also depend on the expression
-// So if "talked" is not zero, these lines are skipped.
-// If there's no expression, it just runs each line sequentially.
-// `talked` is a varaible tracking how many times you've talked to a specific NPC
-{talked == 0} Ahh, the tourist has found fit to visit me!
-	// The first whitespace characters on a non-empty, non-comment line indicate what's used for indentation.
-	// A star indicates narration
+{talked == 0} Ah, the tourist has found fit to visit me!
 	* The shop smells of burning incense. It's different from home. A stronger, more bitter smell.
-	// Square brackets mark who is speaking.
-	// `[You]` has special properties, and will make the text bold to mark the player's speech.
-	// Indenting changes the default character to the one named for the indented text
 	[You] Hi, I'm Jackie!
 		It's nice to meet you!
-	Welcome to my shop, Jackie! I am Lonus. Whatever brings you so far from your home, to our modest city?
+	Welcome to my shop, Jackie! Whatever brings you so far from your home, to our modest city?
 	> I'm here to see the Medium.
-		... Ah.
+		{mention("medium")}... Ah.
 		{format("italic")} Braalni Mhote.
-		"The Medium of Bralna". I do not believe the machine has worked in some years.
+		{animation("show_medium")} The Medium of Bralna". I do not believe the machine has worked in some years.
 		[You] Yeah. I talked with the village elder.
 		So he has roped you into repairing that contraption?
 		[You] I'm glad to help! Especially since I need to see it.
@@ -32,42 +20,35 @@
 			She's not.
 		I am sorry to hear that. The loss of a parent is deep, though better than the alternative. You are here for unsettled affairs, or memories?
 		[You] Uh, both, I guess...
-		I see. Well, if you need anything for your travels, I sell many things that may serve you well.
-	// `skip()` is only for replies. It means the dialog on the button is not printed as a message. It has no effect on messages or narration.
+		> I'm here to see the Medium.
+			{mention("medium")} Oh.
+			And you wish to commune with her.
+			{animation("show_medium")} Quite frankly, I do not think the Medium is such a useful machine.
+			It does not talk to souls. Only simulacra. Faint reflections of those lost.
+			[You] Yeah. I know how it works. It's just... important to me.
+			I hope you find what you are looking for. I hope that machine can help you.
+			If you need anything during your stay, I probably have it in my shop.
+		> {skip()} (Say nothing more)
+			I see. Well, if you need anything for your travels, perhaps I have it in my shop.
 	> {skip()} (Come up with a clever excuse)
 		[You] I, uh... um, I
 		There is no need to tell me if you are shy.  It must be important to come all this way.
 		Besides, you probably came in here to buy something, not to have me talk your ears off.
 
-// `otherwise` is set to true if we're coming from a failed check. It's essentially "else" but due to technical constraints I have to use another word
 {otherwise} Welcome back, Jackie!
-	// An expression can be anywhere after indentation. It's removed before all other processing.
 	* {talked > 10} The familiar smell of the incense comforts you.
-	// "otherwise if X" is not actually valid GDScript. 
-	// It detects this construct and uses custom logic to make its behavior consistent with "elif" in Godot
-	// Here's the logic:
-	// if 'otherwise' is true:
-		// the expression is run without 'otherwise if'
-		// the statement is shown if the result is true
-		// `otherwise` is assigned 'true' if the result is false 
-	// else:
-		// no expression is checked
-		// statement isn't shown
-		// otherwise is kept 'false'
-	* {otherwise if talked > 7} The burning incense is not unpleasent.
+	* {otherwise if talked > 7} The burning incense is not unpleasant.
 	* {otherwise if talked > 4} The incense is strong.
 	* {otherwise} The bitter incense burns at your sinuses.
 	
 	{Global.stat("left_village")} I am glad you have returned safely.
 	Do let me know if you need anything.
 
-// A named section lets us go back to this using "goto"
 :shop_replies
+{animation("reset")} 
 > What do you sell?
 	Ammunition! Water! Eggs! Protective fabrics!
-	// Replies are all shown in a list, and the indented text is what follows that choice.
-	// Replies are also conditional
-	> {!Global.stat("has_gun")} Ammo? There are guns in the village?
+	> {Global.stat("gun") == 0} Ammo? There are guns in the village?
 		Of course!
 		It is dangerous beyond these walls.
 		If you want to leave the city, you will need to be trained to use one.
@@ -76,41 +57,36 @@
 	> What are the eggs for?
 		Many things.
 		They are a currency. You use gems to buy eggs, and the eggs to buy other items, such as capacitors.
-		// Expressions that return false are skipped
 		{Global.stat("egg") == 0} You do not have any eggs, but I'm sure you shall find some.
 		{otherwise if Global.stat("egg") == 1} I see you have found an egg. There are many more to find!
-		// Expressions starting with '#{' will take the result, convert it to text, and insert it into the text right when it's shown.
 		{otherwise} You have #{Global.count("egg")} eggs on your person, and have found a total of #{Global.stat("egg")}.
 			Commendable work!
 
 		> ... What are the capacitors for?
 			Many ancient machines, doors and elevators and such, need them for power. We only have so many, so make sure to retrieve all you find!
+			{mentioned("medium")} I have heard the Medium requires three capacitors.
 			So would you like to buy an egg?
-			// Nothing needed here, it'll automatically go to the goto a few lines down
 		> Okay, I think I understand.
 			Immaculate! Let me know if you want one. Once it is gone, it is gone!
 	> Fabrics?
 		Of many styles, colors, and patterns. I can sew them in the same style as your jacket quite easily.
 		You seem quite fashionable, yes? With an eye for shape and color?
 		If you find any fabrics you like, bring them to me and you will get a lovely new coat, for a small fee.
-	> Ah ok, that makes sense.
+	> Ah okay, that makes sense.
 		It does!
-	// An expression with no text is validated and skip to the next item, regardless of result
-	// goto will go to the labeled item
 	{goto("shop_replies")}
 > Sure, I'll buy some stuff.
 	With pleasure, Jackie!
-	// How should I handle custom events where we need to resume from a specific point?
-	// I think I'll have it emit a signal and let some handler pause the dialog viewer
-	// This could automatically hook into an animation player as well.
 	{event("shop_opened")}
 	I hope you found what you were looking for...
 > I'll see you around!
 	Take care...
-// An explicit exit.  Necessary to avoid hitting the text further below
 {exit()}
 
-// A default label for when the player presses a button to instantly exit the dialog
-// If `_exit` isn't set, the dialog viewer just closes.
 :_exit
 [You] Gotta go, see you!
+{exit()}
+
+:other_thing
+Hello
+{back()}

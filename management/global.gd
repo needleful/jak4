@@ -16,6 +16,10 @@ var color_rare := Color.mediumblue
 var color_super_rare := Color.darkorchid
 var color_sublime := Color.coral
 
+# Items that also have a "stat" value, 
+# measuring the total collected 
+var tracked_items = ["egg", "capacitor"]
+
 func _ready():
 	randomize()
 	var coat_dir := Directory.new()
@@ -51,11 +55,13 @@ func count(item: String) -> int:
 	else:
 		return 0
 
-func add_item(item: String):
+func add_item(item: String, amount:= 1):
 	if item in game_state.inventory:
-		game_state.inventory[item] += 1
+		game_state.inventory[item] += amount
 	else:
-		game_state.inventory[item] = 1
+		game_state.inventory[item] = amount
+	if item in tracked_items:
+		add_stat(item, amount)
 	emit_signal("inventory_changed")
 
 func remove_item(item: String, amount := 1) -> bool:
@@ -65,6 +71,12 @@ func remove_item(item: String, amount := 1) -> bool:
 		return true
 	else:
 		return false
+
+func add_stat(tag: String, amount = 1):
+	if amount is int and tag in game_state.stats:
+		game_state.stats[tag] += amount
+	else:
+		game_state.stats[tag] = amount
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)

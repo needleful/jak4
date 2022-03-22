@@ -15,7 +15,7 @@ const BASE_JUMP_VEL := 8.0
 const CROUCH_JUMP_VEL := 12.5
 const LEDGE_JUMP_VEL := 9.0
 const ROLL_JUMP_VEL := 7.0
-const ROLL_JUMP_LURCH := 15.0
+const ROLL_JUMP_LURCH := 16.5
 
 const BASE_JUMP_TIME := 0.25
 const ROLL_JUMP_STEER := 2.5
@@ -61,7 +61,7 @@ const DIVE_MIN_END_TIME := 0.4
 const DIVE_MAX_END_TIME := 0.5
 
 const LUNGE_KICK_VEL := 25.0
-const AIR_SPIN_VEL := 5.0
+const AIR_SPIN_VEL := 3.0
 const UPPERCUT_VEL := 10.0
 const UPPERCUT_EXTRA_GRAVITY := 0.2
 const DIVE_WINDUP_VEL := 4.0
@@ -291,7 +291,8 @@ func _physics_process(delta):
 			stamina -= CLIMB_STAMINA_DRAIN*delta*(1.0-best_floor_dot)
 			if best_floor_dot > MIN_GROUND_DOT:
 				next_state = State.Crouch
-			elif best_floor_dot < MIN_SLIDE_DOT:
+			# Can climb sheer cliffs, must start from sliding ground though
+			elif best_floor_dot < 0.0:
 				next_state = State.Fall
 			elif stamina <= 0 or !Input.is_action_pressed("mv_crouch"):
 				next_state = State.Slide
@@ -485,7 +486,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*RUN_SPEED, ACCEL)
 			damage_directed(uppercut_hitbox, UPPERCUT_DAMAGE, Vector3.UP)
 		State.DiveWindup:
-			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL)
+			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL_START)
 		State.DiveStart:
 			velocity += delta*GRAVITY*DIVE_EXTRA_GRAVITY
 			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL)
@@ -493,6 +494,8 @@ func _physics_process(delta):
 		State.DiveEnd:
 			accel(delta, desired_velocity*RUN_SPEED)
 			damage_point(dive_end_hitbox, DIVE_END_DAMAGE, global_transform.origin)
+		State.DialogLocked:
+			desired_velocity = Vector3.ZERO
 	update_visuals(desired_velocity)
 
 func _process(_delta):
@@ -688,6 +691,8 @@ func damage(node: Node, damage: int, dir: Vector3):
 		node.take_damage(damage, dir)
 
 func take_damage(damage: int, direction: Vector3):
+	if state == State.DialogLocked:
+		return
 	health -= damage
 	update_health()
 	print("Health: ", health)
@@ -704,10 +709,12 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node):
 	$ui/dialog_viewer.start(source, sequence, speaker)
 	set_process_input(false)
 	set_state(State.DialogLocked)
+	$camera_rig.play_animation("dialog_start")
 
 func _on_dialog_exited():
 	$ui/dialog_viewer.end()
 	set_state(State.Ground)
+	$camera_rig.play_animation("dialog_end")
 
 func set_state(next_state: int):
 	if state == next_state:

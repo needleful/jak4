@@ -12,6 +12,7 @@ var sequence: Resource
 var otherwise := false
 var talked := 0
 var skip_reply := false
+var discussed := {}
 
 export(Font) var speaker_font
 export(Font) var narration_font
@@ -31,8 +32,11 @@ enum Result {
 	TRUE,
 	# Result does not return true or false. Show item
 	IGNORE,
-	# Result does not return true or false. Stop processing
+	# Result does not return true or false. Stop processing this item
 	SKIP,
+	# Pause() is called and processing stopped.
+	# On resume(), the item is shown and dialog resumes from there
+	PAUSE,
 	# It's the end of the dialog
 	END
 }
@@ -53,10 +57,13 @@ func _ready():
 	r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
 	end()
 
-func start(p_source_node: Node, p_sequence: Resource, speaker: Node):
+func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	source_node = p_source_node
 	sequence = p_sequence
-	main_speaker = speaker
+	if speaker:
+		main_speaker = speaker
+	else:
+		main_speaker = source_node
 	set_process(true)
 	clear()
 	if !main_speaker:
@@ -73,6 +80,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node):
 	advance()
 
 func clear():
+	discussed = {}
 	for c in messages.get_children():
 		c.queue_free()
 	clear_replies()
@@ -90,10 +98,10 @@ func get_next():
 		advance()
 
 func advance():
-	clear_replies()
 	if !current_item:
 		exit()
 		return
+	clear_replies()
 	var result := false
 	while !result:
 		if !current_item:
@@ -105,6 +113,7 @@ func advance():
 			var r = evaluate(c)
 			if r == Result.FALSE:
 				result = false
+				otherwise = true
 				break
 			elif r == Result.SKIP:
 				advance()
@@ -115,7 +124,9 @@ func advance():
 			current_item = sequence.failed_next(current_item)
 		elif current_item.text == "":
 			current_item = sequence.canonical_next(current_item)
-
+	
+	otherwise = !result
+	
 	match current_item.type:
 		DialogItem.Type.MESSAGE:
 			show_message()
@@ -131,10 +142,8 @@ func list_replies():
 		var cond = reply.conditions
 		var result := true
 		for c in cond:
-			print("> {%s}" % cond)
 			if evaluate(c) == Result.FALSE:
 				result = false
-				print("\tFALSE")
 				break
 		if result:
 			var b := Button.new()
@@ -160,7 +169,7 @@ func choose_reply(item: DialogItem, skip: bool):
 	get_next()
 
 func show_message():
-	var speaker = current_item.speaker	
+	var speaker: String = current_item.speaker	
 	if speaker == "":
 		speaker = main_speaker.name.capitalize()
 
@@ -168,7 +177,7 @@ func show_message():
 	if speaker != last_speaker:
 		text = "%s: %s" % [speaker, current_item.text]
 	else:
-		text = "    " + current_item.text
+		text = current_item.text
 	last_speaker = speaker
 	
 	if speaker == "You":
@@ -182,10 +191,14 @@ func show_narration():
 func insert_label(text: String, font: Font, color: Color):
 	var label := Label.new()
 	label.autowrap = true
-	label.text = text
+	label.text = interpolate(text)
 	label.add_font_override("font", font)
 	label.add_color_override("font_color", color)
 	messages.add_child(label)
+
+#TODO
+func interpolate(line: String):
+	return line
 
 func evaluate(cond: String):
 	var oim: RegExMatch = r_otherwise_if.search(cond)
@@ -224,13 +237,18 @@ func evaluate(cond: String):
 		otherwise = result != Result.TRUE
 	return result
 
+# TODO
 func format(_style: String):
 	return Result.TRUE
 
+# TODO
 func animation(_anim: String):
 	return Result.TRUE
 
-func event(_tag: String):
+# TODO
+func event(_tag: String, should_pause := true):
+	if should_pause:
+		pause()
 	return Result.TRUE
 
 func goto(label: String):
@@ -245,6 +263,24 @@ func exit():
 	emit_signal("exited")
 	return Result.END
 
+func mention(topic):
+	discussed[topic] = true
+	return Result.IGNORE
+
+func mentioned(topic):
+	if topic in discussed:
+		return Result.TRUE
+	else:
+		return Result.FALSE
+
+#TODO
+func subtopic(_label):
+	return Result.IGNORE
+
+#TODO
+func back():
+	return Result.IGNORE
+
 func end():
 	hide()
 	set_process(false)
@@ -254,3 +290,13 @@ func end():
 func fast_exit():
 	current_item = sequence.get("_exit")
 	advance()
+
+func pause():
+	hide()
+	set_process_input(false)
+	set_process(false)
+
+func resume():
+	show()
+	set_process_input(true)
+	set_process(true)

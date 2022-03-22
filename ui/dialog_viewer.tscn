@@ -1,9 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ui/dialog_viewer.gd" type="Script" id=1]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://ui/fonts/averia/Averia-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://ui/fonts/averia/Averia-Italic.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.768627 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -18,10 +21,9 @@ size = 20
 font_data = ExtResource( 2 )
 
 [node name="dialog_viewer" type="Panel"]
-anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -739.0
+custom_styles/panel = SubResource( 4 )
 script = ExtResource( 1 )
 speaker_font = SubResource( 1 )
 narration_font = SubResource( 2 )
@@ -37,20 +39,20 @@ margin_right = -20.0
 margin_bottom = -20.0
 
 [node name="messages" type="ScrollContainer" parent="vbox"]
-margin_right = 699.0
+margin_right = 984.0
 margin_bottom = 466.0
 rect_min_size = Vector2( 0, 90 )
 size_flags_vertical = 3
 
 [node name="list" type="VBoxContainer" parent="vbox/messages"]
-margin_right = 699.0
+margin_right = 984.0
 margin_bottom = 466.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="replies" type="VBoxContainer" parent="vbox"]
 margin_top = 470.0
-margin_right = 699.0
+margin_right = 984.0
 margin_bottom = 560.0
 rect_min_size = Vector2( 0, 90 )
 
