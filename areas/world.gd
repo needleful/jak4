@@ -1,8 +1,8 @@
 extends Spatial
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 75
-const MIN_DIST_MUST_LOAD := 20
+const MIN_DIST_LOAD := 150
+const MIN_DIST_MUST_LOAD := 40
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0

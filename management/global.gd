@@ -12,13 +12,16 @@ var can_pause := true
 
 var color_common := Color.white
 var color_uncommon := Color.chartreuse
-var color_rare := Color.mediumblue
+var color_rare := Color.darkcyan
 var color_super_rare := Color.darkorchid
 var color_sublime := Color.coral
 
 # Items that also have a "stat" value, 
 # measuring the total collected 
 var tracked_items = ["egg", "capacitor"]
+var checkpoint_position : Vector3
+
+onready var player: PlayerBody = get_tree().current_scene.get_node("player")
 
 func _ready():
 	randomize()
@@ -96,7 +99,9 @@ func mark_activated(node: Node):
 
 # Coats
 
-func get_coat(cgen_seed: int) -> Coat:
+func get_coat(cgen_seed: int = -1) -> Coat:
+	if cgen_seed == -1:
+		cgen_seed = rand64()
 	if coat_textures.size() == 0:
 		print_debug("No coat textures!")
 		return null
@@ -105,21 +110,22 @@ func get_coat(cgen_seed: int) -> Coat:
 	rng.seed = cgen_seed
 	
 	var colors: int
-	if cgen_seed < (1 << 16):
-		colors = 7
-		coat.rarity = coat.Rarity.Sublime
-	elif cgen_seed < (1 << 32):
-		colors = 5
-		coat.rarity = coat.Rarity.SuperRare
-	elif cgen_seed < (1 << 36):
-		colors = 4
-		coat.rarity = coat.Rarity.Rare
-	elif cgen_seed < (1 << 56):
+	var max_int := 9223372036854775807
+	if cgen_seed < 0:
+		colors = 2
+		coat.rarity = coat.Rarity.Common
+	elif cgen_seed < max_int/2:
 		colors = 3
 		coat.rarity = coat.Rarity.Uncommon
+	elif cgen_seed < max_int*0.75:
+		colors = 4
+		coat.rarity = coat.Rarity.Rare
+	elif cgen_seed < max_int*0.825:
+		colors = 5
+		coat.rarity = coat.Rarity.SuperRare
 	else:
-		colors = 2
-		coat.rarity = coat.Rarity.Uncommon
+		colors = 7
+		coat.rarity = coat.Rarity.Sublime
 	
 	coat.gradient = Gradient.new()
 	
@@ -135,12 +141,38 @@ func get_coat(cgen_seed: int) -> Coat:
 	coat.palette = coat_textures[cgen_seed % coat_textures.size()]
 	return coat
 
+func get_rarity_color(rarity: int) -> Color:
+	match rarity:
+		Coat.Rarity.Common:
+			return color_common
+		Coat.Rarity.Uncommon:
+			return color_uncommon
+		Coat.Rarity.Rare:
+			return color_rare
+		Coat.Rarity.SuperRare:
+			return color_super_rare
+		Coat.Rarity.Sublime:
+			return color_sublime
+		_:
+			return Color.white
+
+func rand64():
+	return (randi() << 32) + randi()
+
 #Saving and loading
+
+func save_checkpoint(pos: Vector3):
+	checkpoint_position = pos
+	save_sync()
+
+func save_game():
+	save_sync()
 
 func load_sync():
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
 		valid_game_state = true
+		checkpoint_position = game_state.player_transform.origin
 		var _x = get_tree().reload_current_scene()
 	else:
 		print_debug("Tried to load with no save at ", save_path)

@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/enemies/bug.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("bug:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.396698, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bug:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "bob"
+length = 4.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("bug:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 1.1, 1.6, 1.7, 3.1, 3.2, 4.3, 4.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.396698, 0 ), Vector3( 0, 0.396698, 0 ), Vector3( -0.0559491, 0.32464, 0 ), Vector3( -0.0559491, 0.32464, 0 ), Vector3( 0.0222171, 0.480981, -0.0174917 ), Vector3( 0.0222171, 0.480981, -0.0174917 ), Vector3( -0.0124797, 0.3813, -0.0217864 ), Vector3( -0.0124797, 0.3813, -0.0217864 ), Vector3( 0, 0.396698, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bug:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1, 1.1, 1.6, 1.7, 3.1, 3.2, 4.3, 4.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), Vector3( 7.31638, 0.96958, 7.56999 ), Vector3( 7.31638, 0.96958, 7.56999 ), Vector3( -1.45722, 0.406563, -0.155065 ), Vector3( -1.45722, 0.406563, -0.155065 ), Vector3( -2.36288, 0.398332, 1.02382 ), Vector3( -2.36288, 0.398332, 1.02382 ), Vector3( 0, 0, 0 ) ]
+}
+
+[node name="egg_pickup" instance=ExtResource( 1 )]
+item_id = "bug"
+
+[node name="bug" parent="." index="2" instance=ExtResource( 2 )]
+transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0.396698, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+autoplay = "bob"
+anims/RESET = SubResource( 2 )
+anims/bob = SubResource( 3 )

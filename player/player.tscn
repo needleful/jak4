@@ -1,10 +1,11 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
 [ext_resource path="res://player/jackie.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
+[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="SphereShape" id=13]
 radius = 0.631892
@@ -54,6 +55,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0.863214, 0 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("yaw/pitch/SpringArm:spring_length")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 2.5 ]
+}
 
 [sub_resource type="Animation" id=25]
 resource_name = "dialog_end"
@@ -83,6 +96,36 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 0.329877, 0.120742 ),
 "update": 0,
 "values": [ Vector3( 0, 0.863214, 0 ), Vector3( 1, 0.863, 0 ) ]
+}
+
+[sub_resource type="Animation" id=28]
+resource_name = "wardrobe_lock"
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch/SpringArm:spring_length")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.594604, 1 ),
+"update": 0,
+"values": [ 2.5, 1.0 ]
+}
+
+[sub_resource type="Animation" id=29]
+resource_name = "wardrobe_unlock"
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch/SpringArm:spring_length")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.784584, 1 ),
+"update": 0,
+"values": [ 1.0, 2.5 ]
 }
 
 [sub_resource type="Animation" id=9]
@@ -240,6 +283,12 @@ bg_color = Color( 0.611765, 1, 0.513726, 1 )
 [sub_resource type="StyleBoxFlat" id=20]
 bg_color = Color( 0, 0, 0, 0.388235 )
 
+[sub_resource type="DynamicFont" id=27]
+size = 48
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 6 )
+
 [sub_resource type="SphereShape" id=5]
 radius = 0.35
 
@@ -376,6 +425,8 @@ far = 8192.0
 anims/RESET = SubResource( 24 )
 anims/dialog_end = SubResource( 25 )
 anims/dialog_start = SubResource( 26 )
+anims/wardrobe_lock = SubResource( 28 )
+anims/wardrobe_unlock = SubResource( 29 )
 
 [node name="ui" type="Control" parent="."]
 anchor_right = 1.0
@@ -488,6 +539,55 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 rect_min_size = Vector2( 500, 0 )
+
+[node name="inventory" type="HBoxContainer" parent="ui"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -412.0
+margin_top = 20.0
+margin_right = -45.0
+margin_bottom = 74.0
+
+[node name="gem_Label" type="Label" parent="ui/inventory"]
+margin_top = 16.0
+margin_right = 56.0
+margin_bottom = 38.0
+text = "Gems:"
+
+[node name="gem_count" type="Label" parent="ui/inventory"]
+margin_left = 60.0
+margin_right = 87.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="bug_label" type="Label" parent="ui/inventory"]
+margin_left = 91.0
+margin_top = 16.0
+margin_right = 142.0
+margin_bottom = 38.0
+text = "Bugs:"
+
+[node name="bug_count" type="Label" parent="ui/inventory"]
+margin_left = 146.0
+margin_right = 173.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="cap_label" type="Label" parent="ui/inventory"]
+margin_left = 177.0
+margin_top = 16.0
+margin_right = 276.0
+margin_bottom = 38.0
+text = "Capacitors:"
+
+[node name="cap_count" type="Label" parent="ui/inventory"]
+margin_left = 280.0
+margin_right = 307.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )

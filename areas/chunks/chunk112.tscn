@@ -1,9 +1,9 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=2]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=3]
-[ext_resource path="res://items/egg_pickup.tscn" type="PackedScene" id=4]
+[ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material/bricks.material" type="Material" id=5]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=6]
 [ext_resource path="res://_glb/chunks/chunk112.glb" type="PackedScene" id=7]
@@ -12,6 +12,7 @@
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=10]
 [ext_resource path="res://dialog/village_shop.dialog" type="Resource" id=11]
 [ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=12]
+[ext_resource path="res://entities/fountain.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ArrayMesh" id=225]
 resource_name = "world_Plane401"
@@ -79,6 +80,7 @@ material_override = ExtResource( 5 )
 [node name="crawly" parent="." index="1" instance=ExtResource( 3 )]
 transform = Transform( -0.120033, 0, -0.99277, 0, 1, 0, 0.99277, 0, -0.120033, 248, -198.34, -190 )
 drops_coat = true
+gem_drop_max = 15
 health = 45
 attack_damage = 15
 
@@ -95,19 +97,19 @@ transform = Transform( 0.649156, 0, -0.760655, 0, 1, 0, 0.760655, 0, 0.649156, 2
 transform = Transform( -0.535753, 0, -0.844375, 0, 1, 0, 0.844375, 0, -0.535753, 238.593, -198.528, -185.684 )
 
 [node name="egg_pickup" parent="." index="6" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.917, -198.762, -189.086 )
+transform = Transform( 0.0681719, 0, 0.997674, 0, 1, 0, -0.997674, 0, 0.0681719, 236.917, -198.762, -189.086 )
 
 [node name="egg_pickup2" parent="." index="7" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.878, -198.762, -188.412 )
 
 [node name="egg_pickup3" parent="." index="8" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.184, -198.762, -188.193 )
+transform = Transform( -0.0576163, 0, -0.998339, 0, 1, 0, 0.998339, 0, -0.0576163, 236.184, -198.762, -188.193 )
 
 [node name="egg_pickup4" parent="." index="9" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.169, -198.762, -189.225 )
+transform = Transform( 0.551486, 0, 0.834184, 0, 1, 0, -0.834184, 0, 0.551486, 236.169, -198.762, -189.225 )
 
 [node name="egg_pickup5" parent="." index="10" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 235.765, -198.762, -188.804 )
+transform = Transform( -0.308668, 0, 0.95117, 0, 1, 0, -0.95117, 0, -0.308668, 235.765, -198.762, -188.804 )
 
 [node name="door_frame" parent="." index="11"]
 material_override = ExtResource( 5 )
@@ -125,25 +127,25 @@ shape = SubResource( 227 )
 material_override = ExtResource( 5 )
 
 [node name="egg_pickup6" parent="." index="15" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 178.224, -218.747, -63.7619 )
+transform = Transform( -0.310942, 0, -0.950429, 0, 1, 0, 0.950429, 0, -0.310942, 178.224, -218.747, -63.7619 )
 
 [node name="egg_pickup7" parent="." index="16" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 158.05, -219.53, -53.5611 )
+transform = Transform( -0.657388, 0, 0.753552, 0, 1, 0, -0.753552, 0, -0.657388, 158.05, -219.53, -53.5611 )
 
 [node name="egg_pickup8" parent="." index="17" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 190.981, -219.484, -45.7573 )
+transform = Transform( 0.966273, 0, -0.257521, 0, 1, 0, 0.257521, 0, 0.966273, 190.981, -219.484, -45.7573 )
 
 [node name="egg_pickup9" parent="." index="18" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 190.608, -218.218, -42.3671 )
+transform = Transform( 0.417835, 0, -0.908523, 0, 1, 0, 0.908523, 0, 0.417835, 190.608, -218.218, -42.3671 )
 
 [node name="egg_pickup10" parent="." index="19" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 124.83, -217.145, -65.8646 )
+transform = Transform( -0.0714975, 0, 0.997441, 0, 1, 0, -0.997441, 0, -0.0714975, 124.83, -217.145, -65.8646 )
 
 [node name="egg_pickup11" parent="." index="20" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 110.191, -207.998, -61.475 )
+transform = Transform( 0.540475, 0, 0.84136, 0, 1, 0, -0.84136, 0, 0.540475, 110.191, -207.998, -61.475 )
 
 [node name="egg_pickup12" parent="." index="21" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 108.988, -208.22, -57.4413 )
+transform = Transform( -0.28266, 0, 0.95922, 0, 1, 0, -0.95922, 0, -0.28266, 108.988, -208.22, -57.4413 )
 
 [node name="coat_pickup" parent="." index="22" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 107.839, -209.062, -60.4016 )
@@ -185,20 +187,23 @@ main_speaker = NodePath("../shop_keeper")
 [node name="CollisionShape" type="CollisionShape" parent="shop_dialog" index="0"]
 shape = SubResource( 229 )
 
-[node name="hut" parent="." index="30" instance=ExtResource( 12 )]
+[node name="hut" parent="." index="29" instance=ExtResource( 12 )]
 transform = Transform( -0.974574, 0, 0.224067, 0, 1, 0, -0.224067, 0, -0.974574, 200.164, -231.222, 13.8376 )
 
-[node name="hut2" parent="." index="31" instance=ExtResource( 12 )]
+[node name="hut2" parent="." index="30" instance=ExtResource( 12 )]
 transform = Transform( 0.0472285, 0, 0.998884, 0, 1, 0, -0.998884, 0, 0.0472285, 183.895, -231.222, 0.846618 )
 
-[node name="hut3" parent="." index="32" instance=ExtResource( 12 )]
+[node name="hut3" parent="." index="31" instance=ExtResource( 12 )]
 transform = Transform( -0.111469, 0, -0.993768, 0, 1, 0, 0.993768, 0, -0.111469, 203.524, -230.745, -7.3789 )
 
-[node name="hut4" parent="." index="33" instance=ExtResource( 12 )]
+[node name="hut4" parent="." index="32" instance=ExtResource( 12 )]
 transform = Transform( -0.433486, 0, -0.90116, 0, 1, 0, 0.90116, 0, -0.433486, 190.974, -230.305, -45.9365 )
 
-[node name="hut5" parent="." index="34" instance=ExtResource( 12 )]
+[node name="hut5" parent="." index="33" instance=ExtResource( 12 )]
 transform = Transform( 0.608692, 0, -0.793406, 0, 1, 0, 0.793406, 0, 0.608692, 178.22, -229.696, -63.8332 )
 
-[node name="hut6" parent="." index="35" instance=ExtResource( 12 )]
+[node name="hut6" parent="." index="34" instance=ExtResource( 12 )]
 transform = Transform( 0.383731, 0, 0.923445, 0, 1, 0, -0.923445, 0, 0.383731, 158.062, -230.417, -53.4 )
+
+[node name="fountain" parent="." index="35" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 158.374, -230.72, -28.2394 )

@@ -1,6 +1,7 @@
 extends KinematicBody
 
 export(bool) var drops_coat = false
+export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10
 export(float) var run_speed = 7.5
@@ -11,6 +12,9 @@ export(float) var turn_speed_windup = 5.0
 export(float) var turn_speed_attacking = 1.0
 
 onready var anim := $crawly/AnimationPlayer
+
+var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
+var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
 
 enum AI {
 	Idle,
@@ -46,7 +50,7 @@ var coat = null
 func _ready():
 	set_state(ai)
 	if drops_coat:
-		coat = Global.get_coat(randi())
+		coat = Global.get_coat()
 		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
 
 func _physics_process(delta):
@@ -161,12 +165,18 @@ func set_state(new_ai):
 		AI.Dead:
 			collision_layer = 0
 			if drops_coat:
-				var coat_scene: PackedScene = load("res://items/coat_pickup.tscn")
 				var c = coat_scene.instance()
 				c.coat = coat
 				c.persistent = false
 				get_parent().add_child(c)
 				c.global_transform = global_transform
+			var gems = int(rand_range(0, gem_drop_max))
+			if gems > 0:
+				print("Dropping %d gems" % gems)
+				var g = gem_scene.instance()
+				g.quantity = gems
+				get_parent().add_child(g)
+				g.global_transform = global_transform
 			anim.play("Die")
 			anim.queue("Dead-loop")
 		AI.Idle:

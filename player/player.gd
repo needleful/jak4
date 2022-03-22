@@ -164,7 +164,7 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
-		var coat = Global.get_coat(randi())
+		var coat = Global.get_coat(Global.rand64())
 		set_current_coat(coat)
 		Global.add_coat(coat)
 		
@@ -178,6 +178,11 @@ func complete_save():
 	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
 func redraw_inventory():
+	$ui/inventory/gem_count.text = str(Global.count("gem"))
+	$ui/inventory/bug_count.text = str(Global.count("bug"))
+	$ui/inventory/cap_count.text = str(Global.count("capacitor"))
+	
+	#debug
 	var state_viewer: Control = $ui/debug/game_state
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
@@ -697,24 +702,49 @@ func take_damage(damage: int, direction: Vector3):
 	update_health()
 	print("Health: ", health)
 	if health <= 0:
-		Global.load_sync()
+		die()
 		return
 	velocity = VEL_H_DAMAGED*direction
 	set_state(State.Damaged)
+
+func die():
+	Global.add_stat("player_death")
+	health = max_health
+	update_health()
+	global_transform.origin = Global.checkpoint_position
 
 func can_talk():
 	return state == State.Ground
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node):
 	$ui/dialog_viewer.start(source, sequence, speaker)
-	set_process_input(false)
-	set_state(State.DialogLocked)
 	$camera_rig.play_animation("dialog_start")
+	lock()
 
 func _on_dialog_exited():
 	$ui/dialog_viewer.end()
-	set_state(State.Ground)
 	$camera_rig.play_animation("dialog_end")
+	unlock()
+
+func wardrobe_lock():
+	lock()
+	$camera_rig.play_animation("wardrobe_lock")
+
+func wardrobe_unlock():
+	unlock()
+	$camera_rig.play_animation("wardrobe_unlock")
+
+func lock():
+	set_process_input(false)
+	set_state(State.DialogLocked)
+	$ui/stats.hide()
+	$ui/inventory.hide()
+
+func unlock():
+	set_process_input(true)
+	call_deferred("set_state", State.Ground)
+	$ui/stats.show()
+	$ui/inventory.show()
 
 func set_state(next_state: int):
 	if state == next_state:
@@ -796,4 +826,3 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
-

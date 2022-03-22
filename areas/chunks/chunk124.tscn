@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
 [ext_resource path="res://_glb/chunks/chunk124.glb" type="PackedScene" id=3]
+[ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=5]
 
 [sub_resource type="ArrayMesh" id=249]
 resource_name = "world_Plane413"
@@ -22,3 +24,9 @@ surfaces/0 = {
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
 preview_mesh = SubResource( 249 )
+
+[node name="hut" parent="." index="1" instance=ExtResource( 4 )]
+transform = Transform( -0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, -220, -230.951, 14 )
+
+[node name="wardrobe" parent="hut" index="0" instance=ExtResource( 5 )]
+transform = Transform( 0.873603, 0, -0.48664, 0, 1, 0, 0.48664, 0, 0.873603, 2.72163, 5.08853, 1.96338 )
