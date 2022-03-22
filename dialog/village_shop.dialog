@@ -47,19 +47,23 @@
 :shop_replies
 {animation("reset")} 
 > What do you sell?
-	Ammunition! Water! Eggs! Protective fabrics!
-	> {Global.stat("gun") == 0} Ammo? There are guns in the village?
-		Of course!
-		It is dangerous beyond these walls.
-		If you want to leave the city, you will need to be trained to use one.
-		{animation("show_cave")} You can ask Uule, who tends the caves. He manages the firearms here.
-
-	> What are the eggs for?
+	Elixirs! Deathgnats! 
+	> What do the elixirs do?
 		Many things.
-		They are a currency. You use gems to buy eggs, and the eggs to buy other items, such as capacitors.
-		{Global.stat("egg") == 0} You do not have any eggs, but I'm sure you shall find some.
-		{otherwise if Global.stat("egg") == 1} I see you have found an egg. There are many more to find!
-		{otherwise} You have #{Global.count("egg")} eggs on your person, and have found a total of #{Global.stat("egg")}.
+		Increase your stamina, endurance, flexibility.
+		Some temporarily, others permanently.
+	> {format("italic")} Deathgnats?
+		{animation("show_deathgnat")}A nasty pest, but not nearly as harmful as its larger cousins.
+		We catch them to use as a second currency. Typically for larger purchases, such as capacitors.
+		{animation("reset")}
+		{Global.stat("bug") == 0} You do not have any gnats, but I'm sure you shall find some.
+		{otherwise if Global.stat("bug") == 1} I see you have found one! Nasty creatures, aren't they?
+			[You] It keeps vibrating. People carry these around?
+			Hahaha!
+			You do not need to keep it alive. It would be quite unbearable keeping dozens of live deathgnats.
+			{animation("show_deathgnat")} The one I keep is quite a handful.
+			{animation("reset")}
+		{otherwise} You have #{Global.count("bug")} eggs on your person, and have found a total of #{Global.stat("bug")}.
 			Commendable work!
 
 		> ... What are the capacitors for?

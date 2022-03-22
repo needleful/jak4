@@ -1,5 +1,7 @@
 extends Spatial
 
+signal activated
+
 var anim: AnimationPlayer
 var active := false
 
@@ -28,3 +30,4 @@ func activate(auto: bool = false):
 			anim.seek(anim.current_animation_length)
 	if !auto: 
 		Global.mark_activated(self)
+	emit_signal("activated")
