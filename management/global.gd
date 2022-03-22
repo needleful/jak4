@@ -18,13 +18,13 @@ var color_sublime := Color.coral
 
 # Items that also have a "stat" value, 
 # measuring the total collected 
-var tracked_items = ["egg", "capacitor"]
+var tracked_items = ["bug", "capacitor"]
 var checkpoint_position : Vector3
 
 onready var player: PlayerBody = get_tree().current_scene.get_node("player")
 
 func _enter_tree():
-	if !valid_game_state:
+	if !valid_game_state and ResourceLoader.exists(save_path):
 		load_sync()
 
 func _ready():
@@ -79,8 +79,11 @@ func remove_item(item: String, amount := 1) -> bool:
 	else:
 		return false
 
-func add_stat(tag: String, amount = 1):
-	if amount is int and tag in game_state.stats:
+func set_stat(tag: String, value):
+	game_state.stats[tag] = value
+
+func add_stat(tag: String, amount := 1):
+	if tag in game_state.stats:
 		game_state.stats[tag] += amount
 	else:
 		game_state.stats[tag] = amount

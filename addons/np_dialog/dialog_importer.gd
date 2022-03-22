@@ -34,7 +34,7 @@ func get_save_extension():
 	return "tres"
 
 func get_resource_type():
-	return "NPSequence"
+	return "Resource"
 
 func import(src_path: String, 
 	dest_path: String,
@@ -208,7 +208,6 @@ func extract_speaker(line: String) -> Dictionary:
 	if m:
 		dict.speaker = m.get_string(1)
 		dict.line = line.replace(m.get_string(), "")
-		print("Speaker : ", dict.speaker)
 	return dict
 
 func get_preset_count():

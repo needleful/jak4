@@ -13,6 +13,7 @@ var otherwise := false
 var talked := 0
 var skip_reply := false
 var discussed := {}
+var exiting := false
 
 export(Font) var speaker_font
 export(Font) var narration_font
@@ -41,7 +42,8 @@ enum Result {
 	END
 }
 
-var r_otherwise_if = RegEx.new()
+var r_otherwise_if := RegEx.new()
+var r_interpolate := RegEx.new()
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -55,20 +57,20 @@ func _process(_delta):
 
 func _ready():
 	r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
+	r_interpolate.compile("#\\{([^\\}])\\}")
 	end()
 
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
+	clear()
+	show()
 	source_node = p_source_node
 	sequence = p_sequence
 	if speaker:
 		main_speaker = speaker
 	else:
 		main_speaker = source_node
+	talked = Global.stat("talked"+speaker.get_path())
 	set_process(true)
-	clear()
-	if !main_speaker:
-		main_speaker = self
-	show()
 	set_process_input(true)
 	Global.can_pause = false
 	var first_index = INF
@@ -80,6 +82,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	advance()
 
 func clear():
+	exiting = false
 	discussed = {}
 	for c in messages.get_children():
 		c.queue_free()
@@ -113,7 +116,6 @@ func advance():
 			var r = evaluate(c)
 			if r == Result.FALSE:
 				result = false
-				otherwise = true
 				break
 			elif r == Result.SKIP:
 				advance()
@@ -124,8 +126,7 @@ func advance():
 			current_item = sequence.failed_next(current_item)
 		elif current_item.text == "":
 			current_item = sequence.canonical_next(current_item)
-	
-	otherwise = !result
+			result = false
 	
 	match current_item.type:
 		DialogItem.Type.MESSAGE:
@@ -196,32 +197,37 @@ func insert_label(text: String, font: Font, color: Color):
 	label.add_color_override("font_color", color)
 	messages.add_child(label)
 
-#TODO
 func interpolate(line: String):
-	return line
+	var matches := r_interpolate.search_all(line)
+	var text := line
+	for m in matches:
+		var ex = eval_expression(m.get_string(1))
+		text = text.replace(m.get_string(), str(ex))
+	return text
 
-func evaluate(cond: String):
-	var oim: RegExMatch = r_otherwise_if.search(cond)
-	var otherwise_if := false
-	if oim:
-		cond = cond.replace(oim.get_string(), "")
-		otherwise_if = true
-	
-	if otherwise_if and !otherwise:
-		return Result.FALSE
-	
+func eval_expression(ex_text: String):
 	var expr: Expression = Expression.new()
-	var err = expr.parse(cond, ["Global"])
+	var err = expr.parse(ex_text, ["Global"])
 	if err != OK:
-		print_debug("\tFailed to parse {%s}. Code %d" % [cond, err])
+		print_debug("\tFailed to parse {%s}. Code %d" % [ex_text, err])
 		return Result.IGNORE
 	
 	var r = expr.execute([Global], self)
 	
 	if expr.has_execute_failed():
 		print_debug("\tFailed to execute {%s}.\n\t%s" 
-			% [cond, expr.get_error_text()])
+			% [ex_text, expr.get_error_text()])
 		return Result.IGNORE
+	return r
+
+func evaluate(cond: String):
+	var oim: RegExMatch = r_otherwise_if.search(cond)
+	if oim:
+		if !otherwise:
+			return Result.FALSE
+		cond = cond.replace(oim.get_string(), "")
+	
+	var r = eval_expression(cond)
 	
 	var result: int
 	if r is int:
@@ -231,10 +237,7 @@ func evaluate(cond: String):
 	else:
 		result = Result.FALSE
 	
-	if otherwise_if:
-		otherwise = result == Result.TRUE
-	else:
-		otherwise = result != Result.TRUE
+	otherwise = result == Result.FALSE
 	return result
 
 # TODO
@@ -260,6 +263,7 @@ func skip():
 	return Result.TRUE
 
 func exit():
+	Global.add_stat("talked"+main_speaker.get_path())
 	emit_signal("exited")
 	return Result.END
 
@@ -288,8 +292,12 @@ func end():
 	Global.can_pause = true
 
 func fast_exit():
-	current_item = sequence.get("_exit")
-	advance()
+	if exiting:
+		get_next()
+	else:
+		exiting = true
+		current_item = sequence.get("_exit")
+		advance()
 
 func pause():
 	hide()

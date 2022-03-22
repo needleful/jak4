@@ -46,6 +46,7 @@ func _ready():
 	exit()
 
 func enter(p: PlayerBody):
+	coats_by_rarity = {}
 	player = p
 	old_coat = player.current_coat
 	for c in Global.game_state.all_coats:

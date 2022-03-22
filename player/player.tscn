@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -10,12 +10,42 @@
 [sub_resource type="SphereShape" id=13]
 radius = 0.631892
 
-[sub_resource type="CylinderShape" id=14]
-radius = 0.847281
-height = 0.804826
+[sub_resource type="SphereShape" id=33]
+radius = 0.624527
 
 [sub_resource type="SphereShape" id=15]
-radius = 0.613997
+radius = 0.403057
+
+[sub_resource type="Animation" id=34]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=35]
+resource_name = "spin"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -720, 0 ) ]
+}
 
 [sub_resource type="SphereShape" id=16]
 radius = 0.689781
@@ -313,6 +343,87 @@ outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
 
+[sub_resource type="Animation" id=30]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=31]
+resource_name = "fadein"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.574349, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=32]
+resource_name = "fadeout"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.517632, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
 [sub_resource type="SphereShape" id=5]
 radius = 0.35
 
@@ -368,18 +479,20 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0254159, 0, -0.0763994 )
 shape = SubResource( 13 )
 
 [node name="attack_spin" type="Area" parent="jackie"]
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
-visible = false
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="jackie/attack_spin"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.701608, 0 )
-shape = SubResource( 14 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.489956, 0.40164, 0 )
+shape = SubResource( 33 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="jackie/attack_spin"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.283345, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13731, 0 )
 shape = SubResource( 15 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="jackie/attack_spin"]
+anims/RESET = SubResource( 34 )
+anims/spin = SubResource( 35 )
 
 [node name="attack_roll" type="Area" parent="jackie"]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.43397, 0 )
@@ -404,6 +517,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.92
 shape = SubResource( 21 )
 
 [node name="attack_dive_start" type="Area" parent="jackie"]
+visible = false
 collision_layer = 0
 collision_mask = 4
 
@@ -412,6 +526,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.347216, 0.26563
 shape = SubResource( 22 )
 
 [node name="attack_dive_end" type="Area" parent="jackie"]
+visible = false
 collision_layer = 0
 collision_mask = 4
 
@@ -612,6 +727,17 @@ margin_right = 307.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
+
+[node name="fade" type="ColorRect" parent="ui"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/fade"]
+autoplay = "fadein"
+anims/RESET = SubResource( 30 )
+anims/fadein = SubResource( 31 )
+anims/fadeout = SubResource( 32 )
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
