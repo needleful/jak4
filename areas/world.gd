@@ -6,9 +6,7 @@ const MIN_DIST_MUST_LOAD := 40
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0
-const UNLOAD_TIME := 2.0
-
-const MAX_ACTIVE_CHUNKS := 4
+const UNLOAD_TIME := 10.0
 
 var chunks: Array
 var chunk_load_waitlist : Dictionary = {}

@@ -1,28 +1,50 @@
 // So there's a lot of stuff that'll be here.
 // Also we can see if multiple statements work.
-{Global.stat("mom_info") == 0} {goto("no_info")}
-// TODO: deciding what to show based on what information you have, and what's been discussed previously
+{Global.stat("mom_info") == 0}
+	{talked == 0}
+		* The thing in front of you is almost nothing at all.
+		* A jawline. The outline of a dress. That's all you can make out. Somehow this is more than you could recall.
+		* It's unmistakable.
+		[You] Hi Mom.
+		* The thing laughs. It's her laugh.
+		* It's her laugh.
+		[You] I-.. I....
+		* {animation("sit")} You can't think of anything to say.
+		* {animation("comfort")} Can she even hear you like this? Would talking to her mean anything?
+		[You] You lived around here.  Maybe I can find.. I don't know. Old friends? Your home?
+			The memory scanner can use those right? If I know more about you?
+		* What little you have gives you hope.
+		* Who knows what the machine will be able to show with more?
+		* You turn to leave.
+	{otherwise}
+		* The ghost of your mother lingers for a moment.
+		* You won't get anything more from her without learning more.
+		[You] I'll come back, okay Mom?
+		* She murmurs incomprehensibly as you leave.
+	{exit()}
+
+
 {exit()}
 
-:no_info
-{talked == 0}
-	* The thing in front of you is almost nothing at all.
-	* A jawline. The outline of a dress. That's all you can make out. Somehow this is more than you could recall.
-	* It's unmistakable.
-	[You] Hi Mom.
-	* The thing laughs. It's her laugh.
-	* It's her laugh.
-	[You] I-.. I....
-	* {animation("sit")} You can't think of anything to say.
-	* {animation("comfort")} Can she even hear you like this? Would talking to her mean anything?
-	[You] You lived around here.  Maybe I can find.. I don't know. Old friends? Your home?
-		The memory scanner can use those right? If I know more about you?
-	* What little you have gives you hope.
-	* Who knows what the machine will be able to show with more?
-	* You turn to leave.
-{otherwise}
-	* The ghost of your mother lingers for a moment.
-	[You] I don't know if there's anything I can ask you, really.
-		I'll come back, okay Mom?
-	* You can hear her murmuring as you leave.
-{exit()}
+:_exit:
+[You] I have to go. Bye, mom.
+{Global.stat("mom_info") > 2} I'll see you, sweetie.
+
+:accuracy_1
+{Global.stat("mom/accuracy") > 0} Like I said last time, I'm not terribly worried about this thing's accuracy.
+	Am I what your mom would actually be? I don't know. And if you knew, it wouldn't be a problem, hahaha!
+	But
+
+{otherwise} {Global.add_stat("mom/accuracy")}
+	This medium's impressive, isn't it?
+	It doesn't just scan your mind and cobble together the person from what you think they were.
+	The scan learns everything about you. It knows how your mind would alter memories, or what your perspective of people means for what they actually are.
+	[You] I know how it works. My worry is..
+		I never really knew you. You died when I was, like, three.
+	Two and a half.
+	[You] Exactly! And I'm just learning about you second-hand. And it's... how could you possibly tell me anything I don't already know?
+	Do I have to?
+	[You] I...
+		{animation("sit")} I don't know, really. What's the point if I'm just talking to myself?
+	{animation("comfort")} That sounds like something you should have figured out before coming here.
+	[You] I did, but it...

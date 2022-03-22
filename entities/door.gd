@@ -12,7 +12,6 @@ func add_power(amount:= 1):
 		power += amount
 		return
 	power += amount
-	print("POWER: ", power)
 	if power >= required_power:
 		if has_node("AnimationPlayer"):
 			$AnimationPlayer.play("Activate")

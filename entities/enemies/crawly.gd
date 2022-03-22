@@ -1,6 +1,7 @@
 extends KinematicBody
 
-export(bool) var drops_coat = false
+export(bool) var respawns := true
+export(bool) var drops_coat := false
 export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10
@@ -48,6 +49,9 @@ var damaged:= []
 var coat = null
 
 func _ready():
+	if !respawns and Global.is_picked(get_path()):
+		queue_free()
+		return
 	set_state(ai)
 	if drops_coat:
 		coat = Global.get_coat()
@@ -177,6 +181,8 @@ func set_state(new_ai):
 				g.quantity = gems
 				get_parent().add_child(g)
 				g.global_transform = global_transform
+			if !respawns:
+				Global.mark_picked(get_path())
 			anim.play("Die")
 			anim.queue("Dead-loop")
 		AI.Idle:

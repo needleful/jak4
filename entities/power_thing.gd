@@ -10,10 +10,7 @@ func _ready():
 		anim = $AnimationPlayer
 	if Global.valid_game_state:
 		if Global.is_activated(self):
-			print("Auto activate")
 			activate(true)
-		else:
-			print("NOT activated")
 
 func _on_Area_body_entered(_body):
 	if active:
