@@ -114,7 +114,7 @@ func get_coat(cgen_seed: int = -1) -> Coat:
 	if cgen_seed < 0:
 		colors = 2
 		coat.rarity = coat.Rarity.Common
-	elif cgen_seed < max_int/2:
+	elif cgen_seed < max_int*0.5:
 		colors = 3
 		coat.rarity = coat.Rarity.Uncommon
 	elif cgen_seed < max_int*0.75:

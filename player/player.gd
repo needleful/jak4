@@ -152,7 +152,7 @@ func _ready():
 		set_current_coat(Global.game_state.current_coat)
 	else:
 		# Generate a random Common coat
-		var i = (1 << 56) + (randi() & 0xFFFFFFFFFFF)
+		var i = -randi()
 		var coat = Global.get_coat(i)
 		set_current_coat(coat)
 		Global.add_coat(coat)
@@ -160,7 +160,6 @@ func _ready():
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	redraw_inventory()
 	update_health()
-	
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
@@ -709,9 +708,12 @@ func take_damage(damage: int, direction: Vector3):
 
 func die():
 	Global.add_stat("player_death")
+	heal()
+	global_transform.origin = Global.checkpoint_position
+
+func heal():
 	health = max_health
 	update_health()
-	global_transform.origin = Global.checkpoint_position
 
 func can_talk():
 	return state == State.Ground

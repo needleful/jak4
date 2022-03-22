@@ -8,9 +8,15 @@ var viewing_index := 0
 
 const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
+var old_coat: Coat
 
 func _input(event):
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_accept"):
+		Global.save_game()
+		exit()
+	elif event.is_action_pressed("ui_cancel"):
+		Global.save_game()
+		player.set_current_coat(old_coat)
 		exit()
 	elif event.is_action_pressed("ui_up"):
 		viewing_rarity += 1
@@ -41,10 +47,13 @@ func _ready():
 
 func enter(p: PlayerBody):
 	player = p
+	old_coat = player.current_coat
 	for c in Global.game_state.all_coats:
 		if !(c.rarity in coats_by_rarity):
 			coats_by_rarity[c.rarity] = []
 		coats_by_rarity[c.rarity].append(c)
+	viewing_rarity = old_coat.rarity
+	viewing_index = coats_by_rarity[viewing_rarity].find(old_coat)
 	show()
 	set_process_input(true)
 	Global.can_pause = false
@@ -52,6 +61,7 @@ func enter(p: PlayerBody):
 	view()
 
 func exit():
+	set_process_input(false)
 	Global.can_pause = true
 	if player:
 		player.wardrobe_unlock()
