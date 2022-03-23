@@ -43,5 +43,10 @@ func set_coat(c: Coat):
 			light_color = Color.brown
 	$OmniLight.light_color = light_color
 	$OmniLight2.light_color = light_color
+	$spire.material_override.albedo_color = light_color
 	coat = c
 	$MeshInstance.material_override = coat.generate_material()
+
+
+func _on_pickup_timer_timeout():
+	$CollisionShape.disabled = false

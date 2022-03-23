@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/rock1.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/the_medium.gd" type="Script" id=16]
+[ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=17]
 
 [sub_resource type="ArrayMesh" id=249]
 resource_name = "world_Plane413"
@@ -131,22 +132,19 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -129.07, -229.795, -37.2621 )
 [node name="hut2" parent="." index="3" instance=ExtResource( 4 )]
 transform = Transform( 0.99245, -0.122649, 0, 0.122649, 0.99245, 0, 0, 0, 1, 39.2949, -251.668, -51.5167 )
 
-[node name="capacitor_pickup2" parent="." index="4" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.2263, -247.639, -52.6449 )
-
-[node name="bug_pickup" parent="." index="5" instance=ExtResource( 14 )]
+[node name="bug_pickup" parent="." index="4" instance=ExtResource( 14 )]
 transform = Transform( -0.900782, 0, -0.434272, 0, 1, 0, 0.434272, 0, -0.900782, -229.986, -221.097, -39.6066 )
 
-[node name="bug_pickup2" parent="." index="6" instance=ExtResource( 14 )]
+[node name="bug_pickup2" parent="." index="5" instance=ExtResource( 14 )]
 transform = Transform( -0.780958, -0.198222, 0.592294, -0.246018, 0.969265, -7.22159e-09, -0.57409, -0.145715, -0.805721, -227.605, -221.515, -43.4451 )
 
-[node name="bug_pickup3" parent="." index="7" instance=ExtResource( 14 )]
+[node name="bug_pickup3" parent="." index="6" instance=ExtResource( 14 )]
 transform = Transform( -0.492792, -0.0352028, 0.869435, -0.0712537, 0.997458, 1.85791e-09, -0.867225, -0.0619505, -0.494048, -232.548, -219.88, -41.5774 )
 
-[node name="rock1" parent="." index="8" instance=ExtResource( 15 )]
+[node name="rock1" parent="." index="7" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 0.947311, 0.320315, 0, -0.320315, 0.947311, -240.997, -226.185, -55.0654 )
 
-[node name="the_medium" type="Spatial" parent="." index="9"]
+[node name="the_medium" type="Spatial" parent="." index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -231.618, -225.576, -40.6129 )
 script = ExtResource( 16 )
 
@@ -227,6 +225,30 @@ shape = SubResource( 251 )
 transform = Transform( 1, 0, 0, 0, 0.00453788, -0.99999, 0, 0.99999, 0.00453788, 0, -0.279541, 0.00127029 )
 mesh = SubResource( 252 )
 material/0 = null
+
+[node name="bug_pickup4" parent="." index="10" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.32987, -132.979, -181.332 )
+
+[node name="bug_pickup5" parent="." index="11" instance=ExtResource( 14 )]
+transform = Transform( -0.0964016, 0, 0.995342, 0, 1, 0, -0.995342, 0, -0.0964016, -0.20876, -128.721, -184.34 )
+
+[node name="bug_pickup6" parent="." index="12" instance=ExtResource( 14 )]
+transform = Transform( -0.0462348, 0, -0.998931, 0, 1, 0, 0.998931, 0, -0.0462348, 10.3712, -128.754, -189.049 )
+
+[node name="bug_pickup7" parent="." index="13" instance=ExtResource( 14 )]
+transform = Transform( -0.0462348, 0, -0.998931, 0, 1, 0, 0.998931, 0, -0.0462348, 18.6186, -127.862, -188.438 )
+
+[node name="bug_pickup9" parent="." index="14" instance=ExtResource( 14 )]
+transform = Transform( 0.274532, 0.399864, 0.874495, -0.0860081, 0.916003, -0.391843, -0.957724, 0.0323598, 0.285864, 38.4432, -249.063, -51.7613 )
+
+[node name="bug_pickup8" parent="." index="15" instance=ExtResource( 14 )]
+transform = Transform( -0.797047, 0, -0.603918, 0, 1, 0, 0.603918, 0, -0.797047, 39.3069, -246.869, -53.803 )
+
+[node name="bug_pickup10" parent="." index="16" instance=ExtResource( 14 )]
+transform = Transform( 0.941541, 0, 0.336898, 0, 1, 0, -0.336898, 0, 0.941541, 38.7431, -246.869, -54.3123 )
+
+[node name="coat_pickup" parent="." index="17" instance=ExtResource( 17 )]
+transform = Transform( -0.832361, 0, -0.554235, 0, 1, 0, 0.554235, 0, -0.832361, 40.0058, -247.454, -49.2127 )
 
 [connection signal="activated" from="the_medium/power_thing" to="the_medium/door" method="_on_activated"]
 [connection signal="activated" from="the_medium/power_thing2" to="the_medium/door" method="_on_activated"]
