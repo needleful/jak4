@@ -11,4 +11,7 @@ func _on_body_entered(body):
 		print_debug("BUG: Non-player triggered dialog node ", get_path())
 		return
 	if body.can_talk():
-		body.start_dialog(self, dialog_sequence, get_node(main_speaker))
+		var s: Node
+		if has_node(main_speaker):
+			s = get_node(main_speaker)
+		body.start_dialog(self, dialog_sequence, s)

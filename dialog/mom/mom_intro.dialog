@@ -1,6 +1,6 @@
 // So there's a lot of stuff that'll be here.
 // Also we can see if multiple statements work.
-{Global.stat("mom_info") == 0}
+{Global.stat("mom/info") == 0}
 	{talked == 0}
 		* The thing in front of you is almost nothing at all.
 		* A jawline. The outline of a dress. That's all you can make out. Somehow this is more than you could recall.
@@ -16,19 +16,46 @@
 		* What little you have gives you hope.
 		* Who knows what the machine will be able to show with more?
 		* You turn to leave.
+		{exit()}
 	{otherwise}
 		* The ghost of your mother lingers for a moment.
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay Mom?
 		* She murmurs incomprehensibly as you leave.
-	{exit()}
+	// For debugging {exit()}
 
+// This is for how many times you've actually talked to her
+{Global.add_stat("mom/talked") == 1}
+	Oh? Who are you?
+	[You] Hi mom...
+	Jackie? But you're so-
+	* She looks around.
+	This is the Medium. So I'm...
+	{animation("hug")} ...
+	That explains why you've grown so much.
+	How'd I die?
+	[You] I don't know. One day you left, and just... didn't come back.
+	Are you sure I died?
+	[You]... No, not really.
+	{Global.stat("mom/tick") != 0} Huh.
+	{Global.stat("mom/near_medium") != 0} 
+
+{otherwise if Global.stat("mom/talked") == 2}
+	Did you forget something? I thought you were leaving?
+	[You] What do you mean? I did leave...
+	But you came right back? Stepping out for a few second doesn't count as "leaving".
+	[You] But... I.. wasn't gone for a few seconds?
+	...
+	{Global.stat("mom/tick") != 0} Huh.
+	[You] Is everything okay?
+	... As okay as it'll ever be, I guess.
 
 {exit()}
 
 :_exit:
 [You] I have to go. Bye, mom.
-{Global.stat("mom_info") > 2} I'll see you, sweetie.
+{Global.stat("mom/info") > 2} I'll see you, sweetie.
+{exit()}
 
 :accuracy_1
 {Global.stat("mom/accuracy") > 0} Like I said last time, I'm not terribly worried about this thing's accuracy.

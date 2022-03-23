@@ -1,7 +1,9 @@
 extends Control
 
 signal exited
+signal event(id)
 
+var player: Node
 var main_speaker: Node
 var source_node: Node
 var last_speaker: String
@@ -56,8 +58,8 @@ func _process(_delta):
 	scr.scroll_vertical = scr.get_v_scrollbar().max_value
 
 func _ready():
-	r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
-	r_interpolate.compile("#\\{([^\\}])\\}")
+	var _x = r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
+	_x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	end()
 
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
@@ -69,7 +71,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 		main_speaker = speaker
 	else:
 		main_speaker = source_node
-	talked = Global.stat("talked"+speaker.get_path())
+	talked = Global.stat("talked"+main_speaker.get_path())
 	set_process(true)
 	set_process_input(true)
 	Global.can_pause = false
@@ -245,13 +247,15 @@ func format(_style: String):
 	return Result.TRUE
 
 # TODO
-func animation(_anim: String):
+func animation(_animation: String, _node: String = ""):
 	return Result.TRUE
 
-# TODO
-func event(_tag: String, should_pause := true):
+func event(tag: String, should_pause := true):
 	if should_pause:
 		pause()
+	emit_signal("event", tag)
+	if main_speaker.has_method(tag):
+		main_speaker.call(tag)
 	return Result.TRUE
 
 func goto(label: String):
@@ -263,7 +267,7 @@ func skip():
 	return Result.TRUE
 
 func exit():
-	Global.add_stat("talked"+main_speaker.get_path())
+	var _x = Global.add_stat("talked"+main_speaker.get_path())
 	emit_signal("exited")
 	return Result.END
 

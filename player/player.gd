@@ -2,7 +2,7 @@ extends KinematicBody
 class_name PlayerBody
 
 const RUN_SPEED := 7.0
-const CROUCH_SPEED := 2.0
+const CROUCH_SPEED := 3.0
 const CLIMB_SPEED := 5.0
 const WALKING_SPEED := 1.5
 const GRAVITY := Vector3.DOWN*24
@@ -87,8 +87,10 @@ var max_health := 50
 var health := max_health
 var damaged_objects: Array = []
 
+const HANG_STAMINA_DRAIN := 0.5
 const CLIMB_STAMINA_DRAIN := 25.0
 const MIN_CLIMB_STAMINA := 10.0
+const MIN_STAMINA_DRAIN := 0.05
 var max_stamina := 30.0
 var stamina_recover := 8.0
 var stamina := max_stamina
@@ -141,7 +143,7 @@ enum State {
 	DiveStart,
 	DiveEnd,
 	Damaged,
-	DialogLocked
+	Locked
 }
 
 var state: int = State.Fall
@@ -210,7 +212,7 @@ func _physics_process(delta):
 	if global_transform.origin.y < -1000:
 		global_transform.origin.y = 1000
 	state_timer += delta
-	if state != State.Climb:
+	if state != State.Climb and state != State.LedgeHang:
 		stamina += stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
@@ -284,20 +286,24 @@ func _physics_process(delta):
 				crouch_head.get_overlapping_bodies().size() == 0
 			):
 				next_state = State.Ground
-			elif best_floor_dot < MIN_SLIDE_DOT:
-				next_state = State.Fall
-			elif best_floor_dot < MIN_GROUND_DOT:
+			elif $groundArea.get_overlapping_bodies().size() == 0:
+				coyote_timer += delta
+				if coyote_timer > COYOTE_TIME:
+					next_state = State.Fall
+			elif best_floor_dot < MIN_GROUND_DOT and best_floor_dot > 0:
 				if stamina > MIN_CLIMB_STAMINA:
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
+			else:
+				coyote_timer = 0
 		State.CrouchJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif state_timer > CROUCH_JUMP_TIME:
 				next_state = State.Fall
 		State.Climb:
-			stamina -= CLIMB_STAMINA_DRAIN*delta*(1.0-best_floor_dot)
+			stamina -= (desired_velocity.length() + MIN_STAMINA_DRAIN)*CLIMB_STAMINA_DRAIN*delta*(1.0-best_floor_dot)
 			if best_floor_dot > MIN_GROUND_DOT:
 				next_state = State.Crouch
 			# Can climb sheer cliffs, must start from sliding ground though
@@ -328,6 +334,11 @@ func _physics_process(delta):
 				next_state = State.DiveWindup
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
+			elif (best_normal != Vector3.ZERO
+				and best_floor_dot < MIN_SLIDE_DOT
+			):
+				ground_normal = best_normal
+				next_state = State.BonkFall
 			elif state_timer > CROUCH_JUMP_TIME:
 				if best_floor_dot > MIN_GROUND_DOT:
 					next_state = State.Ground
@@ -335,11 +346,6 @@ func _physics_process(delta):
 					next_state = State.Slide
 				else:
 					next_state = State.RollFall
-			elif (best_normal != Vector3.ZERO
-				and best_floor_dot < MIN_SLIDE_DOT
-			):
-				ground_normal = best_normal
-				next_state = State.BonkFall
 		State.RollFall:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
@@ -376,12 +382,13 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 		State.LedgeHang:
+			stamina -= HANG_STAMINA_DRAIN*delta
 			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("mv_jump"):
 				next_state = State.LedgeJump
-			elif Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
+			elif stamina <= 0 or Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
 				next_state = State.LedgeFall
 		State.LedgeFall:
 			if Input.is_action_just_pressed("combat_spin"):
@@ -516,7 +523,7 @@ func _physics_process(delta):
 		State.DiveEnd:
 			accel(delta, desired_velocity*RUN_SPEED)
 			damage_point(dive_end_hitbox, DIVE_END_DAMAGE, global_transform.origin)
-		State.DialogLocked:
+		State.Locked:
 			desired_velocity = Vector3.ZERO
 	update_visuals(desired_velocity)
 
@@ -666,6 +673,10 @@ func is_grounded():
 		or state == State.Roll
 		or state == State.Crouch)
 
+func cannot_flinch():
+	return ( state == State.DiveWindup
+		or state == State.DiveStart)
+
 func can_ledge_grab() -> bool:
 	if ((ledgeCastCeiling.is_colliding() 
 		and ledgeCastCeiling.get_collision_normal().y < 0)
@@ -744,19 +755,24 @@ func damage(node: Node, damage: int, dir: Vector3):
 		node.take_damage(damage, dir)
 
 func take_damage(damage: int, direction: Vector3):
-	if state == State.DialogLocked:
+	if state == State.Locked:
 		return
 	health -= damage
 	update_health()
-	print("Health: ", health)
 	if health <= 0:
 		die()
 		return
 	velocity = VEL_H_DAMAGED*direction
-	set_state(State.Damaged)
+	if !cannot_flinch():
+		set_state(State.Damaged)
 
 func die():
 	Global.add_stat("player_death")
+	# TODO: Animation and fadeout, then queue respawn
+	respawn()
+
+func respawn():
+	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
 	global_transform.origin = Global.checkpoint_position
 
@@ -787,7 +803,7 @@ func wardrobe_unlock():
 
 func lock():
 	set_process_input(false)
-	set_state(State.DialogLocked)
+	set_state(State.Locked)
 	$ui/stats.hide()
 	$ui/inventory.hide()
 
@@ -873,7 +889,7 @@ func set_state(next_state: int):
 		State.Damaged:
 			velocity.y = move_speed*VEL_V_DAMAGED
 			mesh.transition_to("Fall")
-		State.DialogLocked:
+		State.Locked:
 			mesh.transition_to("Ground")
 			velocity = Vector3.ZERO
 	state = next_state

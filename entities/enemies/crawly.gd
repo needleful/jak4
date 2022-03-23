@@ -1,10 +1,5 @@
-extends KinematicBody
+extends KinematicEnemy
 
-export(bool) var respawns := true
-export(bool) var drops_coat := false
-export(int) var gem_drop_max = 5
-export(int) var health = 15
-export(int) var attack_damage = 10
 export(float) var run_speed = 7.5
 export(float) var lunge_speed = 15.0
 export(float) var damaged_speed = 5.0
@@ -13,9 +8,6 @@ export(float) var turn_speed_windup = 5.0
 export(float) var turn_speed_attacking = 1.0
 
 onready var anim := $crawly/AnimationPlayer
-
-var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
-var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
 
 enum AI {
 	Idle,
@@ -41,20 +33,12 @@ var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
 
-var target: Spatial
 var move_dir: Vector3
 
-var damaged:= []
-
-var coat = null
-
 func _ready():
-	if !respawns and Global.is_picked(get_path()):
-		queue_free()
-		return
+	prepare()
 	set_state(ai)
-	if drops_coat:
-		coat = Global.get_coat()
+	if coat:
 		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
 
 func _physics_process(delta):
@@ -96,10 +80,7 @@ func _physics_process(delta):
 		AI.Attacking:
 			look_at_target(turn_speed_attacking*delta)
 			walk(delta, lunge_speed)
-			for c in $hurtbox.get_overlapping_bodies():
-				if !(c in damaged) and c.has_method("take_damage"):
-					c.take_damage(attack_damage, global_transform.basis.z)
-				damaged.append(c)
+			damage_direction($hurtbox, global_transform.basis.z)
 		AI.Chasing:
 			look_at_target(turn_speed_radians*delta)
 			walk(delta, run_speed)
@@ -109,7 +90,6 @@ func _physics_process(delta):
 			velocity.z = move_dir.z
 			velocity = move_and_slide(velocity + GRAVITY*delta)
 		AI.Dead:
-			
 			var best_normal = Vector3.ZERO
 			for c in get_slide_count():
 				var n = get_slide_collision(c).normal
@@ -128,19 +108,6 @@ func _physics_process(delta):
 		AI.Windup, AI.Alerted:
 			look_at_target(turn_speed_windup*delta)
 			walk(delta, 0)
-
-func look_at_target(turn_amount: float):
-	if !target:
-		return
-	var forward := global_transform.basis.z
-	var desired_f := target.global_transform.origin - global_transform.origin
-	desired_f.y = 0
-	desired_f = desired_f.normalized()
-	var axis = forward.cross(desired_f).normalized()
-	if axis.is_normalized():
-		var angle = forward.angle_to(desired_f)
-		var rot = sign(angle)*min(abs(angle), turn_amount)
-		global_rotate(axis, rot)
 
 func walk(delta, speed):
 	var hvel = global_transform.basis.z*speed
@@ -168,21 +135,7 @@ func set_state(new_ai):
 			anim.play("Damaged")
 		AI.Dead:
 			collision_layer = 0
-			if drops_coat:
-				var c = coat_scene.instance()
-				c.coat = coat
-				c.persistent = false
-				get_parent().add_child(c)
-				c.global_transform = global_transform
-			var gems = int(rand_range(0, gem_drop_max))
-			if gems > 0:
-				print("Dropping %d gems" % gems)
-				var g = gem_scene.instance()
-				g.quantity = gems
-				get_parent().add_child(g)
-				g.global_transform = global_transform
-			if !respawns:
-				Global.mark_picked(get_path())
+			die()
 			anim.play("Die")
 			anim.queue("Dead-loop")
 		AI.Idle:

@@ -62,14 +62,15 @@ func count(item: String) -> int:
 	else:
 		return 0
 
-func add_item(item: String, amount:= 1):
+func add_item(item: String, amount:= 1) -> int:
 	if item in game_state.inventory:
 		game_state.inventory[item] += amount
 	else:
 		game_state.inventory[item] = amount
 	if item in tracked_items:
-		add_stat(item, amount)
+		var _x = add_stat(item, amount)
 	emit_signal("inventory_changed")
+	return game_state.inventory[item]
 
 func remove_item(item: String, amount := 1) -> bool:
 	if count(item) >= amount:
@@ -82,11 +83,12 @@ func remove_item(item: String, amount := 1) -> bool:
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
 
-func add_stat(tag: String, amount := 1):
+func add_stat(tag: String, amount := 1) -> int:
 	if tag in game_state.stats:
 		game_state.stats[tag] += amount
 	else:
 		game_state.stats[tag] = amount
+	return game_state.stats[tag]
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)
@@ -105,7 +107,6 @@ func mark_activated(node: Node):
 		game_state.activated.append(node.get_path())
 
 # Coats
-
 func get_coat(cgen_seed: int = -1) -> Coat:
 	if cgen_seed == -1:
 		cgen_seed = rand64()
@@ -124,10 +125,10 @@ func get_coat(cgen_seed: int = -1) -> Coat:
 	elif cgen_seed < max_int*0.5:
 		colors = 3
 		coat.rarity = coat.Rarity.Uncommon
-	elif cgen_seed < max_int*0.75:
+	elif cgen_seed < max_int*0.8:
 		colors = 4
 		coat.rarity = coat.Rarity.Rare
-	elif cgen_seed < max_int*0.825:
+	elif cgen_seed < max_int*0.99:
 		colors = 5
 		coat.rarity = coat.Rarity.SuperRare
 	else:
@@ -138,7 +139,7 @@ func get_coat(cgen_seed: int = -1) -> Coat:
 	
 	for p in range(colors):
 		var o := rng.randf()
-		var c := Color(rng.randf(), rng.randf(), rng.randf())
+		var c := Color.from_hsv(rng.randf(), rng.randf(), rng.randf())
 		if p <= 1:
 			coat.gradient.colors[p] = c
 			coat.gradient.offsets[p] = o

@@ -5,13 +5,15 @@ onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 onready var groundCast: RayCast = get_parent().get_node("groundCast")
 
+var camera_move_advanced := 1.0
+
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 1.0
-const CORRECTION_VELOCITY := 4.0
-const CORRECTION_VELOCITY_GROUND := 8.0
+const CORRECTION_VELOCITY := 2.0
+const CORRECTION_VELOCITY_GROUND := 4.0
 const MIN_FLOOR_HEIGHT := 0.5
-const H_CORRECTION := 30.0
-const H_SLOW_CORRECTION := 15.0
+const H_CORRECTION := 25.0
+const H_SLOW_CORRECTION := 10.0
 const H_DIFF_BOUND := 2.5
 
 const LEDGE_GRAB_RAISE := 1.0
@@ -22,6 +24,9 @@ var mouse_sns := Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
 
 var cv := CORRECTION_VELOCITY
+const velocity_track := 0.02
+var velocity := Vector3.ZERO
+var max_vel_diff := 10.0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -31,10 +36,14 @@ func _input(event):
 		mouse_accum += event.relative
 
 func _physics_process(delta):
+	var vel_diff = (player.velocity - velocity).length()
+	vel_diff = 0.5*min(vel_diff, max_vel_diff) + 1
+	velocity = velocity.move_toward(player.velocity, vel_diff*velocity_track)
+	velocity *= camera_move_advanced
+	
 	#Camera Movement
 	var target: Vector3 = player.global_transform.origin
-	var pos: Vector3 = yaw.global_transform.origin
-	
+	var pos: Vector3 = yaw.global_transform.origin + velocity*delta
 	
 	if player.state == player.State.LedgeHang:
 		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.1)

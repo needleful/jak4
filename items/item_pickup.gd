@@ -14,7 +14,7 @@ func _ready():
 		$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
 
 func _on_body_entered(_b):
-	Global.add_item(item_id, quantity)
+	var _x = Global.add_item(item_id, quantity)
 	if persistent:
 		Global.mark_picked(get_path())
 	queue_free()
