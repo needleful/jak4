@@ -10,6 +10,7 @@ var last_speaker: String
 
 var current_item : DialogItem
 var sequence: Resource
+var now: Dictionary
 
 var otherwise := false
 var talked := 0
@@ -54,6 +55,7 @@ func _ready():
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	clear()
 	show()
+	now = OS.get_datetime(true)
 	source_node = p_source_node
 	sequence = p_sequence
 	if speaker:

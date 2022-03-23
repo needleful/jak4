@@ -23,7 +23,7 @@ func _on_body_entered(b):
 	if persistent:
 		Global.mark_picked(get_path())
 	if from_kill:
-		Global.add_stat("kill_coat")
+		var _x = Global.add_stat("kill_coat")
 	queue_free()
 
 func set_coat(c: Coat):

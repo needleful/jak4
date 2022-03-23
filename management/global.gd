@@ -82,6 +82,7 @@ func remove_item(item: String, amount := 1) -> bool:
 
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
+	return true
 
 func add_stat(tag: String, amount := 1) -> int:
 	if tag in game_state.stats:
