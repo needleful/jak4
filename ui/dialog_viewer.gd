@@ -28,21 +28,10 @@ export(Color) var player_color := Color.deeppink
 onready var replies := $vbox/replies
 onready var messages := $vbox/messages/list
 
-enum Result {
-	# Result failed. Skip this, set otherwise
-	FALSE,
-	# Result is true. Show this.
-	TRUE,
-	# Result does not return true or false. Show item
-	IGNORE,
-	# Result does not return true or false. Stop processing this item
-	SKIP,
-	# Pause() is called and processing stopped.
-	# On resume(), the item is shown and dialog resumes from there
-	PAUSE,
-	# It's the end of the dialog
-	END
-}
+const RESULT_SKIP := {"result":"skip"}
+const RESULT_PAUSE := {"result":"pause"}
+const RESULT_END := {"result":"end"}
+
 
 var r_otherwise_if := RegEx.new()
 var r_interpolate := RegEx.new()
@@ -115,15 +104,19 @@ func advance():
 		var cond: Array = current_item.conditions
 		result = true
 		for c in cond:
-			var r = evaluate(c)
-			if r == Result.FALSE:
+			var r = check_condition(c)
+			if r is Dictionary:
+				if r == RESULT_END:
+					return
+				elif r == RESULT_PAUSE:
+					pause()
+					return
+				elif r == RESULT_SKIP:
+					advance()
+					return
+			elif !r:
 				result = false
 				break
-			elif r == Result.SKIP:
-				advance()
-				return
-			elif r == Result.END:
-				return
 		if !result:
 			current_item = sequence.failed_next(current_item)
 		elif current_item.text == "":
@@ -145,7 +138,7 @@ func list_replies():
 		var cond = reply.conditions
 		var result := true
 		for c in cond:
-			if evaluate(c) == Result.FALSE:
+			if !check_condition(c):
 				result = false
 				break
 		if result:
@@ -203,52 +196,43 @@ func interpolate(line: String):
 	var matches := r_interpolate.search_all(line)
 	var text := line
 	for m in matches:
-		var ex = eval_expression(m.get_string(1))
+		var ex = evaluate(m.get_string(1))
 		text = text.replace(m.get_string(), str(ex))
 	return text
 
-func eval_expression(ex_text: String):
+func evaluate(ex_text: String):
 	var expr: Expression = Expression.new()
 	var err = expr.parse(ex_text, ["Global"])
 	if err != OK:
 		print_debug("\tFailed to parse {%s}. Code %d" % [ex_text, err])
-		return Result.IGNORE
+		return true
 	
 	var r = expr.execute([Global], self)
 	
 	if expr.has_execute_failed():
 		print_debug("\tFailed to execute {%s}.\n\t%s" 
 			% [ex_text, expr.get_error_text()])
-		return Result.IGNORE
+		return true
 	return r
 
-func evaluate(cond: String):
-	var oim: RegExMatch = r_otherwise_if.search(cond)
-	if oim:
+func check_condition(cond: String):
+	var oif: RegExMatch = r_otherwise_if.search(cond)
+	if oif:
 		if !otherwise:
-			return Result.FALSE
-		cond = cond.replace(oim.get_string(), "")
+			return false
+		cond = cond.replace(oif.get_string(), "")
 	
-	var r = eval_expression(cond)
-	
-	var result: int
-	if r is int:
-		result = r
-	elif r:
-		result = Result.TRUE
-	else:
-		result = Result.FALSE
-	
-	otherwise = result == Result.FALSE
+	var result = evaluate(cond)
+	otherwise = !result
 	return result
 
 # TODO
 func format(_style: String):
-	return Result.TRUE
+	return true
 
 # TODO
 func animation(_animation: String, _node: String = ""):
-	return Result.TRUE
+	return true
 
 func event(tag: String, should_pause := true):
 	if should_pause:
@@ -256,38 +240,36 @@ func event(tag: String, should_pause := true):
 	emit_signal("event", tag)
 	if main_speaker.has_method(tag):
 		main_speaker.call(tag)
-	return Result.TRUE
+	return true
 
 func goto(label: String):
 	current_item = sequence.get(label)
-	return Result.SKIP
+	return RESULT_SKIP
 
 func skip():
 	skip_reply = true
-	return Result.TRUE
+	# Ironic how skip() does not return RESULT_SKIP
+	return true
 
 func exit():
 	var _x = Global.add_stat("talked"+main_speaker.get_path())
 	emit_signal("exited")
-	return Result.END
+	return RESULT_END
 
 func mention(topic):
 	discussed[topic] = true
-	return Result.IGNORE
+	return true
 
 func mentioned(topic):
-	if topic in discussed:
-		return Result.TRUE
-	else:
-		return Result.FALSE
+	return topic in discussed
 
 #TODO
 func subtopic(_label):
-	return Result.IGNORE
+	return RESULT_SKIP
 
 #TODO
 func back():
-	return Result.IGNORE
+	return RESULT_SKIP
 
 func end():
 	hide()

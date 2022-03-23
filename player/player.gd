@@ -54,6 +54,7 @@ const LEDGE_MIN_Y := 0.6
 
 const LUNGE_KICK_MAX_TIME := 0.6
 const LUNGE_KICK_MIN_TIME := 0.4
+const LUNGE_KICK_UPPERCUT_TIME := 0.2
 const SPIN_KICK_TIME := 0.7
 const UPPERCUT_WINDUP_TIME := 0.25
 const UPPERCUT_MIN_TIME := 0.4
@@ -411,11 +412,14 @@ func _physics_process(delta):
 		State.LungeKick:
 			if state_timer >= LUNGE_KICK_MAX_TIME:
 				next_state = State.Ground
-			elif state_timer >= LUNGE_KICK_MIN_TIME:
-				if Input.is_action_just_pressed("mv_jump"):
-					next_state = State.UppercutWindup
-				elif Input.is_action_just_pressed("combat_spin"):
-					next_state = State.SpinKick
+			elif ( state_timer >= LUNGE_KICK_MIN_TIME
+				and Input.is_action_just_pressed("combat_spin")
+			):
+				next_state = State.SpinKick
+			elif (state_timer >= LUNGE_KICK_UPPERCUT_TIME
+				and Input.is_action_just_pressed("mv_jump")
+			):
+				next_state = State.UppercutWindup
 		State.SpinKick:
 			if state_timer >= SPIN_KICK_TIME:
 				next_state = State.Ground
@@ -675,7 +679,8 @@ func is_grounded():
 
 func cannot_flinch():
 	return ( state == State.DiveWindup
-		or state == State.DiveStart)
+		or state == State.DiveStart
+		or state == State.UppercutWindup)
 
 func can_ledge_grab() -> bool:
 	if ((ledgeCastCeiling.is_colliding() 
@@ -809,9 +814,12 @@ func lock():
 
 func unlock():
 	set_process_input(true)
-	call_deferred("set_state", State.Ground)
+	$unlock_timer.start()
 	$ui/stats.show()
 	$ui/inventory.show()
+
+func _on_unlock_timer_timeout():
+	set_state(State.Ground)
 
 func set_state(next_state: int):
 	if state == next_state:

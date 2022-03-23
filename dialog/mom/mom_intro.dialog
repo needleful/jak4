@@ -17,15 +17,18 @@
 		* Who knows what the machine will be able to show with more?
 		* You turn to leave.
 		{exit()}
-	{otherwise}
+	{otherwise if talked < 3}
 		* The ghost of your mother lingers for a moment.
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay Mom?
 		* She murmurs incomprehensibly as you leave.
-	// For debugging {exit()}
+	{otherwise if talked < 5}
+		* She still says nothing.
+		[You] I've been looking for anything to help. But I have no idea where to go.
+	{exit()}
 
 // This is for how many times you've actually talked to her
-{Global.add_stat("mom/talked") == 1}
+{Global.add_stat("mom/talked")}
 	Oh? Who are you?
 	[You] Hi mom...
 	Jackie? But you're so-
@@ -37,8 +40,8 @@
 	[You] I don't know. One day you left, and just... didn't come back.
 	Are you sure I died?
 	[You]... No, not really.
-	{Global.stat("mom/tick") != 0} Huh.
-	{Global.stat("mom/near_medium") != 0} 
+	{Global.stat("mom/tick")} Huh.
+	{Global.stat("mom/near_medium")} 
 
 {otherwise if Global.stat("mom/talked") == 2}
 	Did you forget something? I thought you were leaving?
@@ -58,7 +61,7 @@
 {exit()}
 
 :accuracy_1
-{Global.stat("mom/accuracy") > 0} Like I said last time, I'm not terribly worried about this thing's accuracy.
+{Global.stat("mom/accuracy")} Like I said last time, I'm not terribly worried about this thing's accuracy.
 	Am I what your mom would actually be? I don't know. And if you knew, it wouldn't be a problem, hahaha!
 	But
 

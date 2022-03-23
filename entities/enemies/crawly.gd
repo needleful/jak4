@@ -2,26 +2,11 @@ extends KinematicEnemy
 
 export(float) var run_speed = 7.5
 export(float) var lunge_speed = 15.0
-export(float) var damaged_speed = 5.0
 export(float) var turn_speed_radians = 15.0
 export(float) var turn_speed_windup = 5.0
 export(float) var turn_speed_attacking = 1.0
 
 onready var anim := $crawly/AnimationPlayer
-
-enum AI {
-	Idle,
-	Alerted,
-	Chasing,
-	Windup,
-	Attacking,
-	Damaged,
-	Dead
-}
-var ai = AI.Idle
-
-const GRAVITY := Vector3.DOWN*24
-var velocity := Vector3.ZERO
 
 var WINDUP_TIME := .5
 var ATTACK_TIME := 0.75
@@ -33,11 +18,8 @@ var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
 
-var move_dir: Vector3
 
 func _ready():
-	prepare()
-	set_state(ai)
 	if coat:
 		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
 
@@ -109,13 +91,6 @@ func _physics_process(delta):
 			look_at_target(turn_speed_windup*delta)
 			walk(delta, 0)
 
-func walk(delta, speed):
-	var hvel = global_transform.basis.z*speed
-	velocity.x = hvel.x
-	velocity.z = hvel.z
-	
-	velocity = move_and_slide(velocity + GRAVITY*delta)
-
 func set_state(new_ai):
 	if ai == new_ai:
 		return
@@ -142,11 +117,3 @@ func set_state(new_ai):
 			anim.play("Idle-loop")
 		AI.Windup:
 			anim.play("Attack")
-
-func take_damage(damage: int, dir: Vector3):
-	health -= damage
-	move_dir = dir*damaged_speed
-	if health <= 0:
-		set_state(AI.Dead)
-	else:
-		set_state(AI.Damaged)

@@ -1,0 +1,75 @@
+{talked == 0} Kholt mi!
+	> {Global.stat("language/nseit_mi")} N'seit mi.
+		Anglesari?
+		[You] Uh... yes.
+		No no, you have to say "Eeya! Ta mheri anglesari!"
+		[You] Eh ya?
+		With some more force on the first syllable. It's a uh, "long vowel". "Eeya"! It means "yes".
+		{Global.add_stat("language/eeya")}
+		[You] Eeya.
+
+		Now you're a pro!
+		So what brings you out here? Seems like you're on quite the trip.
+
+		{Global.stat("kill_coat") > 2} {subtopic("hunting")}
+		{otherwise}[You] Just uh, some family stuff.
+
+		What sort?
+		> I'm seeing the Medium. For uh... my mom.
+			Oh.
+		>{skip()} (Evade the question)
+			[You] Um, I uh, I 
+
+	> {otherwise}{skip()} Kholt mi.
+		[You] Uh, "kolt me".
+		Haha! English?
+		[You] Uh, yeah. Was I bad?
+		Ah, it's no worry. "Kholt mi" is more for uh, shop owners and things. You'd say "n'seit mi" or something like that.
+		[You] N.. Seit mi?
+		{Global.add_stat("language/nseit_mi")}
+		Yeah! You're learning!
+		So what brings you so far from home?
+		{Global.stat("kill_coat") > 2} {subtopic("hunting")}
+		{otherwise}[You] Uh, some personal stuff.
+	> Sorry, I only know English.
+		Ah! A rather out-of-the-way spot for tourism, isn't it?
+		{Global.stat("kill_coat") > 2} {subtopic("hunting")}
+		{otherwise} [You] It's, uh, an important trip. I'm looking for something.
+
+{otherwise} Good to see ya, Jack-o!
+	[You] Hey.
+	So what can I get ya?
+
+:shop_replies
+> I'd like to buy some supplies.
+	Can do!
+	{event("open_shop")}
+	{goto("sub_exit")}
+> How long have you run this shop?
+	Oh, my whole life really. So I guess almost forty years.
+	My dad used to run it. And before that, my grandma. I think she and her husband built it.
+	I guess when I go, my girl's gonna take it over.
+	> Have you traveled much?
+		I went to the academy in 
+	> {skip()}(Back)
+		{goto("shop_replies")}
+> See you later.
+	{goto("sub_exit")}
+{exit()}
+
+:_exit
+[You] I have to go, see you!
+:sub_exit
+{mentioned("mom")} Safe travels to you, Jackie.
+{otherwise if mentioned("safari")} Enjoy your safari, huntress! If you find a nicer coat, maybe my daughter can have your hand-me-downs!
+{otherwise} Have a good one!
+{exit()}
+
+:hunting
+* He gestures to your coat
+{mention("safari")} Safari hunting?
+[You] Oh, no, that was just, uh, a side thing.
+Hahaha! A "side thing"! Those alpha crawlers are nasty beasts. I wouldn't fight with them as a "side thing"!
+[You] Yeah, haha! They're not so tough once you start hitting them, though.
+	But uh, I'm here for personal stuff.
+{back()}

@@ -2,6 +2,7 @@ extends Area
 
 export(int) var random_seed = -1
 export(bool) var persistent := true
+export(bool) var from_kill := false
 
 var coat: Coat setget set_coat
 
@@ -21,6 +22,8 @@ func _on_body_entered(b):
 		b.set_current_coat(coat)
 	if persistent:
 		Global.mark_picked(get_path())
+	if from_kill:
+		Global.add_stat("kill_coat")
 	queue_free()
 
 func set_coat(c: Coat):
