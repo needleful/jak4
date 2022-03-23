@@ -1,36 +1,37 @@
 extends KinematicBody
 class_name PlayerBody
 
-const RUN_SPEED := 7.0
-const CROUCH_SPEED := 3.0
-const CLIMB_SPEED := 5.0
-const WALKING_SPEED := 1.5
 const GRAVITY := Vector3.DOWN*24
 
-const MIN_GROUND_DOT := 0.7
-const MIN_SLIDE_DOT := 0.12
+# Movement
+const SPEED_WALK := 1.5
+const SPEED_RUN := 7.0
+const SPEED_CROUCH := 3.0
 
-const COYOTE_TIME := 0.1
-var coyote_timer := 0.0
+const SPEED_CLIMB := 5.0
+const SPEED_ROLL := 15.0
+const SPEED_BONK := 5.0
 
-const BASE_JUMP_VEL := 8.0
-const CROUCH_JUMP_VEL := 12.5
-const LEDGE_JUMP_VEL := 9.0
-const ROLL_JUMP_VEL := 7.0
-const ROLL_JUMP_LURCH := 16.5
+const MIN_DOT_GROUND := 0.7
+const MIN_DOT_SLIDE := 0.12
+const MIN_DOT_LEDGE := 0.6
 
-const BASE_JUMP_TIME := 0.25
-const ROLL_JUMP_STEER := 2.5
-const CROUCH_JUMP_TIME := 0.5
-var state_timer := 0.0
+const TIME_COYOTE := 0.1
+const TIME_LEDGE_FALL := 0.5
+const TIME_CROUCH_JUMP := 0.5
+const TIME_BASE_JUMP := 0.25
+
+const JUMP_VEL_BASE := 8.0
+const JUMP_VEL_CROUCH := 12.5
+const JUMP_VEL_LEDGE := 9.0
+const JUMP_VEL_ROLL := 7.0
+const JUMP_VEL_ROLL_FORWARD := 16.5
 
 const MIN_SPEED_ROLL := 2.0
 
-const ROLL_SPEED := 15.0
-const ROLL_MIN_TIME := 0.25
-const ROLL_MAX_TIME := 0.5
-const ROLL_MIN_TIME_JUMP := 0.3
-const BONK_SPEED := 5.0
+const TIME_ROLL_MIN := 0.25
+const TIME_ROLL_MAX := 0.5
+const TIME_ROLL_MIN_JUMP := 0.3
 
 
 # Accelerating from zero
@@ -46,59 +47,53 @@ const DECEL_WITH := 15.0
 
 const ACCEL_CLIMB := 45.0
 const DECEL_CLIMB := 45.0
+const ACCEL_STEER_ROLL := 2.5
 
-const TIME_LEDGE_FALL := 0.5
-const LEDGE_MIN_Y := 0.6
+const STAMINA_DRAIN_HANG := 0.5
+const STAMINA_DRAIN_CLIMB := 25.0
+const STAMINA_DRAIN_MIN := 0.05
+const MIN_CLIMB_STAMINA := 10.0
 
 # Combat
 
-const LUNGE_KICK_MAX_TIME := 0.6
-const LUNGE_KICK_MIN_TIME := 0.4
-const LUNGE_KICK_UPPERCUT_TIME := 0.2
-const SPIN_KICK_TIME := 0.7
-const UPPERCUT_WINDUP_TIME := 0.25
-const UPPERCUT_MIN_TIME := 0.4
-const UPPERCUT_MAX_TIME := 0.8
-const DIVE_WINDUP_TIME := 0.2
-const DIVE_MIN_END_TIME := 0.4
-const DIVE_MAX_END_TIME := 0.5
+const TIME_LUNGE_MAX := 0.6
+const TIME_LUNGE_MIN := 0.4
+const TIME_LUNGE_MIN_UPPERCUT := 0.2
 
-const LUNGE_KICK_VEL := 25.0
-const AIR_SPIN_VEL := 3.0
-const UPPERCUT_VEL := 10.0
-const UPPERCUT_EXTRA_GRAVITY := 0.2
-const DIVE_WINDUP_VEL := 4.0
-const DIVE_EXTRA_GRAVITY := 0.5
+const TIME_SPIN := 0.7
+
+const TIME_UPPERCUT_WINDUP := 0.25
+const TIME_UPPERCUT_MIN := 0.4
+const TIME_UPPERCUT_MAX := 0.8
+
+const TIME_DIVE_WINDUP := 0.2
+const TIME_DIVE_END_MIN := 0.4
+const TIME_DIVE_END_MAX := 0.5
+
+const SPEED_LUNGE := 25.0
+
+const VEL_AIR_SPIN := 3.0
+const VEL_UPPERCUT := 10.0
+const VEL_DIVE_WINDUP := 4.0
+
+const GRAVITY_BOOST_UPPERCUT := 0.2
+const GRAVITY_BOOST_DIVE := 0.5
 
 const STEER_KICK := 5.0
 const DECEL_KICK := 75.0
 
-const DIVE_START_DAMGE := 15
-const DIVE_END_DAMAGE := 25
-const UPPERCUT_DAMAGE := 20
-const LUNGE_DAMAGE := 15
-const SPIN_DAMAGE := 10
-const ROLL_JUMP_DAMAGE := 5
+const DAMGE_DIVE_START := 15
+const DAMAGE_DIVE_END := 25
+const DAMAGE_UPPERCUT := 20
+const DAMAGE_LUNGE := 15
+const DAMAGE_SPIN := 10
+const DAMAGE_ROLL_JUMP := 5
 
-const VEL_H_DAMAGED := 5
-const VEL_V_DAMAGED := 6
 const TIME_DAMAGED := 0.75
+const VEL_DAMAGED_H := 5
+const VEL_DAMAGED_V := 6
 
-var max_health := 50
-var health := max_health
-var damaged_objects: Array = []
-
-const HANG_STAMINA_DRAIN := 0.5
-const CLIMB_STAMINA_DRAIN := 25.0
-const MIN_CLIMB_STAMINA := 10.0
-const MIN_STAMINA_DRAIN := 0.05
-var max_stamina := 30.0
-var stamina_recover := 8.0
-var stamina := max_stamina
-
-var move_speed := 1.0
-var jump_height := 1.0
-
+# Nodes
 onready var cam_yaw := $camera_rig/yaw
 onready var mesh := $jackie
 onready var crouch_head := $crouchHeadArea
@@ -119,6 +114,20 @@ onready var dive_start_hitbox := $jackie/attack_dive_start
 onready var dive_end_hitbox := $jackie/attack_dive_end
 
 var velocity := Vector3.ZERO
+var timer_coyote := 0.0
+var timer_state := 0.0
+
+var move_speed := 1.0
+var jump_height := 1.0
+
+var max_stamina := 30.0
+var stamina_recover := 8.0
+var stamina := max_stamina
+
+var max_health := 50
+var health := max_health
+var damaged_objects: Array = []
+
 
 enum State {
 	Ground,
@@ -212,7 +221,7 @@ func set_current_coat(coat: Coat):
 func _physics_process(delta):
 	if global_transform.origin.y < -1000:
 		global_transform.origin.y = 1000
-	state_timer += delta
+	timer_state += delta
 	if state != State.Climb and state != State.LedgeHang:
 		stamina += stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
@@ -250,32 +259,32 @@ func _physics_process(delta):
 			elif Input.is_action_just_pressed("combat_spin"):
 				next_state = State.SpinKick
 			elif $groundArea.get_overlapping_bodies().size() == 0:
-				coyote_timer += delta
-				if coyote_timer > COYOTE_TIME:
+				timer_coyote += delta
+				if timer_coyote > TIME_COYOTE:
 					next_state = State.Fall
-			elif best_normal != Vector3.ZERO and best_floor_dot < MIN_GROUND_DOT:
+			elif best_normal != Vector3.ZERO and best_floor_dot < MIN_DOT_GROUND:
 				next_state = State.Slide
 			else:
-				coyote_timer = 0
+				timer_coyote = 0
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif stamina > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
 				next_state = State.Climb
-			elif best_floor_dot > MIN_GROUND_DOT:
+			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif best_floor_dot < MIN_SLIDE_DOT:
-				coyote_timer += delta
-				if coyote_timer > COYOTE_TIME:
+			elif best_floor_dot < MIN_DOT_SLIDE:
+				timer_coyote += delta
+				if timer_coyote > TIME_COYOTE:
 					next_state = State.Fall
 			else:
-				coyote_timer = 0
+				timer_coyote = 0
 		State.BaseJump, State.LedgeJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif state_timer > BASE_JUMP_TIME:
+			elif timer_state > TIME_BASE_JUMP:
 				next_state = State.Fall
 		State.Crouch:
 			if Input.is_action_just_pressed("mv_jump"):
@@ -288,24 +297,24 @@ func _physics_process(delta):
 			):
 				next_state = State.Ground
 			elif $groundArea.get_overlapping_bodies().size() == 0:
-				coyote_timer += delta
-				if coyote_timer > COYOTE_TIME:
+				timer_coyote += delta
+				if timer_coyote > TIME_COYOTE:
 					next_state = State.Fall
-			elif best_floor_dot < MIN_GROUND_DOT and best_floor_dot > 0:
+			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot > 0:
 				if stamina > MIN_CLIMB_STAMINA:
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
 			else:
-				coyote_timer = 0
+				timer_coyote = 0
 		State.CrouchJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif state_timer > CROUCH_JUMP_TIME:
+			elif timer_state > TIME_CROUCH_JUMP:
 				next_state = State.Fall
 		State.Climb:
-			stamina -= (desired_velocity.length() + MIN_STAMINA_DRAIN)*CLIMB_STAMINA_DRAIN*delta*(1.0-best_floor_dot)
-			if best_floor_dot > MIN_GROUND_DOT:
+			stamina -= (desired_velocity.length() + STAMINA_DRAIN_MIN)*STAMINA_DRAIN_CLIMB*delta*(1.0-best_floor_dot)
+			if best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Crouch
 			# Can climb sheer cliffs, must start from sliding ground though
 			elif best_floor_dot < 0.0:
@@ -313,22 +322,22 @@ func _physics_process(delta):
 			elif stamina <= 0 or !Input.is_action_pressed("mv_crouch"):
 				next_state = State.Slide
 		State.Roll:
-			if (state_timer > ROLL_MIN_TIME_JUMP 
+			if (timer_state > TIME_ROLL_MIN_JUMP 
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.RollJump
-			elif (state_timer > ROLL_MIN_TIME
-				and best_floor_dot < MIN_SLIDE_DOT
+			elif (timer_state > TIME_ROLL_MIN
+				and best_floor_dot < MIN_DOT_SLIDE
 			):
 				if best_normal != Vector3.ZERO:
 					next_state = State.BonkFall
 				else:
-					coyote_timer += delta
-					if coyote_timer > COYOTE_TIME:
+					timer_coyote += delta
+					if timer_coyote > TIME_COYOTE:
 						next_state = State.Fall
 			else:
-				coyote_timer = 0
-				if state_timer > ROLL_MAX_TIME:
+				timer_coyote = 0
+				if timer_state > TIME_ROLL_MAX:
 					next_state = State.Crouch
 		State.RollJump:
 			if Input.is_action_just_pressed("combat_lunge"):
@@ -336,14 +345,14 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			elif (best_normal != Vector3.ZERO
-				and best_floor_dot < MIN_SLIDE_DOT
+				and best_floor_dot < MIN_DOT_SLIDE
 			):
 				ground_normal = best_normal
 				next_state = State.BonkFall
-			elif state_timer > CROUCH_JUMP_TIME:
-				if best_floor_dot > MIN_GROUND_DOT:
+			elif timer_state > TIME_CROUCH_JUMP:
+				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
-				elif best_floor_dot > MIN_SLIDE_DOT:
+				elif best_floor_dot > MIN_DOT_SLIDE:
 					next_state = State.Slide
 				else:
 					next_state = State.RollFall
@@ -352,12 +361,12 @@ func _physics_process(delta):
 				next_state = State.DiveWindup
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif best_floor_dot > MIN_GROUND_DOT:
+			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				elif crouch_head.get_overlapping_bodies().size() == 0:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_SLIDE_DOT:
+			elif best_floor_dot > MIN_DOT_SLIDE:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Climb
 				elif crouch_head.get_overlapping_bodies().size() == 0:
@@ -370,12 +379,12 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif best_floor_dot > MIN_GROUND_DOT:
+			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_SLIDE_DOT:
+			elif best_floor_dot > MIN_DOT_SLIDE:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
@@ -383,7 +392,7 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 		State.LedgeHang:
-			stamina -= HANG_STAMINA_DRAIN*delta
+			stamina -= STAMINA_DRAIN_HANG*delta
 			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -396,35 +405,35 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif best_floor_dot > MIN_GROUND_DOT:
+			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_SLIDE_DOT:
+			elif best_floor_dot > MIN_DOT_SLIDE:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Slide
 			else:
-				if state_timer >= TIME_LEDGE_FALL:
+				if timer_state >= TIME_LEDGE_FALL:
 					next_state = State.Fall
 		State.LungeKick:
-			if state_timer >= LUNGE_KICK_MAX_TIME:
+			if timer_state >= TIME_LUNGE_MAX:
 				next_state = State.Ground
-			elif ( state_timer >= LUNGE_KICK_MIN_TIME
+			elif ( timer_state >= TIME_LUNGE_MIN
 				and Input.is_action_just_pressed("combat_spin")
 			):
 				next_state = State.SpinKick
-			elif (state_timer >= LUNGE_KICK_UPPERCUT_TIME
+			elif (timer_state >= TIME_LUNGE_MIN_UPPERCUT
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.UppercutWindup
 		State.SpinKick:
-			if state_timer >= SPIN_KICK_TIME:
+			if timer_state >= TIME_SPIN:
 				next_state = State.Ground
 		State.AirSpinKick:
-			if best_floor_dot > MIN_GROUND_DOT:
+			if best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
@@ -432,101 +441,101 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			else:
-				if state_timer >= SPIN_KICK_TIME:
+				if timer_state >= TIME_SPIN:
 					next_state = State.Fall
 		State.UppercutWindup:
-			if state_timer > UPPERCUT_WINDUP_TIME:
+			if timer_state > TIME_UPPERCUT_WINDUP:
 				next_state = State.Uppercut
 		State.Uppercut:
 			if Input.is_action_just_released("combat_lunge"):
 				next_state = State.DiveWindup
 			elif Input.is_action_just_released("combat_spin"):
 				next_state = State.AirSpinKick
-			elif state_timer > UPPERCUT_MIN_TIME and best_floor_dot > MIN_GROUND_DOT:
+			elif timer_state > TIME_UPPERCUT_MIN and best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif state_timer > UPPERCUT_MAX_TIME:
+			elif timer_state > TIME_UPPERCUT_MAX:
 				next_state = State.Fall
 		State.DiveWindup:
-			if state_timer > DIVE_WINDUP_TIME:
+			if timer_state > TIME_DIVE_WINDUP:
 				next_state = State.DiveStart
 		State.DiveStart:
-			if best_floor_dot > MIN_SLIDE_DOT:
+			if best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.DiveEnd
 		State.DiveEnd:
-			if state_timer > DIVE_MIN_END_TIME:
+			if timer_state > TIME_DIVE_END_MIN:
 				if Input.is_action_just_pressed("combat_lunge"):
 					next_state = State.LungeKick
 				elif Input.is_action_just_pressed("combat_spin"):
 					next_state = State.AirSpinKick
-			if state_timer > DIVE_MAX_END_TIME:
+			if timer_state > TIME_DIVE_END_MAX:
 				next_state = State.Ground
 		State.Damaged:
 			if Input.is_action_just_released("combat_lunge"):
 				next_state = State.LungeKick
 			elif Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif state_timer > TIME_DAMAGED:
+			elif timer_state > TIME_DAMAGED:
 				next_state = State.Fall
 	set_state(next_state)
 	
 	match state:
 		State.Ground:
 			ground_normal = best_normal
-			accel(delta, desired_velocity*RUN_SPEED)
+			accel(delta, desired_velocity*SPEED_RUN)
 		State.Fall, State.LedgeFall:
-			accel_air(delta, desired_velocity*RUN_SPEED, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 		State.Slide:
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
-			accel_slide(delta, desired_velocity*RUN_SPEED, best_normal)
+			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 		State.BaseJump:
-			accel_air(delta, desired_velocity*RUN_SPEED, ACCEL_START)
+			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
 		State.Roll:
 			ground_normal = best_normal
-			accel(delta, desired_velocity * ROLL_SPEED, ACCEL, ROLL_JUMP_STEER, 0.0)
+			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
-			accel_air(delta, desired_velocity * ROLL_SPEED, ACCEL_ROLL, true)
-			damage_point(roll_hitbox, ROLL_JUMP_DAMAGE, global_transform.origin)
+			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL, true)
+			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 		State.BonkFall, State.Damaged:
-			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL_ROLL)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
 			ground_normal = best_normal
-			accel(delta, desired_velocity*CROUCH_SPEED)
+			accel(delta, desired_velocity*SPEED_CROUCH)
 		State.Climb:
 			ground_normal = best_normal
-			accel_climb(delta, desired_velocity*CLIMB_SPEED)
+			accel_climb(delta, desired_velocity*SPEED_CLIMB)
 		State.CrouchJump, State.LedgeJump:
-			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 		State.LedgeHang:
 			desired_velocity = Vector3.ZERO
 		State.LungeKick:
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*LUNGE_KICK_VEL)
-			damage_directed(lunge_hitbox, LUNGE_DAMAGE, get_visual_forward())
+			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
+			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
-			accel(delta, desired_velocity*RUN_SPEED)
-			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
+			accel(delta, desired_velocity*SPEED_RUN)
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
-			accel_low_gravity(delta, desired_velocity*RUN_SPEED, 0.75)
-			damage_point(spin_hitbox, SPIN_DAMAGE, global_transform.origin)
+			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.UppercutWindup:
-			accel(delta, 0.5*desired_velocity*CROUCH_SPEED)
+			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
 		State.Uppercut:
-			velocity += delta*GRAVITY*UPPERCUT_EXTRA_GRAVITY
-			accel_air(delta, desired_velocity*RUN_SPEED, ACCEL)
-			damage_directed(uppercut_hitbox, UPPERCUT_DAMAGE, Vector3.UP)
+			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
+			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
+			damage_directed(uppercut_hitbox, DAMAGE_UPPERCUT, Vector3.UP)
 		State.DiveWindup:
-			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL_START)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_START)
 		State.DiveStart:
-			velocity += delta*GRAVITY*DIVE_EXTRA_GRAVITY
-			accel_air(delta, desired_velocity*CROUCH_SPEED, ACCEL)
-			damage_point(dive_start_hitbox, DIVE_START_DAMGE, global_transform.origin)
+			velocity += delta*GRAVITY*GRAVITY_BOOST_DIVE
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
+			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
-			accel(delta, desired_velocity*RUN_SPEED)
-			damage_point(dive_end_hitbox, DIVE_END_DAMAGE, global_transform.origin)
+			accel(delta, desired_velocity*SPEED_RUN)
+			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked:
 			desired_velocity = Vector3.ZERO
 	update_visuals(desired_velocity)
@@ -559,7 +568,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 	if ground_normal != Vector3.ZERO:
 		gravity = gravity.project(ground_normal.normalized())
 
-	if hvel.length() > WALKING_SPEED and desired_velocity != Vector3.ZERO:
+	if hvel.length() > SPEED_WALK and desired_velocity != Vector3.ZERO:
 		var charge_accel = accel_normal
 		# Direction parellel to current (horizontal) velocity
 		var charge := desired_velocity.project(hdir)
@@ -575,7 +584,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		else:
 			charge_accel = DECEL_AGAINST*decel_factor
 		velocity += delta*(
-			(charge - hvel)/RUN_SPEED*charge_accel 
+			(charge - hvel)/SPEED_RUN*charge_accel 
 			+ (steer*steer_accel) 
 			+ gravity )
 	else:
@@ -615,7 +624,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		charge = desired_velocity
 		steer = Vector3.ZERO
 	velocity += delta*(
-		(charge - velocity)/RUN_SPEED*charge_accel 
+		(charge - velocity)/SPEED_RUN*charge_accel 
 		+ (steer*ACCEL_CLIMB) 
 		+ gravity )
 	velocity = move_and_slide_with_snap(
@@ -687,18 +696,18 @@ func can_ledge_grab() -> bool:
 		and ledgeCastCeiling.get_collision_normal().y < 0)
 		or ( 
 			ledgeCastWall.is_colliding()
-			and ledgeCastWall.get_collision_normal().y < LEDGE_MIN_Y
+			and ledgeCastWall.get_collision_normal().y < MIN_DOT_LEDGE
 	)):
 		return false
 	var left:bool = (
 		ledgeCastLeft.is_colliding()
-		and ledgeCastLeft.get_collision_normal().y > LEDGE_MIN_Y)
+		and ledgeCastLeft.get_collision_normal().y > MIN_DOT_LEDGE)
 	var right:bool = (
 		ledgeCastRight.is_colliding()
-		and ledgeCastRight.get_collision_normal().y > LEDGE_MIN_Y)
+		and ledgeCastRight.get_collision_normal().y > MIN_DOT_LEDGE)
 	var center:bool = (
 		ledgeCastCenter.is_colliding()
-		and ledgeCastCenter.get_collision_normal().y > LEDGE_MIN_Y)
+		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
 	return center and (left or right) 
 
 func snap_to_ledge():
@@ -711,7 +720,7 @@ func should_slow_follow():
 func update_visuals(input_dir: Vector3, var flip = false):
 	var crouching = state == State.Crouch or state == State.Climb
 	var climbing = state == State.Climb
-	var vs = velocity/(CROUCH_SPEED if crouching else RUN_SPEED)
+	var vs = velocity/(SPEED_CROUCH if crouching else SPEED_RUN)
 	var vis_vel = lerp(
 		vs,
 		input_dir,
@@ -767,7 +776,7 @@ func take_damage(damage: int, direction: Vector3):
 	if health <= 0:
 		die()
 		return
-	velocity = VEL_H_DAMAGED*direction
+	velocity = VEL_DAMAGED_H*direction
 	if !cannot_flinch():
 		set_state(State.Damaged)
 
@@ -824,8 +833,8 @@ func _on_unlock_timer_timeout():
 func set_state(next_state: int):
 	if state == next_state:
 		return
-	coyote_timer = 0.0
-	state_timer = 0.0
+	timer_coyote = 0.0
+	timer_state = 0.0
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
 	
@@ -833,7 +842,7 @@ func set_state(next_state: int):
 		State.Fall, State.LedgeFall:
 			mesh.transition_to("Fall")
 		State.BaseJump:
-			velocity.y = jump_height*BASE_JUMP_VEL
+			velocity.y = jump_height*JUMP_VEL_BASE
 			mesh.transition_to("BaseJump")
 		State.Ground:
 			mesh.transition_to("Ground")
@@ -844,14 +853,14 @@ func set_state(next_state: int):
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
 		State.CrouchJump:
-			velocity.y = jump_height*CROUCH_JUMP_VEL
+			velocity.y = jump_height*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
 			velocity = Vector3.ZERO
 		State.LedgeJump:
-			velocity.y += jump_height*LEDGE_JUMP_VEL
+			velocity.y += jump_height*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
 		State.Roll:
 			$crouching_col.disabled = false
@@ -861,8 +870,8 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			var dir = mesh.global_transform.basis.z
-			velocity = move_speed*dir*ROLL_JUMP_LURCH
-			velocity.y = jump_height*ROLL_JUMP_VEL
+			velocity = move_speed*dir*JUMP_VEL_ROLL_FORWARD
+			velocity.y = jump_height*JUMP_VEL_ROLL
 			
 			mesh.transition_to("RollJump")
 		State.BonkFall:
@@ -870,24 +879,24 @@ func set_state(next_state: int):
 			var dir = ground_normal
 			dir.y = 0.1
 			dir = dir.normalized()
-			velocity = move_speed*dir*BONK_SPEED
+			velocity = move_speed*dir*SPEED_BONK
 		State.LungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
-			velocity = move_speed*dir*LUNGE_KICK_VEL
+			velocity = move_speed*dir*SPEED_LUNGE
 			mesh.transition_to("LungeKickRight")
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
-			velocity.y = jump_height*AIR_SPIN_VEL
+			velocity.y = jump_height*VEL_AIR_SPIN
 			mesh.transition_to("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 		State.Uppercut:
 			damaged_objects = []
-			velocity.y = jump_height*UPPERCUT_VEL
+			velocity.y = jump_height*VEL_UPPERCUT
 		State.DiveWindup:
-			velocity.y = DIVE_WINDUP_VEL
+			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
 		State.DiveStart:
 			damaged_objects = []
@@ -895,7 +904,7 @@ func set_state(next_state: int):
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
 		State.Damaged:
-			velocity.y = move_speed*VEL_V_DAMAGED
+			velocity.y = move_speed*VEL_DAMAGED_V
 			mesh.transition_to("Fall")
 		State.Locked:
 			mesh.transition_to("Ground")
