@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://entities/env/rock1.tscn" type="PackedScene" id=15]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/env/ruin1.tscn" type="PackedScene" id=17]
+[ext_resource path="res://entities/shop_keeper.gd" type="Script" id=18]
 
 [sub_resource type="ArrayMesh" id=225]
 resource_name = "world_Plane401"
@@ -174,10 +175,12 @@ anims/RESET = SubResource( 228 )
 [node name="crawly6" parent="." index="26" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.3886, -243.307, -147.95 )
 
-[node name="shop_keeper" type="MeshInstance" parent="." index="27"]
+[node name="village_shop_keeper" type="MeshInstance" parent="." index="27"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.259, -229.722, 12.9293 )
 mesh = SubResource( 230 )
 material/0 = null
+script = ExtResource( 18 )
+inventory = "res://entities/shop_stock/village_stock.json"
 
 [node name="shop_dialog" type="Area" parent="." index="28"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 198.259, -228.87, 12.9293 )
@@ -185,7 +188,7 @@ collision_layer = 0
 collision_mask = 2
 script = ExtResource( 10 )
 dialog_sequence = ExtResource( 11 )
-main_speaker = NodePath("../shop_keeper")
+main_speaker = NodePath("../village_shop_keeper")
 
 [node name="CollisionShape" type="CollisionShape" parent="shop_dialog" index="0"]
 shape = SubResource( 229 )

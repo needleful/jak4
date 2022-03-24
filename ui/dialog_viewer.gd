@@ -2,6 +2,7 @@ extends Control
 
 signal exited
 signal event(id)
+signal event_with_source(id, source)
 
 var player: Node
 var main_speaker: Node
@@ -169,7 +170,10 @@ func choose_reply(item: DialogItem, skip: bool):
 func show_message():
 	var speaker: String = current_item.speaker	
 	if speaker == "":
-		speaker = main_speaker.name.capitalize()
+		if "visual_name" in main_speaker:
+			speaker = main_speaker.visual_name
+		else:
+			speaker = main_speaker.name.capitalize()
 
 	var text := ""
 	if speaker != last_speaker:
@@ -240,6 +244,7 @@ func event(tag: String, should_pause := true):
 	if should_pause:
 		pause()
 	emit_signal("event", tag)
+	emit_signal("event_with_source", tag, main_speaker)
 	if main_speaker.has_method(tag):
 		main_speaker.call(tag)
 	return true
@@ -272,6 +277,10 @@ func subtopic(_label):
 #TODO
 func back():
 	return RESULT_SKIP
+
+func exiting():
+	exiting = true
+	return true
 
 func end():
 	hide()

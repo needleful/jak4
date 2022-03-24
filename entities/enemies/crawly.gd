@@ -13,17 +13,29 @@ var ATTACK_TIME := 0.75
 var ALERT_TIME := 2.0
 var DAMAGED_TIME := 1.0
 var COOLDOWN_TIME := 2.0
-var EXTRA_CHASE_TIME := 4.0
+var EXTRA_CHASE_TIME := 10.0
 var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
 
+const MIN_DOT_GROUND := 0.7
+const MIN_DOT_UP := 0.01
+var ground_normal := Vector3.UP
+
+var physics_frequency := 1
+var frame_until_update := 0
 
 func _ready():
 	if coat:
 		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
 
 func _physics_process(delta):
+	frame_until_update -= 1
+	if frame_until_update <= 0:
+		frame_until_update = physics_frequency
+	else:
+		return
+	delta *= physics_frequency
 	state_timer += delta
 	if cooldown_timer > 0:
 		cooldown_timer -= delta
@@ -64,8 +76,11 @@ func _physics_process(delta):
 			walk(delta, lunge_speed)
 			damage_direction($hurtbox, global_transform.basis.z)
 		AI.Chasing:
+			ground_normal = get_closest_floor()
+			if ground_normal.y > MIN_DOT_UP:
+				rotate_up(turn_speed_radians*delta, ground_normal)
 			look_at_target(turn_speed_radians*delta)
-			walk(delta, run_speed)
+			walk(delta, run_speed, ground_normal.y < MIN_DOT_GROUND)
 		AI.Damaged:
 			look_at_target(turn_speed_radians*delta)
 			velocity.x = move_dir.x
@@ -91,8 +106,16 @@ func _physics_process(delta):
 			look_at_target(turn_speed_windup*delta)
 			walk(delta, 0)
 
-func set_state(new_ai):
-	if ai == new_ai:
+func set_active(active: bool):
+	if !active:
+		anim.stop()
+		physics_frequency = 5
+	else:
+		set_state(ai, true)
+		physics_frequency = 1
+
+func set_state(new_ai, force := false):
+	if ai == new_ai and !force:
 		return
 	if ai == AI.Attacking:
 		cooldown_timer = COOLDOWN_TIME

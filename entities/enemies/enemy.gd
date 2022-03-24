@@ -1,12 +1,14 @@
 extends KinematicBody
 class_name KinematicEnemy
 
+export(String) var id
 export(bool) var respawns := true
 export(bool) var drops_coat := false
 export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10
-export(float) var damaged_speed = 5.0
+export(float) var damaged_speed = 0.5
+export(float) var square_distance_activation := 2400.0
 
 enum AI {
 	Idle,
@@ -29,6 +31,8 @@ var velocity := Vector3.ZERO
 var move_dir: Vector3
 var damaged:= []
 
+var in_range := false
+
 var coat = null
 
 func _ready():
@@ -38,6 +42,17 @@ func _ready():
 		return
 	if drops_coat:
 		coat = Global.get_coat()
+
+func set_active(_active: bool):
+	pass
+
+func process_player_distance(pos: Vector3) -> float:
+	var lensq := (pos - global_transform.origin).length_squared()
+	var within_activation := lensq <= square_distance_activation
+	if within_activation != in_range:
+		in_range = within_activation
+		set_active(in_range)
+	return lensq
 
 func damage_direction(hitbox: Area, dir: Vector3):
 	for c in hitbox.get_overlapping_bodies():
@@ -58,7 +73,18 @@ func look_at_target(turn_amount: float):
 		var rot = sign(angle)*min(abs(angle), turn_amount)
 		global_rotate(axis, rot)
 
+func rotate_up(speed: float, up := Vector3.UP):
+	var current_up := global_transform.basis.y
+	var desired_up = up.normalized()
+	var axis = current_up.cross(desired_up).normalized()
+	if axis.is_normalized():
+		var angle = current_up.angle_to(desired_up)
+		var theta = sign(angle)*min(abs(angle), speed)
+		global_rotate(axis, theta)
+
 func die():
+	var _x = Global.add_stat(id + "/killed")
+	remove_from_group("distance_activated")
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
@@ -77,18 +103,29 @@ func die():
 
 func take_damage(damage: int, dir: Vector3):
 	health -= damage
-	move_dir = dir*damaged_speed
+	move_dir = damage*dir*damaged_speed
 	if health <= 0:
 		set_state(AI.Dead)
 	else:
 		set_state(AI.Damaged)
 
-func walk(delta, speed):
+func get_closest_floor(vector:= Vector3.UP):
+	var res := -vector
+	for i in get_slide_count():
+		var c := get_slide_collision(i)
+		if c.normal.dot(vector) > res.dot(vector):
+			res = c.normal
+	return res 
+
+func walk(delta: float, speed: float, slide := false):
 	var hvel = global_transform.basis.z*speed
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	
 	velocity = move_and_slide(velocity + GRAVITY*delta)
+	
+	if slide:
+		velocity.y = min(0, velocity.y)
 
 # Implemented by subclasses
 func set_state(_ai: int):

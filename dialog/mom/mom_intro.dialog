@@ -22,13 +22,20 @@
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay Mom?
 		* She murmurs incomprehensibly as you leave.
-	{otherwise if talked < 5}
+	{otherwise}
 		* She still says nothing.
-		[You] I've been looking for anything to help. But I have no idea where to go.
+		[You] I've been looking for anything to help. But I have no idea where to go...
+			{animation("sit")} I know you lived around here.
+			But I just... don't know what to look for.
+			Think... Where specifically did she live? I think it was...
+		The plateau?
+		{animation("stand")} * You're startled by the voice. It's not really your mother's voice, as far as you can tell, but she's right.
+		{animation("plateau")} * She lived up in the plateaus. If anyone would remember her, they're most likely to be there.
+		[You] I should go.
 	{exit()}
 
 // This is for how many times you've actually talked to her
-{Global.add_stat("mom/talked")}
+{Global.add_stat("mom/true_talked") == 1}
 	Oh? Who are you?
 	[You] Hi mom...
 	Jackie? But you're so-
@@ -43,15 +50,19 @@
 	{Global.stat("mom/tick")} Huh.
 	{Global.stat("mom/near_medium")} 
 
-{otherwise if Global.stat("mom/talked") == 2}
-	Did you forget something? I thought you were leaving?
-	[You] What do you mean? I did leave...
-	But you came right back? Stepping out for a few second doesn't count as "leaving".
-	[You] But... I.. wasn't gone for a few seconds?
-	...
-	{Global.stat("mom/tick") != 0} Huh.
-	[You] Is everything okay?
-	... As okay as it'll ever be, I guess.
+{otherwise if not Global.stat("mom/time")}
+	{seconds_from_last_conversation() > 180}
+		Did you forget something? I thought you were leaving?
+		[You] What do you mean? I did leave...
+		But you came right back? Stepping out for a few second doesn't count as "leaving".
+		[You] But... I.. wasn't gone for a few seconds?
+		...
+		{Global.add_stat("mom/time")}
+		{Global.stat("mom/tick")} Huh.
+		[You] Is everything okay?
+		... As okay as it'll ever be, I guess.
+	{otherwise}
+
 
 {exit()}
 

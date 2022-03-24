@@ -24,6 +24,12 @@ export(Material) var debug_inactive_chunk_material
 const PATH_CONTENT := "res://areas/chunks/%s.tscn"
 const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
+var TENSION_FADE_IN := 30.0
+var TENSION_FADE_OUT := 8.0
+var TENSION_MIN_DB := -80.0
+var enemies_present := false
+var MIN_DIST_SQ_ENEMIES := 2000.0
+
 func _ready():
 	for c in get_children():
 		if c.name.begins_with("chunk"):
@@ -55,6 +61,25 @@ func _process(delta):
 		chunk_unload_waitlist[ch] += delta
 		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
 			mark_inactive(get_node(ch))
+	
+	detect_enemies(delta)
+
+func detect_enemies(delta):
+	enemies_present = false
+	var enemies = get_tree().get_nodes_in_group("distance_activated")
+	for e in enemies:
+		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
+		if dist_squared < MIN_DIST_SQ_ENEMIES:
+			enemies_present = true
+
+	if enemies_present and $music_tension.volume_db < 0:
+		$music_tension.stream_paused = false
+		$music_tension.volume_db += TENSION_FADE_IN*delta
+	elif !enemies_present:
+		if $music_tension.volume_db > TENSION_MIN_DB:
+			$music_tension.volume_db -= TENSION_FADE_OUT*delta
+		else:
+			$music_tension.stream_paused = true
 
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:

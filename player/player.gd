@@ -33,7 +33,6 @@ const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
 const TIME_ROLL_MIN_JUMP := 0.3
 
-
 # Accelerating from zero
 const ACCEL_START := 50.0
 # Accelerating when moving above some speed
@@ -120,13 +119,31 @@ var timer_state := 0.0
 var move_speed := 1.0
 var jump_height := 1.0
 
-var max_stamina := 30.0
+const DEFAULT_MAX_STAMINA := 30.0
+const STAMINA_UP_BOOST := 0.10
+var max_stamina := DEFAULT_MAX_STAMINA
 var stamina_recover := 8.0
 var stamina := max_stamina
 
-var max_health := 50
+const DEFAULT_MAX_HEALTH := 50
+const HEALTH_UP_BOOST := 0.08
+var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 var damaged_objects: Array = []
+
+const ARMOR_BOOST := 10.0
+var armor := 0
+var extra_health := 0.0
+
+const HEALTH_BAR_DEFAULT_SIZE := 400
+const ARMOR_BAR_DEFAULT_SIZE := 80.0
+const STAMINA_BAR_DEFAULT_SIZE := 200
+
+const STAMINA_RECOVERY_BOOST := 0.10
+var stamina_factor := 1.0
+
+const DAMAGE_UP_BOOST := 0.15
+var damage_factor := 1.0
 
 
 enum State {
@@ -162,6 +179,7 @@ var ground_normal:Vector3 = Vector3.UP
 var current_coat: Coat
 
 func _ready():
+	$ui/shop.player = self
 	set_state(State.Ground)
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
@@ -173,9 +191,12 @@ func _ready():
 			var coat = Global.get_coat(i)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0])
-	var _x = Global.connect("inventory_changed", self, "redraw_inventory")
+	var _x = Global.connect("inventory_changed", self, "update_inventory")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
-	redraw_inventory()
+	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
+	update_inventory()
+	health = max_health
+	stamina = max_stamina
 	update_health()
 
 func _input(event):
@@ -193,18 +214,40 @@ func prepare_save():
 func complete_save():
 	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
-func redraw_inventory():
+func update_inventory():
 	$ui/inventory/gem_count.text = str(Global.count("gem"))
 	$ui/inventory/bug_count.text = str(Global.count("bug"))
 	$ui/inventory/cap_count.text = str(Global.count("capacitor"))
+	
+	var health_up :int = Global.count("health_up")
+	var stamina_up :int = Global.count("stamina_up")
+	
+	var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
+	var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
+	
+	max_health = DEFAULT_MAX_HEALTH*h_factor
+	max_stamina = DEFAULT_MAX_STAMINA*s_factor
+	$ui/stats/health.max_value = max_health
+	$ui/stats/health.rect_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
+	
+	$ui/stats/stamina.max_value = max_stamina
+	$ui/stats/stamina.rect_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
+	
+	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
+	damage_factor = pow(1 + DAMAGE_UP_BOOST, Global.count("damage_up"))
+	
+	var new_armor:int = Global.count("armor")
+	if new_armor > armor:
+		extra_health += (new_armor - armor)*ARMOR_BOOST
+	armor = new_armor
+	$ui/stats/health/upgrade.rect_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
+	$ui/stats/health/upgrade.visible = armor > 0 and extra_health > 0
+	update_health()
 	
 	#debug
 	var state_viewer: Control = $ui/debug/game_state
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
-	add_label(state_viewer, "Stats:")
-	for s in Global.game_state.stats:
-		add_label(state_viewer, "\t%s: %d" % [s, Global.stat(s)])
 	add_label(state_viewer, "Inventory:")
 	for i in Global.game_state.inventory:
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
@@ -220,10 +263,10 @@ func set_current_coat(coat: Coat):
 
 func _physics_process(delta):
 	if global_transform.origin.y < -1000:
-		global_transform.origin.y = 1000
+		die()
 	timer_state += delta
 	if state != State.Climb and state != State.LedgeHang:
-		stamina += stamina_recover*delta
+		stamina += stamina_factor*stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
@@ -546,6 +589,9 @@ func _process(_delta):
 func update_health():
 	$ui/stats/health.max_value = max_health
 	$ui/stats/health.value = health
+	$ui/stats/health.value = health
+	$ui/stats/health/upgrade.max_value = armor*ARMOR_BOOST
+	$ui/stats/health/upgrade.value = extra_health
 
 func update_stamina():
 	$ui/stats/stamina.max_value = max_stamina
@@ -766,11 +812,22 @@ func damage(node: Node, damage: int, dir: Vector3):
 		return
 	damaged_objects.append(node)
 	if node.has_method("take_damage"):
-		node.take_damage(damage, dir)
+		node.take_damage(damage_factor*damage, dir)
 
 func take_damage(damage: int, direction: Vector3):
 	if state == State.Locked:
 		return
+	if extra_health:
+		var diff = extra_health - damage
+		if diff > 0:
+			damage = 0
+			extra_health = diff
+		else:
+			extra_health = 0
+			damage = -diff
+		var new_armor = ceil(extra_health/ARMOR_BOOST)
+		Global.add_item("armor", new_armor - armor)
+		armor = new_armor
 	health -= damage
 	update_health()
 	if health <= 0:
@@ -781,7 +838,7 @@ func take_damage(damage: int, direction: Vector3):
 		set_state(State.Damaged)
 
 func die():
-	Global.add_stat("player_death")
+	var _x = Global.add_stat("player_death")
 	# TODO: Animation and fadeout, then queue respawn
 	respawn()
 
@@ -792,6 +849,8 @@ func respawn():
 
 func heal():
 	health = max_health
+	stamina = max_stamina
+	extra_health = armor*ARMOR_BOOST
 	update_health()
 
 func can_talk():
@@ -806,6 +865,21 @@ func _on_dialog_exited():
 	$ui/dialog_viewer.end()
 	$camera_rig.play_animation("dialog_end")
 	unlock()
+
+func _on_dialog_event(id: String, source: Node):
+	match id:
+		"open_shop":
+			$ui/stats.show()
+			$ui/inventory.show()
+			$ui/inventory/AnimationPlayer.play("show_for_shop")
+			$ui/shop.start_shopping(source)
+
+func stop_shopping():
+	$ui/stats.hide()
+	$ui/inventory.hide()
+	$ui/inventory/AnimationPlayer.play("RESET")
+	$ui/shop.hide()
+	$ui/dialog_viewer.resume()
 
 func wardrobe_lock():
 	lock()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/shop.tscn" type="PackedScene" id=7]
 
 [sub_resource type="SphereShape" id=13]
 radius = 0.631892
@@ -331,6 +332,11 @@ bg_color = Color( 1, 0.458824, 0, 1 )
 [sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0, 0, 0, 0.501961 )
 
+[sub_resource type="StyleBoxFlat" id=38]
+bg_color = Color( 0.247059, 0, 0, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=39]
+
 [sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0.611765, 1, 0.513726, 1 )
 
@@ -342,6 +348,60 @@ size = 48
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
+
+[sub_resource type="Animation" id=36]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:anchor_left")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:anchor_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=37]
+resource_name = "show_for_shop"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:anchor_left")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.353553, 1 ),
+"update": 0,
+"values": [ 1.0, 0.65 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:anchor_right")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.210224, 1 ),
+"update": 0,
+"values": [ 1.0, 0.65 ]
+}
 
 [sub_resource type="Animation" id=30]
 length = 0.001
@@ -652,7 +712,7 @@ margin_right = 465.0
 margin_bottom = 53.0
 
 [node name="health" type="ProgressBar" parent="ui/stats"]
-margin_right = 377.0
+margin_right = 400.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 custom_styles/fg = SubResource( 17 )
@@ -661,9 +721,20 @@ max_value = 50.0
 value = 50.0
 percent_visible = false
 
+[node name="upgrade" type="ProgressBar" parent="ui/stats/health"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 200.0
+custom_styles/fg = SubResource( 38 )
+custom_styles/bg = SubResource( 39 )
+max_value = 50.0
+value = 50.0
+percent_visible = false
+
 [node name="stamina" type="ProgressBar" parent="ui/stats"]
 margin_top = 36.0
-margin_right = 189.0
+margin_right = 200.0
 margin_bottom = 51.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/fg = SubResource( 19 )
@@ -671,21 +742,13 @@ custom_styles/bg = SubResource( 20 )
 value = 100.0
 percent_visible = false
 
-[node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
-anchor_left = 0.67
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-rect_min_size = Vector2( 500, 0 )
-
 [node name="inventory" type="HBoxContainer" parent="ui"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -412.0
-margin_top = 20.0
-margin_right = -45.0
-margin_bottom = 74.0
+margin_left = -371.0
+margin_top = 45.0
+margin_right = -4.0
+margin_bottom = 99.0
 
 [node name="gem_Label" type="Label" parent="ui/inventory"]
 margin_top = 16.0
@@ -728,6 +791,19 @@ margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory"]
+anims/RESET = SubResource( 36 )
+anims/show_for_shop = SubResource( 37 )
+
+[node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
+visible = false
+anchor_left = 0.67
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+rect_min_size = Vector2( 500, 0 )
+
 [node name="fade" type="ColorRect" parent="ui"]
 visible = false
 anchor_right = 1.0
@@ -738,6 +814,9 @@ autoplay = "fadein"
 anims/RESET = SubResource( 30 )
 anims/fadein = SubResource( 31 )
 anims/fadeout = SubResource( 32 )
+
+[node name="shop" parent="ui" instance=ExtResource( 7 )]
+visible = false
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
