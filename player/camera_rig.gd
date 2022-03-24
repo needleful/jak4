@@ -36,10 +36,10 @@ func _physics_process(delta):
 	var target: Vector3 = player.global_transform.origin
 	var pos: Vector3 = yaw.global_transform.origin
 	
-	if player.state == player.State.LedgeHang:
-		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.1)
+	if player.should_raise_camera():
+		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.05)
 	else:
-		raise = lerp(raise, 0.0, 0.1)
+		raise = lerp(raise, 0.0, 0.05)
 		if groundCast.is_colliding():
 			target.y = max(groundCast.get_collision_point().y + MIN_FLOOR_HEIGHT, target.y)
 	

@@ -52,16 +52,25 @@ func get_random_sound(type: String) -> AudioStream:
 func stop_particles():
 	$Armature/Skeleton/footLeft/kick_particles.emitting = false
 	$Armature/Skeleton/footRight/kick_particles.emitting = false
+	$Armature/Skeleton/footLeft/max_kick_particles.emitting = false
+	$Armature/Skeleton/footRight/max_kick_particles.emitting = false
+	$max_dive_particles.emitting = false
 	$dive_particles.emitting = false
 
-func start_kick_left():
+func start_kick_left(max_damage: bool):
 	$Armature/Skeleton/footLeft/kick_particles.emitting = true
+	if max_damage:
+		$Armature/Skeleton/footLeft/max_kick_particles.emitting = true
 
-func start_kick_right():
+func start_kick_right(max_damage: bool):
 	$Armature/Skeleton/footRight/kick_particles.emitting = true
+	if max_damage:
+		$Armature/Skeleton/footRight/max_kick_particles.emitting = true
 
-func start_dive_shockwave():
+func start_dive_shockwave(max_damage: bool):
 	$dive_particles.emitting = true
+	if max_damage:
+		$max_dive_particles.emitting = true
 
 func start_damage_particle(dir: Vector3):
 	var emitter := $Armature/Skeleton/chest/damage_particles
@@ -74,3 +83,14 @@ func start_damage_particle(dir: Vector3):
 
 func _on_damage_emit_timer_timeout():
 	$Armature/Skeleton/chest/damage_particles.emitting = false
+
+func start_heal_particle():
+	$Armature/Skeleton/head/heal_particles.emitting = true
+	$Armature/Skeleton/head/heal_emit_timer.start()
+
+func _on_heal_emit_timer_timeout():
+	$Armature/Skeleton/head/heal_particles.emitting = false
+
+func start_roll_particles():
+	start_kick_left(false)
+	start_kick_right(false)

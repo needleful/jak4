@@ -14,7 +14,7 @@ const SPEED_BONK := 5.0
 
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
-const MIN_DOT_LEDGE := 0.6
+const MIN_DOT_LEDGE := 0.3
 
 const TIME_COYOTE := 0.1
 const TIME_LEDGE_FALL := 0.5
@@ -55,6 +55,7 @@ const ACCEL_DIVE_WINDUP := 75.0
 
 const STAMINA_DRAIN_HANG := 0.5
 const STAMINA_DRAIN_CLIMB := 25.0
+const STAMINA_DRAIN_CLIMB_START := 2.0
 const STAMINA_DRAIN_MIN := 0.05
 const MIN_CLIMB_STAMINA := 10.0
 
@@ -133,37 +134,41 @@ var velocity := Vector3.ZERO
 var timer_coyote := 0.0
 var timer_state := 0.0
 
-const DEFAULT_MAX_STAMINA := 30.0
-const STAMINA_UP_BOOST := 0.15
-var max_stamina := DEFAULT_MAX_STAMINA
-var stamina_recover := 8.0
-var stamina := max_stamina
 
 const DEFAULT_MAX_HEALTH := 50
 const HEALTH_UP_BOOST := 0.12
 var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
-var damaged_objects: Array = []
+
 
 const ARMOR_BOOST := 12.0
 var armor := 0
 var extra_health := 0.0
 
+const HEALTH_BAR_DEFAULT_SIZE := 400
+const ARMOR_BAR_DEFAULT_SIZE := 96.0
+
+const DEFAULT_MAX_STAMINA := 40.0
+const STAMINA_UP_BOOST := 0.12
+var max_stamina := DEFAULT_MAX_STAMINA
+var stamina_recover := 8.0
+var stamina := max_stamina
+
 const EXTRA_STAMINA_BOOST := 10.0
 var energy := 0
 var extra_stamina := 0.0
 
-const HEALTH_BAR_DEFAULT_SIZE := 400
-const ARMOR_BAR_DEFAULT_SIZE := 96.0
-
-const STAMINA_BAR_DEFAULT_SIZE := 200
+const STAMINA_BAR_DEFAULT_SIZE := 280
 const EXTRA_STAMINA_BAR_SIZE := 7
 
 const STAMINA_RECOVERY_BOOST := 0.14
 var stamina_factor := 1.0
 
+const MAX_DAMAGE_UP := 10
 const DAMAGE_UP_BOOST := 0.15
 var damage_factor := 1.0
+var max_damage := false
+var damaged_objects: Array = []
 
 const JUMP_UP_BOOST := 0.10
 var jump_factor := 1.0
@@ -264,10 +269,13 @@ func update_inventory():
 	stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
 	
 	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
-	damage_factor = pow(1 + DAMAGE_UP_BOOST, Global.count("damage_up"))
 	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
 	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
 	stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
+	
+	var damage_up_count:int =  Global.count("damage_up")
+	damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
+	max_damage = damage_up_count >= MAX_DAMAGE_UP
 	
 	var new_armor:int = Global.count("armor")
 	if new_armor > armor:
@@ -790,6 +798,9 @@ func accel_lunge(delta, desired_velocity):
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
 
+func should_raise_camera():
+	return state == State.LedgeHang or state == State.Climb
+
 func is_grounded():
 	return ( state == State.Ground
 		or state == State.Slide
@@ -929,6 +940,7 @@ func respawn():
 	global_transform.origin = Global.checkpoint_position
 
 func heal():
+	mesh.start_heal_particle()
 	health = max_health
 	stamina = max_stamina
 	extra_stamina = energy*EXTRA_STAMINA_BOOST
@@ -1022,11 +1034,17 @@ func set_state(next_state: int):
 			timer_slide_lunge = 0
 		State.Slide:
 			pass
-		State.Crouch, State.Climb:
+		State.Crouch:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
 			can_air_spin = true
+		State.Climb:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
+			mesh.transition_to("Ground")
+			can_air_spin = true
+			stamina -= STAMINA_DRAIN_CLIMB_START
 		State.CrouchJump:
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
@@ -1048,6 +1066,8 @@ func set_state(next_state: int):
 			var dir = mesh.global_transform.basis.z
 			velocity = speed_factor*dir*JUMP_VEL_ROLL_FORWARD
 			velocity.y = jump_factor*JUMP_VEL_ROLL
+			if max_damage:
+				mesh.start_roll_particles()
 			
 			mesh.transition_to("RollJump")
 		State.BonkFall:
@@ -1061,32 +1081,32 @@ func set_state(next_state: int):
 			var dir = get_visual_forward()
 			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
 			mesh.transition_to("LungeKickRight")
-			mesh.start_kick_right()
+			mesh.start_kick_right(max_damage)
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
 			mesh.transition_to("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
-			mesh.start_kick_left()
+			mesh.start_kick_left(max_damage)
 			can_air_spin = false
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 		State.Uppercut:
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
-			mesh.start_kick_left()
-			mesh.start_kick_right()
+			mesh.start_kick_left(max_damage)
+			mesh.start_kick_right(max_damage)
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
-			mesh.start_kick_left()
+			mesh.start_kick_left(max_damage)
 		State.DiveStart:
 			damaged_objects = []
-			mesh.start_kick_left()
+			mesh.start_kick_left(max_damage)
 		State.DiveEnd:
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
-			mesh.start_dive_shockwave()
+			mesh.start_dive_shockwave(max_damage)
 		State.Damaged:
 			velocity.y = speed_factor*VEL_DAMAGED_V
 			mesh.transition_to("Fall")
