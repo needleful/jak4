@@ -48,3 +48,29 @@ func get_random_sound(type: String) -> AudioStream:
 		return null
 	var array: Array = sounds[type]
 	return array[randi() % array.size()]
+
+func stop_particles():
+	$Armature/Skeleton/footLeft/kick_particles.emitting = false
+	$Armature/Skeleton/footRight/kick_particles.emitting = false
+	$dive_particles.emitting = false
+
+func start_kick_left():
+	$Armature/Skeleton/footLeft/kick_particles.emitting = true
+
+func start_kick_right():
+	$Armature/Skeleton/footRight/kick_particles.emitting = true
+
+func start_dive_shockwave():
+	$dive_particles.emitting = true
+
+func start_damage_particle(dir: Vector3):
+	var emitter := $Armature/Skeleton/chest/damage_particles
+	dir.y = 0.5
+	var local_dir: Vector3 = emitter.global_transform.basis.inverse()*(dir).normalized()
+	emitter.process_material.direction = local_dir
+	emitter.emitting = true
+	#print(dir, " -> ", local_dir, " -> ", emitter.global_transform.xform(local_dir))
+	$Armature/Skeleton/chest/damage_emit_timer.start()
+
+func _on_damage_emit_timer_timeout():
+	$Armature/Skeleton/chest/damage_particles.emitting = false

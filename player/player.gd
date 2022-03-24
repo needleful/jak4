@@ -64,8 +64,10 @@ const TIME_LUNGE_MAX := 0.6
 const TIME_LUNGE_MIN := 0.4
 const TIME_LUNGE_MIN_UPPERCUT := 0.2
 const TIME_LUNGE_INVINCIBILITY := 0.2
+const TIME_LUNGE_PARTICLES := 0.4
 
-const TIME_SPIN := 0.7
+const TIME_SPIN_MAX := 0.7
+const TIME_SPIN_MIN := 0.2
 const TIME_SPIN_INVINCIBILITY := 0.4
 
 const TIME_UPPERCUT_WINDUP := 0.25
@@ -75,6 +77,7 @@ const TIME_UPPERCUT_MAX := 0.8
 const TIME_DIVE_WINDUP := 0.2
 const TIME_DIVE_END_MIN := 0.4
 const TIME_DIVE_END_MAX := 0.5
+const TIME_DIVE_UPPERCUT := 0.1
 
 const SPEED_LUNGE := 25.0
 
@@ -95,7 +98,7 @@ const DAMAGE_LUNGE := 15
 const DAMAGE_SPIN := 10
 const DAMAGE_ROLL_JUMP := 5
 
-const TIME_DAMAGED := 0.75
+const TIME_DAMAGED := 0.25
 const VEL_DAMAGED_H := 5
 const VEL_DAMAGED_V := 6
 
@@ -142,7 +145,7 @@ var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 var damaged_objects: Array = []
 
-const ARMOR_BOOST := 10.0
+const ARMOR_BOOST := 12.0
 var armor := 0
 var extra_health := 0.0
 
@@ -151,7 +154,7 @@ var energy := 0
 var extra_stamina := 0.0
 
 const HEALTH_BAR_DEFAULT_SIZE := 400
-const ARMOR_BAR_DEFAULT_SIZE := 80.0
+const ARMOR_BAR_DEFAULT_SIZE := 96.0
 
 const STAMINA_BAR_DEFAULT_SIZE := 200
 const EXTRA_STAMINA_BAR_SIZE := 7
@@ -520,9 +523,16 @@ func _physics_process(delta):
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.UppercutWindup
+			if timer_state > TIME_LUNGE_PARTICLES:
+				mesh.stop_particles()
 		State.SpinKick:
-			if timer_state >= TIME_SPIN:
+			if timer_state >= TIME_SPIN_MAX:
 				next_state = State.Ground
+			elif timer_state >= TIME_SPIN_MIN:
+				if Input.is_action_just_pressed("combat_lunge"):
+					next_state = State.LungeKick
+				elif Input.is_action_just_pressed("mv_crouch"):
+					next_state = State.Roll
 		State.AirSpinKick:
 			if best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
@@ -532,8 +542,10 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			else:
-				if timer_state >= TIME_SPIN:
+				if timer_state >= TIME_SPIN_MAX:
 					next_state = State.Fall
+				elif timer_state >= TIME_SPIN_MIN and Input.is_action_just_pressed("combat_lunge"):
+					next_state = State.DiveWindup
 		State.UppercutWindup:
 			if timer_state > TIME_UPPERCUT_WINDUP:
 				next_state = State.Uppercut
@@ -556,13 +568,16 @@ func _physics_process(delta):
 			if best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.DiveEnd
 		State.DiveEnd:
-			if timer_state > TIME_DIVE_END_MIN:
+			if timer_state > TIME_DIVE_END_MAX:
+				next_state = State.Ground
+			elif timer_state > TIME_DIVE_END_MIN:
 				if Input.is_action_just_pressed("combat_lunge"):
 					next_state = State.LungeKick
 				elif Input.is_action_just_pressed("combat_spin"):
 					next_state = State.AirSpinKick
-			if timer_state > TIME_DIVE_END_MAX:
-				next_state = State.Ground
+			elif timer_state > TIME_DIVE_UPPERCUT:
+				if Input.is_action_just_pressed("combat_lunge"):
+					next_state = State.UppercutWindup
 		State.Damaged:
 			if Input.is_action_just_released("combat_lunge"):
 				next_state = State.LungeKick
@@ -880,6 +895,8 @@ func damage(node: Node, damage: int, dir: Vector3):
 func take_damage(damage: int, direction: Vector3):
 	if !takes_damage():
 		return
+	
+	mesh.start_damage_particle(direction)
 	if extra_health:
 		var diff = extra_health - damage
 		if diff > 0:
@@ -991,6 +1008,7 @@ func set_state(next_state: int):
 	timer_state = 0.0
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
+	mesh.stop_particles()
 	
 	match next_state:
 		State.Fall, State.LedgeFall:
@@ -1043,25 +1061,32 @@ func set_state(next_state: int):
 			var dir = get_visual_forward()
 			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
 			mesh.transition_to("LungeKickRight")
+			mesh.start_kick_right()
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
 			mesh.transition_to("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
+			mesh.start_kick_left()
 			can_air_spin = false
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 		State.Uppercut:
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
+			mesh.start_kick_left()
+			mesh.start_kick_right()
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
+			mesh.start_kick_left()
 		State.DiveStart:
 			damaged_objects = []
+			mesh.start_kick_left()
 		State.DiveEnd:
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
+			mesh.start_dive_shockwave()
 		State.Damaged:
 			velocity.y = speed_factor*VEL_DAMAGED_V
 			mesh.transition_to("Fall")
