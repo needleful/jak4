@@ -32,6 +32,10 @@ const MIN_SPEED_ROLL := 2.0
 const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
 const TIME_ROLL_MIN_JUMP := 0.3
+const TIME_ROLL_INVINCIBILITY := 0.2
+
+const TIME_SLIDE_CAN_JUNGE := 0.5
+var timer_slide_lunge := 0
 
 # Accelerating from zero
 const ACCEL_START := 50.0
@@ -59,8 +63,10 @@ const MIN_CLIMB_STAMINA := 10.0
 const TIME_LUNGE_MAX := 0.6
 const TIME_LUNGE_MIN := 0.4
 const TIME_LUNGE_MIN_UPPERCUT := 0.2
+const TIME_LUNGE_INVINCIBILITY := 0.2
 
 const TIME_SPIN := 0.7
+const TIME_SPIN_INVINCIBILITY := 0.4
 
 const TIME_UPPERCUT_WINDUP := 0.25
 const TIME_UPPERCUT_MIN := 0.4
@@ -343,8 +349,13 @@ func _physics_process(delta):
 			else:
 				timer_coyote = 0
 		State.Slide:
+			timer_slide_lunge += delta
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
+			elif ( timer_slide_lunge < TIME_SLIDE_CAN_JUNGE 
+				and Input.is_action_just_pressed("combat_lunge")
+			):
+				next_state = State.LungeKick
 			elif total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
@@ -770,10 +781,24 @@ func is_grounded():
 		or state == State.Roll
 		or state == State.Crouch)
 
-func cannot_flinch():
-	return ( state == State.DiveWindup
+func can_flinch():
+	return !( state == State.DiveWindup
 		or state == State.DiveStart
 		or state == State.UppercutWindup)
+
+func takes_damage():
+	return not (
+		state == State.Locked
+		or ( timer_state < TIME_SPIN_INVINCIBILITY
+			and ( state == State.SpinKick
+				or state == State.AirSpinKick))
+		or (timer_state < TIME_LUNGE_INVINCIBILITY
+			and state == State.LungeKick)
+		or (timer_state < TIME_ROLL_INVINCIBILITY
+			and state == State.Roll)
+		# These moves suck so just give em i-frames during windup lol
+		or state == State.UppercutWindup
+		or state == State.DiveWindup)
 
 func can_ledge_grab() -> bool:
 	if ((ledgeCastCeiling.is_colliding() 
@@ -853,7 +878,7 @@ func damage(node: Node, damage: int, dir: Vector3):
 		node.take_damage(damage_factor*damage, dir)
 
 func take_damage(damage: int, direction: Vector3):
-	if state == State.Locked:
+	if !takes_damage():
 		return
 	if extra_health:
 		var diff = extra_health - damage
@@ -872,7 +897,7 @@ func take_damage(damage: int, direction: Vector3):
 		die()
 		return
 	velocity = VEL_DAMAGED_H*direction
-	if !cannot_flinch():
+	if can_flinch():
 		set_state(State.Damaged)
 
 func die():
@@ -976,6 +1001,7 @@ func set_state(next_state: int):
 		State.Ground:
 			mesh.transition_to("Ground")
 			can_air_spin = true
+			timer_slide_lunge = 0
 		State.Slide:
 			pass
 		State.Crouch, State.Climb:
