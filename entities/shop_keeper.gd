@@ -7,7 +7,7 @@ var inventory_data: Dictionary
 
 func _ready():
 	var file := File.new()
-	file.open(inventory, File.READ)
+	var _x = file.open(inventory, File.READ)
 	var text = file.get_as_text()
 	file.close()
 	inventory_data = JSON.parse(text).result
@@ -20,7 +20,7 @@ func get_inventory() -> Dictionary:
 func mark_sold(id: String):
 	var bought: Dictionary = item_data(inventory_data.persistent, id)
 	if !bought.empty():
-		Global.add_stat(item_bought_stat(id))
+		var _x = Global.add_stat(item_bought_stat(id))
 	else:
 		bought = item_data(inventory_data.temporary, id)
 	if bought.empty():

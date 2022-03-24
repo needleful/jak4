@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -329,19 +329,13 @@ tracks/3/keys = {
 [sub_resource type="StyleBoxFlat" id=17]
 bg_color = Color( 1, 0.458824, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=18]
-bg_color = Color( 0, 0, 0, 0.501961 )
-
 [sub_resource type="StyleBoxFlat" id=38]
-bg_color = Color( 0.247059, 0, 0, 1 )
+bg_color = Color( 1, 0.776471, 0.776471, 1 )
 
 [sub_resource type="StyleBoxEmpty" id=39]
 
-[sub_resource type="StyleBoxFlat" id=19]
-bg_color = Color( 0.611765, 1, 0.513726, 1 )
-
-[sub_resource type="StyleBoxFlat" id=20]
-bg_color = Color( 0, 0, 0, 0.388235 )
+[sub_resource type="StyleBoxFlat" id=40]
+bg_color = Color( 0.67451, 1, 0.592157, 1 )
 
 [sub_resource type="DynamicFont" id=27]
 size = 48
@@ -636,7 +630,7 @@ theme = ExtResource( 5 )
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -167.0
+margin_top = -473.0
 margin_right = 452.0
 
 [node name="stats" type="VBoxContainer" parent="ui/debug"]
@@ -711,35 +705,51 @@ margin_top = 16.0
 margin_right = 465.0
 margin_bottom = 53.0
 
-[node name="health" type="ProgressBar" parent="ui/stats"]
+[node name="health" type="HBoxContainer" parent="ui/stats"]
+margin_right = 40.0
+margin_bottom = 40.0
+custom_constants/separation = 0
+
+[node name="base" type="ProgressBar" parent="ui/stats/health"]
 margin_right = 400.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
+rect_min_size = Vector2( 400, 32 )
 custom_styles/fg = SubResource( 17 )
-custom_styles/bg = SubResource( 18 )
 max_value = 50.0
-value = 50.0
+value = 25.0
 percent_visible = false
 
-[node name="upgrade" type="ProgressBar" parent="ui/stats/health"]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 200.0
+[node name="extra" type="ProgressBar" parent="ui/stats/health"]
+margin_left = 400.0
+margin_right = 600.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 200, 32 )
 custom_styles/fg = SubResource( 38 )
 custom_styles/bg = SubResource( 39 )
 max_value = 50.0
 value = 50.0
 percent_visible = false
 
-[node name="stamina" type="ProgressBar" parent="ui/stats"]
-margin_top = 36.0
+[node name="stamina" type="HBoxContainer" parent="ui/stats"]
+margin_left = 1.0
+margin_top = 37.0
+margin_right = 401.0
+margin_bottom = 52.0
+custom_constants/separation = 0
+
+[node name="extra" type="ColorRect" parent="ui/stats/stamina"]
 margin_right = 200.0
-margin_bottom = 51.0
-rect_min_size = Vector2( 0, 15 )
-custom_styles/fg = SubResource( 19 )
-custom_styles/bg = SubResource( 20 )
-value = 100.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 200, 15 )
+color = Color( 1, 0.862745, 0.498039, 1 )
+
+[node name="base" type="ProgressBar" parent="ui/stats/stamina"]
+margin_left = 200.0
+margin_right = 400.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 200, 15 )
+custom_styles/fg = SubResource( 40 )
+value = 50.0
 percent_visible = false
 
 [node name="inventory" type="HBoxContainer" parent="ui"]

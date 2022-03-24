@@ -22,6 +22,7 @@ var mouse_sns := Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
 
 var cv := CORRECTION_VELOCITY
+var hv := H_CORRECTION
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -49,9 +50,11 @@ func _physics_process(delta):
 	else:
 		cv = lerp(cv, CORRECTION_VELOCITY, 0.1)
 	
-	var hv = H_CORRECTION
+	
 	if player.should_slow_follow():
-		hv = H_SLOW_CORRECTION
+		hv = lerp(hv, H_SLOW_CORRECTION, 0.1)
+	else:
+		hv = lerp(hv, H_CORRECTION, 0.1)
 	
 	var diff := target - pos
 	var movement := Vector3(

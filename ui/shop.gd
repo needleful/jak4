@@ -27,7 +27,7 @@ func start_shopping(source: Node):
 	keeper = source
 	stock.clear()
 	draw_shop_window()
-	set_process_input(true)
+	$input_timer.start()
 	show()
 
 func exit():
@@ -55,8 +55,6 @@ func populate_window(items: Array, persistent: bool):
 			currency = "gem"
 
 		var amount = item["C"]
-		if amount <= 0:
-			continue
 		var label = Label.new()
 		var amount_label = Label.new()
 		label.text = item["I"].capitalize()
@@ -81,7 +79,6 @@ func populate_window(items: Array, persistent: bool):
 			"persistent":persistent
 		}
 	update_available()
-	items_window.get_child(2).grab_focus()
 
 func update_available():
 	for item_id in stock.keys():
@@ -107,7 +104,13 @@ func _on_buy_pressed(item_id: String):
 	if player_wallet < cost:
 		print_debug("BUG: Tried to buy unaffordable", item_id)
 	item.amount -= 1
-	Global.add_item(currency, -cost)
-	Global.add_item(item_id)
+	var _x = Global.add_item(currency, -cost)
+	_x = Global.add_item(item_id)
 	keeper.mark_sold(item_id)
 	update_available()
+
+func _on_input_timer_timeout():
+	if visible:
+		if items_window.get_child_count() >= 3:
+			items_window.get_child(2).grab_focus()
+		set_process_input(true)

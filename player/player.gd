@@ -47,6 +47,7 @@ const DECEL_WITH := 15.0
 const ACCEL_CLIMB := 45.0
 const DECEL_CLIMB := 45.0
 const ACCEL_STEER_ROLL := 2.5
+const ACCEL_DIVE_WINDUP := 75.0
 
 const STAMINA_DRAIN_HANG := 0.5
 const STAMINA_DRAIN_CLIMB := 25.0
@@ -112,21 +113,23 @@ onready var uppercut_hitbox := $jackie/attack_uppercut
 onready var dive_start_hitbox := $jackie/attack_dive_start
 onready var dive_end_hitbox := $jackie/attack_dive_end
 
+onready var health_bar := $ui/stats/health/base
+onready var stamina_bar := $ui/stats/stamina/base
+onready var armor_bar := $ui/stats/health/extra
+onready var energy_bar := $ui/stats/stamina/extra
+
 var velocity := Vector3.ZERO
 var timer_coyote := 0.0
 var timer_state := 0.0
 
-var move_speed := 1.0
-var jump_height := 1.0
-
 const DEFAULT_MAX_STAMINA := 30.0
-const STAMINA_UP_BOOST := 0.10
+const STAMINA_UP_BOOST := 0.15
 var max_stamina := DEFAULT_MAX_STAMINA
 var stamina_recover := 8.0
 var stamina := max_stamina
 
 const DEFAULT_MAX_HEALTH := 50
-const HEALTH_UP_BOOST := 0.08
+const HEALTH_UP_BOOST := 0.12
 var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 var damaged_objects: Array = []
@@ -135,16 +138,27 @@ const ARMOR_BOOST := 10.0
 var armor := 0
 var extra_health := 0.0
 
+const EXTRA_STAMINA_BOOST := 10.0
+var energy := 0
+var extra_stamina := 0.0
+
 const HEALTH_BAR_DEFAULT_SIZE := 400
 const ARMOR_BAR_DEFAULT_SIZE := 80.0
-const STAMINA_BAR_DEFAULT_SIZE := 200
 
-const STAMINA_RECOVERY_BOOST := 0.10
+const STAMINA_BAR_DEFAULT_SIZE := 200
+const EXTRA_STAMINA_BAR_SIZE := 7
+
+const STAMINA_RECOVERY_BOOST := 0.14
 var stamina_factor := 1.0
 
 const DAMAGE_UP_BOOST := 0.15
 var damage_factor := 1.0
 
+const JUMP_UP_BOOST := 0.10
+var jump_factor := 1.0
+
+const SPEED_UP_BOOST := .10
+var speed_factor := 1.0
 
 enum State {
 	Ground,
@@ -227,22 +241,30 @@ func update_inventory():
 	
 	max_health = DEFAULT_MAX_HEALTH*h_factor
 	max_stamina = DEFAULT_MAX_STAMINA*s_factor
-	$ui/stats/health.max_value = max_health
-	$ui/stats/health.rect_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
+	health_bar.max_value = max_health
+	health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
 	
-	$ui/stats/stamina.max_value = max_stamina
-	$ui/stats/stamina.rect_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
+	stamina_bar.max_value = max_stamina
+	stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
 	
 	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
 	damage_factor = pow(1 + DAMAGE_UP_BOOST, Global.count("damage_up"))
+	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
+	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
 	
 	var new_armor:int = Global.count("armor")
 	if new_armor > armor:
 		extra_health += (new_armor - armor)*ARMOR_BOOST
 	armor = new_armor
-	$ui/stats/health/upgrade.rect_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
-	$ui/stats/health/upgrade.visible = armor > 0 and extra_health > 0
+	armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
+	armor_bar.visible = armor > 0 and extra_health > 0
 	update_health()
+	
+	var new_energy = Global.count("stamina_booster")
+	if new_energy > energy:
+		extra_stamina = new_energy*EXTRA_STAMINA_BOOST
+	energy = new_energy
+	energy_bar.visible = energy > 0
 	
 	#debug
 	var state_viewer: Control = $ui/debug/game_state
@@ -270,7 +292,7 @@ func _physics_process(delta):
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
-	var desired_velocity: Vector3 = move_speed*(
+	var desired_velocity: Vector3 = speed_factor*(
 		cam_yaw.global_transform.basis.x * movement.x
 		+ cam_yaw.global_transform.basis.z * movement.y)
 	
@@ -312,7 +334,7 @@ func _physics_process(delta):
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif stamina > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
+			elif total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
@@ -344,7 +366,7 @@ func _physics_process(delta):
 				if timer_coyote > TIME_COYOTE:
 					next_state = State.Fall
 			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot > 0:
-				if stamina > MIN_CLIMB_STAMINA:
+				if total_stamina() > MIN_CLIMB_STAMINA:
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
@@ -356,13 +378,17 @@ func _physics_process(delta):
 			elif timer_state > TIME_CROUCH_JUMP:
 				next_state = State.Fall
 		State.Climb:
-			stamina -= (desired_velocity.length() + STAMINA_DRAIN_MIN)*STAMINA_DRAIN_CLIMB*delta*(1.0-best_floor_dot)
+			drain_stamina(
+				(desired_velocity.length() + STAMINA_DRAIN_MIN)
+				* STAMINA_DRAIN_CLIMB
+				* delta
+				* (1.0-best_floor_dot)
+			)
 			if best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Crouch
-			# Can climb sheer cliffs, must start from sliding ground though
-			elif best_floor_dot < 0.0:
+			elif best_normal == Vector3.ZERO:
 				next_state = State.Fall
-			elif stamina <= 0 or !Input.is_action_pressed("mv_crouch"):
+			elif total_stamina() <= 0 or !Input.is_action_pressed("mv_crouch"):
 				next_state = State.Slide
 		State.Roll:
 			if (timer_state > TIME_ROLL_MIN_JUMP 
@@ -435,13 +461,13 @@ func _physics_process(delta):
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 		State.LedgeHang:
-			stamina -= STAMINA_DRAIN_HANG*delta
+			drain_stamina(STAMINA_DRAIN_HANG*delta)
 			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("mv_jump"):
 				next_state = State.LedgeJump
-			elif stamina <= 0 or Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
+			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
 				next_state = State.LedgeFall
 		State.LedgeFall:
 			if Input.is_action_just_pressed("combat_spin"):
@@ -571,7 +597,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 			damage_directed(uppercut_hitbox, DAMAGE_UPPERCUT, Vector3.UP)
 		State.DiveWindup:
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_START)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_DIVE_WINDUP)
 		State.DiveStart:
 			velocity += delta*GRAVITY*GRAVITY_BOOST_DIVE
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
@@ -587,15 +613,16 @@ func _process(_delta):
 	update_stamina()
 
 func update_health():
-	$ui/stats/health.max_value = max_health
-	$ui/stats/health.value = health
-	$ui/stats/health.value = health
-	$ui/stats/health/upgrade.max_value = armor*ARMOR_BOOST
-	$ui/stats/health/upgrade.value = extra_health
+	health_bar.max_value = max_health
+	health_bar.value = health
+	health_bar.value = health
+	armor_bar.max_value = armor*ARMOR_BOOST
+	armor_bar.value = extra_health
 
 func update_stamina():
-	$ui/stats/stamina.max_value = max_stamina
-	$ui/stats/stamina.value = stamina
+	energy_bar.rect_min_size.x = extra_stamina*EXTRA_STAMINA_BAR_SIZE
+	stamina_bar.max_value = max_stamina
+	stamina_bar.value = stamina
 
 func get_visual_forward():
 	return mesh.global_transform.basis.z
@@ -843,15 +870,30 @@ func die():
 	respawn()
 
 func respawn():
+	velocity = Vector3.ZERO
 	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
-	global_transform.origin = Global.checkpoint_position
+	global_transform.origin = Global.checkpoint_position + Vector3.UP
 
 func heal():
 	health = max_health
 	stamina = max_stamina
+	extra_stamina = energy*EXTRA_STAMINA_BOOST
 	extra_health = armor*ARMOR_BOOST
 	update_health()
+
+func drain_stamina(amount):
+	var diff = stamina - amount
+	if diff < 0:
+		extra_stamina += diff
+		extra_stamina = max(extra_stamina, 0)
+		energy = int(ceil(extra_stamina/EXTRA_STAMINA_BOOST))
+		stamina = 0
+	else:
+		stamina = diff
+
+func total_stamina():
+	return extra_stamina + stamina
 
 func can_talk():
 	return state == State.Ground
@@ -916,7 +958,7 @@ func set_state(next_state: int):
 		State.Fall, State.LedgeFall:
 			mesh.transition_to("Fall")
 		State.BaseJump:
-			velocity.y = jump_height*JUMP_VEL_BASE
+			velocity.y = jump_factor*JUMP_VEL_BASE
 			mesh.transition_to("BaseJump")
 		State.Ground:
 			mesh.transition_to("Ground")
@@ -927,14 +969,14 @@ func set_state(next_state: int):
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
 		State.CrouchJump:
-			velocity.y = jump_height*JUMP_VEL_CROUCH
+			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
 			velocity = Vector3.ZERO
 		State.LedgeJump:
-			velocity.y += jump_height*JUMP_VEL_LEDGE
+			velocity.y += jump_factor*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
 		State.Roll:
 			$crouching_col.disabled = false
@@ -944,8 +986,8 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			var dir = mesh.global_transform.basis.z
-			velocity = move_speed*dir*JUMP_VEL_ROLL_FORWARD
-			velocity.y = jump_height*JUMP_VEL_ROLL
+			velocity = speed_factor*dir*JUMP_VEL_ROLL_FORWARD
+			velocity.y = jump_factor*JUMP_VEL_ROLL
 			
 			mesh.transition_to("RollJump")
 		State.BonkFall:
@@ -953,22 +995,22 @@ func set_state(next_state: int):
 			var dir = ground_normal
 			dir.y = 0.1
 			dir = dir.normalized()
-			velocity = move_speed*dir*SPEED_BONK
+			velocity = speed_factor*dir*SPEED_BONK
 		State.LungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
-			velocity = move_speed*dir*SPEED_LUNGE
+			velocity = speed_factor*dir*SPEED_LUNGE
 			mesh.transition_to("LungeKickRight")
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
-			velocity.y = jump_height*VEL_AIR_SPIN
+			velocity.y = jump_factor*VEL_AIR_SPIN
 			mesh.transition_to("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 		State.Uppercut:
 			damaged_objects = []
-			velocity.y = jump_height*VEL_UPPERCUT
+			velocity.y = jump_factor*VEL_UPPERCUT
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
@@ -978,7 +1020,7 @@ func set_state(next_state: int):
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
 		State.Damaged:
-			velocity.y = move_speed*VEL_DAMAGED_V
+			velocity.y = speed_factor*VEL_DAMAGED_V
 			mesh.transition_to("Fall")
 		State.Locked:
 			mesh.transition_to("Ground")

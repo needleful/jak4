@@ -17,7 +17,7 @@ var otherwise := false
 var talked := 0
 var skip_reply := false
 var discussed := {}
-var exiting := false
+var is_exiting := false
 
 export(Font) var speaker_font
 export(Font) var narration_font
@@ -76,7 +76,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	advance()
 
 func clear():
-	exiting = false
+	is_exiting = false
 	discussed = {}
 	for c in messages.get_children():
 		c.queue_free()
@@ -279,7 +279,7 @@ func back():
 	return RESULT_SKIP
 
 func exiting():
-	exiting = true
+	is_exiting = true
 	return true
 
 func end():
@@ -289,10 +289,10 @@ func end():
 	Global.can_pause = true
 
 func fast_exit():
-	if exiting:
+	if is_exiting:
 		get_next()
 	else:
-		exiting = true
+		is_exiting = true
 		current_item = sequence.get("_exit")
 		advance()
 
