@@ -13,12 +13,6 @@ var current_item : DialogItem
 var sequence: Resource
 var now: Dictionary
 
-var otherwise := false
-var talked := 0
-var skip_reply := false
-var discussed := {}
-var is_exiting := false
-
 export(Font) var speaker_font
 export(Font) var narration_font
 export(Font) var player_font
@@ -34,9 +28,16 @@ const RESULT_SKIP := {"result":"skip"}
 const RESULT_PAUSE := {"result":"pause"}
 const RESULT_END := {"result":"end"}
 
-
 var r_otherwise_if := RegEx.new()
 var r_interpolate := RegEx.new()
+
+var otherwise := false
+var talked := 0
+var skip_reply := false
+var discussed := {}
+var is_exiting := false
+# Stack of IDs for DialogItems
+var call_stack:= []
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -78,6 +79,8 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 func clear():
 	is_exiting = false
 	discussed = {}
+	otherwise = false
+	call_stack = []
 	for c in messages.get_children():
 		c.queue_free()
 	clear_replies()
@@ -95,6 +98,7 @@ func get_next():
 		advance()
 
 func advance():
+	otherwise = false
 	if !current_item:
 		exit()
 		return
@@ -104,6 +108,10 @@ func advance():
 		if !current_item:
 			exit()
 			return
+		# Conditions on replies are handles in list_replies()
+		if current_item.type == DialogItem.Type.REPLY:
+			result = true
+			break
 		var cond: Array = current_item.conditions
 		result = true
 		for c in cond:
@@ -122,6 +130,8 @@ func advance():
 				break
 		if !result:
 			current_item = sequence.failed_next(current_item)
+			if sequence.went_up:
+				otherwise = false
 		elif current_item.text == "":
 			current_item = sequence.canonical_next(current_item)
 			result = false
@@ -153,6 +163,7 @@ func list_replies():
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
 		reply = sequence.next(reply)
 	if replies.get_child_count() == 0:
+		print("\tNo replies.")
 		current_item = reply
 		advance()
 	$reply_timer.start()
@@ -270,12 +281,17 @@ func mention(topic):
 func mentioned(topic):
 	return topic in discussed
 
-#TODO
-func subtopic(_label):
-	return RESULT_SKIP
+func subtopic(label):
+	call_stack.push_back(current_item)
+	return goto(label)
 
-#TODO
 func back():
+	# If there's nothing on the call stack, we just continue
+	if call_stack.empty():
+		return true
+	var caller = call_stack.pop_back()
+	current_item = caller
+	get_next()
 	return RESULT_SKIP
 
 func exiting():

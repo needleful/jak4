@@ -3,6 +3,11 @@ extends Resource
 export(Dictionary) var dialog
 export(Dictionary) var labels
 
+# Dumb hack to fix "otherwise" logic.
+# I have to track when failed_next returns an ancestor
+# Because that resets "otherwise"
+var went_up := false
+
 func _init():
 	resource_name = "NPSequence"
 
@@ -62,9 +67,10 @@ func _next_at_or_up(item) -> DialogItem:
 		var n := next(item)
 		if n:
 			return n
-
+	went_up = true
 	return _next_at_or_up(parent(item))
 
 # When failing a check, the next item is at the same level or higher
 func failed_next(item) -> DialogItem:
+	went_up = false
 	return _next_at_or_up(item)
