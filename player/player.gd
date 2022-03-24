@@ -93,6 +93,8 @@ const TIME_DAMAGED := 0.75
 const VEL_DAMAGED_H := 5
 const VEL_DAMAGED_V := 6
 
+const TERMINAL_VELOCITY := -300
+
 # Nodes
 onready var cam_yaw := $camera_rig/yaw
 onready var mesh := $jackie
@@ -159,6 +161,11 @@ var jump_factor := 1.0
 
 const SPEED_UP_BOOST := .10
 var speed_factor := 1.0
+
+const SPEED_STAMINA_BOOST := 0.04
+var stamina_drain_factor := 1.0
+
+var can_air_spin := true
 
 enum State {
 	Ground,
@@ -251,6 +258,7 @@ func update_inventory():
 	damage_factor = pow(1 + DAMAGE_UP_BOOST, Global.count("damage_up"))
 	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
 	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
+	stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
 	
 	var new_armor:int = Global.count("armor")
 	if new_armor > armor:
@@ -286,6 +294,9 @@ func set_current_coat(coat: Coat):
 func _physics_process(delta):
 	if global_transform.origin.y < -1000:
 		die()
+		return
+	if velocity.y < TERMINAL_VELOCITY:
+		velocity.y = TERMINAL_VELOCITY
 	timer_state += delta
 	if state != State.Climb and state != State.LedgeHang:
 		stamina += stamina_factor*stamina_recover*delta
@@ -444,7 +455,7 @@ func _physics_process(delta):
 					ground_normal = best_normal
 					next_state = State.BonkFall
 		State.Fall, State.BonkFall:
-			if Input.is_action_just_pressed("combat_spin"):
+			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
@@ -470,7 +481,7 @@ func _physics_process(delta):
 			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
 				next_state = State.LedgeFall
 		State.LedgeFall:
-			if Input.is_action_just_pressed("combat_spin"):
+			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
@@ -593,13 +604,13 @@ func _physics_process(delta):
 		State.UppercutWindup:
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
 		State.Uppercut:
-			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
+			velocity += damage_factor*delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 			damage_directed(uppercut_hitbox, DAMAGE_UPPERCUT, Vector3.UP)
 		State.DiveWindup:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_DIVE_WINDUP)
 		State.DiveStart:
-			velocity += delta*GRAVITY*GRAVITY_BOOST_DIVE
+			velocity += damage_factor*delta*GRAVITY*GRAVITY_BOOST_DIVE
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
@@ -690,7 +701,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		if (charge.dot(velocity) > 0 
 			and charge.length() < velocity.length()
 		):
-			charge_accel = DECEL_CLIMB
+			charge_accel = DECEL_CLIMB/speed_factor
 		else:
 			charge_accel = ACCEL_CLIMB
 	else:
@@ -853,7 +864,7 @@ func take_damage(damage: int, direction: Vector3):
 			extra_health = 0
 			damage = -diff
 		var new_armor = ceil(extra_health/ARMOR_BOOST)
-		Global.add_item("armor", new_armor - armor)
+		var _x = Global.add_item("armor", new_armor - armor)
 		armor = new_armor
 	health -= damage
 	update_health()
@@ -873,7 +884,7 @@ func respawn():
 	velocity = Vector3.ZERO
 	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
-	global_transform.origin = Global.checkpoint_position + Vector3.UP
+	global_transform.origin = Global.checkpoint_position
 
 func heal():
 	health = max_health
@@ -883,11 +894,13 @@ func heal():
 	update_health()
 
 func drain_stamina(amount):
-	var diff = stamina - amount
+	var diff = stamina - amount/stamina_drain_factor
 	if diff < 0:
 		extra_stamina += diff
 		extra_stamina = max(extra_stamina, 0)
-		energy = int(ceil(extra_stamina/EXTRA_STAMINA_BOOST))
+		var new_energy = int(ceil(extra_stamina/EXTRA_STAMINA_BOOST))
+		var _x = Global.add_item("stamina_booster", new_energy-energy)
+		energy = new_energy
 		stamina = 0
 	else:
 		stamina = diff
@@ -962,12 +975,14 @@ func set_state(next_state: int):
 			mesh.transition_to("BaseJump")
 		State.Ground:
 			mesh.transition_to("Ground")
+			can_air_spin = true
 		State.Slide:
 			pass
 		State.Crouch, State.Climb:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
+			can_air_spin = true
 		State.CrouchJump:
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
@@ -975,6 +990,7 @@ func set_state(next_state: int):
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
 			velocity = Vector3.ZERO
+			can_air_spin = true
 		State.LedgeJump:
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
@@ -999,18 +1015,19 @@ func set_state(next_state: int):
 		State.LungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
-			velocity = speed_factor*dir*SPEED_LUNGE
+			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
 			mesh.transition_to("LungeKickRight")
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
 			mesh.transition_to("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
+			can_air_spin = false
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 		State.Uppercut:
 			damaged_objects = []
-			velocity.y = jump_factor*VEL_UPPERCUT
+			velocity.y = damage_factor*VEL_UPPERCUT
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")

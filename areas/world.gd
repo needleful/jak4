@@ -98,22 +98,43 @@ func update_active_chunks(position: Vector3, instant := false):
 			else:
 				queue_unload(ch)
 	player.get_node("ui/debug/stats/a4").text = "%d active chunks" % active_chunks.size()
+	if $debug.visible:
+		$debug/box/Label.text = "Moved from (%f, %f %f) to (%f %f %f)" % [
+			player_last_postion.x, player_last_postion.y, player_last_postion.z,
+			position.x, position.y, position.z
+		]
+		var active_str = "Active Chunks:"
+		for c in active_chunks:
+			active_str += "\n\t"+c.name
+		$debug/box/Label2.text = active_str
+		
+		var load_str = "Load Queue"
+		for c in chunk_load_waitlist:
+			load_str += "\n\t" + c
+		$debug/box/Label3.text = load_str
+		
+		var unload_str = "Unload Queue:"
+		for c in chunk_unload_waitlist:
+			unload_str += "\n\t" + c
+		$debug/box/Label4.text = unload_str
+		
 
 func queue_load(ch: Spatial):
-	if !(ch.name in chunk_load_waitlist):
-		chunk_load_waitlist[ch.name] = 0.0 
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
-	
-	if ch.name in chunk_collider and !ch.has_node("static_collision"):
-		ch.add_child(chunk_collider[ch.name])
+	if ch in active_chunks:
+		return
+	if !(ch.name in chunk_load_waitlist):
+		chunk_load_waitlist[ch.name] = 0.0 
 	#ch.material_override = debug_active_chunk_material
 
 func queue_unload(ch: Spatial):
-	if !(ch.name in chunk_unload_waitlist):
-		chunk_unload_waitlist[ch.name] = 0.0 
 	if ch.name in chunk_load_waitlist:
 		var _x = chunk_load_waitlist.erase(ch.name)
+	if !(ch in active_chunks):
+		return
+	if !(ch.name in chunk_unload_waitlist):
+		chunk_unload_waitlist[ch.name] = 0.0 
 	#ch.material_override = debug_inactive_chunk_material
 
 func mark_active(chunk: Spatial):
@@ -134,12 +155,14 @@ func mark_active(chunk: Spatial):
 			print_debug("Loading %s failed!!" % content_file)
 		if chunk.has_node("lowres"):
 			chunk.remove_child(chunk.get_node("lowres"))
+	if !chunk.has_node("static_collision"):
+		chunk.add_child(chunk_collider[chunk.name])
 
 func mark_inactive(chunk: Spatial):
 	if !(chunk in active_chunks):
 		return
 	if chunk.name in chunk_unload_waitlist:
-		var _x = chunk_load_waitlist.erase(chunk.name)
+		var _x = chunk_unload_waitlist.erase(chunk.name)
 	active_chunks.remove(active_chunks.find(chunk))
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
