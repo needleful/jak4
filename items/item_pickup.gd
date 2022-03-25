@@ -10,7 +10,6 @@ func _ready():
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
 		return
-	var _x = connect("body_entered", self, "_on_body_entered")
 	if has_node("AnimationPlayer"):
 		$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
 

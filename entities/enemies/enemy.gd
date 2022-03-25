@@ -108,6 +108,7 @@ func die():
 	if gems > 0:
 		var g = gem_scene.instance()
 		g.quantity = gems
+		g.gravity = true
 		get_parent().add_child(g)
 		g.global_transform = global_transform
 	if !respawns:

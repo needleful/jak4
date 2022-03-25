@@ -29,13 +29,13 @@ func _physics_process(delta):
 		
 	var c := move_and_collide(velocity*delta)
 	if c:
-		damage(c.collider)
+		dir_damage(c.collider)
 		queue_free()
 
 func take_damage(_damage, _dir):
 	queue_free()
 
-func damage(body):
+func dir_damage(body):
 	if !body.has_method("take_damage"):
 		return
 	var dir :Vector3 = velocity.normalized()
