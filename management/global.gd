@@ -108,7 +108,7 @@ func mark_activated(node: Node):
 		game_state.activated.append(node.get_path())
 
 # Coats
-func get_coat(cgen_seed: int = -1) -> Coat:
+func get_coat(cgen_seed: int = -1, min_rarity = Coat.Rarity.Common, max_rarity = Coat.Rarity.Uncommon) -> Coat:
 	if cgen_seed == -1:
 		cgen_seed = rand64()
 	if coat_textures.size() == 0:
@@ -121,20 +121,32 @@ func get_coat(cgen_seed: int = -1) -> Coat:
 	var colors: int
 	var max_int := 9223372036854775807
 	if cgen_seed < 0:
-		colors = 2
 		coat.rarity = coat.Rarity.Common
 	elif cgen_seed < max_int*0.5:
-		colors = 3
 		coat.rarity = coat.Rarity.Uncommon
 	elif cgen_seed < max_int*0.8:
-		colors = 4
 		coat.rarity = coat.Rarity.Rare
 	elif cgen_seed < max_int*0.99:
-		colors = 5
 		coat.rarity = coat.Rarity.SuperRare
 	else:
-		colors = 7
 		coat.rarity = coat.Rarity.Sublime
+	
+	if coat.rarity < min_rarity:
+		coat.rarity = min_rarity
+	elif coat.rarity > max_rarity:
+		coat.rarity = max_rarity
+	
+	match coat.rarity:
+		Coat.Rarity.Common:
+			colors = 2
+		Coat.Rarity.Uncommon:
+			colors = 3
+		Coat.Rarity.Rare:
+			colors = 4
+		Coat.Rarity.SuperRare:
+			colors = 5
+		Coat.Rarity.Sublime:
+			colors = 7
 	
 	coat.gradient = Gradient.new()
 	

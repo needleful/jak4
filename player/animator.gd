@@ -17,6 +17,8 @@ onready var anim: AnimationTree = $AnimationTree
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 onready var audio := $audio
 
+var lunge_right_foot := true
+
 func set_movement_animation(speed: float, is_crouch: bool, is_climb: bool):
 	crouch_blend = lerp(crouch_blend, float(is_crouch), 0.45)
 	climb_blend = lerp(climb_blend, float(is_climb), 0.15)
@@ -56,6 +58,15 @@ func stop_particles():
 	$Armature/Skeleton/footRight/max_kick_particles.emitting = false
 	$max_dive_particles.emitting = false
 	$dive_particles.emitting = false
+
+func play_lunge_kick(max_damage: bool):
+	anim["parameters/WholeBody/LungeKick/blend_position"] = float(lunge_right_foot)
+	transition_to("LungeKick")
+	if lunge_right_foot:
+		start_kick_right(max_damage)
+	else:
+		start_kick_left(max_damage)
+	lunge_right_foot = !lunge_right_foot
 
 func start_kick_left(max_damage: bool):
 	$Armature/Skeleton/footLeft/kick_particles.emitting = true

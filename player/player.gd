@@ -428,6 +428,10 @@ func _physics_process(delta):
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.RollJump
+			elif (timer_state > TIME_ROLL_MIN 
+				and Input.is_action_just_pressed("combat_lunge")
+			):
+				next_state = State.UppercutWindup
 			elif (timer_state > TIME_ROLL_MIN
 				and best_floor_dot < MIN_DOT_SLIDE
 			):
@@ -856,6 +860,8 @@ func update_visuals(input_dir: Vector3, var flip = false):
 	var crouching = state == State.Crouch or state == State.Climb
 	var climbing = state == State.Climb
 	var vs = velocity/(SPEED_CROUCH if crouching else SPEED_RUN)
+	vs.y = 0
+	input_dir.y = 0
 	var vis_vel = lerp(
 		vs,
 		input_dir,
@@ -1080,8 +1086,7 @@ func set_state(next_state: int):
 			damaged_objects = []
 			var dir = get_visual_forward()
 			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
-			mesh.transition_to("LungeKickRight")
-			mesh.start_kick_right(max_damage)
+			mesh.play_lunge_kick(max_damage)
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN

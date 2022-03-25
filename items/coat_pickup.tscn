@@ -1,11 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://items/coat_pickup.gd" type="Script" id=1]
 [ext_resource path="res://_glb/mat_jackie_coat.material" type="Material" id=2]
 
-[sub_resource type="CylinderShape" id=1]
-radius = 0.614627
-height = 0.635406
+[sub_resource type="CylinderShape" id=8]
+radius = 0.165743
+height = 0.720317
 
 [sub_resource type="ArrayMesh" id=7]
 resource_name = "jackie_coat"
@@ -63,9 +63,12 @@ top_radius = 0.02
 bottom_radius = 0.02
 height = 0.5
 
-[node name="coat_pickup" type="Area"]
+[sub_resource type="CylinderShape" id=1]
+radius = 0.614627
+height = 0.635406
+
+[node name="coat_pickup" type="KinematicBody"]
 collision_layer = 0
-collision_mask = 2
 script = ExtResource( 1 )
 
 [node name="OmniLight" type="OmniLight" parent="."]
@@ -79,9 +82,8 @@ light_energy = 1.5
 omni_range = 0.25
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45358, 0 )
-shape = SubResource( 1 )
-disabled = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.455747, 0 )
+shape = SubResource( 8 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.44054, 0 )
@@ -104,4 +106,14 @@ wait_time = 0.5
 one_shot = true
 autostart = true
 
+[node name="area" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45358, 0 )
+shape = SubResource( 1 )
+disabled = true
+
 [connection signal="timeout" from="pickup_timer" to="." method="_on_pickup_timer_timeout"]
+[connection signal="body_entered" from="area" to="." method="_on_area_body_entered"]

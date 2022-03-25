@@ -1,8 +1,9 @@
-extends Area
+extends KinematicBody
 
 export(int) var random_seed = -1
 export(bool) var persistent := true
 export(bool) var from_kill := false
+export(bool) var gravity := false
 
 var coat: Coat setget set_coat
 
@@ -14,17 +15,10 @@ func _ready():
 		if random_seed < 0:
 			random_seed = randi()
 		set_coat(Global.get_coat(random_seed))
-	var _x = connect("body_entered", self, "_on_body_entered")
 
-func _on_body_entered(b):
-	Global.add_coat(coat)
-	if b is PlayerBody:
-		b.set_current_coat(coat)
-	if persistent:
-		Global.mark_picked(get_path())
-	if from_kill:
-		var _x = Global.add_stat("kill_coat")
-	queue_free()
+func _physics_process(delta):
+	if gravity:
+		var _c = move_and_collide(delta*Vector3.DOWN*15)
 
 func set_coat(c: Coat):
 	var light_color : Color
@@ -47,6 +41,15 @@ func set_coat(c: Coat):
 	coat = c
 	$MeshInstance.material_override = coat.generate_material()
 
-
 func _on_pickup_timer_timeout():
-	$CollisionShape.disabled = false
+	$area/CollisionShape.disabled = false
+
+func _on_area_body_entered(b):
+	Global.add_coat(coat)
+	if b is PlayerBody:
+		b.set_current_coat(coat)
+	if persistent:
+		Global.mark_picked(get_path())
+	if from_kill:
+		var _x = Global.add_stat("kill_coat")
+	queue_free()

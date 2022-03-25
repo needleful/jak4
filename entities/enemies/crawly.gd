@@ -87,19 +87,7 @@ func _physics_process(delta):
 			velocity.z = move_dir.z
 			velocity = move_and_slide(velocity + GRAVITY*delta)
 		AI.Dead:
-			var best_normal = Vector3.ZERO
-			for c in get_slide_count():
-				var n = get_slide_collision(c).normal
-				if n.y > best_normal.y:
-					best_normal = n
-			var gravity := GRAVITY
-			if best_normal != Vector3.ZERO:
-				gravity = GRAVITY.project(best_normal)
-				
-			velocity.x = move_dir.x
-			velocity.z = move_dir.z
-			move_dir *= 0.9
-			velocity = move_and_slide(velocity + gravity*delta)
+			fall_down(delta)
 		AI.Idle:
 			walk(delta, 0)
 		AI.Windup, AI.Alerted:
@@ -133,7 +121,6 @@ func set_state(new_ai, force := false):
 			anim.play("Damaged")
 		AI.Dead:
 			collision_layer = 0
-			die()
 			anim.play("Die")
 			anim.queue("Dead-loop")
 		AI.Idle:

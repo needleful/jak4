@@ -1,9 +1,19 @@
 extends KinematicBody
 class_name KinematicEnemy
 
+enum Rarity {
+	Common,
+	Uncommon,
+	Rare,
+	SuperRare,
+	Sublime
+}
+
 export(String) var id
 export(bool) var respawns := true
 export(bool) var drops_coat := false
+export(Rarity) var minimum_rarity = Rarity.Common
+export(Rarity) var maximum_rarity = Rarity.Rare
 export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10
@@ -33,7 +43,7 @@ var damaged:= []
 
 var in_range := false
 
-var coat = null
+var coat: Coat = null
 
 func _ready():
 	set_state(ai)
@@ -41,7 +51,7 @@ func _ready():
 		queue_free()
 		return
 	if drops_coat:
-		coat = Global.get_coat()
+		coat = Global.get_coat(-1, minimum_rarity, maximum_rarity)
 
 func set_active(_active: bool):
 	pass
@@ -51,7 +61,7 @@ func process_player_distance(pos: Vector3) -> float:
 	var within_activation := lensq <= square_distance_activation
 	if within_activation != in_range:
 		in_range = within_activation
-		set_active(in_range)
+		set_active(in_range and ai != AI.Dead)
 	return lensq
 
 func damage_direction(hitbox: Area, dir: Vector3):
@@ -90,8 +100,10 @@ func die():
 		c.coat = coat
 		c.persistent = false
 		c.from_kill = true
+		c.gravity = true
 		get_parent().add_child(c)
 		c.global_transform = global_transform
+		print("Spawning coat")
 	var gems = int(rand_range(0, gem_drop_max))
 	if gems > 0:
 		var g = gem_scene.instance()
@@ -102,10 +114,13 @@ func die():
 		Global.mark_picked(get_path())
 
 func take_damage(damage: int, dir: Vector3):
+	if ai == AI.Dead:
+		return
 	health -= damage
 	move_dir = damage*dir*damaged_speed
 	if health <= 0:
 		set_state(AI.Dead)
+		die()
 	else:
 		set_state(AI.Damaged)
 
@@ -126,6 +141,21 @@ func walk(delta: float, speed: float, slide := false):
 	
 	if slide:
 		velocity.y = min(0, velocity.y)
+
+func fall_down(delta: float):
+	var best_normal = Vector3.ZERO
+	for c in get_slide_count():
+		var n = get_slide_collision(c).normal
+		if n.y > best_normal.y:
+			best_normal = n
+	var gravity := GRAVITY
+	if best_normal != Vector3.ZERO:
+		gravity = GRAVITY.project(best_normal)
+		
+	velocity.x = move_dir.x
+	velocity.z = move_dir.z
+	move_dir *= 0.9
+	velocity = move_and_slide(velocity + gravity*delta)
 
 # Implemented by subclasses
 func set_state(_ai: int):
