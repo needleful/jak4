@@ -15,10 +15,12 @@ const SPEED_BONK := 5.0
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_LEDGE := 0.3
+const MIN_DOT_CEILING := -0.7
 
 const TIME_COYOTE := 0.1
 const TIME_LEDGE_FALL := 0.5
 const TIME_CROUCH_JUMP := 0.5
+const TIME_JUMP_MIN := 0.2
 const TIME_BASE_JUMP := 0.25
 
 const JUMP_VEL_BASE := 8.0
@@ -33,9 +35,6 @@ const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
 const TIME_ROLL_MIN_JUMP := 0.3
 const TIME_ROLL_INVINCIBILITY := 0.2
-
-const TIME_SLIDE_CAN_JUNGE := 0.5
-var timer_slide_lunge := 0
 
 # Accelerating from zero
 const ACCEL_START := 50.0
@@ -134,7 +133,6 @@ var velocity := Vector3.ZERO
 var timer_coyote := 0.0
 var timer_state := 0.0
 
-
 const DEFAULT_MAX_HEALTH := 50
 const HEALTH_UP_BOOST := 0.12
 var max_health := DEFAULT_MAX_HEALTH
@@ -179,7 +177,9 @@ var speed_factor := 1.0
 const SPEED_STAMINA_BOOST := 0.04
 var stamina_drain_factor := 1.0
 
+const TIME_RESET_GROUND := 0.01
 var can_air_spin := true
+var can_slide_lunge := true
 
 enum State {
 	Ground,
@@ -197,6 +197,7 @@ enum State {
 	LedgeJump,
 	BonkFall,
 	LungeKick,
+	SlideLungeKick,
 	SpinKick,
 	AirSpinKick,
 	UppercutWindup,
@@ -239,6 +240,10 @@ func _input(event):
 		var coat = Global.get_coat(Global.rand64())
 		set_current_coat(coat)
 		Global.add_coat(coat)
+	elif event.is_action_pressed("quick_save"):
+		Global.save_checkpoint(global_transform.origin)
+	elif event.is_action_pressed("quick_load"):
+		Global.load_sync()
 		
 func prepare_save():
 	Global.game_state.player_transform = global_transform
@@ -360,13 +365,10 @@ func _physics_process(delta):
 			else:
 				timer_coyote = 0
 		State.Slide:
-			timer_slide_lunge += delta
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif ( timer_slide_lunge < TIME_SLIDE_CAN_JUNGE 
-				and Input.is_action_just_pressed("combat_lunge")
-			):
-				next_state = State.LungeKick
+			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
+				next_state = State.SlideLungeKick
 			elif total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
@@ -384,6 +386,11 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif timer_state > TIME_BASE_JUMP:
 				next_state = State.Fall
+			elif timer_state > TIME_JUMP_MIN:
+				if best_floor_dot > MIN_DOT_GROUND:
+					next_state = State.Ground
+				elif best_floor_dot > MIN_DOT_SLIDE:
+					next_state = State.Slide
 		State.Crouch:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.CrouchJump
@@ -410,6 +417,11 @@ func _physics_process(delta):
 				next_state = State.DiveWindup
 			elif timer_state > TIME_CROUCH_JUMP:
 				next_state = State.Fall
+			elif timer_state > TIME_JUMP_MIN:
+				if best_floor_dot > MIN_DOT_GROUND:
+					next_state = State.Ground
+				elif best_floor_dot > MIN_DOT_SLIDE:
+					next_state = State.Slide
 		State.Climb:
 			drain_stamina(
 				(desired_velocity.length() + STAMINA_DRAIN_MIN)
@@ -535,8 +547,13 @@ func _physics_process(delta):
 				and Input.is_action_just_pressed("mv_jump")
 			):
 				next_state = State.UppercutWindup
-			if timer_state > TIME_LUNGE_PARTICLES:
-				mesh.stop_particles()
+		State.SlideLungeKick:
+			if timer_state >= TIME_LUNGE_MAX:
+				next_state = State.Slide
+			elif ( timer_state >= TIME_LUNGE_MIN
+				and Input.is_action_just_pressed("combat_spin")
+			):
+				next_state = State.AirSpinKick
 		State.SpinKick:
 			if timer_state >= TIME_SPIN_MAX:
 				next_state = State.Ground
@@ -588,7 +605,9 @@ func _physics_process(delta):
 				elif Input.is_action_just_pressed("combat_spin"):
 					next_state = State.AirSpinKick
 			elif timer_state > TIME_DIVE_UPPERCUT:
-				if Input.is_action_just_pressed("combat_lunge"):
+				if (best_floor_dot > MIN_DOT_GROUND 
+				and Input.is_action_just_pressed("combat_lunge")
+			):
 					next_state = State.UppercutWindup
 		State.Damaged:
 			if Input.is_action_just_released("combat_lunge"):
@@ -601,6 +620,9 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
+			if timer_state > TIME_RESET_GROUND:
+				can_air_spin = true
+				can_slide_lunge = true
 			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN)
 		State.Fall, State.LedgeFall:
@@ -629,7 +651,9 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 		State.LedgeHang:
 			desired_velocity = Vector3.ZERO
-		State.LungeKick:
+		State.LungeKick, State.SlideLungeKick:
+			if timer_state > TIME_LUNGE_PARTICLES:
+				mesh.stop_particles()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
@@ -652,7 +676,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
-			accel(delta, desired_velocity*SPEED_RUN)
+			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked:
 			desired_velocity = Vector3.ZERO
@@ -759,10 +783,16 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_sli
 	velocity += GRAVITY*delta
 	var pre_slide_vel := velocity
 	velocity = move_and_slide(velocity)
-	if pre_slide_vel.y <= 0:
-		velocity.y = clamp(velocity.y, pre_slide_vel.y, 0.0)
-	else:
-		velocity.y = max(velocity.y, pre_slide_vel.y)
+	var ceiling_normal := Vector3.UP
+	for i in get_slide_count():
+		var c := get_slide_collision(i)
+		if c.normal.y < ceiling_normal.y:
+			ceiling_normal = c.normal
+	if ceiling_normal.y > MIN_DOT_CEILING:
+		if pre_slide_vel.y <= 0:
+			velocity.y = clamp(velocity.y, pre_slide_vel.y, 0.0)
+		else:
+			velocity.y = max(velocity.y, pre_slide_vel.y)
 	if ignore_slide:
 		velocity = pre_slide_vel
 
@@ -1036,8 +1066,6 @@ func set_state(next_state: int):
 			mesh.transition_to("BaseJump")
 		State.Ground:
 			mesh.transition_to("Ground")
-			can_air_spin = true
-			timer_slide_lunge = 0
 		State.Slide:
 			pass
 		State.Crouch:
@@ -1082,11 +1110,12 @@ func set_state(next_state: int):
 			dir.y = 0.1
 			dir = dir.normalized()
 			velocity = speed_factor*dir*SPEED_BONK
-		State.LungeKick:
+		State.LungeKick, State.SlideLungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
 			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
 			mesh.play_lunge_kick(max_damage)
+			can_slide_lunge = false
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN

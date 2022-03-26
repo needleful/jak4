@@ -42,12 +42,6 @@ func _ready():
 	else:
 		print_debug("Could not open coat directory!")
 
-func _input(event):
-	if event.is_action_pressed("quick_save"):
-		save_sync()
-	elif event.is_action_pressed("quick_load"):
-		load_sync()
-
 # Game state management
 
 func stat(index: String):
