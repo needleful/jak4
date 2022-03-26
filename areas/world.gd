@@ -30,6 +30,10 @@ var TENSION_MIN_DB := -80.0
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
 
+func _enter_tree():
+	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
+		Global.load_sync()
+		
 func _ready():
 	for c in get_children():
 		if c.name.begins_with("chunk"):

@@ -23,10 +23,6 @@ var checkpoint_position : Vector3
 
 onready var player: PlayerBody = get_tree().current_scene.get_node("player")
 
-func _enter_tree():
-	if !valid_game_state and ResourceLoader.exists(save_path):
-		load_sync()
-
 func _ready():
 	randomize()
 	var coat_dir := Directory.new()
