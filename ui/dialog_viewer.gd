@@ -243,6 +243,14 @@ func check_condition(cond: String):
 	otherwise = !result
 	return result
 
+#TODO: Implement
+func track_conversation_time():
+	return true
+
+#TODO: Implement
+func seconds_from_last_conversation() -> int:
+	return 10
+
 # TODO
 func format(_style: String):
 	return true

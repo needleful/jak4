@@ -878,14 +878,7 @@ func can_ledge_grab() -> bool:
 		ledgeCastCenter.is_colliding()
 		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
 	
-	var res := center and (left or right) 
-	$jackie/debug/normal.global_transform.origin = (
-		$jackie/debug.global_transform.origin + ledgeCastCenter.get_collision_normal())
-	if res:
-		$jackie/debug/normal.material_override.albedo_color = Color.greenyellow
-	else:
-		$jackie/debug/normal.material_override.albedo_color = Color.crimson
-	return res
+	return center and (left or right)
 
 func snap_to_ledge():
 	var change = ledgeCastCenter.get_collision_point() - ledgeRef.global_transform.origin

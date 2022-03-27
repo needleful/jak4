@@ -1,12 +1,13 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=30 format=2]
 
+[ext_resource path="res://entities/shop_keeper.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
 [ext_resource path="res://_glb/chunks/chunk124.glb" type="PackedScene" id=3]
 [ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=6]
 [ext_resource path="res://dialog/medium.dialog" type="Resource" id=7]
-[ext_resource path="res://dialog/mom/mom_intro.dialog" type="Resource" id=8]
+[ext_resource path="res://dialog/mom.dialog" type="Resource" id=8]
 [ext_resource path="res://entities/power_thing.tscn" type="PackedScene" id=9]
 [ext_resource path="res://_glb/chunks/mat_basic.material" type="Material" id=10]
 [ext_resource path="res://entities/door.gd" type="Script" id=11]
@@ -16,7 +17,6 @@
 [ext_resource path="res://entities/env/rock1.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/the_medium.gd" type="Script" id=16]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=17]
-[ext_resource path="res://entities/shop_keeper.gd" type="Script" id=18]
 [ext_resource path="res://dialog/shops/plateau_shop.dialog" type="Resource" id=19]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=20]
 
@@ -98,12 +98,6 @@ extents = Vector3( 2.65809, 1.56186, 1 )
 [sub_resource type="CapsuleMesh" id=252]
 radius = 0.2
 mid_height = 1.2
-
-[sub_resource type="CapsuleMesh" id=260]
-radius = 0.2
-mid_height = 0.9
-
-[sub_resource type="BoxShape" id=261]
 
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
@@ -218,23 +212,10 @@ transform = Transform( 1, 0, 0, 0, 0.00453788, -0.99999, 0, 0.99999, 0.00453788,
 mesh = SubResource( 252 )
 material/0 = null
 
-[node name="plateu_shop" type="Area" parent="." index="9"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0724, -248.546, 0 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 6 )
+[node name="plateau_shop" parent="." index="9" instance=ExtResource( 1 )]
+transform = Transform( 0.380118, 0, 0.924938, 0, 1, 0, -0.924938, 0, 0.380118, 12.3516, -248.98, -0.396636 )
 dialog_sequence = ExtResource( 19 )
-main_speaker = NodePath("plateau_shop")
-
-[node name="plateau_shop" type="MeshInstance" parent="plateu_shop" index="0"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.522845, 2.28543e-08 )
-mesh = SubResource( 260 )
-material/0 = null
-script = ExtResource( 18 )
 inventory = "res://entities/shop_stock/village_stock.json"
-
-[node name="CollisionShape" type="CollisionShape" parent="plateu_shop" index="1"]
-shape = SubResource( 261 )
 
 [node name="bug_pickup4" parent="." index="10" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.32987, -132.979, -181.332 )

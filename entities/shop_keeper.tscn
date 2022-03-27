@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/lil_man.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/shop_keeper.gd" type="Script" id=2]
+
+[sub_resource type="CylinderShape" id=2]
+radius = 0.282646
+height = 1.05014
+
+[sub_resource type="CylinderShape" id=1]
+height = 1.33528
+
+[node name="shop_keeper" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="." index="2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.526918, 0 )
+shape = SubResource( 2 )
+
+[node name="dialog_trigger" type="Area" parent="." index="3"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="dialog_trigger" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.668219, 0.73677 )
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="dialog_trigger" to="." method="_on_dialog_trigger_body_entered"]

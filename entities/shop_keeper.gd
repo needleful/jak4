@@ -1,5 +1,6 @@
 extends Node
 
+export(Resource) var dialog_sequence
 export(String) var visual_name: String = "Shop Keeper"
 export(String, FILE, "*.json") var inventory: String
 
@@ -13,6 +14,7 @@ func _ready():
 	inventory_data = JSON.parse(text).result
 	for pitem in inventory_data.persistent:
 		pitem["C"] -= Global.stat(item_bought_stat(pitem["I"]))
+	$AnimationPlayer.play("Idle-loop")
 
 func get_inventory() -> Dictionary:
 	return inventory_data
@@ -37,3 +39,10 @@ func item_data(array: Array, id: String) -> Dictionary:
 		if c["I"] == id:
 			return c
 	return {}
+
+func _on_dialog_trigger_body_entered(body):
+	if !(body is PlayerBody):
+		print_debug("BUG: Non-player triggered dialog node ", get_path())
+		return
+	if body.can_talk():
+		body.start_dialog(self, dialog_sequence, self)

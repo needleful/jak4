@@ -1,5 +1,4 @@
 // So there's a lot of stuff that'll be here.
-// Also we can see if multiple statements work.
 {Global.stat("mom/info") == 0}
 	{talked == 0}
 		* The thing in front of you is almost nothing at all.
@@ -41,9 +40,10 @@
 	Jackie? But you're so-
 	* She looks around.
 	This is the Medium. So I'm...
+	...
 	{animation("hug")} ...
 	That explains why you've grown so much.
-	How'd I die?
+	{animation("end_hug")} How'd I die?
 	[You] I don't know. One day you left, and just... didn't come back.
 	Are you sure I died?
 	[You]... No, not really.
@@ -62,30 +62,19 @@
 		[You] Is everything okay?
 		... As okay as it'll ever be, I guess.
 	{otherwise}
+{otherwise}
 
-
-{exit()}
+{goto("track_and_exit")}
 
 :_exit:
 [You] I have to go. Bye, mom.
 {Global.stat("mom/info") > 2} I'll see you, sweetie.
+
+:track_and_exit
+{track_conversation_time()}
 {exit()}
 
-:accuracy_1
-{Global.stat("mom/accuracy")} Like I said last time, I'm not terribly worried about this thing's accuracy.
-	Am I what your mom would actually be? I don't know. And if you knew, it wouldn't be a problem, hahaha!
-	But
 
-{otherwise} {Global.add_stat("mom/accuracy")}
-	This medium's impressive, isn't it?
-	It doesn't just scan your mind and cobble together the person from what you think they were.
-	The scan learns everything about you. It knows how your mind would alter memories, or what your perspective of people means for what they actually are.
-	[You] I know how it works. My worry is..
-		I never really knew you. You died when I was, like, three.
-	Two and a half.
-	[You] Exactly! And I'm just learning about you second-hand. And it's... how could you possibly tell me anything I don't already know?
-	Do I have to?
-	[You] I...
-		{animation("sit")} I don't know, really. What's the point if I'm just talking to myself?
-	{animation("comfort")} That sounds like something you should have figured out before coming here.
-	[You] I did, but it...
+:accuracy_1
+
+{back()}
