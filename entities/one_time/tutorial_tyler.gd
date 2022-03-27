@@ -1,6 +1,9 @@
 extends Spatial
 
+export(Resource) var dialog
+
 onready var anim := $lil_man/AnimationPlayer
+var visual_name := "Young Boy"
 
 onready var last_position := global_transform.origin
 onready var player :PlayerBody = get_tree().current_scene.get_node("player")
@@ -62,3 +65,6 @@ func climb():
 func fall():
 	look_at_player = false
 	anim.play("Air")
+
+func start_tutorial():
+	$tutorial_area.next_stage()

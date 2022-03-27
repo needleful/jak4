@@ -1002,6 +1002,9 @@ func total_stamina():
 func can_talk():
 	return state == State.Ground
 
+func get_dialog_viewer() -> Node:
+	return $ui/dialog_viewer
+
 func start_dialog(source: Node, sequence: Resource, speaker: Node):
 	$ui/dialog_viewer.start(source, sequence, speaker)
 	$camera_rig.play_animation("dialog_start")
@@ -1013,12 +1016,19 @@ func _on_dialog_exited():
 	unlock()
 
 func _on_dialog_event(id: String, source: Node):
+	print("Dialog: ", id)
 	match id:
 		"open_shop":
 			$ui/stats.show()
 			$ui/inventory.show()
 			$ui/inventory/AnimationPlayer.play("show_for_shop")
 			$ui/shop.start_shopping(source)
+		"unlock_player":
+			$camera_rig.play_animation("dialog_end")
+			unlock()
+		"lock_player":
+			$camera_rig.play_animation("dialog_start")
+			lock()
 
 func stop_shopping():
 	$ui/stats.hide()
@@ -1050,6 +1060,27 @@ func unlock():
 func _on_unlock_timer_timeout():
 	set_state(State.Ground)
 
+func show_prompt(textures: Array, text: String):
+	if textures.size() >= 1:
+		$ui/tutorial/TextureRect1.show()
+		$ui/tutorial/TextureRect1.texture = textures[0]
+	else:
+		$ui/tutorial/TextureRect1.hide()
+	if textures.size() >= 2:
+		$ui/tutorial/plus.show()
+		$ui/tutorial/TextureRect2.show()
+		$ui/tutorial/TextureRect2.texture = textures[1]
+	else:
+		$ui/tutorial/plus.hide()
+		$ui/tutorial/TextureRect2.hide()
+
+	$ui/tutorial/Label.text = text
+	$ui/tutorial.show()
+	$ui/tutorial/prompt_timer.start()
+
+func _on_prompt_timer_timeout():
+	$ui/tutorial.hide()
+	
 func set_state(next_state: int):
 	if state == next_state:
 		return
@@ -1150,3 +1181,4 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
+

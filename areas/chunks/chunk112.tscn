@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/shop_keeper.tscn" type="PackedScene" id=2]
@@ -18,6 +18,11 @@
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/env/ruin1.tscn" type="PackedScene" id=17]
 [ext_resource path="res://entities/one_time/tutorial_area.gd" type="Script" id=18]
+[ext_resource path="res://dialog/tutorial_tyler.dialog" type="Resource" id=19]
+[ext_resource path="res://entities/one_time/tutorial_prompt.gd" type="Script" id=20]
+[ext_resource path="res://ui/prompts/gamepad0.png" type="Texture" id=21]
+[ext_resource path="res://ui/prompts/gamepadLB.png" type="Texture" id=22]
+[ext_resource path="res://ui/prompts/gamepad1.png" type="Texture" id=23]
 
 [sub_resource type="ConvexPolygonShape" id=227]
 points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
@@ -132,10 +137,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 1, 1.5, 1.8, 2, 2.3, 2.6, 2.8, 3.4, 3.9, 4.1, 4.5, 4.7, 5, 5.3, 5.8, 6.3, 6.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.3, 1, 1.5, 1.8, 2, 2.3, 2.6, 2.8, 3.4, 3.9, 4.1, 4.5, 4.7, 5, 5.3, 5.8, 6, 6.3, 6.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector3( 194.269, -222.003, -47.2305 ), Vector3( 192.998, -222.188, -50.0682 ), Vector3( 187.046, -223.469, -51.9142 ), Vector3( 187.046, -223.469, -51.9142 ), Vector3( 184.437, -222.296, -55.6111 ), Vector3( 183.598, -223.978, -56.4379 ), Vector3( 183.598, -223.978, -56.4379 ), Vector3( 183.332, -222.538, -56.7463 ), Vector3( 182.891, -222.877, -57.0919 ), Vector3( 176.836, -222.574, -57.5287 ), Vector3( 172.403, -222.877, -59.128 ), Vector3( 171.513, -222.877, -58.6618 ), Vector3( 167.178, -222.171, -56.574 ), Vector3( 165.344, -224.523, -56.574 ), Vector3( 165.344, -224.523, -56.574 ), Vector3( 164.865, -223.247, -56.4848 ), Vector3( 163.135, -223.396, -58.0359 ), Vector3( 156.113, -222.984, -58.9496 ), Vector3( 150.577, -223.402, -56.6638 ) ]
+"values": [ Vector3( 194.269, -222.003, -47.2305 ), Vector3( 192.998, -222.188, -50.0682 ), Vector3( 187.046, -223.469, -51.9142 ), Vector3( 187.046, -223.469, -51.9142 ), Vector3( 184.437, -222.296, -55.6111 ), Vector3( 183.598, -223.978, -56.4379 ), Vector3( 183.598, -223.978, -56.4379 ), Vector3( 183.332, -222.538, -56.7463 ), Vector3( 182.891, -222.877, -57.0919 ), Vector3( 176.836, -222.574, -57.5287 ), Vector3( 172.403, -222.877, -59.128 ), Vector3( 171.513, -222.877, -58.6618 ), Vector3( 167.178, -222.171, -56.574 ), Vector3( 165.344, -224.523, -56.574 ), Vector3( 165.344, -224.523, -56.574 ), Vector3( 164.865, -223.247, -56.4848 ), Vector3( 163.135, -223.396, -58.0359 ), Vector3( 160.709, -222.84, -59.0794 ), Vector3( 156.113, -222.984, -58.9496 ), Vector3( 150.577, -223.402, -56.6638 ) ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath("..")
@@ -192,10 +197,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 0.8, 1.1, 1.4, 1.7, 2.9, 3, 3.4, 3.5, 3.7, 4, 4.2, 4.4, 4.7, 4.8, 5, 5.2, 5.5, 5.7, 5.9, 6.1, 6.2, 6.3, 6.5, 6.7, 7, 7.5, 7.8, 9.8, 10.4, 10.5, 10.7, 10.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.5, 0.8, 1.1, 1.4, 1.7, 2.1, 2.8, 2.9, 3.1, 3.4, 3.6, 3.8, 4.1, 4.2, 4.4, 4.6, 4.9, 5.1, 5.3, 5.5, 5.6, 5.7, 5.9, 6.1, 6.4, 6.9, 7.2, 9.2, 9.8, 9.9, 10.1, 10.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector3( 150.577, -223.402, -56.6638 ), Vector3( 150.577, -223.402, -56.6638 ), Vector3( 147.877, -222.574, -59.2539 ), Vector3( 145.176, -224.979, -61.8441 ), Vector3( 145.176, -224.979, -61.8441 ), Vector3( 144.529, -223.692, -62.4527 ), Vector3( 142.232, -224.885, -62.4527 ), Vector3( 141.197, -225.172, -62.3719 ), Vector3( 135.615, -226.754, -61.8732 ), Vector3( 134.239, -227.274, -61.798 ), Vector3( 131.904, -226.184, -62.4865 ), Vector3( 129, -226.884, -61.9648 ), Vector3( 127.609, -226.886, -61.3931 ), Vector3( 124.851, -226.094, -60.2657 ), Vector3( 119.764, -228.694, -57.7069 ), Vector3( 118.116, -228.921, -56.8328 ), Vector3( 116.045, -230.134, -56.1361 ), Vector3( 114.814, -229.967, -55.9715 ), Vector3( 114.814, -229.967, -55.9715 ), Vector3( 114.577, -228.864, -56.0823 ), Vector3( 113.219, -228.993, -55.5377 ), Vector3( 111.551, -227.6, -54.8432 ), Vector3( 110.698, -226.898, -54.4865 ), Vector3( 110.053, -226.872, -54.2167 ), Vector3( 109.025, -226.865, -53.496 ), Vector3( 107.889, -225.826, -52.689 ), Vector3( 105.952, -225.461, -50.8188 ), Vector3( 101.61, -222.485, -47.8971 ), Vector3( 99.1014, -220.73, -46.4423 ), Vector3( 96.0197, -214.059, -46.1139 ), Vector3( 95.3694, -214.022, -48.0545 ), Vector3( 96.0664, -213.794, -48.3475 ), Vector3( 97.7287, -213.042, -49.7649 ), Vector3( 99.3039, -215.579, -51.1457 ) ]
+"values": [ Vector3( 150.577, -223.402, -56.6638 ), Vector3( 150.577, -223.402, -56.6638 ), Vector3( 147.877, -222.574, -59.2539 ), Vector3( 145.176, -224.979, -61.8441 ), Vector3( 145.176, -224.979, -61.8441 ), Vector3( 144.529, -223.692, -62.4527 ), Vector3( 141.197, -225.172, -62.3719 ), Vector3( 135.615, -226.754, -61.8732 ), Vector3( 134.239, -227.274, -61.798 ), Vector3( 131.904, -226.184, -62.4865 ), Vector3( 129, -226.884, -61.9648 ), Vector3( 127.609, -226.886, -61.3931 ), Vector3( 124.851, -226.094, -60.2657 ), Vector3( 119.764, -228.694, -57.7069 ), Vector3( 118.116, -228.921, -56.8328 ), Vector3( 116.045, -230.134, -56.1361 ), Vector3( 114.814, -229.967, -55.9715 ), Vector3( 114.814, -229.967, -55.9715 ), Vector3( 114.577, -228.864, -56.0823 ), Vector3( 113.219, -228.993, -55.5377 ), Vector3( 111.551, -227.6, -54.8432 ), Vector3( 110.698, -226.898, -54.4865 ), Vector3( 110.053, -226.872, -54.2167 ), Vector3( 109.025, -226.865, -53.496 ), Vector3( 107.889, -225.826, -52.689 ), Vector3( 105.952, -225.461, -50.8188 ), Vector3( 101.61, -222.485, -47.8971 ), Vector3( 99.1014, -220.73, -46.4423 ), Vector3( 96.0197, -214.059, -46.1139 ), Vector3( 95.3694, -214.022, -48.0545 ), Vector3( 96.0664, -213.794, -48.3475 ), Vector3( 97.7287, -213.042, -49.7649 ), Vector3( 99.3039, -215.579, -51.1457 ) ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath("..")
@@ -204,7 +209,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.6, 1.1, 1.6, 2.8, 3.4, 3.8, 4.3, 4.6, 4.8, 5, 5.2, 5.7, 5.9, 6.6, 7, 7.9, 9.9, 10.4, 10.6 ),
+"times": PoolRealArray( 0, 0.6, 1.1, 1.6, 2, 2.8, 3.2, 3.7, 4, 4.2, 4.4, 4.6, 5.1, 5.3, 6, 6.4, 7.3, 9.3, 9.8, 10 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "values": [ {
 "args": [  ],
@@ -271,7 +276,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=234]
 resource_name = "TutStage3"
-length = 13.0
+length = 12.7
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:translation")
 tracks/0/interp = 2
@@ -279,10 +284,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 2, 2.6, 2.8, 3.1, 3.4, 3.8, 3.9, 4, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5, 5.2, 5.6, 5.8, 6, 6.2, 6.8, 7, 7.1, 7.2, 7.7, 8.1, 8.5, 8.8, 9, 9.7, 10.5, 11, 11.6, 12, 12.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.3, 0.5, 0.7, 0.9, 1.1, 1.4, 1.7, 2.2, 2.8, 3.2, 3.6, 4, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8, 6.1, 6.5, 6.8, 7, 7.2, 7.8, 8.2, 8.4, 8.6, 8.9, 9.1, 9.5, 10.1, 10.4, 10.6, 11, 11.4, 11.7, 12, 12.4, 12.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector3( 99.3039, -215.579, -51.1457 ), Vector3( 100.217, -215.471, -51.8103 ), Vector3( 100.651, -214.936, -52.3079 ), Vector3( 101.519, -214.457, -53.3324 ), Vector3( 102.164, -213.175, -54.0982 ), Vector3( 103.292, -212.276, -55.4627 ), Vector3( 104.386, -208.622, -56.614 ), Vector3( 105.339, -209.136, -57.5948 ), Vector3( 105.339, -209.136, -57.5948 ), Vector3( 105.983, -207.909, -57.8196 ), Vector3( 107.459, -209.121, -58.717 ), Vector3( 110.858, -207.987, -60.8008 ), Vector3( 115.189, -206.818, -63.4893 ), Vector3( 119.253, -215.699, -65.7936 ), Vector3( 120.52, -215.673, -64.8032 ), Vector3( 121.202, -215.687, -63.0314 ), Vector3( 124.924, -215.699, -61.7727 ), Vector3( 126.241, -215.698, -62.0567 ), Vector3( 127.727, -215.716, -62.3271 ), Vector3( 129.025, -215.431, -64.1666 ), Vector3( 129.81, -215.446, -65.1371 ), Vector3( 130.203, -215.169, -65.8666 ), Vector3( 131.409, -215.066, -65.8844 ), Vector3( 133.793, -214.085, -66.3163 ), Vector3( 134.579, -219.2, -67.6417 ), Vector3( 136.595, -219.324, -68.731 ), Vector3( 138.483, -217.681, -69.8027 ), Vector3( 139.438, -218.435, -70.3119 ), Vector3( 139.438, -218.435, -70.3119 ), Vector3( 140.095, -216.667, -70.3111 ), Vector3( 140.444, -215.692, -70.4768 ), Vector3( 140.698, -214.862, -70.5637 ), Vector3( 144.91, -211.993, -73.0583 ), Vector3( 146.295, -212.756, -73.7279 ), Vector3( 147.184, -210.208, -73.8093 ), Vector3( 147.882, -208.082, -73.9138 ), Vector3( 148.218, -207.545, -74.1029 ), Vector3( 150.393, -207.302, -75.5441 ), Vector3( 153.375, -208.083, -77.2466 ), Vector3( 155.449, -206.917, -78.6684 ), Vector3( 158.253, -208.036, -80.6375 ), Vector3( 160.221, -207.087, -82.023 ), Vector3( 161.344, -206.758, -82.8146 ) ]
+"values": [ Vector3( 99.3039, -215.579, -51.1457 ), Vector3( 100.217, -215.471, -51.8103 ), Vector3( 100.651, -214.936, -52.3079 ), Vector3( 101.519, -214.457, -53.3324 ), Vector3( 102.164, -213.175, -54.0982 ), Vector3( 103.292, -212.276, -55.4627 ), Vector3( 104.386, -208.622, -56.614 ), Vector3( 105.339, -209.136, -57.5948 ), Vector3( 105.339, -209.136, -57.5948 ), Vector3( 105.983, -207.909, -57.8196 ), Vector3( 107.459, -209.121, -58.717 ), Vector3( 110.858, -207.987, -60.8008 ), Vector3( 115.189, -206.818, -63.4893 ), Vector3( 119.253, -215.699, -65.7936 ), Vector3( 120.52, -215.673, -64.8032 ), Vector3( 121.202, -215.687, -63.0314 ), Vector3( 124.924, -215.699, -61.7727 ), Vector3( 127.727, -215.716, -62.3271 ), Vector3( 129.025, -215.431, -64.1666 ), Vector3( 130.203, -215.169, -65.8666 ), Vector3( 131.409, -215.066, -65.8844 ), Vector3( 133.793, -214.085, -66.3163 ), Vector3( 134.579, -219.2, -67.6417 ), Vector3( 136.595, -219.324, -68.731 ), Vector3( 138.483, -217.681, -69.8027 ), Vector3( 139.438, -218.435, -70.3119 ), Vector3( 139.438, -218.435, -70.3119 ), Vector3( 140.095, -216.667, -70.3111 ), Vector3( 140.444, -215.692, -70.4768 ), Vector3( 140.698, -214.862, -70.5637 ), Vector3( 143.239, -213.802, -72.0763 ), Vector3( 144.91, -211.993, -73.0583 ), Vector3( 146.295, -212.756, -73.7279 ), Vector3( 147.184, -210.208, -73.8093 ), Vector3( 147.882, -208.082, -73.9138 ), Vector3( 148.218, -207.545, -74.1029 ), Vector3( 150.393, -207.302, -75.5441 ), Vector3( 153.375, -208.083, -77.2466 ), Vector3( 155.449, -206.917, -78.6684 ), Vector3( 158.253, -208.036, -80.6375 ), Vector3( 160.221, -207.087, -82.023 ), Vector3( 161.344, -206.758, -82.8146 ) ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath("..")
@@ -291,7 +296,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.4, 0.7, 1.1, 1.5, 2.4, 2.8, 3.1, 3.4, 3.8, 4.9, 5.3, 5.6, 5.8, 6.2, 6.8, 7.3, 7.8, 8.1, 9.1, 10.3, 11.1, 11.7 ),
+"times": PoolRealArray( 0, 0.4, 0.7, 1.1, 1.7, 2.6, 3.2, 3.6, 4, 4.4, 5.7, 6.2, 6.5, 6.8, 7.2, 7.8, 8.9, 9.2, 9.5, 10.7, 11.2, 11.8, 12.1 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "values": [ {
 "args": [  ],
@@ -364,6 +369,9 @@ tracks/1/keys = {
 "method": "run"
 } ]
 }
+
+[sub_resource type="SphereShape" id=235]
+radius = 2.91933
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
@@ -679,12 +687,14 @@ inventory = "res://entities/shop_stock/village_stock.json"
 
 [node name="tutorial_tyler" parent="." index="95" instance=ExtResource( 10 )]
 transform = Transform( 0.942758, 0, -0.333478, 0, 1, 0, 0.333478, 0, 0.942758, 210.227, -228.909, -44.48 )
+dialog = ExtResource( 19 )
 
 [node name="tutorial_area" type="Area" parent="tutorial_tyler" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0599976, 0.177994, 0.1064 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0600052, 0.177994, 0.106392 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 18 )
+prompts_node = NodePath("../../tutorial_prompts")
 
 [node name="CollisionShape" type="CollisionShape" parent="tutorial_tyler/tutorial_area" index="0"]
 shape = SubResource( 229 )
@@ -695,6 +705,83 @@ anims/TutStage0 = SubResource( 231 )
 anims/TutStage1 = SubResource( 232 )
 anims/TutStage2 = SubResource( 233 )
 anims/TutStage3 = SubResource( 234 )
+
+[node name="tutorial_prompts" type="Spatial" parent="." index="96"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 207.365, -229.117, -42.9328 )
+
+[node name="crouchJump" type="Area" parent="tutorial_prompts" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.14877, 2.65944, -1.88862 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+gamepad_textures = [ ExtResource( 22 ), ExtResource( 21 ) ]
+gamepad_text = "Crouch Jump"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_prompts/crouchJump" index="0"]
+shape = SubResource( 235 )
+
+[node name="rolljump" type="Area" parent="tutorial_prompts" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.2287, 6.55383, -6.09828 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+gamepad_textures = [ ExtResource( 22 ), ExtResource( 21 ) ]
+gamepad_text = "(When Running) Roll Jump"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_prompts/rolljump" index="0"]
+shape = SubResource( 235 )
+
+[node name="rolljump2" type="Area" parent="tutorial_prompts" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2652, 6.55383, -17.3916 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+gamepad_textures = [ ExtResource( 22 ), ExtResource( 21 ) ]
+gamepad_text = "(When Running) Roll Jump"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_prompts/rolljump2" index="0"]
+shape = SubResource( 235 )
+
+[node name="spinkick" type="Area" parent="tutorial_prompts" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -53.9846, 6.55383, -13.3952 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+gamepad_textures = [ ExtResource( 21 ), ExtResource( 23 ) ]
+gamepad_text = "Air Kick"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_prompts/spinkick" index="0"]
+shape = SubResource( 235 )
+
+[node name="climb" type="Area" parent="tutorial_prompts" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -108.713, 10.7453, -3.66735 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+gamepad_textures = [ ExtResource( 22 ) ]
+gamepad_text = "(At steep slopes) Climb"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_prompts/climb" index="0"]
+shape = SubResource( 235 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="tutorial_prompts/climb" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78814, -1.88055, -1.8419 )
+shape = SubResource( 235 )
 
 [connection signal="body_entered" from="tutorial_tyler/tutorial_area" to="tutorial_tyler/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="tutorial_tyler/tutorial_area/AnimationPlayer" to="tutorial_tyler/tutorial_area" method="_on_AnimationPlayer_animation_finished"]

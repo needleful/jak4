@@ -2,6 +2,8 @@ extends Node
 
 signal inventory_changed
 
+var using_gamepad := true
+
 var game_state := GameState.new()
 
 var coat_textures: Array
@@ -22,6 +24,12 @@ var tracked_items = ["bug", "capacitor"]
 var checkpoint_position : Vector3
 
 onready var player: PlayerBody = get_tree().current_scene.get_node("player")
+
+func _input(event):
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		using_gamepad = true
+	elif event is InputEventMouse or event is InputEventKey:
+		using_gamepad = false
 
 func _ready():
 	randomize()

@@ -27,6 +27,7 @@ onready var messages := $vbox/messages/list
 const RESULT_SKIP := {"result":"skip"}
 const RESULT_PAUSE := {"result":"pause"}
 const RESULT_END := {"result":"end"}
+const RESULT_NOSKIP := {"result":"noskip"}
 
 var r_otherwise_if := RegEx.new()
 var r_interpolate := RegEx.new()
@@ -38,6 +39,7 @@ var discussed := {}
 var is_exiting := false
 # Stack of IDs for DialogItems
 var call_stack:= []
+var advance_on_resume := false
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -104,6 +106,7 @@ func advance():
 		return
 	clear_replies()
 	var result := false
+	var noskip := false
 	while !result:
 		if !current_item:
 			exit()
@@ -125,6 +128,8 @@ func advance():
 				elif r == RESULT_SKIP:
 					advance()
 					return
+				elif r == RESULT_NOSKIP:
+					noskip = true
 			elif !r:
 				result = false
 				break
@@ -132,17 +137,18 @@ func advance():
 			current_item = sequence.failed_next(current_item)
 			if sequence.went_up:
 				otherwise = false
-		elif current_item.text == "":
+		elif current_item.text == "" and !noskip:
 			current_item = sequence.canonical_next(current_item)
 			result = false
 	
-	match current_item.type:
-		DialogItem.Type.MESSAGE:
-			show_message()
-		DialogItem.Type.REPLY:
-			list_replies()
-		DialogItem.Type.NARRATION:
-			show_narration()
+	if current_item.text != "":
+		match current_item.type:
+			DialogItem.Type.MESSAGE:
+				show_message()
+			DialogItem.Type.REPLY:
+				list_replies()
+			DialogItem.Type.NARRATION:
+				show_narration()
 
 func list_replies():
 	var reply: DialogItem = current_item
@@ -243,6 +249,39 @@ func check_condition(cond: String):
 	otherwise = !result
 	return result
 
+func exiting():
+	is_exiting = true
+	return true
+
+func end():
+	hide()
+	set_process(false)
+	set_process_input(false)
+	Global.can_pause = true
+
+func fast_exit():
+	if is_exiting:
+		get_next()
+	else:
+		is_exiting = true
+		current_item = sequence.get("_exit")
+		advance()
+
+func pause():
+	print("Pausing dialog...")
+	hide()
+	set_process_input(false)
+	set_process(false)
+
+func resume():
+	show()
+	set_process_input(true)
+	set_process(true)
+	if advance_on_resume:
+		get_next()
+
+## Dialog functions
+
 #TODO: Implement
 func track_conversation_time():
 	return true
@@ -259,14 +298,17 @@ func format(_style: String):
 func animation(_animation: String, _node: String = ""):
 	return true
 
-func event(tag: String, should_pause := true):
-	if should_pause:
-		pause()
+func event(tag: String, should_pause := true, auto_advance_on_resume:= true):
+
 	emit_signal("event", tag)
 	emit_signal("event_with_source", tag, main_speaker)
 	if main_speaker.has_method(tag):
 		main_speaker.call(tag)
-	return true
+	if should_pause:
+		advance_on_resume = auto_advance_on_resume
+		return RESULT_PAUSE
+	else:
+		return true
 
 func goto(label: String):
 	current_item = sequence.get(label)
@@ -276,6 +318,9 @@ func skip():
 	skip_reply = true
 	# Ironic how skip() does not return RESULT_SKIP
 	return true
+
+func noskip():
+	return RESULT_NOSKIP
 
 func exit():
 	var _x = Global.add_stat("talked"+main_speaker.get_path())
@@ -301,31 +346,3 @@ func back():
 	current_item = caller
 	get_next()
 	return RESULT_SKIP
-
-func exiting():
-	is_exiting = true
-	return true
-
-func end():
-	hide()
-	set_process(false)
-	set_process_input(false)
-	Global.can_pause = true
-
-func fast_exit():
-	if is_exiting:
-		get_next()
-	else:
-		is_exiting = true
-		current_item = sequence.get("_exit")
-		advance()
-
-func pause():
-	hide()
-	set_process_input(false)
-	set_process(false)
-
-func resume():
-	show()
-	set_process_input(true)
-	set_process(true)

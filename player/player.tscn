@@ -826,6 +826,51 @@ anims/fadeout = SubResource( 32 )
 [node name="shop" parent="ui" instance=ExtResource( 7 )]
 visible = false
 
+[node name="tutorial" type="HBoxContainer" parent="ui"]
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -154.0
+alignment = 1
+
+[node name="TextureRect1" type="TextureRect" parent="ui/tutorial"]
+margin_left = 324.0
+margin_right = 324.0
+margin_bottom = 154.0
+
+[node name="plus" type="Label" parent="ui/tutorial"]
+margin_left = 328.0
+margin_top = 50.0
+margin_right = 388.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 60, 0 )
+custom_fonts/font = SubResource( 27 )
+text = "+"
+align = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ui/tutorial"]
+margin_left = 392.0
+margin_right = 392.0
+margin_bottom = 154.0
+
+[node name="spacer" type="Control" parent="ui/tutorial"]
+margin_left = 396.0
+margin_right = 456.0
+margin_bottom = 154.0
+rect_min_size = Vector2( 60, 0 )
+
+[node name="Label" type="Label" parent="ui/tutorial"]
+margin_left = 460.0
+margin_top = 50.0
+margin_right = 699.0
+margin_bottom = 104.0
+custom_fonts/font = SubResource( 27 )
+text = "Stuff here!"
+
+[node name="prompt_timer" type="Timer" parent="ui/tutorial"]
+wait_time = 6.0
+
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
 collision_layer = 0
@@ -857,4 +902,5 @@ material/0 = null
 wait_time = 0.1
 one_shot = true
 
+[connection signal="timeout" from="ui/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="unlock_timer" to="." method="_on_unlock_timer_timeout"]
