@@ -1,5 +1,10 @@
 extends Spatial
 
+export(Texture) var gamepad_spin
+export(Texture) var gamepad_lunge
+export(Texture) var keyboard_spin
+export(Texture) var keyboard_lunge
+
 # Distance from the bounding box edge
 const MIN_DIST_LOAD := 150
 const MIN_DIST_MUST_LOAD := 40
@@ -69,13 +74,14 @@ func _process(delta):
 	detect_enemies(delta)
 
 func detect_enemies(delta):
+	var were_present := enemies_present
 	enemies_present = false
 	var enemies = get_tree().get_nodes_in_group("distance_activated")
 	for e in enemies:
 		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
 		if dist_squared < MIN_DIST_SQ_ENEMIES:
 			enemies_present = true
-
+	
 	if enemies_present and $music_tension.volume_db < 0:
 		$music_tension.stream_paused = false
 		$music_tension.volume_db += TENSION_FADE_IN*delta
@@ -84,6 +90,8 @@ func detect_enemies(delta):
 			$music_tension.volume_db -= TENSION_FADE_OUT*delta
 		else:
 			$music_tension.stream_paused = true
+	if !were_present and enemies_present and !Global.stat("combat_tutorial"):
+		show_combat_tutorial()
 
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:
@@ -176,3 +184,16 @@ func mark_inactive(chunk: Spatial):
 	if chunk.has_node("static_collision"):
 		chunk.remove_child(chunk.get_node("static_collision"))
 
+func show_combat_tutorial():
+	var _x = Global.add_stat("combat_tutorial")
+	if Global.using_gamepad:
+		player.show_prompt([gamepad_lunge], "Lunge Kick")
+	else:
+		player.show_prompt([keyboard_lunge], "Lunge Kick")
+	$tutorial_swap.start()
+
+func _on_tutorial_swap_timeout():
+	if Global.using_gamepad:
+		player.show_prompt([gamepad_spin], "Spin Kick")
+	else:
+		player.show_prompt([keyboard_spin], "Spin Kick")

@@ -13,9 +13,12 @@ export(int) var rarity = Rarity.Common
 export(Texture) var palette: Texture
 export(Gradient) var gradient: Gradient
 
-func generate_material() -> Material:
+func generate_material(backface_culling := true) -> Material:
 	var mat = ShaderMaterial.new()
-	mat.shader = load("res://material/coat.shader")
+	if !backface_culling:
+		mat.shader = load("res://material/coat_doublesided.shader")
+	else:
+		mat.shader = load("res://material/coat.shader")
 	
 	var gt := GradientTexture.new()
 	gt.gradient = gradient

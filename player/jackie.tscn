@@ -364,10 +364,10 @@ states/Uppercut/node = SubResource( 46 )
 states/Uppercut/position = Vector2( -23, 40 )
 transitions = [ "Ground", "Fall", SubResource( 10 ), "Fall", "Ground", SubResource( 11 ), "Ground", "BaseJump", SubResource( 13 ), "BaseJump", "Fall", SubResource( 14 ), "Roll", "Ground", SubResource( 16 ), "Ground", "Roll", SubResource( 17 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "RollFall", "Ground", SubResource( 23 ), "RollJump", "Ground", SubResource( 24 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "SpinKickLeft", "Ground", SubResource( 38 ), "Ground", "SpinKickLeft", SubResource( 39 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Uppercut", "Ground", SubResource( 47 ), "Roll", "Uppercut", SubResource( 49 ), "Ground", "Uppercut", SubResource( 50 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "DiveEnd", "Ground", SubResource( 58 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "Ground", "LungeKick", SubResource( 94 ), "LungeKick", "Ground", SubResource( 95 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "BaseJump", "Ground", SubResource( 102 ) ]
 start_node = "Ground"
-graph_offset = Vector2( -57, -274 )
+graph_offset = Vector2( -39, -245 )
 
 [sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -123, 59 )
+graph_offset = Vector2( -85, 59 )
 nodes/WholeBody/node = SubResource( 6 )
 nodes/WholeBody/position = Vector2( -20, 140 )
 node_connections = [ "output", 0, "WholeBody" ]
@@ -403,6 +403,12 @@ scale_curve = SubResource( 81 )
 [node name="jackie" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/4/bound_children = [ NodePath("chest") ]
+bones/6/bound_children = [ NodePath("head") ]
+bones/57/bound_children = [ NodePath("footLeft") ]
+bones/61/bound_children = [ NodePath("footRight") ]
+
 [node name="coat" parent="Armature/Skeleton" index="0"]
 material/0 = SubResource( 66 )
 
@@ -416,7 +422,7 @@ material_override = ExtResource( 2 )
 material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
-transform = Transform( 0.0494007, 0.0418526, -0.997901, -0.762695, -0.643507, -0.064746, -0.644868, 0.764293, 0.000130926, 0.118735, 0.108885, -0.00154286 )
+transform = Transform( 0.0497752, 0.0417072, -0.997889, -0.765154, -0.640562, -0.0649388, -0.641918, 0.766772, 2.83428e-05, 0.118781, 0.108769, -0.000391712 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -438,7 +444,7 @@ process_material = SubResource( 89 )
 draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.0492819, -0.0417082, 0.997914, 0.761469, -0.644977, -0.0645628, 0.646324, 0.763063, -2.62617e-05, -0.118742, 0.108883, -0.00232506 )
+transform = Transform( 0.0494145, -0.041787, 0.997905, 0.762506, -0.643736, -0.0647149, 0.64509, 0.764106, 5.30309e-05, -0.118704, 0.108837, -0.00268386 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -460,7 +466,7 @@ process_material = SubResource( 67 )
 draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1, -1.49703e-08, 2.58359e-07, -4.10251e-08, 0.988174, 0.153337, -2.40955e-07, -0.153337, 0.988174, -8.36512e-05, 1.01891, -0.026344 )
+transform = Transform( 1, -1.67274e-08, 2.61644e-07, -4.10251e-08, 0.988174, 0.153337, -2.40955e-07, -0.153337, 0.988174, -0.00172345, 1.01897, -0.00735493 )
 bone_name = "BackUpper"
 
 [node name="damage_particles" type="Particles" parent="Armature/Skeleton/chest" index="0"]
@@ -476,7 +482,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
-transform = Transform( 0.999984, -0.00442859, -0.00349029, -0.00274253, 0.158856, -0.987298, 0.00492686, 0.987292, 0.158841, 8.40731e-05, 1.21033, -0.0219338 )
+transform = Transform( 0.999989, -0.00370551, -0.00294253, -0.00228608, 0.166134, -0.9861, 0.00414293, 0.986096, 0.166124, -0.00158108, 1.21053, -0.00365169 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]

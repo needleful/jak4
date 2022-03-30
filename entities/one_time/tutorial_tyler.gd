@@ -10,6 +10,7 @@ onready var player :PlayerBody = get_tree().current_scene.get_node("player")
 const ROTATE_SPEED := 10.0
 var look_at_player := true
 var chase := true
+var in_tutorial := false
 
 func _process(delta):
 	if !chase:
@@ -67,4 +68,5 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	in_tutorial = true
 	$tutorial_area.next_stage()

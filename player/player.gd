@@ -1061,6 +1061,8 @@ func _on_unlock_timer_timeout():
 	set_state(State.Ground)
 
 func show_prompt(textures: Array, text: String):
+	print("Show prompt: ", text)
+	$ui/tutorial/prompt_timer.stop()
 	if textures.size() >= 1:
 		$ui/tutorial/TextureRect1.show()
 		$ui/tutorial/TextureRect1.texture = textures[0]
@@ -1079,6 +1081,7 @@ func show_prompt(textures: Array, text: String):
 	$ui/tutorial/prompt_timer.start()
 
 func _on_prompt_timer_timeout():
+	print("Hid prompt: ", $ui/tutorial/Label.text)
 	$ui/tutorial.hide()
 	
 func set_state(next_state: int):

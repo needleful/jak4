@@ -15,6 +15,16 @@ func _ready():
 	for pitem in inventory_data.persistent:
 		pitem["C"] -= Global.stat(item_bought_stat(pitem["I"]))
 	$AnimationPlayer.play("Idle-loop")
+	$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
+	
+	var coat_stat = str(get_path()) + "/coat"
+	var coat = Global.stat(coat_stat)
+	if !coat:
+		coat = Global.set_stat(coat_stat, Global.get_coat())
+	show_coat(coat)
+
+func show_coat(coat: Coat):
+	$Armature/Skeleton/body.set_surface_material(1, coat.generate_material(false))
 
 func get_inventory() -> Dictionary:
 	return inventory_data

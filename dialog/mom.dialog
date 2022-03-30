@@ -1,3 +1,5 @@
+// There's special music for this dialog
+{event("play_music")}
 // So there's a lot of stuff that'll be here.
 {Global.stat("mom/info") == 0}
 	{talked == 0}
@@ -9,7 +11,8 @@
 		* It's her laugh.
 		[You] I-.. I....
 		* {animation("sit")} You can't think of anything to say.
-		* {animation("comfort")} Can she even hear you like this? Would talking to her mean anything?
+		* Can she even hear you like this? Would talking to her mean anything?
+		* {animation("comfort")} 
 		[You] You lived around here.  Maybe I can find.. I don't know. Old friends? Your home?
 			The memory scanner can use those right? If I know more about you?
 		* What little you have gives you hope.
@@ -35,34 +38,68 @@
 
 // This is for how many times you've actually talked to her
 {Global.add_stat("mom/true_talked") == 1}
-	Oh? Who are you?
+	Oh? Hello.
+	Who are you?
 	[You] Hi mom...
-	Jackie? But you're so-
+	... Jackie? But you're so-
 	* She looks around.
-	This is the Medium. So I'm...
-	...
+	What is this place? How did I get here?
+	[You] It's the Medium.
+	What? That thing in the old village? Someone fixed it?
+	[You] I did.
+		To... talk to you.
+	... So that means...
 	{animation("hug")} ...
 	That explains why you've grown so much.
-	{animation("end_hug")} How'd I die?
+	{animation("end_hug")} ... How did I die?
 	[You] I don't know. One day you left, and just... didn't come back.
-	Are you sure I died?
-	[You]... No, not really.
 	{Global.stat("mom/tick")} Huh.
-	{Global.stat("mom/near_medium")} 
+	Are you sure I died?
+	[You] ...
+	...
+	So why did you bring me back? Did you need to talk to me?
+	[You] It's because of exactly that. I want to figure out how you died.
+		Or where you went.
+		Or just... why you left.
+	... Jackie.
+	I was told how the machine works. And I assume you were, too.
+	I'm just a memory. The machine reads your mind and makes some kind of copy.
+	How could I possibly know things you do not?
+	[You] Yes. That's what I thought, too.
+		But I read into it. The Mediums, they weren't perfect, but they could sometimes tell you things you couldn't have possibly guessed.
+		They don't just, like, take the memories of a person and replay them. It's really, really sophisticated. It knows how people's memories change over time, or how they process facts, and ways to reconstruct true information from flawed perspectives. It can use information about the region someone grew up, and things like that.
+		It's not magic, but it's an incredibly powerful data aggregator. Even now... You're...
+		I didn't even remember your face at first. But looking at you now...
+		It's perfect.
+	Of course you think it's perfect! It's your memories.
+	But I'm sorry to say, I don't know where... I? Died, or live now, or really... anything. It's all a blur besides the family, I guess what you knew about them.
+	{Global.stat("mom/info") == 1}
+		[You]... I can find more information. We can figure this out, mom.
+	{otherwise}
+		[You]... I've learned so much about you. Maybe we can talk through it? Help you jog your memories?
+	I suppose.
 
 {otherwise if not Global.stat("mom/time")}
-	{seconds_from_last_conversation() > 180}
-		Did you forget something? I thought you were leaving?
+	Did you forget something? I thought you were leaving?
+	{seconds_since_conversation() > 60}
 		[You] What do you mean? I did leave...
 		But you came right back? Stepping out for a few second doesn't count as "leaving".
-		[You] But... I.. wasn't gone for a few seconds?
+		[You] But... I.. wasn't gone for a few seconds? It was a little while?
 		...
 		{Global.add_stat("mom/time")}
 		{Global.stat("mom/tick")} Huh.
 		[You] Is everything okay?
 		... As okay as it'll ever be, I guess.
+		Did you want to talk about something?
+		{goto("main")}
 	{otherwise}
-{otherwise}
+		[You] Uh yeah, one more thing, actually.
+		{goto("main")}
+
+:main
+> Do you remember anything near the end of your life?
+> What do you remember of the plateaus?
+
 
 {goto("track_and_exit")}
 

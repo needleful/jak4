@@ -4,6 +4,7 @@ render_mode cull_back, depth_draw_opaque;
 uniform sampler2D wall: hint_albedo;
 uniform sampler2D ground: hint_albedo;
 uniform float uv_scale = 0.125;
+uniform float power = 5.0;
 
 varying vec3 position;
 varying vec3 normal;
@@ -19,5 +20,5 @@ void fragment() {
 	vec4 color_y = texture(ground, position.xz*uv_scale);
 	
 	vec4 color_wall = mix(color_z, color_x, abs(normal.x));
-	ALBEDO = mix(color_wall, color_y, pow(abs(normal.y), 5.0)).rgb;
+	ALBEDO = mix(color_wall, color_y, pow(abs(normal.y), power)).rgb;
 }

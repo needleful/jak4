@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://audio/music/tension2.ogg" type="AudioStream" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -6,6 +6,12 @@
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/prompts/gamepad1.png" type="Texture" id=7]
+[ext_resource path="res://ui/prompts/gamepad2.png" type="Texture" id=8]
+[ext_resource path="res://ui/prompts/key_f.png" type="Texture" id=9]
+[ext_resource path="res://ui/prompts/key_r.png" type="Texture" id=10]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=11]
+[ext_resource path="res://dialog/border.dialog" type="Resource" id=12]
 
 [sub_resource type="ProceduralSky" id=2]
 sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
@@ -36,8 +42,15 @@ outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
 
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 14, 350, 3174 )
+
 [node name="world" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
+gamepad_spin = ExtResource( 7 )
+gamepad_lunge = ExtResource( 8 )
+keyboard_spin = ExtResource( 10 )
+keyboard_lunge = ExtResource( 9 )
 
 [node name="player" parent="." index="144" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2018, -229.869, 729 )
@@ -46,8 +59,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2018, -229.869, 729 )
 transform = Transform( -0.74805, -0.372392, 0.549314, 0.29632, 0.55321, 0.778558, -0.593815, 0.745173, -0.303481, 0, 0, 0 )
 light_color = Color( 1, 0.988235, 0.878431, 1 )
 shadow_enabled = true
-directional_shadow_normal_bias = 0.5
-directional_shadow_max_distance = 50.0
+directional_shadow_split_1 = 0.005
+directional_shadow_split_2 = 0.04
+directional_shadow_normal_bias = 0.2
+directional_shadow_max_distance = 2000.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="146"]
 environment = SubResource( 3 )
@@ -113,3 +128,31 @@ custom_fonts/font = SubResource( 4 )
 text = "Starting Soon !!!"
 align = 1
 valign = 1
+
+[node name="tutorial_swap" type="Timer" parent="." index="150"]
+wait_time = 3.0
+one_shot = true
+
+[node name="border" type="Area" parent="." index="151"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 11 )
+dialog_sequence = ExtResource( 12 )
+
+[node name="CollisionShape" type="CollisionShape" parent="border" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2989.53, 0, 0 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="border" index="1"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 3000 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="border" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3000, 0, 0 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="border" index="3"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
+shape = SubResource( 5 )
+
+[connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]
