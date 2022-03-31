@@ -11,7 +11,6 @@ var last_speaker: String
 
 var current_item : DialogItem
 var sequence: Resource
-var now: Dictionary
 
 export(Font) var speaker_font
 export(Font) var narration_font
@@ -41,6 +40,12 @@ var is_exiting := false
 var call_stack:= []
 var advance_on_resume := false
 
+const SECONDS_PER_YEAR := 356*24*3600
+const SECONDS_PER_MONTH := 30*24*3600
+const SECONDS_PER_DAY := 24*3600
+const SECONDS_PER_HOUR := 3600
+const SECONDS_PER_MINUTE := 60
+
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		fast_exit()
@@ -59,7 +64,6 @@ func _ready():
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	clear()
 	show()
-	now = OS.get_datetime(true)
 	source_node = p_source_node
 	sequence = p_sequence
 	if speaker:
@@ -281,14 +285,13 @@ func resume():
 		get_next()
 
 ## Dialog functions
-
-#TODO: Implement
 func track_conversation_time():
-	return true
+	Global.set_stat("talk_time"+main_speaker.get_path(), OS.get_unix_time())
 
-#TODO: Implement
-func seconds_from_last_conversation() -> int:
-	return 10
+func seconds_since_conversation() -> int:
+	var prev: int = Global.stat("talk_time"+main_speaker.get_path())
+	var now: int = OS.get_unix_time()
+	return now - prev
 
 # TODO
 func format(_style: String):

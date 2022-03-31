@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://entities/wardrobe.gd" type="Script" id=1]
 [ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CylinderShape" id=250]
 radius = 0.347493
+
+[sub_resource type="SpatialMaterial" id=251]
+distance_fade_mode = 2
+distance_fade_min_distance = 0.3
+distance_fade_max_distance = 0.5
 
 [node name="wardrobe" type="Spatial"]
 script = ExtResource( 1 )
@@ -25,6 +30,7 @@ transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0 )
 use_collision = true
 width = 0.668095
 depth = 0.882618
+material = SubResource( 251 )
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.0598637, -0.934736, -0.350265, -3.06761e-08, -0.350894, 0.936415, -0.998207, -0.0560573, -0.0210058, -1.55898, 2.2085, -0.0934939 )
