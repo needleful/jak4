@@ -314,7 +314,7 @@ func set_current_coat(coat: Coat):
 	mesh.show_coat(coat)
 
 func _physics_process(delta):
-	if global_transform.origin.y < -1000:
+	if global_transform.origin.y < -500:
 		die()
 		return
 	if velocity.y < TERMINAL_VELOCITY:
@@ -966,8 +966,8 @@ func take_damage(damage: int, direction: Vector3):
 		set_state(State.Damaged)
 
 func die():
+	print("Player died")
 	var _x = Global.add_stat("player_death")
-	# TODO: Animation and fadeout, then queue respawn
 	respawn()
 
 func respawn():

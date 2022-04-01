@@ -1,6 +1,7 @@
 extends Node
 
 signal inventory_changed
+signal stat_changed(tag, value)
 
 var using_gamepad := true
 
@@ -80,6 +81,7 @@ func remove_item(item: String, amount := 1) -> bool:
 
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
+	emit_signal("stat_changed", tag, value)
 	return value
 
 func add_stat(tag: String, amount := 1) -> int:
@@ -87,7 +89,9 @@ func add_stat(tag: String, amount := 1) -> int:
 		game_state.stats[tag] += amount
 	else:
 		game_state.stats[tag] = amount
-	return game_state.stats[tag]
+	var value =  game_state.stats[tag]
+	emit_signal("stat_changed", tag, value)
+	return value
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -18,6 +18,8 @@
 [ext_resource path="res://entities/npc.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/env/scrap2.tscn" type="PackedScene" id=17]
 [ext_resource path="res://entities/env/scrap_pile3.tscn" type="PackedScene" id=18]
+[ext_resource path="res://entities/water_hut.tscn" type="PackedScene" id=19]
+[ext_resource path="res://dialog/water/chunk137.dialog" type="Resource" id=20]
 
 [node name="chunk137" type="Spatial"]
 script = ExtResource( 1 )
@@ -365,6 +367,15 @@ transform = Transform( 1, 0, 0, 0, 0.989711, -0.143078, 0, 0.143078, 0.989711, 1
 [node name="ruin2" parent="." instance=ExtResource( 10 )]
 transform = Transform( -0.42178, -7.45058e-09, -0.906698, -0.129729, 0.989711, 0.0603474, 0.89737, 0.143078, -0.41744, 172.12, -126.322, -163.03 )
 
+[node name="gem_pickup" parent="ruin2" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 3.72529e-09, 0, 0, 1, 3.3394, 5.33476, 5.39489 )
+
+[node name="gem_pickup2" parent="ruin2" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 3.72529e-09, 0, 0, 1, 1.15443, 5.51485, -5.32253 )
+
+[node name="gem_pickup3" parent="ruin2" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 3.72529e-09, 0, 0, 1, 4.19722, 1.74434, 1.86265 )
+
 [node name="hut" parent="." instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 86.9851, -132.928, -155.352 )
 
@@ -400,9 +411,6 @@ transform = Transform( 0.0580453, -0.959638, 0.275185, 0.996648, 0.0397864, -0.0
 
 [node name="rock6" parent="." instance=ExtResource( 12 )]
 transform = Transform( 0.0789446, -0.238623, 0.967898, 0.897494, -0.405595, -0.173196, 0.433903, 0.882356, 0.182143, 95.5724, -139.903, -153.022 )
-
-[node name="fountain" parent="." instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 108.968, -148.571, -96.0997 )
 
 [node name="wardrobe" parent="." instance=ExtResource( 15 )]
 transform = Transform( 0.700374, 0, -0.713776, 0, 1, 0, 0.713776, 0, 0.700374, 89.703, -127.935, -153.162 )
@@ -722,11 +730,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -142.695, 27.436, -84.2352 )
 [node name="scrap_pile3" parent="." instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -148.546, 40.1742, -158.886 )
 
-[node name="crawly11" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -153.413, 38.3151, -160.241 )
-drops_coat = true
-health = 60
-
 [node name="bug_pickup41" parent="." instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -147.551, 43.4465, -160.241 )
 
@@ -738,3 +741,18 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -148.946, 42.0079, -158.459 )
 
 [node name="gem_pickup144" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -149.579, 41.2218, -157.331 )
+
+[node name="npc10" parent="." instance=ExtResource( 16 )]
+transform = Transform( 0.862054, 0, 0.506816, 0, 1, 0, -0.506816, 0, 0.862054, -184.481, 39.0258, -170.263 )
+dialog = ExtResource( 20 )
+visual_name = "Water-tender"
+
+[node name="water_hut" parent="." instance=ExtResource( 19 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -192.644, 38.9198, -166.947 )
+tracked_stat = "chunk137/water"
+
+[node name="fountain" parent="water_hut" instance=ExtResource( 13 )]
+transform = Transform( 0.0127755, 0.0497347, -0.998681, 0, 0.998762, 0.0497388, 0.999918, -0.000635438, 0.0127597, 0.3349, -0.323761, -0.162445 )
+
+[node name="gem_pickup145" parent="." instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 199.594, -121.984, -165.304 )

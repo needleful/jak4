@@ -1,0 +1,103 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://_glb/entities/water_hut.glb" type="PackedScene" id=1]
+[ext_resource path="res://entities/door.gd" type="Script" id=2]
+[ext_resource path="res://material/env/bricks.material" type="Material" id=3]
+[ext_resource path="res://material/env/sand_brick1.jpg" type="Texture" id=4]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_texture = ExtResource( 4 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "Activate"
+tracks/0/type = "value"
+tracks/0/path = NodePath("water_hut/door/static_collision:collision_layer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("water_hut/door/static_collision:collision_mask")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("water_hut/door:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -3.08311, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("water_hut/door/static_collision:collision_layer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("water_hut/door/static_collision:collision_mask")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("water_hut/door:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[node name="water_hut" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="water_hut" parent="." index="0"]
+material/0 = ExtResource( 3 )
+
+[node name="door" parent="water_hut" index="0"]
+material/0 = SubResource( 1 )
+
+[node name="static_collision" parent="water_hut" index="1"]
+collision_layer = 257
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+anims/Activate = SubResource( 2 )
+anims/RESET = SubResource( 3 )

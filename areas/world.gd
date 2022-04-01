@@ -6,8 +6,8 @@ export(Texture) var keyboard_spin
 export(Texture) var keyboard_lunge
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 150
-const MIN_DIST_MUST_LOAD := 40
+const MIN_DIST_LOAD := 550
+const MIN_DIST_MUST_LOAD := 100
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0
@@ -52,7 +52,6 @@ func _ready():
 					lowres_chunks[c.name] = node
 			if c.has_node("static_collision"):
 				chunk_collider[c.name] = c.get_node("static_collision")
-	print(chunks.size(), " chunks")
 	update_active_chunks(player_last_postion, true)
 
 func _process(delta):
@@ -150,6 +149,8 @@ func queue_unload(ch: Spatial):
 	#ch.material_override = debug_inactive_chunk_material
 
 func mark_active(chunk: Spatial):
+	if chunk.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(chunk.name)
 	if (chunk in active_chunks):
 		return
 	if chunk.name in chunk_load_waitlist:
@@ -171,6 +172,8 @@ func mark_active(chunk: Spatial):
 		chunk.add_child(chunk_collider[chunk.name])
 
 func mark_inactive(chunk: Spatial):
+	if chunk.name in chunk_load_waitlist:
+		var _x = chunk_load_waitlist.erase(chunk.name)
 	if !(chunk in active_chunks):
 		return
 	if chunk.name in chunk_unload_waitlist:
