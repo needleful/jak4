@@ -219,13 +219,13 @@ func _ready():
 	set_state(State.Ground)
 	if Global.valid_game_state:
 		global_transform = Global.game_state.player_transform
-		set_current_coat(Global.game_state.current_coat)
+		set_current_coat(Global.game_state.current_coat, false)
 	else:
 		# Generate three random Common coats
 		for _x in range(3):
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
-		set_current_coat(Global.game_state.all_coats[0])
+		set_current_coat(Global.game_state.all_coats[0], false)
 	var _x = Global.connect("inventory_changed", self, "update_inventory")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
@@ -308,9 +308,11 @@ func add_label(box: Control, text: String):
 	l.text = text
 	box.add_child(l)
 
-func set_current_coat(coat: Coat):
+func set_current_coat(coat: Coat, play_sound:= false):
 	current_coat = coat
 	mesh.show_coat(coat)
+	if play_sound:
+		mesh.play_pickup_sound("coat")
 
 func _physics_process(delta):
 	if global_transform.origin.y < -500:
@@ -1083,6 +1085,9 @@ func _on_prompt_timer_timeout():
 	print("Hid prompt: ", $ui/tutorial/Label.text)
 	$ui/tutorial.hide()
 	
+func get_item(id):
+	mesh.play_pickup_sound(id)
+
 func set_state(next_state: int):
 	if state == next_state:
 		return
@@ -1183,4 +1188,3 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
-

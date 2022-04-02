@@ -5,6 +5,12 @@ export(float) var lunge_speed = 15.0
 export(float) var turn_speed_radians = 15.0
 export(float) var turn_speed_windup = 5.0
 export(float) var turn_speed_attacking = 1.0
+export(AudioStream) var alert_audio
+export(AudioStream) var run_audio
+export(AudioStream) var death_audio
+export(AudioStream) var damage_audio
+export(AudioStream) var quit_audio
+export(AudioStream) var attack_audio
 
 onready var anim := $crawly/AnimationPlayer
 
@@ -24,6 +30,8 @@ var ground_normal := Vector3.UP
 
 var physics_frequency := 1
 var frame_until_update := 0
+
+onready var sound := $AudioStreamPlayer3D
 
 func _ready():
 	if coat:
@@ -115,15 +123,27 @@ func set_state(new_ai, force := false):
 	match ai:
 		AI.Alerted:
 			anim.play("Alert")
+			sound.stream = alert_audio
+			sound.play()
 		AI.Chasing:
+			sound.stream = run_audio
+			sound.play()
 			anim.play("Run-loop")
 		AI.Damaged:
 			anim.play("Damaged")
+			sound.stream = damage_audio
+			sound.play()
 		AI.Dead:
 			collision_layer = 0
 			anim.play("Die")
 			anim.queue("Dead-loop")
+			sound.stream = death_audio
+			sound.play()
 		AI.Idle:
 			anim.play("Idle-loop")
+			sound.stream = quit_audio
+			sound.play()
 		AI.Windup:
 			anim.play("Attack")
+			sound.stream = attack_audio
+			sound.play()

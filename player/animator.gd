@@ -10,12 +10,26 @@ var sounds := {
 		preload("res://audio/player/stepdirt3.wav"),
 		preload("res://audio/player/stepdirt4.wav"),
 	],
-	"stepSteepGround": []
+	"stepSteepGround": [],
+	"gem": [
+		preload("res://audio/pickup/gem1.wav"),
+		preload("res://audio/pickup/gem2.wav"),
+	],
+	"coat": [
+		preload("res://audio/pickup/coat1.wav"),
+		preload("res://audio/pickup/coat2.wav"),
+	],
+	"_pickup": [
+		preload("res://audio/pickup/gem1.wav"),
+		preload("res://audio/pickup/gem2.wav"),
+	]
 }
 
 onready var anim: AnimationTree = $AnimationTree
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 onready var audio := $audio
+
+var item_sound := 0
 
 var lunge_right_foot := true
 
@@ -32,18 +46,18 @@ func show_coat(coat: Coat):
 	var mat = coat.generate_material()
 	$Armature/Skeleton/coat.material_override = mat
 
-func play_sound(bodyPart: String, soundType: String):
-	print("Playing ", soundType, " on ", bodyPart)
+func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	if !audio.has_node(bodyPart):
 		print_debug("No audio player for ", bodyPart)
 		return
 	var node: AudioStreamPlayer3D = audio.get_node(bodyPart)
-	match soundType:
-		"step":
-			node.stream = get_random_sound("stepLevelGround")
-			node.play()
-		_:
-			print_debug("No sound effects for ", soundType)
+	node.stream = get_random_sound(soundType)
+	if node.stream == null:
+		print("No sound: ", soundType)
+		return
+	if randomize_tone:
+		node.pitch_scale = rand_range(0.9, 1.2)
+	node.play()
 
 func get_random_sound(type: String) -> AudioStream:
 	if !(type in sounds) or sounds[type].size() == 0:
@@ -105,3 +119,9 @@ func _on_heal_emit_timer_timeout():
 func start_roll_particles():
 	start_kick_left(false)
 	start_kick_right(false)
+
+func play_pickup_sound(item: String):
+	if !item in sounds:
+		item = "_pickup"
+	play_sound("item_sound"+str(item_sound), item, true)
+	item_sound = item_sound != 1

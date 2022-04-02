@@ -36,6 +36,7 @@ func next_stage():
 	if $AnimationPlayer.has_animation(anim):
 		$AnimationPlayer.play(anim)
 	else:
+		Music.stop_music()
 		player.start_dialog(self, tyler.dialog, tyler)
 		var _x = Global.add_stat(get_stat_name())
 		emit_signal("tutorial_complete")

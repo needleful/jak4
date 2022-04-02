@@ -77,7 +77,7 @@ func view():
 	$window/player_view/coat.visible = v
 	var rarity_name = Coat.Rarity.keys()[viewing_rarity]
 	$window/player_view/sorting.text = f_sorting % rarity_name
-	var color := Global.get_rarity_color(viewing_rarity)
+	var color:Color = Global.get_rarity_color(viewing_rarity)
 	$window/player_view/sorting.modulate = color
 	if v:
 		$window/player_view/coat.text = f_coats % [
@@ -86,4 +86,4 @@ func view():
 		]
 		$window/player_view/coat.modulate = color
 		var coat:Coat = coats_by_rarity[viewing_rarity][viewing_index]
-		player.set_current_coat(coat)
+		player.set_current_coat(coat, true)

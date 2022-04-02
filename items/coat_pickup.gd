@@ -54,7 +54,7 @@ func _on_pickup_timer_timeout():
 func _on_area_body_entered(b):
 	Global.add_coat(coat)
 	if b is PlayerBody:
-		b.set_current_coat(coat)
+		b.set_current_coat(coat, true)
 	if persistent:
 		Global.mark_picked(get_path())
 	if from_kill:

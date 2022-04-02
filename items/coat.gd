@@ -46,10 +46,12 @@ static func rand64_range(min_rarity: int, max_rarity: int) -> int:
 			low = MAX_SUPER_RARE
 	if min_rarity == Rarity.Common:
 		var k = (randi()<<32) + randi()
-		if k > 0:
+		if k < 0:
 			k = -k
 		return high - k
-	var g: int = ((randi()<<31) + randi()) % (high-low)
+	var g: int = ((randi()<<32) + randi()) % (high-low)
+	if g < 0:
+		g = -g
 	return low + g
 	
 func _init(random := false,  min_rarity = Rarity.Common, max_rarity = Rarity.Uncommon):

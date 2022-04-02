@@ -403,12 +403,6 @@ scale_curve = SubResource( 81 )
 [node name="jackie" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/4/bound_children = [ NodePath("chest") ]
-bones/6/bound_children = [ NodePath("head") ]
-bones/57/bound_children = [ NodePath("footLeft") ]
-bones/61/bound_children = [ NodePath("footRight") ]
-
 [node name="coat" parent="Armature/Skeleton" index="0"]
 material/0 = SubResource( 66 )
 
@@ -422,7 +416,7 @@ material_override = ExtResource( 2 )
 material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
-transform = Transform( 0.0497752, 0.0417072, -0.997889, -0.765154, -0.640562, -0.0649388, -0.641918, 0.766772, 2.83428e-05, 0.118781, 0.108769, -0.000391712 )
+transform = Transform( 0.0493699, 0.041854, -0.997903, -0.762493, -0.643749, -0.0647234, -0.645109, 0.76409, 0.000131448, 0.118794, 0.108886, -0.00269477 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -444,7 +438,7 @@ process_material = SubResource( 89 )
 draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.0494145, -0.041787, 0.997905, 0.762506, -0.643736, -0.0647149, 0.64509, 0.764106, 5.30309e-05, -0.118704, 0.108837, -0.00268386 )
+transform = Transform( 0.0493621, -0.0418376, 0.997905, 0.762452, -0.6438, -0.0647075, 0.645158, 0.764049, 0.000119789, -0.118768, 0.108891, -0.00220059 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -466,7 +460,7 @@ process_material = SubResource( 67 )
 draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1, -1.67274e-08, 2.61644e-07, -4.10251e-08, 0.988174, 0.153337, -2.40955e-07, -0.153337, 0.988174, -0.00172345, 1.01897, -0.00735493 )
+transform = Transform( 1, -1.76542e-08, 2.50469e-07, -3.74908e-08, 0.988174, 0.153337, -2.2636e-07, -0.153337, 0.988174, -2.79966e-09, 1.01891, -0.0271083 )
 bone_name = "BackUpper"
 
 [node name="damage_particles" type="Particles" parent="Armature/Skeleton/chest" index="0"]
@@ -482,7 +476,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
-transform = Transform( 0.999989, -0.00370551, -0.00294253, -0.00228608, 0.166134, -0.9861, 0.00414293, 0.986096, 0.166124, -0.00158108, 1.21053, -0.00365169 )
+transform = Transform( 0.999986, -0.00416596, -0.00329229, -0.00257636, 0.161496, -0.98687, 0.00464302, 0.986865, 0.161483, 0.000158601, 1.21038, -0.0229543 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -507,13 +501,25 @@ parameters/WholeBody/LungeKick/blend_position = 0
 
 [node name="audio" type="Spatial" parent="." index="3"]
 
-[node name="footLeft" type="AudioStreamPlayer3D" parent="audio" index="0"]
+[node name="item_sound0" type="AudioStreamPlayer3D" parent="audio" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802325, 0 )
+unit_db = -20.0
+unit_size = 5.0
+bus = "SFX_Player"
+
+[node name="item_sound1" type="AudioStreamPlayer3D" parent="audio" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802325, 0 )
+unit_db = -20.0
+unit_size = 5.0
+bus = "SFX_Player"
+
+[node name="footLeft" type="AudioStreamPlayer3D" parent="audio" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110216, 0, 0 )
 stream = ExtResource( 6 )
 unit_size = 5.0
 bus = "SFX_Player"
 
-[node name="footRight" type="AudioStreamPlayer3D" parent="audio" index="1"]
+[node name="footRight" type="AudioStreamPlayer3D" parent="audio" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.121316, 0, 0 )
 stream = ExtResource( 7 )
 unit_size = 5.0

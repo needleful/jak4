@@ -1,7 +1,7 @@
 extends Spatial
 
 export(Resource) var dialog
-
+export(AudioStream) var music
 onready var anim := $lil_man/AnimationPlayer
 var visual_name := "Young Boy"
 
@@ -68,5 +68,6 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	Music.play_music(music)
 	in_tutorial = true
 	$tutorial_area.next_stage()

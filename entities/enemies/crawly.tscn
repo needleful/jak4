@@ -1,7 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://_glb/enemies/crawly.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/enemies/crawly.gd" type="Script" id=2]
+[ext_resource path="res://audio/enemy/crawly_alerted.wav" type="AudioStream" id=3]
+[ext_resource path="res://audio/enemy/crawly_run.wav" type="AudioStream" id=4]
+[ext_resource path="res://audio/enemy/crawly_death.wav" type="AudioStream" id=5]
+[ext_resource path="res://audio/enemy/crawly_damaged.wav" type="AudioStream" id=6]
+[ext_resource path="res://audio/enemy/crawly_quit.wav" type="AudioStream" id=7]
+[ext_resource path="res://audio/enemy/crawly_attack.wav" type="AudioStream" id=8]
 
 [sub_resource type="CylinderShape" id=2]
 radius = 0.727064
@@ -22,6 +28,12 @@ script = ExtResource( 2 )
 id = "crawly"
 gem_drop_max = 8
 health = 30
+alert_audio = ExtResource( 3 )
+run_audio = ExtResource( 4 )
+death_audio = ExtResource( 5 )
+damage_audio = ExtResource( 6 )
+quit_audio = ExtResource( 7 )
+attack_audio = ExtResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.480411, 0 )
@@ -52,3 +64,7 @@ collision_mask = 2
 [node name="CollisionShape" type="CollisionShape" parent="attack_range"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.922294, 1.00539 )
 shape = SubResource( 4 )
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+unit_size = 3.0
+bus = "SFX_Enemy"
