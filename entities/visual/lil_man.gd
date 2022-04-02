@@ -4,7 +4,7 @@ func _ready():
 	var coat_stat = str(get_path()) + "/coat"
 	var coat = Global.stat(coat_stat)
 	if !coat:
-		coat = Global.set_stat(coat_stat, Global.get_coat())
+		coat = Global.set_stat(coat_stat, Coat.new(true))
 	show_coat(coat)
 
 func show_coat(coat: Coat):

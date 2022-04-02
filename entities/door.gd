@@ -11,7 +11,7 @@ func _ready():
 	if tracked_stat != "":
 		var stat_power = Global.stat(tracked_stat)
 		add_power(stat_power)
-		Global.connect("stat_changed", self, "_on_stat_changed")
+		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:

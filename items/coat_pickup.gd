@@ -1,26 +1,33 @@
 extends KinematicBody
 
-export(int) var random_seed = -1
+enum Rarity{
+	Common,
+	Uncommon,
+	Rare,
+	SuperRare,
+	Sublime
+}
+
+export(Rarity) var min_rarity := Rarity.Common
+export(Rarity) var max_rarity := Rarity.Uncommon
 export(bool) var persistent := true
 export(bool) var from_kill := false
 export(bool) var gravity := false
 
-var coat: Coat setget set_coat
+var coat setget set_coat
 
 func _ready():
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
 		return
 	if !coat:
-		if random_seed < 0:
-			random_seed = randi()
-		set_coat(Global.get_coat(random_seed))
+		set_coat(Coat.new(true, min_rarity, max_rarity))
 
 func _physics_process(delta):
 	if gravity:
 		var _c = move_and_collide(delta*Vector3.DOWN*15)
 
-func set_coat(c: Coat):
+func set_coat(c):
 	var light_color : Color
 	match c.rarity:
 		c.Rarity.Common:
@@ -52,4 +59,6 @@ func _on_area_body_entered(b):
 		Global.mark_picked(get_path())
 	if from_kill:
 		var _x = Global.add_stat("kill_coat")
+	else:
+		var _x = Global.add_stat("found_coat")
 	queue_free()

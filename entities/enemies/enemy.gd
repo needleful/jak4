@@ -51,7 +51,7 @@ func _ready():
 		queue_free()
 		return
 	if drops_coat:
-		coat = Global.get_coat(-1, minimum_rarity, maximum_rarity)
+		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 
 func set_active(_active: bool):
 	pass

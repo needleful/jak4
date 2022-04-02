@@ -223,8 +223,7 @@ func _ready():
 	else:
 		# Generate three random Common coats
 		for _x in range(3):
-			var i = -randi()
-			var coat = Global.get_coat(i)
+			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0])
 	var _x = Global.connect("inventory_changed", self, "update_inventory")
