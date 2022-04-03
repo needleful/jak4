@@ -42,6 +42,7 @@ func set_coat(c):
 			light_color = Global.color_sublime
 		_:
 			light_color = Color.brown
+	light_color.a = 0.5
 	$OmniLight.light_color = light_color
 	$OmniLight2.light_color = light_color
 	$spire.material_override.albedo_color = light_color

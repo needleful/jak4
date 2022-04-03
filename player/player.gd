@@ -378,6 +378,8 @@ func _physics_process(delta):
 				timer_coyote += delta
 				if timer_coyote > TIME_COYOTE:
 					next_state = State.Fall
+			elif can_ledge_grab():
+				next_state = State.LedgeHang
 			else:
 				timer_coyote = 0
 		State.BaseJump, State.LedgeJump:

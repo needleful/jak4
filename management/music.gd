@@ -53,5 +53,6 @@ func play_music(music: AudioStream):
 
 func stop_music():
 	if state == State.Fixed:
-		set_state(State.Fadeout)
 		next_state = State.Explore
+		next_track = tension_music
+		set_state(State.Fadeout)

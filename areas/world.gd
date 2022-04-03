@@ -47,6 +47,7 @@ func _ready():
 					var node = scn.instance()
 					node.name = "lowres"
 					lowres_chunks[c.name] = node
+					c.add_child(node)
 			if c.has_node("static_collision"):
 				chunk_collider[c.name] = c.get_node("static_collision")
 	update_active_chunks(player_last_postion, true)

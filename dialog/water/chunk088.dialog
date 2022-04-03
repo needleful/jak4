@@ -1,0 +1,43 @@
+{Global.stat("chunk088/water")}
+	Thank you for your patronage!
+	{exit()}
+
+{otherwise if talked == 0}
+	Hello!
+	{Global.stat("paid_water")}
+		[You] Hello. How much is the water?
+		Fifteen deathgnats.
+	{otherwise}
+		[You] Oh, hello!
+		[You] I see there's a fountain in there?
+		[You] May I use it?
+		For fifteen deathgnats, yes.
+	{Global.count("bug") < 50} [You] Ouch.
+	{Global.add_stat("paid_water")}
+	{goto("choice")}
+
+{otherwise}
+	Hello again!
+	[You] Uh, hi.
+	As always, fifteen deathgnats for access to the fountain.
+
+:choice
+	> {Global.count("bug") > 15} Here, fifteen deathgnats.
+		{Global.add_item("bug", -15)} Excellent!
+		{Global.add_stat("chunk088/water")} Thank you for your business!
+		{exit()}
+	> {otherwise} I can't afford that. Can I have a drink just this once?
+		The water's for the village, we have to make money somehow.
+		There are plenty of deathgnats around. You can search and find them!
+		Ta-ta!
+		{exit()}
+	> {Global.stat("paid_water") == 1} You charge for water?
+		Of course! Water is not free. But for just fifteen deathgnats, you may use the fountain as much as you want!
+		{goto("choice")}
+	> {otherwise} Do people in the village have to pay, as well?
+		In a way. They take care of the village, guard, cook, clean.
+		We all pay for the water, just not with gnats.
+		{goto("choice")}
+	> I'll see you later.
+		Ta-ta!
+		{exit()}
