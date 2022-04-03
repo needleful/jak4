@@ -96,6 +96,11 @@ func add_stat(tag: String, amount := 1) -> int:
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)
 
+func remove_coat(coat: Coat):
+	var index: int = game_state.all_coats.find(coat)
+	if index >= 0:
+		game_state.all_coats.remove(index)
+
 func mark_picked(path: NodePath):
 	game_state.picked_items.append(path)
 

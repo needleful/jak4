@@ -104,31 +104,6 @@ const VEL_DAMAGED_V := 6
 
 const TERMINAL_VELOCITY := -300
 
-# Nodes
-onready var cam_yaw := $camera_rig/yaw
-onready var mesh := $jackie
-onready var crouch_head := $crouchHeadArea
-onready var intention := $intention
-
-onready var ledgeCastLeft := $jackie/leftHandCast
-onready var ledgeCastRight := $jackie/rightHandCast
-onready var ledgeCastCenter := $jackie/centerCast
-onready var ledgeCastCeiling := $jackie/ceilingCast
-onready var ledgeCastWall := $jackie/wallCast
-onready var ledgeRef := $jackie/reference
-
-onready var lunge_hitbox := $jackie/attack_lunge
-onready var spin_hitbox := $jackie/attack_spin
-onready var roll_hitbox := $jackie/attack_roll
-onready var uppercut_hitbox := $jackie/attack_uppercut
-onready var dive_start_hitbox := $jackie/attack_dive_start
-onready var dive_end_hitbox := $jackie/attack_dive_end
-
-onready var health_bar := $ui/stats/health/base
-onready var stamina_bar := $ui/stats/stamina/base
-onready var armor_bar := $ui/stats/health/extra
-onready var energy_bar := $ui/stats/stamina/extra
-
 var velocity := Vector3.ZERO
 var timer_coyote := 0.0
 var timer_state := 0.0
@@ -214,6 +189,33 @@ var ground_normal:Vector3 = Vector3.UP
 
 var current_coat: Coat
 
+# Nodes
+onready var cam_yaw := $camera_rig/yaw
+onready var mesh := $jackie
+onready var crouch_head := $crouchHeadArea
+onready var intention := $intention
+
+onready var ledgeCastLeft := $jackie/leftHandCast
+onready var ledgeCastRight := $jackie/rightHandCast
+onready var ledgeCastCenter := $jackie/centerCast
+onready var ledgeCastCeiling := $jackie/ceilingCast
+onready var ledgeCastWall := $jackie/wallCast
+onready var ledgeRef := $jackie/reference
+
+onready var lunge_hitbox := $jackie/attack_lunge
+onready var spin_hitbox := $jackie/attack_spin
+onready var roll_hitbox := $jackie/attack_roll
+onready var uppercut_hitbox := $jackie/attack_uppercut
+onready var dive_start_hitbox := $jackie/attack_dive_start
+onready var dive_end_hitbox := $jackie/attack_dive_end
+
+onready var health_bar := $ui/stats/health/base
+onready var stamina_bar := $ui/stats/stamina/base
+onready var armor_bar := $ui/stats/health/extra
+onready var energy_bar := $ui/stats/stamina/extra
+
+onready var coat_zone := $jackie/the_coat_zone
+
 func _ready():
 	$ui/shop.player = self
 	set_state(State.Ground)
@@ -239,6 +241,20 @@ func _input(event):
 		var coat = Global.get_coat(Global.rand64())
 		set_current_coat(coat)
 		Global.add_coat(coat)
+	elif( can_talk()
+		and event.is_action_pressed("dialog_coat")
+		and coat_zone.get_overlapping_bodies().size() != 0
+	):
+		var c = coat_zone.get_overlapping_bodies()
+		var best_trade = c[0]
+		for b in c :
+			var current_dist = (best_trade.global_transform.origin
+				- global_transform.origin).length_squared()
+			var new_dist = (b.global_transform.origin
+				- global_transform.origin).length_squared()
+			if new_dist < current_dist:
+				best_trade = b
+		best_trade.start_coat_trade(self)
 	elif event.is_action_pressed("quick_save"):
 		Global.save_checkpoint(global_transform.origin)
 	elif event.is_action_pressed("quick_load"):
@@ -1008,8 +1024,8 @@ func can_talk():
 func get_dialog_viewer() -> Node:
 	return $ui/dialog_viewer
 
-func start_dialog(source: Node, sequence: Resource, speaker: Node):
-	$ui/dialog_viewer.start(source, sequence, speaker)
+func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
+	$ui/dialog_viewer.start(source, sequence, speaker, starting_label)
 	$camera_rig.play_animation("dialog_start")
 	lock()
 

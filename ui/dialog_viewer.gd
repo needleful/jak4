@@ -4,7 +4,7 @@ signal exited
 signal event(id)
 signal event_with_source(id, source)
 
-var player: Node
+onready var player: PlayerBody = get_parent().get_parent()
 var main_speaker: Node
 var source_node: Node
 var last_speaker: String
@@ -49,6 +49,8 @@ const SECONDS_PER_MINUTE := 60
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		fast_exit()
+	elif event.is_action_pressed("dialog_coat"):
+		trade_coats()
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
 
@@ -61,7 +63,7 @@ func _ready():
 	_x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	end()
 
-func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
+func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, starting_label:= ""):
 	clear()
 	show()
 	source_node = p_source_node
@@ -76,10 +78,14 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null):
 	Global.can_pause = false
 	var first_index = INF
 	# I forgot to specify a first item and I'm not going to bother lol
-	for c in sequence.dialog.keys():
-		if c < first_index:
-			first_index = c
-	current_item = sequence.get(first_index)
+	var s: DialogItem = sequence.get(starting_label)
+	if !s:
+		for c in sequence.dialog.keys():
+			if c < first_index:
+				first_index = c
+		current_item = sequence.get(first_index)
+	else:
+		current_item = s
 	advance()
 
 func clear():
@@ -253,15 +259,23 @@ func check_condition(cond: String):
 	otherwise = !result
 	return result
 
-func exiting():
-	is_exiting = true
-	return true
-
 func end():
 	hide()
 	set_process(false)
 	set_process_input(false)
 	Global.can_pause = true
+
+func trade_coats():
+	if mentioned("_coat"):
+		get_next()
+		return
+	var coat_item: DialogItem = sequence.get("_coat")
+	if coat_item:
+		mention("_coat")
+		current_item = coat_item
+		advance()
+	else:
+		insert_label("[You cannot trade coats with this person]", narration_font, narration_color)
 
 func fast_exit():
 	if is_exiting:
@@ -285,6 +299,11 @@ func resume():
 		get_next()
 
 ## Dialog functions
+
+func exiting():
+	is_exiting = true
+	return true
+
 func track_conversation_time():
 	Global.set_stat("talk_time"+main_speaker.get_path(), OS.get_unix_time())
 
@@ -301,8 +320,8 @@ func format(_style: String):
 func animation(_animation: String, _node: String = ""):
 	return true
 
-func event(tag: String, should_pause := true, auto_advance_on_resume:= true):
 
+func event(tag: String, should_pause := true, auto_advance_on_resume:= true):
 	emit_signal("event", tag)
 	emit_signal("event_with_source", tag, main_speaker)
 	if main_speaker.has_method(tag):
@@ -349,3 +368,16 @@ func back():
 	current_item = caller
 	get_next()
 	return RESULT_SKIP
+
+func traded_coats():
+	return Global.stat("coat_trade"+str(main_speaker.get_path()))
+	
+func swap_coats():
+	Global.add_stat("coat_trade"+main_speaker.get_path())
+	var player_coat: Coat = player.current_coat
+	var speaker_coat: Coat = main_speaker.get_coat()
+	main_speaker.set_coat(player_coat)
+	Global.add_coat(speaker_coat)
+	player.set_current_coat(speaker_coat)
+	Global.remove_coat(player_coat)
+	return true

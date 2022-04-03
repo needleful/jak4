@@ -63,6 +63,9 @@
 
 {otherwise} Good to see you, Jackie!
 	[You] Hey.
+	{traded_coats() == 1} Not here to buy my shirt again, are you?
+		[You] Oh, no! Well...
+		Haha! Well, I won't refuse another hundred gems.
 	So what can I get you?
 
 :shop_replies
@@ -97,3 +100,25 @@
 {otherwise if mentioned("safari")} Enjoy your safari, huntress! If you find a nicer coat, maybe my daughter can have your hand-me-downs!
 {otherwise} Have a good one!
 {exit()}
+
+:_coat
+{traded_coats()}
+	[You] Say, would you want to trade outfits again?
+	Did you regret the trade? Did this have sentimental value?
+	I don't mind, it'll be another hundred gems in my pocket!
+{otherwise}
+	[You] You're wearing a lovely fabric. Would you be interested in trading?
+	What, this old thing? Hmmm... For what?
+	[You] My jacket, I suppose
+	Hahaha! What a request! I've never has someone ask to buy the shirt of my back.
+	Your coat plus a hundred gems, and we have a deal.
+> Actually, let's not.
+	Ah, alright.  It'd be a little awkward changing in front of you, anyway.
+> {Global.count("gem") >= 100} Deal. A hundred gems and my coat.
+	{Global.add_item("gem", -100)} I'll take that.
+	{swap_coats()} Alrighty, hope you like the pattern!
+> {otherwise} Drat! I haven't the gems.
+	Ah! Well, if you get them, the offer's on the table.
+
+Anything else you need?
+{goto("shop_replies")}

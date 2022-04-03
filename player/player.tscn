@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -62,6 +62,10 @@ radius = 0.820178
 [sub_resource type="CylinderShape" id=23]
 radius = 1.31936
 height = 0.948043
+
+[sub_resource type="CylinderShape" id=41]
+radius = 1.40098
+height = 1.10324
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.35
@@ -588,6 +592,14 @@ collision_mask = 4
 [node name="CollisionShape" type="CollisionShape" parent="jackie/attack_dive_end"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.198498, 0.0490749 )
 shape = SubResource( 23 )
+
+[node name="the_coat_zone" type="Area" parent="jackie"]
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape" type="CollisionShape" parent="jackie/the_coat_zone"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.689418, 1.02734 )
+shape = SubResource( 41 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )

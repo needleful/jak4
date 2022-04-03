@@ -52,10 +52,10 @@
 	{exiting()} [You] Thanks!
 	I hope you found what you were looking for...
 > What do you sell?
-	Elixirs! Deathgnats! Fabrics!
+	Elixirs! Deathgnats! Flags!
 	> What do the elixirs do?
 		Many things.
-		Increase your stamina, endurance, flexibility.
+		Increase your stamina, strength, speed.
 		Some temporarily, others permanently.
 	> {format("italic")} Deathgnats?
 		{animation("show_deathgnat")}A nasty pest, but not nearly as harmful as its larger cousins.
@@ -80,11 +80,14 @@
 			So would you like to buy my gnat?
 		> Okay, I think I understand.
 			Immaculate! Let me know if you want one. Once it is gone, it is gone!
-	> Fabrics?
-		Of many styles, colors, and patterns. I can sew them in the same style as your jacket quite easily.
-		You seem quite fashionable, yes? With an eye for shape and color?
-		[You] I do love my coats...
-		I'm sure you will find something you like, in my shop or elsewhere.
+	> What are the flags for?
+		They mark where you have been, a reminder, I suppose.
+		Adventurers seem keen to stock up on them.
+		* [Hint: Flags serve as consumable checkpoints. When you place one, you will teleport back to it upon death.]
+	> Do you sell any coats? So many people are wearing lovely fabrics.
+		They are not usually sold... We get our clothes from hunting alpha specters. It is too dangerous to hunt for profit.
+		You may be able to trade with people. They won't mind losing an outfit if they get another.
+		* [Hint: You can trade clothes with nearly any NPC by pressing "C" on the keyboard, or Button 3 (the top face button)on a gamepad. This works both in and out of dialog].
 	> Ah okay, that makes sense.
 		It does!
 	{goto("shop_replies")}
@@ -96,3 +99,20 @@
 :_exit
 [You] Gotta go, see you!
 {exit()}
+
+:_coat
+{traded_coats()} [You] Could we trade outfits again?
+	Hm, you changed your mind?
+	How about the same deal as last time: my coat, in exchange for yours plus fifty gems.
+{otherwise}
+	[You] Would you be willing to trade outfits? Yours is so lovely...
+	Hm... I only have two sets.
+	If you give me your coat in exchange, plus... oh, fifty gems? Then we have a deal.
+> I'll think about it and ask again later.
+> {Global.count("gem") > 50} Deal. My coat and fifty gems.
+	{Global.add_item("gem", -50)} Very well.
+	{swap_coats} I hope you enjoy.
+> {otherwise} Ouch. I don't have fifty gems.
+	Well, I'm sure you can find some if you are interested.
+Anything else I can help you with?
+{goto("shop_replies")}
