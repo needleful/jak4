@@ -3,7 +3,7 @@ extends Node
 signal inventory_changed
 signal stat_changed(tag, value)
 
-var using_gamepad := true
+var using_gamepad := false
 
 var game_state := GameState.new()
 
@@ -28,8 +28,12 @@ onready var player: PlayerBody = get_tree().current_scene.get_node("player")
 
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if !using_gamepad:
+			print("Switched to gamepad")
 		using_gamepad = true
 	elif event is InputEventMouse or event is InputEventKey:
+		if using_gamepad:
+			print("Switched to keyboard")
 		using_gamepad = false
 
 func _ready():

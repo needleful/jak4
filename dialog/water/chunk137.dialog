@@ -40,3 +40,31 @@
 	> I'll see you later.
 		See you!
 		{exit()}
+
+{exit()}
+:_coat
+{traded_coats()}
+	[You] Do you want to trade coats again?
+	Well, for a hundred more gems, I'll do it.
+	> {Global.count("gem") < 100} Ouch. I don't have a hundred.
+		Then you don't have my coat, either. Sorry!
+	> {otherwise} So much? Uh, never mind for now.
+		Suit yourself. I will enjoy your coat like fine silk.
+	> Alright. Here's a hundred gems, and my coat.
+		{Global.add_item("gem", -100)}
+		{swap_coats()} Excellent! Pleasure doing business.
+		[You] Of course.
+{otherwise}
+	[You] I couldn't help but notice that lovely fabric.
+	What, this thing?
+	[You] Yes. Would you be interested in swapping?
+	The coats? Mine for yours?
+	.. Eh well, it has, uh, "sentinel value". Maybe if you added uuuh hundred gems on top.
+	> {Global.count("gem") < 100} I don't have a hundred gems.
+		Well, it's a precious heirloom. Come back when you've got it and we can talk.
+	> {otherwise} A hundred!? Never mind, actually.
+		That's what it costs for the shirt on my back! Pride and all that.
+	> Okay. Here's a hundred gems. Let's swap.
+		{Global.add_item("gem", -100)}
+		{swap_coats()} Thank you! This one is quite nice, too!
+		[You] Thanks.

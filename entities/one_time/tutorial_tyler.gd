@@ -36,6 +36,9 @@ func _process(delta):
 	
 	last_position = current_position
 
+func start_coat_trade(player):
+	player.start_dialog(self, dialog, self, "_coat")
+	
 func _ready():
 	idle()
 
@@ -71,3 +74,10 @@ func start_tutorial():
 	Music.play_music(music)
 	in_tutorial = true
 	$tutorial_area.next_stage()
+
+func get_coat() -> Coat:
+	return Global.stat($lil_man.coat_stat())
+
+func set_coat(coat: Coat):
+	$lil_man.show_coat(coat)
+	return Global.set_stat($lil_man.coat_stat(), coat)

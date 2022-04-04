@@ -87,7 +87,10 @@
 	> Do you sell any coats? So many people are wearing lovely fabrics.
 		They are not usually sold... We get our clothes from hunting alpha specters. It is too dangerous to hunt for profit.
 		You may be able to trade with people. They won't mind losing an outfit if they get another.
-		* [Hint: You can trade clothes with nearly any NPC by pressing "C" on the keyboard, or Button 3 (the top face button)on a gamepad. This works both in and out of dialog].
+		{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing Button 3 (the top face button) on the gamepad. This works both in and out of dialog.]
+		{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing 'C' on the keyboard. This works both in and out of dialog.]
+		
+		* DEBUG: USING_GAMEPAD = #{str(Global.using_gamepad)}
 	> Ah okay, that makes sense.
 		It does!
 	{goto("shop_replies")}
@@ -111,7 +114,7 @@
 > I'll think about it and ask again later.
 > {Global.count("gem") > 50} Deal. My coat and fifty gems.
 	{Global.add_item("gem", -50)} Very well.
-	{swap_coats} I hope you enjoy.
+	{swap_coats()} I hope you enjoy.
 > {otherwise} Ouch. I don't have fifty gems.
 	Well, I'm sure you can find some if you are interested.
 Anything else I can help you with?

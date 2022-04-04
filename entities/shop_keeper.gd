@@ -17,11 +17,13 @@ func _ready():
 	$AnimationPlayer.play("Idle-loop")
 	$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
 	
-	var coat_stat = str(get_path()) + "/coat"
-	var coat = Global.stat(coat_stat)
+	var coat = Global.stat(coat_stat())
 	if !coat:
-		coat = Global.set_stat(coat_stat, Coat.new(true))
+		coat = Global.set_stat(coat_stat(), Coat.new(true))
 	show_coat(coat)
+
+func coat_stat() -> String:
+	return str(get_path()) + "/coat"
 
 func show_coat(coat: Coat):
 	$Armature/Skeleton/body.set_surface_material(1, coat.generate_material(false))
@@ -56,3 +58,13 @@ func _on_dialog_trigger_body_entered(body):
 		return
 	if body.can_talk():
 		body.start_dialog(self, dialog_sequence, self)
+
+func get_coat() -> Coat:
+	return Global.stat(coat_stat())
+
+func set_coat(coat: Coat):
+	show_coat(coat)
+	return Global.set_stat(coat_stat(), coat)
+
+func start_coat_trade(player: PlayerBody):
+	player.start_dialog(self, dialog_sequence, self, "_coat")
