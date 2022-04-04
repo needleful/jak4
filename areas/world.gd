@@ -21,6 +21,8 @@ onready var player: PlayerBody = $player
 var lowres_chunks: Dictionary
 var chunk_collider: Dictionary
 
+var chunk_scenes: Dictionary = {}
+
 onready var player_last_postion: Vector3 = player.global_transform.origin
 
 export(Material) var debug_active_chunk_material
@@ -48,6 +50,9 @@ func _ready():
 					node.name = "lowres"
 					lowres_chunks[c.name] = node
 					c.add_child(node)
+			var content_file: String = PATH_CONTENT % c.name
+			if ResourceLoader.exists(content_file):
+				chunk_scenes[c.name] = load(content_file)
 			if c.has_node("static_collision"):
 				chunk_collider[c.name] = c.get_node("static_collision")
 	update_active_chunks(player_last_postion, true)
@@ -147,16 +152,14 @@ func mark_active(chunk: Spatial):
 	if chunk.name in chunk_load_waitlist:
 		var _x = chunk_load_waitlist.erase(chunk.name)
 	active_chunks.append(chunk)
-	# Dynamic chunk loading
-	var content_file: String = PATH_CONTENT % chunk.name
-	if ResourceLoader.exists(content_file):
-		var scn: PackedScene = load(content_file) as PackedScene
+	if chunk.name in chunk_scenes:
+		var scn: PackedScene = chunk_scenes[chunk.name]
 		if scn:
 			var node: Node = scn.instance()
 			node.name = "dynamic_content"
 			chunk.add_child(node)
 		else:
-			print_debug("Loading %s failed!!" % content_file)
+			print_debug("Loading %s failed!!" % chunk.name)
 		if chunk.has_node("lowres"):
 			chunk.remove_child(chunk.get_node("lowres"))
 	if !chunk.has_node("static_collision"):

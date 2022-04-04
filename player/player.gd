@@ -324,7 +324,7 @@ func add_label(box: Control, text: String):
 	l.text = text
 	box.add_child(l)
 
-func set_current_coat(coat: Coat, play_sound:= false):
+func set_current_coat(coat: Coat, play_sound:= true):
 	current_coat = coat
 	mesh.show_coat(coat)
 	if play_sound:

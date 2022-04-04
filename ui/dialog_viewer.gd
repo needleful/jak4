@@ -378,6 +378,6 @@ func swap_coats():
 	var speaker_coat: Coat = main_speaker.get_coat()
 	main_speaker.set_coat(player_coat)
 	Global.add_coat(speaker_coat)
-	player.set_current_coat(speaker_coat)
+	player.set_current_coat(speaker_coat, true)
 	Global.remove_coat(player_coat)
 	return true
