@@ -127,8 +127,6 @@ func parse_text(text: String, src_path = "<local>"):
 		elif level_change == 1:
 			prev.child = line_number
 			wd.parent = current_dialog
-			if wd.speaker == "" and prev.speaker != "":
-				wd.speaker = prev.speaker
 		else:
 			var lv:int = level_change
 			var previous: DialogItem = prev
@@ -142,6 +140,13 @@ func parse_text(text: String, src_path = "<local>"):
 				lv += 1
 			previous.next = line_number
 			wd.parent = previous.parent
+		
+		if ( wd.speaker == "" 
+			and wd.parent in seq.dialog
+			and seq.dialog[wd.parent].speaker != ""
+		):
+			wd.speaker = seq.dialog[wd.parent].speaker
+			
 		current_dialog = line_number
 		current_level += level_change
 		prev = wd
