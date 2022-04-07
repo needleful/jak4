@@ -258,7 +258,8 @@ func _input(event):
 	elif event.is_action_pressed("quick_save"):
 		Global.save_checkpoint(global_transform.origin)
 	elif event.is_action_pressed("quick_load"):
-		Global.load_sync()
+		respawn()
+		#Global.load_sync()
 		
 func prepare_save():
 	Global.game_state.player_transform = global_transform
@@ -716,9 +717,6 @@ func update_stamina():
 	stamina_bar.max_value = max_stamina
 	stamina_bar.value = stamina
 
-func get_visual_forward():
-	return mesh.global_transform.basis.z
-
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	var hvel := velocity
 	hvel.y = 0
@@ -906,23 +904,27 @@ func snap_to_ledge():
 func should_slow_follow():
 	return state == State.LungeKick or state == State.RollJump
 
+func get_visual_forward():
+	return mesh.global_transform.basis.z
+
 func update_visuals(input_dir: Vector3, var flip = false):
 	var crouching = state == State.Crouch or state == State.Climb
 	var climbing = state == State.Climb
 	var vs = velocity/(SPEED_CROUCH if crouching else SPEED_RUN)
-	vs.y = 0
-	input_dir.y = 0
 	var vis_vel = lerp(
 		vs,
 		input_dir,
 		0.5)
 	if flip:
 		vis_vel = -vis_vel
-		
+	
+	vs.y /= 2
+	
 	mesh.set_movement_animation(
 		vs.length(), 
 		crouching, climbing)
 	
+	vis_vel.y = 0
 	if abs(vis_vel.x) + abs(vis_vel.z) > 0.1 and input_dir != Vector3.ZERO:
 		rotate_mesh(Vector3(vis_vel.x, 0, vis_vel.z).normalized())
 

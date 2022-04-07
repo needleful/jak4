@@ -36,8 +36,8 @@ func _process(delta):
 	
 	last_position = current_position
 
-func start_coat_trade(player):
-	player.start_dialog(self, dialog, self, "_coat")
+func start_coat_trade(p_player):
+	p_player.start_dialog(self, dialog, self, "_coat")
 	
 func _ready():
 	idle()

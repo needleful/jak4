@@ -21,7 +21,9 @@
 		{otherwise} [You] I try to be fashionable.
 			Ah ha...
 
-	> {Global.stat("kill_coat") > 1} A lot of those monsters have the loveliest skins.
+	> {Global.stat("trade_coat")} I've traded a few with the natives.
+		Oh! I was ask.
+	> {Global.stat("kill_coat")} A lot of those monsters have the loveliest skins.
 		Keeta? You hunt?
 		{Global.add_stat("language/keeta") == 1} [You] Is that what they're called?
 			[You] They look like skulls?
@@ -36,7 +38,7 @@
 			Hunter...
 			Very brave! Beautiful djaket.
 
-	> {Global.stat("found_coat") > 1} I've been finding beautiful fabrics out in the wild.
+	> {Global.stat("found_coat")} I've been finding beautiful fabrics out in the wild.
 		[You] I'm a bit of a tailor by hobby. 
 		Wow. Tailor!
 
@@ -46,8 +48,9 @@
 	> Sure, we can trade.
 		{swap_coats()} Very big thank you! Such beauty jaket.
 
-	{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing Button 3 (the top face button) on the gamepad. This works both in and out of dialog.]
-	{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing 'C' on the keyboard. This works both in and out of dialog.]
+	{!Global.stat("trade_coat")}
+		{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing Button 3 (the top face button) on the gamepad. This works both in and out of dialog.]
+		{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing 'C' on the keyboard. This works both in and out of dialog.]
 
 {otherwise}
 	{Global.stat("basin/coats_girl")} N'seit mi, "coats girl"!

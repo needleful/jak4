@@ -75,7 +75,7 @@ func _process(delta):
 	
 	detect_enemies(delta)
 
-func detect_enemies(delta):
+func detect_enemies(_delta):
 	var were_present := enemies_present
 	enemies_present = false
 	var enemies = get_tree().get_nodes_in_group("distance_activated")

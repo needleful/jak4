@@ -373,7 +373,8 @@ func traded_coats():
 	return Global.stat("coat_trade"+str(main_speaker.get_path()))
 	
 func swap_coats():
-	Global.add_stat("coat_trade"+main_speaker.get_path())
+	var _x = Global.add_stat("coat_trade"+main_speaker.get_path())
+	_x = Global.add_stat("trade_coat")
 	var player_coat: Coat = player.current_coat
 	var speaker_coat: Coat = main_speaker.get_coat()
 	main_speaker.set_coat(player_coat)
