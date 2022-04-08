@@ -202,7 +202,6 @@ onready var ledgeCastLeft := $jackie/leftHandCast
 onready var ledgeCastRight := $jackie/rightHandCast
 onready var ledgeCastCenter := $jackie/centerCast
 onready var ledgeCastCeiling := $jackie/ceilingCast
-onready var ledgeCastWall := $jackie/wallCast
 onready var ledgeRef := $jackie/reference
 
 onready var lunge_hitbox := $jackie/attack_lunge
@@ -263,76 +262,6 @@ func _input(event):
 	elif event.is_action_pressed("quick_load"):
 		respawn()
 		#Global.load_sync()
-		
-func prepare_save():
-	Global.game_state.player_transform = global_transform
-	Global.game_state.current_coat = current_coat
-	assert(Global.game_state.player_transform == global_transform)
-	$ui/saveStats/AnimationPlayer.play("save_start")
-
-func complete_save():
-	$ui/saveStats/AnimationPlayer.queue("save_complete")
-
-func update_inventory():
-	$ui/inventory/gem_count.text = str(Global.count("gem"))
-	$ui/inventory/bug_count.text = str(Global.count("bug"))
-	$ui/inventory/cap_count.text = str(Global.count("capacitor"))
-	
-	var health_up :int = Global.count("health_up")
-	var stamina_up :int = Global.count("stamina_up")
-	
-	var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
-	var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
-	
-	max_health = DEFAULT_MAX_HEALTH*h_factor
-	max_stamina = DEFAULT_MAX_STAMINA*s_factor
-	health_bar.max_value = max_health
-	health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
-	
-	stamina_bar.max_value = max_stamina
-	stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
-	
-	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
-	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
-	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
-	stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
-	
-	var damage_up_count:int =  Global.count("damage_up")
-	damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
-	max_damage = damage_up_count >= MAX_DAMAGE_UP
-	
-	var new_armor:int = Global.count("armor")
-	if new_armor > armor:
-		extra_health += (new_armor - armor)*ARMOR_BOOST
-	armor = new_armor
-	armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
-	armor_bar.visible = armor > 0 and extra_health > 0
-	update_health()
-	
-	var new_energy = Global.count("stamina_booster")
-	if new_energy > energy:
-		extra_stamina = new_energy*EXTRA_STAMINA_BOOST
-	energy = new_energy
-	energy_bar.visible = energy > 0
-	
-	#debug
-	var state_viewer: Control = $ui/debug/game_state
-	for c in state_viewer.get_children():
-		state_viewer.remove_child(c)
-	add_label(state_viewer, "Inventory:")
-	for i in Global.game_state.inventory:
-		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
-
-func add_label(box: Control, text: String):
-	var l := Label.new()
-	l.text = text
-	box.add_child(l)
-
-func set_current_coat(coat: Coat, play_sound:= true):
-	current_coat = coat
-	mesh.show_coat(coat)
-	if play_sound:
-		mesh.play_pickup_sound("coat")
 
 func _physics_process(delta):
 	if global_transform.origin.y < -500:
@@ -373,6 +302,9 @@ func _physics_process(delta):
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
+			elif ( crouch_head.get_overlapping_bodies().size() > 0
+				and $standing_col.disabled):
+				next_state = State.Crouch
 			elif Input.is_action_just_released("combat_lunge"):
 				next_state = State.LungeKick
 			elif Input.is_action_just_pressed("combat_spin"):
@@ -714,6 +646,76 @@ func _physics_process(delta):
 func _process(_delta):
 	update_stamina()
 
+func prepare_save():
+	Global.game_state.player_transform = global_transform
+	Global.game_state.current_coat = current_coat
+	assert(Global.game_state.player_transform == global_transform)
+	$ui/saveStats/AnimationPlayer.play("save_start")
+
+func complete_save():
+	$ui/saveStats/AnimationPlayer.queue("save_complete")
+
+func update_inventory():
+	$ui/inventory/gem_count.text = str(Global.count("gem"))
+	$ui/inventory/bug_count.text = str(Global.count("bug"))
+	$ui/inventory/cap_count.text = str(Global.count("capacitor"))
+	
+	var health_up :int = Global.count("health_up")
+	var stamina_up :int = Global.count("stamina_up")
+	
+	var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
+	var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
+	
+	max_health = DEFAULT_MAX_HEALTH*h_factor
+	max_stamina = DEFAULT_MAX_STAMINA*s_factor
+	health_bar.max_value = max_health
+	health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
+	
+	stamina_bar.max_value = max_stamina
+	stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
+	
+	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
+	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
+	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
+	stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
+	
+	var damage_up_count:int =  Global.count("damage_up")
+	damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
+	max_damage = damage_up_count >= MAX_DAMAGE_UP
+	
+	var new_armor:int = Global.count("armor")
+	if new_armor > armor:
+		extra_health += (new_armor - armor)*ARMOR_BOOST
+	armor = new_armor
+	armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
+	armor_bar.visible = armor > 0 and extra_health > 0
+	update_health()
+	
+	var new_energy = Global.count("stamina_booster")
+	if new_energy > energy:
+		extra_stamina = new_energy*EXTRA_STAMINA_BOOST
+	energy = new_energy
+	energy_bar.visible = energy > 0
+	
+	#debug
+	var state_viewer: Control = $ui/debug/game_state
+	for c in state_viewer.get_children():
+		state_viewer.remove_child(c)
+	add_label(state_viewer, "Inventory:")
+	for i in Global.game_state.inventory:
+		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
+
+func add_label(box: Control, text: String):
+	var l := Label.new()
+	l.text = text
+	box.add_child(l)
+
+func set_current_coat(coat: Coat, play_sound:= true):
+	current_coat = coat
+	mesh.show_coat(coat)
+	if play_sound:
+		mesh.play_pickup_sound("coat")
+
 func update_health():
 	health_bar.max_value = max_health
 	health_bar.value = health
@@ -887,33 +889,39 @@ func takes_damage():
 		or state == State.DiveWindup)
 
 func can_ledge_grab() -> bool:
+	if ledgeCastCeiling.is_colliding():
+		return false
+	
 	var left:bool = (
 		ledgeCastLeft.is_colliding()
 		and ledgeCastLeft.get_collision_normal().y > MIN_DOT_LEDGE)
-	if !ledgeCastLeft.is_colliding():
-		$jackie/debug_left.material_override.albedo_color = Color.red
-	elif ledgeCastLeft.get_collision_normal().y <= MIN_DOT_LEDGE:
-		$jackie/debug_left.material_override.albedo_color = Color.orange
-	else:
-		$jackie/debug_left.material_override.albedo_color = Color.green		
+	
 	var right:bool = (
 		ledgeCastRight.is_colliding()
 		and ledgeCastRight.get_collision_normal().y > MIN_DOT_LEDGE)
-	if !ledgeCastRight.is_colliding():
-		$jackie/debug_right.material_override.albedo_color = Color.red
-	elif ledgeCastRight.get_collision_normal().y <= MIN_DOT_LEDGE:
-		$jackie/debug_right.material_override.albedo_color = Color.orange
-	else:
-		$jackie/debug_right.material_override.albedo_color = Color.green	
 	var center:bool = (
 		ledgeCastCenter.is_colliding()
 		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
-	if !ledgeCastCenter.is_colliding():
-		$jackie/debug_center.material_override.albedo_color = Color.red
-	elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
-		$jackie/debug_center.material_override.albedo_color = Color.orange
-	else:
-		$jackie/debug_center.material_override.albedo_color = Color.green	
+	# debug
+	if true:
+		if !ledgeCastCenter.is_colliding():
+			$jackie/debug_center.material_override.albedo_color = Color.red
+		elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
+			$jackie/debug_center.material_override.albedo_color = Color.orange
+		else:
+			$jackie/debug_center.material_override.albedo_color = Color.green
+		if !ledgeCastLeft.is_colliding():
+			$jackie/debug_left.material_override.albedo_color = Color.red
+		elif ledgeCastLeft.get_collision_normal().y <= MIN_DOT_LEDGE:
+			$jackie/debug_left.material_override.albedo_color = Color.orange
+		else:
+			$jackie/debug_left.material_override.albedo_color = Color.green
+		if !ledgeCastRight.is_colliding():
+			$jackie/debug_right.material_override.albedo_color = Color.red
+		elif ledgeCastRight.get_collision_normal().y <= MIN_DOT_LEDGE:
+			$jackie/debug_right.material_override.albedo_color = Color.orange
+		else:
+			$jackie/debug_right.material_override.albedo_color = Color.green
 	
 	return center and (left or right)
 
@@ -1132,8 +1140,6 @@ func set_state(next_state: int):
 	timer_coyote = 0.0
 	timer_state = 0.0
 	timer_leave_ledge = 0
-	$crouching_col.disabled = true
-	$standing_col.disabled = false
 	mesh.stop_particles()
 	
 	match next_state:
@@ -1158,6 +1164,8 @@ func set_state(next_state: int):
 			can_air_spin = true
 			stamina -= STAMINA_DRAIN_CLIMB_START
 		State.CrouchJump:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
