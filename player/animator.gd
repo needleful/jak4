@@ -1,7 +1,5 @@
 extends Spatial
 
-var crouch_blend := 0.0
-var climb_blend := 0.0
 
 var sounds := {
 	"stepLevelGround": [
@@ -30,14 +28,20 @@ onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody
 onready var audio := $audio
 
 var item_sound := 0
-
+var move_blend:= 0.0
 var lunge_right_foot := true
 
-func set_movement_animation(speed: float, is_crouch: bool, is_climb: bool):
-	crouch_blend = lerp(crouch_blend, float(is_crouch), 0.45)
-	climb_blend = lerp(climb_blend, float(is_climb), 0.15)
+func set_movement_animation(speed: float, state: int):
+	var target := 0.0
+	if state == PlayerBody.State.Crouch:
+		target = 1.0
+	elif state == PlayerBody.State.Climb:
+		target = 2.0
+	elif state == PlayerBody.State.Slide:
+		target = -1.0
+	move_blend = lerp(move_blend, target, 0.45)
 	
-	anim["parameters/WholeBody/Ground/blend_position"] = Vector2(crouch_blend + climb_blend, speed)
+	anim["parameters/WholeBody/Ground/blend_position"] = Vector2(move_blend, speed)
 
 func transition_to(state):
 	body.travel(state)

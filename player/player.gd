@@ -14,7 +14,7 @@ const SPEED_BONK := 5.0
 
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
-const MIN_DOT_LEDGE := 0.3
+const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
 
 const TIME_COYOTE := 0.1
@@ -155,6 +155,9 @@ var stamina_drain_factor := 1.0
 const TIME_RESET_GROUND := 0.01
 var can_air_spin := true
 var can_slide_lunge := true
+
+const TIME_LEDGE_LEAVE := 0.25
+var timer_leave_ledge := 0.0
 
 enum State {
 	Ground,
@@ -536,8 +539,14 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("mv_jump"):
 				next_state = State.LedgeJump
-			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch") or intent_dot < 0:
+			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch"):
 				next_state = State.LedgeFall
+			elif intent_dot < 0:
+				timer_leave_ledge += delta
+				if timer_leave_ledge > TIME_LEDGE_LEAVE:
+					next_state = State.LedgeFall
+			else:
+				timer_leave_ledge = 0
 		State.LedgeFall:
 			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -878,22 +887,33 @@ func takes_damage():
 		or state == State.DiveWindup)
 
 func can_ledge_grab() -> bool:
-	if ((ledgeCastCeiling.is_colliding() 
-		and ledgeCastCeiling.get_collision_normal().y < 0)
-		or ( 
-			ledgeCastWall.is_colliding()
-			and ledgeCastWall.get_collision_normal().y < MIN_DOT_LEDGE)
-	):
-		return false
 	var left:bool = (
 		ledgeCastLeft.is_colliding()
 		and ledgeCastLeft.get_collision_normal().y > MIN_DOT_LEDGE)
+	if !ledgeCastLeft.is_colliding():
+		$jackie/debug_left.material_override.albedo_color = Color.red
+	elif ledgeCastLeft.get_collision_normal().y <= MIN_DOT_LEDGE:
+		$jackie/debug_left.material_override.albedo_color = Color.orange
+	else:
+		$jackie/debug_left.material_override.albedo_color = Color.green		
 	var right:bool = (
 		ledgeCastRight.is_colliding()
 		and ledgeCastRight.get_collision_normal().y > MIN_DOT_LEDGE)
+	if !ledgeCastRight.is_colliding():
+		$jackie/debug_right.material_override.albedo_color = Color.red
+	elif ledgeCastRight.get_collision_normal().y <= MIN_DOT_LEDGE:
+		$jackie/debug_right.material_override.albedo_color = Color.orange
+	else:
+		$jackie/debug_right.material_override.albedo_color = Color.green	
 	var center:bool = (
 		ledgeCastCenter.is_colliding()
 		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
+	if !ledgeCastCenter.is_colliding():
+		$jackie/debug_center.material_override.albedo_color = Color.red
+	elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
+		$jackie/debug_center.material_override.albedo_color = Color.orange
+	else:
+		$jackie/debug_center.material_override.albedo_color = Color.green	
 	
 	return center and (left or right)
 
@@ -909,7 +929,6 @@ func get_visual_forward():
 
 func update_visuals(input_dir: Vector3, var flip = false):
 	var crouching = state == State.Crouch or state == State.Climb
-	var climbing = state == State.Climb
 	var vs = velocity/(SPEED_CROUCH if crouching else SPEED_RUN)
 	var vis_vel = lerp(
 		vs,
@@ -921,8 +940,7 @@ func update_visuals(input_dir: Vector3, var flip = false):
 	vs.y /= 2
 	
 	mesh.set_movement_animation(
-		vs.length(), 
-		crouching, climbing)
+		vs.length(), state)
 	
 	vis_vel.y = 0
 	if abs(vis_vel.x) + abs(vis_vel.z) > 0.1 and input_dir != Vector3.ZERO:
@@ -1113,6 +1131,7 @@ func set_state(next_state: int):
 		return
 	timer_coyote = 0.0
 	timer_state = 0.0
+	timer_leave_ledge = 0
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
 	mesh.stop_particles()

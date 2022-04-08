@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -8,6 +8,15 @@
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
+
+[sub_resource type="SpatialMaterial" id=44]
+
+[sub_resource type="CubeMesh" id=43]
+size = Vector3( 0.1, 0.1, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=45]
+
+[sub_resource type="SpatialMaterial" id=46]
 
 [sub_resource type="SphereShape" id=13]
 radius = 0.831067
@@ -498,33 +507,41 @@ script = ExtResource( 1 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
 
+[node name="debug_center" type="MeshInstance" parent="jackie"]
+transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, 0, 1.72277, 0.2413 )
+material_override = SubResource( 44 )
+mesh = SubResource( 43 )
+material/0 = null
+
+[node name="debug_right" type="MeshInstance" parent="jackie"]
+transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, -0.12, 1.68075, 0.223277 )
+material_override = SubResource( 45 )
+mesh = SubResource( 43 )
+material/0 = null
+
+[node name="debug_left" type="MeshInstance" parent="jackie"]
+transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, 0.12, 1.67863, 0.248642 )
+material_override = SubResource( 46 )
+mesh = SubResource( 43 )
+material/0 = null
+
 [node name="leftHandCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.01671e-07, 2.84362e-07, 0, 0.941623, 0.336668, -3.01992e-07, -0.336668, 0.941623, 0.12053, 1.58791, 0.336696 )
+transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, 0.12, 1.65147, 0.25723 )
 enabled = true
-cast_to = Vector3( 0, -0.25, 0 )
+cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="rightHandCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.01671e-07, 2.84362e-07, 0, 0.941623, 0.336668, -3.01992e-07, -0.336668, 0.941623, -0.0903583, 1.58791, 0.336696 )
+transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, -0.12, 1.65147, 0.25723 )
 enabled = true
-cast_to = Vector3( 0, -0.25, 0 )
+cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="centerCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.01671e-07, 2.84362e-07, 0, 0.941623, 0.336668, -3.01992e-07, -0.336668, 0.941623, 0.00444612, 1.62532, 0.41862 )
-enabled = true
-cast_to = Vector3( 0, -0.35, 0 )
-
-[node name="ceilingCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 1.47892, 0.391784 )
-enabled = true
-cast_to = Vector3( 0, -0.25, 0 )
-
-[node name="wallCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, 0, 0, 0, -0.0123042, 0.999924, 0, -0.999924, -0.0123042, 0, 1.60708, 0.176383 )
+transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, 0, 1.70647, 0.255652 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="reference" type="Position3D" parent="jackie"]
-transform = Transform( 1, -1.01671e-07, 2.84362e-07, 0, 0.941623, 0.336668, -3.01992e-07, -0.336668, 0.941623, 0.00444614, 1.49646, 0.464695 )
+transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, -7.45588e-09, 1.50822, 0.359177 )
 
 [node name="attack_lunge" type="Area" parent="jackie"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42109e-14, 0.65977, 0.530665 )
