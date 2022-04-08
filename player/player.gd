@@ -686,7 +686,7 @@ func _physics_process(delta):
 		State.UppercutWindup:
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
 		State.Uppercut:
-			velocity += damage_factor*delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
+			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 			damage_directed(uppercut_hitbox, DAMAGE_UPPERCUT, Vector3.UP)
 		State.DiveWindup:
@@ -1172,7 +1172,7 @@ func set_state(next_state: int):
 		State.LungeKick, State.SlideLungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
-			velocity = pow(damage_factor, 0.4)*dir*SPEED_LUNGE
+			velocity = dir*SPEED_LUNGE
 			mesh.play_lunge_kick(max_damage)
 			can_slide_lunge = false
 		State.SpinKick, State.AirSpinKick:
