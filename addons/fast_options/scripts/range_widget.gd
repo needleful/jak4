@@ -4,6 +4,10 @@ signal changed(opt_name, value)
 
 var option_name:String
 
+func _ready():
+	for c in get_children():
+		c.focus_neighbour_left = c.get_path()
+
 func set_option_hint(option:Dictionary):
 	if option.hint == PROPERTY_HINT_RANGE:
 		var hint:PoolStringArray = option.hint_string.split(",")

@@ -24,6 +24,9 @@ var color_sublime := Color.coral
 var tracked_items = ["bug", "capacitor"]
 var checkpoint_position : Vector3
 
+func _init():
+	pause_mode = Node.PAUSE_MODE_PROCESS
+
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		if !using_gamepad:

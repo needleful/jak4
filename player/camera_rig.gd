@@ -20,9 +20,6 @@ var raise := 0.0
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
-var sensitivity := 1.0
-var invert_x := false
-var invert_y := false
 
 var cv := CORRECTION_VELOCITY
 var hv := H_CORRECTION
@@ -91,10 +88,10 @@ func _physics_process(delta):
 	var analog_aim = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
 	analog_aim *= analog_sns
 	
-	var aim : Vector2 = sensitivity*(mouse_aim + analog_aim)
-	if invert_x:
+	var aim : Vector2 = player.sensitivity*(mouse_aim + analog_aim)
+	if player.invert_x:
 		aim.x *= -1
-	if invert_y:
+	if player.invert_y:
 		aim.y *= -1
 	
 	yaw.rotate_y(aim.x)

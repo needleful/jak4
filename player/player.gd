@@ -192,6 +192,11 @@ var ground_normal:Vector3 = Vector3.UP
 
 var current_coat: Coat
 
+# Camera settings
+var sensitivity := 1.0
+var invert_x := false
+var invert_y := false
+
 # Nodes
 onready var cam_rig := $camera_rig
 onready var cam_yaw := $camera_rig/yaw

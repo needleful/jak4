@@ -5,6 +5,10 @@ signal changed(opt_name, value)
 var opt_name: String
 var value: AudioChannel
 
+func _ready():
+	for c in get_children():
+		c.focus_neighbour_left = c.get_path()
+
 func _input(event):
 	if ( visible
 		and event.is_action_pressed("ui_accept")

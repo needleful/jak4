@@ -9,32 +9,32 @@ onready var player = Global.get_player()
 func set_sns(value: float):
 	camera_sensitivity = value
 	if player:
-		player.cam_rig.sensitivity = value
+		player.sensitivity = value
 
 func get_sns():
-	if player and player.cam_rig:
-		return player.cam_rig.sensitivity
+	if player:
+		return player.sensitivity
 	else:
 		return camera_sensitivity
 
 func set_invx(value):
 	invert_x = value
-	if player and player.cam_rig:
-		player.cam_rig.invert_x = value
+	if player:
+		player.invert_x = value
 
 func get_invx():
-	if player and player.cam_rig:
-		return player.cam_rig.invert_x
+	if player:
+		return player.invert_x
 	else:
 		return invert_x
 	
 func set_invy(value):
 	invert_y = value
-	if player and player.cam_rig:
-		player.cam_rig.invert_y = value
+	if player:
+		player.invert_y = value
 
 func get_invy():
-	if player and player.cam_rig:
-		return player.cam_rig.invert_y
+	if player:
+		return player.invert_y
 	else:
 		return invert_y

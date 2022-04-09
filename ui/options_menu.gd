@@ -1,5 +1,7 @@
 extends Control
 
+signal ui_redraw
+
 export(Script) var options_script: Script
 
 const WIDGET_SCENES = {
@@ -14,7 +16,6 @@ const CUSTOM_WIDGETS = {
 }
 
 const USAGE_FLAGS = PROPERTY_USAGE_SCRIPT_VARIABLE | PROPERTY_USAGE_EDITOR
-const save_path = "user://settings.cfg"
 
 var options: Object
 
@@ -75,4 +76,20 @@ func is_export_var(property)->bool:
 	return property.usage & USAGE_FLAGS == USAGE_FLAGS
 
 func _on_ui_redraw():
-	pass
+	emit_signal("ui_redraw")
+
+func grab_focus():
+	for c in get_children():
+		if c is Control:
+			c.grab_focus()
+			return
+
+func save_to(file: ConfigFile):
+	for property in options.get_property_list():
+		if property.usage & USAGE_FLAGS == USAGE_FLAGS:
+			file.set_value(name, property.name, options.get(property.name))
+	return file
+
+func load_from(file: ConfigFile):
+	for property in file.get_section_keys(name):
+		options.set(property, file.get_value(name, property))
