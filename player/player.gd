@@ -156,7 +156,7 @@ const TIME_RESET_GROUND := 0.01
 var can_air_spin := true
 var can_slide_lunge := true
 
-const TIME_LEDGE_LEAVE := 0.25
+const TIME_LEDGE_LEAVE := 0.1
 var timer_leave_ledge := 0.0
 
 enum State {
@@ -193,6 +193,7 @@ var ground_normal:Vector3 = Vector3.UP
 var current_coat: Coat
 
 # Nodes
+onready var cam_rig := $camera_rig
 onready var cam_yaw := $camera_rig/yaw
 onready var mesh := $jackie
 onready var crouch_head := $crouchHeadArea
@@ -1054,12 +1055,12 @@ func get_dialog_viewer() -> Node:
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	$ui/dialog_viewer.start(source, sequence, speaker, starting_label)
-	$camera_rig.play_animation("dialog_start")
+	cam_rig.play_animation("dialog_start")
 	lock()
 
 func _on_dialog_exited():
 	$ui/dialog_viewer.end()
-	$camera_rig.play_animation("dialog_end")
+	cam_rig.play_animation("dialog_end")
 	unlock()
 
 func _on_dialog_event(id: String, source: Node):
@@ -1071,10 +1072,10 @@ func _on_dialog_event(id: String, source: Node):
 			$ui/inventory/AnimationPlayer.play("show_for_shop")
 			$ui/shop.start_shopping(source)
 		"unlock_player":
-			$camera_rig.play_animation("dialog_end")
+			cam_rig.play_animation("dialog_end")
 			unlock()
 		"lock_player":
-			$camera_rig.play_animation("dialog_start")
+			cam_rig.play_animation("dialog_start")
 			lock()
 
 func stop_shopping():
@@ -1086,11 +1087,11 @@ func stop_shopping():
 
 func wardrobe_lock():
 	lock()
-	$camera_rig.play_animation("wardrobe_lock")
+	cam_rig.play_animation("wardrobe_lock")
 
 func wardrobe_unlock():
 	unlock()
-	$camera_rig.play_animation("wardrobe_unlock")
+	cam_rig.play_animation("wardrobe_unlock")
 
 func lock():
 	set_process_input(false)
@@ -1141,6 +1142,8 @@ func set_state(next_state: int):
 	timer_state = 0.0
 	timer_leave_ledge = 0
 	mesh.stop_particles()
+	$crouching_col.disabled = true
+	$standing_col.disabled = false
 	
 	match next_state:
 		State.Fall, State.LedgeFall:

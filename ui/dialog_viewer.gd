@@ -16,7 +16,6 @@ export(Font) var speaker_font
 export(Font) var narration_font
 export(Font) var player_font
 
-export(Color) var speaker_color := Color.whitesmoke
 export(Color) var narration_color := Color.dimgray
 export(Color) var player_color := Color.deeppink
 
@@ -212,17 +211,18 @@ func show_message():
 	if speaker == "You":
 		insert_label(text, player_font, player_color)
 	else:
-		insert_label(text, speaker_font, speaker_color)
+		insert_label(text, speaker_font)
 
 func show_narration():
 	insert_label(current_item.text, narration_font, narration_color)
 
-func insert_label(text: String, font: Font, color: Color):
+func insert_label(text: String, font: Font, color := Color.black):
 	var label := Label.new()
 	label.autowrap = true
 	label.text = interpolate(text)
-	label.add_font_override("font", font)
-	label.add_color_override("font_color", color)
+	if color != Color.black:
+		label.add_font_override("font", font)
+		label.add_color_override("font_color", color)
 	messages.add_child(label)
 
 func interpolate(line: String):

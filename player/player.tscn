@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
+[ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -529,24 +530,24 @@ mesh = SubResource( 43 )
 material/0 = null
 
 [node name="leftHandCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, 0.12, 1.65147, 0.25723 )
+transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, 0.12, 1.65147, 0.25723 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="rightHandCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, -0.12, 1.65147, 0.25723 )
+transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, -0.12, 1.65147, 0.25723 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="centerCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.35841e-07, 2.69715e-07, 0, 0.89312, 0.449818, -3.01992e-07, -0.449818, 0.89312, 0, 1.70647, 0.255652 )
+transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, 0, 1.70647, 0.255652 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="ceilingCast" type="RayCast" parent="jackie"]
-transform = Transform( 1, -1.09622e-07, -3.88781e-07, -8.72806e-08, -0.998374, 0.0570063, -3.94398e-07, -0.0570063, -0.998374, -9.49926e-09, 1.253, 0.346815 )
+transform = Transform( 1, 0, 0, 0, 0.991954, -0.126597, 0, 0.126597, 0.991954, -7.45068e-08, 1.01541, 0.133882 )
 enabled = true
-cast_to = Vector3( 0, -0.5, 0 )
+cast_to = Vector3( 0, 0.75, 0 )
 
 [node name="reference" type="Position3D" parent="jackie"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.39747 )
@@ -916,6 +917,8 @@ text = "Stuff here!"
 [node name="prompt_timer" type="Timer" parent="ui/tutorial"]
 wait_time = 6.0
 one_shot = true
+
+[node name="pause_menu" parent="ui" instance=ExtResource( 9 )]
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )

@@ -24,8 +24,6 @@ var color_sublime := Color.coral
 var tracked_items = ["bug", "capacitor"]
 var checkpoint_position : Vector3
 
-onready var player: PlayerBody = get_tree().current_scene.get_node("player")
-
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		if !using_gamepad:
@@ -50,6 +48,9 @@ func _ready():
 			file_name = coat_dir.get_next()
 	else:
 		print_debug("Could not open coat directory!")
+
+func get_player() -> Node:
+	return get_tree().current_scene.get_node("player")
 
 # Game state management
 
