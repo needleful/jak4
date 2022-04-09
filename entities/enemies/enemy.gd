@@ -95,6 +95,7 @@ func rotate_up(speed: float, up := Vector3.UP):
 func die():
 	var _x = Global.add_stat("killed/"+id)
 	remove_from_group("distance_activated")
+	remove_from_group("target")
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat

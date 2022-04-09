@@ -31,6 +31,9 @@ var item_sound := 0
 var move_blend:= 0.0
 var lunge_right_foot := true
 
+func _ready():
+	$Armature/Skeleton/gun.holder = self
+
 func set_movement_animation(speed: float, state: int):
 	var target := 0.0
 	if state == PlayerBody.State.Crouch:
@@ -129,3 +132,10 @@ func play_pickup_sound(item: String):
 		item = "_pickup"
 	play_sound("item_sound"+str(item_sound), item, true)
 	item_sound = item_sound != 1
+
+func display_gun(active: bool):
+	var blend: float = 0.8 if active else 0.0
+	anim["parameters/Gun/blend_amount"] = blend
+
+func aim_gun(aim: Vector2):
+	anim["parameters/Aim/blend_position"] = 1.5*aim

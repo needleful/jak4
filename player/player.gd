@@ -223,6 +223,7 @@ onready var armor_bar := $ui/stats/health/extra
 onready var energy_bar := $ui/stats/stamina/extra
 
 onready var coat_zone := $jackie/the_coat_zone
+onready var gun := $jackie/Armature/Skeleton/gun
 
 func _ready():
 	$ui/shop.player = self
@@ -1149,6 +1150,7 @@ func set_state(next_state: int):
 	mesh.stop_particles()
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
+	gun.set_active(true)
 	
 	match next_state:
 		State.Fall, State.LedgeFall:
@@ -1171,6 +1173,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Ground")
 			can_air_spin = true
 			stamina -= STAMINA_DRAIN_CLIMB_START
+			gun.set_active(false)
 		State.CrouchJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
@@ -1181,6 +1184,7 @@ func set_state(next_state: int):
 			snap_to_ledge()
 			velocity = Vector3.ZERO
 			can_air_spin = true
+			gun.set_active(false)
 		State.LedgeJump:
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
@@ -1188,6 +1192,7 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Roll")
+			gun.set_active(false)
 		State.RollJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
@@ -1198,6 +1203,9 @@ func set_state(next_state: int):
 				mesh.start_roll_particles()
 			
 			mesh.transition_to("RollJump")
+			gun.set_active(false)
+		State.RollFall:
+			gun.set_active(false)
 		State.BonkFall:
 			mesh.transition_to("Fall")
 			var dir = ground_normal
@@ -1219,18 +1227,22 @@ func set_state(next_state: int):
 			can_air_spin = false
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
+			gun.set_active(false)
 		State.Uppercut:
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
 			mesh.start_kick_left(max_damage)
 			mesh.start_kick_right(max_damage)
+			gun.set_active(false)
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
 			mesh.start_kick_left(max_damage)
+			gun.set_active(false)
 		State.DiveStart:
 			damaged_objects = []
 			mesh.start_kick_left(max_damage)
+			gun.set_active(false)
 		State.DiveEnd:
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
@@ -1241,5 +1253,6 @@ func set_state(next_state: int):
 		State.Locked:
 			mesh.transition_to("Ground")
 			velocity = Vector3.ZERO
+			gun.set_active(false)
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

@@ -12,20 +12,22 @@ var velocity := Vector3.ZERO
 func fire(p_target: Spatial, p_offset := Vector3.ZERO):
 	offset = p_offset
 	target = p_target
-	var direction = (
-		target.global_transform.origin + offset
-		 - global_transform.origin).normalized()
-	velocity = speed*direction
+	if target:
+		var direction = (
+			target.global_transform.origin + offset
+			 - global_transform.origin).normalized()
+		velocity = speed*direction
 
 func _physics_process(delta):
-	var dir = (
-		target.global_transform.origin + offset
-		 - global_transform.origin)
-	var axis = velocity.cross(dir).normalized()
-	if axis.is_normalized():
-		var theta = velocity.angle_to(dir)
-		var angle = sign(theta)*min(theta, turn_speed*delta)
-		velocity = velocity.rotated(axis, angle)
+	if target:
+		var dir = (
+			target.global_transform.origin + offset
+			 - global_transform.origin)
+		var axis = velocity.cross(dir).normalized()
+		if axis.is_normalized():
+			var theta = velocity.angle_to(dir)
+			var angle = sign(theta)*min(theta, turn_speed*delta)
+			velocity = velocity.rotated(axis, angle)
 		
 	var c := move_and_collide(velocity*delta)
 	if c:
