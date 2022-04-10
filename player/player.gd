@@ -287,7 +287,10 @@ func _physics_process(delta):
 		cam_yaw.global_transform.basis.x * movement.x
 		+ cam_yaw.global_transform.basis.z * movement.y)
 	
-	rotate_intention(desired_velocity)
+	if desired_velocity.length() > 1.0 or (
+		desired_velocity.dot(velocity) > 0
+	):
+		rotate_intention(desired_velocity)
 	
 	var best_floor_dot := -1.0
 	var best_normal := Vector3.ZERO
@@ -960,7 +963,7 @@ func update_visuals(input_dir: Vector3, var flip = false):
 		vs.length(), state)
 	
 	vis_vel.y = 0
-	if abs(vis_vel.x) + abs(vis_vel.z) > 0.1 and input_dir != Vector3.ZERO:
+	if abs(vis_vel.x) + abs(vis_vel.z) > 0.01 and input_dir != Vector3.ZERO:
 		rotate_mesh(Vector3(vis_vel.x, 0, vis_vel.z).normalized())
 
 func rotate_mesh(target: Vector3):
@@ -1224,14 +1227,14 @@ func set_state(next_state: int):
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
-			mesh.transition_to("SpinKickLeft")
+			mesh.force_play("SpinKickLeft")
 			$jackie/attack_spin/AnimationPlayer.play("spin")
 			mesh.start_kick_left(max_damage)
 			can_air_spin = false
 			gun.aim_lock()
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
-			gun.set_hidden(true)
+			gun.lock()
 		State.Uppercut:
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT

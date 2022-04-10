@@ -23,7 +23,7 @@ var aim_toggle := false
 var state_timer := 0.0
 var time_since_fired := 0.0
 
-const TIME_FIRING := 0.2
+const TIME_FIRING := 0.1
 const TIME_HIDE := 10.0
 const DELAY_HIDDEN_FIRE := 0.1
 
@@ -31,6 +31,7 @@ onready var gun_ik := $"../gun_ik"
 
 var weapon1: PackedScene
 var current_weapon : Spatial
+var state_before_fire:= state
 
 var holder: Spatial
 var camera: Spatial
@@ -58,7 +59,7 @@ func _input(event):
 	elif event.is_action_pressed("combat_aim_toggle"):
 		if !visible:
 			time_since_fired = 0
-		enable()
+			enable()
 		aim_toggle = !aim_toggle
 
 func update_laser():
@@ -84,7 +85,7 @@ func update_laser():
 	laser_geometry.end()
 
 func _process(delta):
-	var current_dir: Vector3 = holder.global_transform.basis.z
+	var current_dir: Vector3 = holder.get_desired_aim()
 	var target_dir : Vector3
 	var aiming: bool = aim_toggle or Input.is_action_pressed("combat_aim")
 	var locked_aim := false
@@ -98,9 +99,12 @@ func _process(delta):
 	match state:
 		State.Firing:
 			if state_timer > TIME_FIRING:
-				unlock()
+				set_state(state_before_fire)
 		State.AimLocked:
 			locked_aim = true
+		State.Locked:
+			locked_aim = true
+			lock_on = false
 		State.DelayedFire:
 			if state_timer > DELAY_HIDDEN_FIRE:
 				fire()
@@ -160,12 +164,6 @@ func _process(delta):
 	if laser.visible:
 		update_laser()
 
-func set_active(p_active : bool):
-	visible = p_active
-	set_process(p_active)
-	set_physics_process(p_active)
-	set_process_input(p_active)
-
 func fire():
 	if state == State.Hidden:
 		set_state(State.DelayedFire)
@@ -210,6 +208,7 @@ func set_state(new_state, force := false):
 	if !force and new_state == state:
 		return
 	state_timer = 0.0
+	set_process(true)
 	set_process_input(true)
 	laser.visible = true
 	laser_geometry.visible = true
@@ -217,30 +216,24 @@ func set_state(new_state, force := false):
 		State.NoWeapon:
 			set_process(false)
 			set_process_input(false)
-			set_physics_process(false)
 			visible = false
 			holder.blend_gun(0.0)
 			holder.hold_gun(0.0)
 			gun_ik.stop()
 		State.Hidden:
 			set_process(false)
-			set_physics_process(false)
 			visible = false
 			holder.blend_gun(0.0)
 			holder.hold_gun(0.0)
 			gun_ik.stop()
 			aim_toggle = false
 		State.Free:
-			set_process(true)
-			set_physics_process(true)
 			visible = true
 			holder.hold_gun(1.0)
 			holder.blend_gun(1.0)
 			gun_ik.interpolation = 1.0
 			gun_ik.start()
 		State.DelayedFire:
-			set_process(true)
-			set_physics_process(true)
 			visible = true
 			holder.blend_gun(1.0)
 			holder.hold_gun(1.0)
@@ -248,8 +241,6 @@ func set_state(new_state, force := false):
 			gun_ik.start()
 			time_since_fired = 0
 		State.Locked:
-			set_process(false)
-			set_physics_process(false)
 			visible = true
 			laser.visible = false
 			laser_geometry.visible = false
@@ -258,15 +249,11 @@ func set_state(new_state, force := false):
 			holder.hold_gun(1.0)
 			gun_ik.stop()
 		State.AimLocked:
-			set_process(true)
-			set_physics_process(true)
 			visible = true
 			holder.blend_gun(0.7)
 			holder.hold_gun(1.0)
 			gun_ik.start()
 		State.Firing:
-			set_process(true)
-			set_physics_process(true)
 			visible = true
 			holder.blend_gun(1.0)
 			holder.hold_gun(1.0)
@@ -276,4 +263,8 @@ func set_state(new_state, force := false):
 			laser.visible = false
 			laser_geometry.visible = false
 			time_since_fired = 0
+			if state == State.DelayedFire:
+				state_before_fire = State.Free
+			else:
+				state_before_fire = state
 	state = new_state

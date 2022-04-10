@@ -25,6 +25,7 @@ var sounds := {
 
 onready var anim: AnimationTree = $AnimationTree
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
+onready var player : PlayerBody = get_parent()
 onready var audio := $audio
 onready var camera_rig := $"../camera_rig"
 
@@ -47,6 +48,9 @@ func set_movement_animation(speed: float, state: int):
 	
 	anim["parameters/WholeBody/Ground/blend_position"] = Vector2(move_blend, speed)
 
+func force_play(state):
+	body.start(state)
+
 func transition_to(state):
 	body.travel(state)
 
@@ -66,6 +70,9 @@ func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	if randomize_tone:
 		node.pitch_scale = rand_range(0.9, 1.2)
 	node.play()
+
+func get_desired_aim():
+	return -player.intention.global_transform.basis.z
 
 func get_random_sound(type: String) -> AudioStream:
 	if !(type in sounds) or sounds[type].size() == 0:

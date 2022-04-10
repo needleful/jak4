@@ -375,10 +375,8 @@ xfade_time = 0.2
 [sub_resource type="AnimationNodeStateMachineTransition" id=39]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=40]
-xfade_time = 0.05
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=41]
-xfade_time = 0.05
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=42]
 
@@ -461,15 +459,15 @@ states/RollFall/position = Vector2( 409, -221 )
 states/RollJump/node = SubResource( 18 )
 states/RollJump/position = Vector2( 637, -181 )
 states/SpinKickLeft/node = SubResource( 37 )
-states/SpinKickLeft/position = Vector2( -99, 243 )
+states/SpinKickLeft/position = Vector2( -206, 315 )
 states/Uppercut/node = SubResource( 46 )
 states/Uppercut/position = Vector2( -23, 40 )
 transitions = [ "Ground", "Fall", SubResource( 10 ), "Fall", "Ground", SubResource( 11 ), "Ground", "BaseJump", SubResource( 13 ), "BaseJump", "Fall", SubResource( 14 ), "Roll", "Ground", SubResource( 16 ), "Ground", "Roll", SubResource( 17 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "RollFall", "Ground", SubResource( 23 ), "RollJump", "Ground", SubResource( 24 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "SpinKickLeft", "Ground", SubResource( 38 ), "Ground", "SpinKickLeft", SubResource( 39 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Uppercut", "Ground", SubResource( 47 ), "Roll", "Uppercut", SubResource( 49 ), "Ground", "Uppercut", SubResource( 50 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "DiveEnd", "Ground", SubResource( 58 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "Ground", "LungeKick", SubResource( 94 ), "LungeKick", "Ground", SubResource( 95 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "BaseJump", "Ground", SubResource( 102 ) ]
 start_node = "Ground"
-graph_offset = Vector2( -221, -25 )
+graph_offset = Vector2( -300, -284 )
 
 [sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -585, -54 )
+graph_offset = Vector2( -484, -106 )
 nodes/Aim/node = SubResource( 115 )
 nodes/Aim/position = Vector2( -500, 280 )
 nodes/Animation/node = SubResource( 125 )
@@ -485,7 +483,7 @@ nodes/GunHold/position = Vector2( 160, -40 )
 nodes/WholeBody/node = SubResource( 6 )
 nodes/WholeBody/position = Vector2( -340, -20 )
 nodes/output/position = Vector2( 380, 40 )
-node_connections = [ "Fire", 0, "Aim", "Fire", 1, "FireAnim", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "GunHold", 0, "Gun", "GunHold", 1, "Animation", "output", 0, "GunHold" ]
+node_connections = [ "output", 0, "GunHold", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "GunHold", 0, "Gun", "GunHold", 1, "Animation" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=8]
 
@@ -531,7 +529,7 @@ material_override = ExtResource( 2 )
 material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
-transform = Transform( 0.0501229, 0.0410722, -0.997897, -0.760941, -0.645575, -0.0647919, -0.64688, 0.76259, -0.00110465, 0.118749, 0.10894, -0.00115599 )
+transform = Transform( -0.450957, 0.297556, -0.841484, -0.224094, -0.950337, -0.215955, -0.863955, 0.0911846, 0.495244, 0.315088, 0.234226, 0.0125912 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -553,7 +551,7 @@ process_material = SubResource( 89 )
 draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.0488896, -0.042283, 0.997909, 0.760474, -0.646144, -0.0646354, 0.647526, 0.762043, 0.000565299, -0.118572, 0.108965, -0.000794984 )
+transform = Transform( 0.1956, -0.0515582, 0.979328, 0.403336, -0.906019, -0.128257, 0.893901, 0.420086, -0.156422, 0.0788215, 0.146607, -0.124925 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -575,7 +573,7 @@ process_material = SubResource( 67 )
 draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 0.521743, 0.130897, -0.843001, 0.000597239, 0.988102, 0.153798, 0.853103, -0.0807463, 0.515457, 0.00485041, 1.01893, -0.0217269 )
+transform = Transform( -0.0504342, 0.153871, -0.986803, -0.223814, 0.961189, 0.161315, 0.973326, 0.228996, -0.0140384, -0.00951117, 1.01056, 0.0593143 )
 bone_name = "BackUpper"
 
 [node name="damage_particles" type="Particles" parent="Armature/Skeleton/chest" index="0"]
@@ -591,7 +589,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
-transform = Transform( 0.983617, -0.0762779, -0.16334, -0.150929, 0.147044, -0.977547, 0.0985836, 0.986184, 0.133122, 0.0185752, 1.21146, -0.0171646 )
+transform = Transform( 0.756527, -0.619258, -0.210202, -0.290213, -0.0298695, -0.956495, 0.58604, 0.784619, -0.202314, -0.000705654, 1.19559, 0.11379 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -607,7 +605,7 @@ draw_pass_1 = SubResource( 87 )
 one_shot = true
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
-transform = Transform( 0.663963, -0.120312, 0.737854, 0.0869453, -0.967719, -0.236031, 0.742525, 0.220897, -0.632148, 0.0438081, 1.04832, 0.411685 )
+transform = Transform( 0.648147, -0.507161, 0.568061, 0.614844, -0.0916051, -0.783311, 0.449302, 0.85697, 0.252452, -0.254697, 1.0147, 0.482493 )
 bone_name = "Gun.R"
 script = ExtResource( 9 )
 
