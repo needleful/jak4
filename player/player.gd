@@ -244,6 +244,7 @@ func _ready():
 	health = max_health
 	stamina = max_stamina
 	update_health()
+	gun.camera = cam_rig.camera
 
 func _input(event):
 	if event.is_action_pressed("debug_randomize_coat"):
@@ -1151,6 +1152,7 @@ func set_state(next_state: int):
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
 	gun.set_active(true)
+	gun.unlock()
 	
 	match next_state:
 		State.Fall, State.LedgeFall:
@@ -1218,6 +1220,7 @@ func set_state(next_state: int):
 			velocity = dir*SPEED_LUNGE
 			mesh.play_lunge_kick(max_damage)
 			can_slide_lunge = false
+			gun.lock()
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
@@ -1225,6 +1228,7 @@ func set_state(next_state: int):
 			$jackie/attack_spin/AnimationPlayer.play("spin")
 			mesh.start_kick_left(max_damage)
 			can_air_spin = false
+			gun.lock()
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
 			gun.set_active(false)
@@ -1238,7 +1242,7 @@ func set_state(next_state: int):
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
 			mesh.start_kick_left(max_damage)
-			gun.set_active(false)
+			gun.lock()
 		State.DiveStart:
 			damaged_objects = []
 			mesh.start_kick_left(max_damage)

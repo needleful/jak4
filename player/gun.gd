@@ -5,21 +5,27 @@ onready var laser_geometry := $reference/laser_geometry
 onready var laser_end := $reference/laser/laser_end
 onready var base_ref := $base_reference
 onready var ref := $reference
+onready var ik_target := $gun_ik/target
 
 var active := true
-var aiming := false
+var locked := false
 
 var holder: Spatial
+var camera: Spatial
 
 const lockon_weight_distance := 0.3
 const lockon_weight_angle := 4.5
 
-const lockon_max_dist_sq := 900
-const lockon_max_angle_rad := PI/3.0
+const lockon_max_dist_sq := 900.0
+const lockon_max_angle_rad := PI/2.0
+
+var aim_toggle := false
 
 func _input(event):
 	if event.is_action_pressed("combat_shoot"):
 		fire()
+	elif event.is_action_pressed("combat_aim_toggle"):
+		aim_toggle = !aim_toggle
 
 func _process(delta):
 	update_laser()
@@ -49,7 +55,14 @@ func update_laser():
 func _physics_process(delta):
 	var current_dir: Vector3 = holder.global_transform.basis.z
 	var target_dir : Vector3
-	if !aiming:
+	var aiming: bool = aim_toggle or Input.is_action_pressed("combat_aim")
+	if locked:
+		current_dir = base_ref.global_transform.basis.z
+	
+	if aiming and !locked:
+		target_dir = -camera.global_transform.basis.z
+		ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
+	else:
 		var best_target : Spatial
 		# Lowest score wins
 		var best_score : float = INF
@@ -67,49 +80,50 @@ func _physics_process(delta):
 				htdir.y = 0
 				if abs(hdir.angle_to(htdir)) > lockon_max_angle_rad:
 					continue
-			# TODO: a physics cast here
 			var angle := current_dir.angle_to(dir)
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if score < best_score:
+				# TODO: a physics cast here
 				best_target = g
 				best_score = score
 		if best_target:
 			target_dir = (best_target.global_transform.origin - base_ref.global_transform.origin)
+			ik_target.global_transform.origin = best_target.global_transform.origin
 		else:
 			target_dir = current_dir
-	else:
-		target_dir = current_dir
-		
-	ref.global_transform = base_ref.global_transform.looking_at(
-		base_ref.global_transform.origin - target_dir*100.0,
-		base_ref.global_transform.basis.y)
-	
+			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
 	# Aiming:
-	var x_cur: Vector3 = current_dir.slide(holder.global_transform.basis.x)
-	var x_tar: Vector3 = target_dir.slide(holder.global_transform.basis.x)
-	var x_axis: Vector3 = x_cur.cross(x_tar).normalized()
-	var x_angle: float = x_cur.angle_to(x_tar)
-	
-	
-	var y_cur: Vector3 = current_dir.slide(holder.global_transform.basis.y)
-	var y_tar: Vector3 = target_dir.slide(holder.global_transform.basis.y)
-	var y_axis: Vector3 = y_cur.cross(y_tar).normalized()
-	var y_angle: float = y_cur.angle_to(y_tar)
-	var aim := Vector2(
-		-y_angle/PI*sign(holder.global_transform.basis.y.dot(y_axis)),
-		-x_angle/PI*sign(holder.global_transform.basis.x.dot(x_axis))
-	)
+	if locked:
+		holder.aim_gun(Vector2.ZERO)
+	else:
+		var y_cur: Vector3 = holder.global_transform.basis.z
+		var y_tar: Vector3 = target_dir.slide(holder.global_transform.basis.y)
+		var y_axis: Vector3 = y_cur.cross(y_tar).normalized()
+		var y_angle: float = y_cur.angle_to(y_tar)
 		
-	holder.aim_gun(aim)
-		
+		var aim := Vector2(
+			-y_angle/(PI/2)*sign(holder.global_transform.basis.y.dot(y_axis)),
+			target_dir.normalized().y
+		)
+			
+		holder.aim_gun(aim)
+
+func lock():
+	locked = true
+	holder.display_gun(0.5)
+
+func unlock():
+	locked = false
+	holder.display_gun(1.0)
+
 func set_active(p_active : bool):
 	active = p_active
 	visible = active
 	set_process(active)
 	set_physics_process(active)
 	set_process_input(active)
-	holder.display_gun(active)
+	holder.display_gun(1.0 if active else 0.0)
 
 func fire():
 	fire_test_orb()

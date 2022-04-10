@@ -91,5 +91,9 @@ func save_to(file: ConfigFile):
 	return file
 
 func load_from(file: ConfigFile):
-	for property in file.get_section_keys(name):
-		options.set(property, file.get_value(name, property))
+	if options.has_method("set_option"):
+		for property in file.get_section_keys(name):
+			options.set_option(property, file.get_value(name, property))
+	else:
+		for property in file.get_section_keys(name):
+			options.set(property, file.get_value(name, property))

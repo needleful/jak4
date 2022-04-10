@@ -4,6 +4,7 @@ onready var player: PlayerBody = get_parent()
 onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 onready var groundCast: RayCast = get_parent().get_node("groundCast")
+onready var camera := $yaw/pitch/SpringArm/Camera
 
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 1.0

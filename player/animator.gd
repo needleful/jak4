@@ -133,9 +133,8 @@ func play_pickup_sound(item: String):
 	play_sound("item_sound"+str(item_sound), item, true)
 	item_sound = item_sound != 1
 
-func display_gun(active: bool):
-	var blend: float = 0.8 if active else 0.0
-	anim["parameters/Gun/blend_amount"] = blend
+func display_gun(active: float):
+	anim["parameters/Gun/blend_amount"] = active*0.9
 
 func aim_gun(aim: Vector2):
-	anim["parameters/Aim/blend_position"] = 1.5*aim
+	anim["parameters/Aim/blend_position"] = aim
