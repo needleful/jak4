@@ -1,4 +1,5 @@
 extends Spatial
+class_name Gun
 
 onready var laser := $reference/laser
 onready var laser_geometry := $reference/laser_geometry
@@ -6,6 +7,8 @@ onready var laser_end := $reference/laser/laser_end
 onready var base_ref := $base_reference
 onready var ref := $reference
 onready var ik_target := $gun_ik/target
+
+const MASK_ATTACK := 0x1 + 0x4
 
 enum State {
 	NoWeapon,
@@ -23,7 +26,7 @@ var aim_toggle := false
 var state_timer := 0.0
 var time_since_fired := 0.0
 
-const TIME_FIRING := 0.1
+var time_firing := 0.1
 const TIME_HIDE := 10.0
 const DELAY_HIDDEN_FIRE := 0.1
 
@@ -43,11 +46,10 @@ const lockon_max_dist_sq := 900.0
 const lockon_max_angle_rad := PI/2.0
 
 func _ready():
-	var w = load("res://player/weapons/weapon_1.tscn")
+	var w = load("res://player/weapons/pistol.tscn")
 	if w is PackedScene:
 		weapon1 = w
-		current_weapon = weapon1.instance()
-		ref.add_child(current_weapon)
+		call_deferred("set_current_weapon", weapon1)
 		call_deferred("set_state", State.Hidden, true)
 	else:
 		call_deferred("set_state", State.NoWeapon, true)
@@ -61,6 +63,12 @@ func _input(event):
 			time_since_fired = 0
 			enable()
 		aim_toggle = !aim_toggle
+
+func set_current_weapon(weapon: PackedScene):
+	current_weapon = weapon.instance()
+	ref.add_child(current_weapon)
+	if holder:
+		holder.track_weapon(current_weapon.name)
 
 func update_laser():
 	var l = laser.get_hit_length()
@@ -98,7 +106,7 @@ func _process(delta):
 			disable()
 	match state:
 		State.Firing:
-			if state_timer > TIME_FIRING:
+			if state_timer > time_firing:
 				set_state(state_before_fire)
 		State.AimLocked:
 			locked_aim = true
@@ -116,6 +124,10 @@ func _process(delta):
 		target_dir = -camera.global_transform.basis.z
 		ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
 	elif lock_on:
+		var space: RID = get_world().space
+		var ds := PhysicsServer.space_get_direct_state(space)
+		var cast_start: Vector3 = base_ref.global_transform.origin
+		
 		var best_target : Spatial
 		# Lowest score wins
 		var best_score : float = INF
@@ -138,8 +150,10 @@ func _process(delta):
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if score < best_score:
 				# TODO: a physics cast here
-				best_target = g
-				best_score = score
+				var col := ds.intersect_ray(cast_start, g.global_transform.origin, [], MASK_ATTACK)
+				if col and "collider" in col and col.collider == g:
+					best_target = g
+					best_score = score
 		if best_target:
 			target_dir = (best_target.global_transform.origin - base_ref.global_transform.origin)
 			ik_target.global_transform.origin = best_target.global_transform.origin
@@ -168,7 +182,6 @@ func fire():
 	if state == State.Hidden:
 		set_state(State.DelayedFire)
 	else:
-		fire_test_orb()
 		set_state(State.Firing)
 
 func fire_test_orb():
@@ -257,14 +270,20 @@ func set_state(new_state, force := false):
 			visible = true
 			holder.blend_gun(1.0)
 			holder.hold_gun(1.0)
-			holder.play_fire()
-			current_weapon.fire()
-			gun_ik.stop()
-			laser.visible = false
-			laser_geometry.visible = false
+			gun_ik.start()
+			time_firing = current_weapon.time_firing
 			time_since_fired = 0
 			if state == State.DelayedFire:
 				state_before_fire = State.Free
 			else:
 				state_before_fire = state
+			if current_weapon.fire():
+				holder.play_fire()
+				gun_ik.interpolation = 0.2
+				laser.visible = false
+				laser_geometry.visible = false
+			else:
+				gun_ik.interpolation = 1.0
+				laser.visible = true
+				laser_geometry.visible = true
 	state = new_state

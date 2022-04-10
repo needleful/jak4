@@ -162,3 +162,6 @@ func fall_down(delta: float):
 # Implemented by subclasses
 func set_state(_ai: int):
 	pass
+
+func aggro_to(node: Spatial):
+	target = node

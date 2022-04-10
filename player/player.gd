@@ -197,6 +197,8 @@ var sensitivity := 1.0
 var invert_x := false
 var invert_y := false
 
+var current_weapon : String
+
 # Nodes
 onready var cam_rig := $camera_rig
 onready var cam_yaw := $camera_rig/yaw
@@ -270,6 +272,8 @@ func _input(event):
 	elif event.is_action_pressed("quick_load"):
 		respawn()
 		#Global.load_sync()
+	elif event.is_action_pressed("show_inventory"):
+		show_inventory()
 
 func _physics_process(delta):
 	if global_transform.origin.y < -500:
@@ -668,9 +672,19 @@ func complete_save():
 	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
 func update_inventory():
-	$ui/inventory/gem_count.text = str(Global.count("gem"))
-	$ui/inventory/bug_count.text = str(Global.count("bug"))
-	$ui/inventory/cap_count.text = str(Global.count("capacitor"))
+	var old_gem:String = $ui/inventory/gem_count.text 
+	var old_bug:String = $ui/inventory/bug_count.text
+	var old_cap:String = $ui/inventory/cap_count.text
+	var new_gem:String = str(Global.count("gem"))
+	var new_bug:String = str(Global.count("bug"))
+	var new_cap:String = str(Global.count("capacitor"))
+	if old_gem != new_gem or old_bug != new_bug or new_cap != new_cap:
+		$ui/inventory/gem_count.text = new_gem
+		$ui/inventory/bug_count.text = new_bug
+		$ui/inventory/cap_count.text = new_cap
+		show_inventory()
+	
+	$ui/weapon/ammo_label.text = str(Global.count(current_weapon))
 	
 	var health_up :int = Global.count("health_up")
 	var stamina_up :int = Global.count("stamina_up")
@@ -1082,6 +1096,7 @@ func _on_dialog_event(id: String, source: Node):
 			$ui/inventory.show()
 			$ui/inventory/AnimationPlayer.play("show_for_shop")
 			$ui/shop.start_shopping(source)
+			$ui/inventory/vis_timer.stop()
 		"unlock_player":
 			cam_rig.play_animation("dialog_end")
 			unlock()
@@ -1145,6 +1160,23 @@ func _on_prompt_timer_timeout():
 	
 func get_item(id):
 	mesh.play_pickup_sound(id)
+
+func show_inventory():
+	$ui/inventory.show()
+	$ui/inventory/vis_timer.start()
+
+func _on_vis_timer_timeout():
+	$ui/inventory.hide()
+
+func track_weapon(weapon: String):
+	current_weapon = weapon
+	$ui/weapon/weapon_label.text = weapon.capitalize()
+
+func show_ammo():
+	$ui/weapon.show()
+
+func hide_ammo():
+	$ui/weapon.hide()
 
 func set_state(next_state: int):
 	if state == next_state:

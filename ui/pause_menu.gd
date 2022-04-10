@@ -8,9 +8,7 @@ const save_path = "user://settings.cfg"
 
 func _input(event):
 	if get_tree().paused:
-		if Global.using_gamepad:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
+		if !Global.using_gamepad:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
 		if event.is_action_pressed("pause"):

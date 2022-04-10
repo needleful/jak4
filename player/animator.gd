@@ -143,6 +143,13 @@ func play_pickup_sound(item: String):
 
 func hold_gun(blend: float):
 	anim["parameters/GunHold/blend_amount"] = blend
+	if blend:
+		player.show_ammo()
+	else:
+		player.hide_ammo()
+
+func track_weapon(weapon: String):
+	player.track_weapon(weapon)
 
 func blend_gun(active: float):
 	anim["parameters/Gun/blend_amount"] = active*0.9
