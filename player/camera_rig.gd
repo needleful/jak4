@@ -3,7 +3,6 @@ extends Node
 onready var player: PlayerBody = get_parent()
 onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
-onready var groundCast: RayCast = get_parent().get_node("groundCast")
 onready var camera := $yaw/pitch/SpringArm/Camera
 
 const MIN_CAMERA_DIFF := -1.0
@@ -24,6 +23,7 @@ var analog_sns := Vector2(-0.1, 0.1)
 
 var cv := CORRECTION_VELOCITY
 var hv := H_CORRECTION
+var aiming := false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -41,9 +41,6 @@ func _physics_process(delta):
 		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.05)
 	else:
 		raise = lerp(raise, 0.0, 0.05)
-		if groundCast.is_colliding():
-			target.y = max(groundCast.get_collision_point().y + MIN_FLOOR_HEIGHT, target.y)
-	
 	target.y += raise
 	
 	if player.is_grounded():
@@ -81,7 +78,8 @@ func _physics_process(delta):
 		pos.x = hP.x
 		pos.z = hP.z
 	yaw.global_transform.origin = pos
-	
+
+func _process(delta):
 	# Camera Rotation
 	var mouse_aim = -mouse_accum*mouse_sns
 	mouse_accum = Vector2.ZERO
@@ -104,3 +102,12 @@ func _physics_process(delta):
 
 func play_animation(anim: String):
 	$AnimationPlayer.play(anim)
+
+func set_aiming(aim: bool):
+	if aiming == aim:
+		return
+	aiming = aim
+	if aiming:
+		$AnimationPlayer.play("aim")
+	else:
+		$AnimationPlayer.play_backwards("aim")

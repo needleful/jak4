@@ -82,6 +82,8 @@ func fire_orb():
 	orb_timer = orb_cooldown
 
 func fly(delta: float):
+	if !target:
+		target = Global.get_player()
 	var dir := target.global_transform.origin - global_transform.origin
 	var change_y := dir.y
 	dir.y = 0

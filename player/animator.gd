@@ -26,6 +26,7 @@ var sounds := {
 onready var anim: AnimationTree = $AnimationTree
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 onready var audio := $audio
+onready var camera_rig := $"../camera_rig"
 
 var item_sound := 0
 var move_blend:= 0.0
@@ -133,8 +134,22 @@ func play_pickup_sound(item: String):
 	play_sound("item_sound"+str(item_sound), item, true)
 	item_sound = item_sound != 1
 
-func display_gun(active: float):
+func hold_gun(blend: float):
+	anim["parameters/GunHold/blend_amount"] = blend
+
+func blend_gun(active: float):
 	anim["parameters/Gun/blend_amount"] = active*0.9
 
-func aim_gun(aim: Vector2):
+func aim_gun(aim: Vector2, aiming: bool):
 	anim["parameters/Aim/blend_position"] = aim
+	camera_rig.set_aiming(aiming)
+
+func get_normal_gun_orientation() -> Vector3:
+	var skeleton: Skeleton = $Armature/Skeleton
+	var idx : int = skeleton.find_bone("Gun.R")
+	var local_bone_transform: Transform = skeleton.get_bone_global_pose_no_override(idx)
+	var t : Transform = skeleton.global_transform*local_bone_transform
+	return t.basis.y
+
+func play_fire():
+	anim["parameters/Fire/active"] = true

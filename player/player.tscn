@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -113,6 +113,34 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ 2.5 ]
+}
+
+[sub_resource type="Animation" id=47]
+resource_name = "aim"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch/SpringArm:spring_length")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 2.5, 1.5 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("yaw/pitch:translation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.863214, 0 ), Vector3( -0.5, 0.863, 0 ) ]
 }
 
 [sub_resource type="Animation" id=25]
@@ -640,6 +668,10 @@ script = ExtResource( 2 )
 
 [node name="yaw" type="Spatial" parent="camera_rig"]
 
+[node name="Listener" type="Listener" parent="camera_rig/yaw"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.939026, 0 )
+current = true
+
 [node name="pitch" type="Spatial" parent="camera_rig/yaw"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.863214, 0 )
 
@@ -656,6 +688,7 @@ far = 8192.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="camera_rig"]
 anims/RESET = SubResource( 24 )
+anims/aim = SubResource( 47 )
 anims/dialog_end = SubResource( 25 )
 anims/dialog_start = SubResource( 26 )
 anims/wardrobe_lock = SubResource( 28 )
@@ -926,10 +959,6 @@ collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="groundArea"]
 shape = SubResource( 5 )
-
-[node name="groundCast" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.318745, 0 )
-cast_to = Vector3( 0, -1.5, 0 )
 
 [node name="crouchHeadArea" type="Area" parent="."]
 collision_layer = 0

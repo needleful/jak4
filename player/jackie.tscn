@@ -1,4 +1,4 @@
-[gd_scene load_steps=122 format=2]
+[gd_scene load_steps=124 format=2]
 
 [ext_resource path="res://_glb/jackie.glb" type="PackedScene" id=1]
 [ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://audio/player/stepdirt2.wav" type="AudioStream" id=7]
 [ext_resource path="res://player/particles/kick_stars.png" type="Texture" id=8]
 [ext_resource path="res://player/gun.gd" type="Script" id=9]
-[ext_resource path="res://player/gun_ik.gd" type="Script" id=10]
 
 [sub_resource type="Gradient" id=64]
 colors = PoolColorArray( 1, 0, 0, 1, 1, 1, 1, 1 )
@@ -136,21 +135,18 @@ albedo_texture = ExtResource( 8 )
 material = SubResource( 86 )
 size = Vector2( 0.1, 0.1 )
 
-[sub_resource type="CubeMesh" id=105]
-size = Vector3( 0.05, 0.1, 0.05 )
+[sub_resource type="SphereMesh" id=107]
+radius = 0.07
+height = 0.14
+radial_segments = 5
+rings = 5
 
 [sub_resource type="SpatialMaterial" id=106]
 flags_transparent = true
 flags_unshaded = true
 params_blend_mode = 1
 params_cull_mode = 2
-albedo_color = Color( 0.2, 1.5, 0.2, 0.58 )
-
-[sub_resource type="SphereMesh" id=107]
-radius = 0.07
-height = 0.14
-radial_segments = 5
-rings = 5
+albedo_color = Color( 0.2, 2.00392, 0.2, 0.0666667 )
 
 [sub_resource type="AnimationNodeAnimation" id=110]
 animation = "AimF"
@@ -211,9 +207,24 @@ blend_point_10/pos = Vector2( -2, 1 )
 min_space = Vector2( -2, -1 )
 max_space = Vector2( 2, 1 )
 
+[sub_resource type="AnimationNodeAnimation" id=125]
+animation = "AimF"
+
+[sub_resource type="AnimationNodeOneShot" id=124]
+filter_enabled = true
+filters = [ "Armature/Skeleton:Forearm.L", "Armature/Skeleton:Hand.L" ]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id=123]
+animation = "Fire"
+
 [sub_resource type="AnimationNodeBlend2" id=109]
 filter_enabled = true
 filters = [ "Armature/Skeleton:BackLower", "Armature/Skeleton:BackUpper", "Armature/Skeleton:Bicep.L", "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Armature/Skeleton:C_Thumb.L", "Armature/Skeleton:Collar.L", "Armature/Skeleton:Fingers1.L", "Armature/Skeleton:Fingers2.L", "Armature/Skeleton:Fingers3.L", "Armature/Skeleton:Forearm.L", "Armature/Skeleton:Gun.R", "Armature/Skeleton:Hand.L", "Armature/Skeleton:Head", "Armature/Skeleton:Index1.L", "Armature/Skeleton:Index2.L", "Armature/Skeleton:Index3.L", "Armature/Skeleton:Neck", "Armature/Skeleton:Sleeve.L", "Armature/Skeleton:Thumb1.L", "Armature/Skeleton:Thumb2.L", "Armature/Skeleton:Thumb3.L" ]
+
+[sub_resource type="AnimationNodeBlend2" id=126]
+filter_enabled = true
+filters = [ "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Armature/Skeleton:C_Thumb.L", "Armature/Skeleton:Fingers1.L", "Armature/Skeleton:Fingers2.L", "Armature/Skeleton:Fingers3.L", "Armature/Skeleton:Index1.L", "Armature/Skeleton:Index2.L", "Armature/Skeleton:Index3.L", "Armature/Skeleton:Thumb1.L", "Armature/Skeleton:Thumb2.L", "Armature/Skeleton:Thumb3.L" ]
 
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "BaseJump"
@@ -458,14 +469,23 @@ start_node = "Ground"
 graph_offset = Vector2( -221, -25 )
 
 [sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -402, 199 )
+graph_offset = Vector2( -585, -54 )
 nodes/Aim/node = SubResource( 115 )
-nodes/Aim/position = Vector2( -160, 300 )
+nodes/Aim/position = Vector2( -500, 280 )
+nodes/Animation/node = SubResource( 125 )
+nodes/Animation/position = Vector2( 60, 180 )
+nodes/Fire/node = SubResource( 124 )
+nodes/Fire/position = Vector2( -300, 180 )
+nodes/FireAnim/node = SubResource( 123 )
+nodes/FireAnim/position = Vector2( -520, 440 )
 nodes/Gun/node = SubResource( 109 )
-nodes/Gun/position = Vector2( 80, 160 )
+nodes/Gun/position = Vector2( -100, 80 )
+nodes/GunHold/node = SubResource( 126 )
+nodes/GunHold/position = Vector2( 160, -40 )
 nodes/WholeBody/node = SubResource( 6 )
-nodes/WholeBody/position = Vector2( -160, 160 )
-node_connections = [ "output", 0, "Gun", "Gun", 0, "WholeBody", "Gun", 1, "Aim" ]
+nodes/WholeBody/position = Vector2( -340, -20 )
+nodes/output/position = Vector2( 380, 40 )
+node_connections = [ "Fire", 0, "Aim", "Fire", 1, "FireAnim", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "GunHold", 0, "Gun", "GunHold", 1, "Animation", "output", 0, "GunHold" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=8]
 
@@ -498,13 +518,6 @@ scale_curve = SubResource( 81 )
 [node name="jackie" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/4/bound_children = [ NodePath("chest") ]
-bones/6/bound_children = [ NodePath("head") ]
-bones/31/bound_children = [ NodePath("gun") ]
-bones/59/bound_children = [ NodePath("footLeft") ]
-bones/63/bound_children = [ NodePath("footRight") ]
-
 [node name="coat" parent="Armature/Skeleton" index="0"]
 material/0 = SubResource( 66 )
 
@@ -518,7 +531,7 @@ material_override = ExtResource( 2 )
 material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
-transform = Transform( 0.0501486, 0.0410232, -0.997898, -0.761147, -0.645334, -0.0647803, -0.646636, 0.762796, -0.00113762, 0.118763, 0.108938, -0.00232305 )
+transform = Transform( 0.0501229, 0.0410722, -0.997897, -0.760941, -0.645575, -0.0647919, -0.64688, 0.76259, -0.00110465, 0.118749, 0.10894, -0.00115599 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -540,7 +553,7 @@ process_material = SubResource( 89 )
 draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.0488446, -0.0422675, 0.997912, 0.760214, -0.646453, -0.0645913, 0.647833, 0.761782, 0.000556819, -0.118556, 0.108974, -0.00181554 )
+transform = Transform( 0.0488896, -0.042283, 0.997909, 0.760474, -0.646144, -0.0646354, 0.647526, 0.762043, 0.000565299, -0.118572, 0.108965, -0.000794984 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -562,7 +575,7 @@ process_material = SubResource( 67 )
 draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 0.521743, 0.130897, -0.843001, 0.000597283, 0.988102, 0.153798, 0.853103, -0.0807464, 0.515457, 0.00485041, 1.01893, -0.0260957 )
+transform = Transform( 0.521743, 0.130897, -0.843001, 0.000597239, 0.988102, 0.153798, 0.853103, -0.0807463, 0.515457, 0.00485041, 1.01893, -0.0217269 )
 bone_name = "BackUpper"
 
 [node name="damage_particles" type="Particles" parent="Armature/Skeleton/chest" index="0"]
@@ -578,7 +591,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
-transform = Transform( 0.983617, -0.0762779, -0.16334, -0.150929, 0.147044, -0.977547, 0.0985836, 0.986185, 0.133122, 0.0185752, 1.21146, -0.0215334 )
+transform = Transform( 0.983617, -0.0762779, -0.16334, -0.150929, 0.147044, -0.977547, 0.0985836, 0.986184, 0.133122, 0.0185752, 1.21146, -0.0171646 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -594,33 +607,18 @@ draw_pass_1 = SubResource( 87 )
 one_shot = true
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
-transform = Transform( 0.745652, -0.0285725, 0.665723, -0.269366, -0.926733, 0.261933, 0.609463, -0.374634, -0.698717, 0.0344687, 1.11798, 0.451947 )
+transform = Transform( 0.663963, -0.120312, 0.737854, 0.0869453, -0.967719, -0.236031, 0.742525, 0.220897, -0.632148, 0.0438081, 1.04832, 0.411685 )
 bone_name = "Gun.R"
 script = ExtResource( 9 )
 
 [node name="base_reference" type="Spatial" parent="Armature/Skeleton/gun" index="0"]
-transform = Transform( 0.766044, 0.642788, 0, 2.80971e-08, -3.34849e-08, 1, 0.642788, -0.766044, -4.37114e-08, 0, 0, 0 )
+transform = Transform( 0.766044, 0.642788, 2.80971e-08, 0, -4.37114e-08, 1, 0.642788, -0.766045, -3.34849e-08, 0.0204648, 0.00561577, -0.01722 )
 
 [node name="reference" type="Spatial" parent="Armature/Skeleton/gun" index="1"]
-transform = Transform( 0.766044, 0.642788, 0, 2.80971e-08, -3.34849e-08, 1, 0.642788, -0.766044, -4.37114e-08, 0, 0, 0 )
+transform = Transform( 0.766044, 0.642788, 2.80971e-08, 0, -4.37114e-08, 1, 0.642788, -0.766045, -3.34849e-08, 0.0204648, 0.00561577, -0.01722 )
 
-[node name="test_model" type="MeshInstance" parent="Armature/Skeleton/gun/reference" index="0"]
-mesh = SubResource( 105 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="reference2" type="MeshInstance" parent="Armature/Skeleton/gun/reference/test_model" index="0"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.041, 0.083 )
-mesh = SubResource( 105 )
-skeleton = NodePath("../../..")
-material/0 = null
-
-[node name="laser_geometry" type="ImmediateGeometry" parent="Armature/Skeleton/gun/reference" index="1"]
-transform = Transform( 1, 1.49012e-08, 1.86265e-09, -2.98023e-08, 1, -5.96046e-08, -1.86265e-09, -5.96046e-08, 1, -0.0065001, 0.0697899, 0.00951833 )
-material_override = SubResource( 106 )
-
-[node name="laser" type="SpringArm" parent="Armature/Skeleton/gun/reference" index="2"]
-transform = Transform( 1, 1.49012e-08, 1.86265e-09, -2.98023e-08, 1, -5.96046e-08, -1.86265e-09, -5.96046e-08, 1, -0.0065001, 0.0697899, 0.00951833 )
+[node name="laser" type="SpringArm" parent="Armature/Skeleton/gun/reference" index="0"]
+transform = Transform( 1, 0, 1.11759e-08, -4.47035e-08, 1, -5.96046e-08, 3.72529e-09, -7.45058e-08, 1, -0.00650011, 0.0697899, 0.00951844 )
 spring_length = 30.0
 
 [node name="laser_end" type="MeshInstance" parent="Armature/Skeleton/gun/reference/laser" index="0"]
@@ -629,24 +627,29 @@ mesh = SubResource( 107 )
 skeleton = NodePath("")
 material/0 = SubResource( 106 )
 
+[node name="laser_geometry" type="ImmediateGeometry" parent="Armature/Skeleton/gun/reference" index="1"]
+transform = Transform( 1, 1.49012e-08, 1.86265e-09, -2.98023e-08, 1, -5.96046e-08, -1.86265e-09, -5.96046e-08, 1, -0.0065001, 0.0697899, 0.00951833 )
+material_override = SubResource( 106 )
+
 [node name="gun_ik" type="Node" parent="Armature/Skeleton/gun" index="2"]
 
 [node name="target" type="Spatial" parent="Armature/Skeleton/gun/gun_ik" index="0"]
 
 [node name="gun_ik" type="SkeletonIK" parent="Armature/Skeleton" index="9"]
 process_priority = 1
-root_bone = "Gun.R"
+root_bone = "Hand.L"
 tip_bone = "Gun.R.001"
-use_magnet = true
+interpolation = 0.15
 target_node = NodePath("../gun/gun_ik/target")
-script = ExtResource( 10 )
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 tree_root = SubResource( 7 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/Aim/blend_position = Vector2( -0.0186567, 0 )
+parameters/Fire/active = false
 parameters/Gun/blend_amount = 1.0
+parameters/GunHold/blend_amount = 0
 parameters/WholeBody/playback = SubResource( 8 )
 parameters/WholeBody/Ground/blend_position = Vector2( -0.00373137, -0.012931 )
 parameters/WholeBody/LungeKick/blend_position = 0
@@ -654,14 +657,14 @@ parameters/WholeBody/LungeKick/blend_position = 0
 [node name="audio" type="Spatial" parent="." index="3"]
 
 [node name="item_sound0" type="AudioStreamPlayer3D" parent="audio" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802325, 0 )
-unit_db = -20.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198218, 0 )
+unit_db = -30.0
 unit_size = 5.0
 bus = "SFX_Player"
 
 [node name="item_sound1" type="AudioStreamPlayer3D" parent="audio" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.802325, 0 )
-unit_db = -20.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.198218, 0 )
+unit_db = -30.0
 unit_size = 5.0
 bus = "SFX_Player"
 

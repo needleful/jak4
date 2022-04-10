@@ -649,6 +649,7 @@ func _physics_process(delta):
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked:
 			desired_velocity = Vector3.ZERO
+
 	update_visuals(desired_velocity)
 
 func _process(_delta):
@@ -1151,7 +1152,6 @@ func set_state(next_state: int):
 	mesh.stop_particles()
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
-	gun.set_active(true)
 	gun.unlock()
 	
 	match next_state:
@@ -1175,7 +1175,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Ground")
 			can_air_spin = true
 			stamina -= STAMINA_DRAIN_CLIMB_START
-			gun.set_active(false)
+			gun.lock()
 		State.CrouchJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
@@ -1186,7 +1186,7 @@ func set_state(next_state: int):
 			snap_to_ledge()
 			velocity = Vector3.ZERO
 			can_air_spin = true
-			gun.set_active(false)
+			gun.lock()
 		State.LedgeJump:
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
@@ -1194,7 +1194,7 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Roll")
-			gun.set_active(false)
+			gun.lock()
 		State.RollJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
@@ -1205,9 +1205,9 @@ func set_state(next_state: int):
 				mesh.start_roll_particles()
 			
 			mesh.transition_to("RollJump")
-			gun.set_active(false)
+			gun.lock()
 		State.RollFall:
-			gun.set_active(false)
+			gun.lock()
 		State.BonkFall:
 			mesh.transition_to("Fall")
 			var dir = ground_normal
@@ -1228,16 +1228,16 @@ func set_state(next_state: int):
 			$jackie/attack_spin/AnimationPlayer.play("spin")
 			mesh.start_kick_left(max_damage)
 			can_air_spin = false
-			gun.lock()
+			gun.aim_lock()
 		State.UppercutWindup:
 			mesh.transition_to("Uppercut")
-			gun.set_active(false)
+			gun.set_hidden(true)
 		State.Uppercut:
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
 			mesh.start_kick_left(max_damage)
 			mesh.start_kick_right(max_damage)
-			gun.set_active(false)
+			gun.lock()
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
 			mesh.transition_to("DiveStart")
@@ -1246,7 +1246,7 @@ func set_state(next_state: int):
 		State.DiveStart:
 			damaged_objects = []
 			mesh.start_kick_left(max_damage)
-			gun.set_active(false)
+			gun.lock()
 		State.DiveEnd:
 			damaged_objects = []
 			mesh.transition_to("DiveEnd")
@@ -1257,6 +1257,6 @@ func set_state(next_state: int):
 		State.Locked:
 			mesh.transition_to("Ground")
 			velocity = Vector3.ZERO
-			gun.set_active(false)
+			gun.disable()
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
