@@ -52,11 +52,26 @@ func _ready():
 			file_name = coat_dir.get_next()
 	else:
 		print_debug("Could not open coat directory!")
+	
+	call_deferred("place_flags")
+
+func place_flags():
+	var flag_scene = load("res://entities/flag.tscn")
+	for transform in game_state.flags:
+		var node = flag_scene.instance()
+		get_tree().current_scene.add_child(node)
+		node.global_transform = transform
 
 func get_player() -> Node:
 	return get_tree().current_scene.get_node("player")
 
 # Game state management
+
+func place_flag(node: Spatial, transform: Transform):
+	var _x = add_item("flag", -1)
+	get_tree().current_scene.add_child(node)
+	node.global_transform = transform
+	game_state.flags.append(transform)
 
 func stat(index: String):
 	if index in game_state.stats:

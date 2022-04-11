@@ -159,6 +159,8 @@ var can_slide_lunge := true
 const TIME_LEDGE_LEAVE := 0.1
 var timer_leave_ledge := 0.0
 
+const TIME_PLACE_FLAG := 0.5
+
 enum State {
 	Ground,
 	Fall,
@@ -184,7 +186,9 @@ enum State {
 	DiveStart,
 	DiveEnd,
 	Damaged,
-	Locked
+	Locked,
+	PlaceFlag,
+	GetCapacitor
 }
 
 var state: int = State.Fall
@@ -297,8 +301,6 @@ func _input(event):
 		#Global.load_sync()
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
-	elif can_place_flag() and event.is_action_pressed("place_flag"):
-		place_flag()
 
 func _physics_process(delta):
 	if global_transform.origin.y < -500:
@@ -337,6 +339,8 @@ func _physics_process(delta):
 		State.Ground:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.BaseJump
+			elif can_place_flag() and Input.is_action_just_pressed("place_flag"):
+				next_state = State.PlaceFlag
 			elif Input.is_action_pressed("mv_crouch"):
 				if velocity.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
@@ -357,6 +361,10 @@ func _physics_process(delta):
 				next_state = State.Slide
 			else:
 				timer_coyote = 0
+		State.PlaceFlag:
+			if timer_state > TIME_PLACE_FLAG:
+				place_flag()
+				next_state = State.Ground
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -679,7 +687,7 @@ func _physics_process(delta):
 		State.DiveEnd:
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
-		State.Locked:
+		State.Locked, State.PlaceFlag:
 			desired_velocity = Vector3.ZERO
 
 	update_visuals(desired_velocity)
@@ -1101,14 +1109,12 @@ func total_stamina():
 	return extra_stamina + stamina
 
 func can_place_flag():
-	return state == State.Ground and Global.count("flag")
+	return Global.count("flag")
 
 func place_flag():
-	Global.add_item("flag", -1)
 	Global.save_checkpoint(global_transform.origin)
-	var f = flag.instance()
-	get_tree().current_scene.add_child(f)
-	f.global_transform = $jackie/flag_ref.global_transform
+	var f = mesh.release_item()
+	Global.place_flag(f, $jackie/flag_ref.global_transform)
 
 func can_talk():
 	return state == State.Ground
@@ -1197,6 +1203,8 @@ func _on_prompt_timer_timeout():
 	$ui/tutorial.hide()
 	
 func get_item(id):
+	if id == "capacitor":
+		set_state(State.GetCapacitor)
 	mesh.play_pickup_sound(id)
 
 func show_inventory():
@@ -1351,5 +1359,10 @@ func set_state(next_state: int):
 			mesh.transition_to("Ground")
 			velocity = Vector3.ZERO
 			gun.disable()
+		State.PlaceFlag:
+			mesh.transition_to("PlaceFlag")
+			velocity = Vector3.ZERO
+			gun.aim_lock()
+			mesh.hold_item(flag.instance())
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

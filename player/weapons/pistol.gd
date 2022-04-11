@@ -11,7 +11,7 @@ func fire() -> bool:
 	if !Global.count("pistol"):
 		$AnimationPlayer.play("dry_fire")
 		return false
-	Global.add_item("pistol", -1)
+	var _x = Global.add_item("pistol", -1)
 	$AnimationPlayer.play('fire')
 	# Cast damage ray
 	var space: RID = get_world().space

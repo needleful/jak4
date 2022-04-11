@@ -32,6 +32,7 @@ onready var camera_rig := $"../camera_rig"
 var item_sound := 0
 var move_blend:= 0.0
 var lunge_right_foot := true
+var held_item:Spatial
 
 func _ready():
 	$Armature/Skeleton/gun.holder = self
@@ -167,3 +168,15 @@ func get_normal_gun_orientation() -> Vector3:
 
 func play_fire():
 	anim["parameters/Fire/active"] = true
+
+func hold_item(node: Spatial):
+	held_item = node
+	$Armature/Skeleton/handRight/ref.add_child(held_item)
+	held_item.transform = Transform.IDENTITY
+
+func release_item() -> Spatial:
+	var h = held_item
+	if h:
+		h.get_parent().remove_child(h)
+	held_item = null
+	return h
