@@ -87,7 +87,7 @@ func _process(delta):
 	var analog_aim = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
 	analog_aim *= analog_sns
 	
-	var aim : Vector2 = player.sensitivity*(mouse_aim + analog_aim)
+	var aim : Vector2 = delta*60*player.sensitivity*(mouse_aim + analog_aim)
 	if player.invert_x:
 		aim.x *= -1
 	if player.invert_y:

@@ -226,6 +226,29 @@ onready var energy_bar := $ui/stats/stamina/extra
 
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
+export(PackedScene) var flag : PackedScene
+
+const VISIBLE_ITEMS := [
+	"bug",
+	"capacitor",
+	"flag",
+	"gem",
+]
+
+const UPGRADE_ITEMS := [
+	"armor",
+	"damage_up",
+	"health_up",
+	"jump_height_up",
+	"move_speed_up",
+	"stamina_booster",
+	"stamina_recovery_up",
+	"stamina_up",
+]
+
+const AMMO := [
+	"pistol"
+]
 
 func _ready():
 	$ui/shop.player = self
@@ -239,7 +262,7 @@ func _ready():
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
-	var _x = Global.connect("inventory_changed", self, "update_inventory")
+	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
 	update_inventory()
@@ -274,6 +297,8 @@ func _input(event):
 		#Global.load_sync()
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
+	elif can_place_flag() and event.is_action_pressed("place_flag"):
+		place_flag()
 
 func _physics_process(delta):
 	if global_transform.origin.y < -500:
@@ -397,7 +422,7 @@ func _physics_process(delta):
 				(desired_velocity.length() + STAMINA_DRAIN_MIN)
 				* STAMINA_DRAIN_CLIMB
 				* delta
-				* (1.0-best_floor_dot)
+				* (1.0-sqrt(abs(best_floor_dot)))
 			)
 			if best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Crouch
@@ -672,57 +697,60 @@ func complete_save():
 	$ui/saveStats/AnimationPlayer.queue("save_complete")
 
 func update_inventory():
-	var old_gem:String = $ui/inventory/gem_count.text 
-	var old_bug:String = $ui/inventory/bug_count.text
-	var old_cap:String = $ui/inventory/cap_count.text
-	var new_gem:String = str(Global.count("gem"))
-	var new_bug:String = str(Global.count("bug"))
-	var new_cap:String = str(Global.count("capacitor"))
-	if old_gem != new_gem or old_bug != new_bug or new_cap != new_cap:
-		$ui/inventory/gem_count.text = new_gem
-		$ui/inventory/bug_count.text = new_bug
-		$ui/inventory/cap_count.text = new_cap
-		show_inventory()
-	
+	for item in VISIBLE_ITEMS:
+		on_item_changed(item)
+	for item in UPGRADE_ITEMS:
+		on_item_changed(item)
 	$ui/weapon/ammo_label.text = str(Global.count(current_weapon))
+
+func on_item_changed(item: String):
+	if item in VISIBLE_ITEMS:
+		var count: Label = get_node("ui/inventory/"+item+"_count")
+		count.text = str(Global.count(item))
+		show_specific_item(item)
 	
-	var health_up :int = Global.count("health_up")
-	var stamina_up :int = Global.count("stamina_up")
+	elif item in UPGRADE_ITEMS:
+		var health_up :int = Global.count("health_up")
+		var stamina_up :int = Global.count("stamina_up")
+		
+		var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
+		var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
+		
+		max_health = DEFAULT_MAX_HEALTH*h_factor
+		max_stamina = DEFAULT_MAX_STAMINA*s_factor
+		health_bar.max_value = max_health
+		health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
+		
+		stamina_bar.max_value = max_stamina
+		stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
+		
+		stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
+		jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
+		speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
+		stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
+		
+		var damage_up_count:int =  Global.count("damage_up")
+		damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
+		max_damage = damage_up_count >= MAX_DAMAGE_UP
+		
+		var new_armor:int = Global.count("armor")
+		if new_armor > armor:
+			extra_health += (new_armor - armor)*ARMOR_BOOST
+		armor = new_armor
+		armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
+		armor_bar.visible = armor > 0 and extra_health > 0
+		update_health()
 	
-	var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
-	var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
+		var new_energy = Global.count("stamina_booster")
+		if new_energy > energy:
+			extra_stamina = new_energy*EXTRA_STAMINA_BOOST
+		energy = new_energy
+		energy_bar.visible = energy > 0
 	
-	max_health = DEFAULT_MAX_HEALTH*h_factor
-	max_stamina = DEFAULT_MAX_STAMINA*s_factor
-	health_bar.max_value = max_health
-	health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
-	
-	stamina_bar.max_value = max_stamina
-	stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
-	
-	stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
-	jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
-	speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
-	stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
-	
-	var damage_up_count:int =  Global.count("damage_up")
-	damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
-	max_damage = damage_up_count >= MAX_DAMAGE_UP
-	
-	var new_armor:int = Global.count("armor")
-	if new_armor > armor:
-		extra_health += (new_armor - armor)*ARMOR_BOOST
-	armor = new_armor
-	armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
-	armor_bar.visible = armor > 0 and extra_health > 0
-	update_health()
-	
-	var new_energy = Global.count("stamina_booster")
-	if new_energy > energy:
-		extra_stamina = new_energy*EXTRA_STAMINA_BOOST
-	energy = new_energy
-	energy_bar.visible = energy > 0
-	
+	elif current_weapon == item:
+		$ui/weapon/ammo_label.text = str(Global.count(item))
+		if !$ui/weapon.visible:
+			show_ammo()
 	#debug
 	var state_viewer: Control = $ui/debug/game_state
 	for c in state_viewer.get_children():
@@ -1072,6 +1100,16 @@ func drain_stamina(amount):
 func total_stamina():
 	return extra_stamina + stamina
 
+func can_place_flag():
+	return state == State.Ground and Global.count("flag")
+
+func place_flag():
+	Global.add_item("flag", -1)
+	Global.save_checkpoint(global_transform.origin)
+	var f = flag.instance()
+	get_tree().current_scene.add_child(f)
+	f.global_transform = $jackie/flag_ref.global_transform
+
 func can_talk():
 	return state == State.Ground
 
@@ -1162,8 +1200,27 @@ func get_item(id):
 	mesh.play_pickup_sound(id)
 
 func show_inventory():
+	for g in $ui/inventory.get_children():
+		if g is CanvasItem:
+			g.visible = true
 	$ui/inventory.show()
 	$ui/inventory/vis_timer.start()
+
+func show_specific_item(item):
+	if !$ui/inventory.visible:
+		for g in $ui/inventory.get_children():
+			if g is CanvasItem:
+				g.visible = false
+		$ui/inventory.show()
+	$ui/inventory/vis_timer.start()
+	var count = get_node("ui/inventory/"+item+"_count")
+	var label = get_node("ui/inventory/"+item+"_label")
+	if !label or !count:
+		print_debug("BUG: no inventory for ", item)
+		return
+	label.show()
+	count.show()
+	
 
 func _on_vis_timer_timeout():
 	$ui/inventory.hide()
@@ -1171,6 +1228,7 @@ func _on_vis_timer_timeout():
 func track_weapon(weapon: String):
 	current_weapon = weapon
 	$ui/weapon/weapon_label.text = weapon.capitalize()
+	$ui/weapon/ammo_label.text = str(Global.count(weapon))
 
 func show_ammo():
 	$ui/weapon.show()

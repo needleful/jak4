@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/flag.tscn" type="PackedScene" id=10]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -533,8 +534,12 @@ size = Vector3( 0.2, 0.2, 0.2 )
 [node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
 collision_layer = 10
 script = ExtResource( 1 )
+flag = ExtResource( 10 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
+
+[node name="flag_ref" type="Spatial" parent="jackie"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0524814, 0.260517 )
 
 [node name="debug_center" type="MeshInstance" parent="jackie"]
 transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, 0, 1.72277, 0.2413 )
@@ -833,7 +838,7 @@ custom_constants/vseparation = 16
 custom_constants/hseparation = 18
 columns = 2
 
-[node name="gem_Label" type="Label" parent="ui/inventory"]
+[node name="gem_label" type="Label" parent="ui/inventory"]
 margin_top = 16.0
 margin_right = 99.0
 margin_bottom = 38.0
@@ -868,7 +873,7 @@ margin_bottom = 124.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 
-[node name="cap_label" type="Label" parent="ui/inventory"]
+[node name="capacitor_label" type="Label" parent="ui/inventory"]
 margin_top = 156.0
 margin_right = 99.0
 margin_bottom = 178.0
@@ -878,11 +883,29 @@ custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 3
 text = "Capacitors:"
 
-[node name="cap_count" type="Label" parent="ui/inventory"]
+[node name="capacitor_count" type="Label" parent="ui/inventory"]
 margin_left = 117.0
 margin_top = 140.0
 margin_right = 144.0
 margin_bottom = 194.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="flag_label" type="Label" parent="ui/inventory"]
+margin_top = 226.0
+margin_right = 99.0
+margin_bottom = 248.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 3
+text = "Flags:"
+
+[node name="flag_count" type="Label" parent="ui/inventory"]
+margin_left = 117.0
+margin_top = 210.0
+margin_right = 144.0
+margin_bottom = 264.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 

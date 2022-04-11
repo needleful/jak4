@@ -67,8 +67,7 @@ func _input(event):
 func set_current_weapon(weapon: PackedScene):
 	current_weapon = weapon.instance()
 	ref.add_child(current_weapon)
-	if holder:
-		holder.track_weapon(current_weapon.name)
+	holder.track_weapon(current_weapon.name)
 
 func update_laser():
 	var l = laser.get_hit_length()
@@ -267,23 +266,19 @@ func set_state(new_state, force := false):
 			holder.hold_gun(1.0)
 			gun_ik.start()
 		State.Firing:
-			visible = true
-			holder.blend_gun(1.0)
-			holder.hold_gun(1.0)
-			gun_ik.start()
+			if current_weapon.fire():
+				holder.play_fire()
+				holder.blend_gun(1.0)
+				gun_ik.interpolation = 0.2
+				gun_ik.start()
+				laser.visible = false
+				laser_geometry.visible = false
+				visible = true
+				holder.hold_gun(1.0)
 			time_firing = current_weapon.time_firing
 			time_since_fired = 0
 			if state == State.DelayedFire:
 				state_before_fire = State.Free
 			else:
 				state_before_fire = state
-			if current_weapon.fire():
-				holder.play_fire()
-				gun_ik.interpolation = 0.2
-				laser.visible = false
-				laser_geometry.visible = false
-			else:
-				gun_ik.interpolation = 1.0
-				laser.visible = true
-				laser_geometry.visible = true
 	state = new_state
