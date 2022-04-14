@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://entities/flag.tscn" type="PackedScene" id=10]
+[ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=11]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -85,6 +86,38 @@ height = 0.8
 [sub_resource type="CapsuleShape" id=7]
 radius = 0.35
 height = 0.2
+
+[sub_resource type="Animation" id=48]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch/SpringArm:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -15, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=49]
+resource_name = "shot_shake"
+length = 0.08
+step = 0.02
+tracks/0/type = "value"
+tracks/0/path = NodePath("yaw/pitch/SpringArm:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.02, 0.04, 0.08 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -15, 0, 0 ), Vector3( -14.9, -0.004, -0.199 ), Vector3( -15, 0, 0.2 ), Vector3( -15, 0, 0 ) ]
+}
 
 [sub_resource type="SphereShape" id=6]
 radius = 0.25
@@ -535,6 +568,7 @@ size = Vector3( 0.2, 0.2, 0.2 )
 collision_layer = 10
 script = ExtResource( 1 )
 flag = ExtResource( 10 )
+capacitor = ExtResource( 11 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
 
@@ -670,6 +704,10 @@ shape = SubResource( 7 )
 
 [node name="camera_rig" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="cam_shake" type="AnimationPlayer" parent="camera_rig"]
+anims/RESET = SubResource( 48 )
+anims/shot_shake = SubResource( 49 )
 
 [node name="yaw" type="Spatial" parent="camera_rig"]
 

@@ -168,6 +168,7 @@ func get_normal_gun_orientation() -> Vector3:
 
 func play_fire():
 	anim["parameters/Fire/active"] = true
+	player.shake_camera()
 
 func hold_item(node: Spatial):
 	held_item = node

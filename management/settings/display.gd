@@ -26,7 +26,6 @@ func set_vsync(val: bool):
 func get_vsync()->bool:
 	return OS.vsync_enabled
 
-
 func get_textsize():
 	return theme.default_font.size
 

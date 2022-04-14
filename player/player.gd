@@ -160,6 +160,8 @@ const TIME_LEDGE_LEAVE := 0.1
 var timer_leave_ledge := 0.0
 
 const TIME_PLACE_FLAG := 0.5
+const TIME_GET_ITEM := 0.9
+var time_animation := 0.0
 
 enum State {
 	Ground,
@@ -188,7 +190,7 @@ enum State {
 	Damaged,
 	Locked,
 	PlaceFlag,
-	GetCapacitor
+	GetItem,
 }
 
 var state: int = State.Fall
@@ -231,6 +233,7 @@ onready var energy_bar := $ui/stats/stamina/extra
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
 export(PackedScene) var flag : PackedScene
+export(PackedScene) var capacitor : PackedScene
 
 const VISIBLE_ITEMS := [
 	"bug",
@@ -258,9 +261,10 @@ func _ready():
 	$ui/shop.player = self
 	set_state(State.Ground)
 	if Global.valid_game_state:
-		global_transform = Global.game_state.player_transform
+		global_transform.origin = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
 	else:
+		Global.game_state.checkpoint_position = global_transform.origin
 		# Generate three random Common coats
 		for _x in range(3):
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
@@ -361,9 +365,8 @@ func _physics_process(delta):
 				next_state = State.Slide
 			else:
 				timer_coyote = 0
-		State.PlaceFlag:
-			if timer_state > TIME_PLACE_FLAG:
-				place_flag()
+		State.PlaceFlag, State.GetItem:
+			if timer_state > time_animation:
 				next_state = State.Ground
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
@@ -687,7 +690,7 @@ func _physics_process(delta):
 		State.DiveEnd:
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
-		State.Locked, State.PlaceFlag:
+		State.Locked, State.PlaceFlag, State.GetItem:
 			desired_velocity = Vector3.ZERO
 
 	update_visuals(desired_velocity)
@@ -696,9 +699,7 @@ func _process(_delta):
 	update_stamina()
 
 func prepare_save():
-	Global.game_state.player_transform = global_transform
 	Global.game_state.current_coat = current_coat
-	assert(Global.game_state.player_transform == global_transform)
 	$ui/saveStats/AnimationPlayer.play("save_start")
 
 func complete_save():
@@ -1083,7 +1084,7 @@ func respawn():
 	velocity = Vector3.ZERO
 	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
-	global_transform.origin = Global.checkpoint_position
+	global_transform.origin = Global.game_state.checkpoint_position
 
 func heal():
 	mesh.start_heal_particle()
@@ -1112,9 +1113,9 @@ func can_place_flag():
 	return Global.count("flag")
 
 func place_flag():
-	Global.save_checkpoint(global_transform.origin)
 	var f = mesh.release_item()
 	Global.place_flag(f, $jackie/flag_ref.global_transform)
+	Global.save_checkpoint(global_transform.origin)
 
 func can_talk():
 	return state == State.Ground
@@ -1204,7 +1205,7 @@ func _on_prompt_timer_timeout():
 	
 func get_item(id):
 	if id == "capacitor":
-		set_state(State.GetCapacitor)
+		set_state(State.GetItem)
 	mesh.play_pickup_sound(id)
 
 func show_inventory():
@@ -1244,6 +1245,10 @@ func show_ammo():
 func hide_ammo():
 	$ui/weapon.hide()
 
+func shake_camera():
+	if cam_rig.aiming:
+		$camera_rig/cam_shake.play("shot_shake")
+
 func set_state(next_state: int):
 	if state == next_state:
 		return
@@ -1254,6 +1259,12 @@ func set_state(next_state: int):
 	$crouching_col.disabled = true
 	$standing_col.disabled = false
 	gun.unlock()
+	
+	# Place flag on state exit
+	if state == State.PlaceFlag:
+		place_flag()
+	elif state == State.GetItem:
+		mesh.release_item()
 	
 	match next_state:
 		State.Fall, State.LedgeFall:
@@ -1354,7 +1365,7 @@ func set_state(next_state: int):
 			mesh.start_dive_shockwave(max_damage)
 		State.Damaged:
 			velocity.y = speed_factor*VEL_DAMAGED_V
-			mesh.transition_to("Fall")
+			mesh.transition_to("Damaged")
 		State.Locked:
 			mesh.transition_to("Ground")
 			velocity = Vector3.ZERO
@@ -1364,5 +1375,13 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 			gun.aim_lock()
 			mesh.hold_item(flag.instance())
+			time_animation = TIME_PLACE_FLAG
+		State.GetItem:
+			mesh.transition_to("GetItem")
+			velocity = Vector3.ZERO
+			gun.aim_lock()
+			mesh.hold_item(capacitor.instance())
+			time_animation = TIME_GET_ITEM
+			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

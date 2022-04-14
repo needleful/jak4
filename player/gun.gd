@@ -45,6 +45,11 @@ const lockon_weight_angle := 4.5
 const lockon_max_dist_sq := 900.0
 const lockon_max_angle_rad := PI/2.0
 
+var timer_cant_lock_on := 0.0
+const TIME_QUIT_LOCK_ON := 0.25
+
+var target: Node
+
 func _ready():
 	var w = load("res://player/weapons/pistol.tscn")
 	if w is PackedScene:
@@ -148,14 +153,20 @@ func _process(delta):
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if score < best_score:
-				# TODO: a physics cast here
 				var col := ds.intersect_ray(cast_start, g.global_transform.origin, [], MASK_ATTACK)
 				if col and "collider" in col and col.collider == g:
 					best_target = g
 					best_score = score
-		if best_target:
-			target_dir = (best_target.global_transform.origin - base_ref.global_transform.origin)
-			ik_target.global_transform.origin = best_target.global_transform.origin
+					timer_cant_lock_on = 0
+				elif target == g:
+					timer_cant_lock_on += delta
+					if timer_cant_lock_on < TIME_QUIT_LOCK_ON:
+						best_target = g
+						best_score = score
+		target = best_target
+		if target:
+			target_dir = (target.global_transform.origin - base_ref.global_transform.origin)
+			ik_target.global_transform.origin = target.global_transform.origin
 		else:
 			target_dir = current_dir
 			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0

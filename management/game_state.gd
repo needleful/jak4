@@ -3,7 +3,7 @@ class_name GameState
 
 export(Dictionary) var stats: Dictionary = {}
 export(Dictionary) var inventory: Dictionary = {}
-export(Transform) var player_transform: Transform = Transform()
+export(Vector3) var checkpoint_position: Vector3
 export(Resource) var current_coat: Resource
 export(Array, Resource) var all_coats: Array
 export(Array, NodePath) var picked_items: Array

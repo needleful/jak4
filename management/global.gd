@@ -23,7 +23,6 @@ var color_sublime := Color.coral
 # Items that also have a "stat" value, 
 # measuring the total collected 
 var tracked_items = ["bug", "capacitor"]
-var checkpoint_position : Vector3
 
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
@@ -157,7 +156,7 @@ func get_rarity_color(rarity: int) -> Color:
 #Saving and loading
 
 func save_checkpoint(pos: Vector3):
-	checkpoint_position = pos
+	game_state.checkpoint_position = pos
 	save_sync()
 
 func save_game():
@@ -167,7 +166,6 @@ func load_sync():
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
 		valid_game_state = true
-		checkpoint_position = game_state.player_transform.origin
 		var _x = get_tree().reload_current_scene()
 	else:
 		print_debug("Tried to load with no save at ", save_path)
