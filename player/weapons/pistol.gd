@@ -1,6 +1,6 @@
 extends Spatial
 
-const BASE_DAMAGE := 10.0
+const BASE_DAMAGE := 5.0
 const BASE_RANGE := 60.0
 const time_firing := 0.15
 

@@ -3,12 +3,15 @@ extends Spatial
 export(int) var required_power := 1
 # Only for triggering doors through events persistently
 export(String) var tracked_stat = ""
+export(bool) var generate_stat = false
 
 var power := 0
 var open := false
 
 func _ready():
-	if tracked_stat != "":
+	if tracked_stat != "" or generate_stat:
+		if generate_stat:
+			tracked_stat = str(get_path())+"/opened"
 		var stat_power = Global.stat(tracked_stat)
 		add_power(stat_power)
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")

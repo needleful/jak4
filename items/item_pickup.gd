@@ -6,6 +6,8 @@ export(PackedScene) var preview
 export(bool) var persistent := true
 export(bool) var gravity = false
 
+const sq_distance_visible := 30000
+
 func _ready():
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
@@ -23,3 +25,15 @@ func _on_area_body_entered(body):
 	if persistent:
 		Global.mark_picked(get_path())
 	queue_free()
+
+func process_player_distance(origin: Vector3):
+	var sq_dist = (origin - global_transform.origin).length_squared()
+	var vis = sq_dist < sq_distance_visible
+	if visible != vis:
+		visible = vis
+		if has_node("AnimationPlayer"):
+			if visible:
+				$AnimationPlayer.play()
+			else:
+				$AnimationPlayer.stop(false)
+	return INF

@@ -1086,6 +1086,10 @@ func respawn():
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
 
+func teleport_to(t: Transform):
+	global_transform.origin = t.origin
+	$ui/fade/AnimationPlayer.play("fadein")
+
 func heal():
 	mesh.start_heal_particle()
 	health = max_health

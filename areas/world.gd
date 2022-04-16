@@ -6,7 +6,7 @@ export(Texture) var keyboard_spin
 export(Texture) var keyboard_lunge
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 550
+const MIN_DIST_LOAD := 200
 const MIN_DIST_MUST_LOAD := 100
 const MIN_SQDIST_UPDATE := 10
 
