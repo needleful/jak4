@@ -203,6 +203,8 @@ func fire_test_orb():
 	orb.velocity = ref.global_transform.basis.z*orb.speed
 
 func can_fire():
+	if !current_weapon:
+		return false
 	return ( state != State.Firing
 		and state != State.NoWeapon
 		and state != State.Locked)

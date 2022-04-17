@@ -1,16 +1,19 @@
-extends Spatial
+extends NPC
 
-export(Resource) var dialog
 export(AudioStream) var music
-onready var anim := $lil_man/AnimationPlayer
-var visual_name := "Young Boy"
 
 onready var last_position := global_transform.origin
 onready var player :PlayerBody = get_tree().current_scene.get_node("player")
 const ROTATE_SPEED := 10.0
-var look_at_player := true
+var look_at_player := false
 var chase := true
 var in_tutorial := false
+
+func _ready():
+	# TODO: maybe add some tutorial-free dialog
+	if (Global.stat($tutorial_area.get_stat_name())):
+		$dialog.queue_free()
+	idle()
 
 func _process(delta):
 	if !chase:
@@ -35,12 +38,6 @@ func _process(delta):
 		$lil_man.global_rotate(axis, angle)
 	
 	last_position = current_position
-
-func start_coat_trade(p_player):
-	p_player.start_dialog(self, dialog, self, "_coat")
-	
-func _ready():
-	idle()
 
 func idle():
 	look_at_player = true
@@ -71,13 +68,7 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	$dialog.queue_free()
 	Music.play_music(music)
 	in_tutorial = true
 	$tutorial_area.next_stage()
-
-func get_coat() -> Coat:
-	return Global.stat($lil_man.coat_stat())
-
-func set_coat(coat: Coat):
-	$lil_man.show_coat(coat)
-	return Global.set_stat($lil_man.coat_stat(), coat)

@@ -1,13 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://entities/visual/lil_man.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/npc.gd" type="Script" id=2]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CylinderShape" id=1]
 radius = 0.272342
 height = 1.05653
 
 [sub_resource type="CylinderShape" id=2]
+radius = 0.658097
 height = 1.20272
 
 [node name="npc" type="KinematicBody"]
@@ -23,6 +25,9 @@ shape = SubResource( 1 )
 [node name="dialog" type="Area" parent="."]
 collision_layer = 0
 collision_mask = 2
+
+[node name="dialog_circle" parent="dialog" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.699022 )
 
 [node name="CollisionShape" type="CollisionShape" parent="dialog"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605396, 0.682469 )

@@ -1,6 +1,8 @@
 extends KinematicBody
 class_name PlayerBody
 
+signal jumped
+
 const GRAVITY := Vector3.DOWN*24
 
 # Movement
@@ -230,10 +232,14 @@ onready var stamina_bar := $ui/stats/stamina/base
 onready var armor_bar := $ui/stats/health/extra
 onready var energy_bar := $ui/stats/stamina/extra
 
+onready var game_ui := $ui/custom_game
+
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
 export(PackedScene) var flag : PackedScene
 export(PackedScene) var capacitor : PackedScene
+
+var held_item: Spatial
 
 const VISIBLE_ITEMS := [
 	"bug",
@@ -1087,8 +1093,8 @@ func respawn():
 	global_transform.origin = Global.game_state.checkpoint_position
 
 func teleport_to(t: Transform):
-	global_transform.origin = t.origin
 	$ui/fade/AnimationPlayer.play("fadein")
+	global_transform.origin = t.origin
 
 func heal():
 	mesh.start_heal_particle()
@@ -1172,13 +1178,13 @@ func lock():
 	set_process_input(false)
 	set_state(State.Locked)
 	$ui/stats.hide()
+	$ui/inventory/vis_timer.stop()
 	$ui/inventory.hide()
 
 func unlock():
 	set_process_input(true)
 	$unlock_timer.start()
 	$ui/stats.show()
-	$ui/inventory.show()
 
 func _on_unlock_timer_timeout():
 	set_state(State.Ground)
@@ -1206,10 +1212,14 @@ func show_prompt(textures: Array, text: String):
 func _on_prompt_timer_timeout():
 	print("Hid prompt: ", $ui/tutorial/Label.text)
 	$ui/tutorial.hide()
-	
+
+func celebrate(item: Spatial):
+	held_item = item
+	set_state(State.GetItem)
+
 func get_item(id):
 	if id == "capacitor":
-		set_state(State.GetItem)
+		celebrate(capacitor.instance())
 	mesh.play_pickup_sound(id)
 
 func show_inventory():
@@ -1274,6 +1284,7 @@ func set_state(next_state: int):
 		State.Fall, State.LedgeFall:
 			mesh.transition_to("Fall")
 		State.BaseJump:
+			emit_signal("jumped")
 			velocity.y = jump_factor*JUMP_VEL_BASE
 			mesh.transition_to("BaseJump")
 		State.Ground:
@@ -1293,6 +1304,7 @@ func set_state(next_state: int):
 			stamina -= STAMINA_DRAIN_CLIMB_START
 			gun.lock()
 		State.CrouchJump:
+			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
@@ -1304,6 +1316,7 @@ func set_state(next_state: int):
 			can_air_spin = true
 			gun.lock()
 		State.LedgeJump:
+			emit_signal("jumped")
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
 			mesh.transition_to("BaseJump")
 		State.Roll:
@@ -1312,6 +1325,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Roll")
 			gun.lock()
 		State.RollJump:
+			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			var dir = mesh.global_transform.basis.z
@@ -1349,6 +1363,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Uppercut")
 			gun.lock()
 		State.Uppercut:
+			emit_signal("jumped")
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
 			mesh.start_kick_left(max_damage)
@@ -1384,7 +1399,8 @@ func set_state(next_state: int):
 			mesh.transition_to("GetItem")
 			velocity = Vector3.ZERO
 			gun.aim_lock()
-			mesh.hold_item(capacitor.instance())
+			if held_item:
+				mesh.hold_item(held_item)
 			time_animation = TIME_GET_ITEM
 			
 	state = next_state

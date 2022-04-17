@@ -1,4 +1,5 @@
 extends KinematicBody
+class_name NPC
 
 export(Resource) var dialog
 export(String) var visual_name := "Villager"

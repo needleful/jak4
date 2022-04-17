@@ -1,7 +1,7 @@
 [gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
-[ext_resource path="res://entities/shop_keeper.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/npc_shop.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=3]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material/env/bricks.material" type="Material" id=5]
@@ -9,7 +9,6 @@
 [ext_resource path="res://_glb/chunks/chunk112.glb" type="PackedScene" id=7]
 [ext_resource path="res://dialog/intro/gate.dialog" type="Resource" id=8]
 [ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=9]
-[ext_resource path="res://entities/one_time/tutorial_tyler.tscn" type="PackedScene" id=10]
 [ext_resource path="res://dialog/shops/village_shop.dialog" type="Resource" id=11]
 [ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/fountain.tscn" type="PackedScene" id=13]
@@ -31,9 +30,13 @@
 [ext_resource path="res://dialog/intro/fountain.dialog" type="Resource" id=29]
 [ext_resource path="res://dialog/intro/tylers_mom.dialog" type="Resource" id=30]
 [ext_resource path="res://audio/music/tutorial.ogg" type="AudioStream" id=31]
+[ext_resource path="res://entities/one_time/npc_tyler.gd" type="Script" id=32]
 
 [sub_resource type="ConvexPolygonShape" id=227]
 points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
+
+[sub_resource type="SphereShape" id=235]
+radius = 2.91933
 
 [sub_resource type="SphereShape" id=229]
 radius = 3.0
@@ -346,9 +349,6 @@ tracks/1/keys = {
 "method": "run"
 } ]
 }
-
-[sub_resource type="SphereShape" id=235]
-radius = 2.91933
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
@@ -666,34 +666,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 183.985, -222.809, -58.303 )
 
 [node name="village_shop" parent="." index="92" instance=ExtResource( 2 )]
 transform = Transform( 0.0969923, 0, 0.995285, 0, 1, 0, -0.995285, 0, 0.0969923, 198.143, -230.222, 13.0641 )
-dialog_sequence = ExtResource( 11 )
+dialog = ExtResource( 11 )
+visual_name = "Shop Keeper"
 inventory = "res://entities/shop_stock/village_stock.json"
 
-[node name="tutorial_tyler" parent="." index="93" instance=ExtResource( 10 )]
-transform = Transform( 0.808586, 0, 0.588378, 0, 1, 0, -0.588378, 0, 0.808586, 210.227, -228.909, -44.48 )
-collision_layer = 4097
-dialog = ExtResource( 19 )
-music = ExtResource( 31 )
-
-[node name="tutorial_area" type="Area" parent="tutorial_tyler" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0600052, 0.177994, 0.106392 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 18 )
-prompts_node = NodePath("../../tutorial_prompts")
-id = "tyler_tutorial"
-
-[node name="CollisionShape" type="CollisionShape" parent="tutorial_tyler/tutorial_area" index="0"]
-shape = SubResource( 229 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="tutorial_tyler/tutorial_area" index="1"]
-anims/RESET = SubResource( 230 )
-anims/TutStage0 = SubResource( 231 )
-anims/TutStage1 = SubResource( 232 )
-anims/TutStage2 = SubResource( 233 )
-anims/TutStage3 = SubResource( 234 )
-
-[node name="tutorial_prompts" type="Spatial" parent="." index="94"]
+[node name="tutorial_prompts" type="Spatial" parent="." index="93"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 207.365, -229.117, -42.9328 )
 
 [node name="crouchJump" type="Area" parent="tutorial_prompts" index="0"]
@@ -774,6 +751,31 @@ shape = SubResource( 235 )
 [node name="CollisionShape2" type="CollisionShape" parent="tutorial_prompts/climb" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78814, -1.88055, -1.8419 )
 shape = SubResource( 235 )
+
+[node name="tutorial_tyler_neo" parent="." index="94" instance=ExtResource( 28 )]
+transform = Transform( 0.991118, 0, -0.132983, 0, 1, 0, 0.132983, 0, 0.991118, 210.227, -228.909, -44.48 )
+script = ExtResource( 32 )
+dialog = ExtResource( 19 )
+visual_name = "Young Boy"
+model_scale = 0.75
+music = ExtResource( 31 )
+
+[node name="tutorial_area" type="Area" parent="tutorial_tyler_neo" index="3"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 18 )
+prompts_node = NodePath("../../tutorial_prompts")
+id = "tyler_tutorial"
+
+[node name="CollisionShape" type="CollisionShape" parent="tutorial_tyler_neo/tutorial_area" index="0"]
+shape = SubResource( 229 )
+
+[node name="tutorial_anim" type="AnimationPlayer" parent="tutorial_tyler_neo/tutorial_area" index="1"]
+anims/RESET = SubResource( 230 )
+anims/TutStage0 = SubResource( 231 )
+anims/TutStage1 = SubResource( 232 )
+anims/TutStage2 = SubResource( 233 )
+anims/TutStage3 = SubResource( 234 )
 
 [node name="tyler_tut_beat" type="Spatial" parent="." index="95"]
 transform = Transform( 0.343987, 0, 0.938974, 0, 1, 0, -0.938974, 0, 0.343987, 211.178, -228.884, -44.7593 )
@@ -917,5 +919,5 @@ transform = Transform( 0.972113, 0, 0.234514, 0, 1, 0, -0.234514, 0, 0.972113, 2
 [node name="crawly" parent="." index="134" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9999, -249.106, 141.486 )
 
-[connection signal="body_entered" from="tutorial_tyler/tutorial_area" to="tutorial_tyler/tutorial_area" method="_on_tutorial_area_body_entered"]
-[connection signal="animation_finished" from="tutorial_tyler/tutorial_area/AnimationPlayer" to="tutorial_tyler/tutorial_area" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="body_entered" from="tutorial_tyler_neo/tutorial_area" to="tutorial_tyler_neo/tutorial_area" method="_on_tutorial_area_body_entered"]
+[connection signal="animation_finished" from="tutorial_tyler_neo/tutorial_area/tutorial_anim" to="tutorial_tyler_neo/tutorial_area" method="_on_AnimationPlayer_animation_finished"]

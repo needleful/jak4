@@ -1,4 +1,7 @@
-{main_speaker.get_parent().completed()}
+// The game is active
+{main_speaker.get_parent().active}
+	* The kids are cheering you on. One is booing.
+{otherwise if main_speaker.get_parent().completed()}
 	Eeey!
 	* The kids cheer and wave at you as they play.
 {otherwise}
@@ -22,4 +25,17 @@
 
 {exit()}
 :_coat
-* TODO: implement
+{traded_coats()}
+	[You] Could we trade coats again?
+{otherwise}
+	[You] Oh, your coat is lovely! Would you want to trade?
+	...
+	* You pantomime trading coats to the child.
+{main_speaker.get_parent().completed()}
+	... Ah, eeya!
+	* The child trades coats with you.
+	{swap_coats()}
+	[You] Thank you!
+{otherwise}
+	Hmmmm.... paina! hugoran!
+	* The child will not trade unless you play with them.

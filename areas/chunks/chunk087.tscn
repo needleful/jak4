@@ -1,17 +1,27 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
+[ext_resource path="res://areas/chunks/chunk087-lowres.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/plateau/basin.dialog" type="Resource" id=2]
 [ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/npc.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/env/ruin1.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=6]
 
-[node name="chunk087" type="Spatial"]
-script = ExtResource( 1 )
+[node name="chunk087" instance=ExtResource( 1 )]
 
-[node name="hut" parent="." instance=ExtResource( 3 )]
+[node name="ruin1" parent="." index="0" instance=ExtResource( 5 )]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 129, -2, 79 )
+
+[node name="ruin2" parent="." index="1" instance=ExtResource( 5 )]
+transform = Transform( -0.86921, 0, -0.494442, 0, 1, 0, 0.494442, 0, -0.86921, 143.33, -2.1497, 64.1795 )
+
+[node name="hut" parent="." index="2" instance=ExtResource( 3 )]
 transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 114, 0, 62 )
 
-[node name="npc" parent="." instance=ExtResource( 4 )]
+[node name="npc_coats" parent="." index="3" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 115.531, 1, 62.2533 )
 dialog = ExtResource( 2 )
 visual_name = "Young Woman"
+
+[node name="scrap_pile2" parent="." index="4" instance=ExtResource( 6 )]
+transform = Transform( 0.915319, -0.0715909, -0.396316, 0.0157914, 0.989696, -0.142308, 0.40242, 0.123999, 0.907018, 137.201, 3.26937, 72.9201 )

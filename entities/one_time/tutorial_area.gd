@@ -8,7 +8,7 @@ onready var prompts = get_node(prompts_node)
 
 var stage := 0
 onready var tyler := get_parent()
-var player: Node
+onready var player := Global.get_player()
 
 func _ready():
 	if Global.stat(get_stat_name()):
@@ -16,14 +16,7 @@ func _ready():
 		queue_free()
 
 func _on_tutorial_area_body_entered(body):
-	if stage == 0:
-		if !(body is PlayerBody):
-			print_debug("BUG: Non-player triggered dialog node ", get_path())
-			return
-		if body.can_talk():
-			player = body
-			body.start_dialog(self, tyler.dialog, tyler)
-	else:
+	if stage != 0:
 		next_stage()
 
 func next_stage():
@@ -33,8 +26,8 @@ func next_stage():
 				c.enabled = true
 	var anim := "TutStage" + str(stage)
 	stage += 1
-	if $AnimationPlayer.has_animation(anim):
-		$AnimationPlayer.play(anim)
+	if $tutorial_anim.has_animation(anim):
+		$tutorial_anim.play(anim)
 	else:
 		Music.stop_music()
 		player.start_dialog(self, tyler.dialog, tyler)
