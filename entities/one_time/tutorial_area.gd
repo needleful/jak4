@@ -15,7 +15,7 @@ func _ready():
 		tyler.chase = false
 		queue_free()
 
-func _on_tutorial_area_body_entered(body):
+func _on_tutorial_area_body_entered(_body):
 	if stage != 0:
 		next_stage()
 

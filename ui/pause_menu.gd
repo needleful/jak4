@@ -108,7 +108,6 @@ func load_settings():
 	var f:File = File.new()
 	if !f.file_exists(save_path):
 		print("No settings file: ", save_path)
-		save_settings()
 		return
 	var file:ConfigFile = ConfigFile.new()
 	var res = file.load(save_path)

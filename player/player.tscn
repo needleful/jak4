@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -420,6 +420,126 @@ outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
 
+[sub_resource type="Animation" id=50]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=51]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=52]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=53]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=54]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=55]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=56]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=57]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [sub_resource type="Animation" id=36]
 length = 0.001
 tracks/0/type = "value"
@@ -564,6 +684,19 @@ height = 0.269648
 
 [sub_resource type="PrismMesh" id=12]
 size = Vector3( 0.2, 0.2, 0.2 )
+
+[sub_resource type="PrismMesh" id=58]
+size = Vector3( 0.2, 0.2, 0.1 )
+
+[sub_resource type="PrismMesh" id=60]
+size = Vector3( 0.18, 0.18, 0.05 )
+
+[sub_resource type="SpatialMaterial" id=61]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SphereMesh" id=59]
+radius = 0.05
+height = 0.1
 
 [node name="player" type="KinematicBody" groups=["post_save_object", "pre_save_object"]]
 collision_layer = 10
@@ -870,12 +1003,12 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -249.0
+margin_left = -356.0
 margin_top = -97.0
 margin_bottom = 97.0
 custom_constants/vseparation = 16
 custom_constants/hseparation = 18
-columns = 2
+columns = 3
 
 [node name="gem_label" type="Label" parent="ui/inventory"]
 margin_top = 16.0
@@ -893,6 +1026,18 @@ margin_right = 144.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
+
+[node name="gem_added" type="Label" parent="ui/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_right = 231.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/gem_added"]
+anims/RESET = SubResource( 50 )
+anims/show = SubResource( 51 )
 
 [node name="bug_label" type="Label" parent="ui/inventory"]
 margin_top = 86.0
@@ -912,6 +1057,19 @@ margin_bottom = 124.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 
+[node name="bug_added" type="Label" parent="ui/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 70.0
+margin_right = 231.0
+margin_bottom = 124.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/bug_added"]
+anims/RESET = SubResource( 52 )
+anims/show = SubResource( 53 )
+
 [node name="capacitor_label" type="Label" parent="ui/inventory"]
 margin_top = 156.0
 margin_right = 99.0
@@ -930,6 +1088,19 @@ margin_bottom = 194.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 
+[node name="capacitor_added" type="Label" parent="ui/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 140.0
+margin_right = 231.0
+margin_bottom = 194.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/capacitor_added"]
+anims/RESET = SubResource( 54 )
+anims/show = SubResource( 55 )
+
 [node name="flag_label" type="Label" parent="ui/inventory"]
 margin_top = 226.0
 margin_right = 99.0
@@ -947,6 +1118,19 @@ margin_right = 144.0
 margin_bottom = 264.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
+
+[node name="flag_added" type="Label" parent="ui/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 210.0
+margin_right = 231.0
+margin_bottom = 264.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/flag_added"]
+anims/RESET = SubResource( 56 )
+anims/show = SubResource( 57 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory"]
 anims/RESET = SubResource( 36 )
@@ -1122,6 +1306,24 @@ material/0 = null
 [node name="unlock_timer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="debug_climb" type="Spatial" parent="."]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1.41574, 0 )
+
+[node name="mesh" type="MeshInstance" parent="debug_climb"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.481227 )
+mesh = SubResource( 58 )
+material/0 = null
+
+[node name="dog" type="MeshInstance" parent="debug_climb/mesh"]
+mesh = SubResource( 60 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 61 )
+
+[node name="MeshInstance" type="MeshInstance" parent="debug_climb/mesh"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.89334e-09, -0.0766101, 0.0518876 )
+mesh = SubResource( 59 )
+material/0 = null
 
 [connection signal="timeout" from="ui/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]

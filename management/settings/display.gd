@@ -15,19 +15,24 @@ func get_name() -> String:
 	return "Display"
 
 func set_fullscreen(val: bool):
+	full_screen = val
 	OS.window_fullscreen = val
 
 func get_fullscreen() -> bool:
-	return OS.window_fullscreen
+	full_screen = OS.window_fullscreen
+	return full_screen
 
 func set_vsync(val: bool):
+	vsync = val
 	OS.vsync_enabled = val
 
 func get_vsync()->bool:
-	return OS.vsync_enabled
+	vsync = OS.vsync_enabled
+	return vsync
 
 func get_textsize():
-	return theme.default_font.size
+	text_size = theme.default_font.size
+	return text_size
 
 func set_textsize(val):
 	text_size = val
@@ -35,13 +40,15 @@ func set_textsize(val):
 	emit_signal("ui_redraw")
 
 func get_text_color()->Color:
-	return theme.get_color("font_color", "Label")
+	text_color = theme.get_color("font_color", "Label")
+	return text_color
 
 func set_text_color(val:Color):
+	#assert(val != Color.black)
 	text_color = val
-	theme.set_color("font_color", "Label", val)
-	theme.set_color("font_color", "Button", val)
-	theme.set_color("font_color", "OptionButton", val)
-	theme.set_color("font_color_fg", "Tabs", val)
-	theme.set_color("font_color_fg", "TabContainer", val)
+	theme.set_color("font_color", "Label", text_color)
+	theme.set_color("font_color", "Button", text_color)
+	theme.set_color("font_color", "OptionButton", text_color)
+	theme.set_color("font_color_fg", "Tabs", text_color)
+	theme.set_color("font_color_fg", "TabContainer", text_color)
 	emit_signal("ui_redraw")

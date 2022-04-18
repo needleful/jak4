@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://areas/chunks/chunk088_lowres.tscn" type="PackedScene" id=2]
@@ -32,12 +32,28 @@
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=30]
 [ext_resource path="res://entities/env/rock3.tscn" type="PackedScene" id=31]
 [ext_resource path="res://entities/env/foilage/tree1.tscn" type="PackedScene" id=32]
+[ext_resource path="res://ui/diagetic/target.png" type="Texture" id=33]
 
 [sub_resource type="CylinderShape" id=1]
 radius = 0.682553
 
 [sub_resource type="SpatialMaterial" id=2]
 albedo_texture = ExtResource( 26 )
+
+[sub_resource type="QuadMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_transparent = true
+flags_no_depth_test = true
+params_depth_draw_mode = 2
+params_billboard_mode = 1
+albedo_texture = ExtResource( 33 )
+emission_enabled = true
+emission = Color( 0, 0, 0, 1 )
+emission_energy = 0.5
+emission_operator = 0
+emission_on_uv2 = false
+emission_texture = ExtResource( 33 )
 
 [node name="chunk088" type="Spatial"]
 script = ExtResource( 1 )
@@ -831,25 +847,25 @@ script = ExtResource( 24 )
 [node name="npc_tyler" parent="game_088" instance=ExtResource( 17 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60927, 2.52747, -0.192726 )
 dialog = ExtResource( 27 )
-visual_name = "Children"
+visual_name = "Child"
 model_scale = 0.75
 
 [node name="npc_tyler2" parent="game_088" instance=ExtResource( 17 )]
 transform = Transform( 0.378616, 0, -0.925554, 0, 1, 0, 0.925554, 0, 0.378616, 0.771271, -0.029541, -2.43333 )
 dialog = ExtResource( 27 )
-visual_name = "Children"
+visual_name = "Child"
 model_scale = 0.75
 
 [node name="npc_tyler4" parent="game_088" instance=ExtResource( 17 )]
 transform = Transform( 0.378616, 0, -0.925554, 0, 1, 0, 0.925554, 0, 0.378616, -2.60197, 2.48436, -0.0149593 )
 dialog = ExtResource( 27 )
-visual_name = "Children"
+visual_name = "Child"
 model_scale = 0.75
 
 [node name="npc_tyler3" parent="game_088" instance=ExtResource( 17 )]
 transform = Transform( -0.835846, 0, 0.548965, 0, 1, 0, -0.548965, 0, -0.835846, 3.80908, 0.172653, -0.941528 )
 dialog = ExtResource( 27 )
-visual_name = "Children"
+visual_name = "Child"
 model_scale = 0.75
 
 [node name="game_target" type="Area" parent="game_088"]
@@ -866,6 +882,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82434, 0, -4.92159 )
 [node name="flag" parent="game_088" instance=ExtResource( 25 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20273, 7.6031, 2.48827 )
 flag_material = SubResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="game_088/flag"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00909424, 1.77278, 0.21022 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../../game_target")
+material/0 = SubResource( 4 )
 
 [node name="tree1" parent="." instance=ExtResource( 32 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82, -142.067, -134 )

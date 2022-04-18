@@ -14,7 +14,6 @@ func _init(name: String = ""):
 		vol = db_to_percent(AudioServer.get_bus_volume_db(bi))
 
 func apply(c):
-	print("Changed ", bus_name)
 	vol = c.vol
 	muted = c.muted
 	var bi = AudioServer.get_bus_index(bus_name)

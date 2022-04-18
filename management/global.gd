@@ -1,7 +1,7 @@
 extends Node
 
 signal inventory_changed
-signal item_changed(item)
+signal item_changed(item, amount)
 signal stat_changed(tag, value)
 
 var using_gamepad := false
@@ -92,7 +92,7 @@ func add_item(item: String, amount:= 1) -> int:
 	if item in tracked_items:
 		var _x = add_stat(item, amount)
 	emit_signal("inventory_changed")
-	emit_signal("item_changed", item)
+	emit_signal("item_changed", item, amount)
 	return game_state.inventory[item]
 
 func remove_item(item: String, amount := 1) -> bool:

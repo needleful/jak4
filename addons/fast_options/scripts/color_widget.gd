@@ -13,6 +13,7 @@ func set_option_hint(option:Dictionary):
 	$name.text = option_name.capitalize()
 
 func set_option_value(val:Color):
+	#assert(val != Color.black)
 	$value/rgb/redSlider.value = val.r
 	$value/rgb/greenSlider.value = val.g
 	$value/rgb/blueSlider.value = val.b

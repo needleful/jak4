@@ -59,7 +59,7 @@ const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 2.0
 const STAMINA_DRAIN_MIN := 0.05
 const MIN_CLIMB_STAMINA := 10.0
-
+const TIME_STOP_CLIMB := 0.1
 # Combat
 
 const TIME_LUNGE_MAX := 0.6
@@ -442,11 +442,17 @@ func _physics_process(delta):
 				* (1.0-sqrt(abs(best_floor_dot)))
 			)
 			if best_floor_dot > MIN_DOT_GROUND:
-				next_state = State.Crouch
+				timer_coyote += delta
+				if timer_coyote > TIME_STOP_CLIMB:
+					next_state = State.Crouch
 			elif best_normal == Vector3.ZERO:
-				next_state = State.Fall
+				timer_coyote += delta
+				if timer_coyote > TIME_STOP_CLIMB:
+					next_state = State.Fall
 			elif total_stamina() <= 0 or !Input.is_action_pressed("mv_crouch"):
 				next_state = State.Slide
+			else:
+				timer_coyote = 0.0
 		State.Roll:
 			if (timer_state > TIME_ROLL_MIN_JUMP 
 				and Input.is_action_just_pressed("mv_jump")
@@ -713,15 +719,21 @@ func complete_save():
 
 func update_inventory():
 	for item in VISIBLE_ITEMS:
-		on_item_changed(item)
+		on_item_changed(item, 0)
 	for item in UPGRADE_ITEMS:
-		on_item_changed(item)
+		on_item_changed(item, 0)
 	$ui/weapon/ammo_label.text = str(Global.count(current_weapon))
 
-func on_item_changed(item: String):
+func on_item_changed(item: String, amount: int):
 	if item in VISIBLE_ITEMS:
 		var count: Label = get_node("ui/inventory/"+item+"_count")
 		count.text = str(Global.count(item))
+		if amount != 0:
+			var added: Label = get_node("ui/inventory/"+item+"_added")
+			added.text = "+ "+str(amount) if amount > 0 else "- "+str(abs(amount))
+			var anim = added.get_node("AnimationPlayer")
+			anim.stop()
+			anim.play("show")
 		show_specific_item(item)
 	
 	elif item in UPGRADE_ITEMS:
@@ -843,14 +855,18 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		velocity,Vector3.DOWN*0.125,Vector3.UP)
 
 func accel_climb(delta: float, desired_velocity: Vector3):
-	var gravity := GRAVITY
+	var gravity := Vector3.ZERO
 	if ground_normal != Vector3.ZERO:
 		var axis = Vector3.UP.cross(ground_normal).normalized()
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
 			desired_velocity = desired_velocity.rotated(axis, angle)
 		gravity = GRAVITY.project(ground_normal)
-		
+		if desired_velocity != Vector3.ZERO:
+			$debug_climb.global_transform = $debug_climb.global_transform.looking_at(
+				$debug_climb.global_transform.origin + desired_velocity, ground_normal
+			)
+	$debug_climb/mesh/dog.transform.origin.y = desired_velocity.length()/10
 	var charge_accel = ACCEL_CLIMB
 	var charge: Vector3
 	var steer: Vector3
@@ -870,8 +886,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		(charge - velocity)/SPEED_RUN*charge_accel 
 		+ (steer*ACCEL_CLIMB) 
 		+ gravity )
-	velocity = move_and_slide_with_snap(
-		velocity + delta*gravity,Vector3.DOWN*0.125,Vector3.UP)
+	velocity = move_and_slide(velocity + delta*gravity)
 
 func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_slide := false):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
@@ -930,7 +945,7 @@ func accel_lunge(delta, desired_velocity):
 	velocity.y = min(velocity.y, v2.y)
 
 func should_raise_camera():
-	return state == State.LedgeHang or state == State.Climb
+	return state == State.LedgeHang
 
 func is_grounded():
 	return ( state == State.Ground
@@ -1238,9 +1253,11 @@ func show_specific_item(item):
 	$ui/inventory/vis_timer.start()
 	var count = get_node("ui/inventory/"+item+"_count")
 	var label = get_node("ui/inventory/"+item+"_label")
-	if !label or !count:
+	var added = get_node("ui/inventory/"+item+"_added")
+	if !label or !count or !added:
 		print_debug("BUG: no inventory for ", item)
 		return
+	added.show()
 	label.show()
 	count.show()
 	
@@ -1270,8 +1287,9 @@ func set_state(next_state: int):
 	timer_state = 0.0
 	timer_leave_ledge = 0
 	mesh.stop_particles()
-	$crouching_col.disabled = true
-	$standing_col.disabled = false
+	var head_blocked = crouch_head.get_overlapping_bodies().size() > 0
+	$crouching_col.disabled = !head_blocked
+	$standing_col.disabled = head_blocked
 	gun.unlock()
 	
 	# Place flag on state exit

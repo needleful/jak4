@@ -12,5 +12,5 @@ func process_player_distance(origin: Vector3):
 		visible = vis
 	return INF
 
-func _process(delta):
+func _process(_delta):
 	mat.set_shader_param("world_player", Global.get_player().global_transform.origin)
