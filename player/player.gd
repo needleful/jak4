@@ -16,6 +16,7 @@ const SPEED_BONK := 5.0
 
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
+const MIN_DOT_CLIMB := 0.0
 const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
 
@@ -445,7 +446,7 @@ func _physics_process(delta):
 				timer_coyote += delta
 				if timer_coyote > TIME_STOP_CLIMB:
 					next_state = State.Crouch
-			elif best_normal == Vector3.ZERO:
+			elif best_floor_dot <= MIN_DOT_CLIMB:
 				timer_coyote += delta
 				if timer_coyote > TIME_STOP_CLIMB:
 					next_state = State.Fall
