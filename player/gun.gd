@@ -131,7 +131,6 @@ func _process(delta):
 		var space: RID = get_world().space
 		var ds := PhysicsServer.space_get_direct_state(space)
 		var cast_start: Vector3 = base_ref.global_transform.origin
-		
 		var best_target : Spatial
 		# Lowest score wins
 		var best_score : float = INF
@@ -153,7 +152,12 @@ func _process(delta):
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if score < best_score:
-				var col := ds.intersect_ray(cast_start, g.global_transform.origin, [], MASK_ATTACK)
+				var cast_end: Vector3
+				if g.has_method("get_target_ref"):
+					cast_end = g.get_target_ref()
+				else:
+					cast_end = g.global_transform.origin
+				var col := ds.intersect_ray(cast_start, cast_end, [], MASK_ATTACK)
 				if col and "collider" in col and col.collider == g:
 					best_target = g
 					best_score = score
@@ -165,8 +169,13 @@ func _process(delta):
 						best_score = score
 		target = best_target
 		if target:
-			target_dir = (target.global_transform.origin - base_ref.global_transform.origin)
-			ik_target.global_transform.origin = target.global_transform.origin
+			var target_pos: Vector3
+			if target.has_method("get_target_ref"):
+				target_pos = target.get_target_ref()
+			else:
+				target_pos = target.global_transform.origin
+			target_dir = (target_pos - base_ref.global_transform.origin)
+			ik_target.global_transform.origin = target_pos
 		else:
 			target_dir = current_dir
 			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0

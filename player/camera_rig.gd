@@ -24,6 +24,9 @@ var analog_sns := Vector2(-0.1, 0.1)
 var cv := CORRECTION_VELOCITY
 var hv := H_CORRECTION
 var aiming := false
+var locked := false
+
+onready var cam_basis = camera.transform.basis
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -33,6 +36,10 @@ func _input(event):
 		mouse_accum += event.relative
 
 func _physics_process(delta):
+	if locked:
+		# Look at player, return
+		camera.global_transform = camera.global_transform.looking_at(player.global_transform.origin, Vector3.UP)
+		return
 	#Camera Movement
 	var target: Vector3 = player.global_transform.origin
 	var pos: Vector3 = yaw.global_transform.origin
@@ -99,6 +106,14 @@ func _process(delta):
 		pitch.rotation_degrees.x = 80
 	elif pitch.rotation_degrees.x < -80:
 		pitch.rotation_degrees.x = -80
+
+func reset():
+	camera.transform.basis = cam_basis
+	locked = false
+	set_aiming(false)
+
+func lock_follow():
+	locked = true
 
 func play_animation(anim: String):
 	$AnimationPlayer.play(anim)

@@ -116,7 +116,6 @@ const HEALTH_UP_BOOST := 0.12
 var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 
-
 const ARMOR_BOOST := 12.0
 var armor := 0
 var extra_health := 0.0
@@ -166,6 +165,8 @@ const TIME_PLACE_FLAG := 0.5
 const TIME_GET_ITEM := 0.9
 var time_animation := 0.0
 
+const TIME_FALLING_DEATH := 2.0
+
 enum State {
 	Ground,
 	Fall,
@@ -194,6 +195,7 @@ enum State {
 	Locked,
 	PlaceFlag,
 	GetItem,
+	FallingDeath
 }
 
 var state: int = State.Fall
@@ -287,11 +289,7 @@ func _ready():
 	gun.camera = cam_rig.camera
 
 func _input(event):
-	if event.is_action_pressed("debug_randomize_coat"):
-		var coat = Global.get_coat(Global.rand64())
-		set_current_coat(coat)
-		Global.add_coat(coat)
-	elif( can_talk()
+	if( can_talk()
 		and event.is_action_pressed("dialog_coat")
 		and coat_zone.get_overlapping_bodies().size() != 0
 	):
@@ -305,18 +303,10 @@ func _input(event):
 			if new_dist < current_dist:
 				best_trade = b
 		best_trade.start_coat_trade(self)
-	elif event.is_action_pressed("quick_save"):
-		Global.save_checkpoint(global_transform.origin)
-	elif event.is_action_pressed("quick_load"):
-		respawn()
-		#Global.load_sync()
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
 
 func _physics_process(delta):
-	if global_transform.origin.y < -500:
-		die()
-		return
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
 	timer_state += delta
@@ -641,6 +631,10 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif timer_state > TIME_DAMAGED:
 				next_state = State.Fall
+		State.FallingDeath:
+			if timer_state > TIME_FALLING_DEATH:
+				next_state = State.Fall
+				die()
 	set_state(next_state)
 	
 	match state:
@@ -705,6 +699,9 @@ func _physics_process(delta):
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked, State.PlaceFlag, State.GetItem:
 			desired_velocity = Vector3.ZERO
+		State.FallingDeath:
+			desired_velocity = Vector3.ZERO
+			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 
 	update_visuals(desired_velocity)
 
@@ -1098,11 +1095,14 @@ func take_damage(damage: int, direction: Vector3):
 		set_state(State.Damaged)
 
 func die():
-	print("Player died")
 	var _x = Global.add_stat("player_death")
 	respawn()
 
+func fall_to_death():
+	set_state(State.FallingDeath)
+
 func respawn():
+	cam_rig.reset()
 	velocity = Vector3.ZERO
 	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
@@ -1421,6 +1421,9 @@ func set_state(next_state: int):
 			if held_item:
 				mesh.hold_item(held_item)
 			time_animation = TIME_GET_ITEM
+		State.FallingDeath:
+			mesh.transition_to("Fall")
+			cam_rig.lock_follow()
 			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

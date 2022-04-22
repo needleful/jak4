@@ -32,7 +32,7 @@ tracks/1/keys = {
 "values": [ false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("AudioStreamPlayer3D:playing")
+tracks/2/path = NodePath("AudioStreamPlayer:playing")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -40,11 +40,11 @@ tracks/2/enabled = true
 tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
+"update": 1,
 "values": [ false ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("AudioStreamPlayer3D:stream")
+tracks/3/path = NodePath("AudioStreamPlayer:stream")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -52,15 +52,15 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ ExtResource( 2 ) ]
+"update": 1,
+"values": [ null ]
 }
 
 [sub_resource type="Animation" id=11]
 resource_name = "dry_fire"
 length = 0.1
 tracks/0/type = "value"
-tracks/0/path = NodePath("AudioStreamPlayer3D:stream")
+tracks/0/path = NodePath("AudioStreamPlayer:stream")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -72,7 +72,7 @@ tracks/0/keys = {
 "values": [ ExtResource( 4 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("AudioStreamPlayer3D:playing")
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -113,7 +113,7 @@ tracks/1/keys = {
 "values": [ true, false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("AudioStreamPlayer3D:playing")
+tracks/2/path = NodePath("AudioStreamPlayer:stream")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -122,10 +122,10 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ true ]
+"values": [ ExtResource( 2 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("AudioStreamPlayer3D:stream")
+tracks/3/path = NodePath("AudioStreamPlayer:playing")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -134,7 +134,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ ExtResource( 2 ) ]
+"values": [ true ]
 }
 
 [sub_resource type="CylinderMesh" id=3]
@@ -193,13 +193,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -
 mesh = SubResource( 3 )
 material/0 = SubResource( 9 )
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="4"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0637963, 0.0467384 )
-stream = ExtResource( 2 )
-unit_size = 5.0
-bus = "SFX_Player"
-
-[node name="impact" type="Node" parent="." index="5"]
+[node name="impact" type="Node" parent="." index="4"]
 
 [node name="Particles" type="Particles" parent="impact" index="0"]
 emitting = false
@@ -210,3 +204,5 @@ preprocess = 0.2
 randomness = 0.81
 process_material = SubResource( 7 )
 draw_pass_1 = SubResource( 8 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="5"]
