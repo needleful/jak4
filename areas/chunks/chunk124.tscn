@@ -34,6 +34,7 @@
 [ext_resource path="res://entities/env/ruin1.tscn" type="PackedScene" id=32]
 [ext_resource path="res://entities/fountain.tscn" type="PackedScene" id=33]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=34]
+[ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=35]
 
 [sub_resource type="CubeMesh" id=253]
 
@@ -109,10 +110,6 @@ extents = Vector3( 1.24123, 1.82926, 1 )
 extents = Vector3( 2.65809, 1.56186, 1 )
 
 [sub_resource type="CylinderShape" id=251]
-
-[sub_resource type="CapsuleMesh" id=252]
-radius = 0.2
-mid_height = 1.2
 
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
@@ -240,10 +237,12 @@ dialog_sequence = ExtResource( 8 )
 [node name="CollisionShape" type="CollisionShape" parent="the_medium/mom" index="0"]
 shape = SubResource( 251 )
 
-[node name="MeshInstance" type="MeshInstance" parent="the_medium/mom" index="1"]
-transform = Transform( 1, 0, 0, 0, 0.00453788, -0.99999, 0, 0.99999, 0.00453788, 0, -0.279541, 0.00127029 )
-mesh = SubResource( 252 )
-material/0 = null
+[node name="mum" parent="the_medium/mom" index="1" instance=ExtResource( 35 )]
+transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0.223297, -0.994339, 0.0672112 )
+
+[node name="OmniLight" type="OmniLight" parent="the_medium" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.82181, -2.0892, 1.69101 )
+light_color = Color( 0.784314, 0.976471, 0.92549, 1 )
 
 [node name="bug_pickup4" parent="." index="11" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.32987, -132.979, -181.332 )
