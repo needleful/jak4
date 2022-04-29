@@ -12,10 +12,10 @@ var old_coat: Coat
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
-		Global.save_game()
+		Global.save_checkpoint(player.global_transform.origin)
 		exit()
 	elif event.is_action_pressed("ui_cancel"):
-		Global.save_game()
+		Global.save_checkpoint(player.global_transform.origin)
 		player.set_current_coat(old_coat)
 		exit()
 	elif event.is_action_pressed("ui_up"):

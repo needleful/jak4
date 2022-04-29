@@ -1,20 +1,20 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
 [ext_resource path="res://_glb/chunks/chunk124.glb" type="PackedScene" id=3]
-[ext_resource path="res://entities/env/hut.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=6]
 [ext_resource path="res://dialog/main/medium.dialog" type="Resource" id=7]
-[ext_resource path="res://dialog/main/mom.dialog" type="Resource" id=8]
+[ext_resource path="res://dialog/main/mum.dialog" type="Resource" id=8]
 [ext_resource path="res://entities/power_thing.tscn" type="PackedScene" id=9]
 [ext_resource path="res://_glb/chunks/mat_basic.material" type="Material" id=10]
 [ext_resource path="res://entities/moving/door.gd" type="Script" id=11]
 [ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://management/player_start.gd" type="Script" id=13]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=14]
-[ext_resource path="res://entities/env/rock1.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/the_medium.gd" type="Script" id=16]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=17]
 [ext_resource path="res://entities/npc.tscn" type="PackedScene" id=18]
@@ -23,18 +23,27 @@
 [ext_resource path="res://dialog/intro/starting_area.dialog" type="Resource" id=21]
 [ext_resource path="res://dialog/intro/armstrong.dialog" type="Resource" id=22]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=23]
-[ext_resource path="res://entities/env/rock2.tscn" type="PackedScene" id=24]
+[ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=24]
 [ext_resource path="res://material/env/copper_corroded.material" type="Material" id=25]
 [ext_resource path="res://dialog/intro/cave.dialog" type="Resource" id=26]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=27]
 [ext_resource path="res://entities/env/copper/palace2.tscn" type="PackedScene" id=28]
 [ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=29]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=30]
-[ext_resource path="res://entities/env/pillar.tscn" type="PackedScene" id=31]
-[ext_resource path="res://entities/env/ruin1.tscn" type="PackedScene" id=32]
+[ext_resource path="res://entities/env/stone/pillar.tscn" type="PackedScene" id=31]
+[ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=32]
 [ext_resource path="res://entities/fountain.tscn" type="PackedScene" id=33]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=34]
 [ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=35]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=36]
+[ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=37]
+[ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=38]
+[ext_resource path="res://entities/env/sofa.tscn" type="PackedScene" id=39]
+[ext_resource path="res://entities/env/jackie/tea_table.tscn" type="PackedScene" id=40]
+[ext_resource path="res://entities/env/jackie/tea_chair.tscn" type="PackedScene" id=41]
+[ext_resource path="res://entities/env/jackie/tea_cup.tscn" type="PackedScene" id=42]
+[ext_resource path="res://entities/env/jackie/tea_plate.tscn" type="PackedScene" id=43]
+[ext_resource path="res://entities/env/jackie/tea_pot.tscn" type="PackedScene" id=44]
 
 [sub_resource type="CubeMesh" id=253]
 
@@ -110,6 +119,7 @@ extents = Vector3( 1.24123, 1.82926, 1 )
 extents = Vector3( 2.65809, 1.56186, 1 )
 
 [sub_resource type="CylinderShape" id=251]
+radius = 0.634045
 
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
@@ -142,8 +152,15 @@ script = ExtResource( 13 )
 [node name="wardrobe" parent="hut" index="1" instance=ExtResource( 5 )]
 transform = Transform( 0.873603, 0, -0.48664, 0, 1, 0, 0.48664, 0, 0.873603, 2.72163, 5.08853, 1.96338 )
 
+[node name="tea_chair" parent="hut" index="3" instance=ExtResource( 41 )]
+transform = Transform( -0.630621, 0, 0.77609, 0, 1, 0, -0.77609, 0, -0.630621, -2.20464, 4.13033, 2.56259 )
+
+[node name="tea_table" parent="hut" index="4" instance=ExtResource( 40 )]
+transform = Transform( 0.932815, 0, -0.360355, 0, 1, 0, 0.360355, 0, 0.932815, -1.35854, 4.1067, 2.69504 )
+
 [node name="capacitor_pickup" parent="." index="4" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 0.508786, 0.860893, 0, -0.860893, 0.508786, -92.8117, -234.238, -5.38548 )
+friendly_name = "cave_capacitor_124"
 
 [node name="hut2" parent="." index="5" instance=ExtResource( 4 )]
 transform = Transform( 0.99245, -0.122649, 0, 0.122649, 0.99245, 0, 0, 0, 1, 39.2949, -251.668, -51.5167 )
@@ -234,11 +251,14 @@ collision_mask = 2
 script = ExtResource( 6 )
 dialog_sequence = ExtResource( 8 )
 
-[node name="CollisionShape" type="CollisionShape" parent="the_medium/mom" index="0"]
+[node name="dialog_circle" parent="the_medium/mom" index="0" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.996246, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="the_medium/mom" index="1"]
 shape = SubResource( 251 )
 
-[node name="mum" parent="the_medium/mom" index="1" instance=ExtResource( 35 )]
-transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0.223297, -0.994339, 0.0672112 )
+[node name="mum" parent="the_medium/mom" index="2" instance=ExtResource( 35 )]
+transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0.0466156, -0.994339, 0.879108 )
 
 [node name="OmniLight" type="OmniLight" parent="the_medium" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.82181, -2.0892, 1.69101 )
@@ -1181,6 +1201,63 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -132.356, -215.263, -15.1874 )
 
 [node name="pistol_pickup" parent="." index="235" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.596888, -231, -70.5032 )
+
+[node name="hut_bath" parent="." index="236" instance=ExtResource( 37 )]
+transform = Transform( 0.354732, 0, -0.934968, 0, 1, 0, 0.934968, 0, 0.354732, -234.351, -229.702, 16.5518 )
+
+[node name="wall1" parent="." index="237" instance=ExtResource( 38 )]
+transform = Transform( 0.996535, 0, 0.0831735, 0, 1, 0, -0.0831735, 0, 0.996535, -249.055, -231.299, 22.963 )
+
+[node name="rock26" parent="." index="238" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -252.067, -233.291, -2.84541 )
+
+[node name="gem_pickup141" parent="." index="239" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -249.055, -221.51, 23.5176 )
+
+[node name="gem_pickup142" parent="." index="240" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -250.308, -220.831, 20.1086 )
+
+[node name="gem_pickup143" parent="." index="241" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -251.023, -221.933, 12.8057 )
+
+[node name="bug_pickup47" parent="." index="242" instance=ExtResource( 14 )]
+transform = Transform( 0.512672, 0, -0.858584, 0, 1, 0, 0.858584, 0, 0.512672, -251.803, -228.482, 20.6516 )
+
+[node name="sofa" parent="." index="243" instance=ExtResource( 39 )]
+transform = Transform( -0.624425, 0, 0.781085, 0, 1, 0, -0.781085, 0, -0.624425, -216.737, -229.951, 11.941 )
+
+[node name="tea_plate" parent="." index="244" instance=ExtResource( 43 )]
+transform = Transform( -0.845308, 0, 0.534279, 0, 1, 0, -0.534279, 0, -0.845308, -219.113, -226.127, 11.1686 )
+
+[node name="tea_cup" parent="tea_plate" index="1" instance=ExtResource( 42 )]
+transform = Transform( -0.898288, 0, -0.439406, 0, 1, 0, 0.439406, 0, -0.898288, 0, 0, -2.86102e-06 )
+
+[node name="tea_plate3" parent="." index="245" instance=ExtResource( 43 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -219.45, -226.127, 10.8205 )
+
+[node name="tea_plate2" parent="tea_plate3" index="1" instance=ExtResource( 43 )]
+transform = Transform( 0.526689, 0, 0.850058, 0, 1, 0, -0.850058, 0, 0.526689, -0.000518799, 0.00724792, 0.000832558 )
+
+[node name="tea_plate3" parent="tea_plate3" index="2" instance=ExtResource( 43 )]
+transform = Transform( 0.998757, 0, -0.0498434, 0, 1, 0, 0.0498434, 0, 0.998757, -0.00050354, 0.0130005, 0.000832558 )
+
+[node name="tea_plate4" parent="tea_plate3" index="3" instance=ExtResource( 43 )]
+transform = Transform( -0.472843, 0, 0.881147, 0, 1, 0, -0.881147, 0, -0.472843, -0.00050354, 0.0194702, 0.000832558 )
+
+[node name="tea_cup" parent="." index="246" instance=ExtResource( 42 )]
+transform = Transform( -0.0349867, 0, -0.999388, 0, 1, 0, 0.999388, 0, -0.0349867, -219.451, -226.106, 10.8225 )
+
+[node name="tea_cup2" parent="tea_cup" index="1" instance=ExtResource( 42 )]
+transform = Transform( 0.332849, -0.0215127, 0.942735, 0.114511, 0.993263, -0.0177644, -0.936001, 0.113867, 0.33307, -0.0015564, 0.0297394, 0.000796318 )
+
+[node name="tea_cup3" parent="tea_cup" index="2" instance=ExtResource( 42 )]
+transform = Transform( -0.464726, 0.0377553, -0.884649, 0.0678321, 0.997673, 0.00694525, 0.882853, -0.05678, -0.466205, -0.00157166, 0.0542603, 0.000796318 )
+
+[node name="tea_cup4" parent="tea_cup" index="3" instance=ExtResource( 42 )]
+transform = Transform( -0.81751, 0.225887, 0.529767, 0.167394, 0.973355, -0.156715, -0.551051, -0.0394362, -0.833539, -0.00157166, 0.080246, 0.000796318 )
+
+[node name="tea_pot" parent="." index="247" instance=ExtResource( 44 )]
+transform = Transform( 0.743122, 0, 0.669157, 0, 1, 0, -0.669157, 0, 0.743122, -219.486, -226.127, 11.1452 )
 
 [connection signal="activated" from="the_medium/power_thing" to="the_medium/door" method="_on_activated"]
 [connection signal="activated" from="the_medium/power_thing2" to="the_medium/door" method="_on_activated"]

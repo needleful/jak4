@@ -6,7 +6,7 @@ var queued_pause := false
 
 func _ready():
 	if flag_material:
-		$pole.material_override = flag_material
+		$SoftBody.material_override = flag_material
 	
 func process_player_distance(player_origin):
 	var l = (player_origin - global_transform.origin).length_squared()

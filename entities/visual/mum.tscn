@@ -1,17 +1,32 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://_glb/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=2]
-[ext_resource path="res://player/materials/jackie_albedo.png" type="Texture" id=3]
+[ext_resource path="res://entities/visual/mum_albedo.png" type="Texture" id=3]
+[ext_resource path="res://entities/visual/mum_detail_albedo.png" type="Texture" id=4]
+[ext_resource path="res://entities/visual/mum.gd" type="Script" id=5]
+[ext_resource path="res://entities/visual/mum_hologram.material" type="Material" id=6]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
-shader_param/light_bias = 0.114
-shader_param/softness = 0.579
-shader_param/specularity = 1.0
+shader_param/light_bias = null
+shader_param/softness = 0.25
+shader_param/specularity = 2.536
 shader_param/main_texture = ExtResource( 3 )
 
-[node name="mum" instance=ExtResource( 1 )]
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 2 )
+shader_param/light_bias = null
+shader_param/softness = 0.479
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 4 )
 
-[node name="mum" parent="." index="0"]
-material/0 = SubResource( 1 )
+[node name="mum" instance=ExtResource( 1 )]
+script = ExtResource( 5 )
+hologram_material = ExtResource( 6 )
+
+[node name="mum" parent="Armature/Skeleton" index="0"]
+material_override = SubResource( 1 )
+
+[node name="mum_deatail" parent="Armature/Skeleton" index="1"]
+material_override = SubResource( 2 )

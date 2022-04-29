@@ -5,6 +5,7 @@ export(int) var quantity = 1
 export(PackedScene) var preview
 export(bool) var persistent := true
 export(bool) var gravity = false
+export(String) var friendly_name = ""
 
 const sq_distance_visible := 30000
 
@@ -24,6 +25,8 @@ func _on_area_body_entered(body):
 	body.get_item(item_id)
 	if persistent:
 		Global.mark_picked(get_path())
+		if friendly_name != "":
+			_x = Global.add_stat(friendly_name)
 	queue_free()
 
 func process_player_distance(origin: Vector3):

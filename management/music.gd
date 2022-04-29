@@ -22,14 +22,16 @@ func _process(delta):
 	if state == State.Fadeout:
 		volume_db -= FADEOUT_SPEED*delta
 		if volume_db < MIN_DB:
-			print("Faded out")
 			set_state(next_state)
 	elif state == State.Explore:
-		if tension and volume_db < 0:
+		if tension:
 			if stream_paused:
-				print("Unpausing stream")
-			stream_paused = false
-			volume_db += TENSION_FADE_IN*delta
+				stream_paused = false
+			if !playing:
+				play()
+			if volume_db < 0:
+				print(volume_db)
+				volume_db += TENSION_FADE_IN*delta
 		elif !tension:
 			if volume_db > MIN_DB:
 				volume_db -= TENSION_FADE_OUT*delta

@@ -1,15 +1,13 @@
 // There's special music for this dialog
 {event("play_music", false)}
 // So there's a lot of stuff that'll be here.
-{Global.stat("mom/info") == 0}
+{Global.stat("mum/info") == 0}
 	{talked == 0}
 		* The thing in front of you is almost nothing at all.
-		* A jawline. The outline of a dress. That's all you can make out. Somehow this is more than you could recall.
+		* The outline of a dress. Her arched nose. That's all you can make out. Somehow this is more than you could recall.
 		* It's unmistakable.
-		[You] Hi Mom.
-		* The thing laughs. It's her laugh.
-		* It's her laugh.
-		[You] I-.. I....
+		[You] Hi mum.
+			I-.. I....
 		* {animation("sit")} You can't think of anything to say.
 		* Can she even hear you like this? Would talking to her mean anything?
 		* {animation("comfort")} 
@@ -22,7 +20,7 @@
 	{otherwise if talked < 3}
 		* The ghost of your mother lingers for a moment.
 		* You won't get anything more from her without learning more.
-		[You] I'll come back, okay Mom?
+		[You] I'll come back, okay mum?
 		* She murmurs incomprehensibly as you leave.
 	{otherwise}
 		* She still says nothing.
@@ -37,10 +35,10 @@
 	{exit()}
 
 // This is for how many times you've actually talked to her
-{Global.add_stat("mom/true_talked") == 1}
+{Global.add_stat("mum/true_talked") == 1}
 	Oh? Hello.
 	Who are you?
-	[You] Hi mom...
+	[You] Hi mum...
 	... Jackie? But you're so-
 	* She looks around.
 	What is this place? How did I get here?
@@ -53,7 +51,7 @@
 	That explains why you've grown so much.
 	{animation("end_hug")} ... How did I die?
 	[You] I don't know. One day you left, and just... didn't come back.
-	{Global.stat("mom/tick")} Huh.
+	{Global.stat("mum/tick")} Huh.
 	Are you sure I died?
 	[You] ...
 	...
@@ -73,21 +71,21 @@
 		It's perfect.
 	Of course you think it's perfect! It's your memories.
 	But I'm sorry to say, I don't know where... I? Died, or live now, or really... anything. It's all a blur besides the family, I guess what you knew about them.
-	{Global.stat("mom/info") == 1}
-		[You]... I can find more information. We can figure this out, mom.
+	{Global.stat("mum/info") == 1}
+		[You]... I can find more information. We can figure this out, mum.
 	{otherwise}
 		[You]... I've learned so much about you. Maybe we can talk through it? Help you jog your memories?
 	I suppose.
 
-{otherwise if not Global.stat("mom/time")}
+{otherwise if not Global.stat("mum/time")}
 	Did you forget something? I thought you were leaving?
 	{seconds_since_conversation() > 60}
 		[You] What do you mean? I did leave...
 		But you came right back? Stepping out for a few second doesn't count as "leaving".
 		[You] But... I.. wasn't gone for a few seconds? It was a little while?
 		...
-		{Global.add_stat("mom/time")}
-		{Global.stat("mom/tick")} Huh.
+		{Global.add_stat("mum/time")}
+		{Global.stat("mum/tick")} Huh.
 		[You] Is everything okay?
 		... As okay as it'll ever be, I guess.
 		Did you want to talk about something?
@@ -106,8 +104,8 @@
 {goto("track_and_exit")}
 
 :_exit:
-[You] I have to go. Bye, mom.
-{Global.stat("mom/info") > 2} I'll see you, sweetie.
+[You] I have to go. Bye, mum.
+{Global.stat("mum/info") > 2} I'll see you, sweetie.
 
 :track_and_exit
 {track_conversation_time()}
