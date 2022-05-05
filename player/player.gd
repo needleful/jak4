@@ -112,7 +112,7 @@ var timer_coyote := 0.0
 var timer_state := 0.0
 
 const DEFAULT_MAX_HEALTH := 50
-const HEALTH_UP_BOOST := 0.12
+const HEALTH_UP_BOOST := 0.25
 var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 
@@ -124,7 +124,7 @@ const HEALTH_BAR_DEFAULT_SIZE := 400
 const ARMOR_BAR_DEFAULT_SIZE := 96.0
 
 const DEFAULT_MAX_STAMINA := 40.0
-const STAMINA_UP_BOOST := 0.12
+const STAMINA_UP_BOOST := 0.25
 var max_stamina := DEFAULT_MAX_STAMINA
 var stamina_recover := 8.0
 var stamina := max_stamina
@@ -136,7 +136,7 @@ var extra_stamina := 0.0
 const STAMINA_BAR_DEFAULT_SIZE := 280
 const EXTRA_STAMINA_BAR_SIZE := 7
 
-const STAMINA_RECOVERY_BOOST := 0.14
+const STAMINA_RECOVERY_BOOST := 0.20
 var stamina_factor := 1.0
 
 const MAX_DAMAGE_UP := 10
@@ -738,8 +738,8 @@ func on_item_changed(item: String, amount: int):
 		var health_up :int = Global.count("health_up")
 		var stamina_up :int = Global.count("stamina_up")
 		
-		var h_factor = pow(1.0 + HEALTH_UP_BOOST, health_up)
-		var s_factor = pow(1.0 + STAMINA_UP_BOOST, stamina_up)
+		var h_factor = (1.0 + HEALTH_UP_BOOST*health_up)
+		var s_factor = (1.0 + STAMINA_UP_BOOST*stamina_up)
 		
 		max_health = DEFAULT_MAX_HEALTH*h_factor
 		max_stamina = DEFAULT_MAX_STAMINA*s_factor
@@ -749,13 +749,13 @@ func on_item_changed(item: String, amount: int):
 		stamina_bar.max_value = max_stamina
 		stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
 		
-		stamina_factor = pow(1 + STAMINA_RECOVERY_BOOST, Global.count("stamina_recovery_up"))
-		jump_factor = pow(1 + JUMP_UP_BOOST, Global.count("jump_height_up"))
-		speed_factor = pow(1 + SPEED_UP_BOOST, Global.count("move_speed_up"))
-		stamina_drain_factor = pow(1 + SPEED_STAMINA_BOOST, Global.count("move_speed_up"))
+		stamina_factor = (1 + STAMINA_RECOVERY_BOOST*Global.count("stamina_recovery_up"))
+		jump_factor = (1 + JUMP_UP_BOOST*Global.count("jump_height_up"))
+		speed_factor = (1 + SPEED_UP_BOOST*Global.count("move_speed_up"))
+		stamina_drain_factor = (1 + SPEED_STAMINA_BOOST*Global.count("move_speed_up"))
 		
 		var damage_up_count:int =  Global.count("damage_up")
-		damage_factor = pow(1 + DAMAGE_UP_BOOST, damage_up_count)
+		damage_factor = (1 + DAMAGE_UP_BOOST*damage_up_count)
 		max_damage = damage_up_count >= MAX_DAMAGE_UP
 		
 		var new_armor:int = Global.count("armor")

@@ -97,7 +97,7 @@ func add_item(item: String, amount:= 1) -> int:
 
 func remove_item(item: String, amount := 1) -> bool:
 	if count(item) >= amount:
-		add_item(item, -amount)
+		var _x = add_item(item, -amount)
 		return true
 	else:
 		return false

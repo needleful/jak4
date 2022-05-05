@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
+[ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material/death_plane.shader" type="Shader" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/max_depth = 20.0
+shader_param/depth_color = null
+
+[sub_resource type="SphereShape" id=2]
+
+[node name="chunk085" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="death_plane" parent="." instance=ExtResource( 2 )]
+transform = Transform( 49.6349, 0, 0, 0, -4.37114e-08, 1, 0, -72.5839, -3.17274e-06, -99.9684, -39.4958, 192.206 )
+material/0 = SubResource( 1 )
+
+[node name="ghost" type="StaticBody" parent="." groups=["target"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -126.299, -7.94569, 158.294 )
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="ghost"]
+shape = SubResource( 2 )
