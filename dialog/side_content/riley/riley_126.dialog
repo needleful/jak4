@@ -1,0 +1,43 @@
+// Riley's introduction
+// Placeholder
+{main_speaker.saved}
+	{talked == 0} Wow miss, thanks for saving me!
+		[You] I did?
+		Yeah, I was pinned down by those deathgnats, but you took them out no problem!
+		[You] Oh.  Well, it wasn't too big a deal. One of them had a snazzy coat, so you know. Had to do it.
+		Well, you saved me! I'm Riley, By the way.
+	{otherwise if Global.stat("riley/126/reward")} Thanks again! I'm heading out of here soon.
+		{exit()}
+	{otherwise} Thanks for the help! I'm Riley, by the way.
+	[You] Jackie. Say, is there a capacitor up here? I was told they were up in these towers.
+	That's what I was looking for! To activate the Medium, right?
+	[You] Exactly. Was there one?
+	No. I have a hunch there's one in that big tower to the north, but I wouldn't mess with that one.
+	[You] Why not?
+	I'm pretty sure it holds up that whole tower. If you take it out, it'd collapse right onto that village in the valley. It's not worth it.
+	[You] ...
+	{Global.add_stat("riley/126/reward")} {Global.add_item("bug", 16)} Say, I think it's only fair I give you something. Here's some of the bugs I found climbing up this thing.
+	I'm gonna take some time and collect myself, then get out of here. Safe travels!
+{otherwise if talked > 0} Seriously, I could use some help with those deathgnats.
+	[You] No worries, they're tricky to hit but I've got it.
+	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
+{otherwise} Hey there! I could use some help. I'm stuck up here because of those two deathgnats! If you could
+	[You] Uh, I'll see what I can do.
+{exit()}
+
+:_exit
+[You] Gotta go, bye!
+{exit()}
+
+:_coat
+[You] Say, would you be interested in trading coats?
+{!main_speaker.saved} Uh, I'm in a bit of a jam right now.  If you could take out those deathgnats, then we can talk.
+{otherwise if traded_coats()}
+	Wow, you really like trading coats, huh?
+	[You] I'm quite particular about them.
+	Well, it's no skin of my teeth.
+	{swap_coats()} [You] Thanks!
+{otherwise} For yours?
+	[You] Yes.
+	Hm... I don't see why not.
+	{swap_coats()} [You] Thanks!

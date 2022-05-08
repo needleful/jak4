@@ -376,11 +376,17 @@ func back():
 	get_next()
 	return RESULT_SKIP
 
+func coat_trade_stat() -> String:
+	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
+		return "coat_trade/"+main_speaker.friendly_id
+	else:
+		return "coat_trade"+str(main_speaker.get_path())
+
 func traded_coats():
-	return Global.stat("coat_trade"+str(main_speaker.get_path()))
+	return Global.stat(coat_trade_stat())
 	
 func swap_coats():
-	var _x = Global.add_stat("coat_trade"+main_speaker.get_path())
+	var _x = Global.add_stat(coat_trade_stat())
 	_x = Global.add_stat("trade_coat")
 	var player_coat: Coat = player.current_coat
 	var speaker_coat: Coat = main_speaker.get_coat()

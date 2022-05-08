@@ -1,6 +1,8 @@
 extends KinematicBody
 class_name KinematicEnemy
 
+signal died(id, fullPath)
+
 enum Rarity {
 	Common,
 	Uncommon,
@@ -114,6 +116,7 @@ func die():
 		g.global_transform = global_transform
 	if !respawns:
 		Global.mark_picked(get_path())
+	emit_signal("died", id, get_path())
 
 func take_damage(damage: int, dir: Vector3):
 	if ai == AI.Dead:

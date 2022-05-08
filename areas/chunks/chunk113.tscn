@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://areas/chunks/chunk113_lowres.tscn" type="PackedScene" id=1]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=2]
@@ -15,6 +15,8 @@
 [ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/conditional.gd" type="Script" id=15]
+[ext_resource path="res://entities/npc/npc_riley.tscn" type="PackedScene" id=16]
+[ext_resource path="res://dialog/side_content/riley/riley_113.dialog" type="Resource" id=17]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 2, 13, 2 )
@@ -71,7 +73,7 @@ transform = Transform( -0.939526, -0.0404799, 0.340067, -0.0208031, 0.997901, 0.
 transform = Transform( -0.939526, -0.0404799, 0.340067, -0.0208031, 0.997901, 0.0613092, -0.341834, 0.050527, -0.938398, -11.1641, 44.8636, -27.497 )
 
 [node name="bobble7" parent="tower_base/tower_mid" index="8" instance=ExtResource( 6 )]
-transform = Transform( 0.867094, 0.0485357, -0.495766, 0.40454, 0.512118, 0.757678, 0.290664, -0.857541, 0.42442, -16.2535, 43.0903, -32.6135 )
+transform = Transform( 0.867094, -0.185852, -0.462166, 0.40454, 0.804096, 0.435628, 0.290664, -0.564699, 0.772414, -16.0267, 42.1089, -31.9243 )
 
 [node name="bobble8" parent="tower_base/tower_mid" index="9" instance=ExtResource( 6 )]
 transform = Transform( 0.876433, 0.0497582, -0.478936, -0.0737792, 0.996776, -0.031456, 0.475828, 0.0629065, 0.877281, -21.1244, 43.0903, -33.2487 )
@@ -155,9 +157,6 @@ material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="tower_base/tower_mid/KinematicBody2" index="1"]
 shape = SubResource( 6 )
-
-[node name="tower_top" parent="tower_base" index="1"]
-transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -0.816315, 118.73, 1.50084 )
 
 [node name="bobble14" parent="tower_base/tower_top" index="2" instance=ExtResource( 6 )]
 transform = Transform( 0.870711, 0.248127, -0.42461, -0.27406, 0.961713, 1.0023e-09, 0.408353, 0.116369, 0.905376, -24.2447, -38.3674, 18.9329 )
@@ -338,9 +337,6 @@ material/0 = null
 [node name="CollisionShape" type="CollisionShape" parent="tower_base/KinematicBody3" index="1"]
 shape = SubResource( 7 )
 
-[node name="anim_lowres" parent="." index="1"]
-autoplay = ""
-
 [node name="enemies_no_shortcut" type="Spatial" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.2901, 85.6158, 20.3832 )
 script = ExtResource( 15 )
@@ -401,9 +397,6 @@ transform = Transform( 0.0115294, -0.0762349, 0.997023, 0.997797, 0.0660166, -0.
 [node name="hut" parent="." index="12" instance=ExtResource( 9 )]
 transform = Transform( -0.538962, 0, 0.84233, 0, 1, 0, -0.84233, 0, -0.538962, 106.545, 20.1674, -51.4021 )
 
-[node name="platform_kinematic" parent="." index="13"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.7585, 38.3326, 84.5996 )
-
 [node name="scrap1" parent="platform_kinematic" index="17" instance=ExtResource( 14 )]
 transform = Transform( 0.999999, -9.64263e-08, -9.00659e-08, -8.43915e-08, -0.999999, 1.3411e-07, -8.23911e-08, -2.38419e-07, -0.999999, 0.689972, 3.44081, -10.1058 )
 
@@ -436,3 +429,7 @@ shape = SubResource( 10 )
 
 [node name="flag_spawn" type="Position3D" parent="." index="17"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 135.586, 56.4714, 10.9756 )
+
+[node name="npc_riley" parent="." index="18" instance=ExtResource( 16 )]
+transform = Transform( -0.656415, 0, 0.7544, 0, 1, 0, -0.7544, 0, -0.656415, 133.768, 43.8009, 3.14319 )
+dialog = ExtResource( 17 )

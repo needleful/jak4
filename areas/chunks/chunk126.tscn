@@ -1,11 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/env/copper/palace2.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=5]
-[ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/npc/npc_riley.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=9]
@@ -14,6 +14,7 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=14]
+[ext_resource path="res://dialog/side_content/riley/riley_126.dialog" type="Resource" id=15]
 
 [node name="chunk126" type="Spatial"]
 script = ExtResource( 1 )
@@ -32,9 +33,6 @@ transform = Transform( -0.633854, 0.595358, -0.493739, -0.564366, 0.080498, 0.82
 
 [node name="palace_roof1" parent="palace1" instance=ExtResource( 4 )]
 transform = Transform( 0.538345, 0.291902, -0.790556, -0.0428855, 0.946368, 0.32023, 0.841633, -0.138491, 0.521991, 10.8356, 40.4064, -12.5817 )
-
-[node name="capacitor_pickup" parent="palace1" instance=ExtResource( 6 )]
-transform = Transform( 1, -7.39583e-10, -2.97912e-09, -7.99361e-15, 0.109648, 0.993971, 1.57347e-16, -0.993971, 0.109648, -46.0593, 0.89325, -41.9131 )
 
 [node name="ascrap1" parent="palace1" instance=ExtResource( 14 )]
 transform = Transform( -0.729685, -0.566665, 0.382687, -0.429628, -0.0554527, -0.901301, 0.531957, -0.82208, -0.202992, -46.8123, 1.42673, -41.267 )
@@ -455,3 +453,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 107.564, 5.77093, 59.5127 )
 
 [node name="ascrap1" parent="." instance=ExtResource( 14 )]
 transform = Transform( 0.146446, 0.81831, 0.555807, -0.208495, 0.574777, -0.791304, -0.966997, 2.98023e-08, 0.254788, 138.452, -0.251785, 105.105 )
+
+[node name="npc_riley" parent="." instance=ExtResource( 6 )]
+transform = Transform( 0.449896, 0, 0.893081, 0, 1, 0, -0.893081, 0, 0.449896, 115.182, 58.9904, 55.9632 )
+dialog = ExtResource( 15 )
+only_if_saved = false
+enemies = [ NodePath("../deathgnat2"), NodePath("../deathgnat") ]

@@ -1,0 +1,48 @@
+
+{Global.stat("riley/apology")}
+	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
+	[You] Really? Wow!
+	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
+
+{otherwise if Global.stat("capacitor_113")}
+	{Global.add_stat("riley/113/argue") == 1}
+		Oh my God! I told you not to take that capacitor!
+		{Global.stat("riley/113/days_collapse")}
+			[You] You said it would take days to collapse, not that it'd fall out from under me!
+			Oh, and it would be fine if it fell on the village tomorrow?
+		{otherwise}
+			[You] How was I supposed to know the whole tower would fall over?
+			Because I told you it would!
+		[You] Oh, whatever. It didn't fall on the village, so I don't see the issue.
+		It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
+		[You] I don't know! They move or something!
+		Ugh.
+	{otherwise}
+		I'm not in a talky mood right now. We'll probably see each other again. But seriously, if someone tells you something is a bad idea, listen to them.
+{otherwise}
+	{Global.add_stat("riley/113/talk") == 1}
+		[You] Hi Riley.
+		Hi again, uh...
+		[You] Jackie.
+		Right! Hi Jackie. Thanks for the help back with those deathgnats.
+		[You] So this is the tower you were talking about? With the capacitor?
+		Right. You shouldn't take it.
+		[You] ... Well, where else would I get a capacitor?
+		I'm not sure. But seriously. These ancient structures are on the brink of collapse. They have active supports powered with their energy systems. Without the capacitors, they can completely fall apart.
+		[You] ...
+	{otherwise}
+		[You] Do you really think this thing would collapse if I took the capacitor?
+		{Global.add_stat("riley/113/days_collapse")}Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
+{exit()}
+:_coat
+{traded_coats()} [You] Say, could we trade coats again?
+{otherwise} [You] That's a very lovely coat. Would you be interested in swapping for mine? 
+{Global.stat("capacitor_113") and !Global.stat("riley/apology")} Jackie! You nearly destroyed the entire village! This isn't the time for trading coats.
+{otherwise if traded_coats()} Again? Did you regret the trade?
+	[You] Well, I'm just quite picky with coats.
+	I suppose we can.
+	{swap_coats()} [You] Thanks!
+{otherwise} You want to trade coats? Like, my coat for yours?
+	[You] Yes.
+	You're so odd. But sure, let's trade.
+	{swap_coats()} [You] Thanks!

@@ -4,6 +4,8 @@ class_name NPC
 export(Resource) var dialog
 export(String) var visual_name := "Villager"
 export(float) var model_scale := 1.0
+export(String) var friendly_id := ""
+export(Mesh) var accessory: Mesh
 onready var anim := $lil_man/AnimationPlayer
 
 const coat_dialog := "res://dialog/_coat.dialog"
