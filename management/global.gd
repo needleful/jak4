@@ -12,6 +12,7 @@ var coat_textures: Array
 
 const save_path := "user://autosave.tres"
 var valid_game_state := false
+var player_spawned := false
 var can_pause := true
 
 var color_common := Color.white
@@ -60,6 +61,17 @@ func place_flags():
 		var node = flag_scene.instance()
 		get_tree().current_scene.add_child(node)
 		node.global_transform = transform
+
+func remove_flag(transform: Transform):
+	var index = -1
+	var matched = false
+	for f in game_state.flags:
+		index += 1
+		if f == transform:
+			matched = true
+			break
+	if matched:
+		game_state.flags.remove(index)
 
 func get_player() -> Node:
 	return get_tree().current_scene.get_node("player")
@@ -113,6 +125,7 @@ func add_stat(tag: String, amount := 1) -> int:
 	else:
 		game_state.stats[tag] = amount
 	var value =  game_state.stats[tag]
+	print("Changed stat: ", tag)
 	emit_signal("stat_changed", tag, value)
 	return value
 
@@ -172,5 +185,7 @@ func load_sync():
 
 func save_sync():
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
-	var _x = ResourceSaver.save(save_path, game_state)
+	var r = ResourceSaver.save(save_path, game_state)
+	if r == OK:
+		valid_game_state = true
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "post_save_object", "complete_save")

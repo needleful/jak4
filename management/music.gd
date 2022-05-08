@@ -30,7 +30,6 @@ func _process(delta):
 			if !playing:
 				play()
 			if volume_db < 0:
-				print(volume_db)
 				volume_db += TENSION_FADE_IN*delta
 		elif !tension:
 			if volume_db > MIN_DB:

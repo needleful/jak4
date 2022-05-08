@@ -71,7 +71,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 		main_speaker = speaker
 	else:
 		main_speaker = source_node
-	talked = Global.stat("talked"+main_speaker.get_path())
+	talked = Global.stat(get_talked_stat())
 	set_process(true)
 	set_process_input(true)
 	Global.can_pause = false
@@ -298,6 +298,12 @@ func resume():
 	if advance_on_resume:
 		get_next()
 
+func get_talked_stat():
+	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
+		return "talked/" + main_speaker.friendly_id
+	else:
+		return "talked"+main_speaker.get_path()
+
 ## Dialog functions
 
 func exiting():
@@ -345,7 +351,8 @@ func noskip():
 	return RESULT_NOSKIP
 
 func exit():
-	var _x = Global.add_stat("talked"+main_speaker.get_path())
+	var stat: String = get_talked_stat()
+	var _x = Global.add_stat(stat)
 	emit_signal("exited")
 	return RESULT_END
 

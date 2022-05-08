@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -41,6 +41,42 @@ size = Vector3( 2000, 2000, 2000 )
 
 [sub_resource type="SpatialMaterial" id=5]
 albedo_texture = ExtResource( 3 )
+
+[sub_resource type="BoxShape" id=6]
+
+[sub_resource type="CubeMesh" id=7]
+
+[sub_resource type="Animation" id=8]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 21.2302, 0, 1.81196 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "test"
+length = 15.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 4.3, 5.8, 6.2, 6.8, 7.9, 11 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 21.2302, 0, 1.81196 ), Vector3( -18.0833, 14.5567, 1.81196 ), Vector3( -10.0424, 1.54551, 9.63151 ), Vector3( -4.24347, 1.29823, 12.7205 ), Vector3( 3.03472, 0.927308, 14.6584 ), Vector3( 16.3781, 0.247282, 9.1452 ), Vector3( 21.2302, 0, 1.81196 ) ]
+}
 
 [node name="test_world" instance=ExtResource( 2 )]
 
@@ -108,3 +144,18 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.96897, 0, -7.48036 )
 
 [node name="pistol_pickup3" parent="." index="16" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.93424, 0, -6.18525 )
+
+[node name="KinematicBody" type="KinematicBody" parent="." index="17"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2302, 0, 1.81196 )
+
+[node name="CollisionShape" type="CollisionShape" parent="KinematicBody" index="0"]
+shape = SubResource( 6 )
+
+[node name="MeshInstance" type="MeshInstance" parent="KinematicBody/CollisionShape" index="0"]
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody" index="1"]
+autoplay = "test"
+anims/RESET = SubResource( 8 )
+anims/test = SubResource( 9 )

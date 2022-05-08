@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://ui/prompts/key_r.png" type="Texture" id=10]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=11]
 [ext_resource path="res://dialog/border.dialog" type="Resource" id=12]
+[ext_resource path="res://ui/map.gd" type="Script" id=13]
 
 [sub_resource type="ProceduralSky" id=2]
 sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
@@ -589,5 +590,13 @@ shape = SubResource( 5 )
 [node name="CollisionShape4" type="CollisionShape" parent="border" index="4"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
+
+[node name="mapCam" type="Camera" parent="." index="151"]
+transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612373, 3056.71, 3548.5, 3016.6 )
+projection = 1
+size = 7000.0
+near = 50.0
+far = 12000.0
+script = ExtResource( 13 )
 
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

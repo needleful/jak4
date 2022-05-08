@@ -2,6 +2,7 @@ extends Area
 
 export(Resource) var dialog_sequence
 export(NodePath) var main_speaker
+export(String) var friendly_id
 
 var speaker: Node
 

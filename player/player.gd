@@ -16,7 +16,7 @@ const SPEED_BONK := 5.0
 
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
-const MIN_DOT_CLIMB := 0.0
+const MIN_DOT_CLIMB := -0.1
 const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
 
@@ -200,6 +200,7 @@ enum State {
 
 var state: int = State.Fall
 var ground_normal:Vector3 = Vector3.UP
+var best_floor_dot: float
 
 var current_coat: Coat
 
@@ -324,7 +325,7 @@ func _physics_process(delta):
 	):
 		rotate_intention(desired_velocity)
 	
-	var best_floor_dot := -1.0
+	best_floor_dot = -1.0
 	var best_normal := Vector3.ZERO
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
@@ -456,12 +457,9 @@ func _physics_process(delta):
 			elif (timer_state > TIME_ROLL_MIN
 				and best_floor_dot < MIN_DOT_SLIDE
 			):
-				if best_normal != Vector3.ZERO:
-					next_state = State.BonkFall
-				else:
-					timer_coyote += delta
-					if timer_coyote > TIME_COYOTE:
-						next_state = State.Fall
+				timer_coyote += delta
+				if timer_coyote > TIME_COYOTE:
+					next_state = State.Fall
 			else:
 				timer_coyote = 0
 				if timer_state > TIME_ROLL_MAX:
@@ -642,7 +640,11 @@ func _physics_process(delta):
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
-			ground_normal = best_normal
+			if best_normal != Vector3.ZERO:
+				ground_normal = best_normal
+			$ui/debug/stats/a5.text = "[%f, %f, %f]" % [
+				ground_normal.x, ground_normal.y, ground_normal.z
+			]
 			accel(delta, desired_velocity*SPEED_RUN)
 		State.Fall, State.LedgeFall:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
@@ -677,6 +679,7 @@ func _physics_process(delta):
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
+			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
@@ -849,8 +852,16 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		velocity.z = hvel.z
 		velocity += delta*gravity
 	
-	velocity = move_and_slide_with_snap(
-		velocity,Vector3.DOWN*0.125,Vector3.UP)
+	if ground_normal != Vector3.ZERO:
+		if best_floor_dot > 0 or desired_velocity.length_squared() <= 0.1:
+			velocity = move_and_slide_with_snap(velocity, -ground_normal*0.06125,Vector3.UP)
+		else:
+			#velocity = move_and_slide(velocity)
+			velocity = move_and_slide_with_snap(
+				velocity,Vector3.DOWN*0.06125,Vector3.UP)
+	else:
+		velocity = move_and_slide_with_snap(
+			velocity,Vector3.DOWN*0.06125,Vector3.UP)
 
 func accel_climb(delta: float, desired_velocity: Vector3):
 	var gravity := Vector3.ZERO

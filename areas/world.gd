@@ -125,7 +125,7 @@ func update_active_chunks(position: Vector3, instant := false):
 			unload_str += "\n\t" + c
 		$debug/box/Label4.text = unload_str
 		
-	if active_chunks.size() == 0 and chunk_load_waitlist.size() == 0 and player.y < 0:
+	if active_chunks.size() == 0 and chunk_load_waitlist.size() == 0:
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):

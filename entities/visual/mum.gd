@@ -1,8 +1,8 @@
 extends Spatial
 
 export(Material) var hologram_material
-var mum_material
-var detail_material
+var mum_material: Material
+var detail_material: Material
 
 func _ready():
 	mum_material = $Armature/Skeleton/mum.material_override

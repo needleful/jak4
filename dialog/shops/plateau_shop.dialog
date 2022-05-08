@@ -37,8 +37,9 @@
 			But uh, I'm here for family stuff.
 	{otherwise} Uh, just some family stuff.
 	What sort?
-	> I'm seeing the Medium. For uh... my mom.
-		{Global.add_stat("plateau_shop/mom")} Oh.
+	> I'm seeing the Medium. For uh... my mum.
+		{mention("mum")}
+		{Global.add_stat("plateau_shop/mum")} Oh.
 		Some heavy business then.
 		I'll not pry. But hey, if you want someone to talk to and it's slow in here, I'll lend an ear.
 		[You] Thanks...
@@ -91,6 +92,21 @@
 		I went to the academy in 
 	> {skip()}(Back)
 		{goto("shop_replies")}
+> {Global.stat("mum/info/orstad")} I was wondering if we could talk about my mum again?
+	Of course!
+	{subtopic("mum")}
+> {Global.stat("plateau_shop/mum")} So. About my mum.
+	{subtopic("mum")}
+> {otherwise if Global.stat("plateau_shop/secret")} So. I'm ready to talk about why I'm here.
+	Oh? You sound grim.
+	[You] It's uh. Yeah.  It is.
+		{Global.add_stat("plateau_shop/mum")} I'm here to talk with the Medium. To see my mum again.
+	Oh. I'm sorry for your loss.  Do you want to talk about it?
+	> I would.
+		That's good. I have a few questions.
+		{subtopic("mum")}
+	> Not at the moment.
+
 > See you later.
 	{goto("sub_exit")}
 {exit()}
@@ -98,8 +114,26 @@
 :_exit
 [You] I have to go, see you!
 
+:mum
+{mention("mum")} 
+{!Global.stat("plateau_shop/mum/here")} Why here? Was this the closest Medium? I thought there were more in England?
+	[You] There are. But, well.. I didn't know my mum very well. She died when I was two.
+	Would the Medium even work at that point?
+	{Global.stat("talked/mum")}
+		[You] Better than I expected. But she was... she couldn't talk or anything. She just stood there.
+		You've already talked to her?
+		[You] Yes. I had to get the Medium working myself, but I managed.
+	{otherwise} [You] I don't really know, honestly.
+	{Global.add_stat("plateau_shop/mum/here")} [You] All that to say, I'm here because my mum lived in the area. I'm hoping I can... I don't know. Find people who knew her? 
+	Hm. What's her name?
+	[You] Teltara Ul Syn. Does that sound familiar?
+	{Global.add_stat("mum/info")} Teltara? ... Are you serious? We grew up in the old village!
+	{Global.add_stat("mum/info/orstad")}* The shopkeeper spends hours talking your mother, Teltara. Stories of her stoic and headstrong nature. What they learned at school. You soak up every detail.
+	{Global.add_stat("mum/info/old_village")}* When they were nearing adulthood, the old village was overrun by the creatures now infesting this land. Teltara and a mutual friend, Balter, coordinated the evacuation, and fortifying their new home. That became this very village.
+{back()}
+
 :sub_exit
-{mentioned("mom")} Safe travels to you, Jackie. I hope you find what you're looking for.
+{mentioned("mum")} Safe travels to you, Jackie. I hope you find what you're looking for.
 {otherwise if mentioned("safari")} Enjoy your safari, huntress! If you find a nicer coat, maybe my daughter can have your hand-me-downs!
 {otherwise} Have a good one!
 {exit()}
