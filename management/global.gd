@@ -78,6 +78,9 @@ func get_player() -> Node:
 
 # Game state management
 
+func mark_map(_id:String, _note:String):
+	return true
+
 func place_flag(node: Spatial, transform: Transform):
 	var _x = add_item("flag", -1)
 	get_tree().current_scene.add_child(node)

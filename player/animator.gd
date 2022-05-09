@@ -17,6 +17,12 @@ var sounds := {
 		preload("res://audio/pickup/coat1.wav"),
 		preload("res://audio/pickup/coat2.wav"),
 	],
+	"wep_pistol": [
+		preload("res://audio/pickup/wep_pistol.wav")
+	],
+	"pistol":[
+		preload("res://audio/pickup/ammo.wav")
+	],
 	"_pickup": [
 		preload("res://audio/pickup/gem1.wav"),
 		preload("res://audio/pickup/gem2.wav"),

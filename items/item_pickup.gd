@@ -10,6 +10,8 @@ export(String) var friendly_name = ""
 const sq_distance_visible := 30000
 
 func _ready():
+	if preview:
+		add_child(preview.instance())
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
 		return

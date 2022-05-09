@@ -1,4 +1,19 @@
-{!Global.stat("need_capacitors")}
+{Global.stat("capacitor_113") and !Global.stat("armstrong/tower")}
+	{Global.add_stat("armstrong/tower")}
+	I thought there was an earthquake outside! Did you collapse the tower east of here?
+	[You] Uh... which way is east again?
+	The only path out of the village, now blocked by gigantic ruins of the tower that was on the cliff.
+	[You] I.. uh, I didn't expect the tower would collapse from taking the capacitor.
+	{Global.stat("armstrong/asked_tower")} Did I not tell you about the tower? I clearly remember you asking me!
+		Did you forget? Did you just ignore me?
+		[You] No, no! I just didn't expect it to happen so quickly!
+		Hmph. Well, it is done now. I won't hold it over you, but you should take my advice seriously.
+		[You] ...
+	{otherwise} Ergh. I wish you had talked to me about it. I could have warned you.
+		[You] I'm sorry! It looked completely sturdy, I couldn't have possibly known the whole thing would fall apart!
+		Sigh... I suppose not. For the future, those capacitors power the buildings' repair systems. They are so old, they could collapse at any moment without them. Please be careful. You could get hurt, too.
+		[You] ...
+{otherwise if !Global.stat("need_capacitors")}
 	Ah, Jackie the coats girl! Hello!
 	[You] "Coats girl"?
 	You brought your whole wardrobe, did you not?
@@ -17,14 +32,65 @@
 	[You] Well... I guess I'll have to find them.
 	{Global.add_stat("need_capacitors")}
 {otherwise if !Global.stat("medium/activated")}
-	How goes your search, Coats Girl?
-	[You] Progress as always.
-	Good to hear!
+	{if Global.stat("medium/open")}
+		You did it! Three capacitors!
+		[You] So I just... walk in?
+		I think so! I've never used the Medium before!  Good luck.
+	{otherwise}
+		How goes your search, Coats Girl?
+		[You] Progress as always.
+		Good to hear!
+		> {!Global.stat("capacitor_113")} I was wondering if you knew about that tower on the cliff, just past the village exit.
+			Oh, of course. That's ancient technology.
+			[You] Would there be a capacitor up there?
+			{Global.add_stat("armstrong/asked_tower")}
 {otherwise}
-	How did it go?
-	[You] ...
+	How did it go with the Medium?
+	{Global.stat("talked/mum")}
+		{!Global.stat("mum/info")} 
+			[You] I talked to my mum.
+			[You] Well, I mean, sort of. She was like a ghost. I never knew her that well.
+			... Wait, did you not understand how the Medium worked? It uses your memories.
+			[You] Of course I understand. That's why I came to this Medium. My mother lived in the area. But I don't know where, exactly.
+			What was her name? There aren't many cities out here. Maybe I knew her?
+			[You] Teltara.
+			... No, that doesn't ring a bell.  Your best bet would be the other cities.  One on the plateau to the west, and the other, Crab Hill, all the way to the northwest. You could visit both in one trip.
+			{Global.mark_map("plateau_town", "The Plateau. Armstrong said it's one of the two other settlements in the area.")}
+			{Global.mark_map("crab_hill", "Crab Hill. Armstrong said it's one of the two other settlements in the area.")}
+			[You] Right. So the plateau, then Crab Hill.
+			That would be my plan. Good luck to you.
+		{otherwise}
+			[You] ...
+	{otherwise} 
+		[You] I, uh... haven't talked to her yet.
+		What? Just go in there and do it!
+
+	{Global.count("wep_pistol") and !Global.stat("armstrong/pistol_tutorial")}
+		{Global.add_stat("armstrong/ask_tutorial") == 1}
+			[You] Also, I found a gun in the Medium's waiting room.
+			What?
+			[You] Yeah, this. There was a pistol in a crate.
+			Oh wow, this is one of the weapons the Fallen Kingdom gave to officers. Someone must have been using the Medium to store their antiques!
+			[You] Do you know who? I should return this.
+			Well, you can ask around. The Medium hasn't been opened in twenty years as far as I know.  They probably won't miss it if you need protection outside the city.
+			Do you need me to show you how to use it?
+			{goto("pistol_tutorial")}
+		{otherwise}
+			Say, did you want me to teach you how to use that pistol?
+			{goto("pistol_tutorial")}
 
 {exit()}
+
+:pistol_tutorial
+> {skip()} Yes (Begin Weapons Tutorial)
+	[You] Yes.
+	Alright, I'll show you the ropes.
+	{event("pistol_tutorial", false)}
+	{exit()}
+> {skip()} Maybe Layer (Skip Tutorial)
+	[You] Maybe Later.
+	Okay, let me know. I don't want you hurting yourself.
+	{exit()}
 
 :_coat
 {traded_coats()}

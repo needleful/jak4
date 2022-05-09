@@ -267,6 +267,10 @@ const AMMO := [
 	"pistol"
 ]
 
+const WEAPONS := [
+	"wep_pistol"
+]
+
 func _ready():
 	$ui/shop.player = self
 	set_state(State.Ground)
@@ -283,6 +287,9 @@ func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
+	for item in WEAPONS:
+		if Global.count(item):
+			gun.add_weapon(item)
 	update_inventory()
 	health = max_health
 	stamina = max_stamina
@@ -775,9 +782,13 @@ func on_item_changed(item: String, amount: int):
 		energy = new_energy
 		energy_bar.visible = energy > 0
 	
+	elif item in WEAPONS:
+		gun.add_weapon(item)
+		gun.show_weapon()
+		show_ammo()
 	elif current_weapon == item:
 		$ui/weapon/ammo_label.text = str(Global.count(item))
-		if !$ui/weapon.visible:
+		if current_weapon and !$ui/weapon.visible:
 			show_ammo()
 	#debug
 	var state_viewer: Control = $ui/debug/game_state

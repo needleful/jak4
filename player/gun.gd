@@ -51,13 +51,7 @@ const TIME_QUIT_LOCK_ON := 0.25
 var target: Node
 
 func _ready():
-	var w = load("res://player/weapons/pistol.tscn")
-	if w is PackedScene:
-		weapon1 = w
-		call_deferred("set_current_weapon", weapon1)
-		call_deferred("set_state", State.Hidden, true)
-	else:
-		call_deferred("set_state", State.NoWeapon, true)
+	call_deferred("set_state", State.NoWeapon, true)
 
 func _input(event):
 	if event.is_action_pressed("combat_shoot"):
@@ -68,6 +62,24 @@ func _input(event):
 			time_since_fired = 0
 			enable()
 		aim_toggle = !aim_toggle
+
+func add_weapon(id):
+	var wep_scene
+	match(id):
+		"wep_pistol":
+			wep_scene = load("res://player/weapons/pistol.tscn")
+		_:
+			print_debug("unknown weapon: ", id)
+			return
+	if wep_scene is PackedScene:
+		weapon1 = wep_scene
+		call_deferred("set_current_weapon", weapon1)
+		call_deferred("set_state", State.Hidden, true)
+	else:
+		print_debug("tried to load weapon that was not PackedScene: ", id)
+
+func show_weapon():
+	call_deferred("set_state", State.Free, true)
 
 func set_current_weapon(weapon: PackedScene):
 	current_weapon = weapon.instance()

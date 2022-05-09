@@ -16,7 +16,7 @@ func _ready():
 		var n = get_node(enemies[i])
 		enemies[i] = n.get_path()
 	for e in enemies:
-		get_node(e).connect("died", self, "_on_target_died", [], CONNECT_ONESHOT)
+		var _x = get_node(e).connect("died", self, "_on_target_died", [], CONNECT_ONESHOT)
 
 func _on_target_died(_id, path):
 	var idx = enemies.find(path)
