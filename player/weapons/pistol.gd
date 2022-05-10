@@ -6,6 +6,7 @@ const time_firing := 0.15
 
 onready var cast_start := $cast_start
 onready var impact := $impact/Particles
+var charge_fire := false
 
 func fire() -> bool:
 	if !Global.count("pistol"):

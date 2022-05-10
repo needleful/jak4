@@ -18,6 +18,7 @@ enum State {
 	AimLocked,
 	Firing,
 	DelayedFire,
+	Charging,
 }
 
 var state:int = State.NoWeapon
@@ -63,51 +64,6 @@ func _input(event):
 			enable()
 		aim_toggle = !aim_toggle
 
-func add_weapon(id):
-	var wep_scene
-	match(id):
-		"wep_pistol":
-			wep_scene = load("res://player/weapons/pistol.tscn")
-		_:
-			print_debug("unknown weapon: ", id)
-			return
-	if wep_scene is PackedScene:
-		weapon1 = wep_scene
-		call_deferred("set_current_weapon", weapon1)
-		call_deferred("set_state", State.Hidden, true)
-	else:
-		print_debug("tried to load weapon that was not PackedScene: ", id)
-
-func show_weapon():
-	call_deferred("set_state", State.Free, true)
-
-func set_current_weapon(weapon: PackedScene):
-	current_weapon = weapon.instance()
-	ref.add_child(current_weapon)
-	holder.track_weapon(current_weapon.name)
-
-func update_laser():
-	var l = laser.get_hit_length()
-	if l < laser.spring_length:
-		laser_end.show()
-		var normal = laser.get_hit_normal()
-		var y = laser_end.global_transform.basis.y
-		var m_axis = y.cross(normal).normalized()
-		if m_axis.is_normalized():
-			var m_angle = y.angle_to(normal)
-			laser_end.global_rotate(m_axis, m_angle)
-	else:
-		laser_end.hide()
-	laser_geometry.clear()
-	laser_geometry.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
-	laser_geometry.add_vertex(Vector3(0.012, 0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(0.01, 0.01, l))
-	laser_geometry.add_vertex(Vector3(0.012, -0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(0.01, -0.01, l))
-	laser_geometry.add_vertex(Vector3(-0.012, 0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(-0.01, 0.01, l))
-	laser_geometry.end()
-
 func _process(delta):
 	var current_dir: Vector3 = holder.get_desired_aim()
 	var target_dir : Vector3
@@ -116,7 +72,9 @@ func _process(delta):
 	var lock_on := true
 	
 	state_timer += delta
-	if !aiming:
+	if charging() and !Input.is_action_pressed("combat_shoot"):
+		fire()
+	if !aiming && !charging():
 		time_since_fired += delta
 		if time_since_fired > TIME_HIDE:
 			disable()
@@ -209,9 +167,64 @@ func _process(delta):
 	if laser.visible:
 		update_laser()
 
+func add_weapon(id):
+	var wep_scene
+	match(id):
+		"wep_pistol":
+			wep_scene = load("res://player/weapons/pistol.tscn")
+		"wep_wave_shot":
+			wep_scene = load("res://player/weapons/wave_shot.tscn")
+		_:
+			print_debug("unknown weapon: ", id)
+			return
+	if wep_scene is PackedScene:
+		weapon1 = wep_scene
+		call_deferred("set_current_weapon", weapon1)
+		call_deferred("set_state", State.Hidden, true)
+	else:
+		print_debug("tried to load weapon that was not PackedScene: ", id)
+
+func show_weapon():
+	call_deferred("set_state", State.Free, true)
+
+func set_current_weapon(weapon: PackedScene):
+	if current_weapon:
+		ref.remove_child(current_weapon)
+		current_weapon.queue_free()
+	current_weapon = weapon.instance()
+	ref.add_child(current_weapon)
+	holder.track_weapon(current_weapon.name)
+
+func update_laser():
+	var l = laser.get_hit_length()
+	if l < laser.spring_length:
+		laser_end.show()
+		var normal = laser.get_hit_normal()
+		var y = laser_end.global_transform.basis.y
+		var m_axis = y.cross(normal).normalized()
+		if m_axis.is_normalized():
+			var m_angle = y.angle_to(normal)
+			laser_end.global_rotate(m_axis, m_angle)
+	else:
+		laser_end.hide()
+	laser_geometry.clear()
+	laser_geometry.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	laser_geometry.add_vertex(Vector3(0.012, 0.01, 0.0))
+	laser_geometry.add_vertex(Vector3(0.01, 0.01, l))
+	laser_geometry.add_vertex(Vector3(0.012, -0.01, 0.0))
+	laser_geometry.add_vertex(Vector3(0.01, -0.01, l))
+	laser_geometry.add_vertex(Vector3(-0.012, 0.01, 0.0))
+	laser_geometry.add_vertex(Vector3(-0.01, 0.01, l))
+	laser_geometry.end()
+
 func fire():
 	if state == State.Hidden:
 		set_state(State.DelayedFire)
+	elif current_weapon.charge_fire:
+		if current_weapon.charging:
+			set_state(State.Firing)
+		else:
+			set_state(State.Charging)
 	else:
 		set_state(State.Firing)
 
@@ -226,7 +239,7 @@ func fire_test_orb():
 func can_fire():
 	if !current_weapon:
 		return false
-	return ( state != State.Firing
+	return current_weapon.charge_fire or ( state != State.Firing
 		and state != State.NoWeapon
 		and state != State.Locked)
 
@@ -249,6 +262,9 @@ func enable():
 func disable():
 	if current_weapon:
 		set_state(State.Hidden)
+
+func charging() -> bool:
+	return current_weapon and current_weapon.charge_fire and current_weapon.charging
 
 func set_state(new_state, force := false):
 	if !force and new_state == state:
@@ -309,10 +325,16 @@ func set_state(new_state, force := false):
 				laser_geometry.visible = false
 				visible = true
 				holder.hold_gun(1.0)
+				if "recoil" in current_weapon:
+					holder.apply_velocity(current_weapon.recoil)
 			time_firing = current_weapon.time_firing
 			time_since_fired = 0
-			if state == State.DelayedFire:
+			if state == State.DelayedFire or state == State.Charging:
 				state_before_fire = State.Free
 			else:
 				state_before_fire = state
+		State.Charging:
+			visible = true
+			holder.hold_gun(1.0)
+			current_weapon.charge()
 	state = new_state

@@ -268,7 +268,8 @@ const AMMO := [
 ]
 
 const WEAPONS := [
-	"wep_pistol"
+	"wep_pistol",
+	"wep_wave_shot"
 ]
 
 func _ready():

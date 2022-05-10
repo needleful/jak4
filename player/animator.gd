@@ -187,3 +187,7 @@ func release_item() -> Spatial:
 		h.get_parent().remove_child(h)
 	held_item = null
 	return h
+
+func apply_velocity(vel: Vector3):
+	player.velocity.y = 0
+	player.velocity += vel

@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material/death_plane.shader" type="Shader" id=3]
+[ext_resource path="res://_glb/weapons/wave_shot.glb" type="PackedScene" id=4]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=6]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -26,3 +29,23 @@ collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="ghost"]
 shape = SubResource( 2 )
+
+[node name="crawly" parent="." instance=ExtResource( 6 )]
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.636, 366.195, -4.00729 )
+
+[node name="crawly2" parent="." instance=ExtResource( 6 )]
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 105.043, 366.195, -2.13599 )
+
+[node name="crawly3" parent="." instance=ExtResource( 6 )]
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.462, 366.195, -9.08079 )
+
+[node name="crawly4" parent="." instance=ExtResource( 6 )]
+transform = Transform( -0.967361, 0, 0.253403, 0, 1, 0, -0.253403, 0, -0.967361, 101.317, 366.195, -3.70216 )
+
+[node name="crawly5" parent="." instance=ExtResource( 6 )]
+transform = Transform( -0.362015, 0, 0.932172, 0, 1, 0, -0.932172, 0, -0.362015, 98.5963, 366.195, -7.3567 )
+
+[node name="wep_wave_shot_pickup" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 83.4132, 367.215, -42.1347 )
+item_id = "wep_wave_shot"
+preview = ExtResource( 4 )
