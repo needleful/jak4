@@ -239,9 +239,12 @@ func fire_test_orb():
 func can_fire():
 	if !current_weapon:
 		return false
-	return current_weapon.charge_fire or ( state != State.Firing
-		and state != State.NoWeapon
-		and state != State.Locked)
+	return (current_weapon.charge_fire 
+			and current_weapon.can_charge()
+		) or ( 
+			state != State.Firing
+			and state != State.NoWeapon
+			and state != State.Locked)
 
 func lock():
 	if visible:
@@ -283,10 +286,11 @@ func set_state(new_state, force := false):
 			holder.hold_gun(0.0)
 			gun_ik.stop()
 		State.Hidden:
-			set_process(false)
-			visible = false
+			if !charging():
+				set_process(false)
+				visible = false
+				holder.hold_gun(0.0)
 			holder.blend_gun(0.0)
-			holder.hold_gun(0.0)
 			gun_ik.stop()
 			aim_toggle = false
 		State.Free:
@@ -317,8 +321,9 @@ func set_state(new_state, force := false):
 			gun_ik.start()
 		State.Firing:
 			if current_weapon.fire():
+				if !current_weapon.charge_fire:
+					holder.blend_gun(1.0)
 				holder.play_fire()
-				holder.blend_gun(1.0)
 				gun_ik.interpolation = 0.2
 				gun_ik.start()
 				laser.visible = false

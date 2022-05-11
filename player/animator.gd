@@ -69,7 +69,7 @@ func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	if !audio.has_node(bodyPart):
 		print_debug("No audio player for ", bodyPart)
 		return
-	var node: AudioStreamPlayer = audio.get_node(bodyPart)
+	var node = audio.get_node(bodyPart)
 	node.stream = get_random_sound(soundType)
 	if node.stream == null:
 		print("No sound: ", soundType)
@@ -82,6 +82,8 @@ func get_desired_aim():
 	return -player.intention.global_transform.basis.z
 
 func get_random_sound(type: String) -> AudioStream:
+	if type == "step":
+		type = "stepLevelGround"
 	if !(type in sounds) or sounds[type].size() == 0:
 		return null
 	var array: Array = sounds[type]
