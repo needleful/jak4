@@ -9,6 +9,7 @@ const MIN_RECOIL = 2
 const RECOIL_SEC = 5
 
 var charge_fire := true
+var infinite_ammo := true
 var time_firing := 0.4
 
 var charging := false
@@ -30,10 +31,16 @@ func can_charge():
 	return time_since_fired > time_firing
 
 func charge():
+	$AnimationPlayer.stop()
+	$AnimationPlayer.play("Charging")
+	$AnimationPlayer.queue("MaxCharge-loop")
 	charging_time = 0.0
 	charging = true
 
 func fire():
+	$AnimationPlayer.stop()
+	$AnimationPlayer.clear_queue()
+	$AnimationPlayer.play("Fire")
 	time_since_fired = 0
 	$Particles.emitting = false
 	var bubble = get_node("damage/area%d" % (active_bubble + 1))

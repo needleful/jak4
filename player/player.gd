@@ -1290,9 +1290,13 @@ func _on_vis_timer_timeout():
 	$ui/inventory.hide()
 
 func track_weapon(weapon: String):
+	$ui/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
+	$ui/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
 	current_weapon = weapon
-	$ui/weapon/weapon_label.text = weapon.capitalize()
-	$ui/weapon/ammo_label.text = str(Global.count(weapon))
+	$ui/weapon.icon = weapon
+	if gun.current_weapon:
+		$ui/weapon/ammo_label.visible = !gun.current_weapon.infinite_ammo
+		$ui/weapon/ammo_label.text = str(Global.count(weapon))
 
 func show_ammo():
 	$ui/weapon.show()

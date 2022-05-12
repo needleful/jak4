@@ -33,7 +33,6 @@ const DELAY_HIDDEN_FIRE := 0.1
 
 onready var gun_ik := $"../gun_ik"
 
-var weapon1: PackedScene
 var current_weapon : Spatial
 var state_before_fire:= state
 
@@ -51,6 +50,16 @@ const TIME_QUIT_LOCK_ON := 0.25
 
 var target: Node
 
+var weapons : Dictionary = {
+	"wep_pistol": load("res://player/weapons/pistol.tscn"),
+	"wep_wave_shot": load("res://player/weapons/wave_shot.tscn")
+}
+
+var enabled_wep : Dictionary = {
+	"wep_pistol": false,
+	"wep_wave_shot":false
+}
+
 func _ready():
 	call_deferred("set_state", State.NoWeapon, true)
 
@@ -63,6 +72,10 @@ func _input(event):
 			time_since_fired = 0
 			enable()
 		aim_toggle = !aim_toggle
+	elif event.is_action_pressed("wep_1"):
+		swap_to("wep_pistol")
+	elif event.is_action_pressed("wep_2"):
+		swap_to("wep_wave_shot")
 
 func _process(delta):
 	var current_dir: Vector3 = holder.get_desired_aim()
@@ -168,21 +181,16 @@ func _process(delta):
 		update_laser()
 
 func add_weapon(id):
-	var wep_scene
-	match(id):
-		"wep_pistol":
-			wep_scene = load("res://player/weapons/pistol.tscn")
-		"wep_wave_shot":
-			wep_scene = load("res://player/weapons/wave_shot.tscn")
-		_:
-			print_debug("unknown weapon: ", id)
-			return
-	if wep_scene is PackedScene:
-		weapon1 = wep_scene
-		call_deferred("set_current_weapon", weapon1)
-		call_deferred("set_state", State.Hidden, true)
-	else:
-		print_debug("tried to load weapon that was not PackedScene: ", id)
+	if !(id in weapons):
+		print_debug("Weapon not found: ", id)
+		return
+	if enabled_wep[id]:
+		call_deferred("set_current_weapon", weapons[id])
+		call_deferred("enable")
+		true
+	enabled_wep[id] = true
+	call_deferred("set_current_weapon", weapons[id])
+	call_deferred("disable")
 
 func show_weapon():
 	call_deferred("set_state", State.Free, true)
@@ -268,6 +276,17 @@ func disable():
 
 func charging() -> bool:
 	return current_weapon and current_weapon.charge_fire and current_weapon.charging
+
+func swap_to(id: String):
+	if !(id in weapons):
+		print_debug("Weapon does not exist: ", id)
+		return
+	if !enabled_wep[id]:
+		return
+	set_current_weapon(weapons[id])
+	if !visible:
+		time_since_fired = 0
+		enable()
 
 func set_state(new_state, force := false):
 	if !force and new_state == state:

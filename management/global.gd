@@ -128,7 +128,6 @@ func add_stat(tag: String, amount := 1) -> int:
 	else:
 		game_state.stats[tag] = amount
 	var value =  game_state.stats[tag]
-	print("Changed stat: ", tag)
 	emit_signal("stat_changed", tag, value)
 	return value
 
