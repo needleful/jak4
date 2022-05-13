@@ -187,7 +187,6 @@ func add_weapon(id):
 	if enabled_wep[id]:
 		call_deferred("set_current_weapon", weapons[id])
 		call_deferred("enable")
-		true
 	enabled_wep[id] = true
 	call_deferred("set_current_weapon", weapons[id])
 	call_deferred("disable")
@@ -227,7 +226,11 @@ func update_laser():
 
 func fire():
 	if state == State.Hidden:
-		set_state(State.DelayedFire)
+		if current_weapon.charge_fire:
+			set_state(State.Free)
+			set_state(State.Charging)
+		else:
+			set_state(State.DelayedFire)
 	elif current_weapon.charge_fire:
 		if current_weapon.charging:
 			set_state(State.Firing)

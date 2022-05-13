@@ -2,7 +2,7 @@ extends Spatial
 
 const MAX_RADIUS = 8
 const MIN_RADIUS = 1
-const RADIUS_SEC = 2
+const RADIUS_SEC = 3
 
 const MAX_RECOIL = 15
 const MIN_RECOIL = 2
@@ -25,12 +25,12 @@ func _process(delta):
 	time_since_fired += delta
 	if charging:
 		charging_time += delta
-		assert($Particles.emitting)
 
 func can_charge():
 	return time_since_fired > time_firing
 
 func charge():
+	$AudioStreamPlayer.play()
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("Charging")
 	$AnimationPlayer.queue("MaxCharge-loop")
@@ -38,6 +38,8 @@ func charge():
 	charging = true
 
 func fire():
+	$FireSound.play()
+	$AudioStreamPlayer.stop()
 	$AnimationPlayer.stop()
 	$AnimationPlayer.clear_queue()
 	$AnimationPlayer.play("Fire")

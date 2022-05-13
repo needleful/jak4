@@ -1,11 +1,12 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://material/ancient/white_metal.material" type="Material" id=1]
+[ext_resource path="res://audio/weapons/charge.wav" type="AudioStream" id=1]
 [ext_resource path="res://_glb/weapons/wave_shot.glb" type="PackedScene" id=2]
 [ext_resource path="res://player/weapons/wave_shot.gd" type="Script" id=3]
 [ext_resource path="res://material/env/copper_corroded1.png" type="Texture" id=4]
 [ext_resource path="res://material/bubble.shader" type="Shader" id=5]
 [ext_resource path="res://entities/hurtbox.gd" type="Script" id=6]
+[ext_resource path="res://audio/weapons/wave_fire.wav" type="AudioStream" id=7]
 
 [sub_resource type="Curve" id=10]
 _data = [ Vector2( 0, 0 ), 0.0, 4.44787, 0, 0, Vector2( 1, 0 ), -3.76331, 0.0, 0, 0 ]
@@ -227,9 +228,6 @@ local_coords = false
 process_material = SubResource( 7 )
 draw_pass_1 = SubResource( 3 )
 
-[node name="wave_shot" parent="Armature/Skeleton" index="0"]
-material/0 = ExtResource( 1 )
-
 [node name="damage" type="Node" parent="." index="2"]
 
 [node name="area1" type="Area" parent="damage" index="0"]
@@ -273,3 +271,11 @@ anims/RESET = SubResource( 15 )
 anims/fire = SubResource( 16 )
 
 [node name="Tween" type="Tween" parent="." index="3"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="5"]
+stream = ExtResource( 1 )
+bus = "SFX_Player"
+
+[node name="FireSound" type="AudioStreamPlayer" parent="." index="6"]
+stream = ExtResource( 7 )
+bus = "SFX_Player"
