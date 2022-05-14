@@ -64,6 +64,8 @@ func _ready():
 	call_deferred("set_state", State.NoWeapon, true)
 
 func _input(event):
+	if holder.weapons_locked():
+		return
 	if event.is_action_pressed("combat_shoot"):
 		if can_fire():
 			fire()
@@ -286,6 +288,7 @@ func swap_to(id: String):
 		return
 	if !enabled_wep[id]:
 		return
+	holder.play_pickup_sound(id)
 	set_current_weapon(weapons[id])
 	if !visible:
 		time_since_fired = 0

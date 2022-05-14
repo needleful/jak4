@@ -167,6 +167,10 @@ var time_animation := 0.0
 
 const TIME_FALLING_DEATH := 2.0
 
+# Floor movement
+var ground: Spatial
+var ground_last_position: Vector3
+
 enum State {
 	Ground,
 	Fall,
@@ -334,6 +338,7 @@ func _physics_process(delta):
 		rotate_intention(desired_velocity)
 	
 	best_floor_dot = -1.0
+	var best_ground: Spatial
 	var best_normal := Vector3.ZERO
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
@@ -342,6 +347,11 @@ func _physics_process(delta):
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
+			best_ground = col.collider
+	if state != State.LedgeHang and best_ground != ground:
+		ground = best_ground
+		if ground:
+			ground_last_position = ground.global_transform.origin
 	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
@@ -531,6 +541,8 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("mv_jump"):
 				next_state = State.LedgeJump
+			elif best_floor_dot > MIN_DOT_GROUND:
+				next_state = State.Ground
 			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch"):
 				next_state = State.LedgeFall
 			elif intent_dot < 0:
@@ -645,6 +657,7 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
+			ground_movement()
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
@@ -657,12 +670,14 @@ func _physics_process(delta):
 		State.Fall, State.LedgeFall:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 		State.Slide:
+			ground_movement()
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 		State.BaseJump:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
 		State.Roll:
+			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
@@ -671,22 +686,27 @@ func _physics_process(delta):
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
+			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_CROUCH)
 		State.Climb:
+			ground_movement()
 			ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 		State.LedgeHang:
+			ground_movement()
 			desired_velocity = Vector3.ZERO
 		State.LungeKick, State.SlideLungeKick:
+			ground_movement()
 			if timer_state > TIME_LUNGE_PARTICLES:
 				mesh.stop_particles()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
+			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
@@ -694,6 +714,7 @@ func _physics_process(delta):
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.UppercutWindup:
+			ground_movement()
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
 		State.Uppercut:
 			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
@@ -706,9 +727,11 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
+			ground_movement()
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked, State.PlaceFlag, State.GetItem:
+			ground_movement()
 			desired_velocity = Vector3.ZERO
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
@@ -823,6 +846,11 @@ func update_stamina():
 	stamina_bar.value = stamina
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
+	velocity.y += -9.8*delta
+	velocity = velocity.move_toward(Vector3(desired_velocity.x, velocity.y, desired_velocity.z), accel_normal)
+	velocity = move_and_slide_with_snap(velocity, Vector3.DOWN*0.1, Vector3.UP)
+	
+func _accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	var hvel := velocity
 	hvel.y = 0
 	var hdir := hvel.normalized()
@@ -965,6 +993,16 @@ func accel_lunge(delta, desired_velocity):
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
 
+func ground_movement():
+	#if !ground or ground is StaticBody:
+	#	return
+	var gv := get_floor_velocity()
+	$ui/debug/stats/a6.text = "GV: {%f, %f, %f}" % [gv.x, gv.y, gv.z]
+	#var new_position := ground.global_transform.origin
+	#var movement := new_position - ground_last_position
+	#move_and_collide(movement)
+	#ground_last_position = new_position
+
 func should_raise_camera():
 	return state == State.LedgeHang
 
@@ -1008,7 +1046,7 @@ func can_ledge_grab() -> bool:
 		ledgeCastCenter.is_colliding()
 		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
 	# debug
-	if true:
+	if false:
 		if !ledgeCastCenter.is_colliding():
 			$jackie/debug_center.material_override.albedo_color = Color.red
 		elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
@@ -1225,6 +1263,9 @@ func unlock():
 	$unlock_timer.start()
 	$ui/stats.show()
 
+func is_locked() -> bool:
+	return state == State.Locked
+
 func _on_unlock_timer_timeout():
 	set_state(State.Ground)
 
@@ -1356,6 +1397,8 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
+			ground = ledgeCastCenter.get_collider()
+			ground_last_position = ground.global_transform.origin
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
 			velocity = Vector3.ZERO
@@ -1379,7 +1422,6 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_ROLL
 			if max_damage:
 				mesh.start_roll_particles()
-			
 			mesh.transition_to("RollJump")
 			gun.lock()
 		State.RollFall:

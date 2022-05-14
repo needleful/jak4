@@ -1,9 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
 [ext_resource path="res://icon.png" type="Texture" id=3]
-[ext_resource path="res://entities/dswitch.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/control/dswitch.tscn" type="PackedScene" id=4]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=5]
 
 [sub_resource type="SpatialMaterial" id=1]
@@ -63,7 +63,25 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=9]
 resource_name = "test"
-length = 15.0
+length = 30.0
+loop = true
+step = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 8, 11, 12, 14, 16, 22 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 21.2302, 0, 1.81196 ), Vector3( -18.0833, 14.5567, 1.81196 ), Vector3( -10.0424, 1.54551, 9.63151 ), Vector3( -4.24347, 1.29823, 12.7205 ), Vector3( 3.03472, 0.927308, 14.6584 ), Vector3( 16.3781, 0.247282, 9.1452 ), Vector3( 21.2302, 0, 1.81196 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "Loop"
+length = 8.0
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:translation")
@@ -72,10 +90,25 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 4.3, 5.8, 6.2, 6.8, 7.9, 11 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 21.2302, 0, 1.81196 ), Vector3( -18.0833, 14.5567, 1.81196 ), Vector3( -10.0424, 1.54551, 9.63151 ), Vector3( -4.24347, 1.29823, 12.7205 ), Vector3( 3.03472, 0.927308, 14.6584 ), Vector3( 16.3781, 0.247282, 9.1452 ), Vector3( 21.2302, 0, 1.81196 ) ]
+"values": [ Vector3( 21.2302, 0, 5.87592 ), Vector3( 21.2302, 10.4338, 5.87592 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 21.2302, 0, 5.87592 ) ]
 }
 
 [node name="test_world" instance=ExtResource( 2 )]
@@ -159,3 +192,19 @@ material/0 = null
 autoplay = "test"
 anims/RESET = SubResource( 8 )
 anims/test = SubResource( 9 )
+
+[node name="KinematicBody2" type="KinematicBody" parent="." index="18"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2302, 0, 5.87592 )
+motion/sync_to_physics = true
+
+[node name="CollisionShape" type="CollisionShape" parent="KinematicBody2" index="0"]
+shape = SubResource( 6 )
+
+[node name="MeshInstance" type="MeshInstance" parent="KinematicBody2/CollisionShape" index="0"]
+mesh = SubResource( 7 )
+material/0 = null
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody2" index="1"]
+autoplay = "Loop"
+anims/Loop = SubResource( 10 )
+anims/RESET = SubResource( 11 )

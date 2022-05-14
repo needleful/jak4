@@ -31,12 +31,16 @@ func _input(event):
 		viewing_index = 0
 		view()
 	elif event.is_action_pressed("ui_left"):
+		if !(viewing_rarity in coats_by_rarity):
+			return
 		var l = coats_by_rarity[viewing_rarity].size()
 		if l != 0:
 			viewing_index += l - 1
 			viewing_index = viewing_index % l
 			view()
 	elif event.is_action_pressed("ui_right"):
+		if !(viewing_rarity in coats_by_rarity):
+			return
 		var l = coats_by_rarity[viewing_rarity].size()
 		if l != 0:
 			viewing_index += 1

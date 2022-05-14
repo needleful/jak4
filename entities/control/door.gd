@@ -27,6 +27,9 @@ func _on_stat_changed(stat, value):
 func _on_activated():
 	add_power()
 
+func _on_toggled(active):
+	add_power(1 if active else -1)
+
 func add_power(amount:= 1):
 	power += amount
 	var should_open := power >= required_power

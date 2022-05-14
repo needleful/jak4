@@ -20,6 +20,9 @@ var sounds := {
 	"wep_pistol": [
 		preload("res://audio/pickup/wep_pistol.wav")
 	],
+	"wep_wave_shot": [
+		preload("res://audio/pickup/wep_wave_shot.wav")
+	],
 	"pistol":[
 		preload("res://audio/pickup/ammo.wav")
 	],
@@ -156,6 +159,9 @@ func hold_gun(blend: float):
 		player.show_ammo()
 	else:
 		player.hide_ammo()
+
+func weapons_locked():
+	return player.is_locked()
 
 func track_weapon(weapon: String):
 	player.track_weapon(weapon)
