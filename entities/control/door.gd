@@ -38,8 +38,10 @@ func add_power(amount:= 1):
 	
 	if should_open and !open:
 		if has_node("AnimationPlayer"):
+			print("Opening...")
 			$AnimationPlayer.play("Activate")
 	elif !should_open and open:
 		if has_node("AnimationPlayer"):
+			print("Closing...")
 			$AnimationPlayer.play_backwards("Activate")
 	open = should_open

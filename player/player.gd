@@ -846,11 +846,6 @@ func update_stamina():
 	stamina_bar.value = stamina
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
-	velocity.y += -9.8*delta
-	velocity = velocity.move_toward(Vector3(desired_velocity.x, velocity.y, desired_velocity.z), accel_normal)
-	velocity = move_and_slide_with_snap(velocity, Vector3.DOWN*0.1, Vector3.UP)
-	
-func _accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	var hvel := velocity
 	hvel.y = 0
 	var hdir := hvel.normalized()
