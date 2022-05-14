@@ -167,9 +167,12 @@ var time_animation := 0.0
 
 const TIME_FALLING_DEATH := 2.0
 
-# Floor movement
-var ground: Spatial
-var ground_last_position: Vector3
+# Ledge being held onto
+var ledge: Spatial
+# Position of player relative to ledge at start of ledge grab
+var ledge_local_position : Vector3
+# Global transform
+var ledge_last_transform : Transform
 
 enum State {
 	Ground,
@@ -348,10 +351,6 @@ func _physics_process(delta):
 			best_floor_dot = dot
 			best_normal = normal
 			best_ground = col.collider
-	if state != State.LedgeHang and best_ground != ground:
-		ground = best_ground
-		if ground:
-			ground_last_position = ground.global_transform.origin
 	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
@@ -545,7 +544,7 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch"):
 				next_state = State.LedgeFall
-			elif intent_dot < 0:
+			elif intent_dot < 0 or !ledgeCastCenter.is_colliding():
 				timer_leave_ledge += delta
 				if timer_leave_ledge > TIME_LEDGE_LEAVE:
 					next_state = State.LedgeFall
@@ -657,7 +656,7 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
-			ground_movement()
+			
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
@@ -670,14 +669,12 @@ func _physics_process(delta):
 		State.Fall, State.LedgeFall:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 		State.Slide:
-			ground_movement()
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 		State.BaseJump:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
 		State.Roll:
-			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
@@ -686,27 +683,28 @@ func _physics_process(delta):
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
-			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_CROUCH)
 		State.Climb:
-			ground_movement()
 			ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 		State.LedgeHang:
-			ground_movement()
+			if ledge.global_transform != ledge_last_transform:
+				var new_transform := ledge.global_transform
+				var old_position := ledge_last_transform*ledge_local_position
+				var new_position := new_transform*ledge_local_position
+				move_and_collide(new_position - old_position)
+				ledge_last_transform = new_transform
 			desired_velocity = Vector3.ZERO
 		State.LungeKick, State.SlideLungeKick:
-			ground_movement()
 			if timer_state > TIME_LUNGE_PARTICLES:
 				mesh.stop_particles()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
-			ground_movement()
 			ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
@@ -714,7 +712,6 @@ func _physics_process(delta):
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.UppercutWindup:
-			ground_movement()
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
 		State.Uppercut:
 			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
@@ -727,11 +724,9 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
-			ground_movement()
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked, State.PlaceFlag, State.GetItem:
-			ground_movement()
 			desired_velocity = Vector3.ZERO
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
@@ -987,16 +982,6 @@ func accel_lunge(delta, desired_velocity):
 	var v2 := move_and_slide(velocity + GRAVITY*delta)
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
-
-func ground_movement():
-	#if !ground or ground is StaticBody:
-	#	return
-	var gv := get_floor_velocity()
-	$ui/debug/stats/a6.text = "GV: {%f, %f, %f}" % [gv.x, gv.y, gv.z]
-	#var new_position := ground.global_transform.origin
-	#var movement := new_position - ground_last_position
-	#move_and_collide(movement)
-	#ground_last_position = new_position
 
 func should_raise_camera():
 	return state == State.LedgeHang
@@ -1392,10 +1377,11 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
-			ground = ledgeCastCenter.get_collider()
-			ground_last_position = ground.global_transform.origin
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
+			ledge = ledgeCastCenter.get_collider()
+			ledge_last_transform = ledge.global_transform
+			ledge_local_position = ledge.global_transform.xform_inv(global_transform.origin)
 			velocity = Vector3.ZERO
 			can_air_spin = true
 			gun.lock()

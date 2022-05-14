@@ -6,9 +6,8 @@ signal toggled(on)
 var on: bool = false
 export(float) var time_deactivate := 0.0
 
-func _on_damaged(damage, dir):
+func _on_damaged(_damage, dir):
 	var switch_on = dir.dot(global_transform.basis.z) > 0.0
-	
 	set_on(switch_on)
 
 func set_on(switch_on):

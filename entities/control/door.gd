@@ -28,6 +28,7 @@ func _on_activated():
 	add_power()
 
 func _on_toggled(active):
+	print("Toggled: ", active)
 	add_power(1 if active else -1)
 
 func add_power(amount:= 1):
