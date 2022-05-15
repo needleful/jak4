@@ -10,17 +10,25 @@ func _ready():
 	load_settings()
 	hide()
 
+func _input(event):
+	if !Global.using_gamepad:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	elif event.is_action_pressed("ui_cancel"):
+		if level == 0:
+			get_parent().unpause()
+		else:
+			set_level(level - 1)
+
 func set_active(active):
 	if active:
 		load_settings()
-		show()
-		emit_signal("pause_toggled", true)
 		set_level(0)
 	else:
 		save_settings()
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		hide()
-		emit_signal("pause_toggled", false)
+	visible = active
+	emit_signal("pause_toggled", active)
+	set_process_input(active)
 
 func set_level(l: int):
 	if l < 0:

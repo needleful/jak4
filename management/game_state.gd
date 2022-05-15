@@ -9,6 +9,8 @@ export(Array, Resource) var all_coats: Array
 export(Array, NodePath) var picked_items: Array
 export(Array, NodePath) var activated: Array
 export(Array, Transform) var flags : Array
+# String to array of strings
+export(Dictionary) var map_markers := {}
 
 func _init():
 	resource_name = "GameState"

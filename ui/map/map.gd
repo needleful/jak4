@@ -5,11 +5,12 @@ onready var reticle := $reticle
 
 var active := false
 
-var snap_timer := 0
+var snap_timer := 0.0
 var snap_direction := Vector2.ZERO
 var zoom_scale := 1.0
 
 var last_moved_dir := Vector2.ZERO
+var highlighted_point = null
 
 func _ready():
 	set_active(false)
@@ -46,7 +47,8 @@ func _process(delta: float):
 	
 	# Find snap target
 	var best_dist := 60
-	reticle.get_node("Label").hide()
+	var old_point = highlighted_point
+	highlighted_point = null
 	for g in scroll_area.get_children():
 		if !(g is KinematicBody2D) or !g.visible:
 			continue
@@ -54,15 +56,28 @@ func _process(delta: float):
 		
 		var dist = dir.length()
 		if dist < best_dist and dist < 40:
-			reticle.get_node("Label").show()
-			reticle.get_node("Label").text = g.visual_name
+			best_dist = dist
+			highlighted_point = g
 		if dir.dot(last_moved_dir) <= 0:
 			continue
-		if dist < best_dist and dist > 10:
-			print("Snap to ", g.name)
+		if dist <= best_dist and dist > 10:
 			best_dist = dist
 			snap_direction = dir
 			snap_timer = 1.0
+	if !highlighted_point:
+		reticle.get_node("panel").hide()
+	elif highlighted_point != old_point:
+		reticle.get_node("panel").show()
+		reticle.get_node("panel/Label").text = highlighted_point.visual_name
+		var note_box:Container = reticle.get_node("panel/Notes")
+		for c in note_box.get_children():
+			c.queue_free()
+		for n in highlighted_point.notes:
+			var l = Label.new()
+			l.autowrap = true
+			l.size_flags_horizontal = SIZE_EXPAND_FILL
+			l.text = n
+			note_box.add_child(l)
 
 func set_active(a):
 	reticle.global_position = OS.window_size/2
@@ -71,3 +86,9 @@ func set_active(a):
 	active = a
 	visible = active
 	set_process(active)
+	if active:
+		for g in scroll_area.get_children():
+			if g.name in Global.game_state.map_markers:
+				g.show_with_notes(Global.game_state.map_markers[g.name])
+			else:
+				g.hide()

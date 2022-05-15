@@ -6,7 +6,10 @@ enum State {
 	Map
 }
 
-var state = State.Free
+var state = null
+
+func _ready():
+	set_state(State.Free)
 
 func _input(event):
 	match state:

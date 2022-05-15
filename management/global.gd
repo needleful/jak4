@@ -80,8 +80,11 @@ func get_player() -> Node:
 
 # Game state management
 
-func mark_map(_id:String, _note:String):
-	return true
+func mark_map(id:String, note:String):
+	if id in game_state.map_markers:
+		game_state.map_markers[id].append(note)
+	else:
+		game_state.map_markers[id] = [note]
 
 func place_flag(node: Spatial, transform: Transform):
 	var _x = add_item("flag", -1)
