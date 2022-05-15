@@ -341,7 +341,6 @@ func _physics_process(delta):
 		rotate_intention(desired_velocity)
 	
 	best_floor_dot = -1.0
-	var best_ground: Spatial
 	var best_normal := Vector3.ZERO
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
@@ -350,7 +349,6 @@ func _physics_process(delta):
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
-			best_ground = col.collider
 	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
@@ -695,7 +693,7 @@ func _physics_process(delta):
 				var new_transform := ledge.global_transform
 				var old_position := ledge_last_transform*ledge_local_position
 				var new_position := new_transform*ledge_local_position
-				move_and_collide(new_position - old_position)
+				var _x = move_and_collide(new_position - old_position)
 				ledge_last_transform = new_transform
 			desired_velocity = Vector3.ZERO
 		State.LungeKick, State.SlideLungeKick:

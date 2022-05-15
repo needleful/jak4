@@ -8,7 +8,6 @@ export(int) var bugs_earned := 2
 
 var active := false
 var jumps := 0
-# TODO: add ui for remaining jumps
 # TODO: Sound effect and confetti particles
 
 func _ready():

@@ -5,6 +5,8 @@ export(Array, NodePath) var enemies := []
 
 var saved := false
 
+#TODO: track multiple games to avoid conflicts
+
 func _ready():
 	if only_if_saved and !Global.stat("riley/saved"):
 		queue_free()
@@ -22,8 +24,15 @@ func _on_target_died(_id, path):
 	var idx = enemies.find(path)
 	if idx >= 0:
 		enemies.remove(idx)
+	Global.get_player().game_ui.value = enemies.size()
 	if enemies.size() == 0:
+		Global.get_player().game_ui.hide()
 		var _x = Global.add_stat("riley/saved")
 		_x = Global.add_stat(str(get_path()) + "/saved")
 		saved = true
 	
+func track_enemies():
+	var player = Global.get_player()
+	player.game_ui.show()
+	player.game_ui.label = "Enemies"
+	player.game_ui.value = enemies.size()

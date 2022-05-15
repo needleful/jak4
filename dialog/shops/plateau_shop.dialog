@@ -35,7 +35,7 @@
 		Hahaha! A "side thing"! Those alpha crawlers are nasty beasts. I wouldn't fight with them as a "side thing"!
 		[You] Yeah, heh. They're not so tough once you start hitting them, though.
 			But uh, I'm here for family stuff.
-	{otherwise} Uh, just some family stuff.
+	{otherwise} [You] Uh, just some family stuff.
 	What sort?
 	> I'm seeing the Medium. For uh... my mum.
 		{mention("mum")}
@@ -45,8 +45,7 @@
 		[You] Thanks...
 	>{skip()} (Evade the question)
 		[You] Um, I uh, I 
-
-		{mentioned("safari")} Aha, what, did I guess right? Don't want people to know you're a hunter? Didn't get the right permissions?
+		{mentioned("safari")} {Global.add_stat("plateau_shop/safari")} Aha, what, did I guess right? Don't want people to know you're a hunter? Didn't get the right permissions?
 			[You] No, no! Nothing like that!
 				... Wait, is it illegal to hunt these things?
 			Ha! Don't worry, they're not a uh, preserved species or something. You'll do some good turning them into coats!
@@ -58,9 +57,15 @@
 		The people who journey out here are odd characters.
 		[You] I'm an odd character?
 
-		{mentioned("safari")} A young girl hunting terrifying beasts for colorful coats. With... what, not even a gun? You punch them?
+		{mentioned("safari")} {Global.add_stat("plateau_shop/safari")} A young girl hunting terrifying beasts for colorful coats.
+		{!Global.stat("weapon")}
+			With... what, not even a gun? You punch them?
 			[You] Kick them, usually.
 			Hahaha! Kick them! See, you are a very odd character!
+		{otherwise}
+			With... what, old pistols?
+			[You] Kicking is usually faster, honestly.
+			Hahaha! Kicking them! See, you are a very odd character!
 		{otherwise} Well, that's to be decided. They uh, judge is out still.
 			[You] Hehe.. Well, maybe some other time.
 
@@ -89,7 +94,9 @@
 	My dad used to run it. And before that, my grandma. I think she and her husband built it.
 	I guess when I go, my girl's gonna take it over.
 	> Have you traveled much?
-		I went to the academy in 
+		I went to school at the Crimson Shale National University, but otherwise, not really.
+		I like it here.
+		{goto("shop_replies")}
 	> {skip()}(Back)
 		{goto("shop_replies")}
 > {Global.stat("mum/info/orstad")} I was wondering if we could talk about my mum again?
@@ -129,7 +136,31 @@
 	[You] Teltara Ul Syn. Does that sound familiar?
 	{Global.add_stat("mum/info")} Teltara? ... Are you serious? We grew up in the old village!
 	{Global.add_stat("mum/info/orstad")}* The shopkeeper spends hours talking your mother, Teltara. Stories of her stoic and headstrong nature. What they learned at school. You soak up every detail.
-	{Global.add_stat("mum/info/old_village")}* When they were nearing adulthood, the old village was overrun by the creatures now infesting this land. Teltara and a mutual friend, Balter, coordinated the evacuation, and fortifying their new home. That became this very village.
+	{Global.add_stat("mum/info/old_village")}* When they were nearing adulthood, the old village was overrun by the specters now infesting this land. Teltara and a mutual friend, Balter, coordinated the evacuation, and fortifying their new home. That became this very village.
+	[You] So where is the old village?
+	{Global.mark_map("quarry_village", "Mum's old village. Orstad the shop-keeper told me it's overrun with specters"} On the plateau, to the south. You'd have to go through the quarry to get there. But it's probably not worth it.
+	{Global.mark_map("crab_hill", "Mum's friend Balter apparently lives here")} Specters took over that whole area. Your mother wanted to exterminate them and take it back, but Balter thought it was suicide and went further north, to Crab Hill.
+	[You] I'm quite sturdy against these specters, so the danger isn't much trouble. Do you think there'd be anything worth finding in the old village?
+	{Global.stat("plateau_shop/safari")} Haha! Well, I suppose the great coat huntress would find such a place thrilling.
+	{otherwise} Haha! You may be quite sturdy, but don't take the quarry so lightly. It's a dangerous place.
+	As for what you'd find... Maybe some old knick-knacks, but not old friends or anything.  It's been abandoned since we left.
+	[You] I may make a stop there. I'll stay cautious for you.
+	> What can you tell me about Balter?
+		Balter. Well, he was your mom's friend more than mine. They were the two in charge of the village evacuation. But eventually they both left. Balter for more safety up north, and Teltara... well, I don't really know.
+		It's not much, but I hope I could help.
+		[You] Thanks, Olstad.
+		Any time. Good luck out there. Stay safe.
+		{exit()}
+	> I'm heading out now. Take care.
+		Alright, good luck to you. And stay safe.
+		{exit()}
+{otherwise}
+	> What was Mum like?
+		// TODO
+	> How did you know my mum?
+		// TODO
+	> Who was Balter again?
+		// TODO
 {back()}
 
 :sub_exit

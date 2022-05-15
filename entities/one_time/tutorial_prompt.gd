@@ -6,7 +6,7 @@ export(Array, Texture) var keyboard_textures: Array
 export(String) var gamepad_text : String
 export(String) var keyboard_text : String
 
-var enabled = false setget set_enabled
+var enabled: bool setget set_enabled
 
 func _ready():
 	set_enabled(false)

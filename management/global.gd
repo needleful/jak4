@@ -25,6 +25,8 @@ var color_sublime := Color.coral
 # measuring the total collected 
 var tracked_items = ["bug", "capacitor"]
 
+var stats_temp := {}
+
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
@@ -87,12 +89,6 @@ func place_flag(node: Spatial, transform: Transform):
 	node.global_transform = transform
 	game_state.flags.append(transform)
 
-func stat(index: String):
-	if index in game_state.stats:
-		return game_state.stats[index]
-	else:
-		return 0
-
 func count(item: String) -> int:
 	if item in game_state.inventory:
 		return game_state.inventory[item]
@@ -117,6 +113,12 @@ func remove_item(item: String, amount := 1) -> bool:
 	else:
 		return false
 
+func stat(index: String):
+	if index in game_state.stats:
+		return game_state.stats[index]
+	else:
+		return 0
+
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
 	emit_signal("stat_changed", tag, value)
@@ -128,6 +130,26 @@ func add_stat(tag: String, amount := 1) -> int:
 	else:
 		game_state.stats[tag] = amount
 	var value =  game_state.stats[tag]
+	emit_signal("stat_changed", tag, value)
+	return value
+	
+func temp_stat(index: String):
+	if index in stats_temp:
+		return stats_temp[index]
+	else:
+		return 0
+
+func set_temp_stat(tag: String, value):
+	stats_temp[tag] = value
+	emit_signal("stat_changed", tag, value)
+	return value
+
+func add_temp_stat(tag: String, amount := 1) -> int:
+	if tag in stats_temp:
+		stats_temp[tag] += amount
+	else:
+		stats_temp[tag] = amount
+	var value =  stats_temp[tag]
 	emit_signal("stat_changed", tag, value)
 	return value
 

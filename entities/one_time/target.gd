@@ -8,6 +8,7 @@ onready var audio = get_node(audio_stream_player)
 func take_damage(_dam, dir):
 	audio.pitch_scale = rand_range(0.95, 1.5)
 	anim.stop()
+	Global.add_temp_stat("tut_target_hit")
 	if dir.dot(global_transform.basis.z) < 0:
 		anim.play("hit_front")
 	else:
