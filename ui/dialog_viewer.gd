@@ -299,10 +299,7 @@ func resume():
 		get_next()
 
 func get_talked_stat():
-	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
-		return "talked/" + main_speaker.friendly_id
-	else:
-		return "talked"+main_speaker.get_path()
+	return "talked" + speaker_stat()
 
 ## Dialog functions
 
@@ -377,14 +374,11 @@ func back():
 	return RESULT_SKIP
 
 func coat_trade_stat() -> String:
-	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
-		return "coat_trade/"+main_speaker.friendly_id
-	else:
-		return "coat_trade"+str(main_speaker.get_path())
+	return "coat_trade" + speaker_stat()
 
 func traded_coats():
 	return Global.stat(coat_trade_stat())
-	
+
 func swap_coats():
 	var _x = Global.add_stat(coat_trade_stat())
 	_x = Global.add_stat("trade_coat")
@@ -394,4 +388,19 @@ func swap_coats():
 	Global.add_coat(speaker_coat)
 	player.set_current_coat(speaker_coat, true)
 	Global.remove_coat(player_coat)
+	return true
+
+func speaker_stat() -> String:
+	if !main_speaker:
+		return ""
+	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
+		return main_speaker.friendly_id
+	else:
+		return str(main_speaker.get_path())
+
+func can_discuss(stat: String) -> bool:
+	return Global.stat(stat) and !Global.stat("discussed" + speaker_stat() + "/" + stat)
+
+func mark_discussed(stat: String) -> bool:
+	var _x = Global.add_stat("discussed" + speaker_stat() + "/" + stat)
 	return true

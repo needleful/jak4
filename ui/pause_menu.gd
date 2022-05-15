@@ -6,31 +6,21 @@ var level := 0
 
 const save_path = "user://settings.cfg"
 
-func _input(event):
-	if get_tree().paused:
-		if !Global.using_gamepad:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		
-		if event.is_action_pressed("pause"):
-			unpause()
-		elif event.is_action_pressed("ui_cancel"):
-			if level == 0:
-				unpause()
-			else:
-				set_level(level - 1)
-	elif Global.can_pause and event.is_action_pressed("pause"):
-		pause()
-		
 func _ready():
 	load_settings()
 	hide()
 
-func pause():
-	load_settings()
-	get_tree().paused = true
-	show()
-	emit_signal("pause_toggled", true)
-	set_level(0)
+func set_active(active):
+	if active:
+		load_settings()
+		show()
+		emit_signal("pause_toggled", true)
+		set_level(0)
+	else:
+		save_settings()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		hide()
+		emit_signal("pause_toggled", false)
 
 func set_level(l: int):
 	if l < 0:
@@ -87,13 +77,6 @@ func set_level(l: int):
 				
 	level = l
 
-func unpause():
-	save_settings()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	get_tree().paused = false
-	hide()
-	emit_signal("pause_toggled", false)
-
 func save_settings():
 	var file:ConfigFile = ConfigFile.new()
 	file = $foreground/audioOptions.save_to(file)
@@ -124,13 +107,13 @@ func load_settings():
 		menu.load_from(file)
 
 func _on_resume_pressed():
-	unpause()
+	get_parent().unpause()
 
 func _on_options_pressed():
 	set_level(1)
 
 func _on_reload_pressed():
-	unpause()
+	get_parent().unpause()
 	Global.get_player().respawn()
 
 func _on_quit_pressed():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=70 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -15,6 +15,8 @@
 [ext_resource path="res://ui/prompts/wep_pistol.svg" type="Texture" id=13]
 [ext_resource path="res://ui/weapon.gd" type="Script" id=14]
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
+[ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
+[ext_resource path="res://player/ui.gd" type="Script" id=17]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -899,9 +901,11 @@ anims/wardrobe_lock = SubResource( 28 )
 anims/wardrobe_unlock = SubResource( 29 )
 
 [node name="ui" type="Control" parent="."]
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 5 )
+script = ExtResource( 17 )
 
 [node name="debug" type="Panel" parent="ui"]
 visible = false
@@ -1332,6 +1336,8 @@ text = "Value"
 
 [node name="pause_menu" parent="ui" instance=ExtResource( 9 )]
 visible = false
+
+[node name="map" parent="ui" instance=ExtResource( 16 )]
 
 [node name="groundArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
