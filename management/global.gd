@@ -79,7 +79,6 @@ func get_player() -> Node:
 	return get_tree().current_scene.get_node("player")
 
 # Game state management
-
 func mark_map(id:String, note:String):
 	if id in game_state.map_markers:
 		game_state.map_markers[id].append(note)

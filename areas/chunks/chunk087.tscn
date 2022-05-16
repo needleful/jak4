@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://areas/chunks/chunk087_lowres.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/plateau/basin.dialog" type="Resource" id=2]
@@ -6,6 +6,72 @@
 [ext_resource path="res://entities/npc.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/control/dswitch.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/env/copper/platform_target.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/copper/palace_extension.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=11]
+[ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=12]
+[ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/crate1.tscn" type="PackedScene" id=14]
+[ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=17]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Activate"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 3, 4.5, 6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -89.7128, 58.7033, 189.672 ), Vector3( -93.004, 65.417, 196.711 ), Vector3( -94.3937, 73.5737, 201.109 ), Vector3( -94.459, 80.1554, 202.457 ), Vector3( -94.312, 86.5543, 202.459 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 1.5, 3, 4.5, 5.6, 6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 63.424, 0 ), Vector3( 0, 63.424, -13.739 ), Vector3( -1.10347, 61.6968, -3.60095 ), Vector3( -1.10471, 65.7846, -9.63543 ), Vector3( -1.85729, 66.1012, 0.586379 ), Vector3( -2.40917, 66.3334, -5.79123 ), Vector3( 5.70249, 64.5185, -13.7961 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -89.7128, 58.7033, 189.672 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 63.424, 0 ) ]
+}
 
 [node name="chunk087" instance=ExtResource( 1 )]
 
@@ -25,3 +91,78 @@ visual_name = "Young Woman"
 
 [node name="scrap_pile2" parent="." index="4" instance=ExtResource( 6 )]
 transform = Transform( 0.915319, -0.0715909, -0.396316, 0.0157914, 0.989696, -0.142308, 0.40242, 0.123999, 0.907018, 137.201, 3.26937, 72.9201 )
+
+[node name="platform" parent="." index="6" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -104.662, 95.1117, 193.676 )
+
+[node name="platform2" parent="." index="7" instance=ExtResource( 9 )]
+transform = Transform( 0.562444, 0, 0.826835, 0, 1, 0, -0.826835, 0, 0.562444, -99.8665, 92.6504, 201.323 )
+
+[node name="dswitch" parent="." index="8" instance=ExtResource( 8 )]
+transform = Transform( 0.269605, 0.824285, 0.497863, -0.0447883, -0.505714, 0.861537, 0.961929, -0.254573, -0.0994246, -109.449, 82.1553, 187.824 )
+time_deactivate = 11.0
+
+[node name="rail_cart" parent="." index="9" instance=ExtResource( 7 )]
+transform = Transform( 0.447384, 0, 0.894342, 0, 1, 0, -0.894341, 0, 0.447384, -89.7128, 58.7033, 189.672 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rail_cart" index="1"]
+playback_process_mode = 0
+anims/Activate = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+
+[node name="palace_extension" parent="." index="10" instance=ExtResource( 10 )]
+transform = Transform( 0.259139, 0, -0.96584, 0, 1, 0, 0.96584, 0, 0.259139, -150.605, 98.3545, 218.379 )
+
+[node name="crawly" parent="." index="11" instance=ExtResource( 11 )]
+transform = Transform( -0.971371, 0, -0.237567, 0, 1, 0, 0.237567, 0, -0.971371, -145.206, 112.464, 190.693 )
+
+[node name="crawly2" parent="." index="12" instance=ExtResource( 11 )]
+transform = Transform( 0.326674, 0, -0.945137, 0, 1, 0, 0.945137, 0, 0.326674, -169.177, 112.369, 202.08 )
+
+[node name="deathgnat" parent="." index="13" instance=ExtResource( 15 )]
+transform = Transform( -0.81821, 0, -0.57492, 0, 1, 0, 0.57492, 0, -0.81821, -152.138, 103.85, 195.822 )
+
+[node name="crate1" parent="." index="14" instance=ExtResource( 14 )]
+transform = Transform( -0.325321, 0, -0.945604, 0, 1, 0, 0.945604, 0, -0.325321, -153.84, 111.641, 198.968 )
+
+[node name="pistol_pickup" parent="." index="15" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -153.538, 111.595, 199.144 )
+
+[node name="pistol_pickup2" parent="." index="16" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -154.226, 111.591, 198.77 )
+
+[node name="bug_pickup" parent="." index="17" instance=ExtResource( 13 )]
+transform = Transform( -0.767299, 0, 0.641289, 0, 1, 0, -0.641289, 0, -0.767299, -153.922, 111.515, 198.958 )
+quantity = 5
+
+[node name="bug_pickup2" parent="." index="18" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -150.017, 103.865, 201.467 )
+
+[node name="bug_pickup3" parent="." index="19" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -143.589, 103.999, 202.491 )
+
+[node name="bug_pickup4" parent="." index="20" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -158.392, 104.564, 203.336 )
+
+[node name="bug_pickup5" parent="." index="21" instance=ExtResource( 13 )]
+transform = Transform( 0.210216, 0, 0.977655, 0, 1, 0, -0.977655, 0, 0.210216, -98.6193, 93.0334, 199.827 )
+
+[node name="bug_pickup6" parent="." index="22" instance=ExtResource( 13 )]
+transform = Transform( -0.0140669, 0, 0.999901, 0, 1, 0, -0.999901, 0, -0.0140669, -103.11, 93.4421, 193.639 )
+
+[node name="bug_pickup7" parent="." index="23" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -95.8601, 108.091, 199.201 )
+
+[node name="bug_pickup8" parent="." index="24" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.6976, 101.165, 201.625 )
+
+[node name="bug_pickup9" parent="." index="25" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -165.423, 105.909, 193.583 )
+
+[node name="rock1" parent="." index="26" instance=ExtResource( 16 )]
+transform = Transform( -0.0680603, 0.996128, 0.0556444, 0.211594, 0.0689171, -0.974925, -0.974985, -0.0545796, -0.215466, -204.43, 117.275, 215.996 )
+
+[node name="scrap2" parent="." index="27" instance=ExtResource( 17 )]
+transform = Transform( 0.830037, 0.305517, -0.466581, -0.431761, 0.881567, -0.190844, 0.353016, 0.359859, 0.863644, -191.418, 108.778, 210.567 )
+
+[connection signal="toggled" from="dswitch" to="rail_cart" method="_on_toggled"]
