@@ -53,6 +53,9 @@ func _physics_process(delta):
 		AI.Damaged:
 			if state_timer > TIME_FLINCH:
 				next_state = AI.Chasing
+		AI.GravityStun:
+			if state_timer > Global.gravity_stun_time:
+				next_state = AI.Chasing
 		AI.Dead:
 			pass
 	set_state(next_state)
@@ -70,6 +73,8 @@ func _physics_process(delta):
 			velocity = move_and_slide(velocity + GRAVITY*delta)
 		AI.Dead:
 			fall_down(delta)
+		AI.GravityStun:
+			stunned_move(delta)
 
 func fire_orb():
 	var orb = projectile.instance()
@@ -117,5 +122,8 @@ func set_state(new_state):
 			$AnimationPlayer.stop()
 			velocity = move_dir
 			velocity.y = min(velocity.y, 10)
+		AI.GravityStun:
+			$AnimationPlayer.stop()
+			velocity = move_dir
 		_:
 			$AnimationPlayer.play("Idle-loop")

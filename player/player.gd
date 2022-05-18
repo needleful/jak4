@@ -55,6 +55,8 @@ const DECEL_CLIMB := 45.0
 const ACCEL_STEER_ROLL := 2.5
 const ACCEL_DIVE_WINDUP := 75.0
 
+const ACCEL_GRAVITY_STUN := 17.0
+
 const STAMINA_DRAIN_HANG := 0.5
 const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 2.0
@@ -167,6 +169,8 @@ var time_animation := 0.0
 
 const TIME_FALLING_DEATH := 2.0
 
+const TIME_GRAVITY_STUN := 2
+
 # Ledge being held onto
 var ledge: Spatial
 # Position of player relative to ledge at start of ledge grab
@@ -202,7 +206,8 @@ enum State {
 	Locked,
 	PlaceFlag,
 	GetItem,
-	FallingDeath
+	FallingDeath,
+	GravityStun
 }
 
 var state: int = State.Fall
@@ -276,7 +281,8 @@ const AMMO := [
 
 const WEAPONS := [
 	"wep_pistol",
-	"wep_wave_shot"
+	"wep_wave_shot",
+	"wep_grav_gun"
 ]
 
 func _ready():
@@ -650,6 +656,9 @@ func _physics_process(delta):
 			if timer_state > TIME_FALLING_DEATH:
 				next_state = State.Fall
 				die()
+		State.GravityStun:
+			if timer_state > TIME_GRAVITY_STUN:
+				next_state = State.Fall
 	set_state(next_state)
 	
 	match state:
@@ -729,6 +738,8 @@ func _physics_process(delta):
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
+		State.GravityStun:
+			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_GRAVITY_STUN, false, Vector3.UP*Global.gravity_stun_velocity)
 
 	update_visuals(desired_velocity)
 
@@ -925,11 +936,11 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		+ gravity )
 	velocity = move_and_slide(velocity + delta*gravity)
 
-func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_slide := false):
+func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_slide := false, gravity := GRAVITY):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	velocity += GRAVITY*delta
+	velocity += gravity*delta
 	var pre_slide_vel := velocity
 	velocity = move_and_slide(velocity)
 	var ceiling_normal := Vector3.UP
@@ -1108,9 +1119,10 @@ func damage(node: Node, damage: int, dir: Vector3):
 	if node.has_method("take_damage"):
 		node.take_damage(damage_factor*damage, dir)
 
-func take_damage(damage: int, direction: Vector3):
+# Returns true if dead
+func take_damage(damage: int, direction: Vector3) -> bool:
 	if !takes_damage():
-		return
+		return false
 	
 	mesh.start_damage_particle(direction)
 	if extra_health:
@@ -1128,10 +1140,11 @@ func take_damage(damage: int, direction: Vector3):
 	update_health()
 	if health <= 0:
 		die()
-		return
+		return true
 	velocity = VEL_DAMAGED_H*direction
 	if can_flinch():
 		set_state(State.Damaged)
+	return false
 
 func die():
 	var _x = Global.add_stat("player_death")
@@ -1142,6 +1155,7 @@ func fall_to_death():
 
 func respawn():
 	cam_rig.reset()
+	set_state(State.Ground)
 	velocity = Vector3.ZERO
 	$ui/fade/AnimationPlayer.play("fadein")
 	heal()
@@ -1247,6 +1261,11 @@ func is_locked() -> bool:
 func _on_unlock_timer_timeout():
 	set_state(State.Ground)
 
+func gravity_stun(dam):
+	var dead = take_damage(dam, Vector3.ZERO)
+	if !dead:
+		set_state(State.GravityStun)
+
 func show_prompt(textures: Array, text: String):
 	print("Show prompt: ", text)
 	$ui/tutorial/prompt_timer.stop()
@@ -1311,6 +1330,7 @@ func _on_vis_timer_timeout():
 func track_weapon(weapon: String):
 	$ui/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
 	$ui/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
+	$ui/weapon/ArrowLeft.visible = gun.enabled_wep["wep_grav_gun"]
 	current_weapon = weapon
 	$ui/weapon.icon = weapon
 	if gun.current_weapon:
@@ -1472,6 +1492,9 @@ func set_state(next_state: int):
 		State.FallingDeath:
 			mesh.transition_to("Fall")
 			cam_rig.lock_follow()
+		State.GravityStun:
+			velocity.y = 4
+			mesh.transition_to("Damaged")
 			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

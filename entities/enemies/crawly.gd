@@ -76,6 +76,9 @@ func _physics_process(delta):
 		AI.Damaged:
 			if state_timer > DAMAGED_TIME:
 				next = AI.Chasing
+		AI.GravityStun:
+			if state_timer > Global.gravity_stun_time:
+				next = AI.Chasing
 	set_state(next)
 	
 	match ai:
@@ -101,6 +104,8 @@ func _physics_process(delta):
 		AI.Windup, AI.Alerted:
 			look_at_target(turn_speed_windup*delta)
 			walk(delta, 0)
+		AI.GravityStun:
+			stunned_move(delta)
 
 func set_active(active: bool):
 	if !active:
@@ -147,3 +152,6 @@ func set_state(new_ai, force := false):
 			anim.play("Attack")
 			sound.stream = attack_audio
 			sound.play()
+		AI.GravityStun:
+			anim.play("Idle-loop")
+			velocity = move_dir

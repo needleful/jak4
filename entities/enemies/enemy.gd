@@ -29,6 +29,7 @@ enum AI {
 	Windup,
 	Attacking,
 	Damaged,
+	GravityStun,
 	Dead
 }
 var ai = AI.Idle
@@ -147,6 +148,9 @@ func walk(delta: float, speed: float, slide := false):
 	if slide:
 		velocity.y = min(0, velocity.y)
 
+func stunned_move(delta: float):
+	velocity = move_and_slide(velocity + Vector3.UP*delta*Global.gravity_stun_velocity)
+
 func fall_down(delta: float):
 	var best_normal = Vector3.ZERO
 	for c in get_slide_count():
@@ -168,3 +172,8 @@ func set_state(_ai: int):
 
 func aggro_to(node: Spatial):
 	target = node
+
+func gravity_stun(dam):
+	take_damage(dam, Vector3.UP)
+	if ai != AI.Dead:
+		set_state(AI.GravityStun)
