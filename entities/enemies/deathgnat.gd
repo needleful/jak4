@@ -105,6 +105,10 @@ func fly(delta: float):
 	velocity = velocity.move_toward(speed*dir, delta*acceleration)
 	velocity = move_and_slide(velocity)
 
+func play_damage_sfx():
+	# TODO
+	pass
+
 func set_state(new_state):
 	if ai == new_state:
 		return

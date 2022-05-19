@@ -1,4 +1,5 @@
 extends KinematicBody
+class_name ItemPickup
 
 export(String) var item_id
 export(int) var quantity = 1
@@ -6,8 +7,12 @@ export(PackedScene) var preview
 export(bool) var persistent := true
 export(bool) var gravity = false
 export(String) var friendly_name = ""
+export(bool) var from_kill := false
 
 const sq_distance_visible := 30000
+
+var gravity_stun_time := 0.0
+var fall_velocity := 0.0
 
 func _ready():
 	if preview:
@@ -15,12 +20,22 @@ func _ready():
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
 		return
+	if from_kill:
+		$area/CollisionShape.disabled = true
+		$pickup_timer.start()
 	if has_node("AnimationPlayer"):
 		$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
 
 func _physics_process(delta):
 	if gravity:
-		var _c = move_and_collide(delta*Vector3.DOWN*15)
+		if gravity_stun_time > 0:
+			gravity_stun_time -= delta
+			fall_velocity += delta*Global.gravity_stun_velocity
+		else:
+			fall_velocity -= 9.8*delta
+		var col = move_and_collide(delta*Vector3.UP*fall_velocity)
+		if col:
+			fall_velocity = 0.0
 
 func _on_area_body_entered(body):
 	var _x = Global.add_item(item_id, quantity)
@@ -30,6 +45,10 @@ func _on_area_body_entered(body):
 		if friendly_name != "":
 			_x = Global.add_stat(friendly_name)
 	queue_free()
+
+func gravity_stun(_damage):
+	gravity_stun_time = Global.gravity_stun_time
+	fall_velocity = 3
 
 func process_player_distance(origin: Vector3):
 	var sq_dist = (origin - global_transform.origin).length_squared()
@@ -42,3 +61,6 @@ func process_player_distance(origin: Vector3):
 			else:
 				$AnimationPlayer.stop(false)
 	return INF
+
+func _on_pickup_timer_timeout():
+	$area/CollisionShape.disabled = false

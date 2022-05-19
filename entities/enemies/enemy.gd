@@ -14,6 +14,7 @@ enum Rarity {
 export(String) var id
 export(bool) var respawns := true
 export(bool) var drops_coat := false
+export(float, 0.0, 1.0) var drops_ammo := 0.3
 export(Rarity) var minimum_rarity = Rarity.Common
 export(Rarity) var maximum_rarity = Rarity.Rare
 export(int) var gem_drop_max = 5
@@ -45,8 +46,22 @@ var move_dir: Vector3
 var damaged:= []
 
 var in_range := false
-
 var coat: Coat = null
+
+# Ammo drop logic
+const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
+const WEIGHTS := {
+	"pistol": 1.12,
+	"grav_gun": 1.0
+}
+const IDEAL_COUNT := {
+	"pistol": 100.0,
+	"grav_gun": 50.0
+}
+const COUNTS := {
+	"pistol": 10,
+	"grav_gun": 5
+}
 
 func _ready():
 	set_state(ai)
@@ -102,22 +117,39 @@ func die():
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
-		c.persistent = false
-		c.from_kill = true
-		c.gravity = true
-		get_parent().add_child(c)
-		c.global_transform = global_transform
+		drop_item(c)
 		print("Spawning coat")
 	var gems = int(rand_range(0, gem_drop_max))
 	if gems > 0:
 		var g = gem_scene.instance()
 		g.quantity = gems
-		g.gravity = true
-		get_parent().add_child(g)
-		g.global_transform = global_transform
+		drop_item(g)
+	if drops_ammo > 0:
+		Global.ammo_drop_pity += drops_ammo
+		if Global.ammo_drop_pity >= 1:
+			Global.ammo_drop_pity -= 1
+			var best_wep := ""
+			var best_desire := -INF
+			for a in WEIGHTS.keys():
+				var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/IDEAL_COUNT[a])
+				if desire >= best_desire:
+					best_wep = a
+					best_desire = desire
+			if best_wep != "":
+				var tscn = load(ammo_path_f % best_wep) as PackedScene
+				var ammo = tscn.instance() as ItemPickup
+				ammo.quantity = COUNTS[best_wep]
+				drop_item(ammo)
 	if !respawns:
 		Global.mark_picked(get_path())
 	emit_signal("died", id, get_path())
+
+func drop_item(item: ItemPickup):
+	item.persistent = false
+	item.from_kill = true
+	item.gravity = true
+	get_tree().current_scene.add_child(item)
+	item.global_transform = global_transform
 
 func take_damage(damage: int, dir: Vector3):
 	if ai == AI.Dead:
@@ -127,7 +159,10 @@ func take_damage(damage: int, dir: Vector3):
 	if health <= 0:
 		set_state(AI.Dead)
 		die()
+	elif ai == AI.GravityStun:
+		play_damage_sfx()
 	else:
+		play_damage_sfx()
 		set_state(AI.Damaged)
 
 func get_closest_floor(vector:= Vector3.UP):
@@ -168,6 +203,9 @@ func fall_down(delta: float):
 
 # Implemented by subclasses
 func set_state(_ai: int):
+	pass
+
+func play_damage_sfx():
 	pass
 
 func aggro_to(node: Spatial):

@@ -25,6 +25,11 @@ func _ready():
 	expl_pool.append(explosion)
 
 func fire() -> bool:
+	if !Global.count("grav_gun"):
+		# TODO dry fire
+		return false
+	var _x = Global.add_item("grav_gun", -1)
+	# TODO animation
 	var new_proj: Spatial
 	if proj_pool.empty():
 		new_proj = projectile.duplicate()

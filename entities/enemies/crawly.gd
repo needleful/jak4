@@ -115,6 +115,10 @@ func set_active(active: bool):
 		set_state(ai, true)
 		physics_frequency = 1
 
+func play_damage_sfx():
+	sound.stream = damage_audio
+	sound.play()
+
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
 		return
@@ -136,8 +140,6 @@ func set_state(new_ai, force := false):
 			anim.play("Run-loop")
 		AI.Damaged:
 			anim.play("Damaged")
-			sound.stream = damage_audio
-			sound.play()
 		AI.Dead:
 			collision_layer = 0
 			anim.play("Die")

@@ -37,12 +37,16 @@ func _physics_process(delta):
 func take_damage(_damage, _dir):
 	queue_free()
 
+func gravity_stun(_damage):
+	velocity *= 0.25
+	velocity.y += 3.0
+	turn_speed *= 0.25
+
 func dir_damage(body):
 	if !body.has_method("take_damage"):
 		return
 	var dir :Vector3 = velocity.normalized()
 	body.take_damage(damage, dir)
-	
 
 func _on_deletion_timer_timeout():
 	queue_free()

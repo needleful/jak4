@@ -31,6 +31,8 @@ var tracked_items = ["bug", "capacitor"]
 
 var stats_temp := {}
 
+var ammo_drop_pity := randf()
+
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
