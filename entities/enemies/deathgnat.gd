@@ -129,5 +129,6 @@ func set_state(new_state):
 		AI.GravityStun:
 			$AnimationPlayer.stop()
 			velocity = move_dir
+			$AnimationPlayer.play("GravityStun-loop")
 		_:
 			$AnimationPlayer.play("Idle-loop")

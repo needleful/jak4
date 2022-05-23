@@ -155,5 +155,5 @@ func set_state(new_ai, force := false):
 			sound.stream = attack_audio
 			sound.play()
 		AI.GravityStun:
-			anim.play("Idle-loop")
+			anim.play("GravityStun-loop")
 			velocity = move_dir

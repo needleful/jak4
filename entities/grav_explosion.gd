@@ -15,6 +15,7 @@ func _ready():
 	damaged_nodes = []
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("fire")
+	$CollisionShape.disabled = false
 
 func _on_body_entered(body):
 	if !body.has_method("gravity_stun"):

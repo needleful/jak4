@@ -184,6 +184,7 @@ func walk(delta: float, speed: float, slide := false):
 		velocity.y = min(0, velocity.y)
 
 func stunned_move(delta: float):
+	velocity *= clamp(1.0 - delta, 0.1, 0.995)
 	velocity = move_and_slide(velocity + Vector3.UP*delta*Global.gravity_stun_velocity)
 
 func fall_down(delta: float):

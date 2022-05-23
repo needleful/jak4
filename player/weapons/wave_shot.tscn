@@ -1,11 +1,11 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://audio/weapons/charge.wav" type="AudioStream" id=1]
 [ext_resource path="res://_glb/weapons/wave_shot.glb" type="PackedScene" id=2]
 [ext_resource path="res://player/weapons/wave_shot.gd" type="Script" id=3]
 [ext_resource path="res://material/env/copper_corroded1.png" type="Texture" id=4]
 [ext_resource path="res://material/bubble.shader" type="Shader" id=5]
-[ext_resource path="res://entities/hurtbox.gd" type="Script" id=6]
+[ext_resource path="res://player/weapons/bubble.gd" type="Script" id=6]
 [ext_resource path="res://audio/weapons/wave_fire.wav" type="AudioStream" id=7]
 
 [sub_resource type="Curve" id=10]
@@ -141,90 +141,6 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 
-[sub_resource type="ShaderMaterial" id=17]
-resource_local_to_scene = true
-shader = SubResource( 9 )
-shader_param/color = Color( 1, 1, 1, 1 )
-shader_param/main_texture = ExtResource( 4 )
-
-[sub_resource type="Animation" id=18]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("MeshInstance:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("MeshInstance:material/0:shader_param/color")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-
-[sub_resource type="Animation" id=19]
-length = 0.8
-tracks/0/type = "value"
-tracks/0/path = NodePath("MeshInstance:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("MeshInstance:material/0:shader_param/color")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 2.21914, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, true ]
-}
-
 [node name="wave_shot" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
 
@@ -235,53 +151,35 @@ local_coords = false
 process_material = SubResource( 7 )
 draw_pass_1 = SubResource( 15 )
 
-[node name="damage" type="Node" parent="." index="2"]
-
-[node name="area1" type="Area" parent="damage" index="0"]
+[node name="bubble" type="Area" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0537135, 0.227082 )
 collision_layer = 0
 collision_mask = 4
 script = ExtResource( 6 )
-damage = 5
 
-[node name="CollisionShape" type="CollisionShape" parent="damage/area1" index="0"]
+[node name="Tween" type="Tween" parent="bubble" index="0"]
+
+[node name="CollisionShape" type="CollisionShape" parent="bubble" index="1"]
 shape = SubResource( 14 )
 disabled = true
 
-[node name="MeshInstance" type="MeshInstance" parent="damage/area1" index="1"]
+[node name="MeshInstance" type="MeshInstance" parent="bubble" index="2"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 visible = false
 mesh = SubResource( 20 )
 material/0 = SubResource( 21 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="damage/area1" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="bubble" index="3"]
 anims/RESET = SubResource( 22 )
 anims/fire = SubResource( 23 )
 
-[node name="area2" type="Area" parent="damage" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0284373, 0.0537135, 0.227082 )
-collision_layer = 0
-collision_mask = 4
-script = ExtResource( 6 )
-damage = 5
-
-[node name="CollisionShape" type="CollisionShape" parent="damage/area2" index="0"]
-shape = SubResource( 14 )
-
-[node name="MeshInstance" type="MeshInstance" parent="damage/area2" index="1"]
-mesh = SubResource( 15 )
-material/0 = SubResource( 17 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="damage/area2" index="2"]
-anims/RESET = SubResource( 18 )
-anims/fire = SubResource( 19 )
-
-[node name="Tween" type="Tween" parent="." index="3"]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="5"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="4"]
 stream = ExtResource( 1 )
 bus = "SFX_Player"
 
-[node name="FireSound" type="AudioStreamPlayer" parent="." index="6"]
+[node name="FireSound" type="AudioStreamPlayer" parent="." index="5"]
 stream = ExtResource( 7 )
 bus = "SFX_Player"
+
+[connection signal="remove" from="bubble" to="." method="_on_bubble_remove"]
+[connection signal="animation_finished" from="bubble/AnimationPlayer" to="bubble" method="_on_animation_finished"]

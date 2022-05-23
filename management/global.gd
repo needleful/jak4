@@ -22,8 +22,8 @@ var color_super_rare := Color.darkorchid
 var color_sublime := Color.coral
 
 # Combat constants
-const gravity_stun_time = 6.0
-const gravity_stun_velocity = 0.5
+const gravity_stun_time = 10.0
+const gravity_stun_velocity = 0.02
 
 # Items that also have a "stat" value, 
 # measuring the total collected 

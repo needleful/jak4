@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material/ancient/white_metal.material" type="Material" id=1]
 [ext_resource path="res://material/ancient/gem.material" type="Material" id=2]
 [ext_resource path="res://_glb/env/ancient/bobble.glb" type="PackedScene" id=3]
+[ext_resource path="res://entities/control/gravity_platform.gd" type="Script" id=4]
 
 [node name="bobble" instance=ExtResource( 3 )]
+
+[node name="bobble-kine" parent="." index="0"]
+collision_layer = 5
+script = ExtResource( 4 )
+max_rotation_speed = Vector3( 0, 0.3, 0 )
 
 [node name="mesh" parent="bobble-kine" index="0"]
 material/0 = ExtResource( 1 )

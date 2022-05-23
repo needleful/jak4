@@ -1,8 +1,11 @@
+tool
 extends KinematicBody
 class_name ItemPickup
 
+signal gravity_stun(stun)
+
 export(String) var item_id
-export(int) var quantity = 1
+export(int) var quantity := 1
 export(PackedScene) var preview
 export(bool) var persistent := true
 export(bool) var gravity = false
@@ -17,6 +20,8 @@ var fall_velocity := 0.0
 func _ready():
 	if preview:
 		add_child(preview.instance())
+	if Engine.editor_hint:
+		return
 	if persistent and Global.is_picked(get_path()):
 		queue_free()
 		return
@@ -30,7 +35,10 @@ func _physics_process(delta):
 	if gravity:
 		if gravity_stun_time > 0:
 			gravity_stun_time -= delta
+			fall_velocity *= clamp(1.0 - delta, 0.1, 0.995)
 			fall_velocity += delta*Global.gravity_stun_velocity
+			if gravity_stun_time <= 0:
+				emit_signal("gravity_stun", false)
 		else:
 			fall_velocity -= 9.8*delta
 		var col = move_and_collide(delta*Vector3.UP*fall_velocity)
@@ -47,8 +55,10 @@ func _on_area_body_entered(body):
 	queue_free()
 
 func gravity_stun(_damage):
+	gravity = true
 	gravity_stun_time = Global.gravity_stun_time
 	fall_velocity = 3
+	emit_signal("gravity_stun", true)
 
 func process_player_distance(origin: Vector3):
 	var sq_dist = (origin - global_transform.origin).length_squared()

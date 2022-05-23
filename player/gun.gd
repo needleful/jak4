@@ -51,9 +51,9 @@ const TIME_QUIT_LOCK_ON := 0.25
 var target: Node
 
 var weapons : Dictionary = {
-	"wep_pistol": load("res://player/weapons/pistol.tscn"),
-	"wep_wave_shot": load("res://player/weapons/wave_shot.tscn"),
-	"wep_grav_gun": load("res://player/weapons/grav_gun.tscn")
+	"wep_pistol": load("res://player/weapons/pistol.tscn").instance(),
+	"wep_wave_shot": load("res://player/weapons/wave_shot.tscn").instance(),
+	"wep_grav_gun": load("res://player/weapons/grav_gun.tscn").instance()
 }
 
 var enabled_wep : Dictionary = {
@@ -200,11 +200,10 @@ func add_weapon(id):
 func show_weapon():
 	call_deferred("set_state", State.Free, true)
 
-func set_current_weapon(weapon: PackedScene):
+func set_current_weapon(weapon: Node):
 	if current_weapon:
 		ref.remove_child(current_weapon)
-		current_weapon.queue_free()
-	current_weapon = weapon.instance()
+	current_weapon = weapon
 	ref.add_child(current_weapon)
 	holder.track_weapon(current_weapon.name)
 

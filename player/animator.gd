@@ -23,6 +23,9 @@ var sounds := {
 	"wep_wave_shot": [
 		preload("res://audio/pickup/wep_wave_shot.wav")
 	],
+	"wep_grav_gun": [
+		preload("res://audio/pickup/wep_grav_shot.wav")
+	],
 	"pistol":[
 		preload("res://audio/pickup/ammo.wav")
 	],

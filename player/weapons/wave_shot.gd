@@ -2,11 +2,11 @@ extends Spatial
 
 const MAX_RADIUS = 8
 const MIN_RADIUS = 1
-const RADIUS_SEC = 3
+const RADIUS_SEC = 2
 
-const MAX_RECOIL = 15
-const MIN_RECOIL = 2
-const RECOIL_SEC = 5
+const MAX_RECOIL = 16
+const MIN_RECOIL = 5
+const RECOIL_SEC = 4
 
 var charge_fire := true
 var infinite_ammo := true
@@ -17,8 +17,13 @@ var charging_time := 0.0
 var time_since_fired := INF
 var recoil: Vector3
 
-var active_bubble := 0
-var bubble_count := 2
+var bubble_pool : Array
+onready var bubble := $bubble
+onready var scene = get_tree().current_scene
+
+func _ready():
+	bubble_pool = [bubble]
+	remove_child(bubble)
 
 func _process(delta):
 	$Particles.emitting = charging
@@ -45,25 +50,25 @@ func fire():
 	$AnimationPlayer.play("Fire")
 	time_since_fired = 0
 	$Particles.emitting = false
-	var bubble = get_node("damage/area%d" % (active_bubble + 1))
-	active_bubble = (active_bubble + 1) % bubble_count
-	bubble.global_transform.origin = global_transform.origin
-	
-	var anim = bubble.get_node("AnimationPlayer")
-	anim.stop()
-	anim.play("fire")
+	var new_bubble: Spatial
+	var created := false
+	if bubble_pool.empty():
+		new_bubble = bubble.duplicate()
+		created = true
+	else:
+		new_bubble = bubble_pool.pop_back()
+	scene.add_child(new_bubble)
+	if created:
+		new_bubble.make_unique()
+	new_bubble.global_transform.origin = global_transform.origin
 	
 	var r = clamp(charging_time*RADIUS_SEC, MIN_RADIUS, MAX_RADIUS)
 	recoil = Vector3.UP*clamp(charging_time*RECOIL_SEC, MIN_RECOIL, MAX_RECOIL)
+	new_bubble.fire(r, time_firing)
 	
-	
-	$Tween.interpolate_property(bubble.get_node("MeshInstance"), "scale", 
-		Vector3(0.1, 0.1, 0.1), Vector3(r,r,r), time_firing,
-		Tween.TRANS_CUBIC, Tween.EASE_OUT)
-	$Tween.interpolate_property(bubble.get_node("CollisionShape").shape, "radius",
-		0.1, r, time_firing,
-		Tween.TRANS_CUBIC, Tween.EASE_OUT)
-
-	$Tween.start()
 	charging = false
 	return true
+
+func _on_bubble_remove(node):
+	scene.remove_child(node)
+	bubble_pool.append(node)

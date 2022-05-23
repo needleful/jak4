@@ -9,6 +9,7 @@ var flight_time := 0.0
 const MIN_TIME := 0.25
 
 func fire(direction: Vector3):
+	$bounce_sound.stop()
 	explode_on_contact = false
 	flight_time = 0.0
 	velocity = speed*direction
@@ -27,4 +28,6 @@ func _physics_process(delta):
 		if explode_on_contact:
 			emit_signal("contact", self)
 		else:
-			velocity = -velocity.reflect(col.normal)
+			$bounce_sound.play()
+			
+			velocity = -0.9*velocity.reflect(col.normal)

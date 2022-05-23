@@ -109,6 +109,22 @@ const VEL_DAMAGED_V := 6
 
 const TERMINAL_VELOCITY := -300
 
+# Hover board
+const SPEED_HOVER := SPEED_RUN*2.5
+const ACCEL_HOVER := 8.0
+const DECEL_HOVER := 0.01
+const ACCEL_STEER_HOVER := 2.75
+
+const HOVER_DESIRED_HEIGHT := 0.6
+const HOVER_CORRECTION_HEIGHT := 50.0
+const HOVER_CORRECTION_VELOCITY := 1.0
+const HOVER_CORRECTION_SLOPE := 1.0
+
+const HOVER_EXTRA_GRAVITY := 1.0
+
+var hover_normal := Vector3.UP
+# Broad things
+
 var velocity := Vector3.ZERO
 var timer_coyote := 0.0
 var timer_state := 0.0
@@ -207,7 +223,8 @@ enum State {
 	PlaceFlag,
 	GetItem,
 	FallingDeath,
-	GravityStun
+	GravityStun,
+	Hover
 }
 
 var state: int = State.Fall
@@ -242,6 +259,10 @@ onready var roll_hitbox := $jackie/attack_roll
 onready var uppercut_hitbox := $jackie/attack_uppercut
 onready var dive_start_hitbox := $jackie/attack_dive_start
 onready var dive_end_hitbox := $jackie/attack_dive_end
+
+onready var hover_floor_finder := $hover_floor_finder
+onready var hover_cast := $hover_cast
+onready var hover_area := $hover_area
 
 onready var health_bar := $ui/stats/health/base
 onready var stamina_bar := $ui/stats/stamina/base
@@ -362,6 +383,8 @@ func _physics_process(delta):
 		State.Ground:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.BaseJump
+			elif Input.is_action_just_pressed("hover_toggle"):
+				next_state = State.Hover
 			elif can_place_flag() and Input.is_action_just_pressed("place_flag"):
 				next_state = State.PlaceFlag
 			elif Input.is_action_pressed("mv_crouch"):
@@ -390,6 +413,8 @@ func _physics_process(delta):
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
+			elif Input.is_action_just_pressed("hover_toggle"):
+				next_state = State.Hover
 			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
 			elif total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
@@ -525,6 +550,8 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif Input.is_action_just_pressed("hover_toggle"):
+				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
@@ -546,7 +573,7 @@ func _physics_process(delta):
 				next_state = State.LedgeJump
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif total_stamina() <= 0 or Input.is_action_just_pressed("mv_crouch"):
+			elif total_stamina() <= 0:
 				next_state = State.LedgeFall
 			elif intent_dot < 0 or !ledgeCastCenter.is_colliding():
 				timer_leave_ledge += delta
@@ -559,6 +586,8 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif Input.is_action_just_pressed("hover_toggle"):
+				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
@@ -659,6 +688,9 @@ func _physics_process(delta):
 		State.GravityStun:
 			if timer_state > TIME_GRAVITY_STUN:
 				next_state = State.Fall
+		State.Hover:
+			if Input.is_action_just_pressed("hover_toggle"):
+				next_state = State.Fall
 	set_state(next_state)
 	
 	match state:
@@ -690,10 +722,12 @@ func _physics_process(delta):
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
-			ground_normal = best_normal
+			if best_normal != Vector3.ZERO:
+				ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_CROUCH)
 		State.Climb:
-			ground_normal = best_normal
+			if best_normal != Vector3.ZERO:
+				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
@@ -739,7 +773,15 @@ func _physics_process(delta):
 			desired_velocity = Vector3.ZERO
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 		State.GravityStun:
+			velocity *= clamp(1.0 - delta, 0.1, 0.995)
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_GRAVITY_STUN, false, Vector3.UP*Global.gravity_stun_velocity)
+		State.Hover:
+			var grounded:bool = hover_area.get_overlapping_bodies().size() > 0
+			if hover_floor_finder.is_colliding():
+				hover_normal = hover_floor_finder.get_collision_normal()
+				hover_cast.cast_to = -hover_normal
+			accel_hover(delta, desired_velocity*SPEED_HOVER, grounded)
+			
 
 	update_visuals(desired_velocity)
 
@@ -991,6 +1033,44 @@ func accel_lunge(delta, desired_velocity):
 	var v2 := move_and_slide(velocity + GRAVITY*delta)
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
+
+func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
+	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY
+	var hvel := Vector3(velocity.x, 0, velocity.z)
+	var hdir := hvel.normalized()
+	if grounded:
+		var axis = Vector3.UP.cross(hover_normal).normalized()
+		var angle = Vector3.UP.angle_to(hover_normal)
+		if axis.is_normalized():
+			desired_velocity = desired_velocity.rotated(axis, angle)
+		desired_velocity.y = min(desired_velocity.y, 0)
+		gravity = gravity.slide(hover_normal)
+	var h := hover_normal
+	if hover_cast.is_colliding():
+		var dist = (hover_cast.global_transform.origin - hover_cast.get_collision_point())
+		var factor = HOVER_DESIRED_HEIGHT - dist.length()
+		var height_correction = factor*HOVER_CORRECTION_HEIGHT
+		var vel_correction = -velocity.y*HOVER_CORRECTION_VELOCITY
+		var slope_correction = -hvel.dot(hover_normal)*HOVER_CORRECTION_SLOPE
+		h *= height_correction + vel_correction + slope_correction
+	
+	var charge := desired_velocity.project(hdir)
+	var steer := desired_velocity.slide(hdir)
+	var charge_accel : float
+	if charge.dot(hdir) > 0:
+		if charge.length() < velocity.length():
+			charge_accel = DECEL_HOVER
+		else:
+			charge_accel = ACCEL_HOVER
+	else:
+		charge_accel = ACCEL_HOVER
+	velocity += delta*(
+		(charge - hvel)/SPEED_RUN*charge_accel 
+		+ (steer*ACCEL_STEER_HOVER)
+		+ gravity
+		+ h
+	)
+	velocity = move_and_slide(velocity)
 
 func should_raise_camera():
 	return state == State.LedgeHang
@@ -1359,12 +1439,17 @@ func set_state(next_state: int):
 	$standing_col.disabled = head_blocked
 	gun.unlock()
 	
-	# Place flag on state exit
-	if state == State.PlaceFlag:
-		place_flag()
-	elif state == State.GetItem:
-		mesh.release_item()
+	# Exit effects
+	match state: 
+		State.PlaceFlag:
+			place_flag()
+		State.GetItem:
+			mesh.release_item()
+		State.Hover:
+			$debug_board.hide()
+			hover_cast.enabled = false
 	
+	# Entry effects
 	match next_state:
 		State.Fall, State.LedgeFall:
 			mesh.transition_to("Fall")
@@ -1495,6 +1580,10 @@ func set_state(next_state: int):
 		State.GravityStun:
 			velocity.y = 4
 			mesh.transition_to("Damaged")
+		State.Hover:
+			$debug_board.show()
+			hover_cast.enabled = true
+			mesh.transition_to("Fall")
 			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

@@ -27,7 +27,6 @@ func _ready():
 		assert(res == OK)
 
 func _on_stat_changed(stat, _val):
-	print(stat, " == ", fall_stat)
 	if stat == fall_stat:
 		fall()
 
