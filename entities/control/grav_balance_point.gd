@@ -25,4 +25,3 @@ func add_mass(m):
 		balance.mass_one += m
 	else:
 		balance.mass_two += m
-	print("Balance: ", balance.mass_one, ", ", balance.mass_two)

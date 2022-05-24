@@ -40,6 +40,7 @@ onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody
 onready var player : PlayerBody = get_parent()
 onready var audio := $audio
 onready var camera_rig := $"../camera_rig"
+onready var hover_board := $Armature/Skeleton/hover_board
 
 var item_sound := 0
 var move_blend:= 0.0
@@ -47,6 +48,7 @@ var lunge_right_foot := true
 var held_item:Spatial
 
 func _ready():
+	hover_board.hide()
 	$Armature/Skeleton/gun.holder = self
 
 func set_movement_animation(speed: float, state: int):
@@ -182,6 +184,24 @@ func get_normal_gun_orientation() -> Vector3:
 	var local_bone_transform: Transform = skeleton.get_bone_global_pose_no_override(idx)
 	var t : Transform = skeleton.global_transform*local_bone_transform
 	return t.basis.y
+
+func start_hover():
+	hover_board.show()
+	transition_to("Hover")
+
+func hover_lean(input: Vector2, delta: float):
+	var old_blend = anim["parameters/WholeBody/Hover/blend_position"]
+	var diff :Vector2 = input - old_blend
+	var rate := Vector2(min(5*delta, 0.1), min(15*delta, 0.2))
+	if input.x*old_blend.x >= 0:
+		if abs(input.x) > abs(old_blend.x):
+			rate.x = min(15*delta, 0.3)
+	else:
+		rate.x = min(30*delta, 0.5)
+	anim["parameters/WholeBody/Hover/blend_position"] += diff*rate
+
+func stop_hover():
+	hover_board.hide()
 
 func play_fire():
 	anim["parameters/Fire/active"] = true

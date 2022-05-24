@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -727,8 +727,6 @@ albedo_color = Color( 1, 0, 0, 1 )
 radius = 0.05
 height = 0.1
 
-[sub_resource type="CubeMesh" id=62]
-
 [sub_resource type="CapsuleShape" id=63]
 radius = 0.49462
 height = 0.331652
@@ -1192,79 +1190,6 @@ wait_time = 5.0
 one_shot = true
 autostart = true
 
-[node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
-visible = false
-anchor_left = 0.67
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-rect_min_size = Vector2( 500, 0 )
-
-[node name="fade" type="ColorRect" parent="ui"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/fade"]
-autoplay = "fadein"
-anims/RESET = SubResource( 30 )
-anims/fadein = SubResource( 31 )
-anims/fadeout = SubResource( 32 )
-
-[node name="shop" parent="ui" instance=ExtResource( 7 )]
-visible = false
-
-[node name="tutorial" type="HBoxContainer" parent="ui"]
-visible = false
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -154.0
-alignment = 1
-
-[node name="TextureRect1" type="TextureRect" parent="ui/tutorial"]
-margin_left = 196.0
-margin_right = 324.0
-margin_bottom = 154.0
-texture = ExtResource( 8 )
-stretch_mode = 6
-
-[node name="plus" type="Label" parent="ui/tutorial"]
-margin_left = 328.0
-margin_top = 50.0
-margin_right = 388.0
-margin_bottom = 104.0
-rect_min_size = Vector2( 60, 0 )
-custom_fonts/font = SubResource( 27 )
-text = "+"
-align = 1
-
-[node name="TextureRect2" type="TextureRect" parent="ui/tutorial"]
-margin_left = 392.0
-margin_right = 520.0
-margin_bottom = 154.0
-texture = ExtResource( 8 )
-stretch_mode = 6
-
-[node name="spacer" type="Control" parent="ui/tutorial"]
-margin_left = 524.0
-margin_right = 584.0
-margin_bottom = 154.0
-rect_min_size = Vector2( 60, 0 )
-
-[node name="Label" type="Label" parent="ui/tutorial"]
-margin_left = 588.0
-margin_top = 50.0
-margin_right = 827.0
-margin_bottom = 104.0
-custom_fonts/font = SubResource( 27 )
-text = "Stuff here!"
-
-[node name="prompt_timer" type="Timer" parent="ui/tutorial"]
-wait_time = 6.0
-one_shot = true
-
 [node name="weapon" type="TextureRect" parent="ui"]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -1323,6 +1248,59 @@ rect_rotation = 90.0
 texture = ExtResource( 15 )
 flip_v = true
 
+[node name="shop" parent="ui" instance=ExtResource( 7 )]
+visible = false
+
+[node name="tutorial" type="HBoxContainer" parent="ui"]
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -154.0
+alignment = 1
+
+[node name="TextureRect1" type="TextureRect" parent="ui/tutorial"]
+margin_left = 196.0
+margin_right = 324.0
+margin_bottom = 154.0
+texture = ExtResource( 8 )
+stretch_mode = 6
+
+[node name="plus" type="Label" parent="ui/tutorial"]
+margin_left = 328.0
+margin_top = 50.0
+margin_right = 388.0
+margin_bottom = 104.0
+rect_min_size = Vector2( 60, 0 )
+custom_fonts/font = SubResource( 27 )
+text = "+"
+align = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ui/tutorial"]
+margin_left = 392.0
+margin_right = 520.0
+margin_bottom = 154.0
+texture = ExtResource( 8 )
+stretch_mode = 6
+
+[node name="spacer" type="Control" parent="ui/tutorial"]
+margin_left = 524.0
+margin_right = 584.0
+margin_bottom = 154.0
+rect_min_size = Vector2( 60, 0 )
+
+[node name="Label" type="Label" parent="ui/tutorial"]
+margin_left = 588.0
+margin_top = 50.0
+margin_right = 827.0
+margin_bottom = 104.0
+custom_fonts/font = SubResource( 27 )
+text = "Stuff here!"
+
+[node name="prompt_timer" type="Timer" parent="ui/tutorial"]
+wait_time = 6.0
+one_shot = true
+
 [node name="custom_game" type="HBoxContainer" parent="ui"]
 visible = false
 anchor_top = 1.0
@@ -1354,6 +1332,25 @@ margin_right = 664.0
 margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
 text = "Value"
+
+[node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
+anchor_left = 0.67
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 172.08
+margin_bottom = -10.0
+rect_min_size = Vector2( 500, 0 )
+
+[node name="fade" type="ColorRect" parent="ui"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/fade"]
+autoplay = "fadein"
+anims/RESET = SubResource( 30 )
+anims/fadein = SubResource( 31 )
+anims/fadeout = SubResource( 32 )
 
 [node name="pause_menu" parent="ui" instance=ExtResource( 9 )]
 visible = false
@@ -1407,11 +1404,6 @@ material/0 = SubResource( 61 )
 [node name="MeshInstance" type="MeshInstance" parent="debug_climb/mesh"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.89334e-09, -0.0766101, 0.0518876 )
 mesh = SubResource( 59 )
-material/0 = null
-
-[node name="debug_board" type="MeshInstance" parent="."]
-transform = Transform( 0.165702, 0, 0, 0, 0.0645312, 0, 0, 0, 0.399129, 0, -0.060355, 0 )
-mesh = SubResource( 62 )
 material/0 = null
 
 [node name="hover_floor_finder" type="RayCast" parent="."]

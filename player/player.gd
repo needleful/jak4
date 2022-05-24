@@ -119,7 +119,7 @@ const HOVER_DESIRED_HEIGHT := 0.6
 const HOVER_CORRECTION_HEIGHT := 50.0
 const HOVER_CORRECTION_VELOCITY := 1.0
 const HOVER_CORRECTION_SLOPE := 1.0
-
+const HOVER_AIR_DRAG := 0.01
 const HOVER_EXTRA_GRAVITY := 1.0
 
 var hover_normal := Vector3.UP
@@ -1054,23 +1054,42 @@ func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 		var slope_correction = -hvel.dot(hover_normal)*HOVER_CORRECTION_SLOPE
 		h *= height_correction + vel_correction + slope_correction
 	
-	var charge := desired_velocity.project(hdir)
-	var steer := desired_velocity.slide(hdir)
+	var charge: Vector3
+	var steer: Vector3
 	var charge_accel : float
-	if charge.dot(hdir) > 0:
-		if charge.length() < velocity.length():
-			charge_accel = DECEL_HOVER
+	if hdir.is_normalized():
+		charge = desired_velocity.project(hdir)
+		steer = desired_velocity.slide(hdir)
+		if charge.dot(hdir) > 0:
+			if charge.length() < velocity.length():
+				charge_accel = DECEL_HOVER
+			else:
+				charge_accel = ACCEL_HOVER
 		else:
 			charge_accel = ACCEL_HOVER
 	else:
+		charge = desired_velocity
+		steer = Vector3.ZERO
 		charge_accel = ACCEL_HOVER
+	var drag := -HOVER_AIR_DRAG*delta*(velocity*velocity*velocity)
 	velocity += delta*(
 		(charge - hvel)/SPEED_RUN*charge_accel 
 		+ (steer*ACCEL_STEER_HOVER)
 		+ gravity
 		+ h
+		+ drag
 	)
+	
 	velocity = move_and_slide(velocity)
+	
+	
+	mesh.hover_lean(Vector2(
+		(steer - velocity).dot(mesh.global_transform.basis.x),
+		0
+	)/SPEED_HOVER + Vector2(
+		2*hover_normal.dot(mesh.global_transform.basis.x),
+		-2*hover_normal.dot(mesh.global_transform.basis.z)
+	), delta)
 
 func should_raise_camera():
 	return state == State.LedgeHang
@@ -1446,8 +1465,7 @@ func set_state(next_state: int):
 		State.GetItem:
 			mesh.release_item()
 		State.Hover:
-			$debug_board.hide()
-			hover_cast.enabled = false
+			mesh.stop_hover()
 	
 	# Entry effects
 	match next_state:
@@ -1581,9 +1599,8 @@ func set_state(next_state: int):
 			velocity.y = 4
 			mesh.transition_to("Damaged")
 		State.Hover:
-			$debug_board.show()
 			hover_cast.enabled = true
-			mesh.transition_to("Fall")
+			mesh.start_hover()
 			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
