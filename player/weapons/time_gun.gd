@@ -1,16 +1,17 @@
 extends Spatial
 
-const time_firing := 0.25
+const time_firing := 3.0
 
 var charge_fire := false
 var infinite_ammo := false
 
-var toggled := false
+const TIME_SLOWED := 6.0
+
+var time_amount := 1.0
 
 func fire():
-	toggled = !toggled
-	if toggled:
-		Engine.time_scale = 0.5
+	if TimeManagement.time_slowed:
+		TimeManagement.resume()
 	else:
-		Engine.time_scale = 1.0
+		TimeManagement.slow_time(time_amount*TIME_SLOWED)
 	return true

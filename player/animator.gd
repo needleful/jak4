@@ -51,6 +51,9 @@ func _ready():
 	hover_board.hide()
 	$Armature/Skeleton/gun.holder = self
 
+func _process(delta):
+	$Armature/Skeleton/chest/time_particles.emitting = TimeManagement.time_slowed
+
 func set_movement_animation(speed: float, state: int):
 	var target := 0.0
 	if state == PlayerBody.State.Crouch:
