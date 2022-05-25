@@ -53,13 +53,15 @@ var target: Node
 var weapons : Dictionary = {
 	"wep_pistol": load("res://player/weapons/pistol.tscn").instance(),
 	"wep_wave_shot": load("res://player/weapons/wave_shot.tscn").instance(),
-	"wep_grav_gun": load("res://player/weapons/grav_gun.tscn").instance()
+	"wep_grav_gun": load("res://player/weapons/grav_gun.tscn").instance(),
+	"wep_time_gun": load("res://player/weapons/time_gun.tscn").instance()
 }
 
 var enabled_wep : Dictionary = {
 	"wep_pistol": false,
 	"wep_wave_shot":false,
-	"wep_grav_gun": false
+	"wep_grav_gun": false,
+	"wep_time_gun": true
 }
 
 func _ready():
@@ -82,6 +84,8 @@ func _input(event):
 		swap_to("wep_wave_shot")
 	elif event.is_action_pressed("wep_3"):
 		swap_to("wep_grav_gun")
+	elif event.is_action_pressed("wep_4"):
+		swap_to("wep_time_gun")
 
 func _process(delta):
 	var current_dir: Vector3 = holder.get_desired_aim()
