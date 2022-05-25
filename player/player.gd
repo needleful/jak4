@@ -901,7 +901,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.y,
 		desired_velocity.z
 	]
-	var gravity = GRAVITY
+	var gravity = GRAVITY*Engine.time_scale
 	if ground_normal != Vector3.ZERO:
 		gravity = gravity.project(ground_normal.normalized())
 
@@ -951,7 +951,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
 			desired_velocity = desired_velocity.rotated(axis, angle)
-		gravity = GRAVITY.project(ground_normal)
+		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
 		if desired_velocity != Vector3.ZERO:
 			$debug_climb.global_transform = $debug_climb.global_transform.looking_at(
 				$debug_climb.global_transform.origin + desired_velocity, ground_normal
@@ -982,7 +982,7 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_sli
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	velocity += gravity*delta
+	velocity += gravity*Engine.time_scale*delta
 	var pre_slide_vel := velocity
 	velocity = move_and_slide(velocity)
 	var ceiling_normal := Vector3.UP
@@ -1002,7 +1002,7 @@ func accel_low_gravity(delta, desired_velocity, gravity_factor):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, ACCEL*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	velocity += gravity_factor*GRAVITY*delta
+	velocity += gravity_factor*GRAVITY*Engine.time_scale*delta
 	var pre_slide_vel := velocity
 	velocity = move_and_slide(velocity)
 	velocity.y = min(pre_slide_vel.y, velocity.y)
@@ -1023,19 +1023,19 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.x,
 		min(hvel.y, velocity.y),
 		hvel.z)
-	velocity = move_and_slide(velocity + delta*GRAVITY)
+	velocity = move_and_slide(velocity + delta*GRAVITY*Engine.time_scale)
 
 func accel_lunge(delta, desired_velocity):
 	var hvel = velocity
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
-	var v2 := move_and_slide(velocity + GRAVITY*delta)
+	var v2 := move_and_slide(velocity + GRAVITY*delta*Engine.time_scale)
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
-	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY
+	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY*Engine.time_scale
 	var hvel := Vector3(velocity.x, 0, velocity.z)
 	var hdir := hvel.normalized()
 	if grounded:
