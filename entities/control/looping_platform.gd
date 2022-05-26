@@ -9,5 +9,6 @@ func set_active(a):
 	active = a
 	if active:
 		$AnimationPlayer.play("Loop")
+		$AnimationPlayer.playback_speed = 1
 	else:
-		$AnimationPlayer.stop()
+		$AnimationPlayer.playback_speed = 0

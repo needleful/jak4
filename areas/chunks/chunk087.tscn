@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://areas/chunks/chunk087_lowres.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/plateau/basin.dialog" type="Resource" id=2]
@@ -15,8 +15,11 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/crate1.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=15]
-[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=16]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=16]
 [ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=17]
+[ext_resource path="res://entities/control/looping_platform.gd" type="Script" id=18]
+[ext_resource path="res://entities/env/copper/scrap3.tscn" type="PackedScene" id=19]
+[ext_resource path="res://material/env/copper_corroded.material" type="Material" id=20]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Activate"
@@ -71,6 +74,44 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector3( 0, 63.424, 0 ) ]
+}
+
+[sub_resource type="Curve3D" id=3]
+_data = {
+"points": PoolVector3Array( 5.36722, -0.241127, -0.939621, -5.36722, 0.241127, 0.939621, -0.0341644, 0.741943, -0.0775757, 5.62782, -0.712212, 0.418945, -5.62782, 0.712212, -0.418945, -12.0433, 2.99974, 0.697617, 1.84543, -0.359558, 0.155624, -1.84543, 0.359558, -0.155624, -27.3206, 5.87891, -2.03874, 3.14932, -0.281639, -0.537041, -3.14932, 0.281639, 0.537041, -31.3035, 6.98933, -3.00262, 0, 0, 0, 0, 0, 0, -37.8607, 7.14966, -3.6051, 0, 0, 0, 0, 0, 0, -43.7605, 7.24912, -4.69118 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Loop"
+length = 12.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:unit_offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 4.7, 5.7, 10.4, 12 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0, 1.0, 0.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:unit_offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
 }
 
 [node name="chunk087" instance=ExtResource( 1 )]
@@ -159,10 +200,49 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.6976, 101.165, 201.625 )
 [node name="bug_pickup9" parent="." index="25" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -165.423, 105.909, 193.583 )
 
-[node name="rock1" parent="." index="26" instance=ExtResource( 16 )]
-transform = Transform( -0.0680603, 0.996128, 0.0556444, 0.211594, 0.0689171, -0.974925, -0.974985, -0.0545796, -0.215466, -204.43, 117.275, 215.996 )
+[node name="chunk075" type="Spatial" parent="." index="26"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -500, 0, 0 )
+script = ExtResource( 16 )
 
-[node name="scrap2" parent="." index="27" instance=ExtResource( 17 )]
-transform = Transform( 0.830037, 0.305517, -0.466581, -0.431761, 0.881567, -0.190844, 0.353016, 0.359859, 0.863644, -191.418, 108.778, 210.567 )
+[node name="rail2" type="CSGPolygon" parent="." index="27"]
+transform = Transform( 0.934167, 0, 0.356836, 0, 1, 0, -0.356836, 0, 0.934167, -185.638, 111.225, 210.132 )
+polygon = PoolVector2Array( -0.269577, 0.420509, 0.00724792, 0.692986, 0.126846, 0.455231, -0.0249481, 0.00663757 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = ExtResource( 20 )
+
+[node name="Path" type="Path" parent="rail2" index="0"]
+curve = SubResource( 3 )
+
+[node name="PathFollow" type="PathFollow" parent="rail2/Path" index="0"]
+transform = Transform( 0.662993, 0, -0.748624, 0, 1, 0, 0.748625, 0, 0.662993, -0.0341644, 0.741943, -0.0775757 )
+rotation_mode = 0
+script = ExtResource( 18 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rail2/Path/PathFollow" index="0"]
+playback_process_mode = 0
+anims/Loop = SubResource( 4 )
+anims/RESET = SubResource( 5 )
+
+[node name="rail_cart" parent="rail2/Path/PathFollow" index="1" instance=ExtResource( 7 )]
+transform = Transform( -0.661731, 0, 0.749742, 0, 1, 0, -0.749741, 0, -0.661731, -2.28882e-05, 0, -0.937836 )
+
+[node name="dswitch2" parent="." index="28" instance=ExtResource( 8 )]
+transform = Transform( -0.919883, 0, 0.392193, 0, 1, 0, -0.392193, 0, -0.919883, -176.251, 111.837, 201.7 )
+
+[node name="scrap3" parent="." index="29" instance=ExtResource( 19 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -241.63, 119.063, 220.359 )
+
+[node name="scrap2" parent="." index="30" instance=ExtResource( 17 )]
+transform = Transform( -0.127307, 0.991863, 0, -0.991863, -0.127307, 0, 0, 0, 1, -229.319, 113.57, 216.865 )
 
 [connection signal="toggled" from="dswitch" to="rail_cart" method="_on_toggled"]
+[connection signal="toggled" from="dswitch2" to="rail2/Path/PathFollow" method="_on_toggled"]

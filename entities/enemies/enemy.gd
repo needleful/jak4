@@ -131,10 +131,11 @@ func die():
 			var best_wep := ""
 			var best_desire := -INF
 			for a in WEIGHTS.keys():
-				var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/IDEAL_COUNT[a])
-				if desire >= best_desire:
-					best_wep = a
-					best_desire = desire
+				if Global.count("wep_"+a):
+					var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/IDEAL_COUNT[a])
+					if desire >= best_desire:
+						best_wep = a
+						best_desire = desire
 			if best_wep != "":
 				var tscn = load(ammo_path_f % best_wep) as PackedScene
 				var ammo = tscn.instance() as ItemPickup
