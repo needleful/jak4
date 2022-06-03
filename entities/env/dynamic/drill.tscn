@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://entities/env/dynamic/drill.gd" type="Script" id=1]
+[ext_resource path="res://entities/hurtbox.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 1, 0.027451, 0.027451, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 3.33095
+height = 16.4782
+
+[sub_resource type="CylinderShape" id=2]
+radius = 3.0
+height = 16.0
+
+[sub_resource type="CylinderMesh" id=3]
+top_radius = 3.0
+bottom_radius = 3.0
+height = 16.0
+
+[node name="drill" type="KinematicBody"]
+script = ExtResource( 1 )
+active_material = SubResource( 4 )
+inactive_material = SubResource( 5 )
+
+[node name="hurtbox" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 6
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="hurtbox"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 3 )
+material/0 = null

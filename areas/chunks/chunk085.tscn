@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://_glb/weapons/wave_shot.glb" type="PackedScene" id=4]
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/env/dynamic/drill.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/env/copper/platform_small.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -31,61 +35,54 @@ collision_mask = 0
 shape = SubResource( 2 )
 
 [node name="crawly" parent="." instance=ExtResource( 6 )]
-transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.636, 366.195, -4.00729 )
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.636, 374.018, -4.00729 )
 
 [node name="crawly2" parent="." instance=ExtResource( 6 )]
-transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 105.043, 366.195, -2.13599 )
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 105.043, 374.018, -2.13599 )
 
 [node name="crawly3" parent="." instance=ExtResource( 6 )]
-transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.462, 366.195, -9.08079 )
+transform = Transform( -0.694621, 0, -0.719376, 0, 1, 0, 0.719376, 0, -0.694621, 108.462, 375.384, -9.08079 )
 
 [node name="crawly4" parent="." instance=ExtResource( 6 )]
-transform = Transform( -0.967361, 0, 0.253403, 0, 1, 0, -0.253403, 0, -0.967361, 101.317, 366.195, -3.70216 )
+transform = Transform( -0.967361, 0, 0.253403, 0, 1, 0, -0.253403, 0, -0.967361, 101.317, 374.018, -3.70216 )
 
 [node name="crawly5" parent="." instance=ExtResource( 6 )]
-transform = Transform( -0.362015, 0, 0.932172, 0, 1, 0, -0.932172, 0, -0.362015, 98.5963, 366.195, -7.3567 )
+transform = Transform( -0.362015, 0, 0.932172, 0, 1, 0, -0.932172, 0, -0.362015, 98.5963, 375.384, -7.3567 )
 
 [node name="wep_wave_shot_pickup" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 83.4132, 367.215, -42.1347 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 83.4132, 384.065, -42.1347 )
 item_id = "wep_wave_shot"
 preview = ExtResource( 4 )
 
-[node name="CSGBox" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 173.024, 353.868, -41.5171 )
-use_collision = true
-collision_layer = 257
-width = 27.2776
-height = 33.1836
-depth = 13.5598
+[node name="drill" parent="." instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 0.950857, -0.309631, 0, 0.309631, 0.950857, 147.952, 381.828, -92.203 )
 
-[node name="CSGBox2" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 167.622, 344.822, -72.2272 )
-use_collision = true
-collision_layer = 257
-width = 27.2776
-height = 11.7566
-depth = 13.5598
+[node name="drill3" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.07555, 0.011095, 0.99708, -0.0472915, -0.998773, 0.0146972, 201.822, 369.261, 0.78492 )
 
-[node name="CSGBox4" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 167.622, 352.3, -54.1718 )
-use_collision = true
-collision_layer = 257
-width = 27.2776
-height = 11.7566
-depth = 13.5598
+[node name="drill6" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 274.898, 394.349, 11.9706 )
 
-[node name="CSGBox5" type="CSGBox" parent="."]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 150.423, 357.3, -64.1718 )
-use_collision = true
-collision_layer = 257
-width = 27.2776
-height = 11.7566
-depth = 13.5598
+[node name="drill7" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 298.33, 394.971, 7.11816 )
 
-[node name="CSGBox3" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 210.09, 371.315, 2.97701 )
-use_collision = true
-collision_layer = 257
-width = 50.7217
-height = 11.7566
-depth = 18.4385
+[node name="drill8" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.00320238, 0.85954, -0.511059, 0.0890732, 0.508785, 0.856273, 318.468, 373.322, -123.623 )
+
+[node name="drill4" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.996954, -0.0202529, -0.0753151, 0.07555, 0.011095, 0.99708, -0.0193581, -0.999733, 0.0125913, 195.129, 369.261, 0.78492 )
+
+[node name="drill5" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.997142, -0.00138842, -0.0755392, 0.07555, 0.011095, 0.99708, -0.000546247, -0.999937, 0.0111682, 188.85, 369.261, 0.78492 )
+
+[node name="drill2" parent="." instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 0.907462, 0.420133, 0, -0.420133, 0.907462, 120.775, 376.311, -72.3213 )
+
+[node name="rail_cart" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 0.322183, 0.946677, 0, -0.946677, 0.322183, 135.432, 360.102, -36.455 )
+
+[node name="platform_small" parent="." instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 175.597, 348.496, -51.978 )
+
+[node name="scrap2" parent="." instance=ExtResource( 10 )]
+transform = Transform( 0.990946, 0.134263, 0, -0.134263, 0.990946, 0, 0, 0, 1, 204.949, 341.949, -64.0161 )

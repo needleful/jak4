@@ -303,7 +303,8 @@ const AMMO := [
 const WEAPONS := [
 	"wep_pistol",
 	"wep_wave_shot",
-	"wep_grav_gun"
+	"wep_grav_gun",
+	"wep_time_gun"
 ]
 
 func _ready():
@@ -383,7 +384,7 @@ func _physics_process(delta):
 		State.Ground:
 			if Input.is_action_just_pressed("mv_jump"):
 				next_state = State.BaseJump
-			elif Input.is_action_just_pressed("hover_toggle"):
+			elif should_hover():
 				next_state = State.Hover
 			elif can_place_flag() and Input.is_action_just_pressed("place_flag"):
 				next_state = State.PlaceFlag
@@ -413,7 +414,7 @@ func _physics_process(delta):
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif Input.is_action_just_pressed("hover_toggle"):
+			elif should_hover():
 				next_state = State.Hover
 			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
@@ -550,7 +551,7 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif Input.is_action_just_pressed("hover_toggle"):
+			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
@@ -586,7 +587,7 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif Input.is_action_just_pressed("hover_toggle"):
+			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
@@ -1119,6 +1120,9 @@ func takes_damage():
 		or state == State.UppercutWindup
 		or state == State.DiveWindup)
 
+func should_hover() -> bool:
+	return Input.is_action_just_pressed("hover_toggle") and Global.count("hover_scooter")
+
 func can_ledge_grab() -> bool:
 	if ledgeCastCeiling.is_colliding():
 		return false
@@ -1430,6 +1434,7 @@ func track_weapon(weapon: String):
 	$ui/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
 	$ui/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
 	$ui/weapon/ArrowLeft.visible = gun.enabled_wep["wep_grav_gun"]
+	$ui/weapon/ArrowRight.visible = gun.enabled_wep["wep_time_gun"]
 	current_weapon = weapon
 	$ui/weapon.icon = weapon
 	if gun.current_weapon:

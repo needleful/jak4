@@ -61,7 +61,7 @@ var enabled_wep : Dictionary = {
 	"wep_pistol": false,
 	"wep_wave_shot":false,
 	"wep_grav_gun": false,
-	"wep_time_gun": true
+	"wep_time_gun": false
 }
 
 func _ready():
