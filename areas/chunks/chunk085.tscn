@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://entities/env/copper/platform_target.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=16]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -61,12 +62,6 @@ preview = ExtResource( 4 )
 
 [node name="drill" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 0.950857, -0.309631, 0, 0.309631, 0.950857, 147.952, 381.828, -92.203 )
-
-[node name="drill6" parent="." instance=ExtResource( 7 )]
-transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 274.898, 394.349, 11.9706 )
-
-[node name="drill7" parent="." instance=ExtResource( 7 )]
-transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 298.33, 394.971, 7.11816 )
 
 [node name="drill8" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.00320238, 0.85954, -0.511059, 0.0890732, 0.508785, 0.856273, 318.468, 373.322, -123.623 )
@@ -136,6 +131,19 @@ on = true
 [node name="drill2" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 0.907462, 0.420133, 0, -0.420133, 0.907462, 120.775, 376.246, -72.3213 )
 
+[node name="palace1" parent="." instance=ExtResource( 16 )]
+transform = Transform( 0.45401, 0, 0.890997, 0, 1, 0, -0.890997, 0, 0.45401, 310.257, 341.232, -55.8105 )
+
+[node name="cliff_switch" parent="." instance=ExtResource( 12 )]
+transform = Transform( -0.0295377, -0.0598636, -0.997769, -0.00177141, 0.998207, -0.0598374, 0.999562, 0, -0.0295908, 285.246, 395.035, 12.1669 )
+on = true
+
+[node name="drill6" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 274.898, 394.349, 11.9706 )
+
+[node name="drill7" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.99602, -0.0482638, -0.0749326, 0.0805182, 0.126682, 0.98867, -0.0382243, -0.990768, 0.130064, 298.33, 394.971, 7.11816 )
+
 [connection signal="toggled" from="tower_switch" to="drill3" method="_on_toggled"]
 [connection signal="toggled" from="tower_switch" to="drill4" method="_on_toggled"]
 [connection signal="toggled" from="tower_switch" to="drill5" method="_on_toggled"]
@@ -145,3 +153,5 @@ transform = Transform( 1, 0, 0, 0, 0.907462, 0.420133, 0, -0.420133, 0.907462, 1
 [connection signal="toggled" from="tower_switch" to="drill13" method="_on_toggled"]
 [connection signal="toggled" from="tower_switch" to="drill10" method="_on_toggled"]
 [connection signal="toggled" from="tutorial_switch" to="drill2" method="_on_toggled"]
+[connection signal="toggled" from="cliff_switch" to="drill6" method="_on_toggled"]
+[connection signal="toggled" from="cliff_switch" to="drill7" method="_on_toggled"]

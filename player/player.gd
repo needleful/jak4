@@ -57,12 +57,14 @@ const ACCEL_DIVE_WINDUP := 75.0
 
 const ACCEL_GRAVITY_STUN := 17.0
 
-const STAMINA_DRAIN_HANG := 0.5
+const STAMINA_DRAIN_HANG := 0.0
 const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 2.0
 const STAMINA_DRAIN_MIN := 0.05
-const MIN_CLIMB_STAMINA := 10.0
+const MIN_CLIMB_STAMINA := 0.0
 const TIME_STOP_CLIMB := 0.1
+var stamina_recharges := true
+const MIN_STAMINA_LEDGE_HANG := 0.0
 # Combat
 
 const TIME_LUNGE_MAX := 0.6
@@ -354,7 +356,7 @@ func _physics_process(delta):
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
 	timer_state += delta
-	if state != State.Climb and state != State.LedgeHang:
+	if stamina_recharges:
 		stamina += stamina_factor*stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
@@ -574,7 +576,7 @@ func _physics_process(delta):
 				next_state = State.LedgeJump
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif total_stamina() <= 0:
+			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
 			elif intent_dot < 0 or !ledgeCastCenter.is_colliding():
 				timer_leave_ledge += delta
@@ -1481,15 +1483,18 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_BASE
 			mesh.transition_to("BaseJump")
 		State.Ground:
+			stamina_recharges = true
 			mesh.transition_to("Ground")
 		State.Slide:
 			pass
 		State.Crouch:
+			stamina_recharges = true
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
 			can_air_spin = true
 		State.Climb:
+			stamina_recharges = false
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("Ground")
@@ -1503,6 +1508,7 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
 			mesh.transition_to("BaseJump")
 		State.LedgeHang:
+			stamina_recharges = false
 			mesh.transition_to("LedgeGrab")
 			snap_to_ledge()
 			ledge = ledgeCastCenter.get_collider()
