@@ -5,8 +5,11 @@ signal toggled(on)
 
 export(bool) var on := false
 export(float) var time_deactivate := 0.0
+export(bool) var persistent := false
 
 func _ready():
+	if persistent and Global.has_stat(get_stat()):
+		on = Global.stat(get_stat())
 	set_on(on, true)
 
 func _on_damaged(_damage, dir):
@@ -32,6 +35,11 @@ func set_on(switch_on, force := false):
 		$AnimationPlayer.play("SwitchOff")
 	
 	on = switch_on
+	if persistent and !force:
+		Global.set_stat(get_stat(), on)
 
 func _on_deactivate_timer_timeout():
 	set_on(false)
+
+func get_stat():
+	return str(get_path()) + "/on"

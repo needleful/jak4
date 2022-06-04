@@ -121,6 +121,9 @@ func remove_item(item: String, amount := 1) -> bool:
 	else:
 		return false
 
+func has_stat(index: String) -> bool:
+	return index in game_state.stats
+
 func stat(index: String):
 	if index in game_state.stats:
 		return game_state.stats[index]
