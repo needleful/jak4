@@ -3,20 +3,23 @@ extends Spatial
 signal activated
 signal toggled(on)
 
-var on: bool = false
+export(bool) var on := false
 export(float) var time_deactivate := 0.0
+
+func _ready():
+	set_on(on, true)
 
 func _on_damaged(_damage, dir):
 	$AudioStreamPlayer3D.play()
 	var switch_on = dir.dot(global_transform.basis.z) > 0.0
 	set_on(switch_on)
 
-func set_on(switch_on):
+func set_on(switch_on, force := false):
 	$AnimationPlayer.stop()
 	
-	if switch_on and on:
+	if switch_on and on and !force:
 		$AnimationPlayer.play("AlreadyOn")
-	elif !switch_on and !on:
+	elif !switch_on and !on and !force:
 		$AnimationPlayer.play("AlreadyOff")
 	elif switch_on:
 		emit_signal("activated")
