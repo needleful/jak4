@@ -51,7 +51,7 @@ func _ready():
 	hover_board.hide()
 	$Armature/Skeleton/gun.holder = self
 
-func _process(delta):
+func _process(_delta):
 	$Armature/Skeleton/chest/time_particles.emitting = TimeManagement.time_slowed
 
 func set_movement_animation(speed: float, state: int):

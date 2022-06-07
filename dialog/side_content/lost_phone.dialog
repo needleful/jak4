@@ -1,0 +1,60 @@
+{talked == 0}
+	Excuse me, ma'am! Can you help me?
+	[You] Well, sure. What do you need?
+	I was taking pictures and dropped my phone in the cave! Could you find it? You seem very climbable.
+	[You] What?
+	Er, "climbable" was not the right word. I mean you are able to climb, yes?
+	[You] I understood that just fine. But you dropped an ENTIRE telephone into the cave? And what does that have to do with taking pictures?
+	... Huh? The camera is in the phone.
+	[You] What, in the handset? I don't see how that'd be very useful. Are you sure you're using the right word?
+	* The woman explains the concept of a "smartphone" to you.
+	* ... She then explains "mobile phone", "digital camera", and "cellular network" to you.
+	[You] ... huh.
+	{Global.count("dropped_phone")}
+		[You] Is it this befuddling rectangle I found? I was already down in those caves for a moment.
+		Oh, yes it is!
+		{subtopic("reward")}
+{otherwise if Global.stat("phone_quest/complete")}
+	Thank you again for getting my phone!
+	Maybe someday your people will have phones, too!
+	[You] Uh, no problem.
+{otherwise}
+	Did you find my phone?
+	{Global.count("dropped_phone")}
+		[You] I did, actually.
+		Oh, wonderful!
+		{subtopic("reward")}
+		Thank you for your help! Maybe I can help you get your own phone?
+		[You] Uh, maybe some other time.
+	{otherwise}
+		[You] Not yet. It's down in this cave, right?
+		Yes. Oh, I hope it's not broken...
+{exit()}
+
+:reward
+{Global.remove_item("dropped_phone")}
+{Global.add_stat("phone_quest/complete")}
+{Global.add_item("bug", 15)}
+{Global.add_item("gem", 30)}
+{back()}
+{exit()}
+
+:_coat
+{mention("_coat")}
+{traded_coats()} [You] Hi again! How do you like my coat?
+	It's good, thank you.
+	> That's good to hear. Take care!
+	> Could we trade again?
+		Again? Uh... okay?
+		{swap_coats()} [You] Excellent, thank you!
+{otherwise} [You] Say, I couldn't help but notice that beautiful fabric you're wearing.
+	Oh? Uh, thank you!
+	> I just thought I'd mention it. Take care!
+		{exit()}
+	> I'd like to trade my jacket for yours.
+		{!Global.stat("phone_quest/complete"} Uh... how about once you get my phone?
+			[You] Oh, alright.
+		{otherwise}
+			Sure, I can do that.
+			{swap_coats()} Here you go.
+			[You] Wonderful! Thank you very much! Take care!
