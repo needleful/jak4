@@ -52,6 +52,9 @@ func fire() -> bool:
 
 	return true
 
+func stow():
+	pass
+
 func _on_projectile_contact(proj: Spatial):
 	var pos := proj.global_transform.origin
 	proj.get_parent().remove_child(proj)

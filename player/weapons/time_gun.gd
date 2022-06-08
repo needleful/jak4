@@ -15,3 +15,6 @@ func fire():
 	else:
 		TimeManagement.slow_time(time_amount*TIME_SLOWED)
 	return true
+
+func stow():
+	pass

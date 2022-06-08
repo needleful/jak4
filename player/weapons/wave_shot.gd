@@ -1,4 +1,5 @@
 extends Spatial
+class_name WaveShot
 
 const MAX_RADIUS = 8
 const MIN_RADIUS = 1
@@ -9,7 +10,7 @@ const MIN_RECOIL = 5
 const RECOIL_SEC = 4
 
 var charge_fire := true
-var infinite_ammo := true
+var infinite_ammo := false
 var time_firing := 0.4
 
 var charging := false
@@ -35,6 +36,8 @@ func can_charge():
 	return time_since_fired > time_firing
 
 func charge():
+	if Global.count("wave_shot") <= 0:
+		return
 	$AudioStreamPlayer.play()
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("Charging")
@@ -43,6 +46,7 @@ func charge():
 	charging = true
 
 func fire():
+	var _x = Global.remove_item("wave_shot")
 	$FireSound.play()
 	$AudioStreamPlayer.stop()
 	$AnimationPlayer.stop()
@@ -68,6 +72,11 @@ func fire():
 	
 	charging = false
 	return true
+
+func stow():
+	$AudioStreamPlayer.stop()
+	$AnimationPlayer.stop()
+	charging = false
 
 func _on_bubble_remove(node):
 	scene.remove_child(node)

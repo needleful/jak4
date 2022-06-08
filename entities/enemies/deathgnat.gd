@@ -1,4 +1,5 @@
 extends KinematicEnemy
+class_name DeathGnat
 
 export(PackedScene) var projectile: PackedScene 
 export(float) var speed = 5.0

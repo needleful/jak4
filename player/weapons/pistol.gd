@@ -31,3 +31,6 @@ func fire() -> bool:
 		impact.global_transform.origin = collision.position
 		impact.emitting = true
 	return true
+
+func stow():
+	pass

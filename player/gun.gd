@@ -36,6 +36,7 @@ onready var gun_ik := $"../gun_ik"
 var current_weapon : Spatial
 var state_before_fire:= state
 
+onready var player := Global.get_player()
 var holder: Spatial
 var camera: Spatial
 
@@ -97,6 +98,8 @@ func _process(delta):
 	state_timer += delta
 	if charging() and !Input.is_action_pressed("combat_shoot"):
 		fire()
+		if player.is_roll_jumping():
+			player.wave_jump_roll()
 	if !aiming && !charging():
 		time_since_fired += delta
 		if time_since_fired > TIME_HIDE:
@@ -293,6 +296,8 @@ func swap_to(id: String):
 	if !(id in weapons):
 		print_debug("Weapon does not exist: ", id)
 		return
+	if current_weapon:
+		current_weapon.stow()
 	if !enabled_wep[id]:
 		return
 	holder.play_pickup_sound(id)

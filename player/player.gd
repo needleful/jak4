@@ -45,6 +45,8 @@ const ACCEL_START := 50.0
 const ACCEL := 20.0
 const ACCEL_SLIDE := 10.0
 const ACCEL_ROLL := 0.5
+const ACCEL_ROLL_AIR := 10.0
+const ACCEL_ROLL_WAVE_JUMP := 50.0
 # Decelerate against velocity
 const DECEL_AGAINST := 45.0
 # Decelerate with velocity
@@ -188,6 +190,7 @@ var time_animation := 0.0
 const TIME_FALLING_DEATH := 2.0
 
 const TIME_GRAVITY_STUN := 2
+const TIME_WAVE_JUMP_ROLL := 0.1
 
 # Ledge being held onto
 var ledge: Spatial
@@ -226,7 +229,8 @@ enum State {
 	GetItem,
 	FallingDeath,
 	GravityStun,
-	Hover
+	Hover,
+	WaveJumpRoll
 }
 
 var state: int = State.Fall
@@ -299,7 +303,9 @@ const UPGRADE_ITEMS := [
 ]
 
 const AMMO := [
-	"pistol"
+	"pistol",
+	"wave_shot",
+	"grav_gun"
 ]
 
 const WEAPONS := [
@@ -694,6 +700,9 @@ func _physics_process(delta):
 		State.Hover:
 			if Input.is_action_just_pressed("hover_toggle"):
 				next_state = State.Fall
+		State.WaveJumpRoll:
+			if timer_state > TIME_WAVE_JUMP_ROLL:
+				next_state = State.RollFall
 	set_state(next_state)
 	
 	match state:
@@ -720,7 +729,7 @@ func _physics_process(delta):
 			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
-			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL, true)
+			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL_AIR, true)
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
@@ -784,7 +793,9 @@ func _physics_process(delta):
 				hover_normal = hover_floor_finder.get_collision_normal()
 				hover_cast.cast_to = -hover_normal
 			accel_hover(delta, desired_velocity*SPEED_HOVER, grounded)
-			
+		State.WaveJumpRoll:
+			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL_WAVE_JUMP, true)
+			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 
 	update_visuals(desired_velocity)
 
@@ -1365,6 +1376,12 @@ func is_locked() -> bool:
 
 func _on_unlock_timer_timeout():
 	set_state(State.Ground)
+
+func is_roll_jumping():
+	return state == State.RollJump or state == State.RollFall or state == State.WaveJumpRoll
+
+func wave_jump_roll():
+	set_state(State.WaveJumpRoll)
 
 func gravity_stun(dam):
 	var dead = take_damage(dam, Vector3.ZERO)

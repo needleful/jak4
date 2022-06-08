@@ -52,14 +52,17 @@ var coat: Coat = null
 const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
 const WEIGHTS := {
 	"pistol": 1.12,
+	"wave_shot": 1.07,
 	"grav_gun": 1.0
 }
 const IDEAL_COUNT := {
 	"pistol": 100.0,
-	"grav_gun": 50.0
+	"wave_shot":70.0,
+	"grav_gun": 25.0
 }
 const COUNTS := {
 	"pistol": 10,
+	"wave_shot":7,
 	"grav_gun": 5
 }
 
@@ -217,3 +220,6 @@ func gravity_stun(dam):
 	take_damage(dam, Vector3.UP)
 	if ai != AI.Dead:
 		set_state(AI.GravityStun)
+
+func is_dead():
+	return ai == AI.Dead
