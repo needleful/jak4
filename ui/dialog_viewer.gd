@@ -171,8 +171,21 @@ func list_replies():
 				break
 		if result:
 			var b := Button.new()
-			b.text = reply.text
+			b.clip_text = false
+			var l := Label.new()
 			replies.add_child(b)
+			b.add_child(l)
+			l.anchor_left = 0
+			l.anchor_right = 1
+			l.anchor_top = 0
+			l.anchor_bottom = 1
+			l.margin_left = 10
+			l.margin_right = -10
+			l.margin_top = 5
+			l.margin_bottom = -5
+			l.autowrap = true
+			l.text = reply.text
+			call_deferred("resize_replies")
 			var r = reply
 			var s = skip_reply
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
@@ -182,6 +195,13 @@ func list_replies():
 		current_item = reply
 		advance()
 	$reply_timer.start()
+
+func resize_replies():
+	for b in replies.get_children():
+		if !(b is Button):
+			continue
+		var l: Label = b.get_child(0)
+		b.rect_min_size.y = l.get_line_count()*l.get_line_height()*1.25 + l.margin_top + l.margin_bottom
 
 func _on_reply_timer_timeout():
 	replies.get_child(0).grab_focus()

@@ -36,6 +36,9 @@ func _on_toggled(active):
 
 func add_power(amount:= 1):
 	power += amount
+	if power <= 0:
+		# Dumb bug I introduced
+		power = 0
 	var should_open := power >= required_power
 	if open_stat != "":
 		Global.set_stat(open_stat, should_open)

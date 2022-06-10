@@ -16,6 +16,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_cancel"):
 		if level == 0:
 			get_parent().unpause()
+			get_tree().set_input_as_handled()
 		else:
 			set_level(level - 1)
 

@@ -62,7 +62,7 @@
 	[You] Well... I guess I'll have to find them.
 	{Global.add_stat("need_capacitors")}
 {otherwise if !Global.stat("medium/activated")}
-	{if Global.stat("medium/open")}
+	{Global.stat("medium/open")}
 		You did it! Three capacitors!
 		[You] So I just... walk in?
 		I think so! I've never used the Medium before!  Good luck.
@@ -70,10 +70,30 @@
 		How goes your search, Coats Girl?
 		[You] Progress as always.
 		Good to hear!
+		:choice_loop_search
+		> See you around.
+			See you!
+			{exit()}
+		> {Global.stat("cave_capacitor_124")} There was a capacitor in the cave.
+			Wow! You would think they had been picked clean by now. Lucky find!
+			> They look different than the other ruins around here.
+				They are. There were two difference civilizations before us. Some made metal out of copper, and others out of white metal, impossible to corrode. Incredible material.
+				[You] And presumably they built the Medium?
+				I do not know, actually.
+			> Are there other caves in the area?
+				There are a few scattered about, but none in walking distance. But be very careful: they run deep, and it's easy to get lost.
+				You would have better luck with the small towers you'll find along the river basin. They often used capacitors for some kind of worship.
+		> How do I get out of the village?
+			Right... it's not safe to lower the whole gate right now.
+			Have you tried climbing the fence?
 		> {!Global.stat("capacitor_113")} I was wondering if you knew about that tower on the cliff, just past the village exit.
 			Oh, of course. That's ancient technology.
 			[You] Would there be a capacitor up there?
-			{Global.add_stat("armstrong/asked_tower")}
+			{Global.add_stat("armstrong/asked_tower")} Well... yes, but you should not take it. Those structures can fall apart without power.
+			[You] Really? But surely if it's been standing for centuries, it could go without power?
+			Seriously. It is dangerous. I would not even go near it.
+			[You] ...
+		{goto("choice_loop_search")}
 {otherwise}
 	How did it go with the Medium?
 	{Global.stat("talked/mum")}
