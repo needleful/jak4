@@ -18,6 +18,9 @@ var state_timer := 0.0
 var quit_timer := 0.0
 var orb_timer := 0.0
 
+func _init():
+	can_fly = true
+
 func _ready():
 	if coat:
 		$Armature/Skeleton/bug.set_surface_material(0, coat.generate_material())

@@ -1,10 +1,10 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=4]
-[ext_resource path="res://entities/env/copper/bridge_long.tscn" type="PackedScene" id=5]
+[ext_resource path="res://areas/chunks/chunk137_lowres.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=6]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=8]
@@ -22,9 +22,19 @@
 [ext_resource path="res://dialog/water/chunk137.dialog" type="Resource" id=20]
 [ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=21]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=22]
+[ext_resource path="res://events/jump_game.gd" type="Script" id=23]
+[ext_resource path="res://entities/flag.tscn" type="PackedScene" id=24]
+[ext_resource path="res://dialog/side_content/jump_game.dialog" type="Resource" id=25]
+[ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=26]
+[ext_resource path="res://entities/env/stone/rock3.tscn" type="PackedScene" id=27]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.650211, 1, 0.663028 )
 
 [node name="chunk137" type="Spatial"]
 script = ExtResource( 1 )
+
+[node name="chunk137" parent="." instance=ExtResource( 5 )]
 
 [node name="deathgnat" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -248.766, 102 )
@@ -68,9 +78,6 @@ transform = Transform( 0.130959, 0, -0.991388, 0, 1, 0, 0.991388, 0, 0.130959, 3
 
 [node name="scrap_pile4" parent="." instance=ExtResource( 18 )]
 transform = Transform( 0.946255, 0.266815, 0.182788, -0.323422, 0.780637, 0.534793, 0, -0.565168, 0.824975, 157.28, -140.223, -112.555 )
-
-[node name="bridge_long" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 0.993752, -0.111608, 0, 0.111608, 0.993752, 79.5095, -129.369, 94.1846 )
 
 [node name="scrap1" parent="." instance=ExtResource( 6 )]
 transform = Transform( 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 0, 0, 1, 100.518, -169.932, 229 )
@@ -829,3 +836,70 @@ transform = Transform( 0.0627033, 0, 0.998032, 0, 1, 0, -0.998032, 0, 0.0627033,
 
 [node name="sofa" parent="." instance=ExtResource( 22 )]
 transform = Transform( -0.388143, 0, 0.921599, 0, 1, 0, -0.921599, 0, -0.388143, 97.3026, -136.872, -84.4965 )
+
+[node name="rock8" parent="." instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 0.93203, -0.362382, 0, 0.362382, 0.93203, 109.291, -139.988, -155.493 )
+
+[node name="rock9" parent="." instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 109.461, -137.697, -163.582 )
+
+[node name="jump_game" type="Spatial" parent="."]
+transform = Transform( 0.0545522, 0, -0.998511, -0.0684532, 0.997647, -0.00373985, 0.996162, 0.0685553, 0.0544239, 108.021, -132.351, -158.299 )
+script = ExtResource( 23 )
+
+[node name="npc_kid" parent="jump_game" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 3.72529e-09, 7.45058e-09, 1, 2.32831e-10, 0, 0, 1, 5.08185, -0.590439, -0.987946 )
+dialog = ExtResource( 25 )
+model_scale = 0.75
+
+[node name="npc_kid2" parent="jump_game" instance=ExtResource( 16 )]
+transform = Transform( 0.131966, -0.0558499, 0.989679, -0.0632682, 0.995901, 0.0646373, -0.989233, -0.0711451, 0.127892, -0.970459, -5.54659, -6.93114 )
+dialog = ExtResource( 25 )
+model_scale = 0.75
+
+[node name="npc_kid3" parent="jump_game" instance=ExtResource( 16 )]
+transform = Transform( 0.131966, -0.0558499, 0.989679, -0.0632682, 0.995901, 0.0646373, -0.989233, -0.0711452, 0.127892, -3.96931, 0.284851, -2.33608 )
+dialog = ExtResource( 25 )
+model_scale = 0.75
+
+[node name="flag" parent="jump_game" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 7.45058e-09, 1.49012e-08, 1, 4.65661e-10, 0, 0, 1, 2.91785, 7.4324, 13.9625 )
+
+[node name="game_start" type="Spatial" parent="jump_game"]
+transform = Transform( 1, 0, 1.11759e-08, 2.23517e-08, 1, 6.98492e-10, 0, 0, 1, 10.6683, -7.72014, 0.603149 )
+
+[node name="game_target" type="Area" parent="jump_game"]
+transform = Transform( 1, 0, 7.45058e-09, 1.49012e-08, 1, 4.65661e-10, 0, 0, 1, 2.8932, 6.71352, 13.9403 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="jump_game/game_target"]
+transform = Transform( 1, 0, 3.72529e-09, 7.45058e-09, 1, 2.32831e-10, 3.72529e-09, 0, 1, -0.0498352, 0.726288, -0.00272369 )
+shape = SubResource( 1 )
+
+[node name="scrap5" parent="." instance=ExtResource( 17 )]
+transform = Transform( 0.0545522, 0, -0.998511, -0.0684532, 0.997647, -0.00373985, 0.996162, 0.0685553, 0.0544239, 108.021, -132.351, -158.299 )
+
+[node name="rock10" parent="." instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 0.996241, -0.0866275, 0, 0.0866275, 0.996241, -35.7555, -81.8227, -102.003 )
+
+[node name="rock11" parent="." instance=ExtResource( 26 )]
+transform = Transform( -0.926746, -0.193925, -0.321769, -0.273265, 0.935707, 0.223113, 0.257814, 0.294697, -0.920155, -10.9625, -72.0384, -147.071 )
+
+[node name="rock12" parent="." instance=ExtResource( 12 )]
+transform = Transform( 0.238829, -0.971062, 0, 0.971062, 0.238829, 0, 0, 0, 1, 4.18948, -58.8958, -150.689 )
+
+[node name="rock13" parent="." instance=ExtResource( 27 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.304, -52.0991, -191.145 )
+
+[node name="rock14" parent="." instance=ExtResource( 12 )]
+transform = Transform( 0.971833, -0.235669, 0, 0.235669, 0.971833, 0, 0, 0, 1, 13.8031, -42.5599, -182.358 )
+
+[node name="scrap6" parent="." instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.2647, -78.6696, -125.327 )
+
+[node name="scrap7" parent="." instance=ExtResource( 17 )]
+transform = Transform( -0.296948, 0.048723, -0.95365, -0.0644905, -0.99744, -0.0308792, -0.952714, 0.0523318, 0.29933, -17.6785, -78.6696, -123.858 )
+
+[node name="scrap_pile6" parent="." instance=ExtResource( 14 )]
+transform = Transform( 0.716776, 0.0382794, 0.696252, 0, -0.998492, 0.0548963, 0.697303, -0.0393484, -0.715695, 7.099, -62.0861, -169.111 )

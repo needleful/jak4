@@ -1,4 +1,4 @@
-extends NPC
+extends NPC_Shop
 
 export(bool) var only_if_saved := true
 export(Array, NodePath) var enemies := []
@@ -6,6 +6,8 @@ export(Array, NodePath) var enemies := []
 var saved := false
 
 #TODO: track multiple games to avoid conflicts
+func _init():
+	visual_name = tr("Riley")
 
 func _ready():
 	if only_if_saved and !Global.stat("riley/saved"):

@@ -47,6 +47,7 @@ var damaged:= []
 
 var in_range := false
 var coat: Coat = null
+var can_fly := false
 
 # Ammo drop logic
 const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
@@ -69,6 +70,8 @@ const COUNTS := {
 func _ready():
 	set_state(ai)
 	if !respawns and Global.is_picked(get_path()):
+		ai = AI.Dead
+		emit_signal("died", id, get_path())
 		queue_free()
 		return
 	if drops_coat:

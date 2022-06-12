@@ -2,8 +2,14 @@ extends Spatial
 
 export(Texture) var gamepad_spin
 export(Texture) var gamepad_lunge
+export(Texture) var gamepad_crouch
+export(Texture) var gamepad_jump
 export(Texture) var keyboard_spin
 export(Texture) var keyboard_lunge
+export(Texture) var keyboard_crouch
+export(Texture) var keyboard_jump
+
+var air_tutorial := false
 
 # Distance from the bounding box edge
 const MIN_DIST_LOAD := 200
@@ -78,14 +84,20 @@ func _process(delta):
 func detect_enemies(_delta):
 	var were_present := enemies_present
 	enemies_present = false
+	var air_enemies_present = false
 	var enemies = get_tree().get_nodes_in_group("distance_activated")
 	for e in enemies:
 		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
 		if dist_squared < MIN_DIST_SQ_ENEMIES:
-			enemies_present = true
+			if "can_fly" in e and e.can_fly:
+				air_enemies_present = true
+			else:
+				enemies_present = true
 	
 	Music.tension = enemies_present
-	if !were_present and enemies_present and !Global.stat("combat_tutorial"):
+	if air_enemies_present and !Global.stat("air_combat_tutorial"):
+		show_air_combat_tutorial()
+	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):
 		show_combat_tutorial()
 
 func update_active_chunks(position: Vector3, instant := false):
@@ -189,10 +201,26 @@ func show_combat_tutorial():
 		player.show_prompt([gamepad_lunge], "Lunge Kick")
 	else:
 		player.show_prompt([keyboard_lunge], "Lunge Kick")
+	air_tutorial = false
 	$tutorial_swap.start()
 
 func _on_tutorial_swap_timeout():
-	if Global.using_gamepad:
-		player.show_prompt([gamepad_spin], "Spin Kick")
+	if air_tutorial:
+		if Global.using_gamepad:
+			player.show_prompt([gamepad_jump, gamepad_lunge], "Dive")
+		else:
+			player.show_prompt([keyboard_jump, keyboard_lunge], "Dive")
 	else:
-		player.show_prompt([keyboard_spin], "Spin Kick")
+		if Global.using_gamepad:
+			player.show_prompt([gamepad_spin], "Spin Kick")
+		else:
+			player.show_prompt([keyboard_spin], "Spin Kick")
+
+func show_air_combat_tutorial():
+	var _x = Global.add_stat("air_combat_tutorial")
+	if Global.using_gamepad:
+		player.show_prompt([gamepad_crouch, gamepad_lunge], "Uppercut")
+	else:
+		player.show_prompt([keyboard_crouch, keyboard_lunge], "Uppercut")
+	air_tutorial = true
+	$tutorial_swap.start()

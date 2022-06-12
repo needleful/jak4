@@ -7,19 +7,33 @@
 		[You] Oh.  Well, it wasn't too big a deal. One of them had a snazzy coat, so you know. Had to do it.
 		Well, you saved me! I'm Riley, By the way.
 	{otherwise if Global.stat("riley/126/reward")} Thanks again! I'm heading out of here soon.
-		{exit()}
+		> Say, could I buy some supplies off you?
+			Sure, I have some spare gear.
+			{event("open_shop")}
+			{exiting()} Okay, see you around.
+			{exit()}
+		> Okay, see you.
+			{exit()}
 	{otherwise} Thanks for the help! I'm Riley, by the way.
-	[You] Jackie. Say, is there a capacitor up here? I was told they were up in these towers.
-	That's what I was looking for! To activate the Tree Tower, right?
-	[You] Uhm, I was actually using it for the Medium.
-	Oh? Interesting. There wasn't one up here, unfortunately.
-	[You] Oh, that's unfortunate. Do you know where more could be? There's that white tower to the north, could one be there?
-	Eh, well, there is actually one there. But I wouldn't mess with that one.
-	[You] Oh, why not?
-	I'm pretty sure it holds up that whole tower. If you take it out, it'd collapse right onto that village in the valley. It's not worth it.
-	[You] ...
-	{Global.add_stat("riley/126/reward")} {Global.add_item("bug", 16)} Say, I think it's only fair I give you something. Here's some of the bugs I found climbing up this thing.
-	I'm gonna take some time and collect myself, then get out of here. Safe travels!
+		[You] Jackie. Say, is there a capacitor up here? I was told they were up in these towers.
+		That's what I was looking for! To activate the Tree Tower, right?
+		[You] Uhm, I was actually using it for the Medium.
+		Oh? Interesting. There wasn't one up here, unfortunately.
+		[You] Oh, that's unfortunate. Do you know where more could be? There's that white tower to the north, could one be there?
+		Eh, well, there is actually one there. But I wouldn't mess with that one.
+		[You] Oh, why not?
+		I'm pretty sure it holds up that whole tower. If you take it out, it'd collapse right onto that village in the valley. It's not worth it.
+		[You] ...
+		{Global.add_stat("riley/126/reward")} {Global.add_item("bug", 16)} Say, I think it's only fair I give you something. Here's some of the bugs I found climbing up this thing.
+		Need anything else before I go? I'm gonna collect myself and get out of here.
+		> Could I buy some supplies off you?
+			Sure, I have some spare gear.
+			{event("open_shop")}
+			{exiting()} Okay, see you around.
+			{exit()}
+		> Okay, see you.
+			Safe travels!
+			{exit()}
 {otherwise if talked > 0} Seriously, I could use some help with those deathgnats.
 	[You] No worries, they're tricky to hit but I've got it.
 	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]

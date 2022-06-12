@@ -1,4 +1,5 @@
 extends NPC
+class_name NPC_Shop
 
 export(String, FILE, "*.json") var inventory: String
 
@@ -8,13 +9,15 @@ func _init():
 	visual_name = "Shop Keeper"
 
 func _ready():
-	var file := File.new()
-	var _x = file.open(inventory, File.READ)
-	var text = file.get_as_text()
-	file.close()
-	inventory_data = JSON.parse(text).result
-	for pitem in inventory_data.persistent:
-		pitem["C"] -= Global.stat(item_bought_stat(pitem["I"]))
+	if inventory != "":
+		var file := File.new()
+		var _x = file.open(inventory, File.READ)
+		var text = file.get_as_text()
+		file.close()
+		inventory_data = JSON.parse(text).result
+		if "persistent" in inventory_data:
+			for pitem in inventory_data.persistent:
+				pitem["C"] -= Global.stat(item_bought_stat(pitem["I"]))
 
 func get_inventory() -> Dictionary:
 	return inventory_data
@@ -31,7 +34,8 @@ func mark_sold(id: String):
 		bought["C"] -= 1
 
 func item_bought_stat(id) -> String:
-	var s =  "bought/"+name+"/"+id
+	var short_id = friendly_id if friendly_id != "" else name
+	var s =  "bought/"+short_id+"/"+id
 	return s
 
 func item_data(array: Array, id: String) -> Dictionary:
