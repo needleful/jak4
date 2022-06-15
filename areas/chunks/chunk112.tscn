@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -47,6 +47,10 @@
 [ext_resource path="res://entities/env/copper/glass_support.tscn" type="PackedScene" id=45]
 [ext_resource path="res://entities/env/copper/glass-tools.tscn" type="PackedScene" id=46]
 [ext_resource path="res://material/env/copper1.png" type="Texture" id=47]
+[ext_resource path="res://entities/env/furniture/glass1.tscn" type="PackedScene" id=48]
+[ext_resource path="res://entities/env/furniture/glass_tree.tscn" type="PackedScene" id=49]
+[ext_resource path="res://entities/env/stone/garden.tscn" type="PackedScene" id=50]
+[ext_resource path="res://entities/env/stone/garden_melon.tscn" type="PackedScene" id=51]
 
 [sub_resource type="ConvexPolygonShape" id=227]
 points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
@@ -1051,6 +1055,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236.211, -231.139, 27.0298 )
 [node name="glass_floor" type="CSGCylinder" parent="." index="168"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 232.008, -233.148, 23.5296 )
 use_collision = true
+collision_layer = 257
 radius = 7.86458
 height = 3.90142
 material = SubResource( 236 )
@@ -1087,32 +1092,98 @@ height = 2.2
 sides = 12
 material = SubResource( 237 )
 
-[node name="pail" parent="." index="169" instance=ExtResource( 44 )]
+[node name="glass_table" type="CSGCylinder" parent="." index="169"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 228.872, -230.616, 19.9131 )
+use_collision = true
+radius = 2.25099
+height = 1.14315
+material = SubResource( 237 )
+
+[node name="CSGCylinder3" type="CSGCylinder" parent="glass_table" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.591095, 0 )
+operation = 2
+radius = 1.62119
+material = SubResource( 237 )
+
+[node name="CSGCylinder4" type="CSGCylinder" parent="glass_table" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0868835, 0 )
+operation = 2
+radius = 1.26351
+material = SubResource( 237 )
+
+[node name="CSGBox" type="CSGBox" parent="glass_table" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.25201 )
+operation = 2
+width = 4.55009
+depth = 2.16382
+material = SubResource( 237 )
+
+[node name="pail" parent="." index="170" instance=ExtResource( 44 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 235.305, -231.198, 26.5975 )
 
-[node name="pail2" parent="." index="170" instance=ExtResource( 44 )]
+[node name="pail2" parent="." index="171" instance=ExtResource( 44 )]
 transform = Transform( -0.581261, 0, 0.813717, 0, 1, 0, -0.813717, 0, -0.581261, 237.314, -231.198, 24.4382 )
 
-[node name="pail3" parent="." index="171" instance=ExtResource( 44 )]
+[node name="pail3" parent="." index="172" instance=ExtResource( 44 )]
 transform = Transform( -0.583804, 0, 0.811894, 0, 1, 0, -0.811894, 0, -0.583804, 237.576, -231.198, 23.5343 )
 
-[node name="pail4" parent="." index="172" instance=ExtResource( 44 )]
+[node name="pail4" parent="." index="173" instance=ExtResource( 44 )]
 transform = Transform( 0.382604, 0, 0.923912, 0, 1, 0, -0.923912, 0, 0.382604, 173.145, -229.421, 11.314 )
 
-[node name="pail5" parent="." index="173" instance=ExtResource( 44 )]
+[node name="pail5" parent="." index="174" instance=ExtResource( 44 )]
 transform = Transform( 0.977953, 0, 0.208825, 0, 1, 0, -0.208825, 0, 0.977953, 161.515, -230.282, -63.8541 )
 
-[node name="glass_support" parent="." index="174" instance=ExtResource( 45 )]
+[node name="glass_support" parent="." index="175" instance=ExtResource( 45 )]
 transform = Transform( 0.48821, 0, 0.872726, 0, 1, 0, -0.872726, 0, 0.48821, 234.647, -231.18, 24.9348 )
 
-[node name="glass_support2" parent="." index="175" instance=ExtResource( 45 )]
+[node name="glass_support2" parent="." index="176" instance=ExtResource( 45 )]
 transform = Transform( 0.48821, 0, 0.872726, 0, 1, 0, -0.872726, 0, 0.48821, 235.508, -231.18, 21.1983 )
 
-[node name="glass-tools" parent="." index="176" instance=ExtResource( 46 )]
+[node name="glass-tools" parent="." index="177" instance=ExtResource( 46 )]
 transform = Transform( -0.973965, 0, -0.226697, 0, 1, 0, 0.226697, 0, -0.973965, 232.672, -231.231, 27.1247 )
 
-[node name="npc_glass_blower" parent="." index="177" instance=ExtResource( 28 )]
+[node name="garden" parent="." index="178" instance=ExtResource( 50 )]
+transform = Transform( -0.287132, 0.0190271, 0.957702, 0.00711776, 0.999817, -0.0177299, -0.957865, 0.00172589, -0.287215, 235.362, -228.639, -48.4851 )
+
+[node name="garden_melon2" parent="." index="179" instance=ExtResource( 51 )]
+transform = Transform( -0.75966, 0.0553477, -0.647961, 0.063246, 0.997936, 0.0110933, 0.647238, -0.0325538, -0.761592, 158.892, -229.854, -12.78 )
+
+[node name="garden2" parent="." index="180" instance=ExtResource( 50 )]
+transform = Transform( 0.0654706, 0.0553477, 0.996318, -0.0361609, 0.997936, -0.0530614, -0.997199, -0.0325538, 0.0673369, 149.459, -229.333, -17.6167 )
+
+[node name="npc_glass_blower" parent="." index="181" instance=ExtResource( 28 )]
 transform = Transform( -0.287139, 0, 0.957889, 0, 1, 0, -0.957889, 0, -0.287139, 232.772, -231.197, 24.864 )
+visual_name = "Glass-blower"
+
+[node name="glass1" parent="." index="182" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 230.137, -230.507, 19.5563 )
+
+[node name="glass6" parent="." index="183" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 228.818, -230.507, 18.4962 )
+
+[node name="glass2" parent="." index="184" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 226.975, -230.028, 19.8263 )
+
+[node name="glass3" parent="." index="185" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 230.697, -230.015, 19.7031 )
+
+[node name="glass4" parent="." index="186" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 227.34, -230.01, 18.9655 )
+
+[node name="glass5" parent="." index="187" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 229.497, -230.336, 27.3593 )
+
+[node name="glass_tree" parent="." index="188" instance=ExtResource( 49 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 257.976, -257.394, 36.866 )
+
+[node name="glass_tree2" parent="." index="189" instance=ExtResource( 49 )]
+transform = Transform( -0.944593, 0, -0.328244, 0, 1, 0, 0.328244, 0, -0.944593, 229.722, -230.059, 18.4299 )
+
+[node name="glass_tree3" parent="." index="190" instance=ExtResource( 49 )]
+transform = Transform( 0.302561, 0, 0.95313, 0, 1, 0, -0.95313, 0, 0.302561, 228.014, -230.063, 18.4232 )
+
+[node name="glass_tree4" parent="." index="191" instance=ExtResource( 49 )]
+transform = Transform( 0.268742, 0, 0.963212, 0, 1, 0, -0.963212, 0, 0.268742, 228.998, -230.063, 18.1558 )
 
 [connection signal="body_entered" from="tutorial_tyler_neo/tutorial_area" to="tutorial_tyler_neo/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="tutorial_tyler_neo/tutorial_area/tutorial_anim" to="tutorial_tyler_neo/tutorial_area" method="_on_AnimationPlayer_animation_finished"]

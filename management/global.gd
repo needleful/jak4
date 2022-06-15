@@ -36,6 +36,9 @@ var ammo_drop_pity := randf()
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
+func _enter_tree():
+	randomize()
+
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		if !using_gamepad:
