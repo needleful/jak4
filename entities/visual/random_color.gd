@@ -2,7 +2,7 @@ extends Spatial
 
 export(Gradient) var palette: Gradient
 export(NodePath) var mesh_instance
-export(String) var shader_param
+export(String) var shader_param := "albedo"
 
 onready var mesh = get_node(mesh_instance)
 

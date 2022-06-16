@@ -5,7 +5,7 @@ export(NodePath) var path
 onready var node: GeometryInstance = get_node(path)
 
 export(bool) var double_sided := false
-export(bool) var persistent := false
+export(bool) var persistent := true
 
 var coat: Coat
 
