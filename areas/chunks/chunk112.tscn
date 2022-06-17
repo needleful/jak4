@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=83 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -60,6 +60,10 @@
 [ext_resource path="res://entities/visual/bug.tscn" type="PackedScene" id=58]
 [ext_resource path="res://entities/env/furniture/incense.tscn" type="PackedScene" id=59]
 [ext_resource path="res://entities/env/furniture/shelf.tscn" type="PackedScene" id=60]
+[ext_resource path="res://entities/env/electrical/wind_generator.tscn" type="PackedScene" id=61]
+[ext_resource path="res://entities/env/electrical/phone.tscn" type="PackedScene" id=62]
+[ext_resource path="res://entities/env/electrical/outlet_box.tscn" type="PackedScene" id=63]
+[ext_resource path="res://entities/env/electrical/charger.tscn" type="PackedScene" id=64]
 
 [sub_resource type="ConvexPolygonShape" id=227]
 points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
@@ -395,6 +399,53 @@ shader_param/wall = ExtResource( 40 )
 shader_param/ground = ExtResource( 47 )
 shader_param/ceiling = ExtResource( 47 )
 
+[sub_resource type="SpatialMaterial" id=238]
+albedo_color = Color( 0, 0, 0, 1 )
+roughness = 0.75
+
+[sub_resource type="Curve3D" id=239]
+bake_interval = 0.03
+_data = {
+"points": PoolVector3Array( -0.129589, 0.0040741, 0.0222015, 0.129589, -0.0040741, -0.0222015, -0.169804, 0.0467377, -0.0139313, -0.038784, -0.00254822, 0.102066, 0.038784, 0.00254822, -0.102066, 0.00772858, -0.0345459, 0.0171967, 0, 0, 0, 0, 0, 0, -0.0989799, -0.0376434, -0.0575562, -0.0725365, -0.00012207, -0.00196838, 0.0725365, 0.00012207, 0.00196838, -0.0760918, -0.0416412, 0.111694, -0.0908279, 0.042038, 0.125671, 0.0908279, -0.042038, -0.125671, 0.0234299, -0.0375366, -0.179123 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="SpatialMaterial" id=240]
+albedo_color = Color( 1, 0.698039, 0.733333, 1 )
+
+[sub_resource type="Curve3D" id=241]
+bake_interval = 0.03
+_data = {
+"points": PoolVector3Array( -0.129784, -0.0127563, 0.0151215, 0.129784, 0.0127563, -0.0151215, -0.169456, 0.0437622, -0.0238953, -0.038784, -0.00254822, 0.102066, 0.038784, 0.00254822, -0.102066, -0.128345, -0.0779419, -0.00257874, -0.00505447, -0.0067749, 0.101273, 0.00505447, 0.0067749, -0.101273, -0.02528, -0.0895233, -0.0801697, -0.00178528, -0.0176392, 0.150574, 0.00178528, 0.0176392, -0.150574, -0.0976143, -0.0975037, -0.202988 ),
+"tilts": PoolRealArray( 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=242]
+bake_interval = 0.03
+_data = {
+"points": PoolVector3Array( -0.0612225, -0.0137329, 0.0321655, 0.0612225, 0.0137329, -0.0321655, -0.169804, 0.0467377, -0.0139313, -0.143608, -0.00341797, 0.0211639, 0.143608, 0.00341797, -0.0211639, 0.096611, -0.121643, -0.0288849, -0.209999, 0.00364685, 0.197479, 0.209999, -0.00364685, -0.197479, 0.23838, -0.118851, -0.282684, 0, 0, 0, 0, 0, 0, 0.191597, -0.117981, -0.435303, -0.151932, -0.000793457, 0.126984, 0.151932, 0.000793457, -0.126984, 0.179977, -0.117615, -0.583923 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=243]
+bake_interval = 0.03
+_data = {
+"points": PoolVector3Array( -0.0612225, -0.0137329, 0.0321655, 0.0612225, 0.0137329, -0.0321655, -0.169804, 0.0467377, -0.0139313, -0.125172, -0.00161743, -0.0786743, 0.125172, 0.00161743, 0.0786743, -0.0690689, -0.20755, 0.0761108, -0.108505, 0.01474, 0.0331726, 0.108505, -0.01474, -0.0331726, 0.161514, -0.197983, 0.0625153, -0.123165, 0.0441132, 0.0846558, 0.123165, -0.0441132, -0.0846558, 0.279598, -0.343338, 0.0817261, 0.0534439, -0.0517731, -0.0146942, -0.0534439, 0.0517731, 0.0146942, 0.401619, -0.215134, -0.143707, 0.0600853, 0.00038147, -0.0585938, -0.0600853, -0.00038147, 0.0585938, 0.224171, -0.189194, -0.0821838, 0.0999222, -0.00543213, -0.105255, -0.0999222, 0.00543213, 0.105255, 0.104465, -0.189697, 0.0772858, -0.0872383, -0.00392151, 0.131241, 0.0872383, 0.00392151, -0.131241, -0.166714, -0.188217, 0.121811, -0.0457916, 0.00166321, 0.143829, 0.0457916, -0.00166321, -0.143829, 0.235073, -0.181992, -0.208405 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=244]
+_data = {
+"points": PoolVector3Array( -0.0922089, -0.0459747, -0.554535, 0.0922089, 0.0459747, 0.554535, 0.19059, -0.102905, -0.125565, -0.152969, 0.258591, -0.168488, 0.152969, -0.258591, 0.168488, 0.344093, -0.494385, 0.497971, 0.187508, -0.118134, -0.780212, -0.187508, 0.118134, 0.780212, 0.519672, -1.10864, 0.982025, -1.59505, -0.165756, -4.77164, 1.59505, 0.165756, 4.77164, -3.66924, -0.967239, 14.4012, 1.84256, 0.0782166, -1.10474, -1.84256, -0.0782166, 1.10474, -6.29639, -1.02397, 21.9226, 0.53212, -1.73515, -0.251175, -0.53212, 1.73515, 0.251175, -6.9128, 0.596832, 24.3744, -0.134735, -0.640518, 0.117661, 0.134735, 0.640518, -0.117661, -6.43928, 5.58578, 24.0476, -1.66594, -4.80792, -0.814133, 1.66594, 4.80792, 0.814133, -3.6707, 10.4851, 25.3704, -0.472649, -1.04031, -0.0412445, 0.472649, 1.04031, 0.0412445, 1.07852, 18.7637, 25.7335, 0, 0, 0, 0, 0, 0, 1.96936, 21.701, 26.2242, 0.475311, -0.781784, 0.644653, -0.475311, 0.781784, -0.644653, 1.37907, 23.1362, 25.559, 0.660145, -1.07375, 0.635818, -0.660145, 1.07375, -0.635818, -0.0538025, 26.0844, 23.381, 0.0952797, -0.660599, -0.0158844, -0.0952797, 0.660599, 0.0158844, -0.778328, 27.2389, 22.6398, 0.0817032, -0.207138, 0.0497589, -0.0817032, 0.207138, -0.0497589, -0.601532, 29.1093, 22.5023, -0.552917, -0.171555, 0.0869141, 0.552917, 0.171555, -0.0869141, -0.150482, 29.2009, 22.9533 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=245]
+_data = {
+"points": PoolVector3Array( -0.0922089, -0.0459747, -0.554535, 0.0922089, 0.0459747, 0.554535, 0.0302734, -0.0604553, -0.00814819, 0.343613, 0.0559692, -0.552826, -0.343613, -0.0559692, 0.552826, 0.0480499, -0.136337, 1.06282, 0.892761, 0.0227966, -0.317307, -0.892761, -0.0227966, 0.317307, -3.22238, -0.169724, 4.48215, 2.65167, 0.0522003, -0.0211182, -2.65167, -0.0522003, 0.0211182, -6.6739, -0.370316, 5.62463, 1.9467, -0.0683289, 1.86954, -1.9467, 0.0683289, -1.86954, -12.1391, -0.419601, 4.67937, 0.187897, -0.103012, 3.37025, -0.187897, 0.103012, -3.37025, -15.351, -0.331924, -2.07748, -0.41571, 0.0540771, 0.846344, 0.41571, -0.0540771, -0.846344, -14.3881, -0.210159, -5.44186, -0.318558, -0.0292816, 0.396271, 0.318558, 0.0292816, -0.396271, -13.1991, -0.159348, -6.08716, -1.40727, -0.0298004, 1.06967, 1.40727, 0.0298004, -1.06967, -10.8647, -0.073288, -8.32794, -1.25385, -0.0436859, -1.01723, 1.25385, 0.0436859, 1.01723, -5.12108, 0.0369568, -8.82086, -0.784164, -0.14006, -0.883011, 0.784164, 0.14006, 0.883011, -1.62239, 0.064743, -5.45522, -0.54541, -0.0463562, -1.20628, 0.54541, 0.0463562, 1.20628, -0.896454, -0.0282745, -3.84435, 0.0623169, -0.282913, -1.1391, -0.0623169, 0.282913, 1.1391, 0.116638, 0.0921783, -0.150711 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+}
+
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
 
@@ -563,6 +614,41 @@ transform = Transform( 0.0472285, 0, 0.998884, 0, 1, 0, -0.998884, 0, 0.0472285,
 
 [node name="hut3" parent="." index="26" instance=ExtResource( 12 )]
 transform = Transform( -0.111469, 0, -0.993768, 0, 1, 0, 0.993768, 0, -0.111469, 203.524, -230.745, -7.3789 )
+
+[node name="CSGBox" type="CSGBox" parent="hut3" index="1"]
+transform = Transform( 0.412094, 0, 0.911141, 0, 1, 0, -0.911141, 0, 0.412094, -4.93844, 0.52655, -2.90164 )
+use_collision = true
+width = 2.99146
+height = 1.61676
+depth = 1.62327
+material = ExtResource( 5 )
+
+[node name="CSGBox2" type="CSGBox" parent="hut3/CSGBox" index="0"]
+transform = Transform( 1, 0, 0, 0, 0.865262, -0.501321, 0, 0.501321, 0.865261, 0, 1.12085, -1.32898 )
+operation = 2
+use_collision = true
+width = 3.28067
+height = 1.61676
+depth = 1.62327
+material = ExtResource( 5 )
+
+[node name="CSGBox3" type="CSGBox" parent="hut3/CSGBox" index="1"]
+transform = Transform( -0.0534724, -0.501253, -0.863647, -0.0404619, 0.865261, -0.499685, 0.997749, 0.00822544, -0.0665493, 2.07825, 1.12085, -0.123466 )
+operation = 2
+use_collision = true
+width = 3.28067
+height = 1.61676
+depth = 1.62327
+material = ExtResource( 5 )
+
+[node name="CSGBox4" type="CSGBox" parent="hut3/CSGBox" index="2"]
+transform = Transform( 0.0164075, -0.501253, -0.865145, 0, 0.865262, -0.501321, 0.999865, 0.00822547, 0.0141968, -2.35953, 1.12085, -0.0859833 )
+operation = 2
+use_collision = true
+width = 3.28067
+height = 1.61676
+depth = 1.62327
+material = ExtResource( 5 )
 
 [node name="hut4" parent="." index="27" instance=ExtResource( 12 )]
 transform = Transform( -0.433486, 0, -0.90116, 0, 1, 0, 0.90116, 0, -0.433486, 190.974, -230.305, -45.9365 )
@@ -1286,7 +1372,166 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 229.752, -230.045, 18.4526 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 230.368, -230.045, 18.777 )
 
 [node name="incense" parent="." index="202" instance=ExtResource( 59 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 200.988, -229.213, 15.712 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 197.142, -229.544, 12.5175 )
+
+[node name="wind_generator" parent="." index="203" instance=ExtResource( 61 )]
+transform = Transform( -0.222108, 0, -0.975022, 0, 1, 0, 0.975022, 0, -0.222108, 229.611, -199.273, -23.2197 )
+
+[node name="wind_generator3" parent="." index="204" instance=ExtResource( 61 )]
+transform = Transform( -0.222108, 0, -0.975022, 0, 1, 0, 0.975022, 0, -0.222108, 234.778, -199.157, -14.5835 )
+
+[node name="wind_generator2" parent="." index="205" instance=ExtResource( 61 )]
+transform = Transform( -0.830367, 0, -0.557217, 0, 1, 0, 0.557217, 0, -0.830367, 243.1, -199.415, -26.0248 )
+
+[node name="outlet_box" parent="." index="206" instance=ExtResource( 63 )]
+transform = Transform( -0.262613, 0, 0.964901, 0, 1, 0, -0.964901, 0, -0.262613, 207.71, -229.372, -11.6485 )
+
+[node name="charger" parent="outlet_box" index="1" instance=ExtResource( 64 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0957375, 0.209778, 0.0820618 )
+
+[node name="charger2" parent="outlet_box" index="2" instance=ExtResource( 64 )]
+transform = Transform( 1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0.0957336, 0.052948, 0.0820618 )
+
+[node name="charger3" parent="outlet_box" index="3" instance=ExtResource( 64 )]
+transform = Transform( 1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0.0957298, 0.052948, -0.00386047 )
+
+[node name="charger4" parent="outlet_box" index="4" instance=ExtResource( 64 )]
+transform = Transform( 1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0.0957298, 0.134567, -0.0839386 )
+
+[node name="charger5" parent="outlet_box" index="5" instance=ExtResource( 64 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.0957298, 0.134567, 0.00276184 )
+
+[node name="cord1" type="CSGPolygon" parent="outlet_box" index="6"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.331852, 0, 0 )
+polygon = PoolVector2Array( 0, 0, 0.00537491, 0.0214996, 0.0209007, 0.00904846 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 0.03
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 238 )
+
+[node name="Path" type="Path" parent="outlet_box/cord1" index="0"]
+curve = SubResource( 239 )
+
+[node name="cord2" type="CSGPolygon" parent="outlet_box" index="7"]
+transform = Transform( 1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, 0.323452, 0.0819244, -0.081543 )
+polygon = PoolVector2Array( 0.0286407, 0.0153656, 0.00765228, 0.0122528, 0.00685501, 0.0063324, 0.0282135, 0.0083313 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 0.03
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource( 240 )
+
+[node name="Path" type="Path" parent="outlet_box/cord2" index="0"]
+curve = SubResource( 241 )
+
+[node name="cord3" type="CSGPolygon" parent="outlet_box" index="8"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.331848, 0.0747528, 0 )
+polygon = PoolVector2Array( 0, 0, 0.00537491, 0.0214996, 0.0209007, 0.00904846 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 0.03
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 238 )
+
+[node name="Path" type="Path" parent="outlet_box/cord3" index="0"]
+curve = SubResource( 242 )
+
+[node name="cord4" type="CSGPolygon" parent="outlet_box" index="9"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.331844, 0.162003, 0.0930939 )
+polygon = PoolVector2Array( 0, 0, 0.00537491, 0.0214996, 0.0209007, 0.00904846 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 0.03
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 238 )
+
+[node name="Path" type="Path" parent="outlet_box/cord4" index="0"]
+curve = SubResource( 243 )
+
+[node name="outlet_box" parent="outlet_box" index="10" instance=ExtResource( 63 )]
+transform = Transform( 0.448463, 0, -0.893801, 0, 1, 0, 0.893801, 0, 0.448463, -0.223633, 29.3042, 23.1615 )
+
+[node name="cord5" type="CSGPolygon" parent="outlet_box" index="11"]
+transform = Transform( 1, 0, 5.96046e-08, 0, 1, 0, -5.96046e-08, 0, 1, -0.184025, 0.162003, 0.281723 )
+polygon = PoolVector2Array( -0.0162659, -0.00668335, 0.0163879, 0.0445404, 0.0495377, -0.00750732 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 0.1
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 238 )
+
+[node name="Path" type="Path" parent="outlet_box/cord5" index="0"]
+curve = SubResource( 244 )
+
+[node name="cord6" type="CSGPolygon" parent="outlet_box" index="12"]
+transform = Transform( -0.422189, 0, 0.906507, 0, 1, 0, -0.906507, 0, -0.422189, -0.0376778, 29.3707, 23.1337 )
+polygon = PoolVector2Array( -0.0162659, -0.00668335, 0.0163879, 0.0445404, 0.0495377, -0.00750732 )
+mode = 2
+path_node = NodePath("Path2")
+path_interval_type = 0
+path_interval = 0.1
+path_simplify_angle = 2.4
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 238 )
+
+[node name="Path2" type="Path" parent="outlet_box/cord6" index="1"]
+curve = SubResource( 245 )
+
+[node name="phone" parent="." index="207" instance=ExtResource( 62 )]
+transform = Transform( 0.9741, 0, -0.226116, 0, 1, 0, 0.226116, 0, 0.9741, 197.73, -229.536, 12.5617 )
+on = true
+
+[node name="phone2" parent="." index="208" instance=ExtResource( 62 )]
+transform = Transform( 0.555823, 0, 0.831301, 0, 1, 0, -0.831301, 0, 0.555823, 206.93, -229.403, -12.0491 )
+
+[node name="phone3" parent="." index="209" instance=ExtResource( 62 )]
+transform = Transform( -0.238198, 0, 0.971217, 0, 1, 0, -0.971217, 0, -0.238198, 207.279, -229.403, -11.7618 )
+
+[node name="phone4" parent="." index="210" instance=ExtResource( 62 )]
+transform = Transform( 0.429877, 0, 1.08062, 0, 1.18238, 0, -1.08062, 0, 0.429877, 207.327, -229.4, -12.0064 )
+
+[node name="phone5" parent="." index="211" instance=ExtResource( 62 )]
+transform = Transform( 0.458867, 1.73063e-07, -0.888505, 8.74228e-08, -1, -1.49631e-07, -0.888505, -9.01489e-09, -0.458867, 207.352, -229.403, -12.213 )
 
 [connection signal="body_entered" from="tutorial_tyler_neo/tutorial_area" to="tutorial_tyler_neo/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="tutorial_tyler_neo/tutorial_area/tutorial_anim" to="tutorial_tyler_neo/tutorial_area" method="_on_AnimationPlayer_animation_finished"]
