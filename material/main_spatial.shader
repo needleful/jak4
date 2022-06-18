@@ -14,6 +14,12 @@ void fragment()
 
 void light()
 {
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += LIGHT_COLOR*ATTENUATION*ALBEDO;
+		return;
+	}
+	
 	float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
 	DIFFUSE_LIGHT += light * ATTENUATION * ALBEDO;
 	

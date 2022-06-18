@@ -49,3 +49,11 @@ void fragment() {
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 }
+
+void light(){
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += LIGHT_COLOR*ATTENUATION*ALBEDO;
+		return;
+	}
+}

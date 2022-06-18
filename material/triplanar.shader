@@ -31,3 +31,12 @@ void fragment() {
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
 }
+
+
+/*void light(){
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += LIGHT_COLOR*ATTENUATION*ALBEDO;
+		return;
+	}
+}*/

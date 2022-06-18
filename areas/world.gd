@@ -190,7 +190,9 @@ func mark_inactive(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
 		if chunk.name in lowres_chunks:
-			chunk.add_child(lowres_chunks[chunk.name])
+			var l: Node = lowres_chunks[chunk.name]
+			l.request_ready()
+			chunk.add_child(l)
 	
 	if chunk.has_node("static_collision"):
 		chunk.remove_child(chunk.get_node("static_collision"))

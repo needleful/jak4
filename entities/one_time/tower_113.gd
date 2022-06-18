@@ -10,16 +10,16 @@ var flag_spawn: Spatial
 func _ready():
 	if Global.stat(fall_stat):
 		anim.play("fall")
-		anim.seek(anim.current_animation_length)
+		anim.advance(anim.current_animation_length)
 		# Disable particles
 		for c in $tower_mid.get_children():
 			if c is Particles:
 				c.emitting = false
-				c.queue_free()
+				c.visible = false
 		for c in $tower_top.get_children():
 			if c is Particles:
 				c.emitting = false
-				c.queue_free()
+				c.visible = false
 	elif high_res:
 		flag_deletion = $"../flag_deletion"
 		flag_spawn = $"../flag_spawn"
@@ -33,7 +33,6 @@ func _on_stat_changed(stat, _val):
 func fall():
 	if high_res:
 		Global.disconnect("stat_changed", self, "_on_stat_changed")
-		print("Falling")
 		anim.play("fall")
 		for g in flag_deletion.get_overlapping_bodies():
 			var l = (g.global_transform.origin - Global.game_state.checkpoint_position).length()
