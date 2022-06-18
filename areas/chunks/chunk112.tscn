@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=90 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -68,6 +68,7 @@
 [ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=66]
 [ext_resource path="res://entities/env/plants/cactus_round_flower.tscn" type="PackedScene" id=67]
 [ext_resource path="res://entities/env/plants/cactus_round.tscn" type="PackedScene" id=68]
+[ext_resource path="res://areas/chunks/_lightmaps/chunk112.lmbake" type="BakedLightmapData" id=69]
 
 [sub_resource type="ConvexPolygonShape" id=227]
 points = PoolVector3Array( -5.46454, -0.111179, -0.6754, -1.88392, -0.947531, -0.6754, -5.46454, -0.111179, 0.477956, -5.46454, 7.95494, -0.6754, 1.88285, -0.947531, -0.6754, -1.88392, -0.947531, 0.478069, -5.46454, 7.95494, 0.477956, -1.88392, 10.2338, -0.6754, 1.88285, -0.947531, 0.478069, 5.46347, -0.111179, -0.6754, -1.88392, 10.2338, 0.478069, -0.00106907, 10.693, -0.6754, 5.46347, -0.111179, 0.477956, 1.88285, 10.2338, 0.478069, 5.46347, 7.95494, -0.6754, -0.00106907, 10.693, 0.478069, 1.88285, 10.2338, -0.6754, 5.46347, 7.95494, 0.477956 )
@@ -465,12 +466,16 @@ _data = {
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
-lighting_preview = true
 
 [node name="BakedLightmap" type="BakedLightmap" parent="." index="0"]
 transform = Transform( 0.895626, 0, 0.444808, 0, 1, 0, -0.444808, 0, 0.895626, 188.1, -208.623, -36.309 )
+visible = false
 extents = Vector3( 99.4281, 45.235, 80.6349 )
+quality = 0
+bounces = 1
 environment_mode = 1
+capture_quality = 0
+light_data = ExtResource( 69 )
 
 [node name="wall" parent="." index="1"]
 material_override = ExtResource( 5 )
