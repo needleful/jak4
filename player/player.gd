@@ -148,7 +148,7 @@ const ARMOR_BAR_DEFAULT_SIZE := 96.0
 const DEFAULT_MAX_STAMINA := 40.0
 const STAMINA_UP_BOOST := 0.25
 var max_stamina := DEFAULT_MAX_STAMINA
-var stamina_recover := 8.0
+var stamina_recover := 16.0
 var stamina := max_stamina
 
 const EXTRA_STAMINA_BOOST := 10.0
@@ -759,7 +759,7 @@ func _physics_process(delta):
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
 			ground_normal = best_normal
-			accel(delta, desired_velocity*SPEED_RUN)
+			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
