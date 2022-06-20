@@ -13,6 +13,8 @@ func _ready():
 			add_child(m)
 			m.name = "__autogen_preview"
 			m.mesh = world_node.get_node(name).mesh
+			m.generate_lightmap = false
+			m.use_in_baked_light = true
 			m.transform = Transform()
 		else:
 			print_debug("No chunk of name ", name)
@@ -37,6 +39,8 @@ func _ready():
 					var m = MeshInstance.new()
 					add_child(m)
 					m.mesh = neighbor.mesh
+					m.generate_lightmap = false
+					m.use_in_baked_light = true
 					m.transform.origin = Vector3(500*n.x, 0, -500*n.y)
 					
 			# Lighting and stuff

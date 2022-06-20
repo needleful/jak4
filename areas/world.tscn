@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -51,6 +51,9 @@ extents = Vector3( 14, 350, 3174 )
 
 [sub_resource type="BoxShape" id=6]
 extents = Vector3( 95, 299, 803 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 3750, 2000, 100 )
 
 [node name="world" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
@@ -606,5 +609,29 @@ projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
+
+[node name="StaticBody" type="StaticBody" parent="." index="208"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
+shape = SubResource( 7 )
+
+[node name="StaticBody2" type="StaticBody" parent="." index="209"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
+shape = SubResource( 7 )
+
+[node name="StaticBody3" type="StaticBody" parent="." index="210"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
+shape = SubResource( 7 )
+
+[node name="StaticBody4" type="StaticBody" parent="." index="211"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
+shape = SubResource( 7 )
 
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]
