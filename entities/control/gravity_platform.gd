@@ -1,6 +1,6 @@
 extends KinematicBody
 
-export(float) var initial_velocity = 10
+export(float) var initial_velocity = 10.0
 export(float) var damage_speed := 0.1
 export(float) var damage_on_hit := 10.0
 export(Vector3) var max_rotation_speed := Vector3(0.3, 0.3, 0.3)

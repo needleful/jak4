@@ -1137,6 +1137,8 @@ func should_hover() -> bool:
 	return Input.is_action_just_pressed("hover_toggle") and Global.count("hover_scooter")
 
 func can_ledge_grab() -> bool:
+	if crouch_head.get_overlapping_bodies().size() > 0:
+		return false
 	if ledgeCastCeiling.is_colliding():
 		return false
 	

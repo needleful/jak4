@@ -4,11 +4,11 @@ export(int) var required_power := 1
 # Only for triggering doors through events persistently
 export(String) var tracked_stat = ""
 export(bool) var generate_stat = false
+export(bool) var open := false
 
 var open_stat := ""
 
 var power := 0
-var open := false
 
 func _ready():
 	if generate_stat:
@@ -18,6 +18,9 @@ func _ready():
 		var stat_power = Global.stat(tracked_stat)
 		add_power(stat_power)
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
+	if open:
+		open = false
+		add_power(required_power)
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:
