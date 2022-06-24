@@ -171,7 +171,7 @@ func mark_active(chunk: Spatial):
 		if scn:
 			var node: Node = scn.instance()
 			node.name = "dynamic_content"
-			chunk.add_child(node)
+			chunk.call_deferred("add_child", node)
 		else:
 			print_debug("Loading %s failed!!" % chunk.name)
 		if chunk.has_node("lowres"):
