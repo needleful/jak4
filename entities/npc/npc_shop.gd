@@ -1,20 +1,13 @@
 extends NPC
 class_name NPC_Shop
 
-export(String, FILE, "*.json") var inventory: String
-
-var inventory_data: Dictionary
+export(Resource) var inventory_data
 
 func _init():
 	visual_name = "Shop Keeper"
 
 func _ready():
-	if inventory != "":
-		var file := File.new()
-		var _x = file.open(inventory, File.READ)
-		var text = file.get_as_text()
-		file.close()
-		inventory_data = JSON.parse(text).result
+	if inventory_data:
 		if "persistent" in inventory_data:
 			for pitem in inventory_data.persistent:
 				pitem["C"] -= Global.stat(item_bought_stat(pitem["I"]))

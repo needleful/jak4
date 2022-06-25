@@ -1,5 +1,6 @@
 shader_type spatial;
-render_mode cull_back, depth_draw_opaque, world_vertex_coords;
+render_mode cull_back, depth_draw_opaque, world_vertex_coords, async_hidden;
+
 
 uniform sampler2D wall: hint_albedo;
 uniform sampler2D ground: hint_albedo;

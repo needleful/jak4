@@ -36,6 +36,15 @@ func get_save_extension():
 func get_resource_type():
 	return "Resource"
 
+func get_preset_count():
+	return 1
+
+func get_preset_name(_preset):
+	return "NP Dialog"
+
+func get_import_options(preset):
+	return []
+
 func import(src_path: String, 
 	dest_path: String,
 	options: Dictionary, 
@@ -214,12 +223,3 @@ func extract_speaker(line: String) -> Dictionary:
 		dict.speaker = m.get_string(1)
 		dict.line = line.replace(m.get_string(), "")
 	return dict
-
-func get_preset_count():
-	return 1
-
-func get_preset_name(_preset):
-	return "NP Dialog"
-
-func get_import_options(preset):
-	return []

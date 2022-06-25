@@ -1,6 +1,6 @@
 extends Spatial
 
-export(bool) var active := true
+export(bool) var active := true setget set_active
 export(float, 0.0, 1.0, 0.01) var move_scale := 1.0
 
 onready var turbine := $generator/gen_motor
@@ -29,6 +29,10 @@ var time := 0.0
 
 onready var accel_turn := rand_range(TURN_MIN, TURN_MAX)
 onready var accel_spin := rand_range(SPIN_MIN, SPIN_MAX)
+
+func set_active(a):
+	active = a
+	set_process(active)
 
 func _process(delta):
 	# Get random wind direction

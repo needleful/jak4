@@ -1,3 +1,4 @@
+tool
 extends Spatial
 
 export(bool) var light_enabled := true setget set_enabled
@@ -17,7 +18,12 @@ func set_enabled(e):
 			if c is Light:
 				c.visible = light_enabled
 		# TODO: material swapping
-		if light_enabled:
-			mesh.set_surface_material(1, light_material)
+		if dark_material:
+			if light_enabled:
+				mesh.set_surface_material(1, light_material)
+			else:
+				mesh.set_surface_material(1, dark_material)
 		else:
-			mesh.set_surface_material(1, dark_material)
+			var m := mesh.get_surface_material(1) as SpatialMaterial
+			if m:
+				m.emission_enabled = float(light_enabled)

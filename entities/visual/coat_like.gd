@@ -1,8 +1,8 @@
 extends Node
 
-export(NodePath) var path
+export(NodePath) var mesh_path = NodePath("..")
 
-onready var node: GeometryInstance = get_node(path)
+onready var node: GeometryInstance = get_node(mesh_path)
 
 export(bool) var double_sided := false
 export(bool) var persistent := true

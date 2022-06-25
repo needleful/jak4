@@ -8,7 +8,7 @@ var using_gamepad := false
 
 var game_state := GameState.new()
 
-var coat_textures: Array
+export(Array, Texture) var coat_textures: Array
 
 const save_path := "user://autosave.tres"
 var valid_game_state := false
@@ -51,19 +51,6 @@ func _input(event):
 
 func _ready():
 	randomize()
-	var coat_dir := Directory.new()
-	if coat_dir.open("res://material/coat/") == OK:
-		var _x = coat_dir.list_dir_begin()
-		var file_name = coat_dir.get_next()
-		while file_name != "":
-			if !coat_dir.current_is_dir() and !file_name.ends_with("import"):
-				var texture = load("res://material/coat/" + file_name) as Texture
-				if texture:
-					coat_textures.append(texture)
-			file_name = coat_dir.get_next()
-	else:
-		print_debug("Could not open coat directory!")
-	
 	call_deferred("place_flags")
 
 func place_flags():

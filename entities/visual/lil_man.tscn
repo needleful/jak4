@@ -1,10 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://entities/visual/lil_man.gd" type="Script" id=1]
 [ext_resource path="res://_glb/lil_man.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=3]
+[ext_resource path="res://material/characters/tex_lil_man.png" type="Texture" id=4]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 3 )
+shader_param/subsurface_scattering = 0.042
+shader_param/softness = 0.375
+shader_param/specularity = 2.875
+shader_param/main_texture = ExtResource( 4 )
 
 [node name="lil_man" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+
+[node name="body" parent="Armature/Skeleton" index="0"]
+material/0 = SubResource( 1 )
 
 [node name="attach_hat" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
 transform = Transform( 1, 1.42109e-14, 2.38419e-07, -8.20108e-14, 1, 3.05474e-07, -2.38419e-07, -3.50177e-07, 1, -4.45684e-15, 0.677164, -0.0331869 )

@@ -74,6 +74,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://player/player.gd"
 }, {
+"base": "Resource",
+"class": "ShopInventory",
+"language": "GDScript",
+"path": "res://addons/shop_inventory/inventory.gd"
+}, {
+"base": "EditorImportPlugin",
+"class": "ShopInventoryImportPlugin",
+"language": "GDScript",
+"path": "res://addons/shop_inventory/import.gd"
+}, {
 "base": "Spatial",
 "class": "WaveShot",
 "language": "GDScript",
@@ -93,6 +103,8 @@ _global_script_class_icons={
 "NPC_Shop": "",
 "NPDialogImportPlugin": "",
 "PlayerBody": "",
+"ShopInventory": "",
+"ShopInventoryImportPlugin": "",
 "WaveShot": ""
 }
 
@@ -104,13 +116,13 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://management/global.gd"
 Music="*res://management/music.tscn"
 TimeManagement="*res://management/time_management.tscn"
+Global="*res://management/global.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/np_dialog/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/np_dialog/plugin.cfg", "res://addons/shop_inventory/plugin.cfg" )
 
 [input]
 
@@ -349,6 +361,7 @@ quality/shadow_atlas/quadrant_1_subdiv=1
 quality/shadow_atlas/quadrant_2_subdiv=2
 quality/shadow_atlas/quadrant_3_subdiv=2
 quality/spatial_partitioning/render_tree_balance=1.0
+gles3/shaders/shader_compilation_mode=0
 environment/default_clear_color=Color( 0.956863, 0.905882, 0.768627, 1 )
 quality/filters/msaa=2
 environment/default_environment="res://default_env.tres"

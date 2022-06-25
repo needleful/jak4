@@ -37,14 +37,10 @@ func exit():
 func draw_shop_window():
 	for c in items_window.get_children():
 		c.queue_free()
-	var inventory: Dictionary = keeper.get_inventory()
+	var inventory: ShopInventory = keeper.get_inventory()
 	
-	if "persistent" in inventory:
-		var p: Array = inventory["persistent"]
-		populate_window(p, true)
-	if "temporary" in inventory:
-		var t: Array = inventory["temporary"]
-		populate_window(t, false)
+	populate_window(inventory.persistent, true)
+	populate_window(inventory.temporary, false)
 
 func populate_window(items: Array, persistent: bool):
 	var default_currency := "bug" if persistent else "gem"
