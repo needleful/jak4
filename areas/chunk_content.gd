@@ -45,5 +45,13 @@ func _ready():
 					
 			# Lighting and stuff
 			add_child(world_node.get_node("WorldEnvironment").duplicate())
-			add_child(world_node.get_node("DirectionalLight").duplicate())
+			var light = world_node.get_node("DirectionalLight").duplicate()
+			
+			add_child(light)
+			
+			if has_node("BakedLightmap"):
+				var basis = light.global_transform.basis
+				remove_child(light)
+				$BakedLightmap.add_child(light)
+				light.global_transform.basis = basis
 		world_node.free()

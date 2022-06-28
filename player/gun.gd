@@ -2,8 +2,7 @@ extends Spatial
 class_name Gun
 
 onready var laser := $reference/laser
-onready var laser_geometry := $reference/laser_geometry
-onready var laser_end := $reference/laser/laser_end
+onready var laser_cast := $reference/laser/cast
 onready var base_ref := $base_reference
 onready var ref := $reference
 onready var ik_target := $gun_ik/target
@@ -191,7 +190,7 @@ func _process(delta):
 			
 		holder.aim_gun(aim, aiming)
 	if laser.visible:
-		update_laser()
+		laser_cast.update()
 
 func add_weapon(id):
 	if !(id in weapons):
@@ -213,28 +212,6 @@ func set_current_weapon(weapon: Node):
 	current_weapon = weapon
 	ref.add_child(current_weapon)
 	holder.track_weapon(current_weapon.name)
-
-func update_laser():
-	var l = laser.get_hit_length()
-	if l < laser.spring_length:
-		laser_end.show()
-		var normal = laser.get_hit_normal()
-		var y = laser_end.global_transform.basis.y
-		var m_axis = y.cross(normal).normalized()
-		if m_axis.is_normalized():
-			var m_angle = y.angle_to(normal)
-			laser_end.global_rotate(m_axis, m_angle)
-	else:
-		laser_end.hide()
-	laser_geometry.clear()
-	laser_geometry.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
-	laser_geometry.add_vertex(Vector3(0.012, 0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(0.01, 0.01, l))
-	laser_geometry.add_vertex(Vector3(0.012, -0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(0.01, -0.01, l))
-	laser_geometry.add_vertex(Vector3(-0.012, 0.01, 0.0))
-	laser_geometry.add_vertex(Vector3(-0.01, 0.01, l))
-	laser_geometry.end()
 
 func fire():
 	if state == State.Hidden:
@@ -313,7 +290,6 @@ func set_state(new_state, force := false):
 	set_process(true)
 	set_process_input(true)
 	laser.visible = true
-	laser_geometry.visible = true
 	match new_state:
 		State.NoWeapon:
 			set_process(false)
@@ -346,7 +322,6 @@ func set_state(new_state, force := false):
 		State.Locked:
 			visible = true
 			laser.visible = false
-			laser_geometry.visible = false
 			gun_ik.interpolation = 0
 			holder.blend_gun(0.0)
 			holder.hold_gun(1.0)
@@ -364,7 +339,6 @@ func set_state(new_state, force := false):
 				gun_ik.interpolation = 0.2
 				gun_ik.start()
 				laser.visible = false
-				laser_geometry.visible = false
 				visible = true
 				holder.hold_gun(1.0)
 				if "recoil" in current_weapon:

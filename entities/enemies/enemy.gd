@@ -31,7 +31,8 @@ enum AI {
 	Attacking,
 	Damaged,
 	GravityStun,
-	Dead
+	Dead,
+	Flee
 }
 var ai = AI.Idle
 
