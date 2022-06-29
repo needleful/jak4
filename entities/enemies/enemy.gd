@@ -89,10 +89,12 @@ func process_player_distance(pos: Vector3) -> float:
 		set_active(in_range and ai != AI.Dead)
 	return lensq
 
-func damage_direction(hitbox: Area, dir: Vector3):
+func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
+	if damage <= 0:
+		damage = attack_damage
 	for c in hitbox.get_overlapping_bodies():
 		if !(c in damaged) and c.has_method("take_damage"):
-			c.take_damage(attack_damage, dir)
+			c.take_damage(damage, dir)
 		damaged.append(c)
 
 func look_at_target(turn_amount: float):

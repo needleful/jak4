@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -6,7 +6,21 @@
 [ext_resource path="res://entities/control/dswitch.tscn" type="PackedScene" id=4]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/enemies/gunner.tscn" type="PackedScene" id=7]
 [ext_resource path="res://material/env/copper_corroded1.png" type="Texture" id=8]
+[ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/ancient/arena1.tscn" type="PackedScene" id=11]
+[ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=12]
+[ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=14]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=15]
+[ext_resource path="res://player/weapons/time_gun.tscn" type="PackedScene" id=16]
+[ext_resource path="res://player/weapons/pistol.tscn" type="PackedScene" id=17]
+[ext_resource path="res://items/ammo/grav_gun_pickup.tscn" type="PackedScene" id=18]
+[ext_resource path="res://player/weapons/wave_shot.tscn" type="PackedScene" id=19]
+[ext_resource path="res://items/ammo/wave_shot_pickup.tscn" type="PackedScene" id=20]
+[ext_resource path="res://player/weapons/grav_gun.tscn" type="PackedScene" id=21]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -301,3 +315,127 @@ material/0 = SubResource( 13 )
 
 [node name="shape_" type="CollisionShape" parent="KinematicBody2/rail2-kine" index="1"]
 shape = SubResource( 16 )
+
+[node name="arena1" parent="." index="19" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 90, -24, 15 )
+
+[node name="deathgnat" parent="arena1" index="0" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 44, -40 )
+
+[node name="scrap1" parent="arena1" index="1" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 15, -29 )
+
+[node name="scrap_pile1" parent="arena1" index="2" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 11, 23 )
+
+[node name="CSGBox" type="CSGBox" parent="arena1" index="4"]
+use_collision = true
+width = 116.0
+height = 14.0
+depth = 94.0
+
+[node name="scrap_pile2" parent="arena1" index="5" instance=ExtResource( 13 )]
+transform = Transform( 0.960571, 0, -0.278035, 0.147934, 0.846701, 0.511089, 0.235413, -0.532068, 0.813317, -16.8618, 36.8258, 40.2238 )
+
+[node name="gunner" parent="arena1" index="6" instance=ExtResource( 7 )]
+transform = Transform( -0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -22.5921, 40, 12.1872 )
+
+[node name="gunner2" parent="arena1" index="7" instance=ExtResource( 7 )]
+transform = Transform( -0.864978, 0, 0.50181, 0, 1, 0, -0.50181, 0, -0.864978, 3.44374, 22.3973, 26.2351 )
+
+[node name="gunner3" parent="arena1" index="8" instance=ExtResource( 7 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 27, 22.4041, 6 )
+
+[node name="crawly" parent="arena1" index="9" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 7.50998, 3 )
+
+[node name="crawly2" parent="arena1" index="10" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 11.51, 25 )
+
+[node name="crawly3" parent="arena1" index="11" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 22.51, -5 )
+
+[node name="crawly4" parent="arena1" index="12" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 11.51, -24 )
+
+[node name="item_pickup" parent="." index="20" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.17735, 0, -9.45586 )
+item_id = "wep_pistol"
+preview = ExtResource( 17 )
+
+[node name="item_pickup2" parent="." index="21" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.16675, 0, -8.27191 )
+item_id = "wep_wave_shot"
+preview = ExtResource( 19 )
+
+[node name="item_pickup3" parent="." index="22" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09227, 0, -7.19897 )
+item_id = "wep_grav_gun"
+preview = ExtResource( 21 )
+
+[node name="item_pickup4" parent="." index="23" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.03253, 4.76837e-07, -6.32855 )
+item_id = "wep_time_gun"
+preview = ExtResource( 16 )
+
+[node name="pistol_pickup4" parent="." index="24" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.83621, 0, -9.44693 )
+
+[node name="pistol_pickup5" parent="." index="25" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4505, 0, -9.48639 )
+
+[node name="pistol_pickup6" parent="." index="26" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0939, 0, -9.51001 )
+
+[node name="wave_shot_pickup" parent="." index="27" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.88364, 0, -8.23728 )
+
+[node name="wave_shot_pickup2" parent="." index="28" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3816, 0, -8.19347 )
+
+[node name="wave_shot_pickup3" parent="." index="29" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9663, -4.76837e-07, -8.18305 )
+
+[node name="grav_gun_pickup" parent="." index="30" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.72278, 4.76837e-07, -7.14934 )
+
+[node name="grav_gun_pickup2" parent="." index="31" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3146, 0, -7.09462 )
+
+[node name="grav_gun_pickup3" parent="." index="32" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0018, 0, -7.00371 )
+
+[node name="gunner" parent="." index="33" instance=ExtResource( 7 )]
+transform = Transform( -0.86607, 0, 0.499923, 0, 1, 0, -0.499923, 0, -0.86607, -18.9218, 0, 17.5531 )
+
+[node name="gunner2" parent="." index="34" instance=ExtResource( 7 )]
+transform = Transform( -0.895259, 0, -0.445546, 0, 1, 0, 0.445546, 0, -0.895259, -5.78657, 0, 17.7847 )
+aim_speed = 1.0
+aim_speed_windup = 0.5
+laser_color = Color( 0.2, 3, 0.3, 1 )
+
+[node name="CSGBox8" type="CSGBox" parent="." index="35"]
+transform = Transform( 0.702862, 0, 0.711326, 0, 1, 0, -0.711326, 0, 0.702862, -27.5449, -1.23398, 27.474 )
+use_collision = true
+width = 24.6837
+height = 17.4874
+depth = 36.528
+material = SubResource( 1 )
+
+[node name="CSGBox9" type="CSGBox" parent="CSGBox8" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.50338, 0 )
+operation = 2
+use_collision = true
+width = 24.6837
+height = 8.48342
+depth = 4.10833
+material = SubResource( 1 )
+
+[node name="CSGBox10" type="CSGBox" parent="CSGBox8" index="1"]
+transform = Transform( -0.294748, 0, -0.955575, 0, 1, 0, 0.955575, 0, -0.294748, 0, 3.83137, 0 )
+operation = 2
+use_collision = true
+width = 24.6837
+height = 2.91036
+depth = 8.00467
+material = SubResource( 1 )
