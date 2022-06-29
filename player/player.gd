@@ -769,7 +769,7 @@ func _physics_process(delta):
 		State.Uppercut:
 			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
-			damage_directed(uppercut_hitbox, DAMAGE_UPPERCUT, Vector3.UP)
+			damage_point(uppercut_hitbox, DAMAGE_UPPERCUT, global_transform.origin)
 		State.DiveWindup:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_DIVE_WINDUP)
 		State.DiveStart:

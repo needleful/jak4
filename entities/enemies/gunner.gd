@@ -1,3 +1,4 @@
+tool
 extends KinematicEnemy
 
 export(float) var bounce_damage := 5.0
@@ -22,6 +23,8 @@ const BOUNCE_TIME_TO_HITBOX := 0.1
 const BOUNCE_MIN_TIME := 0.25
 const BOUNCE_TURN_SPEED := 5.0
 const DEFAULT_DISTANCE := 20.0
+
+const GRAV_STUN_TURN_SPEED := 1.0
 
 var shot_timer := 0.0
 var state_timer := 0.0
@@ -109,6 +112,11 @@ func _physics_process(delta):
 						bounce_timer = 0
 					if bounce_timer > BOUNCE_TIME_TO_HITBOX:
 						damage_direction(clawHitbox, -dir, bounce_damage)
+		AI.GravityStun:
+			look_at_target(GRAV_STUN_TURN_SPEED*delta)
+			stunned_move(delta)
+			if state_timer > Global.gravity_stun_time:
+				set_state(AI.Alerted)
 		AI.Dead:
 			fall_down(delta)
 	aim_cast.update()
@@ -124,6 +132,27 @@ func aim(delta: float, speed: float):
 				if axis.is_normalized():
 					var rot := sign(angle)*min(abs(angle), speed*delta)
 					laser.global_rotate(axis, rot)
+
+func get_shield():
+	if is_inside_tree():
+		return $debug_shield
+	else:
+		return null
+
+func get_target_ref():
+	return $target.global_transform.origin
+
+func fire():
+	damaged = []
+	var c = aim_cast.get_hit_collider()
+	if c and c.has_method("take_damage"):
+		c.take_damage(attack_damage, laser.global_transform.basis.z)
+		var particles := $impact/Particles
+		particles.emitting = false
+		particles.global_transform.origin = (
+			aim_cast.global_transform.origin 
+			+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
+		particles.emitting = true
 
 func set_state(new_ai):
 	state_timer = 0.0
@@ -148,18 +177,8 @@ func set_state(new_ai):
 			laser.hide()
 		AI.Dead:
 			laser.hide()
-
-func get_target_ref():
-	return $target.global_transform.origin
-
-func fire():
-	damaged = []
-	var c = aim_cast.get_hit_collider()
-	if c and c.has_method("take_damage"):
-		c.take_damage(attack_damage, laser.global_transform.basis.z)
-		var particles := $impact/Particles
-		particles.emitting = false
-		particles.global_transform.origin = (
-			aim_cast.global_transform.origin 
-			+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
-		particles.emitting = true
+		AI.Damaged:
+			if grounded:
+				velocity.y = move_dir.y
+			else:
+				velocity = move_dir

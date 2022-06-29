@@ -1,3 +1,4 @@
+tool
 extends KinematicEnemy
 class_name DeathGnat
 
@@ -112,6 +113,13 @@ func fly(delta: float):
 func play_damage_sfx():
 	# TODO
 	pass
+
+
+func get_shield():
+	if is_inside_tree():
+		return $debug_shield
+	else:
+		return null
 
 func set_state(new_state):
 	if ai == new_state:

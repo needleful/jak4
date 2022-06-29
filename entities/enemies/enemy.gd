@@ -1,3 +1,4 @@
+tool
 extends KinematicBody
 class_name KinematicEnemy
 
@@ -22,6 +23,7 @@ export(int) var health = 15
 export(int) var attack_damage = 10
 export(float) var damaged_speed = 0.5
 export(float) var square_distance_activation := 2400.0
+export(bool) var shielded := false setget set_shielded
 
 enum AI {
 	Idle,
@@ -36,6 +38,7 @@ enum AI {
 }
 var ai = AI.Idle
 
+
 const GRAVITY := Vector3.DOWN*24
 
 var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
@@ -49,6 +52,8 @@ var damaged:= []
 var in_range := false
 var coat: Coat = null
 var can_fly := false
+
+var min_dot_shielded_damage := -0.5
 
 # Ammo drop logic
 const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
@@ -69,6 +74,9 @@ const COUNTS := {
 }
 
 func _ready():
+	if Engine.editor_hint:
+		set_process(false)
+		set_physics_process(false)
 	set_state(ai)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
@@ -77,6 +85,7 @@ func _ready():
 		return
 	if drops_coat:
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)
+	set_shielded(shielded)
 
 func set_active(_active: bool):
 	pass
@@ -164,6 +173,11 @@ func drop_item(item: ItemPickup):
 func take_damage(damage: int, dir: Vector3):
 	if ai == AI.Dead:
 		return
+	if shielded:
+		var d := dir.dot(global_transform.basis.z)
+		if d < min_dot_shielded_damage:
+			# TODO: play shielded effect
+			return
 	health -= damage
 	move_dir = damage*dir*damaged_speed
 	if health <= 0:
@@ -229,3 +243,11 @@ func gravity_stun(dam):
 
 func is_dead():
 	return ai == AI.Dead
+
+func get_shield() -> Node:
+	return null
+
+func set_shielded(val):
+	shielded = val
+	if get_shield():
+		get_shield().visible = shielded

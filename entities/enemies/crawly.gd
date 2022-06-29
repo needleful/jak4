@@ -1,3 +1,4 @@
+tool
 extends KinematicEnemy
 
 export(float) var run_speed = 7.5
@@ -118,6 +119,12 @@ func set_active(active: bool):
 func play_damage_sfx():
 	sound.stream = damage_audio
 	sound.play()
+
+func get_shield():
+	if is_inside_tree():
+		return $debug_shield
+	else:
+		return null
 
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
