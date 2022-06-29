@@ -39,6 +39,9 @@ onready var awareness := $awareness
 onready var groundArea := $ground_area
 onready var clawHitbox := $claw_hitbox
 
+func _ready():
+	aim_cast.add_excluded_object(self.get_rid())
+
 func _physics_process(delta):
 	state_timer += delta
 	var dist: Vector3
@@ -179,6 +182,6 @@ func set_state(new_ai):
 			laser.hide()
 		AI.Damaged:
 			if grounded:
-				velocity.y = move_dir.y
+				velocity.y += move_dir.y
 			else:
-				velocity = move_dir
+				velocity += move_dir
