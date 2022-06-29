@@ -202,14 +202,14 @@ func walk(delta: float, speed: float, slide := false):
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	
-	velocity = move_and_slide(velocity + GRAVITY*delta)
+	velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
 	
 	if slide:
 		velocity.y = min(0, velocity.y)
 
 func stunned_move(delta: float):
 	velocity *= clamp(1.0 - delta, 0.1, 0.995)
-	velocity = move_and_slide(velocity + Vector3.UP*delta*Global.gravity_stun_velocity)
+	velocity = move_and_slide(velocity + Vector3.UP*delta*Global.gravity_stun_velocity, Vector3.UP)
 
 func fall_down(delta: float):
 	var best_normal = Vector3.ZERO
@@ -224,7 +224,7 @@ func fall_down(delta: float):
 	velocity.x = move_dir.x
 	velocity.z = move_dir.z
 	move_dir *= 0.9
-	velocity = move_and_slide(velocity + gravity*delta)
+	velocity = move_and_slide(velocity + gravity*delta, Vector3.UP)
 
 # Implemented by subclasses
 func set_state(_ai: int):

@@ -12,7 +12,7 @@ export(bool) var gravity = false
 export(String) var friendly_name = ""
 export(bool) var from_kill := false
 
-const sq_distance_visible := 30000
+const sq_distance_visible := 100*100
 
 var gravity_stun_time := 0.0
 var fall_velocity := 0.0
@@ -66,7 +66,7 @@ func process_player_distance(origin: Vector3):
 	if visible != vis:
 		visible = vis
 		if has_node("AnimationPlayer"):
-			if visible:
+			if vis:
 				$AnimationPlayer.play()
 			else:
 				$AnimationPlayer.stop(false)
