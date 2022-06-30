@@ -38,6 +38,8 @@ onready var aim_cast := $laser/aim_cast
 onready var awareness := $awareness
 onready var groundArea := $ground_area
 onready var clawHitbox := $claw_hitbox
+onready var anim:AnimationNodeStateMachinePlayback = $AnimationTree["parameters/StateMachine/playback"]
+onready var anim_tree := $AnimationTree
 
 func _ready():
 	aim_cast.add_excluded_object(self.get_rid())
@@ -53,9 +55,9 @@ func _physics_process(delta):
 			var bodies = awareness.get_overlapping_bodies()
 			if bodies.size() != 0:
 				target = bodies[0]
-				set_state(AI.Alerted)
+				set_state(AI.Chasing)
 			fall_down(delta)
-		AI.Alerted:
+		AI.Chasing:
 			shot_timer += delta
 			if !target:
 				set_state(AI.Idle)
@@ -70,7 +72,8 @@ func _physics_process(delta):
 				elif shot_timer >= time_to_shoot:
 					set_state(AI.Windup)
 				elif dist.length_squared() < flee_radius*flee_radius:
-					set_state(AI.Flee)
+					if !shielded or dist.normalized().dot(global_transform.basis.z) < min_dot_shielded_damage + 0.5:
+						set_state(AI.Flee)
 			var f := DEFAULT_DISTANCE/(1 + dist.length())
 			aim(delta, f*aim_speed)
 			fall_down(delta)
@@ -82,25 +85,30 @@ func _physics_process(delta):
 			fall_down(delta)
 		AI.Attacking:
 			if state_timer > TIME_ATTACK:
-				set_state(AI.Alerted)
+				set_state(AI.Chasing)
 			fall_down(delta)
 		AI.Damaged:
 			if state_timer > TIME_DAMAGED:
-				set_state(AI.Alerted)
+				set_state(AI.Chasing)
 			fall_down(delta)
 		AI.Flee:
 			if !target:
 				set_state(AI.Idle)
 			else:
 				bounce_timer += delta
-				if grounded and dist.length_squared() > safe_radius*safe_radius:
-					set_state(AI.Alerted)
-				
 				dist.y = 0
 				var dir := -dist.normalized()
 				if grounded:
+					if (dist.length_squared() > safe_radius*safe_radius
+						and dist.normalized().dot(global_transform.basis.z) > 0.2
+					):
+						set_state(AI.Chasing)
+
 					fall_down(delta)
+
 					if bounce_timer > BOUNCE_WINDUP_TIME:
+						if ai != AI.Flee:
+							dir = Vector3.ZERO
 						velocity = Vector3.UP*bounce_velocity + dir*move_speed
 						grounded = false
 						bounce_timer = 0
@@ -110,6 +118,7 @@ func _physics_process(delta):
 				else:
 					look_at_target(BOUNCE_TURN_SPEED*delta)
 					velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
+					anim.travel("Flee_Windup")
 					if bounce_timer > BOUNCE_MIN_TIME and is_on_floor():
 						grounded = true
 						bounce_timer = 0
@@ -119,7 +128,7 @@ func _physics_process(delta):
 			look_at_target(GRAV_STUN_TURN_SPEED*delta)
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
-				set_state(AI.Alerted)
+				set_state(AI.Chasing)
 		AI.Dead:
 			fall_down(delta)
 	aim_cast.update()
@@ -128,6 +137,8 @@ func aim(delta: float, speed: float):
 	if target:
 		var aim_dir: Vector3 = (target.global_transform.origin + 0.75*Vector3.UP - laser.global_transform.origin).normalized()
 		if aim_dir.is_normalized():
+			if aim_dir.dot(global_transform.basis.z) < 0:
+				set_state(AI.Flee)
 			var f:Vector3 = laser.global_transform.basis.z
 			var angle :float = f.angle_to(aim_dir)
 			if abs(angle) > 0.0:
@@ -135,6 +146,9 @@ func aim(delta: float, speed: float):
 				if axis.is_normalized():
 					var rot := sign(angle)*min(abs(angle), speed*delta)
 					laser.global_rotate(axis, rot)
+		var aim_up :float = laser.global_transform.basis.z.dot(global_transform.basis.y)
+		var aim_right :float = laser.global_transform.basis.z.dot(-global_transform.basis.x)
+		anim_tree["parameters/StateMachine/Aim/blend_position"] = Vector2(aim_right, aim_up)
 
 func get_shield():
 	if is_inside_tree():
@@ -158,6 +172,7 @@ func fire():
 		particles.emitting = true
 
 func set_state(new_ai):
+	grounded = true
 	state_timer = 0.0
 	ai = new_ai
 	if !laser:
@@ -166,8 +181,10 @@ func set_state(new_ai):
 	var mat_laser: SpatialMaterial = laser.material_override
 	match ai:
 		AI.Idle:
+			anim.travel("Idle")
 			laser.hide()
-		AI.Alerted:
+		AI.Chasing:
+			anim.travel("Aim")
 			mat_laser.albedo_color = laser_color
 			laser.show()
 		AI.Windup:
@@ -177,11 +194,16 @@ func set_state(new_ai):
 			shot_timer = 0.0
 			fire()
 		AI.Flee:
+			anim.travel("Flee_Windup")
 			laser.hide()
 		AI.Dead:
+			anim.travel("Death")
 			laser.hide()
 		AI.Damaged:
+			anim.travel("Damaged")
 			if grounded:
 				velocity.y += move_dir.y
 			else:
 				velocity += move_dir
+		AI.GravityStun:
+			anim.travel("GravityStun")
