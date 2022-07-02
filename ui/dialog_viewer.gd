@@ -321,6 +321,12 @@ func resume():
 func get_talked_stat():
 	return "talked" + speaker_stat()
 
+func ui_settings_apply():
+	if player_font is DynamicFont:
+		player_font.size = get_theme_default_font().size
+	if narration_font is DynamicFont:
+		narration_font.size = get_theme_default_font().size
+
 ## Dialog functions
 
 func exiting():

@@ -236,6 +236,7 @@ enum State {
 var state: int = State.Fall
 var ground_normal:Vector3 = Vector3.UP
 var best_floor_dot: float
+var best_floor : Node
 
 var current_coat: Coat
 
@@ -380,6 +381,7 @@ func _physics_process(delta):
 	
 	best_floor_dot = -1.0
 	var best_normal := Vector3.ZERO
+	best_floor = null
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
 		var normal := col.normal
@@ -387,6 +389,7 @@ func _physics_process(delta):
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
+			best_floor = col.collider as Node
 	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
@@ -908,10 +911,6 @@ func update_stamina():
 	stamina_bar.value = stamina
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
-	var hvel := velocity
-	hvel.y = 0
-	var hdir := hvel.normalized()
-	
 	$ui/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,
 		desired_velocity.y,
@@ -919,8 +918,15 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 	]
 	var gravity = GRAVITY*Engine.time_scale
 	if ground_normal != Vector3.ZERO:
-		gravity = gravity.project(ground_normal.normalized())
-
+		var axis = Vector3.UP.cross(ground_normal).normalized()
+		var angle = Vector3.UP.angle_to(ground_normal)
+		if axis.is_normalized():
+			desired_velocity = desired_velocity.rotated(axis, angle)
+		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
+	
+	var hvel := velocity.slide(gravity.normalized())
+	var hdir := hvel.normalized()
+	
 	if hvel.length() > SPEED_WALK and desired_velocity != Vector3.ZERO:
 		var charge_accel = accel_normal
 		# Direction parellel to current (horizontal) velocity
@@ -945,17 +951,10 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 			hvel = hvel.move_toward(desired_velocity, DECEL_AGAINST*decel_factor)
 		else:
 			hvel = hvel.move_toward(desired_velocity, ACCEL_START)
-		velocity.x = hvel.x
-		velocity.z = hvel.z
-		velocity += delta*gravity
-	
-	if ground_normal != Vector3.ZERO:
-		if best_floor_dot > 0 or desired_velocity.length_squared() <= 0.1:
-			velocity = move(velocity, true)
-		else:
-			velocity = move(velocity, true)
-	else:
-		velocity = move(velocity, true)
+			
+		velocity = velocity.project(gravity) + hvel + delta*gravity
+
+	velocity = move(velocity, true)
 
 func accel_climb(delta: float, desired_velocity: Vector3):
 	var gravity := Vector3.ZERO
@@ -989,7 +988,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		(charge - velocity)/SPEED_RUN*charge_accel 
 		+ (steer*ACCEL_CLIMB) 
 		+ gravity )
-	velocity = move(velocity + delta*gravity)
+	velocity = move(velocity)
 
 func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_slide := false, gravity := GRAVITY):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
@@ -1237,9 +1236,9 @@ func damage(node: Node, damage: int, dir: Vector3):
 func move(p_vel: Vector3, grounded:= false) -> Vector3:
 	if grounded:
 		return move_and_slide_with_snap(p_vel,
-			-ground_normal*0.06125,
+			Vector3.DOWN*0.06125,
 			Vector3.UP,
-			false, 4, 0.79, 
+			true, 4, 0.79, 
 			INFINITE_INERTIA)
 	else:
 		return move_and_slide(p_vel, Vector3.UP, false, 4, 0.79, INFINITE_INERTIA)
@@ -1314,6 +1313,10 @@ func total_stamina():
 	return extra_stamina + stamina
 
 func can_place_flag():
+	if !best_floor:
+		return false
+	elif best_floor.is_in_group("dynamic"):
+		return false 
 	return Global.count("flag")
 
 func place_flag():

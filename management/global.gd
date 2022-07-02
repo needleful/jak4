@@ -11,6 +11,7 @@ var game_state := GameState.new()
 export(Array, Texture) var coat_textures: Array
 
 const save_path := "user://autosave.tres"
+const old_save_backup := "user://autosave.backup.tres"
 var valid_game_state := false
 var player_spawned := false
 var can_pause := true
@@ -25,6 +26,8 @@ var color_sublime := Color.coral
 const gravity_stun_time = 10.0
 const gravity_stun_velocity = 0.02
 
+var player : Node
+
 # Items that also have a "stat" value, 
 # measuring the total collected 
 var tracked_items = ["bug", "capacitor"]
@@ -35,9 +38,6 @@ var ammo_drop_pity := randf()
 
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
-
-func _enter_tree():
-	randomize()
 
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
@@ -72,7 +72,7 @@ func remove_flag(transform: Transform):
 		game_state.flags.remove(index)
 
 func get_player() -> Node:
-	return get_tree().current_scene.get_node("player")
+	return $"/root/world/player"
 
 # Game state management
 func mark_map(id:String, note:String):
@@ -191,6 +191,16 @@ func get_rarity_color(rarity: int) -> Color:
 			return Color.white
 
 #Saving and loading
+
+func reset_game():
+	print("New game...")
+	var dir := Directory.new()
+	if ResourceLoader.exists(save_path):
+		print("Backing up save...")
+		# copy as a backup
+		var _x = dir.rename(save_path, old_save_backup)
+	valid_game_state = false
+	var _x = get_tree().reload_current_scene()
 
 func save_checkpoint(pos: Vector3):
 	game_state.checkpoint_position = pos

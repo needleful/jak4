@@ -7,6 +7,10 @@ var falling := false
 var velocity := Vector3.ZERO
 var angular_velocity := Vector3.ZERO
 
+func _ready():
+	if !is_in_group("dynamic"):
+		add_to_group("dynamic")
+
 func _physics_process(delta):
 	if !falling:
 		set_physics_process(false)

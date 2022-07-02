@@ -3,6 +3,8 @@ extends Spatial
 export(bool) var active = false setget set_active
 
 func _ready():
+	if !is_in_group("dynamic"):
+		add_to_group("dynamic")
 	set_active(active)
 
 func _on_toggled(val: bool):

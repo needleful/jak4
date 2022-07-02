@@ -42,6 +42,7 @@ var MIN_DIST_SQ_ENEMIES := 2000.0
 
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
+		print("Loading game...")
 		Global.load_sync()
 		
 func _ready():
@@ -83,7 +84,7 @@ func get_or_load(chunk_name: String) -> PackedScene:
 		return chunk_scenes[chunk_name] as PackedScene
 	var content_file: String = PATH_CONTENT % chunk_name
 	if ResourceLoader.exists(content_file):
-		var content = load(content_file) as PackedScene
+		var content = ResourceLoader.load(content_file) as PackedScene
 		if content:
 			chunk_scenes[chunk_name] = content
 		return content

@@ -151,3 +151,12 @@ func _on_display_pressed():
 	$foreground/displayOptions.show()
 	$foreground/displayOptions.grab_focus()
 
+
+func _on_new_game_pressed():
+	$new_game.popup_centered()
+
+func _on_new_game_confirmed():
+	Global.reset_game()
+
+func _on_displayOptions_ui_redraw():
+	get_tree().call_group("ui_settings_custom", "ui_settings_apply")

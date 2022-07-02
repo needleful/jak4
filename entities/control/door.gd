@@ -11,6 +11,8 @@ var open_stat := ""
 var power := 0
 
 func _ready():
+	if !is_in_group("dynamic"):
+		add_to_group("dynamic")
 	if generate_stat:
 		tracked_stat = str(get_path())
 	if tracked_stat != "":
