@@ -1,4 +1,3 @@
-tool
 extends KinematicEnemy
 class_name DeathGnat
 
@@ -39,12 +38,14 @@ func _physics_process(delta):
 	var next_state = ai
 	match ai:
 		AI.Idle:
-			var seen = $awareness.get_overlapping_bodies()
-			if seen.size() > 0:
-				target = seen[0]
-				next_state = AI.Chasing
+			for b in $awareness.get_overlapping_bodies():
+				if b.is_in_group("player"):
+					target = b
+					next_state = AI.Chasing
 		AI.Chasing:
-			if $awareness.get_overlapping_bodies().size() == 0:
+			if !target or target.is_dead():
+				next_state = AI.Idle
+			elif $awareness.get_overlapping_bodies().size() == 0:
 				quit_timer += delta
 				if quit_timer > time_to_quit:
 					print("I Quit!")
@@ -83,7 +84,8 @@ func _physics_process(delta):
 
 func fire_orb():
 	var orb = projectile.instance()
-	get_parent().add_child(orb)
+	get_tree().current_scene.add_child(orb)
+	orb.source = self
 	orb.damage = attack_damage
 	orb.speed = orb_speed
 	orb.turn_speed = orb_seeking
@@ -135,6 +137,8 @@ func set_state(new_state):
 			$AnimationPlayer.stop()
 			collision_layer = 0
 		AI.Damaged:
+			if last_attacker:
+				target = last_attacker
 			$AnimationPlayer.stop()
 			velocity = move_dir
 			velocity.y = min(velocity.y, 10)

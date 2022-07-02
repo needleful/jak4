@@ -1,4 +1,3 @@
-tool
 extends KinematicEnemy
 
 export(float) var run_speed = 7.5
@@ -13,25 +12,26 @@ export(AudioStream) var damage_audio
 export(AudioStream) var quit_audio
 export(AudioStream) var attack_audio
 
-onready var anim := $crawly/AnimationPlayer
+const MIN_DOT_GROUND := 0.7
+const MIN_DOT_UP := 0.01
 
-var WINDUP_TIME := .5
-var ATTACK_TIME := 0.75
-var ALERT_TIME := 2.0
-var DAMAGED_TIME := 1.0
-var COOLDOWN_TIME := 2.0
-var EXTRA_CHASE_TIME := 10.0
+const WINDUP_TIME := .5
+const ATTACK_TIME := 0.75
+const ALERT_TIME := 2.0
+const DAMAGED_TIME := 1.0
+const COOLDOWN_TIME := 2.0
+const EXTRA_CHASE_TIME := 10.0
+
 var state_timer := 0.0
 var cooldown_timer := 0.0
 var give_up_timer := 0.0
 
-const MIN_DOT_GROUND := 0.7
-const MIN_DOT_UP := 0.01
 var ground_normal := Vector3.UP
 
 var physics_frequency := 1
 var frame_until_update := 0
 
+onready var anim := $crawly/AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
 
 func _ready():
@@ -52,13 +52,14 @@ func _physics_process(delta):
 	match ai:
 		AI.Idle:
 			for b in $awareness.get_overlapping_bodies():
-				target = b
-				next = AI.Alerted
+				if b.is_in_group("player"):
+					target = b
+					next = AI.Alerted
 		AI.Alerted:
 			if state_timer > ALERT_TIME:
 				next = AI.Chasing
 		AI.Chasing:
-			if !target:
+			if !target or target.is_dead():
 				next = AI.Idle
 			elif !$awareness.overlaps_body(target):
 				give_up_timer += delta
@@ -146,6 +147,8 @@ func set_state(new_ai, force := false):
 			sound.play()
 			anim.play("Run-loop")
 		AI.Damaged:
+			if last_attacker:
+				target = last_attacker
 			anim.play("Damaged")
 		AI.Dead:
 			collision_layer = 0

@@ -26,7 +26,7 @@ func _physics_process(delta):
 		else:
 			velocity = velocity.slide(col.normal)
 
-func take_damage(damage, dir):
+func take_damage(damage, dir, _source: Node):
 	falling = true
 	set_physics_process(true)
 	velocity = damage*dir*damage_force

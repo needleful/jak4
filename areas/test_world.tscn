@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://player/weapons/wave_shot.tscn" type="PackedScene" id=19]
 [ext_resource path="res://items/ammo/wave_shot_pickup.tscn" type="PackedScene" id=20]
 [ext_resource path="res://player/weapons/grav_gun.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/enemies/tentpole.tscn" type="PackedScene" id=22]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -408,17 +409,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3146, 0, -7.09462 )
 [node name="grav_gun_pickup3" parent="." index="32" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0018, 0, -7.00371 )
 
-[node name="gunner" parent="." index="33" instance=ExtResource( 7 )]
-transform = Transform( -0.86607, 0, 0.499923, 0, 1, 0, -0.499923, 0, -0.86607, -18.9218, -0.00511499, 17.5531 )
-shielded = true
-
-[node name="gunner2" parent="." index="34" instance=ExtResource( 7 )]
-transform = Transform( 0.528868, 0, -0.848704, 0, 1, 0, 0.848704, 0, 0.528868, 16.596, 1.27651, 1.63316 )
-aim_speed = 1.0
-aim_speed_windup = 0.5
-laser_color = Color( 0.2, 3, 0.3, 1 )
-
-[node name="CSGBox8" type="CSGBox" parent="." index="35"]
+[node name="CSGBox8" type="CSGBox" parent="." index="33"]
 transform = Transform( 0.702862, 0, 0.711326, 0, 1, 0, -0.711326, 0, 0.702862, -27.5449, -1.23398, 27.474 )
 use_collision = true
 width = 24.6837
@@ -443,3 +434,6 @@ width = 24.6837
 height = 2.91036
 depth = 8.00467
 material = SubResource( 1 )
+
+[node name="tentpole" parent="." index="34" instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.31896, 0, 3.90704 )

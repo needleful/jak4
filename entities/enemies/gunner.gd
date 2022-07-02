@@ -1,4 +1,3 @@
-tool
 extends KinematicEnemy
 
 export(float) var bounce_damage := 5.0
@@ -52,14 +51,14 @@ func _physics_process(delta):
 	
 	match ai:
 		AI.Idle:
-			var bodies = awareness.get_overlapping_bodies()
-			if bodies.size() != 0:
-				target = bodies[0]
-				set_state(AI.Chasing)
+			for b in $awareness.get_overlapping_bodies():
+				if b.is_in_group("player"):
+					target = b
+					set_state(AI.Chasing)
 			fall_down(delta)
 		AI.Chasing:
 			shot_timer += delta
-			if !target:
+			if !target or target.is_dead():
 				set_state(AI.Idle)
 			else:
 				if !awareness.overlaps_body(target):
@@ -92,7 +91,7 @@ func _physics_process(delta):
 				set_state(AI.Chasing)
 			fall_down(delta)
 		AI.Flee:
-			if !target:
+			if !target or target.is_dead():
 				set_state(AI.Idle)
 			else:
 				bounce_timer += delta
@@ -165,7 +164,7 @@ func fire():
 	if !c:
 		return
 	if c.has_method("take_damage"):
-		c.take_damage(attack_damage, laser.global_transform.basis.z)
+		c.take_damage(attack_damage, laser.global_transform.basis.z, self)
 	var particles := $impact/Particles
 	particles.emitting = false
 	particles.global_transform.origin = (
@@ -206,6 +205,8 @@ func set_state(new_ai):
 			$CollisionShape2.disabled = true
 			$CollisionShape3.disabled = false
 		AI.Damaged:
+			if last_attacker:
+				target = last_attacker
 			anim.travel("Damaged")
 			if grounded:
 				velocity.y += move_dir.y

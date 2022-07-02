@@ -24,7 +24,7 @@ func fire() -> bool:
 	if "collider" in collision:
 		var collider = collision.collider
 		if collider.has_method("take_damage"):
-			collider.take_damage(BASE_DAMAGE, cast_start.global_transform.basis.z)
+			collider.take_damage(BASE_DAMAGE, cast_start.global_transform.basis.z, Global.get_player())
 			if collider.has_method("aggro_to"):
 				collider.aggro_to(Global.get_player())
 		impact.emitting = false

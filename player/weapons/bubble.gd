@@ -17,7 +17,7 @@ func _on_body_entered(body):
 	var dir := direction
 	if dir == Vector3.ZERO:
 		dir = (body.global_transform.origin - global_transform.origin).normalized()
-	body.take_damage(damage, dir)
+	body.take_damage(damage, dir, Global.get_player()) # TODO what if someone else fired it?
 
 func fire(r, time_firing):
 	$AnimationPlayer.stop()

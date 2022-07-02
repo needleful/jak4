@@ -13,7 +13,7 @@ func get_target_ref() -> Vector3:
 	else:
 		return global_transform.origin
 
-func take_damage(damage, dir):
+func take_damage(damage, dir, _source: Node):
 	if one_time and damage_count > 0:
 		return
 	emit_signal("damaged")

@@ -224,6 +224,7 @@ enum State {
 	DiveStart,
 	DiveEnd,
 	Damaged,
+	Dead,
 	Locked,
 	PlaceFlag,
 	GetItem,
@@ -887,6 +888,9 @@ func on_item_changed(item: String, amount: int):
 	for i in Global.game_state.inventory:
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
 
+func is_dead():
+	return state == State.Dead
+
 func add_label(box: Control, text: String):
 	var l := Label.new()
 	l.text = text
@@ -1231,7 +1235,7 @@ func damage(node: Node, damage: int, dir: Vector3):
 		return
 	damaged_objects.append(node)
 	if node.has_method("take_damage"):
-		node.take_damage(damage_factor*damage, dir)
+		node.take_damage(damage_factor*damage, dir, self)
 
 func move(p_vel: Vector3, grounded:= false) -> Vector3:
 	if grounded:
@@ -1244,7 +1248,7 @@ func move(p_vel: Vector3, grounded:= false) -> Vector3:
 		return move_and_slide(p_vel, Vector3.UP, false, 4, 0.79, INFINITE_INERTIA)
 
 # Returns true if dead
-func take_damage(damage: int, direction: Vector3) -> bool:
+func take_damage(damage: int, direction: Vector3, _source) -> bool:
 	if !takes_damage():
 		return false
 	
@@ -1271,7 +1275,9 @@ func take_damage(damage: int, direction: Vector3) -> bool:
 	return false
 
 func die():
+	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
+	# TODO : Animation here
 	respawn()
 
 func fall_to_death():
@@ -1396,7 +1402,7 @@ func wave_jump_roll():
 	set_state(State.WaveJumpRoll)
 
 func gravity_stun(dam):
-	var dead = take_damage(dam, Vector3.ZERO)
+	var dead = take_damage(dam, Vector3.ZERO, self)
 	if !dead:
 		set_state(State.GravityStun)
 

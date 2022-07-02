@@ -54,12 +54,12 @@ func gravity_stun(_damage):
 	set_physics_process(true)
 	velocity = Vector3.UP*initial_velocity
 
-func take_damage(damage, dir):
+func take_damage(damage, dir, _source: Node):
 	velocity += damage*dir*damage_speed
 
 func _on_damage_area_body_exited(body):
 	if body in damaged_bodies or !body.has_method("take_damage"):
 		return
 	var dir = (body.global_transform.origin - global_transform.origin).normalized()
-	body.take_damage(damage_on_hit, dir)
-	take_damage(1, -dir)
+	body.take_damage(damage_on_hit, dir, self)
+	take_damage(1, -dir, self)

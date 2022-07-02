@@ -1,4 +1,3 @@
-tool
 extends KinematicBody
 class_name KinematicEnemy
 
@@ -38,7 +37,6 @@ enum AI {
 }
 var ai = AI.Idle
 
-
 const GRAVITY := Vector3.DOWN*24
 
 var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
@@ -54,6 +52,7 @@ var coat: Coat = null
 var can_fly := false
 
 var min_dot_shielded_damage := -0.5
+var last_attacker: Node
 
 # Ammo drop logic
 const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
@@ -73,11 +72,9 @@ const COUNTS := {
 	"grav_gun": 5
 }
 
+
 func _ready():
-	if Engine.editor_hint:
-		set_process(false)
-		set_physics_process(false)
-	set_state(ai)
+	call_deferred("set_state", ai)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
@@ -102,8 +99,10 @@ func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
 	if damage <= 0:
 		damage = attack_damage
 	for c in hitbox.get_overlapping_bodies():
+		if c == self:
+			return
 		if !(c in damaged) and c.has_method("take_damage"):
-			c.take_damage(damage, dir)
+			c.take_damage(damage, dir, self)
 		damaged.append(c)
 
 func look_at_target(turn_amount: float):
@@ -170,7 +169,7 @@ func drop_item(item: ItemPickup):
 	get_tree().current_scene.add_child(item)
 	item.global_transform = global_transform
 
-func take_damage(damage: int, dir: Vector3):
+func take_damage(damage: int, dir: Vector3, source: Node):
 	if ai == AI.Dead:
 		return
 	if shielded:
@@ -178,6 +177,7 @@ func take_damage(damage: int, dir: Vector3):
 		if d < min_dot_shielded_damage:
 			# TODO: play shielded effect
 			return
+	last_attacker = source
 	health -= damage
 	move_dir = damage*dir*damaged_speed
 	if health <= 0:
@@ -237,7 +237,7 @@ func aggro_to(node: Spatial):
 	target = node
 
 func gravity_stun(dam):
-	take_damage(dam, Vector3.UP)
+	take_damage(dam, Vector3.UP, null)
 	if ai != AI.Dead:
 		set_state(AI.GravityStun)
 

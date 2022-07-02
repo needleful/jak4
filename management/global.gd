@@ -72,7 +72,7 @@ func remove_flag(transform: Transform):
 		game_state.flags.remove(index)
 
 func get_player() -> Node:
-	return $"/root/world/player"
+	return get_tree().current_scene.get_node("player")
 
 # Game state management
 func mark_map(id:String, note:String):

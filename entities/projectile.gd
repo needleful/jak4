@@ -5,6 +5,7 @@ export(float) var speed := 10.0
 export(float) var turn_speed := 2.0
 export(Vector3) var offset := Vector3.ZERO
 
+var source: Node
 var target: Spatial
 
 var velocity := Vector3.ZERO
@@ -34,7 +35,7 @@ func _physics_process(delta):
 		dir_damage(c.collider)
 		queue_free()
 
-func take_damage(_damage, _dir):
+func take_damage(_damage, _dir, _source: Node):
 	queue_free()
 
 func gravity_stun(_damage):
@@ -46,7 +47,7 @@ func dir_damage(body):
 	if !body.has_method("take_damage"):
 		return
 	var dir :Vector3 = velocity.normalized()
-	body.take_damage(damage, dir)
+	body.take_damage(damage, dir, source)
 
 func _on_deletion_timer_timeout():
 	queue_free()
