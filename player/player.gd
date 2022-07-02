@@ -246,6 +246,8 @@ var invert_y := false
 
 var current_weapon : String
 
+const INFINITE_INERTIA := false
+
 # Nodes
 onready var cam_rig := $camera_rig
 onready var cam_yaw := $camera_rig/yaw
@@ -949,14 +951,11 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 	
 	if ground_normal != Vector3.ZERO:
 		if best_floor_dot > 0 or desired_velocity.length_squared() <= 0.1:
-			velocity = move_and_slide_with_snap(velocity, -ground_normal*0.06125,Vector3.UP)
+			velocity = move(velocity, true)
 		else:
-			#velocity = move_and_slide(velocity)
-			velocity = move_and_slide_with_snap(
-				velocity,Vector3.DOWN*0.06125,Vector3.UP)
+			velocity = move(velocity, true)
 	else:
-		velocity = move_and_slide_with_snap(
-			velocity,Vector3.DOWN*0.06125,Vector3.UP)
+		velocity = move(velocity, true)
 
 func accel_climb(delta: float, desired_velocity: Vector3):
 	var gravity := Vector3.ZERO
@@ -990,7 +989,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		(charge - velocity)/SPEED_RUN*charge_accel 
 		+ (steer*ACCEL_CLIMB) 
 		+ gravity )
-	velocity = move_and_slide(velocity + delta*gravity)
+	velocity = move(velocity + delta*gravity)
 
 func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_slide := false, gravity := GRAVITY):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
@@ -998,7 +997,7 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_sli
 	velocity.z = hvel.z
 	velocity += gravity*Engine.time_scale*delta
 	var pre_slide_vel := velocity
-	velocity = move_and_slide(velocity)
+	velocity = move(velocity)
 	var ceiling_normal := Vector3.UP
 	for i in get_slide_count():
 		var c := get_slide_collision(i)
@@ -1018,7 +1017,7 @@ func accel_low_gravity(delta, desired_velocity, gravity_factor):
 	velocity.z = hvel.z
 	velocity += gravity_factor*GRAVITY*Engine.time_scale*delta
 	var pre_slide_vel := velocity
-	velocity = move_and_slide(velocity)
+	velocity = move(velocity)
 	velocity.y = min(pre_slide_vel.y, velocity.y)
 
 func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
@@ -1037,14 +1036,14 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.x,
 		min(hvel.y, velocity.y),
 		hvel.z)
-	velocity = move_and_slide(velocity + delta*GRAVITY*Engine.time_scale)
+	velocity = move(velocity + delta*GRAVITY*Engine.time_scale)
 
 func accel_lunge(delta, desired_velocity):
 	var hvel = velocity
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
-	var v2 := move_and_slide(velocity + GRAVITY*delta*Engine.time_scale)
+	var v2 := move(velocity + GRAVITY*delta*Engine.time_scale)
 	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
 	velocity.y = min(velocity.y, v2.y)
 
@@ -1094,9 +1093,7 @@ func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 		+ drag
 	)
 	
-	velocity = move_and_slide(velocity)
-	
-	
+	velocity = move(velocity)
 	mesh.hover_lean(Vector2(
 		(steer - velocity).dot(mesh.global_transform.basis.x),
 		0
@@ -1236,6 +1233,16 @@ func damage(node: Node, damage: int, dir: Vector3):
 	damaged_objects.append(node)
 	if node.has_method("take_damage"):
 		node.take_damage(damage_factor*damage, dir)
+
+func move(p_vel: Vector3, grounded:= false) -> Vector3:
+	if grounded:
+		return move_and_slide_with_snap(p_vel,
+			-ground_normal*0.06125,
+			Vector3.UP,
+			false, 4, 0.79, 
+			INFINITE_INERTIA)
+	else:
+		return move_and_slide(p_vel, Vector3.UP, false, 4, 0.79, INFINITE_INERTIA)
 
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3) -> bool:

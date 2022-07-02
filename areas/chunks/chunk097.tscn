@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=2]
@@ -53,6 +53,7 @@
 [ext_resource path="res://entities/env/stone/cup.tscn" type="PackedScene" id=51]
 [ext_resource path="res://areas/chunks/_lightmaps/chunk097.lmbake" type="BakedLightmapData" id=52]
 [ext_resource path="res://entities/water_hut.tscn" type="PackedScene" id=53]
+[ext_resource path="res://entities/enemies/gunner.tscn" type="PackedScene" id=54]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -582,22 +583,46 @@ open = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.910917, -1.00009, -0.273071 )
 
 [node name="bug_pickup27" parent="." instance=ExtResource( 25 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 269.914, 416.175, -4.38048 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 296.955, 416.175, 16.0938 )
 
 [node name="bug_pickup28" parent="." instance=ExtResource( 25 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 268.604, 420.414, -5.91139 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 295.645, 420.414, 14.5629 )
 
 [node name="bug_pickup29" parent="." instance=ExtResource( 25 )]
-transform = Transform( -0.342684, 0, 0.939451, 0, 1, 0, -0.939451, 0, -0.342684, 269.294, 415.716, -9.10856 )
+transform = Transform( -0.342684, 0, 0.939451, 0, 1, 0, -0.939451, 0, -0.342684, 296.335, 415.716, 11.3658 )
 
 [node name="bug_pickup30" parent="." instance=ExtResource( 25 )]
-transform = Transform( -0.904352, 0, -0.426788, 0, 1, 0, 0.426788, 0, -0.904352, 267.628, 416.749, -9.2531 )
+transform = Transform( -0.904352, 0, -0.426788, 0, 1, 0, 0.426788, 0, -0.904352, 294.669, 416.749, 11.2212 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 296.081, 417.457, 13.6194 )
 max_distance = 16384.0
 extents = Vector3( 5.72716, 2.10887, 5.31486 )
 enable_shadows = true
+
+[node name="gunner" parent="." instance=ExtResource( 54 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 340.188, 453.072, -61.5293 )
+
+[node name="gunner2" parent="." instance=ExtResource( 54 )]
+transform = Transform( -0.806682, 0, -0.590985, 0, 1, 0, 0.590985, 0, -0.806682, 336.411, 433.141, 75.5398 )
+
+[node name="gunner3" parent="." instance=ExtResource( 54 )]
+transform = Transform( 0.918198, 0, -0.396122, 0, 1, 0, 0.396122, 0, 0.918198, 331.4, 432.35, 13.7783 )
+
+[node name="scrap_pile8" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 340.341, 417.115, 35.1933 )
+
+[node name="scrap21" parent="." instance=ExtResource( 9 )]
+transform = Transform( 0.856037, -0.516181, 0.0275284, 0.516914, 0.854822, -0.0455885, 0, 0.0532553, 0.998581, 358.235, 418.054, 29.1973 )
+
+[node name="scrap22" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 372.748, 424.623, 35.1317 )
+
+[node name="scrap23" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 372.748, 424.623, 22.3991 )
+
+[node name="gunner4" parent="." instance=ExtResource( 54 )]
+transform = Transform( 0.333423, 0, -0.942778, 0, 1, 0, 0.942778, 0, 0.333423, 401.47, 446.036, 15.5334 )
 
 [connection signal="toggled" from="hole_switch" to="hole_switch/drill2" method="_on_toggled"]
 [connection signal="toggled" from="hole_switch" to="hole_switch/drill3" method="_on_toggled"]

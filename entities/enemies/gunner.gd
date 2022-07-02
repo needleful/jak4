@@ -98,16 +98,16 @@ func _physics_process(delta):
 				bounce_timer += delta
 				dist.y = 0
 				var dir := -dist.normalized()
+				var safe_dist := dist.length_squared() > safe_radius*safe_radius
+				var safe_angle := dist.normalized().dot(global_transform.basis.z) > 0.2
 				if grounded:
-					if (dist.length_squared() > safe_radius*safe_radius
-						and dist.normalized().dot(global_transform.basis.z) > 0.2
-					):
+					if safe_angle and safe_dist:
 						set_state(AI.Chasing)
-
+						
 					fall_down(delta)
 
 					if bounce_timer > BOUNCE_WINDUP_TIME:
-						if ai != AI.Flee:
+						if safe_dist:
 							dir = Vector3.ZERO
 						velocity = Vector3.UP*bounce_velocity + dir*move_speed
 						grounded = false
@@ -118,8 +118,8 @@ func _physics_process(delta):
 				else:
 					look_at_target(BOUNCE_TURN_SPEED*delta)
 					velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
-					anim.travel("Flee_Windup")
 					if bounce_timer > BOUNCE_MIN_TIME and is_on_floor():
+						anim.travel("Flee_Windup")
 						grounded = true
 						bounce_timer = 0
 					if bounce_timer > BOUNCE_TIME_TO_HITBOX:
@@ -162,14 +162,16 @@ func get_target_ref():
 func fire():
 	damaged = []
 	var c = aim_cast.get_hit_collider()
-	if c and c.has_method("take_damage"):
+	if !c:
+		return
+	if c.has_method("take_damage"):
 		c.take_damage(attack_damage, laser.global_transform.basis.z)
-		var particles := $impact/Particles
-		particles.emitting = false
-		particles.global_transform.origin = (
-			aim_cast.global_transform.origin 
-			+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
-		particles.emitting = true
+	var particles := $impact/Particles
+	particles.emitting = false
+	particles.global_transform.origin = (
+		aim_cast.global_transform.origin 
+		+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
+	particles.emitting = true
 
 func set_state(new_ai):
 	grounded = true
@@ -184,6 +186,7 @@ func set_state(new_ai):
 			anim.travel("Idle")
 			laser.hide()
 		AI.Chasing:
+			shot_timer = 0.0
 			anim.travel("Aim")
 			mat_laser.albedo_color = laser_color
 			laser.show()
@@ -199,6 +202,9 @@ func set_state(new_ai):
 		AI.Dead:
 			anim.travel("Death")
 			laser.hide()
+			$CollisionShape.disabled = true
+			$CollisionShape2.disabled = true
+			$CollisionShape3.disabled = false
 		AI.Damaged:
 			anim.travel("Damaged")
 			if grounded:

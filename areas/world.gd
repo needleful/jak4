@@ -56,9 +56,6 @@ func _ready():
 					node.name = "lowres"
 					lowres_chunks[c.name] = node
 					c.add_child(node)
-			var content_file: String = PATH_CONTENT % c.name
-			if ResourceLoader.exists(content_file):
-				chunk_scenes[c.name] = load(content_file)
 			if c.has_node("static_collision"):
 				chunk_collider[c.name] = c.get_node("static_collision")
 	update_active_chunks(player_last_postion, true)
@@ -80,6 +77,18 @@ func _process(delta):
 			mark_inactive(get_node(ch))
 	
 	detect_enemies(delta)
+
+func get_or_load(chunk_name: String) -> PackedScene:
+	if chunk_name in chunk_scenes:
+		return chunk_scenes[chunk_name] as PackedScene
+	var content_file: String = PATH_CONTENT % chunk_name
+	if ResourceLoader.exists(content_file):
+		var content = load(content_file) as PackedScene
+		if content:
+			chunk_scenes[chunk_name] = content
+		return content
+	else:
+		return null
 
 func detect_enemies(_delta):
 	var were_present := enemies_present
@@ -166,14 +175,11 @@ func mark_active(chunk: Spatial):
 	if chunk.name in chunk_load_waitlist:
 		var _x = chunk_load_waitlist.erase(chunk.name)
 	active_chunks.append(chunk)
-	if chunk.name in chunk_scenes:
-		var scn: PackedScene = chunk_scenes[chunk.name]
-		if scn:
-			var node: Node = scn.instance()
-			node.name = "dynamic_content"
-			chunk.call_deferred("add_child", node)
-		else:
-			print_debug("Loading %s failed!!" % chunk.name)
+	var scn: PackedScene = get_or_load(chunk.name)
+	if scn:
+		var node: Node = scn.instance()
+		node.name = "dynamic_content"
+		chunk.add_child(node)
 		if chunk.has_node("lowres"):
 			chunk.remove_child(chunk.get_node("lowres"))
 	if !chunk.has_node("static_collision"):
