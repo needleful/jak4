@@ -20,6 +20,8 @@ const MIN_DOT_CLIMB := -0.1
 const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
 
+const MAX_VERTICAL_VELOCITY := 4.0
+
 const TIME_COYOTE := 0.1
 const TIME_LEDGE_FALL := 0.5
 const TIME_CROUCH_JUMP := 0.5
@@ -436,7 +438,7 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
-			elif total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot >= MIN_DOT_CLIMB and total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
@@ -942,9 +944,14 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
 			desired_velocity = desired_velocity.rotated(axis, angle)
+			if desired_velocity.y > MAX_VERTICAL_VELOCITY:
+				desired_velocity.y = MAX_VERTICAL_VELOCITY
 		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
-	
-	var hvel := velocity.slide(gravity.normalized())
+	var hvel := velocity
+	if gravity != Vector3.ZERO:
+		hvel = hvel.slide(gravity.normalized())
+	else:
+		hvel.y = 0
 	var hdir := hvel.normalized()
 	
 	if hvel.length() > SPEED_WALK and desired_velocity != Vector3.ZERO:
@@ -971,8 +978,11 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 			hvel = hvel.move_toward(desired_velocity, DECEL_AGAINST*decel_factor)
 		else:
 			hvel = hvel.move_toward(desired_velocity, ACCEL_START)
-			
-		velocity = velocity.project(gravity) + hvel + delta*gravity
+		
+		var vvel := Vector3.ZERO
+		if gravity != Vector3.ZERO:
+			vvel = velocity.project(gravity.normalized())
+		velocity =  vvel + hvel + delta*gravity
 
 	velocity = move(velocity, true)
 

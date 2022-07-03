@@ -30,6 +30,7 @@ func _ready():
 		$pickup_timer.start()
 	if has_node("AnimationPlayer"):
 		$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
+		#$AnimationPlayer.call_deferred("stop")
 
 func _physics_process(delta):
 	if gravity:
@@ -70,6 +71,7 @@ func process_player_distance(origin: Vector3):
 				$AnimationPlayer.play()
 			else:
 				$AnimationPlayer.stop(false)
+		set_physics_process(vis)
 	return INF
 
 func _on_pickup_timer_timeout():

@@ -112,8 +112,11 @@ func _physics_process(delta):
 func set_active(active: bool):
 	if !active:
 		anim.stop()
-		physics_frequency = 5
+		physics_frequency = 10
+		if ai == AI.Idle:
+			set_physics_process(false)
 	else:
+		set_physics_process(true)
 		set_state(ai, true)
 		physics_frequency = 1
 
