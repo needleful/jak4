@@ -56,7 +56,7 @@ func _process(_delta):
 
 func set_movement_animation(speed: float, state: int):
 	var target := 0.0
-	if state == PlayerBody.State.Crouch:
+	if state == PlayerBody.State.Crouch or state == PlayerBody.State.Sitting:
 		target = 1.0
 	elif state == PlayerBody.State.Climb:
 		target = 2.0
@@ -116,6 +116,9 @@ func play_lunge_kick(max_damage: bool):
 	else:
 		start_kick_left(max_damage)
 	lunge_right_foot = !lunge_right_foot
+
+func play_sit():
+	transition_to("Sit_Floor")
 
 func start_kick_left(max_damage: bool):
 	$Armature/Skeleton/footLeft/kick_particles.emitting = true

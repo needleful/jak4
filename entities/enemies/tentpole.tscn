@@ -21,7 +21,7 @@ shader_param/ceiling = ExtResource( 6 )
 radius = 0.34578
 
 [sub_resource type="BoxShape" id=26]
-extents = Vector3( 0.3, 1.37134, 0.641101 )
+extents = Vector3( 0.3, 1.85287, 0.743894 )
 
 [sub_resource type="CylinderShape" id=1]
 height = 1.67918
@@ -66,7 +66,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2", "output", 0, "Chop" ]
+node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -142,12 +142,16 @@ script = ExtResource( 3 )
 id = "tentpole"
 health = 30
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [ NodePath("head") ]
+bones/3/bound_children = [ NodePath("chopper") ]
+
 [node name="tentpole" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999844, 0.00088527, 0.0176466, -0.000639201, 0.999903, -0.0139456, -0.0176573, 0.0139322, 0.999747, 0.0695907, 0.834392, -0.0213938 )
+transform = Transform( 0.999967, 0.00320517, 0.00747442, -0.00323184, 0.999988, 0.00355758, -0.00746293, -0.00358161, 0.999966, 0.0264812, 0.838275, -0.00814094 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
@@ -161,7 +165,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0038645, 0.999142, 0.0412376, -0.871196, 0.0236086, -0.490367, -0.49092, -0.0340311, 0.87054, 0.161662, 1.77209, -0.0404023 )
+transform = Transform( 0.0729109, 0.968352, -0.238701, -0.938506, -0.0143705, -0.344963, -0.337475, 0.249174, 0.907757, 0.121048, 1.77528, -0.0426382 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]
@@ -171,7 +175,7 @@ collision_mask = 6
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Armature/Skeleton/chopper/Area" index="0"]
-transform = Transform( 0.998107, 9.31323e-10, 0.061504, 4.65661e-10, 1, 0, -0.061504, 0, 0.998107, 0.041458, 0.926292, -7.45058e-09 )
+transform = Transform( 0.998107, 9.31323e-10, 0.061504, 6.98492e-10, 1, 0, -0.061504, 1.49012e-08, 0.998107, 0.0414578, 0.637712, -5.58794e-09 )
 shape = SubResource( 26 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="2"]

@@ -201,9 +201,7 @@ func walk(delta: float, speed: float, slide := false):
 	var hvel = global_transform.basis.z*speed
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	
 	velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
-	
 	if slide:
 		velocity.y = min(0, velocity.y)
 

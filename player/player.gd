@@ -192,6 +192,9 @@ const TIME_FALLING_DEATH := 2.0
 const TIME_GRAVITY_STUN := 2
 const TIME_WAVE_JUMP_ROLL := 0.1
 
+const TIME_TO_SIT := 2.5
+var sit_timer := 0.0
+
 # Ledge being held onto
 var ledge: Spatial
 # Position of player relative to ledge at start of ledge grab
@@ -231,7 +234,8 @@ enum State {
 	FallingDeath,
 	GravityStun,
 	Hover,
-	WaveJumpRoll
+	WaveJumpRoll,
+	Sitting
 }
 
 var state: int = State.Fall
@@ -477,6 +481,12 @@ func _physics_process(delta):
 					next_state = State.Slide
 			else:
 				timer_coyote = 0
+				if desired_velocity.length() < 0.001:
+					sit_timer += delta
+					if sit_timer > TIME_TO_SIT:
+						next_state = State.Sitting
+				else:
+					sit_timer = 0
 		State.CrouchJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
@@ -709,11 +719,17 @@ func _physics_process(delta):
 		State.WaveJumpRoll:
 			if timer_state > TIME_WAVE_JUMP_ROLL:
 				next_state = State.RollFall
+		State.Sitting:
+			if Input.is_action_just_pressed("mv_jump"):
+				next_state = State.BaseJump
+			elif $groundArea.get_overlapping_bodies().size() == 0:
+				next_state = State.Fall
+			elif desired_velocity.length() > 0.05:
+				next_state = State.Ground
 	set_state(next_state)
 	
 	match state:
 		State.Ground:
-			
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
@@ -785,7 +801,7 @@ func _physics_process(delta):
 		State.DiveEnd:
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
-		State.Locked, State.PlaceFlag, State.GetItem:
+		State.Locked, State.PlaceFlag, State.GetItem, State.Sitting:
 			desired_velocity = Vector3.ZERO
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
@@ -1494,6 +1510,7 @@ func set_state(next_state: int):
 	timer_coyote = 0.0
 	timer_state = 0.0
 	timer_leave_ledge = 0
+	sit_timer = 0
 	mesh.stop_particles()
 	var head_blocked = crouch_head.get_overlapping_bodies().size() > 0
 	$crouching_col.disabled = !head_blocked
@@ -1647,6 +1664,9 @@ func set_state(next_state: int):
 		State.Hover:
 			hover_cast.enabled = true
 			mesh.start_hover()
+		State.Sitting:
+			velocity = Vector3.ZERO
+			mesh.play_sit()
 			
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]

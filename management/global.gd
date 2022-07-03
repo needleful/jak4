@@ -12,7 +12,7 @@ export(Array, Texture) var coat_textures: Array
 
 const save_path := "user://autosave.tres"
 const old_save_backup := "user://autosave.backup.tres"
-var valid_game_state := false
+var valid_game_state := false setget set_valid_game_state, get_valid_game_state
 var player_spawned := false
 var can_pause := true
 
@@ -73,6 +73,14 @@ func remove_flag(transform: Transform):
 
 func get_player() -> Node:
 	return get_tree().current_scene.get_node("player")
+
+func set_valid_game_state(state):
+	valid_game_state = state and game_state
+
+func get_valid_game_state():
+	if !game_state:
+		valid_game_state = false
+	return valid_game_state
 
 # Game state management
 func mark_map(id:String, note:String):
