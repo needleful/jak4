@@ -14,6 +14,9 @@ const SPEED_CLIMB := 5.0
 const SPEED_ROLL := 15.0
 const SPEED_BONK := 5.0
 
+const SPEED_DASH := 15.0
+const SPEED_DASH_V := 2.0
+
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.1
@@ -53,6 +56,8 @@ const ACCEL_ROLL_WAVE_JUMP := 50.0
 const DECEL_AGAINST := 45.0
 # Decelerate with velocity
 const DECEL_WITH := 15.0
+
+const DECEL_DASH := 25.0
 
 const ACCEL_CLIMB := 45.0
 const DECEL_CLIMB := 45.0
@@ -197,6 +202,9 @@ const TIME_WAVE_JUMP_ROLL := 0.1
 const TIME_TO_SIT := 2.5
 var sit_timer := 0.0
 
+const TIME_TO_DASH := 0.05
+const TIME_DASH := 0.5
+
 # Ledge being held onto
 var ledge: Spatial
 # Position of player relative to ledge at start of ledge grab
@@ -237,7 +245,8 @@ enum State {
 	GravityStun,
 	Hover,
 	WaveJumpRoll,
-	Sitting
+	Sitting,
+	Dash
 }
 
 var state: int = State.Fall
@@ -246,6 +255,7 @@ var best_floor_dot: float
 var best_floor : Node
 
 var current_coat: Coat
+var dash_charges := 0
 
 # Camera settings
 var sensitivity := 1.0
@@ -434,6 +444,8 @@ func _physics_process(delta):
 		State.Slide:
 			if Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
 			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
@@ -450,11 +462,32 @@ func _physics_process(delta):
 				next_state = State.LedgeHang
 			else:
 				timer_coyote = 0
+		State.Dash:
+			if Input.is_action_just_pressed("combat_lunge"):
+				next_state = State.DiveWindup
+			elif Input.is_action_just_pressed("combat_spin"):
+				next_state = State.AirSpinKick
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
+			elif best_floor_dot > MIN_DOT_GROUND:
+				if Input.is_action_pressed("mv_crouch"):
+					next_state = State.Crouch
+				else:
+					next_state = State.Ground
+			elif best_floor_dot > MIN_DOT_SLIDE:
+				if Input.is_action_pressed("mv_crouch"):
+					next_state = State.Crouch
+				else:
+					next_state = State.Slide
+			elif timer_state > TIME_DASH:
+				next_state = State.Fall
 		State.BaseJump, State.LedgeJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
+			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif timer_state > TIME_BASE_JUMP:
 				next_state = State.Fall
 			elif timer_state > TIME_JUMP_MIN:
@@ -492,6 +525,8 @@ func _physics_process(delta):
 		State.CrouchJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif timer_state > TIME_CROUCH_JUMP:
 				next_state = State.Fall
 			elif timer_state > TIME_JUMP_MIN:
@@ -540,6 +575,8 @@ func _physics_process(delta):
 		State.RollJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			elif (best_normal != Vector3.ZERO
@@ -557,6 +594,8 @@ func _physics_process(delta):
 		State.RollFall:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			elif best_floor_dot > MIN_DOT_GROUND:
@@ -577,6 +616,8 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
@@ -613,6 +654,8 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
@@ -655,7 +698,9 @@ func _physics_process(delta):
 				elif Input.is_action_just_pressed("mv_crouch"):
 					next_state = State.Roll
 		State.AirSpinKick:
-			if best_floor_dot > MIN_DOT_GROUND:
+			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
+			elif best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
@@ -675,6 +720,8 @@ func _physics_process(delta):
 				next_state = State.DiveWindup
 			elif Input.is_action_just_released("combat_spin"):
 				next_state = State.AirSpinKick
+			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
 			elif timer_state > TIME_UPPERCUT_MIN and best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
@@ -686,7 +733,9 @@ func _physics_process(delta):
 			if timer_state > TIME_DIVE_WINDUP:
 				next_state = State.DiveStart
 		State.DiveStart:
-			if best_floor_dot > MIN_DOT_SLIDE:
+			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
+			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.DiveEnd
 		State.DiveEnd:
 			if timer_state > TIME_DIVE_END_MAX:
@@ -719,7 +768,9 @@ func _physics_process(delta):
 			if Input.is_action_just_pressed("hover_toggle"):
 				next_state = State.Fall
 		State.WaveJumpRoll:
-			if timer_state > TIME_WAVE_JUMP_ROLL:
+			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+				next_state = State.Dash
+			elif timer_state > TIME_WAVE_JUMP_ROLL:
 				next_state = State.RollFall
 		State.Sitting:
 			if Input.is_action_just_pressed("mv_jump"):
@@ -753,7 +804,7 @@ func _physics_process(delta):
 			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
-			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL_AIR, true)
+			accel_air(delta, desired_velocity*SPEED_ROLL, ACCEL_ROLL_AIR, true)
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
@@ -775,6 +826,10 @@ func _physics_process(delta):
 				var _x = move_and_collide(new_position - old_position)
 				ledge_last_transform = new_transform
 			desired_velocity = Vector3.ZERO
+		State.Dash:
+			rotate_intention(velocity.normalized())
+			accel_lunge(delta, desired_velocity*SPEED_DASH, DECEL_DASH, true)
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 		State.LungeKick, State.SlideLungeKick:
 			if timer_state > TIME_LUNGE_PARTICLES:
 				mesh.stop_particles()
@@ -1067,14 +1122,17 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.z)
 	velocity = move(velocity + delta*GRAVITY*Engine.time_scale)
 
-func accel_lunge(delta, desired_velocity):
+func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := false):
 	var hvel = velocity
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
 	var v2 := move(velocity + GRAVITY*delta*Engine.time_scale)
-	velocity = velocity.move_toward(Vector3.ZERO, DECEL_KICK*delta)
-	velocity.y = min(velocity.y, v2.y)
+	velocity = velocity.move_toward(Vector3.ZERO, decel*delta)
+	if ignore_slide:
+		velocity.y = min(velocity.y, v2.y)
+	else:
+		velocity.y = max(velocity.y, v2.y)
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY*Engine.time_scale
@@ -1344,6 +1402,10 @@ func drain_stamina(amount):
 func total_stamina():
 	return extra_stamina + stamina
 
+func can_dash() -> bool:
+	var d := dash_charges > 0
+	return d
+
 func can_place_flag():
 	if !best_floor:
 		return false
@@ -1545,6 +1607,7 @@ func set_state(next_state: int):
 			velocity.y = jump_factor*JUMP_VEL_BASE
 			mesh.transition_to("BaseJump")
 		State.Ground:
+			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
 			mesh.transition_to("Ground")
 		State.Slide:
@@ -1677,6 +1740,10 @@ func set_state(next_state: int):
 		State.Sitting:
 			velocity = Vector3.ZERO
 			mesh.play_sit()
-			
+		State.Dash:
+			dash_charges -= 1
+			velocity += get_visual_forward()*SPEED_DASH
+			velocity.y =  SPEED_DASH_V
+			mesh.force_play("Dash")
 	state = next_state
 	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
