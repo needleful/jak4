@@ -42,6 +42,9 @@ onready var anim_tree := $AnimationTree
 
 func _ready():
 	aim_cast.add_excluded_object(self.get_rid())
+	if coat:
+		$Armature/Skeleton/gunner.set_surface_material(0, coat.generate_material())
+
 
 func _physics_process(delta):
 	state_timer += delta
@@ -128,6 +131,10 @@ func _physics_process(delta):
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Chasing)
+		AI.GravityStunDead:
+			stunned_move(delta)
+			if state_timer > Global.gravity_stun_time:
+				set_state(AI.Dead)
 		AI.Dead:
 			fall_down(delta)
 	aim_cast.update()
@@ -209,8 +216,10 @@ func set_state(new_ai):
 				target = last_attacker
 			anim.travel("Damaged")
 			if grounded:
-				velocity.y += move_dir.y
+				velocity.y = move_dir.y
 			else:
-				velocity += move_dir
+				velocity = move_dir
 		AI.GravityStun:
 			anim.travel("GravityStun")
+		AI.GravityStunDead:
+			velocity = move_dir

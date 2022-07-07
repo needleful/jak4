@@ -51,6 +51,11 @@ func _physics_process(delta):
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Chasing)
+		AI.GravityStunDead:
+			stunned_move(delta)
+			if state_timer > Global.gravity_stun_time:
+				set_state(AI.Dead)
+			
 
 func take_damage(damage, dir, source):
 	if source and source != self:
@@ -78,7 +83,7 @@ func set_state(new_ai):
 				anim["parameters/StateMachine/Chase/Damaged/active"] = true
 			else:
 				playback.travel("Damaged")
-			velocity += move_dir
+			velocity = move_dir
 		AI.Dead:
 			chopper_hitbox.active = false
 			playback.travel("Death")
@@ -88,3 +93,5 @@ func set_state(new_ai):
 		AI.GravityStun:
 			chopper_hitbox.active = true
 			playback.travel("GravityStun")
+		AI.GravityStunDead:
+			velocity = move_dir

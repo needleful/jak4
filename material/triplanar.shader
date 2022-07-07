@@ -14,20 +14,20 @@ varying vec3 normal;
 void vertex() {
 	position = VERTEX.xyz;
 	normal = NORMAL;
-	//normal /= dot(normal, vec3(1.0));
 }
 
 void fragment() {
+	vec3 n = normalize(normal);
 	vec4 color_x = texture(wall, position.zy*uv_scale);
 	vec4 color_z = texture(wall, position.xy*uv_scale);
 	vec4 color_y_up = texture(ground, position.xz*uv_scale);
 	vec4 color_y_down = texture(ceiling, position.xz*uv_scale);
 	
-	float y_pow = sign(normal.y)*pow(abs(normal.y), power);
+	float y_pow = sign(n.y)*pow(abs(n.y), power);
 	
 	vec4 color =
-		color_x*abs(normal.x) 
-		+ color_z*abs(normal.z)
+		color_x*abs(n.x) 
+		+ color_z*abs(n.z)
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));

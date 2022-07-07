@@ -1,7 +1,6 @@
 extends KinematicEnemy
 class_name DeathGnat
 
-export(PackedScene) var projectile: PackedScene 
 export(float) var speed = 5.0
 export(float) var turn_speed = 10.0
 export(float) var orb_cooldown := 2.0
@@ -64,6 +63,9 @@ func _physics_process(delta):
 				next_state = AI.Chasing
 		AI.Dead:
 			pass
+		AI.GravityStunDead:
+			if state_timer > Global.gravity_stun_time:
+				next_state = AI.Dead
 	set_state(next_state)
 	
 	match ai:
@@ -73,25 +75,15 @@ func _physics_process(delta):
 			look_at_target(delta*turn_speed)
 			fly(delta)
 			if orb_timer <= 0:
-				fire_orb()
+				fire_orb($orb_spawner.global_transform.origin, orb_speed, orb_seeking)
+				orb_timer = orb_cooldown
 		AI.Damaged:
 			look_at_target(delta*turn_speed)
 			velocity = move_and_slide(velocity + GRAVITY*delta)
 		AI.Dead:
 			fall_down(delta)
-		AI.GravityStun:
+		AI.GravityStun, AI.GravityStunDead:
 			stunned_move(delta)
-
-func fire_orb():
-	var orb = projectile.instance()
-	get_tree().current_scene.add_child(orb)
-	orb.source = self
-	orb.damage = attack_damage
-	orb.speed = orb_speed
-	orb.turn_speed = orb_seeking
-	orb.global_transform.origin = $orb_spawner.global_transform.origin
-	orb.fire(target, Vector3.UP)
-	orb_timer = orb_cooldown
 
 func fly(delta: float):
 	if !target:
@@ -144,7 +136,8 @@ func set_state(new_state):
 			velocity.y = min(velocity.y, 10)
 		AI.GravityStun:
 			$AnimationPlayer.stop()
-			velocity = move_dir
 			$AnimationPlayer.play("GravityStun-loop")
+		AI.GravityStunDead:
+			velocity = move_dir
 		_:
 			$AnimationPlayer.play("Idle-loop")

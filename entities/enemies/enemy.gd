@@ -23,6 +23,7 @@ export(int) var attack_damage = 10
 export(float) var damaged_speed = 0.5
 export(float) var square_distance_activation := 2400.0
 export(bool) var shielded := false setget set_shielded
+const projectile: PackedScene = preload("res://entities/projectile.tscn") 
 
 enum AI {
 	Idle,
@@ -33,7 +34,8 @@ enum AI {
 	Damaged,
 	GravityStun,
 	Dead,
-	Flee
+	Flee,
+	GravityStunDead
 }
 var ai = AI.Idle
 
@@ -130,7 +132,8 @@ func rotate_up(speed: float, up := Vector3.UP):
 func die():
 	var _x = Global.add_stat("killed/"+id)
 	remove_from_group("distance_activated")
-	remove_from_group("target")
+	if is_in_group("target"):
+		remove_from_group("target")
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
@@ -170,7 +173,7 @@ func drop_item(item: ItemPickup):
 	item.global_transform = global_transform
 
 func take_damage(damage: int, dir: Vector3, source: Node):
-	if ai == AI.Dead:
+	if is_dead():
 		return
 	if shielded:
 		var d := dir.dot(global_transform.basis.z)
@@ -238,9 +241,12 @@ func gravity_stun(dam):
 	take_damage(dam, Vector3.UP, null)
 	if ai != AI.Dead:
 		set_state(AI.GravityStun)
+	else:
+		move_dir = dam*Vector3.UP*damaged_speed
+		set_state(AI.GravityStunDead)
 
 func is_dead():
-	return ai == AI.Dead
+	return ai == AI.Dead or ai == AI.GravityStunDead
 
 func get_shield() -> Node:
 	return null
@@ -249,3 +255,13 @@ func set_shielded(val):
 	shielded = val
 	if get_shield():
 		get_shield().visible = shielded
+
+func fire_orb(position: Vector3, orb_speed: float, seeking: float):
+	var orb = projectile.instance()
+	get_tree().current_scene.add_child(orb)
+	orb.source = self
+	orb.damage = attack_damage
+	orb.speed = orb_speed
+	orb.turn_speed = seeking
+	orb.global_transform.origin = position
+	orb.fire(target, Vector3.UP*0.5)

@@ -23,7 +23,7 @@ const MIN_DOT_CLIMB := -0.1
 const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
 
-const MAX_VERTICAL_VELOCITY := 4.0
+const ROLL_MAX_VELOCITY_V := 4.0
 
 const TIME_COYOTE := 0.1
 const TIME_LEDGE_FALL := 0.5
@@ -337,7 +337,6 @@ const WEAPONS := [
 
 func _ready():
 	$ui/shop.player = self
-	set_state(State.Ground)
 	if Global.valid_game_state:
 		global_transform.origin = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
@@ -348,6 +347,8 @@ func _ready():
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
+		
+	set_state(State.Ground)
 	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
@@ -804,8 +805,8 @@ func _physics_process(delta):
 			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
-			accel_air(delta, desired_velocity*SPEED_ROLL, ACCEL_ROLL_AIR, true)
-			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
+			accel_air(delta, desired_velocity*SPEED_ROLL, ACCEL_ROLL_AIR)
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity)
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
@@ -999,8 +1000,8 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
 			desired_velocity = desired_velocity.rotated(axis, angle)
-			if desired_velocity.y > MAX_VERTICAL_VELOCITY:
-				desired_velocity.y = MAX_VERTICAL_VELOCITY
+			if desired_velocity.y > ROLL_MAX_VELOCITY_V:
+				desired_velocity.y = ROLL_MAX_VELOCITY_V
 		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
 	var hvel := velocity
 	if gravity != Vector3.ZERO:
@@ -1652,6 +1653,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Roll")
 			gun.lock()
 		State.RollJump:
+			damaged_objects = []
 			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
