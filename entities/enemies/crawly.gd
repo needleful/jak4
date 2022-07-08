@@ -1,10 +1,15 @@
-extends KinematicEnemy
+extends EnemyBody
 
-export(float) var run_speed = 7.5
+export(float) var run_speed = 8.5
 export(float) var lunge_speed = 15.0
-export(float) var turn_speed_radians = 15.0
-export(float) var turn_speed_windup = 5.0
-export(float) var turn_speed_attacking = 1.0
+export(float) var acceleration = 120.0
+export(float) var deceleration = 10.0
+export(float) var lunge_impules = 25.0
+export(float) var turn_speed_radians = 60.0
+export(float) var turn_speed_windup = 50.0
+export(float) var turn_speed_attacking = 5.0
+export(float) var accel_lunge := 25.0
+export(float) var accel_fall := 1.0
 export(AudioStream) var alert_audio
 export(AudioStream) var run_audio
 export(AudioStream) var death_audio
@@ -65,7 +70,7 @@ func _physics_process(delta):
 				give_up_timer += delta
 				if give_up_timer > EXTRA_CHASE_TIME:
 					next = AI.Idle
-			elif cooldown_timer <= 0 and $attack_range.overlaps_body(target):
+			elif contact_count and cooldown_timer <= 0 and $attack_range.overlaps_body(target):
 				next = AI.Windup
 			else:
 				give_up_timer = 0.0
@@ -88,27 +93,27 @@ func _physics_process(delta):
 	
 	match ai:
 		AI.Attacking:
-			look_at_target(turn_speed_attacking*delta)
-			walk(delta, lunge_speed)
+			look_at_target(turn_speed_attacking, 1.5)
+			walk(lunge_speed, accel_lunge, deceleration)
 			damage_direction($hurtbox, global_transform.basis.z)
 		AI.Chasing:
 			ground_normal = get_closest_floor()
 			if ground_normal.y > MIN_DOT_UP:
 				rotate_up(turn_speed_radians*delta, ground_normal)
-			look_at_target(turn_speed_radians*delta)
-			walk(delta, run_speed, ground_normal.y < MIN_DOT_GROUND)
+			look_at_target(turn_speed_radians, 2.5)
+			if contact_count:
+				walk(run_speed, acceleration, deceleration)
+			else:
+				walk(run_speed, accel_fall, deceleration)
 		AI.Damaged:
-			look_at_target(turn_speed_radians*delta)
-			velocity.x = move_dir.x
-			velocity.z = move_dir.z
-			velocity = move_and_slide(velocity + GRAVITY*delta)
+			look_at_target(turn_speed_radians, 1.0)
 		AI.Dead:
-			fall_down(delta)
+			pass
 		AI.Idle:
-			walk(delta, 0)
+			walk(0, acceleration)
 		AI.Windup, AI.Alerted:
-			look_at_target(turn_speed_windup*delta)
-			walk(delta, 0)
+			look_at_target(turn_speed_windup, 1.5)
+			walk(0, acceleration)
 		AI.GravityStun, AI.GravityStunDead:
 			stunned_move(delta)
 
@@ -146,16 +151,19 @@ func set_state(new_ai, force := false):
 	ai = new_ai
 	state_timer = 0
 	damaged = []
+	gravity_scale = 1
 	match ai:
 		AI.Alerted:
 			anim.play("Alert")
 			sound.stream = alert_audio
 			sound.play()
 		AI.Chasing:
+			sleeping = false
 			sound.stream = run_audio
 			sound.play()
 			anim.play("Run-loop")
 		AI.Damaged:
+			sleeping = false
 			if last_attacker:
 				target = last_attacker
 			anim.play("Damaged")
@@ -170,11 +178,15 @@ func set_state(new_ai, force := false):
 			sound.stream = quit_audio
 			sound.play()
 		AI.Windup:
+			sleeping = false
 			anim.play("Attack")
 			sound.stream = attack_audio
 			sound.play()
 		AI.GravityStun:
+			sleeping = false
 			anim.play("GravityStun-loop")
-			velocity = move_dir
+			gravity_scale = 0
 		AI.GravityStunDead:
-			velocity = move_dir
+			gravity_scale = 0
+		AI.Attacking:
+			apply_central_impulse(global_transform.basis.z*lunge_impules*mass)

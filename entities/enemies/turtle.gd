@@ -1,7 +1,7 @@
-extends KinematicEnemy
+extends EnemyBody
 
 export(float) var orb_speed := 9.0
-export(float) var orb_seeking := 2.0
+export(float) var orb_seeking := 1.2
 export(float) var gun_cooldown := 1.0
 export(float) var gravity_stun_speed := 5.0
 
@@ -64,12 +64,6 @@ func set_state(new_ai):
 		AI.Chasing:
 			for i in range(cooldown.size()):
 				cooldown[i] = 0
-		AI.GravityStun:
-			velocity += Vector3.UP*gravity_stun_speed
-		AI.Damaged:
-			velocity += move_dir
-		AI.GravityStunDead:
-			velocity += Vector3.UP*gravity_stun_speed
 
 func take_damage(damage, dir, source):
 	if source and source != self:

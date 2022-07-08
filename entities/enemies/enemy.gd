@@ -1,5 +1,5 @@
-extends KinematicBody
-class_name KinematicEnemy
+extends RigidBody
+class_name EnemyBody
 
 signal died(id, fullPath)
 
@@ -23,7 +23,7 @@ export(int) var attack_damage = 10
 export(float) var damaged_speed = 0.5
 export(float) var square_distance_activation := 2400.0
 export(bool) var shielded := false setget set_shielded
-const projectile: PackedScene = preload("res://entities/projectile.tscn") 
+const projectile: PackedScene = preload("res://entities/projectile.tscn")
 
 enum AI {
 	Idle,
@@ -45,8 +45,6 @@ var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
 var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
 
 var target: Spatial
-var velocity := Vector3.ZERO
-var move_dir: Vector3
 var damaged:= []
 
 var in_range := false
@@ -55,6 +53,8 @@ var can_fly := false
 
 var min_dot_shielded_damage := -0.5
 var last_attacker: Node
+var best_floor_normal : Vector3
+var contact_count := 0
 
 # Ammo drop logic
 const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
@@ -74,8 +74,12 @@ const COUNTS := {
 	"grav_gun": 5
 }
 
+func _init():
+	contact_monitor = true
+	contacts_reported = 4
 
 func _ready():
+	sleeping = false
 	call_deferred("set_state", ai)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
@@ -107,18 +111,17 @@ func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
 			c.take_damage(damage, dir, self)
 		damaged.append(c)
 
-func look_at_target(turn_amount: float):
+func look_at_target(turn_amount: float, damping := 0.1):
 	if !target:
 		return
+
 	var forward := global_transform.basis.z
 	var desired_f := target.global_transform.origin - global_transform.origin
-	desired_f.y = 0
-	desired_f = desired_f.normalized()
 	var axis = forward.cross(desired_f).normalized()
+	
 	if axis.is_normalized():
 		var angle = forward.angle_to(desired_f)
-		var rot = sign(angle)*min(abs(angle), turn_amount)
-		global_rotate(axis, rot)
+		add_torque(mass*axis*angle*turn_amount - damping*mass*angular_velocity)
 
 func rotate_up(speed: float, up := Vector3.UP):
 	var current_up := global_transform.basis.y
@@ -126,8 +129,7 @@ func rotate_up(speed: float, up := Vector3.UP):
 	var axis = current_up.cross(desired_up).normalized()
 	if axis.is_normalized():
 		var angle = current_up.angle_to(desired_up)
-		var theta = sign(angle)*min(abs(angle), speed)
-		global_rotate(axis, theta)
+		add_torque(mass*axis*angle*speed - 0.1*mass*angular_velocity)
 
 func die():
 	var _x = Global.add_stat("killed/"+id)
@@ -182,7 +184,7 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 			return
 	last_attacker = source
 	health -= damage
-	move_dir = damage*dir*damaged_speed
+	apply_central_impulse(mass*damage*dir*damaged_speed)
 	if health <= 0:
 		set_state(AI.Dead)
 		die()
@@ -192,40 +194,46 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 		play_damage_sfx()
 		set_state(AI.Damaged)
 
-func get_closest_floor(vector:= Vector3.UP):
-	var res := -vector
-	for i in get_slide_count():
-		var c := get_slide_collision(i)
-		if c.normal.dot(vector) > res.dot(vector):
-			res = c.normal
-	return res 
+func _integrate_forces(state):
+	best_floor_normal = Vector3(0, -INF, 0)
+	contact_count = state.get_contact_count()
+	for i in range(contact_count):
+		var n:Vector3 = state.get_contact_local_normal(i)
+		if n.y > best_floor_normal.y:
+			best_floor_normal = n
 
-func walk(delta: float, speed: float, slide := false):
-	var hvel = global_transform.basis.z*speed
-	velocity.x = hvel.x
-	velocity.z = hvel.z
-	velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
-	if slide:
-		velocity.y = min(0, velocity.y)
+func is_grounded():
+	return best_floor_normal.y > 0
+
+func get_closest_floor():
+	return best_floor_normal
+
+func walk(velocity: float, accel: float, decel := -1.0):
+	if decel < 0:
+		decel = accel
+
+	var speed := global_transform.basis.z*velocity
+	var force := (speed - linear_velocity)
+	if force.dot(speed) > -0.4:
+		force *= accel
+	else:
+		force *= decel
+	if !best_floor_normal.is_normalized():
+		force.y = 0
+	else:
+		force = force.slide(best_floor_normal)
+	var l = force.length()
+	if l > accel:
+		force = accel*force/l
+
+	add_central_force(mass*force)
 
 func stunned_move(delta: float):
-	velocity *= clamp(1.0 - delta, 0.1, 0.995)
-	velocity = move_and_slide(velocity + Vector3.UP*delta*Global.gravity_stun_velocity, Vector3.UP)
+	var force_removal = -linear_velocity*clamp(1.0 - delta, 0.1, 0.995)
+	add_central_force(force_removal)
 
-func fall_down(delta: float):
-	var best_normal = Vector3.ZERO
-	for c in get_slide_count():
-		var n = get_slide_collision(c).normal
-		if n.y > best_normal.y:
-			best_normal = n
-	var gravity := GRAVITY
-	if best_normal != Vector3.ZERO:
-		gravity = GRAVITY.project(best_normal)
-		
-	velocity.x = move_dir.x
-	velocity.z = move_dir.z
-	move_dir *= 0.9
-	velocity = move_and_slide(velocity + gravity*delta, Vector3.UP)
+func fall_down(_delta: float):
+	pass
 
 # Implemented by subclasses
 func set_state(_ai: int):
@@ -242,7 +250,7 @@ func gravity_stun(dam):
 	if ai != AI.Dead:
 		set_state(AI.GravityStun)
 	else:
-		move_dir = dam*Vector3.UP*damaged_speed
+		apply_central_impulse(mass*dam*Vector3.UP*damaged_speed)
 		set_state(AI.GravityStunDead)
 
 func is_dead():

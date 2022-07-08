@@ -1,4 +1,4 @@
-extends KinematicEnemy
+extends EnemyBody
 
 export(float) var run_speed = 6.5
 export(float) var turn_speed_radians = 8.0
@@ -75,15 +75,16 @@ func set_state(new_ai):
 		AI.Alerted:
 			playback.travel("Chase")
 		AI.Chasing:
+			sleeping = false
 			chopper_hitbox.active = true
 			playback.travel("Chase")
 		AI.Damaged:
+			sleeping = false
 			target = Global.get_player()
 			if playback.get_current_node() == "Chase":
 				anim["parameters/StateMachine/Chase/Damaged/active"] = true
 			else:
 				playback.travel("Damaged")
-			velocity = move_dir
 		AI.Dead:
 			chopper_hitbox.active = false
 			playback.travel("Death")
@@ -91,7 +92,6 @@ func set_state(new_ai):
 			$CollisionShape2.disabled = true
 			$Armature/Skeleton/head.queue_free()
 		AI.GravityStun:
+			sleeping = false
 			chopper_hitbox.active = true
 			playback.travel("GravityStun")
-		AI.GravityStunDead:
-			velocity = move_dir

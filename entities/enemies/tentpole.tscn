@@ -66,7 +66,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2", "output", 0, "Chop" ]
+node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -138,6 +138,8 @@ node_connections = [ "output", 0, "StateMachine" ]
 radius = 8.97288
 
 [node name="tentpole" groups=["distance_activated", "dynamic", "push"] instance=ExtResource( 1 )]
+axis_lock_angular_x = true
+axis_lock_angular_z = true
 script = ExtResource( 3 )
 id = "tentpole"
 health = 30
@@ -147,7 +149,7 @@ material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999634, 0.0268866, 0.00313617, -0.0269293, 0.999532, 0.0144766, -0.00274548, -0.0145557, 0.99989, -0.0302042, 0.820607, -0.00564385 )
+transform = Transform( 0.999964, 0.00307959, 0.00787304, -0.00310224, 0.999991, 0.00286515, -0.00786415, -0.00288947, 0.999965, 0.0284473, 0.838204, -0.00874536 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
@@ -161,7 +163,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0117614, 0.99783, -0.064786, -0.904449, -0.0170139, -0.426242, -0.426419, 0.0636088, 0.902286, 0.0866636, 1.75468, -0.0499932 )
+transform = Transform( 0.0718689, 0.96999, -0.232279, -0.937124, -0.0140702, -0.348711, -0.341514, 0.242735, 0.907991, 0.122884, 1.77525, -0.0426306 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]

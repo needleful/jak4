@@ -341,6 +341,7 @@ func _ready():
 		global_transform.origin = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
 	else:
+		assert(Global.game_state)
 		Global.game_state.checkpoint_position = global_transform.origin
 		# Generate three random Common coats
 		for _x in range(3):

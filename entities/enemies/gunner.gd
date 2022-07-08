@@ -1,4 +1,4 @@
-extends KinematicEnemy
+extends EnemyBody
 
 export(float) var bounce_damage := 5.0
 export(float) var aim_speed := 0.6
@@ -111,7 +111,7 @@ func _physics_process(delta):
 					if bounce_timer > BOUNCE_WINDUP_TIME:
 						if safe_dist:
 							dir = Vector3.ZERO
-						velocity = Vector3.UP*bounce_velocity + dir*move_speed
+						apply_central_impulse(Vector3.UP*bounce_velocity + dir*move_speed)
 						grounded = false
 						bounce_timer = 0
 						damaged = []
@@ -119,8 +119,7 @@ func _physics_process(delta):
 						grounded = false
 				else:
 					look_at_target(BOUNCE_TURN_SPEED*delta)
-					velocity = move_and_slide(velocity + GRAVITY*delta, Vector3.UP)
-					if bounce_timer > BOUNCE_MIN_TIME and is_on_floor():
+					if bounce_timer > BOUNCE_MIN_TIME and is_grounded():
 						anim.travel("Flee_Windup")
 						grounded = true
 						bounce_timer = 0
@@ -203,23 +202,21 @@ func set_state(new_ai):
 			shot_timer = 0.0
 			fire()
 		AI.Flee:
+			sleeping = false
 			anim.travel("Flee_Windup")
 			laser.hide()
 		AI.Dead:
+			sleeping = false
 			anim.travel("Death")
 			laser.hide()
 			$CollisionShape.disabled = true
 			$CollisionShape2.disabled = true
 			$CollisionShape3.disabled = false
 		AI.Damaged:
+			sleeping = false
 			if last_attacker:
 				target = last_attacker
 			anim.travel("Damaged")
-			if grounded:
-				velocity.y = move_dir.y
-			else:
-				velocity = move_dir
 		AI.GravityStun:
+			sleeping = false
 			anim.travel("GravityStun")
-		AI.GravityStunDead:
-			velocity = move_dir
