@@ -133,6 +133,9 @@ func get_shield():
 	else:
 		return null
 
+func get_target_ref():
+	return $ref_target.global_transform.origin
+
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
 		return

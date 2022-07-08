@@ -47,7 +47,6 @@ func _physics_process(delta):
 				set_state(AI.Chasing)
 			fall_down(delta)
 		AI.GravityStun:
-			print(velocity)
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Chasing)
