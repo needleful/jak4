@@ -201,13 +201,14 @@ func get_rarity_color(rarity: int) -> Color:
 #Saving and loading
 
 func reset_game():
+	valid_game_state = false
+	game_state = GameState.new()
 	print("New game...")
 	var dir := Directory.new()
 	if ResourceLoader.exists(save_path):
 		print("Backing up save...")
 		# copy as a backup
 		var _x = dir.rename(save_path, old_save_backup)
-	valid_game_state = false
 	var _x = get_tree().reload_current_scene()
 
 func save_checkpoint(pos: Vector3):
