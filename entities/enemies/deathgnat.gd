@@ -16,6 +16,7 @@ const TIME_FLINCH := 0.75
 var state_timer := 0.0
 var quit_timer := 0.0
 var orb_timer := 0.0
+onready var awareness = $awareness
 
 func _init():
 	can_fly = true
@@ -38,14 +39,14 @@ func _physics_process(delta):
 	var next_state = ai
 	match ai:
 		AI.Idle:
-			for b in $awareness.get_overlapping_bodies():
+			for b in awareness.get_overlapping_bodies():
 				if b.is_in_group("player"):
 					target = b
 					next_state = AI.Chasing
 		AI.Chasing:
 			if no_target():
 				next_state = AI.Idle
-			elif $awareness.get_overlapping_bodies().size() == 0:
+			elif awareness.get_overlapping_bodies().size() == 0:
 				quit_timer += delta
 				if quit_timer > time_to_quit:
 					print("I Quit!")
@@ -72,6 +73,7 @@ func _physics_process(delta):
 	match ai:
 		AI.Idle:
 			fly()
+			pass
 		AI.Chasing:
 			look_at_target(delta*turn_speed)
 			fly()
@@ -94,23 +96,22 @@ func fly():
 		exit_radius = 0
 	else:
 		desired_position = target.global_transform.origin + Vector3.UP*desired_height
-		if "velocity" in target:
+		if target is PlayerBody:
 			desired_velocity = target.velocity
-		elif "linear_velocity" in target:
+		elif target is RigidBody:
 			desired_velocity = target.linear_velocity
-	
 	var dir := desired_position - global_transform.origin
-	var l = Vector2(dir.x, dir.z).length()
-	if l < exit_radius:
+	var l = Vector2(dir.x, dir.z).length_squared()
+	if l < exit_radius*exit_radius:
 		dir.x = -dir.x
 		dir.z = -dir.z
-	elif l < maximum_radius:
+	elif l < maximum_radius*maximum_radius:
 		dir.x = 0
 		dir.z = 0
 	
 	var movement:Vector3 = dir + (desired_velocity - linear_velocity)
 	
-	if movement.length() > speed:
+	if movement.length_squared() > speed*speed:
 		movement = movement.normalized()*speed
 	
 	var force := (movement - linear_velocity)

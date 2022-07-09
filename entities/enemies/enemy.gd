@@ -54,6 +54,9 @@ var in_range := false
 var coat: Coat = null
 var can_fly := false
 
+var source_chunk : MeshInstance
+var nomad := false
+
 var min_dot_shielded_damage := -0.5
 var last_attacker: Node
 var best_floor_normal : Vector3
@@ -92,6 +95,26 @@ func _ready():
 	if drops_coat:
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 	set_shielded(shielded)
+	var p = get_parent()
+	while p:
+		if p is MeshInstance and p.name.begins_with("chunk"):
+			source_chunk = p
+			set_process(true)
+			break
+		p = p.get_parent()
+	if !source_chunk:
+		set_process(false)
+
+func _process(_delta):
+	var aabb := source_chunk.get_aabb()
+	if !aabb.has_point(global_transform.origin - source_chunk.global_transform.origin):
+		nomad = true
+		var gt = global_transform
+		var scene = get_tree().current_scene
+		get_parent().remove_child(self)
+		scene.add_child(self)
+		global_transform = gt
+		set_process(false)
 
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)
@@ -100,6 +123,7 @@ func _integrate_forces(state):
 		var n:Vector3 = state.get_contact_local_normal(i)
 		if n.y > best_floor_normal.y:
 			best_floor_normal = n
+
 func set_active(_active: bool):
 	pass
 
@@ -108,6 +132,8 @@ func process_player_distance(pos: Vector3) -> float:
 	var within_activation := lensq <= square_distance_activation
 	if within_activation != in_range:
 		in_range = within_activation
+		if nomad and !in_range and ai != AI.Chasing:
+			queue_free()
 		set_active(in_range and ai != AI.Dead)
 	return lensq
 

@@ -1,5 +1,6 @@
 tool
 extends Spatial
+class_name Chunk
 
 export(bool) var lighting_preview := false
 

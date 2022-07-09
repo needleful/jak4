@@ -15,8 +15,8 @@ extents = Vector3( 0.516012, 0.37716, 0.913159 )
 [sub_resource type="CubeMesh" id=2]
 
 [sub_resource type="CapsuleShape" id=3]
-radius = 20.05
-height = 30.6641
+radius = 35.9064
+height = 61.9333
 
 [sub_resource type="BoxShape" id=5]
 extents = Vector3( 2.38184, 1.79791, 6.0287 )
@@ -25,6 +25,8 @@ extents = Vector3( 2.38184, 1.79791, 6.0287 )
 extents = Vector3( 0.717496, 0.589175, 1 )
 
 [node name="speeder" groups=["dynamic", "enemy", "push", "target"] instance=ExtResource( 1 )]
+mass = 80.0
+angular_damp = 4.136
 script = ExtResource( 2 )
 id = "speeder"
 drops_ammo = 0.75
@@ -34,8 +36,8 @@ health = 45
 attack_damage = 20
 run_speed = 24.0
 lunge_speed = 40.0
-turn_speed_radians = 80.0
-turn_speed_windup = 75.0
+turn_speed_radians = 90.0
+turn_speed_windup = 85.0
 windup_time = 0.1
 attack_time = 0.3
 alert_time = 0.5
@@ -61,7 +63,7 @@ shape = SubResource( 4 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.20286e-08, 0.376277, -0.626765 )
 shape = SubResource( 4 )
 
-[node name="debug-shield" type="MeshInstance" parent="." index="4"]
+[node name="debug_shield" type="MeshInstance" parent="." index="4"]
 transform = Transform( 0.592973, 0, 0, 0, 0.820549, 0.0928247, 0, -0.571576, 0.133258, -2.38419e-07, 0.481397, 1.13942 )
 visible = false
 mesh = SubResource( 2 )
@@ -71,7 +73,7 @@ collision_layer = 0
 collision_mask = 6
 
 [node name="CollisionShape" type="CollisionShape" parent="awareness" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 23.7894 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 45.7717 )
 shape = SubResource( 3 )
 
 [node name="AnimationPlayer" parent="." index="6"]
