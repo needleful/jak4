@@ -1,7 +1,8 @@
 extends EnemyBody
 
 export(float) var run_speed = 6.5
-export(float) var turn_speed_radians = 8.0
+export(float) var turn_speed_radians = 40.0
+export(float) var acceleration := 60.0
 
 onready var awareness := $awareness
 onready var anim := $AnimationTree
@@ -22,15 +23,15 @@ func _physics_process(delta):
 				if b.is_in_group("player"):
 					target = b
 					set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, acceleration)
 		AI.Alerted:
 			if !target:
 				set_state(AI.Idle)
 			elif state_timer > TIME_ALERT:
 				set_state(AI.Chasing)
-			look_at_target(delta*turn_speed_radians)
+			look_at_target(turn_speed_radians)
 		AI.Chasing:
-			if !target or target.is_dead():
+			if no_target():
 				set_state(AI.Idle)
 			elif !awareness.overlaps_body(target):
 				quit_timer += delta
@@ -38,15 +39,15 @@ func _physics_process(delta):
 					set_state(AI.Idle)
 			else:
 				quit_timer = 0
-			look_at_target(delta*turn_speed_radians)
-			walk(delta, run_speed)
+			look_at_target(turn_speed_radians)
+			walk(run_speed, acceleration)
 		AI.Damaged:
 			if state_timer >= TIME_DAMAGED:
 				set_state(AI.Chasing)
-			look_at_target(turn_speed_radians*delta)
-			fall_down(delta)
+			look_at_target(turn_speed_radians)
+			walk(0, acceleration)
 		AI.Dead:
-			fall_down(delta)
+			walk(0, acceleration)
 		AI.GravityStun:
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
@@ -68,6 +69,7 @@ func take_damage(damage, dir, source):
 func set_state(new_ai):
 	ai = new_ai
 	state_timer = 0
+	gravity_scale = 1
 	match ai:
 		AI.Idle:
 			chopper_hitbox.active = false
@@ -90,8 +92,12 @@ func set_state(new_ai):
 			playback.travel("Death")
 			$CollisionShape.disabled = true
 			$CollisionShape2.disabled = true
+			collision_layer = 0
 			$Armature/Skeleton/head.queue_free()
 		AI.GravityStun:
 			sleeping = false
 			chopper_hitbox.active = true
 			playback.travel("GravityStun")
+			gravity_scale = 0
+		AI.GravityStunDead:
+			gravity_scale = 0

@@ -27,13 +27,13 @@ func _physics_process(delta):
 				if b.is_in_group("player"):
 					target = b
 					set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Chasing:
 			for i in range(cooldown.size()):
 				cooldown[i] -= delta
 				if cooldown[i] < 0:
 					cooldown[i] = 0
-			if !target or target.is_dead():
+			if no_target():
 				set_state(AI.Idle)
 			for i in range(guns.size()):
 				var gun = guns[i]
@@ -41,11 +41,11 @@ func _physics_process(delta):
 				if a.overlaps_body(target) and cooldown[i] <= 0:
 					fire_orb(gun.global_transform.origin, orb_speed, orb_seeking)
 					cooldown[i] = gun_cooldown
-			fall_down(delta)
+			walk(0, 100)
 		AI.Damaged:
 			if state_timer > time_damaged:
 				set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, 10)
 		AI.GravityStun:
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
@@ -54,16 +54,6 @@ func _physics_process(delta):
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Dead)
-		AI.Dead:
-			fall_down(delta)
-
-func set_state(new_ai):
-	state_timer = 0.0
-	ai = new_ai
-	match ai:
-		AI.Chasing:
-			for i in range(cooldown.size()):
-				cooldown[i] = 0
 
 func take_damage(damage, dir, source):
 	if source and source != self:
@@ -72,3 +62,15 @@ func take_damage(damage, dir, source):
 		if last_attacker:
 			target = last_attacker
 		.take_damage(damage, dir, source)
+
+func set_state(new_ai):
+	state_timer = 0.0
+	ai = new_ai
+	gravity_scale = 1
+	match ai:
+		AI.Chasing:
+			for i in range(cooldown.size()):
+				cooldown[i] = 0
+		AI.GravityStun, AI.GravityStunDead:
+			gravity_scale = 0
+

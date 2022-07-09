@@ -64,6 +64,8 @@ func _ready():
 func _process(delta):
 	var player_new_position = player.global_transform.origin
 	if (player_last_postion - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
+		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
+		detect_enemies(delta)
 		update_active_chunks(player_new_position)
 		player_last_postion = player_new_position
 	
@@ -76,8 +78,6 @@ func _process(delta):
 		chunk_unload_waitlist[ch] += delta
 		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
 			mark_inactive(get_node(ch))
-	
-	detect_enemies(delta)
 
 func get_or_load(chunk_name: String) -> PackedScene:
 	if chunk_name in chunk_scenes:
@@ -95,8 +95,7 @@ func detect_enemies(_delta):
 	var were_present := enemies_present
 	enemies_present = false
 	var air_enemies_present = false
-	var enemies = get_tree().get_nodes_in_group("distance_activated")
-	for e in enemies:
+	for e in get_tree().get_nodes_in_group("enemy"):
 		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
 		if dist_squared < MIN_DIST_SQ_ENEMIES:
 			if "can_fly" in e and e.can_fly:

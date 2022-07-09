@@ -5,7 +5,7 @@ const time_firing := 3.0
 var charge_fire := false
 var infinite_ammo := false
 
-const TIME_SLOWED := 6.0
+const TIME_SLOWED := 10.0
 
 var time_amount := 1.0
 

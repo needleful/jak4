@@ -4,10 +4,10 @@ export(float) var bounce_damage := 5.0
 export(float) var aim_speed := 0.6
 export(float) var aim_speed_windup := 0.35
 export(float) var time_to_shoot := 3.0
-export(float) var move_speed := 8.0
 export(float) var flee_radius := 5.0
 export(float) var safe_radius := 10.0
-export(float) var bounce_velocity := 8.0
+export(float) var bounce_impulse := 8.0
+export(float) var bounce_impulse_h := 8.0
 export(float) var flee_acceleration := 40.0
 
 export(Color) var laser_color := Color(3, 0.2, 0.2)
@@ -20,10 +20,10 @@ const TIME_QUIT := 5.0
 const BOUNCE_WINDUP_TIME := 0.75
 const BOUNCE_TIME_TO_HITBOX := 0.1
 const BOUNCE_MIN_TIME := 0.25
-const BOUNCE_TURN_SPEED := 5.0
+const BOUNCE_TURN_SPEED := 50.0
 const DEFAULT_DISTANCE := 20.0
 
-const GRAV_STUN_TURN_SPEED := 1.0
+const GRAV_STUN_TURN_SPEED := 10.0
 
 var shot_timer := 0.0
 var state_timer := 0.0
@@ -58,10 +58,10 @@ func _physics_process(delta):
 				if b.is_in_group("player"):
 					target = b
 					set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Chasing:
 			shot_timer += delta
-			if !target or target.is_dead():
+			if no_target():
 				set_state(AI.Idle)
 			else:
 				if !awareness.overlaps_body(target):
@@ -78,23 +78,23 @@ func _physics_process(delta):
 						set_state(AI.Flee)
 			var f := DEFAULT_DISTANCE/(1 + dist.length())
 			aim(delta, f*aim_speed)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Windup:
 			if state_timer > TIME_WINDUP:
 				set_state(AI.Attacking)
 			var f := DEFAULT_DISTANCE/(1 + dist.length())
 			aim(delta, f*aim_speed_windup)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Attacking:
 			if state_timer > TIME_ATTACK:
 				set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Damaged:
 			if state_timer > TIME_DAMAGED:
 				set_state(AI.Chasing)
-			fall_down(delta)
+			walk(0, 100)
 		AI.Flee:
-			if !target or target.is_dead():
+			if no_target():
 				set_state(AI.Idle)
 			else:
 				bounce_timer += delta
@@ -106,12 +106,12 @@ func _physics_process(delta):
 					if safe_angle and safe_dist:
 						set_state(AI.Chasing)
 						
-					fall_down(delta)
+					walk(0, 100)
 
 					if bounce_timer > BOUNCE_WINDUP_TIME:
 						if safe_dist:
 							dir = Vector3.ZERO
-						apply_central_impulse(Vector3.UP*bounce_velocity + dir*move_speed)
+						apply_central_impulse(mass*(Vector3.UP*bounce_impulse + dir*bounce_impulse_h))
 						grounded = false
 						bounce_timer = 0
 						damaged = []
@@ -140,7 +140,12 @@ func _physics_process(delta):
 
 func aim(delta: float, speed: float):
 	if target:
-		var aim_dir: Vector3 = (target.global_transform.origin + 0.75*Vector3.UP - laser.global_transform.origin).normalized()
+		var target_pos: Vector3
+		if target.has_method("get_target_ref"):
+			target_pos = target.get_target_ref()
+		else:
+			target_pos = target.global_transform.origin
+		var aim_dir: Vector3 = (target_pos - laser.global_transform.origin).normalized()
 		if aim_dir.is_normalized():
 			if aim_dir.dot(global_transform.basis.z) < 0:
 				set_state(AI.Flee)
@@ -186,6 +191,7 @@ func set_state(new_ai):
 		return
 	
 	var mat_laser: SpatialMaterial = laser.material_override
+	gravity_scale = 1
 	match ai:
 		AI.Idle:
 			anim.travel("Idle")
@@ -215,8 +221,11 @@ func set_state(new_ai):
 		AI.Damaged:
 			sleeping = false
 			if last_attacker:
-				target = last_attacker
+				aggro_to(last_attacker)
 			anim.travel("Damaged")
 		AI.GravityStun:
+			gravity_scale = 0
 			sleeping = false
 			anim.travel("GravityStun")
+		AI.GravityStunDead:
+			gravity_scale = 0

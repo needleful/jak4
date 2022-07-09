@@ -38,6 +38,8 @@ var frame_until_update := 0
 
 onready var anim := $crawly/AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
+onready var awareness := $awareness
+onready var ref_target = $ref_target
 
 func _ready():
 	if coat:
@@ -56,17 +58,17 @@ func _physics_process(delta):
 	var next = ai
 	match ai:
 		AI.Idle:
-			for b in $awareness.get_overlapping_bodies():
+			for b in awareness.get_overlapping_bodies():
 				if b.is_in_group("player"):
-					target = b
+					aggro_to(b)
 					next = AI.Alerted
 		AI.Alerted:
 			if state_timer > ALERT_TIME:
 				next = AI.Chasing
 		AI.Chasing:
-			if !target or target.is_dead():
+			if no_target():
 				next = AI.Idle
-			elif !$awareness.overlaps_body(target):
+			elif !awareness.overlaps_body(target):
 				give_up_timer += delta
 				if give_up_timer > EXTRA_CHASE_TIME:
 					next = AI.Idle
@@ -139,7 +141,7 @@ func get_shield():
 		return null
 
 func get_target_ref():
-	return $ref_target.global_transform.origin
+	return ref_target.global_transform.origin
 
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
@@ -165,7 +167,7 @@ func set_state(new_ai, force := false):
 		AI.Damaged:
 			sleeping = false
 			if last_attacker:
-				target = last_attacker
+				aggro_to(last_attacker)
 			anim.play("Damaged")
 		AI.Dead:
 			collision_layer = 0

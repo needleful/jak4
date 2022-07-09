@@ -24,6 +24,7 @@ export(float) var damaged_speed = 0.5
 export(float) var square_distance_activation := 2400.0
 export(bool) var shielded := false setget set_shielded
 const projectile: PackedScene = preload("res://entities/projectile.tscn")
+const GRAV_DECAY := 1.0
 
 enum AI {
 	Idle,
@@ -111,7 +112,7 @@ func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
 			c.take_damage(damage, dir, self)
 		damaged.append(c)
 
-func look_at_target(turn_amount: float, damping := 0.1):
+func look_at_target(turn_amount: float, damping := 1.5):
 	if !target:
 		return
 
@@ -133,14 +134,13 @@ func rotate_up(speed: float, up := Vector3.UP):
 
 func die():
 	var _x = Global.add_stat("killed/"+id)
-	remove_from_group("distance_activated")
+	remove_from_group("enemy")
 	if is_in_group("target"):
 		remove_from_group("target")
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
 		drop_item(c)
-		print("Spawning coat")
 	var gems = int(rand_range(0, gem_drop_max))
 	if gems > 0:
 		var g = gem_scene.instance()
@@ -229,8 +229,8 @@ func walk(velocity: float, accel: float, decel := -1.0):
 	add_central_force(mass*force)
 
 func stunned_move(delta: float):
-	var force_removal = -linear_velocity*clamp(1.0 - delta, 0.1, 0.995)
-	add_central_force(force_removal)
+	var force_removal = -linear_velocity*clamp(1.0 - delta/GRAV_DECAY, 0.1, 0.995)
+	add_central_force(mass*force_removal)
 
 func fall_down(_delta: float):
 	pass
@@ -243,7 +243,8 @@ func play_damage_sfx():
 	pass
 
 func aggro_to(node: Spatial):
-	target = node
+	if node != self:
+		target = node
 
 func gravity_stun(dam):
 	take_damage(dam, Vector3.UP, null)
@@ -252,6 +253,9 @@ func gravity_stun(dam):
 	else:
 		apply_central_impulse(mass*dam*Vector3.UP*damaged_speed)
 		set_state(AI.GravityStunDead)
+
+func no_target():
+	return !target or (target.has_method("is_dead") and target.is_dead())
 
 func is_dead():
 	return ai == AI.Dead or ai == AI.GravityStunDead

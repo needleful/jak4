@@ -38,7 +38,7 @@ func can_charge():
 func charge():
 	if Global.count("wave_shot") <= 0:
 		return
-	$AudioStreamPlayer.play()
+	$ChargeSound.play()
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("Charging")
 	$AnimationPlayer.queue("MaxCharge-loop")
@@ -48,7 +48,7 @@ func charge():
 func fire():
 	var _x = Global.remove_item("wave_shot")
 	$FireSound.play()
-	$AudioStreamPlayer.stop()
+	$ChargeSound.stop()
 	$AnimationPlayer.stop()
 	$AnimationPlayer.clear_queue()
 	$AnimationPlayer.play("Fire")
@@ -74,7 +74,7 @@ func fire():
 	return true
 
 func stow():
-	$AudioStreamPlayer.stop()
+	$ChargeSound.stop()
 	$AnimationPlayer.stop()
 	charging = false
 

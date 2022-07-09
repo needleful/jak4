@@ -1,8 +1,9 @@
 extends EnemyBody
 class_name DeathGnat
 
-export(float) var speed = 5.0
-export(float) var turn_speed = 10.0
+export(float) var speed := 5.0
+export(float) var acceleration := 30.0
+export(float) var turn_speed = 100.0
 export(float) var orb_cooldown := 2.0
 export(float) var orb_speed := 5.0
 export(float) var orb_seeking := 2.0
@@ -10,7 +11,6 @@ export(float) var time_to_quit = 10.0
 export(float) var minimum_radius = 5.0
 export(float) var maximum_radius = 10.0
 export(float) var desired_height = 3.0
-export(float) var acceleration = 10.0
 
 const TIME_FLINCH := 0.75
 var state_timer := 0.0
@@ -43,7 +43,7 @@ func _physics_process(delta):
 					target = b
 					next_state = AI.Chasing
 		AI.Chasing:
-			if !target or target.is_dead():
+			if no_target():
 				next_state = AI.Idle
 			elif $awareness.get_overlapping_bodies().size() == 0:
 				quit_timer += delta
@@ -71,7 +71,7 @@ func _physics_process(delta):
 	
 	match ai:
 		AI.Idle:
-			pass
+			fly()
 		AI.Chasing:
 			look_at_target(delta*turn_speed)
 			fly()
@@ -86,22 +86,36 @@ func _physics_process(delta):
 			stunned_move(delta)
 
 func fly():
+	var desired_position: Vector3 
+	var desired_velocity: Vector3
+	var exit_radius = minimum_radius
 	if !target:
-		target = Global.get_player()
-	var dir := target.global_transform.origin - global_transform.origin
-	var change_y := dir.y
-	dir.y = 0
-	var l = dir.length()
-	if l < minimum_radius:
-		dir = -dir
-	elif l < maximum_radius:
-		dir = Vector3.ZERO
+		desired_position = global_transform.origin
+		exit_radius = 0
+	else:
+		desired_position = target.global_transform.origin + Vector3.UP*desired_height
+		if "velocity" in target:
+			desired_velocity = target.velocity
+		elif "linear_velocity" in target:
+			desired_velocity = target.linear_velocity
 	
-	dir.y = change_y + desired_height
-	dir /= 5
-	if dir.length() > 1:
-		dir = dir.normalized()
-	add_central_force(speed*dir - mass*GRAVITY)
+	var dir := desired_position - global_transform.origin
+	var l = Vector2(dir.x, dir.z).length()
+	if l < exit_radius:
+		dir.x = -dir.x
+		dir.z = -dir.z
+	elif l < maximum_radius:
+		dir.x = 0
+		dir.z = 0
+	
+	var movement:Vector3 = dir + (desired_velocity - linear_velocity)
+	
+	if movement.length() > speed:
+		movement = movement.normalized()*speed
+	
+	var force := (movement - linear_velocity)
+	
+	add_central_force(force*mass*acceleration)
 
 func play_damage_sfx():
 	# TODO
@@ -119,17 +133,22 @@ func set_state(new_state):
 		return
 	ai = new_state
 	state_timer = 0
+	gravity_scale = 0
 	match ai:
 		AI.Chasing:
 			$AnimationPlayer.play("Idle-loop")
 			quit_timer = 0
 			orb_timer = orb_cooldown
 		AI.Dead:
+			axis_lock_angular_x = false
+			axis_lock_angular_z = false
+			gravity_scale = 1
 			$AnimationPlayer.stop()
 			collision_layer = 0
 		AI.Damaged:
+			gravity_scale = 1
 			if last_attacker:
-				target = last_attacker
+				aggro_to(last_attacker)
 			$AnimationPlayer.stop()
 		AI.GravityStun:
 			$AnimationPlayer.stop()

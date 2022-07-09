@@ -1,6 +1,6 @@
 extends ColorRect
 
-const slow_time_rate := 0.5
+const slow_time_rate := 0.25
 var time_slowed := false
 
 func slow_time(time):

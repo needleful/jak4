@@ -134,6 +134,8 @@ const HOVER_AIR_DRAG := 0.01
 const HOVER_EXTRA_GRAVITY := 1.0
 
 var hover_normal := Vector3.UP
+var hover_speed_factor := 1.0
+var hover_speed_up_percent := 0.25
 # Broad things
 
 var velocity := Vector3.ZERO
@@ -320,6 +322,7 @@ const UPGRADE_ITEMS := [
 	"stamina_booster",
 	"stamina_recovery_up",
 	"stamina_up",
+	"hover_speed_up"
 ]
 
 const AMMO := [
@@ -873,7 +876,7 @@ func _physics_process(delta):
 			if hover_floor_finder.is_colliding():
 				hover_normal = hover_floor_finder.get_collision_normal()
 				hover_cast.cast_to = -hover_normal
-			accel_hover(delta, desired_velocity*SPEED_HOVER, grounded)
+			accel_hover(delta, desired_velocity*SPEED_HOVER*hover_speed_factor, grounded)
 		State.WaveJumpRoll:
 			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL_WAVE_JUMP, true)
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
@@ -892,70 +895,80 @@ func complete_save():
 
 func update_inventory():
 	for item in VISIBLE_ITEMS:
-		on_item_changed(item, 0)
+		on_item_changed(item, 0, Global.count(item))
 	for item in UPGRADE_ITEMS:
-		on_item_changed(item, 0)
+		on_item_changed(item, 0, Global.count(item))
 	$ui/weapon/ammo_label.text = str(Global.count(current_weapon))
 
-func on_item_changed(item: String, amount: int):
+func get_target_ref():
+	return global_transform.origin + (Vector3.UP*0.5 if is_crouching() else Vector3.UP*0.75)
+
+func is_crouching():
+	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
+
+func on_item_changed(item: String, change: int, count: int):
 	if item in VISIBLE_ITEMS:
-		var count: Label = get_node("ui/inventory/"+item+"_count")
-		count.text = str(Global.count(item))
-		if amount != 0:
+		var l_count: Label = get_node("ui/inventory/"+item+"_count")
+		l_count.text = str(count)
+		if change != 0:
 			var added: Label = get_node("ui/inventory/"+item+"_added")
-			added.text = "+ "+str(amount) if amount > 0 else "- "+str(abs(amount))
+			added.text = "+ "+str(change) if change > 0 else "- "+str(abs(change))
 			var anim = added.get_node("AnimationPlayer")
 			anim.stop()
 			anim.play("show")
 		show_specific_item(item)
-	
-	elif item in UPGRADE_ITEMS:
-		var health_up :int = Global.count("health_up")
-		var stamina_up :int = Global.count("stamina_up")
-		
-		var h_factor = (1.0 + HEALTH_UP_BOOST*health_up)
-		var s_factor = (1.0 + STAMINA_UP_BOOST*stamina_up)
-		
-		max_health = DEFAULT_MAX_HEALTH*h_factor
-		max_stamina = DEFAULT_MAX_STAMINA*s_factor
-		health_bar.max_value = max_health
-		health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
-		
-		stamina_bar.max_value = max_stamina
-		stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
-		
-		stamina_factor = (1 + STAMINA_RECOVERY_BOOST*Global.count("stamina_recovery_up"))
-		jump_factor = (1 + JUMP_UP_BOOST*Global.count("jump_height_up"))
-		speed_factor = (1 + SPEED_UP_BOOST*Global.count("move_speed_up"))
-		stamina_drain_factor = (1 + SPEED_STAMINA_BOOST*Global.count("move_speed_up"))
-		
-		var damage_up_count:int =  Global.count("damage_up")
-		damage_factor = (1 + DAMAGE_UP_BOOST*damage_up_count)
-		max_damage = damage_up_count >= MAX_DAMAGE_UP
-		
-		var new_armor:int = Global.count("armor")
-		if new_armor > armor:
-			extra_health += (new_armor - armor)*ARMOR_BOOST
-		armor = new_armor
-		armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
-		armor_bar.visible = armor > 0 and extra_health > 0
-		update_health()
-	
-		var new_energy = Global.count("stamina_booster")
-		if new_energy > energy:
-			extra_stamina = new_energy*EXTRA_STAMINA_BOOST
-		energy = new_energy
-		energy_bar.visible = energy > 0
-	
 	elif item in WEAPONS:
 		gun.add_weapon(item)
 		gun.show_weapon()
 		show_ammo()
 	elif current_weapon == item:
-		$ui/weapon/ammo_label.text = str(Global.count(item))
+		$ui/weapon/ammo_label.text = str(count)
 		if current_weapon and !$ui/weapon.visible:
 			show_ammo()
-	#debug
+	else:
+		match item:
+			"health_up":
+				var health_up := count
+				var h_factor = (1.0 + HEALTH_UP_BOOST*health_up)
+				max_health = DEFAULT_MAX_HEALTH*h_factor
+				health_bar.max_value = max_health
+				health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
+			"stamina_up":
+				var stamina_up := count
+				var s_factor = (1.0 + STAMINA_UP_BOOST*stamina_up)
+				max_stamina = DEFAULT_MAX_STAMINA*s_factor
+				stamina_bar.max_value = max_stamina
+				stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
+			"stamina_recovery_up":
+				stamina_factor = (1 + STAMINA_RECOVERY_BOOST*count)
+			"jump_height_up":
+				jump_factor = (1 + JUMP_UP_BOOST*count)
+			"move_speed_up":
+				speed_factor = (1 + SPEED_UP_BOOST*count)
+			"move_speed_up":
+				stamina_drain_factor = (1 + SPEED_STAMINA_BOOST*count)
+			"damage_up":
+				var damage_up_count := count
+				damage_factor = (1 + DAMAGE_UP_BOOST*damage_up_count)
+				max_damage = damage_up_count >= MAX_DAMAGE_UP
+			"armor":
+				var new_armor:int = count
+				if new_armor > armor:
+					extra_health += (new_armor - armor)*ARMOR_BOOST
+				armor = new_armor
+				armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
+				armor_bar.visible = armor > 0 and extra_health > 0
+				update_health()
+			"stamina_booster":
+				var new_energy := count
+				if new_energy > energy:
+					extra_stamina = new_energy*EXTRA_STAMINA_BOOST
+				energy = new_energy
+				energy_bar.visible = energy > 0
+			"hover_speed_up":
+				hover_speed_factor = 1.0 + hover_speed_up_percent*count
+
+func debug_show_inventory():
 	var state_viewer: Control = $ui/debug/game_state
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
@@ -995,7 +1008,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.y,
 		desired_velocity.z
 	]
-	var gravity = GRAVITY*Engine.time_scale
+	var gravity = GRAVITY
 	if ground_normal != Vector3.ZERO:
 		var axis = Vector3.UP.cross(ground_normal).normalized()
 		var angle = Vector3.UP.angle_to(ground_normal)
@@ -1003,7 +1016,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 			desired_velocity = desired_velocity.rotated(axis, angle)
 			if desired_velocity.y > ROLL_MAX_VELOCITY_V:
 				desired_velocity.y = ROLL_MAX_VELOCITY_V
-		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
+		gravity = GRAVITY.project(ground_normal)
 	var hvel := velocity
 	if gravity != Vector3.ZERO:
 		hvel = hvel.slide(gravity.normalized())
@@ -1050,7 +1063,7 @@ func accel_climb(delta: float, desired_velocity: Vector3):
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
 			desired_velocity = desired_velocity.rotated(axis, angle)
-		gravity = GRAVITY.project(ground_normal)*Engine.time_scale
+		gravity = GRAVITY.project(ground_normal)
 		if desired_velocity != Vector3.ZERO:
 			$debug_climb.global_transform = $debug_climb.global_transform.looking_at(
 				$debug_climb.global_transform.origin + desired_velocity, ground_normal
@@ -1081,7 +1094,7 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, ignore_sli
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	velocity += gravity*Engine.time_scale*delta
+	velocity += gravity*delta
 	var pre_slide_vel := velocity
 	velocity = move(velocity)
 	var ceiling_normal := Vector3.UP
@@ -1101,7 +1114,7 @@ func accel_low_gravity(delta, desired_velocity, gravity_factor):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, ACCEL*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
-	velocity += gravity_factor*GRAVITY*Engine.time_scale*delta
+	velocity += gravity_factor*GRAVITY*delta
 	var pre_slide_vel := velocity
 	velocity = move(velocity)
 	velocity.y = min(pre_slide_vel.y, velocity.y)
@@ -1122,14 +1135,14 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.x,
 		min(hvel.y, velocity.y),
 		hvel.z)
-	velocity = move(velocity + delta*GRAVITY*Engine.time_scale)
+	velocity = move(velocity + delta*GRAVITY)
 
 func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := false):
 	var hvel = velocity
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
-	var v2 := move(velocity + GRAVITY*delta*Engine.time_scale)
+	var v2 := move(velocity + GRAVITY*delta)
 	velocity = velocity.move_toward(Vector3.ZERO, decel*delta)
 	if ignore_slide:
 		velocity.y = min(velocity.y, v2.y)
@@ -1137,7 +1150,7 @@ func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := f
 		velocity.y = max(velocity.y, v2.y)
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
-	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY*Engine.time_scale
+	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY
 	var hvel := Vector3(velocity.x, 0, velocity.z)
 	var hdir := hvel.normalized()
 	if grounded:
