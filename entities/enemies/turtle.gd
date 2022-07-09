@@ -2,8 +2,7 @@ extends EnemyBody
 
 export(float) var orb_speed := 9.0
 export(float) var orb_seeking := 1.2
-export(float) var gun_cooldown := 1.0
-export(float) var gravity_stun_speed := 5.0
+export(float) var gun_cooldown := 1.5
 
 const time_damaged := 2.0
 var state_timer := 0.0
@@ -13,7 +12,7 @@ var cooldown: PoolRealArray = [0.0, 0.0, 0.0, 0.0]
 onready var guns = [$gun0, $gun1, $gun2, $gun3]
 
 func _init():
-	damaged_speed = 0.1
+	damaged_speed = 0.0
 
 func _ready():
 	if coat:
@@ -70,7 +69,7 @@ func set_state(new_ai):
 	match ai:
 		AI.Chasing:
 			for i in range(cooldown.size()):
-				cooldown[i] = 0
+				cooldown[i] = randf()*gun_cooldown
 		AI.GravityStun, AI.GravityStunDead:
 			gravity_scale = 0
 

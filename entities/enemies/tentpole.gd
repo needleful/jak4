@@ -93,7 +93,8 @@ func set_state(new_ai):
 			$CollisionShape.disabled = true
 			$CollisionShape2.disabled = true
 			collision_layer = 0
-			$Armature/Skeleton/head.queue_free()
+			if has_node("Armature/Skeleton/head"):
+				$Armature/Skeleton/head.queue_free()
 		AI.GravityStun:
 			sleeping = false
 			chopper_hitbox.active = true

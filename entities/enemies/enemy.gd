@@ -20,11 +20,14 @@ export(Rarity) var maximum_rarity = Rarity.Rare
 export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10
-export(float) var damaged_speed = 0.5
-export(float) var square_distance_activation := 2400.0
 export(bool) var shielded := false setget set_shielded
-const projectile: PackedScene = preload("res://entities/projectile.tscn")
+
 const GRAV_DECAY := 1.0
+const projectile: PackedScene = preload("res://entities/projectile.tscn")
+
+var damaged_speed := 0.5
+var gravity_stun_speed := 0.5
+var square_distance_activation := 2400.0
 
 enum AI {
 	Idle,
@@ -40,7 +43,6 @@ enum AI {
 }
 var ai = AI.Idle
 
-const GRAVITY := Vector3.DOWN*24
 
 var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
 var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
@@ -91,6 +93,13 @@ func _ready():
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 	set_shielded(shielded)
 
+func _integrate_forces(state):
+	best_floor_normal = Vector3(0, -INF, 0)
+	contact_count = state.get_contact_count()
+	for i in range(contact_count):
+		var n:Vector3 = state.get_contact_local_normal(i)
+		if n.y > best_floor_normal.y:
+			best_floor_normal = n
 func set_active(_active: bool):
 	pass
 
@@ -177,30 +186,33 @@ func drop_item(item: ItemPickup):
 func take_damage(damage: int, dir: Vector3, source: Node):
 	if is_dead():
 		return
+	var dead = subtract_health(damage, dir)
+	apply_central_impulse(mass*damage*dir*damaged_speed)
+	if dead:
+		set_state(AI.Dead)
+		die()
+	else:
+		last_attacker = source
+		play_damage_sfx()
+		if ai != AI.GravityStun:
+			set_state(AI.Damaged)
+
+func gravity_stun(dam):
+	var dead = subtract_health(dam, Vector3.UP)
+	apply_central_impulse(mass*dam*Vector3.UP*gravity_stun_speed)
+	if dead:
+		set_state(AI.GravityStunDead)
+	else:
+		set_state(AI.GravityStun)
+
+func subtract_health(damage:int, dir: Vector3) -> bool:
 	if shielded:
 		var d := dir.dot(global_transform.basis.z)
 		if d < min_dot_shielded_damage:
 			# TODO: play shielded effect
-			return
-	last_attacker = source
+			return health <= 0
 	health -= damage
-	apply_central_impulse(mass*damage*dir*damaged_speed)
-	if health <= 0:
-		set_state(AI.Dead)
-		die()
-	elif ai == AI.GravityStun:
-		play_damage_sfx()
-	else:
-		play_damage_sfx()
-		set_state(AI.Damaged)
-
-func _integrate_forces(state):
-	best_floor_normal = Vector3(0, -INF, 0)
-	contact_count = state.get_contact_count()
-	for i in range(contact_count):
-		var n:Vector3 = state.get_contact_local_normal(i)
-		if n.y > best_floor_normal.y:
-			best_floor_normal = n
+	return health <= 0
 
 func is_grounded():
 	return best_floor_normal.y > 0
@@ -245,14 +257,6 @@ func play_damage_sfx():
 func aggro_to(node: Spatial):
 	if node != self:
 		target = node
-
-func gravity_stun(dam):
-	take_damage(dam, Vector3.UP, null)
-	if ai != AI.Dead:
-		set_state(AI.GravityStun)
-	else:
-		apply_central_impulse(mass*dam*Vector3.UP*damaged_speed)
-		set_state(AI.GravityStunDead)
 
 func no_target():
 	return !target or (target.has_method("is_dead") and target.is_dead())

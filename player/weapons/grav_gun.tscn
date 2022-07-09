@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://_glb/weapons/grav_gun.glb" type="PackedScene" id=1]
 [ext_resource path="res://player/weapons/grav_gun.gd" type="Script" id=2]
@@ -11,6 +11,10 @@
 [ext_resource path="res://audio/weapons/grav_gun_explosion.wav" type="AudioStream" id=9]
 [ext_resource path="res://player/weapons/explode_sound.gd" type="Script" id=10]
 [ext_resource path="res://audio/weapons/grav_gun_bounce.wav" type="AudioStream" id=11]
+
+[sub_resource type="PhysicsMaterial" id=22]
+friction = 0.0
+bounce = 0.91
 
 [sub_resource type="SphereShape" id=2]
 radius = 0.114207
@@ -186,9 +190,12 @@ material/1 = ExtResource( 7 )
 [node name="launcher" type="Spatial" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0846297, 0.291625 )
 
-[node name="projectile" type="KinematicBody" parent="launcher" index="0"]
+[node name="projectile" type="RigidBody" parent="launcher" index="0"]
 collision_layer = 0
 collision_mask = 5
+physics_material_override = SubResource( 22 )
+contacts_reported = 1
+contact_monitor = true
 script = ExtResource( 6 )
 
 [node name="CollisionShape" type="CollisionShape" parent="launcher/projectile" index="0"]
@@ -241,6 +248,7 @@ script = ExtResource( 10 )
 stream = ExtResource( 8 )
 bus = "SFX_Player"
 
+[connection signal="body_entered" from="launcher/projectile" to="launcher/projectile" method="_on_body_entered"]
 [connection signal="contact" from="launcher/projectile" to="." method="_on_projectile_contact"]
 [connection signal="disappeared" from="launcher/explosion" to="." method="_on_explosion_disappeared"]
 [connection signal="animation_finished" from="launcher/explosion/AnimationPlayer" to="launcher/explosion" method="_on_animation_finished"]

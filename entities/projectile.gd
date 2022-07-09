@@ -10,7 +10,7 @@ var target: Spatial
 
 var velocity := Vector3.ZERO
 
-const INACTIVE_TIME := 0.2
+const INACTIVE_TIME := 0.1
 const TOTAL_TIME := 6.0
 
 var timer := 0.0

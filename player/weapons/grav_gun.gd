@@ -48,7 +48,7 @@ func fire() -> bool:
 	scene.add_child(new_proj)
 	new_proj.global_transform = launcher.global_transform
 	new_proj.fire(launcher.global_transform.basis.z)
-	new_proj.velocity += Global.get_player().velocity
+	new_proj.apply_central_impulse(new_proj.mass*Global.get_player().velocity)
 
 	return true
 

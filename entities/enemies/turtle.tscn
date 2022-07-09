@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://_glb/enemies/turtle.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/enemies/turtle.gd" type="Script" id=2]
 [ext_resource path="res://material/ancient/gem.material" type="Material" id=3]
 [ext_resource path="res://entities/enemies/hurtbox.gd" type="Script" id=4]
 [ext_resource path="res://material/ancient/white_metal.material" type="Material" id=5]
+[ext_resource path="res://material/env/copper/copper_local_coords.tres" type="Material" id=6]
 
 [sub_resource type="SphereShape" id=1]
 radius = 0.6
@@ -25,6 +26,10 @@ height = 1.4
 radial_segments = 24
 rings = 8
 
+[sub_resource type="CylinderShape" id=6]
+height = 1.07697
+radius = 0.378493
+
 [node name="turtle" groups=["dynamic", "enemy"] instance=ExtResource( 1 )]
 collision_mask = 2
 mass = 500.0
@@ -35,10 +40,11 @@ id = "turtle"
 drops_coat = true
 minimum_rarity = 1
 maximum_rarity = 3
-health = 300
+health = 100
 
 [node name="turtle" parent="." index="0"]
 material/0 = ExtResource( 5 )
+material/1 = ExtResource( 6 )
 
 [node name="turtle_top-kine" parent="." index="1"]
 collision_mask = 2
@@ -74,7 +80,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.29114, 0 )
 shape = SubResource( 2 )
 
 [node name="gun0" type="Position3D" parent="." index="8"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.62334, 1.605, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.81562, 1.67851, 0 )
 
 [node name="awareness" type="Area" parent="gun0" index="0"]
 collision_layer = 0
@@ -85,7 +91,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2164, 0, 0 )
 shape = SubResource( 3 )
 
 [node name="gun1" type="Position3D" parent="." index="9"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.4897e-08, 1.6944, -1.60131 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.4897e-08, 1.72737, -1.98898 )
 
 [node name="awareness" type="Area" parent="gun1" index="0"]
 collision_layer = 0
@@ -96,7 +102,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2164, 0, 0 )
 shape = SubResource( 3 )
 
 [node name="gun2" type="Position3D" parent="." index="10"]
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.49431, 1.57625, 4.76837e-07 )
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -1.75271, 1.7027, 4.76837e-07 )
 
 [node name="awareness" type="Area" parent="gun2" index="0"]
 collision_layer = 0
@@ -107,7 +113,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2164, 0, 0 )
 shape = SubResource( 3 )
 
 [node name="gun3" type="Position3D" parent="." index="11"]
-transform = Transform( 1.94707e-07, 0, -1, 0, 1, 0, 1, 0, 1.94707e-07, 2.62002e-07, 1.62747, 1.71511 )
+transform = Transform( 1.94707e-07, 0, -1, 0, 1, 0, 1, 0, 1.94707e-07, 2.62002e-07, 1.72666, 1.85261 )
 
 [node name="awareness" type="Area" parent="gun3" index="0"]
 collision_layer = 0
@@ -136,3 +142,19 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.219248, 0 )
 light_color = Color( 1, 0.345098, 0.803922, 1 )
 light_energy = 0.568
 omni_range = 1.625
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="13"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -1.26817, 1.707, 0 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="." index="14"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 1.25417, 1.707, 0 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="." index="15"]
+transform = Transform( -4.37114e-08, 4.37114e-08, 1, 1, -4.37114e-08, 4.37114e-08, 4.37114e-08, 1, -4.37114e-08, 0.0268823, 1.707, -1.40389 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="." index="16"]
+transform = Transform( -4.37114e-08, 4.37114e-08, 1, 1, -4.37114e-08, 4.37114e-08, 4.37114e-08, 1, -4.37114e-08, 0.0268824, 1.707, 1.42822 )
+shape = SubResource( 6 )

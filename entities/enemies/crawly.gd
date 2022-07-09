@@ -17,15 +17,16 @@ export(AudioStream) var damage_audio
 export(AudioStream) var quit_audio
 export(AudioStream) var attack_audio
 
+export(float) var windup_time := .5
+export(float) var attack_time := 0.75
+export(float) var alert_time := 2.0
+export(float) var damaged_time := 1.0
+export(float) var cooldown_time := 2.0
+export(float) var extra_chase_time := 10.0
+
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_UP := 0.01
 
-const WINDUP_TIME := .5
-const ATTACK_TIME := 0.75
-const ALERT_TIME := 2.0
-const DAMAGED_TIME := 1.0
-const COOLDOWN_TIME := 2.0
-const EXTRA_CHASE_TIME := 10.0
 
 var state_timer := 0.0
 var cooldown_timer := 0.0
@@ -36,14 +37,17 @@ var ground_normal := Vector3.UP
 var physics_frequency := 1
 var frame_until_update := 0
 
-onready var anim := $crawly/AnimationPlayer
+export(NodePath) var animation_node = NodePath("crawly/AnimationPlayer")
+export(NodePath) var mesh_node = NodePath("crawly/Armature/Skeleton/crawly")
+
+onready var anim := get_node(animation_node)
 onready var sound := $AudioStreamPlayer3D
 onready var awareness := $awareness
 onready var ref_target = $ref_target
 
 func _ready():
 	if coat:
-		$crawly/Armature/Skeleton/crawly.material_override = coat.generate_material()
+		get_node(mesh_node).material_override = coat.generate_material()
 
 func _physics_process(delta):
 	frame_until_update -= 1
@@ -63,27 +67,27 @@ func _physics_process(delta):
 					aggro_to(b)
 					next = AI.Alerted
 		AI.Alerted:
-			if state_timer > ALERT_TIME:
+			if state_timer > alert_time:
 				next = AI.Chasing
 		AI.Chasing:
 			if no_target():
 				next = AI.Idle
 			elif !awareness.overlaps_body(target):
 				give_up_timer += delta
-				if give_up_timer > EXTRA_CHASE_TIME:
+				if give_up_timer > extra_chase_time:
 					next = AI.Idle
 			elif contact_count and cooldown_timer <= 0 and $attack_range.overlaps_body(target):
 				next = AI.Windup
 			else:
 				give_up_timer = 0.0
 		AI.Windup:
-			if state_timer > WINDUP_TIME:
+			if state_timer > windup_time:
 				next = AI.Attacking
 		AI.Attacking:
-			if state_timer > ATTACK_TIME:
+			if state_timer > attack_time:
 				next = AI.Chasing
 		AI.Damaged:
-			if state_timer > DAMAGED_TIME:
+			if state_timer > damaged_time:
 				next = AI.Chasing
 		AI.GravityStun:
 			if state_timer > Global.gravity_stun_time:
@@ -147,7 +151,7 @@ func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
 		return
 	if ai == AI.Attacking:
-		cooldown_timer = COOLDOWN_TIME
+		cooldown_timer = cooldown_time
 	else:
 		cooldown_timer = 0
 	ai = new_ai
@@ -165,6 +169,7 @@ func set_state(new_ai, force := false):
 			sound.play()
 			anim.play("Run-loop")
 		AI.Damaged:
+			sound.stop()
 			sleeping = false
 			if last_attacker:
 				aggro_to(last_attacker)
