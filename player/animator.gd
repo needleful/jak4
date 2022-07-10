@@ -50,9 +50,11 @@ var held_item:Spatial
 func _ready():
 	hover_board.hide()
 	$Armature/Skeleton/gun.holder = self
+	var _x = TimeManagement.connect("time_scale_changed", self, "_on_time_scale_changed")
 
-func _process(_delta):
-	$Armature/Skeleton/chest/time_particles.emitting = TimeManagement.time_slowed
+func _on_time_scale_changed(_time_scale):
+	print("time shift")
+	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
 
 func set_movement_animation(speed: float, state: int):
 	var target := 0.0

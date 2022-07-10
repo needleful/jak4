@@ -25,7 +25,7 @@ var chunk_unload_waitlist : Dictionary = {}
 var active_chunks: Array
 onready var player: PlayerBody = $player
 var lowres_chunks: Dictionary
-var chunk_collider: Dictionary
+#var chunk_collider: Dictionary
 
 var chunk_scenes: Dictionary = {}
 
@@ -57,8 +57,8 @@ func _ready():
 					node.name = "lowres"
 					lowres_chunks[c.name] = node
 					c.add_child(node)
-			if c.has_node("static_collision"):
-				chunk_collider[c.name] = c.get_node("static_collision")
+			#if c.has_node("static_collision"):
+			#	chunk_collider[c.name] = c.get_node("static_collision")
 	update_active_chunks(player_last_postion, true)
 
 func _process(delta):
@@ -182,8 +182,8 @@ func mark_active(chunk: Spatial):
 		chunk.add_child(node)
 		if chunk.has_node("lowres"):
 			chunk.remove_child(chunk.get_node("lowres"))
-	if !chunk.has_node("static_collision"):
-		chunk.add_child(chunk_collider[chunk.name])
+	#if !chunk.has_node("static_collision"):
+	#	chunk.add_child(chunk_collider[chunk.name])
 
 func mark_inactive(chunk: Spatial):
 	if chunk.name in chunk_load_waitlist:
@@ -200,8 +200,8 @@ func mark_inactive(chunk: Spatial):
 			l.request_ready()
 			chunk.add_child(l)
 	
-	if chunk.has_node("static_collision"):
-		chunk.remove_child(chunk.get_node("static_collision"))
+	#if chunk.has_node("static_collision"):
+	#	chunk.remove_child(chunk.get_node("static_collision"))
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")

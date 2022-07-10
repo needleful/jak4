@@ -11,13 +11,17 @@ export(float) var cull_distance := 10.0
 var position: PoolVector3Array = []
 var velocity: PoolVector3Array = []
 
+func _ready():
+	set_active(visible)
+
 func _process(delta):
 	if position.size() == 0:
 		add_point()
 		add_point()
+	position[0] = global_transform.origin
 	var d := position[0] - position[1]
-	var max_d := length*length/(segments*segments)
-	if d.length_squared() > max_d:
+	var max_d := length/(segments)
+	if d.length_squared() > max_d*max_d:
 		add_point()
 	
 	for i in position.size():
@@ -78,9 +82,11 @@ func add_point():
 func process_player_distance(point):
 	if (point - global_transform.origin).length_squared() > cull_distance*cull_distance:
 		if visible:
-			set_process(false)
-			hide()
+			set_active(false)
 	elif !visible:
-		set_process(true)
-		show()
+		set_active(true)
 	return INF
+
+func set_active(active: bool):
+	visible = active
+	set_process(active)

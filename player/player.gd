@@ -1141,7 +1141,7 @@ func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := f
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
-	var v2 := move(velocity + GRAVITY*delta)
+	var v2 := move(velocity + GRAVITY*delta, true)
 	velocity = velocity.move_toward(Vector3.ZERO, decel*delta)
 	if ignore_slide:
 		velocity.y = min(velocity.y, v2.y)
