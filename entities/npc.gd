@@ -9,6 +9,10 @@ export(Mesh) var accessory: Mesh
 export(bool) var sitting := false
 onready var anim := $lil_man/AnimationPlayer
 
+var last_animation := ""
+
+const anim_range := 20*20
+
 const coat_dialog := "res://dialog/_coat.dialog"
 
 func _ready():
@@ -37,3 +41,12 @@ func start_coat_trade(player: PlayerBody):
 		player.start_dialog(self, load(coat_dialog), self)
 	else:
 		player.start_dialog(self, dialog, self, "_coat")
+
+func process_player_distance(pos: Vector3):
+	var diff = pos - global_transform.origin
+	if diff.length_squared() > anim_range:
+		if anim.is_playing():
+			last_animation = anim.current_animation
+			anim.stop()
+	elif !anim.is_playing():
+		anim.play(last_animation)
