@@ -292,12 +292,13 @@ onready var hover_floor_finder := $hover_floor_finder
 onready var hover_cast := $hover_cast
 onready var hover_area := $hover_area
 
-onready var health_bar := $ui/stats/health/base
-onready var stamina_bar := $ui/stats/stamina/base
-onready var armor_bar := $ui/stats/health/extra
-onready var energy_bar := $ui/stats/stamina/extra
+onready var health_bar := $ui/gameing/stats/health/base
+onready var stamina_bar := $ui/gameing/stats/stamina/base
+onready var armor_bar := $ui/gameing/stats/health/extra
+onready var energy_bar := $ui/gameing/stats/stamina/extra
 
-onready var game_ui := $ui/custom_game
+onready var ui := $ui
+onready var game_ui := $ui/gameing/custom_game
 
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
@@ -339,7 +340,6 @@ const WEAPONS := [
 ]
 
 func _ready():
-	$ui/shop.player = self
 	if Global.valid_game_state:
 		global_transform.origin = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
@@ -411,7 +411,7 @@ func _physics_process(delta):
 			best_floor_dot = dot
 			best_normal = normal
 			best_floor = col.collider as Node
-	$ui/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
+	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
 	match state:
@@ -792,7 +792,7 @@ func _physics_process(delta):
 				can_slide_lunge = true
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
-			$ui/debug/stats/a5.text = "[%f, %f, %f]" % [
+			$ui/gameing/debug/stats/a5.text = "[%f, %f, %f]" % [
 				ground_normal.x, ground_normal.y, ground_normal.z
 			]
 			accel(delta, desired_velocity*SPEED_RUN)
@@ -887,17 +887,17 @@ func _process(_delta):
 
 func prepare_save():
 	Global.game_state.current_coat = current_coat
-	$ui/saveStats/AnimationPlayer.play("save_start")
+	$ui/gameing/saveStats/AnimationPlayer.play("save_start")
 
 func complete_save():
-	$ui/saveStats/AnimationPlayer.queue("save_complete")
+	$ui/gameing/saveStats/AnimationPlayer.queue("save_complete")
 
 func update_inventory():
 	for item in VISIBLE_ITEMS:
 		on_item_changed(item, 0, Global.count(item))
 	for item in UPGRADE_ITEMS:
 		on_item_changed(item, 0, Global.count(item))
-	$ui/weapon/ammo_label.text = str(Global.count(current_weapon))
+	$ui/gameing/weapon/ammo_label.text = str(Global.count(current_weapon))
 
 func get_target_ref():
 	return global_transform.origin + (Vector3.UP*0.5 if is_crouching() else Vector3.UP*0.75)
@@ -907,10 +907,10 @@ func is_crouching():
 
 func on_item_changed(item: String, change: int, count: int):
 	if item in VISIBLE_ITEMS:
-		var l_count: Label = get_node("ui/inventory/"+item+"_count")
+		var l_count: Label = get_node("ui/gameing/inventory/"+item+"_count")
 		l_count.text = str(count)
 		if change != 0:
-			var added: Label = get_node("ui/inventory/"+item+"_added")
+			var added: Label = get_node("ui/gameing/inventory/"+item+"_added")
 			added.text = "+ "+str(change) if change > 0 else "- "+str(abs(change))
 			var anim = added.get_node("AnimationPlayer")
 			anim.stop()
@@ -921,8 +921,8 @@ func on_item_changed(item: String, change: int, count: int):
 		gun.show_weapon()
 		show_ammo()
 	elif current_weapon == item:
-		$ui/weapon/ammo_label.text = str(count)
-		if current_weapon and !$ui/weapon.visible:
+		$ui/gameing/weapon/ammo_label.text = str(count)
+		if current_weapon and !$ui/gameing/weapon.visible:
 			show_ammo()
 	else:
 		match item:
@@ -968,7 +968,7 @@ func on_item_changed(item: String, change: int, count: int):
 				hover_speed_factor = 1.0 + hover_speed_up_percent*count
 
 func debug_show_inventory():
-	var state_viewer: Control = $ui/debug/game_state
+	var state_viewer: Control = $ui/gameing/debug/game_state
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
 	add_label(state_viewer, "Inventory:")
@@ -1002,7 +1002,7 @@ func update_stamina():
 	stamina_bar.value = stamina
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
-	$ui/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
+	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,
 		desired_velocity.y,
 		desired_velocity.z
@@ -1385,12 +1385,12 @@ func respawn():
 	cam_rig.reset()
 	set_state(State.Ground)
 	velocity = Vector3.ZERO
-	$ui/fade/AnimationPlayer.play("fadein")
+	$fade/AnimationPlayer.play("fadein")
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
 
 func teleport_to(t: Transform):
-	$ui/fade/AnimationPlayer.play("fadein")
+	$fade/AnimationPlayer.play("fadein")
 	global_transform.origin = t.origin
 
 func heal():
@@ -1439,57 +1439,49 @@ func get_dialog_viewer() -> Node:
 	return $ui/dialog_viewer
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
-	$ui/dialog_viewer.start(source, sequence, speaker, starting_label)
+	ui.start_dialog(source, sequence, speaker, starting_label)
+	# TODO: replace with a tween
 	cam_rig.play_animation("dialog_start")
 	lock()
 
 func _on_dialog_exited():
-	$ui/dialog_viewer.end()
+	ui.resume()
 	cam_rig.play_animation("dialog_end")
 	unlock()
 
 func _on_dialog_event(id: String, source: Node):
 	print("Dialog: ", id)
 	match id:
-		"open_shop":
-			$ui/stats.show()
-			$ui/inventory.show()
-			$ui/inventory/AnimationPlayer.play("show_for_shop")
-			$ui/shop.start_shopping(source)
-			$ui/inventory/vis_timer.stop()
 		"unlock_player":
+			# TODO: replace with a tween
 			cam_rig.play_animation("dialog_end")
 			unlock()
 		"lock_player":
+			# TODO: replace with a tween
 			cam_rig.play_animation("dialog_start")
 			lock()
 
-func stop_shopping():
-	$ui/stats.hide()
-	$ui/inventory.hide()
-	$ui/inventory/AnimationPlayer.play("RESET")
-	$ui/shop.hide()
-	$ui/dialog_viewer.resume()
-
 func wardrobe_lock():
 	lock()
+	# TODO: replace with a tween
 	cam_rig.play_animation("wardrobe_lock")
 
 func wardrobe_unlock():
 	unlock()
+	# TODO: replace with a tween
 	cam_rig.play_animation("wardrobe_unlock")
 
 func lock():
 	set_process_input(false)
 	set_state(State.Locked)
-	$ui/stats.hide()
-	$ui/inventory/vis_timer.stop()
-	$ui/inventory.hide()
+	$ui/gameing/stats.hide()
+	$ui/gameing/inventory/vis_timer.stop()
+	$ui/gameing/inventory.hide()
 
 func unlock():
 	set_process_input(true)
 	$unlock_timer.start()
-	$ui/stats.show()
+	$ui/gameing/stats.show()
 
 func is_locked() -> bool:
 	return state == State.Locked
@@ -1510,27 +1502,27 @@ func gravity_stun(dam):
 
 func show_prompt(textures: Array, text: String):
 	print("Show prompt: ", text)
-	$ui/tutorial/prompt_timer.stop()
+	$ui/gameing/tutorial/prompt_timer.stop()
 	if textures.size() >= 1:
-		$ui/tutorial/TextureRect1.show()
-		$ui/tutorial/TextureRect1.texture = textures[0]
+		$ui/gameing/tutorial/TextureRect1.show()
+		$ui/gameing/tutorial/TextureRect1.texture = textures[0]
 	else:
-		$ui/tutorial/TextureRect1.hide()
+		$ui/gameing/tutorial/TextureRect1.hide()
 	if textures.size() >= 2:
-		$ui/tutorial/plus.show()
-		$ui/tutorial/TextureRect2.show()
-		$ui/tutorial/TextureRect2.texture = textures[1]
+		$ui/gameing/tutorial/plus.show()
+		$ui/gameing/tutorial/TextureRect2.show()
+		$ui/gameing/tutorial/TextureRect2.texture = textures[1]
 	else:
-		$ui/tutorial/plus.hide()
-		$ui/tutorial/TextureRect2.hide()
+		$ui/gameing/tutorial/plus.hide()
+		$ui/gameing/tutorial/TextureRect2.hide()
 
-	$ui/tutorial/Label.text = text
-	$ui/tutorial.show()
-	$ui/tutorial/prompt_timer.start()
+	$ui/gameing/tutorial/Label.text = text
+	$ui/gameing/tutorial.show()
+	$ui/gameing/tutorial/prompt_timer.start()
 
 func _on_prompt_timer_timeout():
-	print("Hid prompt: ", $ui/tutorial/Label.text)
-	$ui/tutorial.hide()
+	print("Hid prompt: ", $ui/gameing/tutorial/Label.text)
+	$ui/gameing/tutorial.hide()
 
 func celebrate(item: Spatial):
 	held_item = item
@@ -1542,22 +1534,22 @@ func get_item(id):
 	mesh.play_pickup_sound(id)
 
 func show_inventory():
-	for g in $ui/inventory.get_children():
+	for g in $ui/gameing/inventory.get_children():
 		if g is CanvasItem:
 			g.visible = true
-	$ui/inventory.show()
-	$ui/inventory/vis_timer.start()
+	$ui/gameing/inventory.show()
+	$ui/gameing/inventory/vis_timer.start()
 
 func show_specific_item(item):
-	if !$ui/inventory.visible:
-		for g in $ui/inventory.get_children():
+	if !$ui/gameing/inventory.visible:
+		for g in $ui/gameing/inventory.get_children():
 			if g is CanvasItem:
 				g.visible = false
-		$ui/inventory.show()
-	$ui/inventory/vis_timer.start()
-	var count = get_node("ui/inventory/"+item+"_count")
-	var label = get_node("ui/inventory/"+item+"_label")
-	var added = get_node("ui/inventory/"+item+"_added")
+		$ui/gameing/inventory.show()
+	$ui/gameing/inventory/vis_timer.start()
+	var count = get_node("ui/gameing/inventory/"+item+"_count")
+	var label = get_node("ui/gameing/inventory/"+item+"_label")
+	var added = get_node("ui/gameing/inventory/"+item+"_added")
 	if !label or !count or !added:
 		print_debug("BUG: no inventory for ", item)
 		return
@@ -1567,24 +1559,24 @@ func show_specific_item(item):
 	
 
 func _on_vis_timer_timeout():
-	$ui/inventory.hide()
+	$ui/gameing/inventory.hide()
 
 func track_weapon(weapon: String):
-	$ui/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
-	$ui/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
-	$ui/weapon/ArrowLeft.visible = gun.enabled_wep["wep_grav_gun"]
-	$ui/weapon/ArrowRight.visible = gun.enabled_wep["wep_time_gun"]
+	$ui/gameing/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
+	$ui/gameing/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
+	$ui/gameing/weapon/ArrowLeft.visible = gun.enabled_wep["wep_grav_gun"]
+	$ui/gameing/weapon/ArrowRight.visible = gun.enabled_wep["wep_time_gun"]
 	current_weapon = weapon
-	$ui/weapon.icon = weapon
+	$ui/gameing/weapon.icon = weapon
 	if gun.current_weapon:
-		$ui/weapon/ammo_label.visible = !gun.current_weapon.infinite_ammo
-		$ui/weapon/ammo_label.text = str(Global.count(weapon))
+		$ui/gameing/weapon/ammo_label.visible = !gun.current_weapon.infinite_ammo
+		$ui/gameing/weapon/ammo_label.text = str(Global.count(weapon))
 
 func show_ammo():
-	$ui/weapon.show()
+	$ui/gameing/weapon.show()
 
 func hide_ammo():
-	$ui/weapon.hide()
+	$ui/gameing/weapon.hide()
 
 func shake_camera():
 	if cam_rig.aiming:
@@ -1761,4 +1753,4 @@ func set_state(next_state: int):
 			velocity.y =  SPEED_DASH_V
 			mesh.force_play("Dash")
 	state = next_state
-	$ui/debug/stats/a1.text = "State: %s" % State.keys()[state]
+	$ui/gameing/debug/stats/a1.text = "State: %s" % State.keys()[state]

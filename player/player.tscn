@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=70 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://ui/shop.tscn" type="PackedScene" id=7]
+[ext_resource path="res://player/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://entities/flag.tscn" type="PackedScene" id=10]
@@ -570,59 +570,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=36]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:anchor_left")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:anchor_right")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1.0 ]
-}
-
-[sub_resource type="Animation" id=37]
-resource_name = "show_for_shop"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:anchor_left")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.353553, 1 ),
-"update": 0,
-"values": [ 1.0, 0.65 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:anchor_right")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.210224, 1 ),
-"update": 0,
-"values": [ 1.0, 0.65 ]
-}
+[sub_resource type="StyleBoxEmpty" id=65]
 
 [sub_resource type="Animation" id=30]
 length = 0.001
@@ -940,94 +888,39 @@ anchor_bottom = 1.0
 theme = ExtResource( 5 )
 script = ExtResource( 17 )
 
-[node name="debug" type="Panel" parent="ui"]
-pause_mode = 1
-time_scale_response = false
-visible = false
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -473.0
-margin_right = 452.0
-
-[node name="stats" type="VBoxContainer" parent="ui/debug"]
+[node name="gameing" type="Control" parent="ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -218.0
 
-[node name="Label" type="Label" parent="ui/debug/stats"]
-margin_right = 234.0
-margin_bottom = 22.0
-text = "Debug Data"
-
-[node name="a1" type="Label" parent="ui/debug/stats"]
-margin_top = 26.0
-margin_right = 234.0
-margin_bottom = 48.0
-text = "Debug Data"
-
-[node name="a2" type="Label" parent="ui/debug/stats"]
-margin_top = 52.0
-margin_right = 234.0
-margin_bottom = 74.0
-text = "Debug Data"
-
-[node name="a3" type="Label" parent="ui/debug/stats"]
-margin_top = 78.0
-margin_right = 234.0
-margin_bottom = 100.0
-text = "Debug Data"
-
-[node name="a4" type="Label" parent="ui/debug/stats"]
-margin_top = 104.0
-margin_right = 234.0
-margin_bottom = 126.0
-text = "Debug Data"
-
-[node name="a5" type="Label" parent="ui/debug/stats"]
-margin_top = 130.0
-margin_right = 234.0
-margin_bottom = 152.0
-text = "Debug Data"
-
-[node name="a6" type="Label" parent="ui/debug/stats"]
-margin_top = 156.0
-margin_right = 234.0
-margin_bottom = 178.0
-text = "Debug Data"
-
-[node name="game_state" type="VBoxContainer" parent="ui/debug"]
-margin_left = 210.0
-margin_right = 452.0
-margin_bottom = 167.0
-
-[node name="saveStats" type="VBoxContainer" parent="ui"]
+[node name="saveStats" type="VBoxContainer" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
 anchor_top = 0.5
 anchor_bottom = 0.5
+margin_left = 17.0
 margin_top = -20.0
-margin_right = 182.0
+margin_right = 163.0
 margin_bottom = 20.0
 
-[node name="saving" type="Label" parent="ui/saveStats"]
+[node name="saving" type="Label" parent="ui/gameing/saveStats"]
 visible = false
 margin_right = 182.0
 margin_bottom = 14.0
 text = "Saving..."
 
-[node name="save" type="Label" parent="ui/saveStats"]
+[node name="save" type="Label" parent="ui/gameing/saveStats"]
 visible = false
 margin_top = 18.0
 margin_right = 182.0
 margin_bottom = 32.0
 text = "SAVED!"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/saveStats"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/saveStats"]
 anims/RESET = SubResource( 9 )
 anims/save_complete = SubResource( 10 )
 anims/save_start = SubResource( 11 )
 
-[node name="stats" type="Control" parent="ui"]
+[node name="stats" type="Control" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
 margin_left = 30.0
@@ -1035,12 +928,12 @@ margin_top = 16.0
 margin_right = 465.0
 margin_bottom = 53.0
 
-[node name="health" type="HBoxContainer" parent="ui/stats"]
+[node name="health" type="HBoxContainer" parent="ui/gameing/stats"]
 margin_right = 40.0
 margin_bottom = 40.0
 custom_constants/separation = 0
 
-[node name="base" type="ProgressBar" parent="ui/stats/health"]
+[node name="base" type="ProgressBar" parent="ui/gameing/stats/health"]
 margin_right = 400.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 400, 32 )
@@ -1049,7 +942,7 @@ max_value = 50.0
 value = 25.0
 percent_visible = false
 
-[node name="extra" type="ProgressBar" parent="ui/stats/health"]
+[node name="extra" type="ProgressBar" parent="ui/gameing/stats/health"]
 margin_left = 400.0
 margin_right = 600.0
 margin_bottom = 32.0
@@ -1059,19 +952,19 @@ max_value = 50.0
 value = 50.0
 percent_visible = false
 
-[node name="stamina" type="HBoxContainer" parent="ui/stats"]
+[node name="stamina" type="HBoxContainer" parent="ui/gameing/stats"]
 margin_top = 37.0
 margin_right = 400.0
 margin_bottom = 52.0
 custom_constants/separation = 0
 
-[node name="extra" type="ColorRect" parent="ui/stats/stamina"]
+[node name="extra" type="ColorRect" parent="ui/gameing/stats/stamina"]
 margin_right = 200.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 200, 15 )
 color = Color( 1, 0.862745, 0.498039, 1 )
 
-[node name="base" type="ProgressBar" parent="ui/stats/stamina"]
+[node name="base" type="ProgressBar" parent="ui/gameing/stats/stamina"]
 margin_left = 200.0
 margin_right = 400.0
 margin_bottom = 15.0
@@ -1080,153 +973,158 @@ custom_styles/fg = SubResource( 40 )
 value = 50.0
 percent_visible = false
 
-[node name="inventory" type="GridContainer" parent="ui"]
+[node name="debug" type="Panel" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
 visible = false
-anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = -473.0
+margin_right = 452.0
+margin_bottom = -13.0
+
+[node name="stats" type="VBoxContainer" parent="ui/gameing/debug"]
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = -356.0
-margin_top = -97.0
-margin_bottom = 97.0
-custom_constants/vseparation = 16
-custom_constants/hseparation = 18
-columns = 3
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 7.0
+margin_right = -16.0
+margin_bottom = -11.0
 
-[node name="gem_label" type="Label" parent="ui/inventory"]
-margin_top = 16.0
-margin_right = 99.0
-margin_bottom = 38.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Gems:"
+[node name="Label" type="Label" parent="ui/gameing/debug/stats"]
+margin_right = 414.0
+margin_bottom = 22.0
+text = "Debug Data"
 
-[node name="gem_count" type="Label" parent="ui/inventory"]
-margin_left = 117.0
-margin_right = 144.0
-margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
-text = "0"
+[node name="a1" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 26.0
+margin_right = 414.0
+margin_bottom = 48.0
+text = "Debug Data"
 
-[node name="gem_added" type="Label" parent="ui/inventory"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_right = 231.0
-margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
-text = "+ 1"
+[node name="a2" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 52.0
+margin_right = 414.0
+margin_bottom = 74.0
+text = "Debug Data"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/gem_added"]
-anims/RESET = SubResource( 50 )
-anims/show = SubResource( 51 )
+[node name="a3" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 78.0
+margin_right = 414.0
+margin_bottom = 100.0
+text = "Debug Data"
 
-[node name="bug_label" type="Label" parent="ui/inventory"]
-margin_top = 86.0
-margin_right = 99.0
-margin_bottom = 108.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Bugs:"
+[node name="a4" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 104.0
+margin_right = 414.0
+margin_bottom = 126.0
+text = "Debug Data"
 
-[node name="bug_count" type="Label" parent="ui/inventory"]
-margin_left = 117.0
-margin_top = 70.0
-margin_right = 144.0
-margin_bottom = 124.0
-custom_fonts/font = SubResource( 27 )
-text = "0"
+[node name="a5" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 130.0
+margin_right = 414.0
+margin_bottom = 152.0
+text = "Debug Data"
 
-[node name="bug_added" type="Label" parent="ui/inventory"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 70.0
-margin_right = 231.0
-margin_bottom = 124.0
-custom_fonts/font = SubResource( 27 )
-text = "+ 1"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/bug_added"]
-anims/RESET = SubResource( 52 )
-anims/show = SubResource( 53 )
-
-[node name="capacitor_label" type="Label" parent="ui/inventory"]
+[node name="a6" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 156.0
-margin_right = 99.0
+margin_right = 414.0
 margin_bottom = 178.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Capacitors:"
+text = "Debug Data"
 
-[node name="capacitor_count" type="Label" parent="ui/inventory"]
-margin_left = 117.0
-margin_top = 140.0
-margin_right = 144.0
-margin_bottom = 194.0
+[node name="game_state" type="VBoxContainer" parent="ui/gameing/debug"]
+margin_left = 210.0
+margin_right = 452.0
+margin_bottom = 167.0
+
+[node name="tutorial" type="HBoxContainer" parent="ui/gameing"]
+pause_mode = 1
+time_scale_response = false
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -148.0
+margin_bottom = -68.0
+alignment = 1
+
+[node name="TextureRect1" type="TextureRect" parent="ui/gameing/tutorial"]
+margin_left = 196.0
+margin_right = 324.0
+margin_bottom = 80.0
+texture = ExtResource( 8 )
+stretch_mode = 6
+
+[node name="plus" type="Label" parent="ui/gameing/tutorial"]
+margin_left = 328.0
+margin_top = 13.0
+margin_right = 388.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 60, 0 )
 custom_fonts/font = SubResource( 27 )
-text = "0"
+text = "+"
+align = 1
 
-[node name="capacitor_added" type="Label" parent="ui/inventory"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 140.0
-margin_right = 231.0
-margin_bottom = 194.0
+[node name="TextureRect2" type="TextureRect" parent="ui/gameing/tutorial"]
+margin_left = 392.0
+margin_right = 520.0
+margin_bottom = 80.0
+texture = ExtResource( 8 )
+stretch_mode = 6
+
+[node name="spacer" type="Control" parent="ui/gameing/tutorial"]
+margin_left = 524.0
+margin_right = 584.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 60, 0 )
+
+[node name="Label" type="Label" parent="ui/gameing/tutorial"]
+margin_left = 588.0
+margin_top = 13.0
+margin_right = 827.0
+margin_bottom = 67.0
 custom_fonts/font = SubResource( 27 )
-text = "+ 1"
+text = "Stuff here!"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/capacitor_added"]
-anims/RESET = SubResource( 54 )
-anims/show = SubResource( 55 )
-
-[node name="flag_label" type="Label" parent="ui/inventory"]
-margin_top = 226.0
-margin_right = 99.0
-margin_bottom = 248.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Flags:"
-
-[node name="flag_count" type="Label" parent="ui/inventory"]
-margin_left = 117.0
-margin_top = 210.0
-margin_right = 144.0
-margin_bottom = 264.0
-custom_fonts/font = SubResource( 27 )
-text = "0"
-
-[node name="flag_added" type="Label" parent="ui/inventory"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 210.0
-margin_right = 231.0
-margin_bottom = 264.0
-custom_fonts/font = SubResource( 27 )
-text = "+ 1"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory/flag_added"]
-anims/RESET = SubResource( 56 )
-anims/show = SubResource( 57 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/inventory"]
-anims/RESET = SubResource( 36 )
-anims/show_for_shop = SubResource( 37 )
-
-[node name="vis_timer" type="Timer" parent="ui/inventory"]
-wait_time = 5.0
+[node name="prompt_timer" type="Timer" parent="ui/gameing/tutorial"]
+wait_time = 6.0
 one_shot = true
-autostart = true
 
-[node name="weapon" type="TextureRect" parent="ui"]
+[node name="custom_game" type="HBoxContainer" parent="ui/gameing"]
+pause_mode = 1
+time_scale_response = false
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -54.0
+custom_constants/separation = 25
+alignment = 1
+script = ExtResource( 12 )
+
+[node name="Label" type="Label" parent="ui/gameing/custom_game"]
+margin_left = 359.0
+margin_right = 478.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "Label"
+
+[node name="spacer" type="Label" parent="ui/gameing/custom_game"]
+margin_left = 503.0
+margin_right = 518.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = ":"
+
+[node name="number" type="Label" parent="ui/gameing/custom_game"]
+margin_left = 543.0
+margin_right = 664.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 27 )
+text = "Value"
+
+[node name="weapon" type="TextureRect" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
 visible = false
@@ -1239,7 +1137,7 @@ margin_bottom = 179.0
 texture = ExtResource( 13 )
 script = ExtResource( 14 )
 
-[node name="ammo_label" type="Label" parent="ui/weapon"]
+[node name="ammo_label" type="Label" parent="ui/gameing/weapon"]
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -1251,7 +1149,7 @@ margin_bottom = 25.0
 custom_fonts/font = SubResource( 27 )
 text = "0"
 
-[node name="ArrowUp" type="TextureRect" parent="ui/weapon"]
+[node name="ArrowUp" type="TextureRect" parent="ui/gameing/weapon"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -1262,7 +1160,7 @@ margin_right = 54.0
 margin_bottom = -75.0
 texture = ExtResource( 15 )
 
-[node name="ArrowDown" type="TextureRect" parent="ui/weapon"]
+[node name="ArrowDown" type="TextureRect" parent="ui/gameing/weapon"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -1274,7 +1172,7 @@ margin_bottom = 80.0
 texture = ExtResource( 15 )
 flip_v = true
 
-[node name="ArrowLeft" type="TextureRect" parent="ui/weapon"]
+[node name="ArrowLeft" type="TextureRect" parent="ui/gameing/weapon"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -1287,7 +1185,7 @@ rect_rotation = 90.0
 texture = ExtResource( 15 )
 flip_v = true
 
-[node name="ArrowRight" type="TextureRect" parent="ui/weapon"]
+[node name="ArrowRight" type="TextureRect" parent="ui/gameing/weapon"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -1300,122 +1198,191 @@ rect_rotation = 90.0
 texture = ExtResource( 15 )
 flip_h = true
 
-[node name="shop" parent="ui" instance=ExtResource( 7 )]
+[node name="inventory" type="GridContainer" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
 visible = false
-
-[node name="tutorial" type="HBoxContainer" parent="ui"]
-pause_mode = 1
-time_scale_response = false
-visible = false
-anchor_top = 1.0
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -154.0
-alignment = 1
+anchor_bottom = 0.5
+margin_left = -322.0
+margin_top = -97.0
+margin_bottom = 167.0
+custom_constants/vseparation = 16
+custom_constants/hseparation = 18
+columns = 3
 
-[node name="TextureRect1" type="TextureRect" parent="ui/tutorial"]
-margin_left = 196.0
-margin_right = 324.0
-margin_bottom = 154.0
-texture = ExtResource( 8 )
-stretch_mode = 6
+[node name="gem_label" type="Label" parent="ui/gameing/inventory"]
+margin_top = 16.0
+margin_right = 99.0
+margin_bottom = 38.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 3
+text = "Gems:"
 
-[node name="plus" type="Label" parent="ui/tutorial"]
-margin_left = 328.0
-margin_top = 50.0
-margin_right = 388.0
-margin_bottom = 104.0
-rect_min_size = Vector2( 60, 0 )
+[node name="gem_count" type="Label" parent="ui/gameing/inventory"]
+margin_left = 117.0
+margin_right = 144.0
+margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
-text = "+"
-align = 1
+text = "0"
 
-[node name="TextureRect2" type="TextureRect" parent="ui/tutorial"]
-margin_left = 392.0
-margin_right = 520.0
-margin_bottom = 154.0
-texture = ExtResource( 8 )
-stretch_mode = 6
-
-[node name="spacer" type="Control" parent="ui/tutorial"]
-margin_left = 524.0
-margin_right = 584.0
-margin_bottom = 154.0
-rect_min_size = Vector2( 60, 0 )
-
-[node name="Label" type="Label" parent="ui/tutorial"]
-margin_left = 588.0
-margin_top = 50.0
-margin_right = 827.0
-margin_bottom = 104.0
+[node name="gem_added" type="Label" parent="ui/gameing/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_right = 231.0
+margin_bottom = 54.0
 custom_fonts/font = SubResource( 27 )
-text = "Stuff here!"
+text = "+ 1"
 
-[node name="prompt_timer" type="Timer" parent="ui/tutorial"]
-wait_time = 6.0
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/gem_added"]
+anims/RESET = SubResource( 50 )
+anims/show = SubResource( 51 )
+
+[node name="bug_label" type="Label" parent="ui/gameing/inventory"]
+margin_top = 86.0
+margin_right = 99.0
+margin_bottom = 108.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 3
+text = "Bugs:"
+
+[node name="bug_count" type="Label" parent="ui/gameing/inventory"]
+margin_left = 117.0
+margin_top = 70.0
+margin_right = 144.0
+margin_bottom = 124.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="bug_added" type="Label" parent="ui/gameing/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 70.0
+margin_right = 231.0
+margin_bottom = 124.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/bug_added"]
+anims/RESET = SubResource( 52 )
+anims/show = SubResource( 53 )
+
+[node name="capacitor_label" type="Label" parent="ui/gameing/inventory"]
+margin_top = 156.0
+margin_right = 99.0
+margin_bottom = 178.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 3
+text = "Capacitors:"
+
+[node name="capacitor_count" type="Label" parent="ui/gameing/inventory"]
+margin_left = 117.0
+margin_top = 140.0
+margin_right = 144.0
+margin_bottom = 194.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="capacitor_added" type="Label" parent="ui/gameing/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 140.0
+margin_right = 231.0
+margin_bottom = 194.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/capacitor_added"]
+anims/RESET = SubResource( 54 )
+anims/show = SubResource( 55 )
+
+[node name="flag_label" type="Label" parent="ui/gameing/inventory"]
+margin_top = 226.0
+margin_right = 99.0
+margin_bottom = 248.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 3
+text = "Flags:"
+
+[node name="flag_count" type="Label" parent="ui/gameing/inventory"]
+margin_left = 117.0
+margin_top = 210.0
+margin_right = 144.0
+margin_bottom = 264.0
+custom_fonts/font = SubResource( 27 )
+text = "0"
+
+[node name="flag_added" type="Label" parent="ui/gameing/inventory"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 162.0
+margin_top = 210.0
+margin_right = 231.0
+margin_bottom = 264.0
+custom_fonts/font = SubResource( 27 )
+text = "+ 1"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/flag_added"]
+anims/RESET = SubResource( 56 )
+anims/show = SubResource( 57 )
+
+[node name="vis_timer" type="Timer" parent="ui/gameing/inventory"]
+wait_time = 5.0
 one_shot = true
-
-[node name="custom_game" type="HBoxContainer" parent="ui"]
-pause_mode = 1
-time_scale_response = false
-visible = false
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -87.0
-margin_bottom = -33.0
-custom_constants/separation = 25
-alignment = 1
-script = ExtResource( 12 )
-
-[node name="Label" type="Label" parent="ui/custom_game"]
-margin_left = 359.0
-margin_right = 478.0
-margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
-text = "Label"
-
-[node name="spacer" type="Label" parent="ui/custom_game"]
-margin_left = 503.0
-margin_right = 518.0
-margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
-text = ":"
-
-[node name="number" type="Label" parent="ui/custom_game"]
-margin_left = 543.0
-margin_right = 664.0
-margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
-text = "Value"
+autostart = true
 
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
 pause_mode = 1
 time_scale_response = false
-anchor_left = 0.65
+anchor_left = 0.572
 rect_min_size = Vector2( 500, 0 )
-
-[node name="fade" type="ColorRect" parent="ui"]
-time_scale_response = false
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/fade"]
-autoplay = "fadein"
-anims/RESET = SubResource( 30 )
-anims/fadein = SubResource( 31 )
-anims/fadeout = SubResource( 32 )
 
 [node name="pause_menu" parent="ui" instance=ExtResource( 9 )]
 time_scale_response = false
 visible = false
 
-[node name="map" parent="ui" instance=ExtResource( 16 )]
+[node name="status_menu" type="TabContainer" parent="ui"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 65 )
+script = ExtResource( 7 )
+
+[node name="Map" parent="ui/status_menu" instance=ExtResource( 16 )]
+time_scale_response = false
+show_behind_parent = true
+margin_top = 32.0
+
+[node name="Journal" type="Control" parent="ui/status_menu"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Inventory" type="Control" parent="ui/status_menu"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="fade" type="ColorRect" parent="."]
 time_scale_response = false
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="fade"]
+autoplay = "fadein"
+anims/RESET = SubResource( 30 )
+anims/fadein = SubResource( 31 )
+anims/fadeout = SubResource( 32 )
 
 [node name="groundArea" type="Area" parent="."]
 time_scale_response = false
@@ -1490,6 +1457,6 @@ time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.107511, 4.69946e-09 )
 shape = SubResource( 63 )
 
-[connection signal="timeout" from="ui/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
-[connection signal="timeout" from="ui/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="unlock_timer" to="." method="_on_unlock_timer_timeout"]

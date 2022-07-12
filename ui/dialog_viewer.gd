@@ -4,6 +4,8 @@ signal exited
 signal event(id)
 signal event_with_source(id, source)
 
+var shopping := false setget set_shopping
+
 onready var player: PlayerBody = get_parent().get_parent()
 var main_speaker: Node
 var source_node: Node
@@ -19,8 +21,8 @@ export(Font) var player_font
 export(Color) var narration_color := Color.dimgray
 export(Color) var player_color := Color.deeppink
 
-onready var replies := $vbox/replies
-onready var messages := $vbox/messages/list
+onready var replies := $messages/replies
+onready var messages := $messages/messages/list
 
 const RESULT_SKIP := {"result":"skip"}
 const RESULT_PAUSE := {"result":"pause"}
@@ -46,7 +48,11 @@ const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
 func _input(event):
-	if event.is_action_pressed("ui_cancel"):
+	if shopping:
+		if event.is_action_pressed("ui_cancel"):
+			set_shopping(false)
+			resume()
+	elif event.is_action_pressed("ui_cancel"):
 		fast_exit()
 	elif event.is_action_pressed("dialog_coat"):
 		trade_coats()
@@ -54,7 +60,7 @@ func _input(event):
 		get_next()
 
 func _process(_delta):
-	var scr = $vbox/messages
+	var scr = $messages/messages
 	scr.scroll_vertical = scr.get_v_scrollbar().max_value
 
 func _ready():
@@ -63,8 +69,8 @@ func _ready():
 	end()
 
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, starting_label:= ""):
+	set_shopping(false)
 	clear()
-	show()
 	source_node = p_source_node
 	sequence = p_sequence
 	if speaker:
@@ -194,7 +200,7 @@ func list_replies():
 		print("\tNo replies.")
 		current_item = reply
 		advance()
-	$reply_timer.start()
+	$input_timer.start()
 
 func resize_replies():
 	for b in replies.get_children():
@@ -203,8 +209,12 @@ func resize_replies():
 		var l: Label = b.get_child(0)
 		b.rect_min_size.y = l.get_line_count()*l.get_line_height()*1.25 + l.margin_top + l.margin_bottom
 
-func _on_reply_timer_timeout():
-	replies.get_child(0).grab_focus()
+func _on_input_timer_timeout():
+	if shopping:
+		if $shop.items_window.get_child_count() >= 3:
+			$shop.items_window.get_child(2).grab_focus()
+	else:
+		replies.get_child(0).grab_focus()
 
 func choose_reply(item: DialogItem, skip: bool):
 	if !skip:
@@ -327,6 +337,13 @@ func ui_settings_apply():
 	if narration_font is DynamicFont:
 		narration_font.size = get_theme_default_font().size
 
+func set_shopping(s):
+	shopping = s
+	$messages.visible = !shopping
+	$shop.visible = shopping
+	if shopping:
+		$input_timer.start()
+
 ## Dialog functions
 
 func exiting():
@@ -349,8 +366,7 @@ func format(_style: String):
 func animation(_animation: String, _node: String = ""):
 	return true
 
-
-func event(tag: String, should_pause := true, auto_advance_on_resume:= true):
+func event(tag: String, should_pause := false, auto_advance_on_resume:= true):
 	emit_signal("event", tag)
 	emit_signal("event_with_source", tag, main_speaker)
 	if main_speaker.has_method(tag):
@@ -377,6 +393,7 @@ func exit():
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited")
+	set_process_input(false)
 	return RESULT_END
 
 func mention(topic):
@@ -430,3 +447,7 @@ func can_discuss(stat: String) -> bool:
 func mark_discussed(stat: String) -> bool:
 	var _x = Global.add_stat("discussed" + speaker_stat() + "/" + stat)
 	return true
+
+func shop():
+	set_shopping(true)
+	$shop.start_shopping(main_speaker)
