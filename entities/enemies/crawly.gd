@@ -162,6 +162,8 @@ func set_state(new_ai, force := false):
 			anim.play("Run-loop")
 		AI.Damaged:
 			sound.stop()
+			sound.stream = damage_audio
+			sound.play()
 			sleeping = false
 			if last_attacker:
 				aggro_to(last_attacker)
