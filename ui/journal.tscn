@@ -1,0 +1,161 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=2]
+
+[sub_resource type="StyleBoxLine" id=66]
+color = Color( 1, 1, 1, 1 )
+vertical = true
+
+[node name="Journal" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="hbox" type="HBoxContainer" parent="panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_top = 102.0
+margin_right = -40.0
+margin_bottom = -20.0
+size_flags_horizontal = 3
+custom_constants/separation = 15
+
+[node name="items" type="ScrollContainer" parent="panel/hbox"]
+margin_right = 250.0
+margin_bottom = 454.0
+rect_min_size = Vector2( 250, 0 )
+
+[node name="list" type="VBoxContainer" parent="panel/hbox/items"]
+margin_right = 250.0
+margin_bottom = 205.0
+rect_min_size = Vector2( 250, 0 )
+
+[node name="Label" type="Label" parent="panel/hbox/items/list"]
+margin_right = 250.0
+margin_bottom = 22.0
+text = "People"
+
+[node name="people" type="VBoxContainer" parent="panel/hbox/items/list"]
+margin_top = 26.0
+margin_right = 250.0
+margin_bottom = 86.0
+
+[node name="Button" type="Button" parent="panel/hbox/items/list/people"]
+margin_right = 250.0
+margin_bottom = 28.0
+text = "Person1"
+
+[node name="Button2" type="Button" parent="panel/hbox/items/list/people"]
+margin_top = 32.0
+margin_right = 250.0
+margin_bottom = 60.0
+text = "Person2"
+
+[node name="spacer" type="Control" parent="panel/hbox/items/list"]
+margin_top = 90.0
+margin_right = 250.0
+margin_bottom = 115.0
+rect_min_size = Vector2( 0, 25 )
+
+[node name="Label2" type="Label" parent="panel/hbox/items/list"]
+margin_top = 119.0
+margin_right = 250.0
+margin_bottom = 141.0
+text = "Places"
+
+[node name="places" type="VBoxContainer" parent="panel/hbox/items/list"]
+margin_top = 145.0
+margin_right = 250.0
+margin_bottom = 205.0
+
+[node name="Button" type="Button" parent="panel/hbox/items/list/places"]
+margin_right = 250.0
+margin_bottom = 28.0
+text = "Place1"
+
+[node name="Button2" type="Button" parent="panel/hbox/items/list/places"]
+margin_top = 32.0
+margin_right = 250.0
+margin_bottom = 60.0
+text = "Place2"
+
+[node name="Panel" type="Panel" parent="panel/hbox"]
+margin_left = 265.0
+margin_right = 265.0
+margin_bottom = 454.0
+custom_styles/panel = SubResource( 66 )
+
+[node name="notes" type="VBoxContainer" parent="panel/hbox"]
+margin_left = 280.0
+margin_right = 944.0
+margin_bottom = 454.0
+size_flags_horizontal = 3
+
+[node name="header" type="HBoxContainer" parent="panel/hbox/notes"]
+margin_right = 664.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 0, 300 )
+
+[node name="text" type="VBoxContainer" parent="panel/hbox/notes/header"]
+margin_right = 330.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+
+[node name="name" type="Label" parent="panel/hbox/notes/header/text"]
+margin_right = 330.0
+margin_bottom = 22.0
+text = "Name"
+autowrap = true
+
+[node name="line" type="Panel" parent="panel/hbox/notes/header/text"]
+margin_top = 26.0
+margin_right = 330.0
+margin_bottom = 26.0
+custom_styles/panel = ExtResource( 2 )
+
+[node name="desc" type="Label" parent="panel/hbox/notes/header/text"]
+margin_top = 30.0
+margin_right = 330.0
+margin_bottom = 52.0
+text = "A description of the character"
+autowrap = true
+
+[node name="TextureRect" type="TextureRect" parent="panel/hbox/notes/header"]
+margin_left = 334.0
+margin_right = 664.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+texture = ExtResource( 1 )
+stretch_mode = 6
+
+[node name="rule2" type="Panel" parent="panel/hbox/notes"]
+margin_top = 304.0
+margin_right = 664.0
+margin_bottom = 304.0
+custom_styles/panel = ExtResource( 2 )
+
+[node name="notes" type="ScrollContainer" parent="panel/hbox/notes"]
+margin_top = 308.0
+margin_right = 664.0
+margin_bottom = 454.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="list" type="VBoxContainer" parent="panel/hbox/notes/notes"]
+margin_right = 297.0
+margin_bottom = 22.0
+
+[node name="Label" type="Label" parent="panel/hbox/notes/notes/list"]
+margin_right = 297.0
+margin_bottom = 22.0
+text = "This is a note about the character"

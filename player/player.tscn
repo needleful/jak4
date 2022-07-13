@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=76 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -17,6 +17,11 @@
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
 [ext_resource path="res://player/ui.gd" type="Script" id=17]
+[ext_resource path="res://ui/button_prompt.gd" type="Script" id=18]
+[ext_resource path="res://ui/prompts/gamepadLB.png" type="Texture" id=19]
+[ext_resource path="res://ui/prompts/gamepadRB.png" type="Texture" id=20]
+[ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
+[ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -572,6 +577,9 @@ tracks/0/keys = {
 
 [sub_resource type="StyleBoxEmpty" id=65]
 
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.745098 )
+
 [sub_resource type="Animation" id=30]
 length = 0.001
 tracks/0/type = "value"
@@ -653,7 +661,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="SphereShape" id=5]
+[sub_resource type="SphereShape" id=66]
 radius = 0.35
 
 [sub_resource type="CapsuleShape" id=8]
@@ -889,6 +897,7 @@ theme = ExtResource( 5 )
 script = ExtResource( 17 )
 
 [node name="gameing" type="Control" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1343,6 +1352,7 @@ autostart = true
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_left = 0.572
 rect_min_size = Vector2( 500, 0 )
 
@@ -1350,27 +1360,84 @@ rect_min_size = Vector2( 500, 0 )
 time_scale_response = false
 visible = false
 
-[node name="status_menu" type="TabContainer" parent="ui"]
-visible = false
+[node name="status_menu" type="Control" parent="ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 65 )
 script = ExtResource( 7 )
 
-[node name="Map" parent="ui/status_menu" instance=ExtResource( 16 )]
+[node name="tabs" type="TabContainer" parent="ui/status_menu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 8.0
+custom_styles/panel = SubResource( 65 )
+custom_styles/tabs_panel = SubResource( 5 )
+
+[node name="Map" parent="ui/status_menu/tabs" instance=ExtResource( 16 )]
 time_scale_response = false
 show_behind_parent = true
 margin_top = 32.0
 
-[node name="Journal" type="Control" parent="ui/status_menu"]
+[node name="Journal" parent="ui/status_menu/tabs" instance=ExtResource( 21 )]
 visible = false
-margin_right = 40.0
-margin_bottom = 40.0
 
-[node name="Inventory" type="Control" parent="ui/status_menu"]
+[node name="Inventory" type="Control" parent="ui/status_menu/tabs"]
 visible = false
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 32.0
+
+[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
+margin_left = 15.0
+margin_right = 357.0
+margin_bottom = 128.0
+
+[node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
+margin_top = 53.0
+margin_right = 104.0
+margin_bottom = 75.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "<< Previous"
+
+[node name="TextureRect" type="TextureRect" parent="ui/status_menu/PromptLeft"]
+margin_left = 108.0
+margin_right = 236.0
+margin_bottom = 128.0
+texture = ExtResource( 19 )
+stretch_mode = 6
+script = ExtResource( 18 )
+gamepad_prompt = ExtResource( 19 )
+
+[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -326.0
+margin_right = -15.0
+margin_bottom = 128.0
+alignment = 2
+
+[node name="TextureButton" type="TextureRect" parent="ui/status_menu/PromptRight"]
+margin_left = 110.0
+margin_right = 238.0
+margin_bottom = 128.0
+texture = ExtResource( 20 )
+stretch_mode = 5
+script = ExtResource( 18 )
+gamepad_prompt = ExtResource( 20 )
+
+[node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
+margin_left = 242.0
+margin_top = 53.0
+margin_right = 311.0
+margin_bottom = 75.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "Next >>"
+align = 2
 
 [node name="fade" type="ColorRect" parent="."]
 time_scale_response = false
@@ -1391,7 +1458,7 @@ collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="groundArea"]
 time_scale_response = false
-shape = SubResource( 5 )
+shape = SubResource( 66 )
 
 [node name="crouchHeadArea" type="Area" parent="."]
 time_scale_response = false
@@ -1456,6 +1523,22 @@ collision_layer = 0
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.107511, 4.69946e-09 )
 shape = SubResource( 63 )
+
+[node name="debug_fps" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -220.0
+margin_top = -20.0
+margin_right = 221.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="debug_fps"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 22 )
 
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]

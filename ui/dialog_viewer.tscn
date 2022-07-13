@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ui/dialog_viewer.gd" type="Script" id=1]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/fonts/averia/Averia-Italic.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://ui/shop.gd" type="Script" id=5]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=6]
+[ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -29,6 +30,7 @@ player_font = SubResource( 3 )
 player_color = Color( 0.901961, 0.596078, 0.513726, 1 )
 
 [node name="messages" type="VBoxContainer" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 20.0
@@ -70,10 +72,16 @@ margin_right = 984.0
 margin_bottom = 14.0
 text = "Shop"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="shop"]
+[node name="Panel" type="Panel" parent="shop"]
 margin_top = 23.0
 margin_right = 984.0
-margin_bottom = 37.0
+margin_bottom = 23.0
+custom_styles/panel = ExtResource( 7 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="shop"]
+margin_top = 32.0
+margin_right = 984.0
+margin_bottom = 46.0
 
 [node name="Label" type="Label" parent="shop/HBoxContainer"]
 margin_right = 76.0
@@ -109,27 +117,28 @@ script = ExtResource( 6 )
 item_id = "gem"
 
 [node name="Control" type="Control" parent="shop"]
-margin_top = 46.0
+margin_top = 55.0
 margin_right = 984.0
-margin_bottom = 61.0
+margin_bottom = 70.0
 rect_min_size = Vector2( 0, 15 )
 
 [node name="items" type="GridContainer" parent="shop"]
-margin_top = 70.0
+margin_top = 79.0
 margin_right = 984.0
-margin_bottom = 70.0
+margin_bottom = 79.0
 size_flags_horizontal = 3
 custom_constants/hseparation = 30
 columns = 3
 
-[node name="Control2" type="Control" parent="shop"]
-margin_top = 79.0
+[node name="hrule" type="Panel" parent="shop"]
+margin_top = 88.0
 margin_right = 984.0
-margin_bottom = 94.0
+margin_bottom = 103.0
 rect_min_size = Vector2( 0, 15 )
+custom_styles/panel = ExtResource( 7 )
 
 [node name="tooltip" type="Label" parent="shop"]
-margin_top = 103.0
+margin_top = 112.0
 margin_right = 984.0
 margin_bottom = 531.0
 size_flags_vertical = 3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -17,6 +17,12 @@
 [ext_resource path="res://ui/prompts/gamepad0.png" type="Texture" id=15]
 [ext_resource path="res://ui/prompts/gamepadLT.png" type="Texture" id=16]
 
+[sub_resource type="OccluderShapePolygon" id=12]
+polygon_points = PoolVector2Array( 1410.04, -495.734, -234.006, 40.7117, -319.745, -602.753, 1048.05, 125.556 )
+
+[sub_resource type="OccluderShapePolygon" id=13]
+polygon_points = PoolVector2Array( 1483.73, -1220.53, -1954.37, 1382.9, 1080.32, 518.403, -1512.17, -415.691 )
+
 [sub_resource type="OccluderShapePolygon" id=8]
 polygon_points = PoolVector2Array( -228.013, -291.803, 177.3, -267.393, 218.465, -29.4867, -94.931, 6.13239 )
 
@@ -25,6 +31,9 @@ polygon_points = PoolVector2Array( 716.625, -465.111, 661.83, 30.3847, -149, 43,
 
 [sub_resource type="OccluderShapePolygon" id=10]
 polygon_points = PoolVector2Array( 161.332, -144.202, 89.0944, 56.7006, -135.845, 58.0527, -214.892, -105.684 )
+
+[sub_resource type="OccluderShapePolygon" id=11]
+polygon_points = PoolVector2Array( 1094.04, -447.409, 819.851, 369.348, -2125.52, -690.93, -1443.06, 396.805 )
 
 [sub_resource type="ProceduralSky" id=2]
 sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
@@ -74,7 +83,19 @@ keyboard_lunge = ExtResource( 9 )
 keyboard_crouch = ExtResource( 13 )
 keyboard_jump = ExtResource( 14 )
 
-[node name="occlusion_start" type="Spatial" parent="." index="0"]
+[node name="Occluder" type="Occluder" parent="." index="0"]
+transform = Transform( 0.185079, 0, 0.982724, 0, 1, 0, -0.982724, 0, 0.185079, 784.329, -121.759, 461.348 )
+shape = SubResource( 12 )
+
+[node name="Occluder3" type="Occluder" parent="." index="1"]
+transform = Transform( 0.184853, 0.00914604, 0.982724, -0.049417, 0.998778, 7.36371e-10, -0.981523, -0.0485633, 0.185079, 1076.43, -121.759, 1868.53 )
+shape = SubResource( 12 )
+
+[node name="Occluder2" type="Occluder" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 0.593696, 0.804689, 0, -0.804689, 0.593696, 1875.85, -276.996, -540.517 )
+shape = SubResource( 13 )
+
+[node name="occlusion_start" type="Spatial" parent="." index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1923.51, 0, 571.325 )
 
 [node name="Occluder" type="Occluder" parent="occlusion_start" index="0"]
@@ -88,6 +109,13 @@ shape = SubResource( 9 )
 [node name="Occluder3" type="Occluder" parent="occlusion_start" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.5338, -186.497, 265.896 )
 shape = SubResource( 10 )
+
+[node name="occlusion_plateau" type="Spatial" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1399.17, 0, 2095.9 )
+
+[node name="Occluder" type="Occluder" parent="occlusion_plateau" index="0"]
+transform = Transform( 0.994214, 0, -0.107413, 0, 1, 0, 0.107413, 0, 0.994214, -12.4431, 0, -169.781 )
+shape = SubResource( 11 )
 
 [node name="static_collision" parent="chunk" index="0"]
 collision_layer = 257
@@ -521,22 +549,22 @@ collision_layer = 257
 [node name="static_collision" parent="chunk143" index="0"]
 collision_layer = 257
 
-[node name="mountains" parent="." index="197"]
+[node name="mountains" parent="." index="201"]
 cast_shadow = 0
 
-[node name="mountains2" parent="." index="198"]
+[node name="mountains2" parent="." index="202"]
 cast_shadow = 0
 
-[node name="mountains3" parent="." index="199"]
+[node name="mountains3" parent="." index="203"]
 cast_shadow = 0
 
-[node name="mountains4" parent="." index="200"]
+[node name="mountains4" parent="." index="204"]
 cast_shadow = 0
 
-[node name="player" parent="." index="201" instance=ExtResource( 4 )]
+[node name="player" parent="." index="205" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.45, 746 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="." index="202"]
+[node name="DirectionalLight" type="DirectionalLight" parent="." index="206"]
 transform = Transform( -0.74805, -0.372392, 0.549314, 0.29632, 0.55321, 0.778558, -0.593815, 0.745173, -0.303481, 0, 0, 0 )
 light_color = Color( 1, 0.988235, 0.878431, 1 )
 shadow_enabled = true
@@ -545,10 +573,10 @@ directional_shadow_split_2 = 0.05
 directional_shadow_normal_bias = 0.3
 directional_shadow_max_distance = 1500.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="203"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="207"]
 environment = SubResource( 3 )
 
-[node name="debug" type="Panel" parent="." index="204"]
+[node name="debug" type="Panel" parent="." index="208"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -595,7 +623,7 @@ margin_right = 574.0
 margin_bottom = 152.0
 autowrap = true
 
-[node name="Label" type="Label" parent="." index="205"]
+[node name="Label" type="Label" parent="." index="209"]
 pause_mode = 2
 visible = false
 anchor_right = 1.0
@@ -606,11 +634,11 @@ align = 1
 valign = 1
 script = ExtResource( 1 )
 
-[node name="tutorial_swap" type="Timer" parent="." index="206"]
+[node name="tutorial_swap" type="Timer" parent="." index="210"]
 wait_time = 3.0
 one_shot = true
 
-[node name="border" type="Area" parent="." index="207"]
+[node name="border" type="Area" parent="." index="211"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -636,32 +664,32 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="mapcam" type="Camera" parent="." index="208"]
+[node name="mapcam" type="Camera" parent="." index="212"]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="209"]
+[node name="StaticBody" type="StaticBody" parent="." index="213"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="210"]
+[node name="StaticBody2" type="StaticBody" parent="." index="214"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="211"]
+[node name="StaticBody3" type="StaticBody" parent="." index="215"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="212"]
+[node name="StaticBody4" type="StaticBody" parent="." index="216"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]

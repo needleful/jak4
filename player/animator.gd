@@ -47,6 +47,10 @@ var move_blend:= 0.0
 var lunge_right_foot := true
 var held_item:Spatial
 
+func _input(event):
+	if event.is_action_pressed("debug_toggle_animator"):
+		anim.active = !anim.active
+
 func _ready():
 	hover_board.hide()
 	$Armature/Skeleton/gun.holder = self
