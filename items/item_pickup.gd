@@ -13,9 +13,13 @@ export(String) var friendly_name = ""
 export(bool) var from_kill := false
 
 const sq_distance_visible := 100*100
+const sq_distance_animated := 50*50
 
 var gravity_stun_time := 0.0
 var fall_velocity := 0.0
+
+var anim: AnimationPlayer
+var sub_anim : AnimationPlayer
 
 func _ready():
 	if preview:
@@ -29,8 +33,11 @@ func _ready():
 		$area/CollisionShape.disabled = true
 		$pickup_timer.start()
 	if has_node("AnimationPlayer"):
-		$AnimationPlayer.seek(rand_range(0, $AnimationPlayer.current_animation_length))
-		#$AnimationPlayer.call_deferred("stop")
+		anim = $AnimationPlayer
+		anim.seek(rand_range(0, anim.current_animation_length))
+	if has_node("bug/AnimationPlayer"):
+		sub_anim = $bug/AnimationPlayer
+		sub_anim.seek(rand_range(0, sub_anim.current_animation_length))
 
 func _physics_process(delta):
 	if gravity:
@@ -63,15 +70,21 @@ func gravity_stun(_damage):
 
 func process_player_distance(origin: Vector3):
 	var sq_dist = (origin - global_transform.origin).length_squared()
-	var vis = sq_dist < sq_distance_visible
+	var vis:bool = sq_dist < sq_distance_visible
+	var animated: bool = sq_dist < sq_distance_animated
 	if visible != vis:
 		visible = vis
-		if has_node("AnimationPlayer"):
-			if vis:
-				$AnimationPlayer.play()
-			else:
-				$AnimationPlayer.stop(false)
 		set_physics_process(vis)
+	if anim and animated != anim.is_playing():
+		if animated:
+			anim.play()
+		else:
+			anim.stop(false)
+		if sub_anim:
+			if animated:
+				sub_anim.play()
+			else:
+				sub_anim.stop(false)
 	return INF
 
 func _on_pickup_timer_timeout():

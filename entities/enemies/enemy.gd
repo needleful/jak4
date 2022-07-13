@@ -106,8 +106,10 @@ func _ready():
 		set_process(false)
 
 func _process(_delta):
-	var aabb := source_chunk.get_aabb()
-	if !aabb.has_point(global_transform.origin - source_chunk.global_transform.origin):
+	var aabb := source_chunk.get_aabb().grow(10)
+	var point := global_transform.origin
+	point.y = aabb.position.y # disregard vertical position
+	if !aabb.has_point(point - source_chunk.global_transform.origin):
 		nomad = true
 		var gt = global_transform
 		var scene = get_tree().current_scene

@@ -1336,6 +1336,8 @@ func damage(node: Node, damage: int, dir: Vector3):
 		node.take_damage(damage_factor*damage, dir, self)
 
 func move(p_vel: Vector3, grounded:= false) -> Vector3:
+	#global_translate(p_vel.slide(Vector3.UP))
+	#return Vector3.ZERO
 	if grounded:
 		return move_and_slide_with_snap(p_vel,
 			Vector3.DOWN*0.06125,

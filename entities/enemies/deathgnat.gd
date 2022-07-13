@@ -29,8 +29,13 @@ func set_active(active):
 	if active:
 		sleeping = false
 		$AnimationPlayer.play("Idle-loop", -1, 0.5)
+		set_physics_process(true)
+		mode = MODE_RIGID
 	else:
 		$AnimationPlayer.stop()
+		if ai == AI.Idle:
+			mode = MODE_STATIC
+			set_physics_process(false)
 
 func _physics_process(delta):
 	state_timer += delta

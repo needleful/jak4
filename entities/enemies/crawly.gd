@@ -34,8 +34,6 @@ var give_up_timer := 0.0
 
 var ground_normal := Vector3.UP
 
-var physics_frequency := 1
-var frame_until_update := 0
 
 export(NodePath) var animation_node = NodePath("crawly/AnimationPlayer")
 export(NodePath) var mesh_node = NodePath("crawly/Armature/Skeleton/crawly")
@@ -50,12 +48,6 @@ func _ready():
 		get_node(mesh_node).material_override = coat.generate_material()
 
 func _physics_process(delta):
-	frame_until_update -= 1
-	if frame_until_update <= 0:
-		frame_until_update = physics_frequency
-	else:
-		return
-	delta *= physics_frequency
 	state_timer += delta
 	if cooldown_timer > 0:
 		cooldown_timer -= delta
@@ -126,13 +118,13 @@ func _physics_process(delta):
 func set_active(active: bool):
 	if !active:
 		anim.stop()
-		physics_frequency = 10
 		if ai == AI.Idle:
 			set_physics_process(false)
+			mode = MODE_STATIC
 	else:
+		mode = MODE_RIGID
 		set_physics_process(true)
 		set_state(ai, true)
-		physics_frequency = 1
 
 func play_damage_sfx():
 	sound.stream = damage_audio
