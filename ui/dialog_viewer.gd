@@ -223,13 +223,16 @@ func choose_reply(item: DialogItem, skip: bool):
 	current_item = item
 	get_next()
 
+func get_speaker_name() -> String:
+	if "visual_name" in main_speaker:
+		return main_speaker.visual_name
+	else:
+		return main_speaker.name.capitalize()
+
 func show_message():
-	var speaker: String = current_item.speaker	
+	var speaker: String = current_item.speaker
 	if speaker == "":
-		if "visual_name" in main_speaker:
-			speaker = main_speaker.visual_name
-		else:
-			speaker = main_speaker.name.capitalize()
+		speaker = get_speaker_name()
 
 	var text := ""
 	if speaker != last_speaker:
@@ -451,3 +454,10 @@ func mark_discussed(stat: String) -> bool:
 func shop():
 	set_shopping(true)
 	$shop.start_shopping(main_speaker)
+	return true
+
+func remember(note: String, subject: String = ""):
+	if subject == "":
+		subject = get_speaker_name()
+	Global.add_note("people", subject, note)
+	return true

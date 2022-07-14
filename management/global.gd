@@ -88,13 +88,29 @@ func mark_map(id:String, note:String):
 		game_state.map_markers[id].append(note)
 	else:
 		game_state.map_markers[id] = [note]
-	add_journal_entry("places/"+id, note)
+	add_note("places", id, note)
+	return true
 
-func add_journal_entry(label: String, note: String):
-	if label in game_state.journal:
-		game_state.journal[label].append(note)
+func add_note(category: String, subject: String, note: String):
+	if !(category in game_state.journal):
+		game_state.journal[category] = {}
+	if !(subject in game_state.journal[category]):
+		game_state.journal[category][subject] = []
+	game_state.journal[category][subject].append(note)
+
+func get_notes(category: String, subject: String = ""):
+	var cat_notes := {}
+	if category in game_state.journal:
+		cat_notes = game_state.journal[category]
 	else:
-		game_state.journal[label] = [note]
+		return null
+
+	if subject == "":
+		return cat_notes
+	elif subject in cat_notes:
+		return cat_notes[subject]
+	else:
+		return []
 
 func place_flag(node: Spatial, transform: Transform):
 	var _x = add_item("flag", -1)

@@ -1451,7 +1451,7 @@ func _on_dialog_exited():
 	cam_rig.play_animation("dialog_end")
 	unlock()
 
-func _on_dialog_event(id: String, source: Node):
+func _on_dialog_event(id: String, _source: Node):
 	print("Dialog: ", id)
 	match id:
 		"unlock_player":

@@ -1,11 +1,11 @@
-[gd_scene load_steps=76 format=2]
+[gd_scene load_steps=75 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
 [ext_resource path="res://player/jackie.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
-[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=6]
 [ext_resource path="res://player/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
@@ -449,12 +449,6 @@ bg_color = Color( 1, 0.776471, 0.776471, 1 )
 [sub_resource type="StyleBoxFlat" id=40]
 bg_color = Color( 0.67451, 1, 0.592157, 1 )
 
-[sub_resource type="DynamicFont" id=27]
-size = 48
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 6 )
-
 [sub_resource type="Animation" id=50]
 length = 0.001
 tracks/0/type = "value"
@@ -897,7 +891,6 @@ theme = ExtResource( 5 )
 script = ExtResource( 17 )
 
 [node name="gameing" type="Control" parent="ui"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1071,7 +1064,7 @@ margin_top = 13.0
 margin_right = 388.0
 margin_bottom = 67.0
 rect_min_size = Vector2( 60, 0 )
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "+"
 align = 1
 
@@ -1093,7 +1086,7 @@ margin_left = 588.0
 margin_top = 13.0
 margin_right = 827.0
 margin_bottom = 67.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "Stuff here!"
 
 [node name="prompt_timer" type="Timer" parent="ui/gameing/tutorial"]
@@ -1116,21 +1109,21 @@ script = ExtResource( 12 )
 margin_left = 359.0
 margin_right = 478.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "Label"
 
 [node name="spacer" type="Label" parent="ui/gameing/custom_game"]
 margin_left = 503.0
 margin_right = 518.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = ":"
 
 [node name="number" type="Label" parent="ui/gameing/custom_game"]
 margin_left = 543.0
 margin_right = 664.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "Value"
 
 [node name="weapon" type="TextureRect" parent="ui/gameing"]
@@ -1155,7 +1148,7 @@ margin_left = 38.0
 margin_top = -29.0
 margin_right = 212.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="ArrowUp" type="TextureRect" parent="ui/gameing/weapon"]
@@ -1210,7 +1203,6 @@ flip_h = true
 [node name="inventory" type="GridContainer" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -1236,7 +1228,7 @@ text = "Gems:"
 margin_left = 117.0
 margin_right = 144.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="gem_added" type="Label" parent="ui/gameing/inventory"]
@@ -1244,7 +1236,7 @@ modulate = Color( 1, 1, 1, 0 )
 margin_left = 162.0
 margin_right = 231.0
 margin_bottom = 54.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/gem_added"]
@@ -1266,7 +1258,7 @@ margin_left = 117.0
 margin_top = 70.0
 margin_right = 144.0
 margin_bottom = 124.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="bug_added" type="Label" parent="ui/gameing/inventory"]
@@ -1275,7 +1267,7 @@ margin_left = 162.0
 margin_top = 70.0
 margin_right = 231.0
 margin_bottom = 124.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/bug_added"]
@@ -1297,7 +1289,7 @@ margin_left = 117.0
 margin_top = 140.0
 margin_right = 144.0
 margin_bottom = 194.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="capacitor_added" type="Label" parent="ui/gameing/inventory"]
@@ -1306,7 +1298,7 @@ margin_left = 162.0
 margin_top = 140.0
 margin_right = 231.0
 margin_bottom = 194.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/capacitor_added"]
@@ -1328,7 +1320,7 @@ margin_left = 117.0
 margin_top = 210.0
 margin_right = 144.0
 margin_bottom = 264.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="flag_added" type="Label" parent="ui/gameing/inventory"]
@@ -1337,7 +1329,7 @@ margin_left = 162.0
 margin_top = 210.0
 margin_right = 231.0
 margin_bottom = 264.0
-custom_fonts/font = SubResource( 27 )
+custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/flag_added"]
@@ -1361,6 +1353,7 @@ time_scale_response = false
 visible = false
 
 [node name="status_menu" type="Control" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1368,7 +1361,6 @@ script = ExtResource( 7 )
 [node name="tabs" type="TabContainer" parent="ui/status_menu"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = 8.0
 custom_styles/panel = SubResource( 65 )
 custom_styles/tabs_panel = SubResource( 5 )
 

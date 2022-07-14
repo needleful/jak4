@@ -11,6 +11,7 @@ export(Array, NodePath) var activated: Array
 export(Array, Transform) var flags : Array
 # String to array of strings
 export(Dictionary) var map_markers := {}
+# Dictionary(string category -> Dictionary(string subject -> Array(string) notes))
 export(Dictionary) var journal := {}
 
 func _init():
