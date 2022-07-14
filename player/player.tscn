@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=2]
+[gd_scene load_steps=76 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://ui/prompts/gamepadRB.png" type="Texture" id=20]
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
+[ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -891,6 +892,7 @@ theme = ExtResource( 5 )
 script = ExtResource( 17 )
 
 [node name="gameing" type="Control" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1353,7 +1355,7 @@ time_scale_response = false
 visible = false
 
 [node name="status_menu" type="Control" parent="ui"]
-visible = false
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1372,10 +1374,8 @@ margin_top = 32.0
 [node name="Journal" parent="ui/status_menu/tabs" instance=ExtResource( 21 )]
 visible = false
 
-[node name="Inventory" type="Control" parent="ui/status_menu/tabs"]
+[node name="Inventory" parent="ui/status_menu/tabs" instance=ExtResource( 23 )]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
 margin_top = 32.0
 
 [node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]

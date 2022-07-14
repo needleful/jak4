@@ -10,6 +10,7 @@ var game_state := GameState.new()
 
 export(Array, Texture) var coat_textures: Array
 
+
 const save_path := "user://autosave.tres"
 const old_save_backup := "user://autosave.backup.tres"
 var valid_game_state := false setget set_valid_game_state, get_valid_game_state
@@ -103,7 +104,7 @@ func get_notes(category: String, subject: String = ""):
 	if category in game_state.journal:
 		cat_notes = game_state.journal[category]
 	else:
-		return null
+		return {}
 
 	if subject == "":
 		return cat_notes

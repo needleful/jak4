@@ -3,6 +3,8 @@ extends Label
 export(String) var item_id
 
 func _ready():
+	if item_id == "":
+		item_id = name
 	var _x = Global.connect("item_changed", self, "_on_item_changed")
 	_x = connect("visibility_changed", self, "_on_visibility_changed")
 	

@@ -17,8 +17,10 @@ func set_active(active):
 		notes.hide()
 		starting_item = null
 		clear(list)
+		populate_list("tasks")
 		populate_list("people")
 		populate_list("places")
+		populate_list("completed")
 		if starting_item:
 			call_deferred("show_notes")
 

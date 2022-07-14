@@ -71,8 +71,5 @@ func show_Status() -> bool:
 		return true
 
 func unpause() -> bool:
-	if mode != Mode.Paused:
-		return false
-	else:
-		set_mode(Mode.Gameing)
-		return true
+	set_mode(Mode.Gameing)
+	return true
