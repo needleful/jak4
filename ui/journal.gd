@@ -6,6 +6,7 @@ onready var list := $panel/hbox/items/list
 onready var subject_name := $panel/hbox/notes/header/text/name
 onready var subject_image := $panel/hbox/notes/header/TextureRect
 onready var subject_notes := $panel/hbox/notes/notes/list
+onready var subject_headline := $panel/hbox/notes/header/text/headline
 onready var notes := $panel/hbox/notes
 
 const image_path := "res://ui/notes/%s/%s.png"
@@ -23,10 +24,6 @@ func set_active(active):
 		populate_list("completed")
 		if starting_item:
 			call_deferred("show_notes")
-
-func clear(node: Node):
-	for c in node.get_children():
-		c.queue_free()
 
 func get_image(category: String, subject: String) -> Texture:
 	var path: String = image_path % [category, subject]
@@ -68,14 +65,25 @@ func populate_list(category: String):
 	var panel := Panel.new()
 	panel.rect_min_size.y = 20
 	panel.add_stylebox_override("panel", hrule_style)
+	list.add_child(panel)
 
 func _on_subject_focused(category: String, subject: String):
 	subject_name.text = subject.capitalize()
 	subject_image.texture = get_image(category, subject)
 	
 	clear(subject_notes)
+	var n : Array = Global.get_notes(category, subject)
+	if n == null or n.empty():
+		subject_headline.hide()
+		return
 	
-	for note in Global.get_notes(category, subject):
+	subject_headline.show()
+	subject_headline.text = n[n.size() - 1]
+	
+	if n.size() < 2:
+		return
+
+	for note in n:
 		var l := Label.new()
 		l.autowrap = true
 		l.text = note
@@ -86,3 +94,7 @@ func show_notes():
 	notes.show()
 	if starting_item:
 		starting_item.grab_focus()
+
+func clear(node: Node):
+	for c in node.get_children():
+		c.queue_free()

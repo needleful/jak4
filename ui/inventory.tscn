@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ui/inventory.gd" type="Script" id=1]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=2]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://ui/items/player_desc.tres" type="Resource" id=5]
+[ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=6]
 
 [sub_resource type="ProceduralSky" id=2]
 radiance_size = 0
@@ -20,9 +22,6 @@ background_sky = SubResource( 2 )
 
 [sub_resource type="World" id=4]
 environment = SubResource( 3 )
-
-[sub_resource type="CubeMesh" id=6]
-size = Vector3( 1, 1, 1 )
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
@@ -45,6 +44,7 @@ corner_radius_bottom_left = 10
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
+player_description = ExtResource( 5 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 512, 512 )
@@ -52,15 +52,19 @@ world = SubResource( 4 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Camera" type="Camera" parent="Viewport"]
-transform = Transform( 1, 0, 0, 0, 0.961262, 0.275637, 0, -0.275637, 0.961262, 0, 0.532514, 1.7124 )
-fov = 60.0
-
 [node name="object_ref" type="Spatial" parent="Viewport"]
 
-[node name="MeshInstance" type="MeshInstance" parent="Viewport/object_ref"]
-mesh = SubResource( 6 )
-skeleton = NodePath("../..")
+[node name="DirectionalLight" type="DirectionalLight" parent="Viewport"]
+transform = Transform( 0.614907, 0.774376, -0.1491, -0.313623, 0.41361, 0.854732, 0.723554, -0.47882, 0.497194, -0.0264456, 0.209806, 0.094446 )
+light_energy = 0.8
+light_indirect_energy = 0.8
+
+[node name="SpringArm" type="SpringArm" parent="Viewport"]
+transform = Transform( 1, 0, 0, 0, 0.944584, 0.32827, 0, -0.32827, 0.944584, 0, -0.00165046, 0.00688021 )
+collision_mask = 0
+
+[node name="Camera" type="Camera" parent="Viewport/SpringArm"]
+fov = 60.0
 
 [node name="viewport_window" type="TextureRect" parent="."]
 anchor_right = 0.8
@@ -75,6 +79,58 @@ texture = SubResource( 1 )
 expand = true
 stretch_mode = 6
 flip_v = true
+
+[node name="Panel" type="PanelContainer" parent="viewport_window"]
+anchor_right = 0.219
+margin_left = 15.0
+margin_top = 4.0
+margin_right = 108.691
+margin_bottom = 143.0
+rect_min_size = Vector2( 320, 0 )
+
+[node name="MarginContainer" type="MarginContainer" parent="viewport_window/Panel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 313.0
+margin_bottom = 132.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 20
+
+[node name="item" type="VBoxContainer" parent="viewport_window/Panel/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 296.0
+margin_bottom = 105.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="name" type="Label" parent="viewport_window/Panel/MarginContainer/item"]
+margin_right = 286.0
+margin_bottom = 54.0
+custom_fonts/font = ExtResource( 3 )
+text = "Item"
+
+[node name="sub_items" type="GridContainer" parent="viewport_window/Panel/MarginContainer/item"]
+margin_top = 58.0
+margin_right = 286.0
+margin_bottom = 58.0
+columns = 2
+
+[node name="spacer" type="Panel" parent="viewport_window/Panel/MarginContainer/item"]
+margin_top = 62.0
+margin_right = 286.0
+margin_bottom = 77.0
+rect_min_size = Vector2( 0, 15 )
+custom_styles/panel = ExtResource( 6 )
+
+[node name="description" type="Label" parent="viewport_window/Panel/MarginContainer/item"]
+margin_top = 81.0
+margin_right = 286.0
+margin_bottom = 95.0
+text = "Item"
+autowrap = true
 
 [node name="large_items" type="Panel" parent="."]
 anchor_top = 0.65
@@ -96,11 +152,12 @@ margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
 
-[node name="Control" type="Control" parent="large_items/ScrollContainer"]
+[node name="rows" type="VBoxContainer" parent="large_items/ScrollContainer"]
 margin_right = 789.2
 margin_bottom = 180.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/separation = 15
 
 [node name="small_items" type="GridContainer" parent="."]
 anchor_left = 0.8
