@@ -18,3 +18,6 @@ func fire():
 
 func stow():
 	pass
+
+func combo_fire():
+	return fire()

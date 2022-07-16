@@ -4,6 +4,18 @@ export(float) var gold setget set_gold
 export(float) var silver setget set_silver
 export(float) var bronze setget set_bronze
 
+func set_best(best: float):
+	$Panel/MarginContainer/GridContainer/LabelBest.show()
+	$Panel/MarginContainer/GridContainer/Best.show()
+	$Panel/MarginContainer/GridContainer/Best.text = "%.3f" % best
+
+func new_best(best:float):
+	$Panel/MarginContainer/GridContainer/LabelBest.show()
+	$Panel/MarginContainer/GridContainer/Best.show()
+	$Panel/MarginContainer/GridContainer/Best.text = "%.3f" % best
+	$best.text = "New best: %.3f" % best
+	$AnimationPlayer.play("new_best")
+
 func set_gold(g: float):
 	$Panel/MarginContainer/GridContainer/Gold.text = "%.2f" % g
 	gold = g

@@ -197,8 +197,9 @@ dead_enemies = [ NodePath("../deathgnat2") ]
 [node name="race" type="Spatial" parent="rocks_area/race_spawn"]
 script = ExtResource( 19 )
 bronze_seconds = 75.0
-silver_seconds = 50.0
-gold_seconds = 30.0
+silver_seconds = 40.0
+gold_seconds = 25.0
+friendly_id = "race125"
 
 [node name="npc_race" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
 transform = Transform( -0.24672, 0, -0.969087, 0, 1, 0, 0.969087, 0, -0.24672, 1.01299, -0.307648, 2.57545 )
@@ -301,10 +302,6 @@ respawns = false
 transform = Transform( -0.0771888, 0, -0.997016, 0, 1, 0, 0.997016, 0, -0.0771888, 9.47731, -2.32248, -4.88287 )
 respawns = false
 
-[node name="npc" parent="hut_area" instance=ExtResource( 17 )]
-transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 11.7983, -2.87549, -8.96378 )
-visual_name = "Hermit"
-
 [node name="bug_pickup2" parent="hut_area" instance=ExtResource( 7 )]
 transform = Transform( 0.352266, 0, 0.9359, 0, 1, 0, -0.9359, 0, 0.352266, -16.2427, -0.575485, 4.76283 )
 
@@ -312,6 +309,10 @@ transform = Transform( 0.352266, 0, 0.9359, 0, 1, 0, -0.9359, 0, 0.352266, -16.2
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09572, 2.23872, 2.51089 )
 script = ExtResource( 16 )
 dead_enemies = [ NodePath("../crawly"), NodePath("../crawly2") ]
+
+[node name="npc" parent="hut_area/conditional_when_dead" instance=ExtResource( 17 )]
+transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 20.894, -5.11421, -11.4747 )
+visual_name = "Hermit"
 
 [node name="valley_area" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -164.23, -233.328, 214.16 )

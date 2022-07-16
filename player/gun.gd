@@ -18,6 +18,10 @@ enum State {
 	Firing,
 	DelayedFire,
 	Charging,
+	ComboReady,
+	ComboReadyHidden,
+	ComboDelayFire,
+	ComboFire
 }
 
 var state:int = State.NoWeapon
@@ -71,7 +75,9 @@ func _input(event):
 	if holder.weapons_locked():
 		return
 	if event.is_action_pressed("combat_shoot"):
-		if can_fire():
+		if state == State.ComboReady or state == State.ComboReadyHidden:
+			combo_fire()
+		elif can_fire():
 			fire()
 	elif event.is_action_pressed("combat_aim_toggle"):
 		if !visible:
@@ -104,10 +110,10 @@ func _process(delta):
 		if time_since_fired > TIME_HIDE:
 			disable()
 	match state:
-		State.Firing:
+		State.Firing, State.ComboFire:
 			if state_timer > time_firing:
 				set_state(state_before_fire)
-		State.AimLocked:
+		State.AimLocked, State.ComboReady:
 			locked_aim = true
 		State.Locked:
 			locked_aim = true
@@ -115,6 +121,9 @@ func _process(delta):
 		State.DelayedFire:
 			if state_timer > DELAY_HIDDEN_FIRE:
 				fire()
+		State.ComboDelayFire:
+			if state_timer > DELAY_HIDDEN_FIRE:
+				combo_fire()
 	
 	if locked_aim:
 		current_dir = holder.get_normal_gun_orientation()
@@ -228,6 +237,12 @@ func fire():
 	else:
 		set_state(State.Firing)
 
+func combo_fire():
+	if state == State.ComboReadyHidden:
+		set_state(State.ComboDelayFire)
+	else:
+		set_state(State.ComboFire)
+
 func fire_test_orb():
 	var orb = load("res://entities/enemies/projectile.tscn").instance()
 	get_tree().current_scene.add_child(orb)
@@ -245,6 +260,27 @@ func can_fire():
 			state != State.Firing
 			and state != State.NoWeapon
 			and state != State.Locked)
+
+func start_combo():
+	if current_weapon:
+		if state == State.Hidden:
+			set_state(State.ComboReadyHidden)
+		else:
+			set_state(State.ComboReady)
+
+func end_combo():
+	if current_weapon:
+		if visible:
+			set_state(State.Free)
+		else:
+			set_state(State.Hidden)
+
+func in_combo():
+	return (
+		state == State.ComboDelayFire
+		or state == State.ComboFire
+		or state == State.ComboReady
+		or state == State.ComboReadyHidden)
 
 func lock():
 	if visible:
@@ -284,6 +320,7 @@ func swap_to(id: String):
 		enable()
 
 func set_state(new_state, force := false):
+	#$debug/list/d1.text = 'State: '+State.keys()[new_state]
 	if !force and new_state == state:
 		return
 	state_timer = 0.0
@@ -298,7 +335,7 @@ func set_state(new_state, force := false):
 			holder.blend_gun(0.0)
 			holder.hold_gun(0.0)
 			gun_ik.stop()
-		State.Hidden:
+		State.Hidden, State.ComboReadyHidden:
 			if !charging():
 				set_process(false)
 				visible = false
@@ -312,7 +349,7 @@ func set_state(new_state, force := false):
 			holder.blend_gun(1.0)
 			gun_ik.interpolation = 1.0
 			gun_ik.start()
-		State.DelayedFire:
+		State.DelayedFire, State.ComboDelayFire:
 			visible = true
 			holder.blend_gun(1.0)
 			holder.hold_gun(1.0)
@@ -326,7 +363,7 @@ func set_state(new_state, force := false):
 			holder.blend_gun(0.0)
 			holder.hold_gun(1.0)
 			gun_ik.stop()
-		State.AimLocked:
+		State.AimLocked, State.ComboReady:
 			visible = true
 			holder.blend_gun(0.7)
 			holder.hold_gun(1.0)
@@ -349,6 +386,25 @@ func set_state(new_state, force := false):
 				state_before_fire = State.Free
 			else:
 				state_before_fire = state
+		State.ComboFire:
+			if current_weapon.combo_fire():
+				if !current_weapon.charge_fire:
+					holder.blend_gun(1.0)
+				holder.play_fire()
+				gun_ik.interpolation = 0.2
+				gun_ik.start()
+				laser.visible = false
+				visible = true
+				holder.hold_gun(1.0)
+				if "recoil" in current_weapon:
+					holder.apply_velocity(current_weapon.recoil)
+			time_firing = current_weapon.time_firing
+			time_since_fired = 0
+			if state == State.ComboDelayFire or state == State.Charging:
+				state_before_fire = State.Free
+			else:
+				state_before_fire = state
+				
 		State.Charging:
 			visible = true
 			holder.hold_gun(1.0)

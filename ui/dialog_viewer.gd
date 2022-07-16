@@ -467,3 +467,21 @@ func task_note(task: String, note: String):
 		Global.add_note("completed", task, note)
 	else:
 		Global.add_note("tasks", task, note)
+
+func game_stat(sub_stat):
+	if !main_speaker:
+		return ""
+	if !main_speaker.get_parent():
+		return ""
+	if !main_speaker.get_parent().has_method("get_stat"):
+		return ""
+	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+
+func has_game_stat(sub_stat) -> bool:
+	if !main_speaker:
+		return false
+	if !main_speaker.get_parent():
+		return false
+	if !main_speaker.get_parent().has_method("get_stat"):
+		return false
+	return Global.has_stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)

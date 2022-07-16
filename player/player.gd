@@ -81,6 +81,7 @@ const TIME_LUNGE_MIN := 0.4
 const TIME_LUNGE_MIN_UPPERCUT := 0.2
 const TIME_LUNGE_INVINCIBILITY := 0.2
 const TIME_LUNGE_PARTICLES := 0.4
+const TIME_LUNGE_COMBO := 0.15
 
 const TIME_SPIN_MAX := 0.7
 const TIME_SPIN_MIN := 0.2
@@ -825,6 +826,10 @@ func _physics_process(delta):
 		State.LungeKick, State.SlideLungeKick:
 			if timer_state > TIME_LUNGE_PARTICLES:
 				mesh.stop_particles()
+			if (timer_state > TIME_LUNGE_COMBO
+				and !gun.in_combo()
+				and damaged_objects.size() > 0):
+				gun.start_combo()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
@@ -847,6 +852,8 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 		State.DiveEnd:
+			if !gun.in_combo() and damaged_objects.size() > 0:
+				gun.start_combo()
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 		State.Locked, State.PlaceFlag, State.GetItem, State.Sitting:
@@ -1438,6 +1445,8 @@ func get_dialog_viewer() -> Node:
 	return $ui/dialog_viewer
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
+	if game_ui.in_game:
+		return
 	ui.start_dialog(source, sequence, speaker, starting_label)
 	# TODO: replace with a tween
 	cam_rig.play_animation("dialog_start")
@@ -1602,7 +1611,9 @@ func set_state(next_state: int):
 			mesh.release_item()
 		State.Hover:
 			mesh.stop_hover()
-	
+		State.LungeKick, State.SlideLungeKick, State.DiveEnd:
+			gun.end_combo()
+
 	# Entry effects
 	match next_state:
 		State.Fall, State.LedgeFall:

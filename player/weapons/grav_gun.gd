@@ -91,3 +91,6 @@ func _on_explosion_disappeared(expl: Spatial):
 func _on_explode_sound_finished(node):
 	node.get_parent().remove_child(node)
 	sound_pool.append(node)
+
+func combo_fire():
+	return fire()

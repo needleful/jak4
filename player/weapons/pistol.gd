@@ -34,3 +34,10 @@ func fire() -> bool:
 
 func stow():
 	pass
+
+func combo_fire():
+	fire()
+	$AnimationPlayer.connect("animation_finished", self, "_combo_fire_mid", [], CONNECT_ONESHOT)
+
+func _combo_fire_mid(_a):
+	fire()

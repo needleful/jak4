@@ -81,3 +81,6 @@ func stow():
 func _on_bubble_remove(node):
 	scene.remove_child(node)
 	bubble_pool.append(node)
+
+func combo_fire():
+	return fire()
