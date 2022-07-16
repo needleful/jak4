@@ -461,3 +461,9 @@ func remember(note: String, subject: String = ""):
 		subject = get_speaker_name()
 	Global.add_note("people", subject, note)
 	return true
+
+func task_note(task: String, note: String):
+	if Global.has_note("completed", task):
+		Global.add_note("completed", task, note)
+	else:
+		Global.add_note("tasks", task, note)

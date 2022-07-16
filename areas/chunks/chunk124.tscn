@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=82 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -208,6 +208,15 @@ extents = Vector3( 2.65809, 1.56186, 1 )
 
 [sub_resource type="CylinderShape" id=251]
 radius = 0.634045
+
+[sub_resource type="OccluderShapePolygon" id=268]
+polygon_points = PoolVector2Array( 7.84183, -4.42842, 7.83727, 2.81516, -8.08119, 2.20998, -7.9166, -3.8607 )
+
+[sub_resource type="OccluderShapePolygon" id=267]
+polygon_points = PoolVector2Array( 7.20355, -8.07906, 7.36118, 7.78926, -8.39911, 7.76288, -8.36946, -8.16253 )
+
+[sub_resource type="OccluderShapePolygon" id=269]
+polygon_points = PoolVector2Array( 4.16739, -6.33401, 4.23732, 2.50775, -6.00702, 2.74455, -6.07927, -5.12074 )
 
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
@@ -878,10 +887,10 @@ enable_shadows = true
 interior_enable = true
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="village_area" index="46"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.379, -3.07881, -21.4642 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.6017, -2.84669, -24.4536 )
 max_distance = 16384.0
-extents = Vector3( 10.1847, 4.5194, 2.20546 )
-origin_offset = Vector3( -2.05566, 0, 1.66016 )
+extents = Vector3( 1.55691, 2.30765, 2.32843 )
+origin_offset = Vector3( 0.0517578, -0.0644531, -0.777344 )
 
 [node name="ReflectionProbe4" type="ReflectionProbe" parent="village_area" index="47"]
 transform = Transform( -0.196665, 0, -0.980471, 0, 1, 0, 0.980471, 0, -0.196665, 111.451, 5.37218, -9.29212 )
@@ -1126,13 +1135,13 @@ transform = Transform( 0.712051, 0.0384404, -0.701075, -0.0642936, 0.997875, -0.
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.2435e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -58.0464, 6.3298, -4.35679 )
 
 [node name="gem_pickup137" parent="palace_area/palace1/pickups" index="11" instance=ExtResource( 20 )]
-transform = Transform( -0.807444, 0.0384404, -0.588691, -2.2435e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -55.7829, 8.37938, -2.99276 )
+transform = Transform( -0.807444, 0.0384404, -0.588691, -1.7691e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -56.0921, 8.80371, -2.72401 )
 
 [node name="gem_pickup138" parent="palace_area/palace1/pickups" index="12" instance=ExtResource( 20 )]
-transform = Transform( -0.807444, 0.0384404, -0.588691, -2.2435e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -55.9096, 8.30484, -2.45589 )
+transform = Transform( -0.807444, 0.0384404, -0.588691, -1.7691e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -56.2187, 8.72919, -2.18716 )
 
 [node name="gem_pickup139" parent="palace_area/palace1/pickups" index="13" instance=ExtResource( 20 )]
-transform = Transform( -0.807444, 0.0384404, -0.588691, -2.2435e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -56.2949, 8.41443, -2.82726 )
+transform = Transform( -0.807444, 0.0384404, -0.588691, -1.7691e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -56.604, 8.83876, -2.55853 )
 
 [node name="bug_pickup44" parent="palace_area/palace1/pickups" index="14" instance=ExtResource( 14 )]
 transform = Transform( 0.693782, 0.0384404, -0.719159, -0.0645447, 0.997875, -0.0089288, 0.717288, 0.0526125, 0.694788, -3.1738, 12.2995, -35.5723 )
@@ -1631,8 +1640,29 @@ transform = Transform( -0.209226, 0, -0.977867, 0, 1, 0, 0.977867, 0, -0.209226,
 transform = Transform( 0.974616, 0, 0.223879, 0, 1, 0, -0.223879, 0, 0.974616, 5.621, -2.21199, -6.6156 )
 
 [node name="SpotLight" type="SpotLight" parent="the_medium" index="19"]
-transform = Transform( 1, 0, 0, 0, -0.250999, 0.967987, 0, -0.967987, -0.250999, 3.27232, 1.54573, -8.5132 )
+transform = Transform( 1, 0, 0, 0, 0.318842, 0.947808, 0, -0.947808, 0.318842, 3.27232, 1.24294, -7.61309 )
+shadow_enabled = true
 spot_angle = 25.6477
+
+[node name="Occluder" type="Occluder" parent="the_medium" index="20"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.483719, 0, -8.98439 )
+shape = SubResource( 268 )
+
+[node name="Occluder2" type="Occluder" parent="the_medium" index="21"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.69279, -0.137695, -1.59429 )
+shape = SubResource( 268 )
+
+[node name="Occluder3" type="Occluder" parent="the_medium" index="22"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.6102, 0, -1.68985 )
+shape = SubResource( 268 )
+
+[node name="Occluder5" type="Occluder" parent="the_medium" index="23"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.77061, -1.94793 )
+shape = SubResource( 267 )
+
+[node name="Occluder4" type="Occluder" parent="the_medium" index="24"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60159, 0, 5.96384 )
+shape = SubResource( 269 )
 
 [connection signal="toggled" from="village_area/dswitch_shortcut" to="village_area/rail_cart_shortcut" method="_on_toggled"]
 [connection signal="activated" from="the_medium/power_thing" to="the_medium/door" method="_on_activated"]

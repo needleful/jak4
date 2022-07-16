@@ -1,12 +1,12 @@
 
 {Global.stat("riley/apology")}
 	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
-	[You] Really? Wow!
+	[You] Really? Wow! {remember("Riley forgave me for destroying the tower. It's more relieving than I thought it would be.")}
 	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
 
 {otherwise if Global.stat("capacitor_113")}
 	{Global.add_stat("riley/113/argue") == 1}
-		Oh my God! I told you not to take that capacitor!
+		Oh my God! I told you not to take that capacitor! {remember("Riley's angry at me for taking the capacitor from the tower. Honestly I think she's overreacting.")}
 		{Global.stat("riley/113/days_collapse")}
 			[You] You said it would take days to collapse, not that it'd fall out from under me!
 			Oh, and it would be fine if it fell on the village tomorrow?
@@ -30,9 +30,10 @@
 		[You] ... Well, where else would I get a capacitor?
 		I'm not sure. But seriously. These ancient structures are on the brink of collapse. They have active supports powered with their energy systems. Without the capacitors, they can completely fall apart.
 		[You] ...
+		{task_note("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it. I'm not sure I see what the harm could be.")}
 	{otherwise}
 		[You] Do you really think this thing would collapse if I took the capacitor?
-		{Global.add_stat("riley/113/days_collapse")}Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
+		{Global.add_stat("riley/113/days_collapse")} Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
 	> Say, could I buy some supplies off you?
 		Sure, I have some spare gear.
 		{shop()}

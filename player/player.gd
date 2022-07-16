@@ -1146,7 +1146,7 @@ func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := f
 	if ignore_slide:
 		velocity.y = min(velocity.y, v2.y)
 	else:
-		velocity.y = max(velocity.y, v2.y)
+		velocity.y = v2.y
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY

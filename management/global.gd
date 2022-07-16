@@ -92,6 +92,12 @@ func mark_map(id:String, note:String):
 	add_note("places", id, note)
 	return true
 
+func has_note(category: String, subject: String):
+	if !(category in game_state.journal):
+		return false
+	else:
+		return subject in game_state.journal[category]
+
 func add_note(category: String, subject: String, note: String):
 	if !(category in game_state.journal):
 		game_state.journal[category] = {}
@@ -112,6 +118,25 @@ func get_notes(category: String, subject: String = ""):
 		return cat_notes[subject]
 	else:
 		return []
+
+func complete_task(task: String, note := "")->bool:
+	if !("tasks" in game_state.journal):
+		print_debug("No tasks to remove: ", task)
+		return false
+	elif "completed" in game_state.journal and task in game_state.journal.completed:
+		print_debug("Already completed: ", task)
+		return false
+	elif !(task in game_state.journal.tasks):
+		print_debug("Task never started: ", task)
+		return false
+	else:
+		if !("completed" in game_state.journal):
+			game_state.journal["completed"] = {}
+		game_state.journal.completed[task] = game_state.journal.tasks[task]
+		game_state.journal.tasks.erase(task)
+		if note != "":
+			add_note("completed", task, note)
+		return true
 
 func place_flag(node: Spatial, transform: Transform):
 	var _x = add_item("flag", -1)

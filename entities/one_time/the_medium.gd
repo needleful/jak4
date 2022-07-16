@@ -10,8 +10,10 @@ var active := false
 func activate_scanner():
 	if active:
 		return
-	var _x = Global.add_stat("medium/activated")
-	_x = Global.set_stat("medium/last_activation", OS.get_datetime(true))
+	var a = Global.add_stat("medium/activated")
+	if a == 1:
+		Global.complete_task("activate_the_medium", "I've activated it. I really did it.")
+	a = Global.set_stat("medium/last_activation", OS.get_datetime(true))
 	active = true
 	dialog_collision.disabled = true
 	mom_door.add_power(1)
