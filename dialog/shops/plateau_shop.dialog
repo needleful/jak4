@@ -120,7 +120,9 @@
 
 :_exit
 [You] I have to go, see you!
+{goto("sub_exit")}
 {exit()}
+
 
 :mum
 {mention("mum")} 
@@ -165,8 +167,11 @@
 {back()}
 
 :sub_exit
+{talked == 0} Say, I never got your name.
+	[You] I'm Jackie.
+	Jackie. I'm Orstad.
 {mentioned("mum")} Safe travels to you, Jackie. I hope you find what you're looking for.
-{otherwise if mentioned("safari")} Enjoy your safari, huntress! If you find a nicer coat, maybe my daughter can have your hand-me-downs!
+{otherwise if mentioned("safari")} Enjoy your safari, Jackie! If you find a nicer coat, maybe my daughter can have your hand-me-downs!
 {otherwise} Have a good one!
 {exit()}
 

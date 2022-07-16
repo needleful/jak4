@@ -411,6 +411,8 @@ func _physics_process(delta):
 			best_floor_dot = dot
 			best_normal = normal
 			best_floor = col.collider as Node
+	if best_floor_dot > 0:
+		ground_normal = best_normal
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
 	var next_state := state
@@ -586,7 +588,6 @@ func _physics_process(delta):
 			elif (best_normal != Vector3.ZERO
 				and best_floor_dot < MIN_DOT_SLIDE
 			):
-				ground_normal = best_normal
 				next_state = State.BonkFall
 			elif timer_state > TIME_CROUCH_JUMP:
 				if best_floor_dot > MIN_DOT_GROUND:
@@ -613,8 +614,7 @@ func _physics_process(delta):
 				elif crouch_head.get_overlapping_bodies().size() == 0:
 					next_state = State.Slide
 			elif best_normal != Vector3.ZERO:
-					ground_normal = best_normal
-					next_state = State.BonkFall
+				next_state = State.BonkFall
 		State.Fall, State.BonkFall:
 			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -790,22 +790,14 @@ func _physics_process(delta):
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
-			$ui/gameing/debug/stats/a5.text = "[%f, %f, %f]" % [
-				ground_normal.x, ground_normal.y, ground_normal.z
-			]
 			accel(delta, desired_velocity*SPEED_RUN)
 		State.Fall, State.LedgeFall:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
 		State.Slide:
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 		State.BaseJump:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
 		State.Roll:
-			ground_normal = best_normal
 			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
 		State.RollJump, State.RollFall:
 			accel_air(delta, desired_velocity*SPEED_ROLL, ACCEL_ROLL_AIR)
@@ -813,12 +805,8 @@ func _physics_process(delta):
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
 		State.Crouch:
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_CROUCH)
 		State.Climb:
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
@@ -841,7 +829,6 @@ func _physics_process(delta):
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 		State.SpinKick:
-			ground_normal = best_normal
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
@@ -1009,6 +996,11 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 	]
 	var gravity = GRAVITY
 	if ground_normal != Vector3.ZERO:
+		$ui/gameing/debug/stats/a4.text = "Gr: (%f, %f, %f)" % [
+			ground_normal.x,
+			ground_normal.y,
+			ground_normal.z
+		]
 		var axis = Vector3.UP.cross(ground_normal).normalized()
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
@@ -1016,6 +1008,11 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 			if desired_velocity.y > ROLL_MAX_VELOCITY_V:
 				desired_velocity.y = ROLL_MAX_VELOCITY_V
 		gravity = GRAVITY.project(ground_normal)
+	$ui/gameing/debug/stats/a5.text = "DV2: [%f, %f, %f]" % [
+		desired_velocity.x,
+		desired_velocity.y,
+		desired_velocity.z
+	]
 	var hvel := velocity
 	if gravity != Vector3.ZERO:
 		hvel = hvel.slide(gravity.normalized())

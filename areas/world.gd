@@ -125,7 +125,6 @@ func update_active_chunks(position: Vector3, instant := false):
 				mark_inactive(ch)
 			else:
 				queue_unload(ch)
-	player.get_node("ui/gameing/debug/stats/a4").text = "%d active chunks" % active_chunks.size()
 	if $debug.visible:
 		$debug/box/Label.text = "Moved from (%f, %f %f) to (%f %f %f)" % [
 			player_last_postion.x, player_last_postion.y, player_last_postion.z,

@@ -3,20 +3,12 @@ class_name EnemyBody
 
 signal died(id, fullPath)
 
-enum Rarity {
-	Common,
-	Uncommon,
-	Rare,
-	SuperRare,
-	Sublime
-}
-
 export(String) var id
 export(bool) var respawns := true
 export(bool) var drops_coat := false
 export(float, 0.0, 1.0) var drops_ammo := 0.3
-export(Rarity) var minimum_rarity = Rarity.Common
-export(Rarity) var maximum_rarity = Rarity.Rare
+export(Coat.Rarity) var minimum_rarity = Coat.Rarity.Common
+export(Coat.Rarity) var maximum_rarity = Coat.Rarity.Rare
 export(int) var gem_drop_max = 5
 export(int) var health = 15
 export(int) var attack_damage = 10

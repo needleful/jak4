@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -17,6 +17,12 @@
 [ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/control/conditional_when_dead.gd" type="Script" id=16]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=17]
+[ext_resource path="res://entities/flag.tscn" type="PackedScene" id=18]
+[ext_resource path="res://games/race.gd" type="Script" id=19]
+[ext_resource path="res://dialog/side_content/race/race_125.dialog" type="Resource" id=20]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 1.37823, 1.71547, 1.36145 )
 
 [node name="chunk125" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -123,9 +129,6 @@ transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635,
 [node name="bug_pickup12" parent="rocks_area" instance=ExtResource( 7 )]
 transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635, -3.83668, -11.9125, 3.76927 )
 
-[node name="crawly4" parent="rocks_area" instance=ExtResource( 6 )]
-transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635, 1.02455, -13.7125, 8.77484 )
-
 [node name="bug_pickup13" parent="rocks_area" instance=ExtResource( 7 )]
 transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635, -1.59765, -13.7095, 14.3665 )
 
@@ -165,6 +168,10 @@ quantity = 3
 
 [node name="deathgnat2" parent="rocks_area" instance=ExtResource( 2 )]
 transform = Transform( 0.134147, 0, -0.990961, 0, 1, 0, 0.990961, 0, 0.134147, -2.09231, -21.4225, -44.6644 )
+respawns = false
+
+[node name="crawly4" parent="rocks_area" instance=ExtResource( 6 )]
+transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635, 1.02455, -13.7125, 8.77484 )
 
 [node name="rock28" parent="rocks_area" instance=ExtResource( 3 )]
 transform = Transform( 0.995635, 0.0603638, -0.0711876, 0, 0.762709, 0.646742, 0.0933352, -0.643919, 0.75938, -49.9981, -32.7335, -53.1035 )
@@ -181,6 +188,63 @@ transform = Transform( 0.695192, -0.545389, 0.468251, 0.715864, 0.466227, -0.519
 
 [node name="bug_pickup17" parent="rocks_area" instance=ExtResource( 7 )]
 transform = Transform( 0.995635, 0, -0.0933352, 0, 1, 0, 0.0933352, 0, 0.995635, -46.7306, -29.9965, -20.6107 )
+
+[node name="race_spawn" type="Spatial" parent="rocks_area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07981, -25.3078, -46.5875 )
+script = ExtResource( 16 )
+dead_enemies = [ NodePath("../deathgnat2") ]
+
+[node name="race" type="Spatial" parent="rocks_area/race_spawn"]
+script = ExtResource( 19 )
+bronze_seconds = 75.0
+silver_seconds = 50.0
+gold_seconds = 30.0
+
+[node name="npc_race" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
+transform = Transform( -0.24672, 0, -0.969087, 0, 1, 0, 0.969087, 0, -0.24672, 1.01299, -0.307648, 2.57545 )
+dialog = ExtResource( 20 )
+visual_name = "Teen"
+model_scale = 0.9
+
+[node name="npc" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
+transform = Transform( -0.999819, 0, -0.0190422, 0, 1, 0, 0.0190422, 0, -0.999819, 3.19137, -0.856171, 1.93161 )
+visual_name = "Teen"
+model_scale = 0.9
+
+[node name="npc3" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98342, -0.88205, 0.90007 )
+visual_name = "Teen"
+model_scale = 0.9
+
+[node name="npc4" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
+transform = Transform( 0.523319, 0, 0.852136, 0, 1, 0, -0.852136, 0, 0.523319, -3.614, -0.520905, -0.398933 )
+visual_name = "Teen"
+model_scale = 0.9
+
+[node name="npc5" parent="rocks_area/race_spawn/race" instance=ExtResource( 17 )]
+transform = Transform( -0.93184, 0, -0.362869, 0, 1, 0, 0.362869, 0, -0.93184, -15.9842, 65.4777, 110.595 )
+visual_name = "Teen"
+model_scale = 0.9
+
+[node name="Timer" type="Timer" parent="rocks_area/race_spawn/race"]
+one_shot = true
+
+[node name="race_start" type="Spatial" parent="rocks_area/race_spawn/race"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06772, -0.385391, 1.49992 )
+
+[node name="race_end" type="Area" parent="rocks_area/race_spawn/race"]
+transform = Transform( 0.793224, 0, -0.60893, 0, 1, 0, 0.60893, 0, 0.793224, -17.1198, 67.3905, 110.511 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="rocks_area/race_spawn/race/race_end"]
+shape = SubResource( 1 )
+
+[node name="flag2" parent="rocks_area/race_spawn" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.9123, 66.3864, 109.781 )
+
+[node name="flag" parent="rocks_area/race_spawn" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107273, 0.600998, 2.0266 )
 
 [node name="hut_area" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -224.548, -145.425, 91.6663 )
