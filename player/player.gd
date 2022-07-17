@@ -1388,6 +1388,8 @@ func fall_to_death():
 	set_state(State.FallingDeath)
 
 func respawn():
+	if game_ui.in_game:
+		game_ui.cancel_game()
 	cam_rig.reset()
 	set_state(State.Ground)
 	velocity = Vector3.ZERO

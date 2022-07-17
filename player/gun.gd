@@ -102,7 +102,10 @@ func _process(delta):
 	
 	state_timer += delta
 	if charging() and !Input.is_action_pressed("combat_shoot"):
-		fire()
+		if in_combo():
+			combo_fire()
+		else:
+			fire()
 		if player.is_roll_jumping():
 			player.wave_jump_roll()
 	if !aiming && !charging():
@@ -343,7 +346,7 @@ func set_state(new_state, force := false):
 			holder.blend_gun(0.0)
 			gun_ik.stop()
 			aim_toggle = false
-		State.Free:
+		State.Free, State.ComboReady:
 			visible = true
 			holder.hold_gun(1.0)
 			holder.blend_gun(1.0)
@@ -363,7 +366,7 @@ func set_state(new_state, force := false):
 			holder.blend_gun(0.0)
 			holder.hold_gun(1.0)
 			gun_ik.stop()
-		State.AimLocked, State.ComboReady:
+		State.AimLocked:
 			visible = true
 			holder.blend_gun(0.7)
 			holder.hold_gun(1.0)

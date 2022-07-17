@@ -36,8 +36,8 @@ func stow():
 	pass
 
 func combo_fire():
-	fire()
-	$AnimationPlayer.connect("animation_finished", self, "_combo_fire_mid", [], CONNECT_ONESHOT)
+	var _x = $AnimationPlayer.connect("animation_finished", self, "_combo_fire_mid", [], CONNECT_ONESHOT)
+	return fire()
 
 func _combo_fire_mid(_a):
-	fire()
+	var _x = fire()

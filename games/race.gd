@@ -54,25 +54,27 @@ func _process(_delta):
 	
 	if running_time + DANGER_TIME > bronze_seconds:
 		overlay.color_bronze(DANGER_COLOR)
-		
-	
 
 func start_race():
 	player = Global.get_player()
 	var res = player.game_ui.start_game("Time")
 	if !res:
 		return
+
+	Global.save_checkpoint(race_start.global_transform.origin)
 	player.teleport_to(race_start.global_transform)
-	player.game_ui.add_target(race_end)
-	overlay = race_overlay.instance()
-	if Global.has_stat(get_stat() + "/best"):
-		var best: float = Global.stat(get_stat() + "/best")
-		overlay.set_best(best)
-	player.game_ui.set_overlay(overlay)
 	
+	overlay = race_overlay.instance()
 	overlay.gold = gold_seconds
 	overlay.silver = silver_seconds
 	overlay.bronze = bronze_seconds
+	if Global.has_stat(get_stat() + "/best"):
+		var best: float = Global.stat(get_stat() + "/best")
+		overlay.set_best(best)
+		
+	player.game_ui.add_target(race_end)
+	var _x = player.game_ui.connect("cancelled", self, "_on_timeout")
+	player.game_ui.set_overlay(overlay)
 	
 	active = true
 	set_process(true)
@@ -84,13 +86,20 @@ func _on_timeout():
 		overlay.color_bronze(EXPIRED_COLOR)
 		overlay.color_silver(EXPIRED_COLOR)
 		overlay.color_gold(EXPIRED_COLOR)
-		active = false
-		set_process(false)
-		overlay = null
+		_end()
+
+func _end():
+	print("game ended")
+	player.game_ui.disconnect("cancelled", self, "_on_timeout")
+	active = false
+	set_process(false)
+	overlay = null
+	timer.stop()
 
 func _on_race_end(body):
 	if !active or body != player:
 		return
+
 	var last_award: int = Global.stat(get_stat() + "/award")
 	var best_time: float = Global.stat(get_stat() + "/best")
 	var race_time = bronze_seconds - timer.time_left
@@ -99,23 +108,21 @@ func _on_race_end(body):
 		Global.set_stat(get_stat() + "/best", race_time)
 		overlay.new_best(race_time)
 
-	var award: int
-	
 	player.game_ui.complete_game()
 	player.celebrate(null)
-	active = false
-	set_process(false)
+	
+	var award: int
 	if race_time <= gold_seconds:
 		overlay.color_gold(WON_COLOR)
 		award = Award.Gold
 	elif race_time <= silver_seconds:
 		overlay.color_silver(WON_COLOR)
-		award = Award.Sliver
+		award = Award.Silver
 	else:
 		overlay.color_bronze(WON_COLOR)
 		award = Award.Bronze
-	timer.stop()
-	overlay = null
+	
+	_end()
 	
 	if award <= last_award:
 		return

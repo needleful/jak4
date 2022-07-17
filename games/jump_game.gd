@@ -22,6 +22,7 @@ func start_game():
 	if !res:
 		return
 	
+	Global.save_checkpoint(game_target.global_transform.origin)
 	active = true
 	game_target.show()
 	jumps = 0
@@ -31,6 +32,7 @@ func start_game():
 	
 	player.teleport_to(game_start.global_transform)
 	var _x = player.connect("jumped", self, "_on_player_jumped")
+	_x = player.game_ui.connect("cancelled", self, "_on_cancelled")
 	_x = game_target.connect(
 		"body_entered", self, "_on_target_entered",
 		[], CONNECT_ONESHOT)
@@ -39,25 +41,32 @@ func _on_player_jumped() :
 	var player = Global.get_player()
 	jumps += 1
 	if jumps > max_jumps:
-		active = false
-		game_target.disconnect("body_entered", self, "_on_target_entered")
-		player.disconnect("jumped", self, "_on_player_jumped")
 		player.game_ui.fail_game()
-		game_target.hide()
+		_end()
 		emit_signal("game_failed")
 	else:
 		player.game_ui.value = max_jumps - jumps
 
+func _on_cancelled():
+	Global.get_player().game_ui.fail_game()
+	_end()
+	emit_signal("game_failed")
+
 func _on_target_entered(body):
 	if body is PlayerBody:
-		active = false
 		body.game_ui.complete_game()
-		game_target.hide()
-		body.disconnect("jumped", self, "_on_player_jumped")
 		body.celebrate(null)
 		var _x = Global.add_stat(get_stat() + "/completed")
 		_x = Global.add_item("bug", bugs_earned)
+		_end()
 		emit_signal("game_completed")
+
+func _end():
+	active = false
+	game_target.hide()
+	game_target.disconnect("body_entered", self, "_on_target_entered")
+	Global.get_player().game_ui.disconnect("cancelled", self, "_on_cancelled")
+	Global.get_player().disconnect("jumped", self, "_on_player_jumped")
 
 func get_stat() -> String:
 	if friendly_id != "":

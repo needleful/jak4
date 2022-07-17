@@ -1,5 +1,7 @@
 extends Control
 
+signal cancelled
+
 export(String) var label setget set_label, get_label
 export(String) var value setget set_value, get_value
 
@@ -13,7 +15,7 @@ var custom_overlay : Node
 func _ready():
 	visible = in_game
 	remove_child(marker)
-	$AnimationPlayer.connect("animation_finished", self, "_on_animation_finished")
+	var _x = $AnimationPlayer.connect("animation_finished", self, "_on_animation_finished")
 
 func _process(_delta):
 	for i in range(targets.size()):
@@ -26,6 +28,9 @@ func _process(_delta):
 			m.global_position = cam.unproject_position(t.global_transform.origin)
 		else:
 			m.hide()
+
+func cancel_game():
+	emit_signal("cancelled")
 
 func start_game(text: String)-> bool:
 	$AnimationPlayer.play("start")

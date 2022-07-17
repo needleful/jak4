@@ -83,4 +83,6 @@ func _on_bubble_remove(node):
 	bubble_pool.append(node)
 
 func combo_fire():
+	# uh
+	charging_time = 10.0
 	return fire()
