@@ -1,0 +1,171 @@
+
+:_entry/111
+{main_speaker.saved}
+	{Global.stat("riley/111/reward")}
+		Thanks again.
+		[You] Do you need any help getting down?
+		{Global.stat("capacitor_113") and !Global.stat("riley/apology")}
+			No.
+		{otherwise}
+			Thanks, but no. The deathgnats are really the only specters that worry me. I can just jump around the others, but those bullets are too much for me!
+	{otherwise if !Global.stat("capacitor_113") or Global.stat("riley/apology")}
+		Phew! You really saved me there, Jackie!
+		{talked == 0} I was pinned down before you took out those deathgnats!
+		{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Here's some of the loot I got before it hit the fan. I can take it from here.
+		> Say, could I buy some supplies off you?
+			Sure, I have some spare gear.
+			{shop()}
+			{exiting()} Okay, see you around.
+			{exit()}
+		> Okay, see you.
+			{exit()}
+	{otherwise}
+		... Thanks, Jackie.
+		{talked == 0} I was pinned down before you took out those deathgnats.
+		> No problem.
+			{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 17)} {Global.add_item("gem", 45)} Here's some of the loot I got. I'll see myself down.
+			{exit()}
+		> I wanted to apologize for knocking down the tower...
+			{subtopic("apology")}
+			{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Oh, and here's some of the loot I got. I can take it from here.
+			See you around, Jackie.
+			{exit()}
+{otherwise}
+	{talked > 0}
+		[You] Are you good?
+		Good. How's the deathgnat situation?
+		[You] In progress.
+	{otherwise if !Global.stat("capacitor_113") or Global.stat("riley/apology")}
+		Hey again, Jackie!
+		[You] Hey. Are you okay?
+		Uh, been better. I tried to get some salvage while the specters were dormant, but that went about as well as it looks.
+		There's four deathgnats flying around, if you could take them out, I can get out of here.
+		[You] Sure, I'll give it a shot.
+		Please do!
+	{otherwise}
+		[You] Riley, are you okay?
+		I've been better. There's four deathgnats keeping me stuck here.
+		[You] I can take them out if you need help.
+		... Yeah, honestly. I can't get them on my own.
+		[You] Okay, stay here and I'll get them.
+	{main_speaker.track_enemies()}
+{exit()}
+
+:_entry/113
+
+{Global.stat("riley/apology")}
+	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
+	[You] Really? Wow! {remember("Riley forgave me for destroying the tower. It's more relieving than I thought it would be.")}
+	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
+
+{otherwise if Global.stat("capacitor_113")}
+	{Global.add_stat("riley/113/argue") == 1}
+		Oh my God! I told you not to take that capacitor! {remember("Riley's angry at me for taking the capacitor from the tower. Honestly I think she's overreacting.")}
+		{Global.stat("riley/113/days_collapse")}
+			[You] You said it would take days to collapse, not that it'd fall out from under me!
+			Oh, and it would be fine if it fell on the village tomorrow?
+		{otherwise}
+			[You] How was I supposed to know the whole tower would fall over?
+			Because I told you it would!
+		[You] Oh, whatever. It didn't fall on the village, so I don't see the issue.
+		It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
+		[You] I don't know! They move or something!
+		Ugh.
+	{otherwise}
+		I'm not in a talky mood right now. We'll probably see each other again. But seriously, if someone tells you something is a bad idea, listen to them.
+{otherwise}
+	{Global.add_stat("riley/113/talk") == 1}
+		[You] Hi Riley.
+		Hi again, uh...
+		[You] Jackie.
+		Right! Hi Jackie. Thanks for the help back with those deathgnats.
+		[You] So this is the tower you were talking about? With the capacitor?
+		Right. You shouldn't take it.
+		[You] ... Well, where else would I get a capacitor?
+		I'm not sure. But seriously. These ancient structures are on the brink of collapse. They have active supports powered with their energy systems. Without the capacitors, they can completely fall apart.
+		[You] ...
+		{task_note("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it. I'm not sure I see what the harm could be.")}
+	{otherwise}
+		[You] Do you really think this thing would collapse if I took the capacitor?
+		{Global.add_stat("riley/113/days_collapse")} Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
+	> Say, could I buy some supplies off you?
+		Sure, I have some spare gear.
+		{shop()}
+		{exiting()} Okay, see you around.
+		{exit()}
+	> Okay, see you.
+		{exit()}
+{exit()}
+
+:_entry/126
+// Riley's introduction
+// Placeholder
+{main_speaker.saved}
+	{talked == 0} Wow miss, thanks for saving me!
+		{remember("She was quite grateful when I helped her off that scrap pile.")}
+		[You] I did?
+		Yeah, I was pinned down by those deathgnats, but you took them out no problem!
+		[You] Oh.  Well, it wasn't too big a deal. One of them had a snazzy coat, so you know. Had to do it.
+		Well, you saved me! I'm Riley, By the way.
+	{otherwise if Global.stat("riley/126/reward")} Thanks again! I'm heading out of here soon.
+		> Say, could I buy some supplies off you?
+			Sure, I have some spare gear.
+			{shop()}
+			{exiting()} Okay, see you around.
+			{exit()}
+		> Okay, see you.
+			{exit()}
+	{otherwise} Thanks for the help! I'm Riley, by the way.
+		[You] Jackie. Say, is there a capacitor up here? I was told they were up in these towers.
+		That's what I was looking for! To activate the Tree Tower, right?
+		[You] Uhm, I was actually using it for the Medium.
+		Oh? Interesting. There wasn't one up here, unfortunately.
+		[You] Oh, that's unfortunate. Do you know where more could be? There's that white tower to the north, could one be there?
+		Eh, well, there is actually one there. But I wouldn't mess with that one.
+		[You] Oh, why not?
+		I'm pretty sure it holds up that whole tower. If you take it out, it'd collapse right onto that village in the valley. It's not worth it.
+		[You] ...
+		{Global.add_stat("riley/126/reward")} {Global.add_item("bug", 16)} Say, I think it's only fair I give you something. Here's some of the bugs I found climbing up this thing.
+		Need anything else before I go? I'm gonna collect myself and get out of here.
+		> Could I buy some supplies off you?
+			Sure, I have some spare gear.
+			{shop()}
+			{exiting()} Okay, see you around.
+			{exit()}
+		> Okay, see you.
+			Safe travels!
+			{exit()}
+{otherwise if talked > 0} Seriously, I could use some help with those deathgnats.
+	[You] No worries, they're tricky to hit but I've got it.
+	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
+{otherwise} Hey there! I could use some help. I'm stuck up here because of those two deathgnats! If you could take them out, I'll share some of the stuff I found with you!
+	[You] Uh, I'll see what I can do. {remember("I found this strange girl stranded at the top of a scrap pile. How did she get here?")}
+	{main_speaker.track_enemies()}
+{exit()}
+
+:_exit
+[You] Gotta go, bye!
+{exit()}
+
+:apology
+[You] I should have listened to you. I could have found some other way to power up the Medium. I'm sorry for nearly destroying the village.
+Well... It's not like anyone got hurt. And you've helped me out plenty.
+{Global.add_stat("riley/apology")} I'm not one to hold a grudge, so let's just consider it a lesson learned.
+[You] Thanks, Riley. {remember("I can see why Riley was as angry as she was about the tower. It could have ")}
+{back()}
+
+:_coat
+{traded_coats()} [You] Say, could we trade coats again?
+{otherwise} [You] That's a very lovely coat. Would you be interested in swapping for mine?
+
+{main_speaker.needs_saving()} Uh, a little busy right now? A little pinned-down-by-gunfire right now?
+	[You] Okay, I'll get the deathgnats first.
+{otherwise if Global.stat("capacitor_113") and !Global.stat("riley/apology")} Uh, maybe some other time.
+{otherwise if traded_coats()} Again? Did you regret the trade?
+	[You] Well, I'm just quite picky with coats.
+	I suppose we can.
+	{swap_coats()} [You] Thanks!
+{otherwise} You want to trade coats? Like, my coat for yours?
+	[You] Yes.
+	You're so odd. But sure, let's trade.
+	{swap_coats()} [You] Thanks!

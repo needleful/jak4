@@ -18,7 +18,7 @@ void light()
 {
 	// negative. Use as ambient shadow
 	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
-		DIFFUSE_LIGHT += LIGHT_COLOR*ATTENUATION*ALBEDO;
+		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
 	}
 	else {
 		float smoothness = (specularity + 2.0) / (8.0*3.1416);

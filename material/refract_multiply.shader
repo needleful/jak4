@@ -16,3 +16,21 @@ void fragment() {
 	TRANSMISSION = EMISSION;
 	ALBEDO *= brightness;
 }
+
+void light()
+{
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
+	}
+	else {
+		float light = dot(NORMAL, LIGHT);
+		DIFFUSE_LIGHT += light * ATTENUATION * ALBEDO;
+		
+		// Specular
+		vec3 h = normalize(VIEW + LIGHT);
+		float cNdotH = max(0.0, dot(NORMAL, h));
+		float blinn = pow(cNdotH, (1.0/(ROUGHNESS + 0.01)));
+		DIFFUSE_LIGHT += LIGHT_COLOR * blinn * ATTENUATION * ALBEDO;
+	}
+}
