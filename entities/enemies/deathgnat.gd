@@ -152,6 +152,9 @@ func set_state(new_state):
 			$AnimationPlayer.stop()
 			collision_layer = 0
 		AI.Damaged:
+			if speed == 0:
+				speed = 5.0
+				acceleration = 25.0
 			gravity_scale = 1
 			if last_attacker:
 				aggro_to(last_attacker)

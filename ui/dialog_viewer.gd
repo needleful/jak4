@@ -83,7 +83,13 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	Global.can_pause = false
 	var first_index = INF
 	# I forgot to specify a first item and I'm not going to bother lol
-	var s: DialogItem = sequence.get(starting_label)
+	var s: DialogItem
+	if starting_label != "":
+		s = sequence.get(starting_label)
+		if !s:
+			print_debug("No starting label '%s' in file: %s" % [
+				starting_label, sequence.resource_path
+			])
 	if !s:
 		for c in sequence.dialog.keys():
 			if c < first_index:
