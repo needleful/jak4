@@ -1224,6 +1224,7 @@ func can_flinch():
 func takes_damage():
 	return not (
 		state == State.Locked
+		or state == State.Damaged
 		or ( timer_state < TIME_SPIN_INVINCIBILITY
 			and ( state == State.SpinKick
 				or state == State.AirSpinKick))

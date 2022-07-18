@@ -40,7 +40,7 @@ func _on_target_died(_id, path):
 		p.game_ui.value = enemies.size() - 1
 		p.game_ui.remove_target(get_node(enemies[idx]))
 		if saved:
-			p.game_ui.end_game()
+			p.game_ui.complete_game()
 	
 	enemies.remove(idx)
 	

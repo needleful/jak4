@@ -7,6 +7,7 @@ export(float) var model_scale := 1.0
 export(String) var friendly_id := ""
 export(Mesh) var accessory: Mesh
 export(bool) var sitting := false
+export(String) var custom_entry := ""
 onready var anim := $lil_man/AnimationPlayer
 
 var last_animation := ""
@@ -27,7 +28,7 @@ func _ready():
 
 func _on_dialog_body_entered(body):
 	if body is PlayerBody and body.can_talk():
-		body.start_dialog(self, dialog, self)
+		body.start_dialog(self, dialog, self, custom_entry)
 
 func get_coat() -> Coat:
 	return Global.stat($lil_man.coat_stat())
