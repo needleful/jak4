@@ -10,7 +10,7 @@ varying vec3 vert_color;
 void fragment()
 {
 	ALBEDO = texture(main_texture, UV).rgb;
-	ROUGHNESS = clamp(2.0/specularity, 0, 1);
+	ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
 	vert_color = COLOR.rgb;
 }
 

@@ -17,7 +17,6 @@ varying vec3 normal;
 void vertex() {
 	position = VERTEX.xyz;
 	normal = NORMAL;
-	//normal /= dot(normal, vec3(1.0));
 }
 
 void fragment() {
@@ -34,6 +33,7 @@ void fragment() {
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
+	//ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
 }
 
 void light()

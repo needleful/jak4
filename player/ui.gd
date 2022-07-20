@@ -4,7 +4,8 @@ enum Mode {
 	Gameing,
 	Dialog,
 	Paused,
-	Status
+	Status,
+	Custom
 }
 
 var mode:int = Mode.Gameing setget set_mode
@@ -14,6 +15,8 @@ onready var game := $gameing
 onready var dialog := $dialog_viewer
 onready var pause := $pause_menu
 onready var status := $status_menu
+var custom_ui : Control
+var loaded_ui : PackedScene
 
 
 func _ready():
@@ -37,13 +40,15 @@ func _input(event):
 		Mode.Paused:
 			if event.is_action_pressed("pause"):
 				set_mode(mode_before_pause)
+		Mode.Custom:
+			if event.is_action_pressed("status_toggle"):
+				set_mode(Mode.Status)
+			elif event.is_action_pressed("pause"):
+				set_mode(Mode.Gameing)
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	set_mode(Mode.Dialog)
 	dialog.start(source, sequence, speaker, starting_label)
-
-func resume():
-	set_mode(Mode.Gameing)
 
 func set_mode(m):
 	if m < 0 or m >= get_child_count():
@@ -63,7 +68,7 @@ func set_mode(m):
 			c.set_active(c.visible)
 		i += 1
 
-func show_Status() -> bool:
+func show_status() -> bool:
 	if Mode == Mode.Paused:
 		return false
 	else:
@@ -71,5 +76,35 @@ func show_Status() -> bool:
 		return true
 
 func unpause() -> bool:
+	set_mode(mode_before_pause)
+	return true
+
+func play_game() -> bool:
 	set_mode(Mode.Gameing)
+	return true
+
+func open_custom(scene: PackedScene) -> bool:
+	if !scene:
+		return false
+
+	if loaded_ui == scene:
+		set_mode(Mode.Custom)
+		return true
+
+	var cui := scene.instance() as Control
+	if !cui:
+		return false
+
+	if custom_ui:
+		remove_child(custom_ui)
+		custom_ui.queue_free()
+	custom_ui = cui
+	add_child(custom_ui)
+
+	if custom_ui.has_signal("exited"):
+		var _x = custom_ui.connect("exited", self, "play_game")
+	
+	loaded_ui = scene
+	
+	set_mode(Mode.Custom)
 	return true

@@ -40,22 +40,27 @@
 		[You] Hey. Are you okay?
 		Uh, been better. I tried to get some salvage while the specters were dormant, but that went about as well as it looks.
 		There's four deathgnats flying around, if you could take them out, I can get out of here.
-		[You] Sure, I'll give it a shot.
-		Please do!
+		> Sure, I'll give it a shot.
+			Please do!
+			{main_speaker.track_enemies()}
+		> I'll scope out the area and be back soon, alright?
+			Alright...
 	{otherwise}
 		[You] Riley, are you okay?
 		I've been better. There's four deathgnats keeping me stuck here.
-		[You] I can take them out if you need help.
-		... Yeah, honestly. I can't get them on my own.
-		[You] Okay, stay here and I'll get them.
-	{main_speaker.track_enemies()}
+		> I can take them out if you need help.
+			... Yeah, honestly. I can't get them on my own.
+			[You] Okay, stay here and I'll get them.
+			{main_speaker.track_enemies()}
+		> I'll be back later.
+			...
 {exit()}
 
 :_entry113
 
 {Global.stat("riley/apology")}
 	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
-	[You] Really? Wow! {remember("Riley forgave me for destroying the tower. It's more relieving than I thought it would be.")}
+	[You] Really? Wow!
 	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
 
 {otherwise if Global.stat("capacitor_113")}
@@ -138,21 +143,26 @@
 {otherwise if talked > 0} Seriously, I could use some help with those deathgnats.
 	[You] No worries, they're tricky to hit but I've got it.
 	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
-{otherwise} Hey there! I could use some help. I'm stuck up here because of those two deathgnats! If you could take them out, I'll share some of the stuff I found with you!
-	[You] Uh, I'll see what I can do. {remember("I found this strange girl stranded at the top of a scrap pile. How did she get here?")}
-	{main_speaker.track_enemies()}
-{exit()}
-
-:_exit
-[You] Gotta go, bye!
+{otherwise} Hey there! I could use some help. I'm stuck up here because of those two deathgnats! If you could take them out, I'll share some of the stuff I found with you! {remember("I found this strange girl stranded at the top of a scrap pile. How did she get here?")}
+	> {skip()} (Accept Challenge) Uh, I'll see what I can do.
+		[You]  Uh, I'll see what I can do.
+		{main_speaker.track_enemies()}
+	> {skip()} (Decline) I'm going to scope out the area first.
+		[You] I'm going to scope out the area first.
+		Uh... don't take too long please!
 {exit()}
 
 :apology
 [You] I should have listened to you. I could have found some other way to power up the Medium. I'm sorry for nearly destroying the village.
 Well... It's not like anyone got hurt. And you've helped me out plenty.
 {Global.add_stat("riley/apology")} I'm not one to hold a grudge, so let's just consider it a lesson learned.
-[You] Thanks, Riley. {remember("I can see why Riley was as angry as she was about the tower. It could have ")}
+[You] Thanks, Riley. {remember("I can see why Riley was as angry as she was about the tower. I'm glad she forgives me, at least.")}
 {back()}
+{exit()}
+
+:_exit
+[You] Gotta go, bye!
+{exit()}
 
 :_coat
 {traded_coats()} [You] Say, could we trade coats again?
@@ -169,3 +179,4 @@ Well... It's not like anyone got hurt. And you've helped me out plenty.
 	[You] Yes.
 	You're so odd. But sure, let's trade.
 	{swap_coats()} [You] Thanks!
+{exit()}

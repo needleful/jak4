@@ -1,5 +1,7 @@
 extends Control
 
+signal exited
+
 var player: PlayerBody
 
 var coats_by_rarity := {}
@@ -46,8 +48,14 @@ func _input(event):
 			viewing_index += 1
 			viewing_index = viewing_index % l
 			view()
-func _ready():
-	exit()
+
+func set_active(active):
+	if active and !player:
+		enter(Global.get_player())
+	elif !active and player:
+		player.wardrobe_unlock()
+		player = null
+	set_process_input(active)
 
 func enter(p: PlayerBody):
 	coats_by_rarity = {}
@@ -59,19 +67,14 @@ func enter(p: PlayerBody):
 		coats_by_rarity[c.rarity].append(c)
 	viewing_rarity = old_coat.rarity
 	viewing_index = coats_by_rarity[viewing_rarity].find(old_coat)
-	show()
-	set_process_input(true)
-	Global.can_pause = false
 	player.wardrobe_lock()
 	view()
 
 func exit():
-	set_process_input(false)
-	Global.can_pause = true
 	if player:
 		player.wardrobe_unlock()
-	hide()
 	player = null
+	emit_signal("exited")
 
 func view():
 	var v = (

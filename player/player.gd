@@ -821,7 +821,7 @@ func _physics_process(delta):
 			desired_velocity = Vector3.ZERO
 		State.Dash:
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*SPEED_DASH, DECEL_DASH, true)
+			accel_lunge(delta, desired_velocity*SPEED_DASH, DECEL_DASH)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 		State.LungeKick, State.SlideLungeKick:
 			if timer_state > TIME_LUNGE_PARTICLES:
@@ -1140,17 +1140,14 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.z)
 	velocity = move(velocity + delta*GRAVITY)
 
-func accel_lunge(delta, desired_velocity, decel := DECEL_KICK, ignore_slide := false):
+func accel_lunge(delta, desired_velocity, decel := DECEL_KICK):
 	var hvel = velocity
 	hvel.y = 0
 	desired_velocity.y = 0
 	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
 	var v2 := move(velocity + GRAVITY*delta, true)
-	velocity = velocity.move_toward(Vector3.ZERO, decel*delta)
-	if ignore_slide:
-		velocity.y = min(velocity.y, v2.y)
-	else:
-		velocity.y = v2.y
+	velocity = v2.move_toward(Vector3.ZERO, decel*delta)
+	velocity.y = v2.y
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 	var gravity := GRAVITY*HOVER_EXTRA_GRAVITY
@@ -1456,7 +1453,7 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	lock()
 
 func _on_dialog_exited():
-	ui.resume()
+	ui.play_game()
 	cam_rig.play_animation("dialog_end")
 	unlock()
 
