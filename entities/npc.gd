@@ -51,3 +51,11 @@ func process_player_distance(pos: Vector3):
 			anim.stop()
 	elif !anim.is_playing():
 		anim.play(last_animation)
+
+func boast():
+	anim.play("ArmsToHips")
+	anim.queue("ArmsOnHips-loop")
+
+func shrug():
+	anim.play("Shrug")
+	anim.queue("Idle-loop")

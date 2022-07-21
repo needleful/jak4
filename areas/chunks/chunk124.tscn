@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=2]
+[gd_scene load_steps=83 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -62,6 +62,7 @@
 [ext_resource path="res://entities/env/furniture/bed_jackie.tscn" type="PackedScene" id=60]
 [ext_resource path="res://areas/chunks/_lightmaps/chunk124.lmbake" type="BakedLightmapData" id=61]
 [ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=62]
+[ext_resource path="res://_glb/npc_clothes/hats_goggles_asym.mesh" type="ArrayMesh" id=63]
 
 [sub_resource type="OccluderShapePolygon" id=263]
 polygon_points = PoolVector2Array( 141.68, -113.101, 88.7279, 18.4084, -117.586, -18.3186, -109.166, -90.4652, -5.99673, 33.6345 )
@@ -266,7 +267,15 @@ shape = SubResource( 265 )
 transform = Transform( -0.547005, 0.481613, 0.684715, 0.403163, 0.868388, -0.288725, -0.733652, 0.118117, -0.669181, -50.1913, -210.602, -93.539 )
 shape = SubResource( 266 )
 
-[node name="village_area" type="Spatial" parent="." index="9"]
+[node name="rail_cart_shortcut" parent="." index="9" instance=ExtResource( 53 )]
+transform = Transform( -0.534574, 0, -0.845122, 0, 1, 0, 0.845122, 0, -0.534574, -237.056, -218.035, -83.3147 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rail_cart_shortcut" index="1"]
+playback_process_mode = 0
+anims/Activate = SubResource( 260 )
+anims/RESET = SubResource( 261 )
+
+[node name="village_area" type="Spatial" parent="." index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -206.564, -223.545, -11.3175 )
 
 [node name="hut" parent="village_area" index="0" instance=ExtResource( 4 )]
@@ -417,6 +426,7 @@ dialog = ExtResource( 50 )
 visual_name = "Armstrong"
 model_scale = 1.1
 friendly_id = "armstrong"
+accessory = ExtResource( 63 )
 tutorial_node = NodePath("../tutorials")
 
 [node name="cave_npc1" parent="village_area" index="28" instance=ExtResource( 18 )]
@@ -800,15 +810,7 @@ transform = Transform( -0.820865, -0.478924, 0.311146, -0.285342, 0.815841, 0.50
 transform = Transform( -0.993989, -0.109477, -1.73974e-08, 0.0125339, -0.113801, 0.993424, -0.108757, 0.987453, 0.114489, -40.69, 29.7302, -88.512 )
 time_deactivate = 11.0
 
-[node name="rail_cart_shortcut" parent="village_area" index="33" instance=ExtResource( 53 )]
-transform = Transform( -0.534574, 0, -0.845122, 0, 1, 0, 0.845122, 0, -0.534574, -237.056, -218.035, -83.3147 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="village_area/rail_cart_shortcut" index="1"]
-playback_process_mode = 0
-anims/Activate = SubResource( 260 )
-anims/RESET = SubResource( 261 )
-
-[node name="tutorials" type="Spatial" parent="village_area" index="34"]
+[node name="tutorials" type="Spatial" parent="village_area" index="33"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.21, -5.72682, -24.4024 )
 
 [node name="pistol" type="Spatial" parent="village_area/tutorials" index="0"]
@@ -845,40 +847,40 @@ keyboard_text = "[Hold] Aim"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.03036, 2.17842, 0 )
 shape = SubResource( 262 )
 
-[node name="hut_bath" parent="village_area" index="35" instance=ExtResource( 37 )]
+[node name="hut_bath" parent="village_area" index="34" instance=ExtResource( 37 )]
 transform = Transform( 0.354732, 0, -0.934968, 0, 1, 0, 0.934968, 0, 0.354732, -27.787, -6.15681, 27.8693 )
 
 [node name="pail" parent="village_area/hut_bath" index="2" instance=ExtResource( 59 )]
 transform = Transform( -0.84109, 0, -0.540896, 0, 1, 0, 0.540896, 0, -0.84109, 1.5953, -0.219009, -2.41946 )
 
-[node name="pillar5" parent="village_area" index="36" instance=ExtResource( 31 )]
+[node name="pillar5" parent="village_area" index="35" instance=ExtResource( 31 )]
 transform = Transform( 0.0167477, -0.999826, -0.00822058, 0.897533, 0.0186565, -0.440552, 0.440629, 2.98023e-08, 0.897689, 2.08205, -4.50282, -34.4595 )
 
-[node name="rock1" parent="village_area" index="37" instance=ExtResource( 15 )]
+[node name="rock1" parent="village_area" index="36" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 0.947311, 0.320315, 0, -0.320315, 0.947311, -34.433, -2.63982, -43.7479 )
 
-[node name="rock3" parent="village_area" index="38" instance=ExtResource( 15 )]
+[node name="rock3" parent="village_area" index="37" instance=ExtResource( 15 )]
 transform = Transform( -0.399667, 0.138115, 0.906195, -0.22712, 0.942838, -0.243868, -0.888079, -0.303281, -0.345454, 81.598, -8.17381, 16.8123 )
 
-[node name="rock12" parent="village_area" index="39" instance=ExtResource( 15 )]
+[node name="rock12" parent="village_area" index="38" instance=ExtResource( 15 )]
 transform = Transform( -0.399667, 0.138115, 0.906195, 0.623691, 0.765452, 0.158409, -0.671771, 0.628496, -0.392067, 81.598, -4.24982, 39.297 )
 
-[node name="rock18" parent="village_area" index="40" instance=ExtResource( 15 )]
+[node name="rock18" parent="village_area" index="39" instance=ExtResource( 15 )]
 transform = Transform( 0.129601, -0.301109, 0.944741, 0.623691, 0.765452, 0.158409, -0.770853, 0.568697, 0.287002, 95.485, -4.24982, 61.9079 )
 
-[node name="rock19" parent="village_area" index="41" instance=ExtResource( 15 )]
+[node name="rock19" parent="village_area" index="40" instance=ExtResource( 15 )]
 transform = Transform( -0.45213, -0.171068, -0.875394, -0.269269, -0.909468, 0.316799, -0.850337, 0.378952, 0.365134, 86.675, -3.01982, 65.5395 )
 
-[node name="rock20" parent="village_area" index="42" instance=ExtResource( 15 )]
+[node name="rock20" parent="village_area" index="41" instance=ExtResource( 15 )]
 transform = Transform( -0.45213, -0.171068, -0.875394, -0.886919, -0.0178962, 0.461578, -0.0946273, 0.985097, -0.143631, 91.069, 3.94418, 65.5395 )
 
-[node name="rock21" parent="village_area" index="43" instance=ExtResource( 15 )]
+[node name="rock21" parent="village_area" index="42" instance=ExtResource( 15 )]
 transform = Transform( 0.859598, -0.00683571, 0.510927, -0.169597, -0.947043, 0.272662, 0.482006, -0.321032, -0.815235, 91.069, -2.84181, 74.0627 )
 
-[node name="rock17" parent="village_area" index="44" instance=ExtResource( 15 )]
+[node name="rock17" parent="village_area" index="43" instance=ExtResource( 15 )]
 transform = Transform( -0.711992, -0.654323, -0.254812, -0.455227, 0.706412, -0.541988, 0.534636, -0.269894, -0.800825, 95.211, -13.8318, -13.0339 )
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="village_area" index="45"]
+[node name="ReflectionProbe" type="ReflectionProbe" parent="village_area" index="44"]
 transform = Transform( -0.00197713, 0, -0.999998, 0, 1, 0, 0.999998, 0, -0.00197713, -25.654, -2.91382, -31.0628 )
 max_distance = 16384.0
 extents = Vector3( 7.83775, 3.57362, 7.87931 )
@@ -886,13 +888,13 @@ origin_offset = Vector3( 2.54492, 0, -3.05566 )
 enable_shadows = true
 interior_enable = true
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="village_area" index="46"]
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="village_area" index="45"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.6017, -2.84669, -24.4536 )
 max_distance = 16384.0
 extents = Vector3( 1.55691, 2.30765, 2.32843 )
 origin_offset = Vector3( 0.0517578, -0.0644531, -0.777344 )
 
-[node name="ReflectionProbe4" type="ReflectionProbe" parent="village_area" index="47"]
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="village_area" index="46"]
 transform = Transform( -0.196665, 0, -0.980471, 0, 1, 0, 0.980471, 0, -0.196665, 111.451, 5.37218, -9.29212 )
 max_distance = 16384.0
 extents = Vector3( 26.0771, 26.9934, 36.7554 )
@@ -900,7 +902,7 @@ origin_offset = Vector3( 9.02539, 3.58846, 2.88477 )
 enable_shadows = true
 interior_enable = true
 
-[node name="ReflectionProbe5" type="ReflectionProbe" parent="village_area" index="48"]
+[node name="ReflectionProbe5" type="ReflectionProbe" parent="village_area" index="47"]
 transform = Transform( -0.551447, 0, 0.83421, 0, 1, 0, -0.83421, 0, -0.551447, 93.905, 5.15918, 27.1298 )
 max_distance = 16384.0
 extents = Vector3( 30.2435, 23.21, 36.7554 )
@@ -908,7 +910,7 @@ origin_offset = Vector3( 9.02539, 1.23438, 6.48828 )
 enable_shadows = true
 interior_enable = true
 
-[node name="ReflectionProbe6" type="ReflectionProbe" parent="village_area" index="49"]
+[node name="ReflectionProbe6" type="ReflectionProbe" parent="village_area" index="48"]
 transform = Transform( -0.820865, -0.291816, 0.490941, -0.285342, 0.954184, 0.0900692, -0.494732, -0.0661516, -0.866524, 70.24, 3.61618, 59.2827 )
 max_distance = 16384.0
 extents = Vector3( 34.3224, 23.21, 24.3839 )
@@ -916,14 +918,14 @@ origin_offset = Vector3( -3.65723, 1.23438, 10.9688 )
 enable_shadows = true
 interior_enable = true
 
-[node name="ReflectionProbe7" type="ReflectionProbe" parent="village_area" index="50"]
+[node name="ReflectionProbe7" type="ReflectionProbe" parent="village_area" index="49"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 57.396, 5.71419, 0.807576 )
 max_distance = 16384.0
 extents = Vector3( 34.3224, 23.21, 36.741 )
 origin_offset = Vector3( 0.533203, 7.74805, 4.45508 )
 enable_shadows = true
 
-[node name="mountain_pickups" type="MultiMeshSystem" parent="." index="10"]
+[node name="mountain_pickups" type="MultiMeshSystem" parent="." index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -147.011, -71.2366, -73.8094 )
 
 [node name="bug_pickup4" parent="mountain_pickups" index="0" instance=ExtResource( 14 )]
@@ -1092,7 +1094,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.3252, -137.425, 197.227 )
 [node name="bug_pickup48" parent="mountain_pickups" index="48" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -95.029, -71.7866, -52.7333 )
 
-[node name="palace_area" type="Spatial" parent="." index="11"]
+[node name="palace_area" type="Spatial" parent="." index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 156.818, -240.56, -54.8446 )
 
 [node name="palace1" parent="palace_area" index="0" instance=ExtResource( 1 )]
@@ -1506,7 +1508,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -160.504, 0.516891, -8.91734 )
 [node name="rock25" parent="palace_area" index="15" instance=ExtResource( 15 )]
 transform = Transform( -0.10781, 0.500997, 0.858708, 0.0624099, 0.865449, -0.497095, -0.992211, 0, -0.124571, -157.954, 1.5739, -16.3009 )
 
-[node name="the_medium" type="Spatial" parent="." index="12"]
+[node name="the_medium" type="Spatial" parent="." index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -231.618, -225.576, -40.6129 )
 script = ExtResource( 16 )
 
@@ -1668,7 +1670,7 @@ shape = SubResource( 267 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60159, 0, 5.96384 )
 shape = SubResource( 269 )
 
-[connection signal="toggled" from="village_area/dswitch_shortcut" to="village_area/rail_cart_shortcut" method="_on_toggled"]
+[connection signal="toggled" from="village_area/dswitch_shortcut" to="rail_cart_shortcut" method="_on_toggled"]
 [connection signal="activated" from="the_medium/power_thing" to="the_medium/door" method="_on_activated"]
 [connection signal="activated" from="the_medium/power_thing2" to="the_medium/door" method="_on_activated"]
 [connection signal="activated" from="the_medium/power_thing3" to="the_medium/door" method="_on_activated"]

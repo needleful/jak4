@@ -29,7 +29,7 @@ func get_image(category: String, subject: String) -> Texture:
 	# Competed tasks have the same image as active
 	if category == "completed":
 		category = "tasks"
-	var path: String = image_path % [category, subject]
+	var path: String = (image_path % [category, subject]).to_lower()
 	if ResourceLoader.exists(path):
 		var r = ResourceLoader.load(path) as Texture
 		if r:

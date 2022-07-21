@@ -2,7 +2,7 @@ extends Spatial
 
 var custom_coat_stat = ""
 
-onready var hat = $Armature/Skeleton/attach_hat/ref_hat/MeshInstance
+onready var hat: MeshInstance = $Armature/Skeleton/attach_hat/ref_hat/MeshInstance
 
 func _ready():
 	var p = get_parent()
@@ -24,4 +24,5 @@ func coat_stat() -> String:
 func show_coat(coat: Coat):
 	var mat = coat.generate_material(false)
 	$Armature/Skeleton/body.set_surface_material(1, mat)
-	hat.material_override = mat
+	if hat.get_surface_material_count() > 0:
+		hat.set_surface_material(0, mat)
