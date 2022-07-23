@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -7,27 +7,93 @@
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/env/electrical/phone.tscn" type="PackedScene" id=7]
+[ext_resource path="res://areas/chunks/chunk054_lowres.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=11]
+[ext_resource path="res://entities/env/copper/tower.tscn" type="PackedScene" id=12]
+[ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/env/copper/scrap4.tscn" type="PackedScene" id=14]
 
 [node name="chunk054" type="MultiMeshSystem"]
 script = ExtResource( 1 )
+lighting_preview = true
 
-[node name="fountain" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 0.995274, -0.0971086, 0, 0.0971086, 0.995274, 148, 0.476618, 238 )
-
-[node name="fountain2" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 0.999394, 0.0348273, 0, -0.0348273, 0.999394, 131.407, -71.554, 190.969 )
-
-[node name="phone_pickup" parent="." instance=ExtResource( 5 )]
-transform = Transform( -0.98355, 0.110702, -0.14274, 0.168605, 0.84618, -0.505521, 0.0648217, -0.521272, -0.850925, 131.637, -69.6651, 195.658 )
-item_id = "dropped_phone"
-
-[node name="phone" parent="phone_pickup" instance=ExtResource( 7 )]
-on = true
-
-[node name="npc" parent="." instance=ExtResource( 3 )]
-transform = Transform( -0.987212, 0, -0.159413, 0, 1, 0, 0.159413, 0, -0.987212, 133.85, 1.19235, 231.662 )
-dialog = ExtResource( 4 )
-visual_name = "Distressed Woman"
+[node name="chunk054" parent="." instance=ExtResource( 8 )]
 
 [node name="scrap1" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 0.998791, 0.0491528, 0, -0.0491528, 0.998791, 131.407, -73.7483, 191.075 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+transform = Transform( 0.934862, 0.296528, -0.195203, -0.328628, 0.930833, -0.159852, 0.134301, 0.213589, 0.967648, 137.341, 25.4213, 261.238 )
+max_distance = 16384.0
+extents = Vector3( 82.128, 67.4603, 84.0554 )
+origin_offset = Vector3( 25.0977, -1.92676, -1.27148 )
+interior_ambient_color = Color( 0.313726, 0.313726, 0.313726, 1 )
+
+[node name="area_cave_entrance" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 141.345, 2.39909, 233.943 )
+
+[node name="npc" parent="area_cave_entrance" instance=ExtResource( 3 )]
+transform = Transform( -0.987212, 0, -0.159413, 0, 1, 0, 0.159413, 0, -0.987212, -7.49486, -1.20674, -2.28111 )
+dialog = ExtResource( 4 )
+visual_name = "Distressed Woman"
+
+[node name="fountain" parent="area_cave_entrance" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 0.995274, -0.0971086, 0, 0.0971086, 0.995274, 6.65514, -1.92247, 4.05688 )
+
+[node name="scrap2" parent="area_cave_entrance" instance=ExtResource( 9 )]
+transform = Transform( 0.347103, 0.937827, 0, -0.937827, 0.347103, 0, 0, 0, 1, 20.5764, 1.33422, 16.6232 )
+
+[node name="scrap_pile1" parent="area_cave_entrance" instance=ExtResource( 13 )]
+transform = Transform( -0.530898, -0.847436, 0, 0.847436, -0.530898, 0, 0, 0, 1, -12.5758, -0.748688, 23.4563 )
+
+[node name="scrap_pile2" parent="area_cave_entrance" instance=ExtResource( 13 )]
+transform = Transform( -0.803134, -0.42265, -0.419931, -0.573916, 0.359545, 0.735764, -0.159987, 0.831922, -0.531328, -40.6856, 21.9783, -23.7872 )
+
+[node name="scrap_pile3" parent="area_cave_entrance" instance=ExtResource( 11 )]
+transform = Transform( -0.840423, 0.227681, 0.491783, -0.43514, -0.824408, -0.361946, 0.323022, -0.518182, 0.791924, -24.9287, 12.5653, -3.12007 )
+
+[node name="table2" parent="area_cave_entrance" instance=ExtResource( 10 )]
+transform = Transform( -0.0164571, 0.582701, -0.81252, 0.7537, 0.54121, 0.372864, 0.657012, -0.60626, -0.448089, 1.30901, -4.0845, 20.2568 )
+
+[node name="tower" parent="area_cave_entrance" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 0.7281, -0.685471, 0, 0.685471, 0.7281, -28.163, 1.12133, -26.2177 )
+
+[node name="tower3" parent="area_cave_entrance" instance=ExtResource( 12 )]
+transform = Transform( 0.237091, -0.943979, -0.229546, 0.803712, 0.0578576, 0.592199, -0.545742, -0.324894, 0.772405, 74.5892, -7.22182, 48.1237 )
+
+[node name="tower2" parent="area_cave_entrance" instance=ExtResource( 12 )]
+transform = Transform( -0.622641, 0.142713, 0.769384, 0, -0.983228, 0.18238, 0.782508, 0.113557, 0.612198, -28.163, 12.4578, 18.8126 )
+
+[node name="scrap4" parent="area_cave_entrance" instance=ExtResource( 14 )]
+transform = Transform( 0.305095, 0.952322, 0, -0.952322, 0.305095, 0, 0, 0, 1, 48.1489, -0.547802, 30.3839 )
+
+[node name="scrap5" parent="area_cave_entrance" instance=ExtResource( 14 )]
+transform = Transform( -0.00141701, -0.0176897, -0.999843, -0.999227, -0.0392581, 0.00211071, -0.0392893, 0.999072, -0.0176204, 45.2755, -0.547802, 30.3839 )
+
+[node name="area_cave" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 125.322, -64.176, 116.732 )
+
+[node name="fountain2" parent="area_cave" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 0.999394, 0.0348273, 0, -0.0348273, 0.999394, 6.08481, -7.37797, 74.2371 )
+
+[node name="phone_pickup" parent="area_cave" instance=ExtResource( 5 )]
+transform = Transform( -0.98355, 0.110702, -0.14274, 0.168605, 0.84618, -0.505521, 0.0648217, -0.521272, -0.850925, 6.3148, -5.48907, 78.9261 )
+item_id = "dropped_phone"
+
+[node name="phone" parent="area_cave/phone_pickup" instance=ExtResource( 7 )]
+on = true
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_cave"]
+transform = Transform( 0.978703, 0.0788166, 0.18955, 0, 0.923358, -0.38394, -0.205283, 0.375764, 0.903693, -9.5499, 22.9652, 4.89059 )
+max_distance = 16384.0
+extents = Vector3( 48.8898, 63.0263, 107.02 )
+origin_offset = Vector3( 11.9551, -18.6631, 0 )
+interior_enable = true
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="area_cave"]
+transform = Transform( 0.293003, -0.36709, -0.882833, 0, 0.923358, -0.38394, 0.956112, 0.112496, 0.270546, 33.709, 95.0596, 0.908844 )
+extents = Vector3( 35.4203, 26.3622, 67.2005 )
+origin_offset = Vector3( 12.6641, -0.564453, 0 )
+interior_enable = true

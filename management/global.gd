@@ -42,12 +42,8 @@ func _init():
 
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		if !using_gamepad:
-			print("Switched to gamepad")
 		using_gamepad = true
 	elif event is InputEventMouse or event is InputEventKey:
-		if using_gamepad:
-			print("Switched to keyboard")
 		using_gamepad = false
 
 func _ready():

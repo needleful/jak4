@@ -1,4 +1,5 @@
 extends Node
+class_name Door
 
 export(int) var required_power := 1
 # Only for triggering doors through events persistently
@@ -35,8 +36,10 @@ func _on_signal(_arg):
 func _on_activated():
 	add_power()
 
+func _on_deactivated():
+	add_power(-1)
+
 func _on_toggled(active):
-	print("Toggled: ", active)
 	add_power(1 if active else -1)
 
 func add_power(amount:= 1):
@@ -50,12 +53,10 @@ func add_power(amount:= 1):
 	
 	if should_open and !open:
 		if has_node("AnimationPlayer"):
-			print("Opening...")
 			$AnimationPlayer.play("Activate")
 		else:
 			print("ERROR: %s has no AnimationPlayer" % name)
 	elif !should_open and open:
 		if has_node("AnimationPlayer"):
-			print("Closing...")
 			$AnimationPlayer.play_backwards("Activate")
 	open = should_open
