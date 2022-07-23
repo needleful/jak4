@@ -1,11 +1,14 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/inventory.gd" type="Script" id=1]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=2]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=4]
 [ext_resource path="res://ui/items/player_desc.tres" type="Resource" id=5]
 [ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=6]
+[ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=7]
+[ext_resource path="res://ui/icons/item_gem.png" type="Texture" id=8]
+[ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=9]
 
 [sub_resource type="ProceduralSky" id=2]
 radiance_size = 0
@@ -92,7 +95,7 @@ rect_min_size = Vector2( 320, 0 )
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 313.0
-margin_bottom = 132.0
+margin_bottom = 151.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -102,7 +105,7 @@ custom_constants/margin_bottom = 20
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 296.0
-margin_bottom = 105.0
+margin_bottom = 124.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -112,25 +115,32 @@ margin_bottom = 54.0
 custom_fonts/font = ExtResource( 3 )
 text = "Item"
 
-[node name="sub_items" type="GridContainer" parent="viewport_window/Panel/MarginContainer/item"]
+[node name="spacer" type="Panel" parent="viewport_window/Panel/MarginContainer/item"]
 margin_top = 58.0
 margin_right = 286.0
-margin_bottom = 58.0
-columns = 2
-
-[node name="spacer" type="Panel" parent="viewport_window/Panel/MarginContainer/item"]
-margin_top = 62.0
-margin_right = 286.0
-margin_bottom = 77.0
+margin_bottom = 73.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 6 )
 
 [node name="description" type="Label" parent="viewport_window/Panel/MarginContainer/item"]
-margin_top = 81.0
+margin_top = 77.0
 margin_right = 286.0
-margin_bottom = 95.0
+margin_bottom = 91.0
 text = "Item"
 autowrap = true
+
+[node name="spacer2" type="Panel" parent="viewport_window/Panel/MarginContainer/item"]
+margin_top = 95.0
+margin_right = 286.0
+margin_bottom = 110.0
+rect_min_size = Vector2( 0, 15 )
+custom_styles/panel = ExtResource( 6 )
+
+[node name="sub_items" type="GridContainer" parent="viewport_window/Panel/MarginContainer/item"]
+margin_top = 114.0
+margin_right = 286.0
+margin_bottom = 114.0
+columns = 2
 
 [node name="large_items" type="Panel" parent="."]
 anchor_top = 0.65
@@ -171,17 +181,19 @@ custom_constants/vseparation = 25
 columns = 2
 
 [node name="TextureRect2" type="TextureRect" parent="small_items"]
-margin_right = 90.0
-margin_bottom = 64.0
+margin_right = 100.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
-texture = ExtResource( 4 )
+texture = ExtResource( 8 )
+expand = true
 stretch_mode = 6
 
 [node name="gem" type="Label" parent="small_items"]
-margin_left = 94.0
-margin_top = 5.0
+margin_left = 104.0
+margin_top = 23.0
 margin_right = 184.0
-margin_bottom = 59.0
+margin_bottom = 77.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
 text = "2"
@@ -189,18 +201,20 @@ align = 1
 script = ExtResource( 2 )
 
 [node name="TextureRect" type="TextureRect" parent="small_items"]
-margin_top = 89.0
-margin_right = 90.0
-margin_bottom = 153.0
+margin_top = 125.0
+margin_right = 100.0
+margin_bottom = 225.0
+rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
-texture = ExtResource( 4 )
+texture = ExtResource( 7 )
+expand = true
 stretch_mode = 6
 
 [node name="bug" type="Label" parent="small_items"]
-margin_left = 94.0
-margin_top = 94.0
+margin_left = 104.0
+margin_top = 148.0
 margin_right = 184.0
-margin_bottom = 148.0
+margin_bottom = 202.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
 text = "2"
@@ -208,37 +222,41 @@ align = 1
 script = ExtResource( 2 )
 
 [node name="TextureRect3" type="TextureRect" parent="small_items"]
-margin_top = 178.0
-margin_right = 90.0
-margin_bottom = 242.0
+margin_top = 250.0
+margin_right = 100.0
+margin_bottom = 350.0
+rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
-texture = ExtResource( 4 )
+texture = ExtResource( 9 )
+expand = true
 stretch_mode = 6
 
 [node name="capacitor" type="Label" parent="small_items"]
-margin_left = 94.0
-margin_top = 183.0
+margin_left = 104.0
+margin_top = 273.0
 margin_right = 184.0
-margin_bottom = 237.0
+margin_bottom = 327.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
 text = "2"
 align = 1
 script = ExtResource( 2 )
 
-[node name="TextureRect4" type="TextureRect" parent="small_items"]
-margin_top = 267.0
-margin_right = 90.0
-margin_bottom = 331.0
+[node name="TextureRect5" type="TextureRect" parent="small_items"]
+margin_top = 375.0
+margin_right = 100.0
+margin_bottom = 475.0
+rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
 texture = ExtResource( 4 )
+expand = true
 stretch_mode = 6
 
 [node name="flag" type="Label" parent="small_items"]
-margin_left = 94.0
-margin_top = 272.0
+margin_left = 104.0
+margin_top = 398.0
 margin_right = 184.0
-margin_bottom = 326.0
+margin_bottom = 452.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
 text = "2"

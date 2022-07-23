@@ -1556,13 +1556,13 @@ func show_specific_item(item):
 		$ui/gameing/inventory.show()
 	$ui/gameing/inventory/vis_timer.start()
 	var count = get_node("ui/gameing/inventory/"+item+"_count")
-	var label = get_node("ui/gameing/inventory/"+item+"_label")
+	var icon = get_node("ui/gameing/inventory/"+item+"_icon")
 	var added = get_node("ui/gameing/inventory/"+item+"_added")
-	if !label or !count or !added:
+	if !icon or !count or !added:
 		print_debug("BUG: no inventory for ", item)
 		return
 	added.show()
-	label.show()
+	icon.show()
 	count.show()
 	
 

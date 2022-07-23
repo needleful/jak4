@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=2]
+[gd_scene load_steps=85 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -12,7 +12,7 @@
 [ext_resource path="res://entities/flag.tscn" type="PackedScene" id=10]
 [ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/diagetic/target.png" type="Texture" id=12]
-[ext_resource path="res://ui/prompts/wep_pistol.svg" type="Texture" id=13]
+[ext_resource path="res://ui/icons/wep_pistol.svg" type="Texture" id=13]
 [ext_resource path="res://ui/weapon.gd" type="Script" id=14]
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
@@ -24,6 +24,10 @@
 [ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
 [ext_resource path="res://ui/custom_game.gd" type="Script" id=24]
+[ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=25]
+[ext_resource path="res://ui/icons/item_gem.png" type="Texture" id=26]
+[ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=27]
+[ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=28]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -1449,28 +1453,28 @@ custom_constants/vseparation = 16
 custom_constants/hseparation = 18
 columns = 3
 
-[node name="gem_label" type="Label" parent="ui/gameing/inventory"]
-margin_top = 16.0
-margin_right = 99.0
-margin_bottom = 38.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Gems:"
+[node name="gem_icon" type="TextureRect" parent="ui/gameing/inventory"]
+margin_right = 100.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 100 )
+texture = ExtResource( 26 )
+expand = true
+stretch_mode = 6
 
 [node name="gem_count" type="Label" parent="ui/gameing/inventory"]
-margin_left = 117.0
-margin_right = 144.0
-margin_bottom = 54.0
+margin_left = 118.0
+margin_top = 23.0
+margin_right = 145.0
+margin_bottom = 77.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="gem_added" type="Label" parent="ui/gameing/inventory"]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_right = 231.0
-margin_bottom = 54.0
+margin_left = 163.0
+margin_top = 23.0
+margin_right = 232.0
+margin_bottom = 77.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
@@ -1478,30 +1482,29 @@ text = "+ 1"
 anims/RESET = SubResource( 50 )
 anims/show = SubResource( 51 )
 
-[node name="bug_label" type="Label" parent="ui/gameing/inventory"]
-margin_top = 86.0
-margin_right = 99.0
-margin_bottom = 108.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Bugs:"
+[node name="bug_icon" type="TextureRect" parent="ui/gameing/inventory"]
+margin_top = 116.0
+margin_right = 100.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 100, 100 )
+texture = ExtResource( 25 )
+expand = true
+stretch_mode = 6
 
 [node name="bug_count" type="Label" parent="ui/gameing/inventory"]
-margin_left = 117.0
-margin_top = 70.0
-margin_right = 144.0
-margin_bottom = 124.0
+margin_left = 118.0
+margin_top = 139.0
+margin_right = 145.0
+margin_bottom = 193.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="bug_added" type="Label" parent="ui/gameing/inventory"]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 70.0
-margin_right = 231.0
-margin_bottom = 124.0
+margin_left = 163.0
+margin_top = 139.0
+margin_right = 232.0
+margin_bottom = 193.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
@@ -1509,30 +1512,29 @@ text = "+ 1"
 anims/RESET = SubResource( 52 )
 anims/show = SubResource( 53 )
 
-[node name="capacitor_label" type="Label" parent="ui/gameing/inventory"]
-margin_top = 156.0
-margin_right = 99.0
-margin_bottom = 178.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Capacitors:"
+[node name="capacitor_icon" type="TextureRect" parent="ui/gameing/inventory"]
+margin_top = 232.0
+margin_right = 100.0
+margin_bottom = 332.0
+rect_min_size = Vector2( 100, 100 )
+texture = ExtResource( 27 )
+expand = true
+stretch_mode = 6
 
 [node name="capacitor_count" type="Label" parent="ui/gameing/inventory"]
-margin_left = 117.0
-margin_top = 140.0
-margin_right = 144.0
-margin_bottom = 194.0
+margin_left = 118.0
+margin_top = 255.0
+margin_right = 145.0
+margin_bottom = 309.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="capacitor_added" type="Label" parent="ui/gameing/inventory"]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 140.0
-margin_right = 231.0
-margin_bottom = 194.0
+margin_left = 163.0
+margin_top = 255.0
+margin_right = 232.0
+margin_bottom = 309.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
@@ -1540,30 +1542,29 @@ text = "+ 1"
 anims/RESET = SubResource( 54 )
 anims/show = SubResource( 55 )
 
-[node name="flag_label" type="Label" parent="ui/gameing/inventory"]
-margin_top = 226.0
-margin_right = 99.0
-margin_bottom = 248.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 3
-text = "Flags:"
+[node name="flag_icon" type="TextureRect" parent="ui/gameing/inventory"]
+margin_top = 348.0
+margin_right = 100.0
+margin_bottom = 448.0
+rect_min_size = Vector2( 100, 100 )
+texture = ExtResource( 28 )
+expand = true
+stretch_mode = 6
 
 [node name="flag_count" type="Label" parent="ui/gameing/inventory"]
-margin_left = 117.0
-margin_top = 210.0
-margin_right = 144.0
-margin_bottom = 264.0
+margin_left = 118.0
+margin_top = 371.0
+margin_right = 145.0
+margin_bottom = 425.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
 [node name="flag_added" type="Label" parent="ui/gameing/inventory"]
 modulate = Color( 1, 1, 1, 0 )
-margin_left = 162.0
-margin_top = 210.0
-margin_right = 231.0
-margin_bottom = 264.0
+margin_left = 163.0
+margin_top = 371.0
+margin_right = 232.0
+margin_bottom = 425.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
