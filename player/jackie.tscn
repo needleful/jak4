@@ -4,7 +4,7 @@
 [ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=2]
 [ext_resource path="res://player/animator.gd" type="Script" id=3]
 [ext_resource path="res://material/coat.shader" type="Shader" id=4]
-[ext_resource path="res://material/coat/gradient3.jpg" type="Texture" id=5]
+[ext_resource path="res://material/coat/gradient.jpg" type="Texture" id=5]
 [ext_resource path="res://audio/player/stepdirt1.wav" type="AudioStream" id=6]
 [ext_resource path="res://material/refract_multiply.shader" type="Shader" id=7]
 [ext_resource path="res://player/particles/kick_stars.png" type="Texture" id=8]
@@ -14,7 +14,8 @@
 [ext_resource path="res://entities/visual/follow.gd" type="Script" id=12]
 
 [sub_resource type="Gradient" id=64]
-colors = PoolColorArray( 1, 0, 0, 1, 1, 1, 1, 1 )
+offsets = PoolRealArray( 0.126437, 0.475096, 0.858238 )
+colors = PoolColorArray( 0.703125, 0.0796509, 0.0796509, 1, 1, 0.617188, 0.940186, 1, 0, 0.273438, 1, 1 )
 
 [sub_resource type="GradientTexture" id=65]
 gradient = SubResource( 64 )
@@ -606,10 +607,10 @@ states/Uppercut/node = SubResource( 46 )
 states/Uppercut/position = Vector2( -23, 40 )
 transitions = [ "Ground", "Fall", SubResource( 10 ), "Fall", "Ground", SubResource( 11 ), "Ground", "BaseJump", SubResource( 13 ), "BaseJump", "Fall", SubResource( 14 ), "Roll", "Ground", SubResource( 16 ), "Ground", "Roll", SubResource( 17 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "RollFall", "Ground", SubResource( 23 ), "RollJump", "Ground", SubResource( 24 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "SpinKickLeft", "Ground", SubResource( 38 ), "Ground", "SpinKickLeft", SubResource( 39 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Uppercut", "Ground", SubResource( 47 ), "Roll", "Uppercut", SubResource( 49 ), "Ground", "Uppercut", SubResource( 50 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "DiveEnd", "Ground", SubResource( 58 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "Ground", "LungeKick", SubResource( 94 ), "LungeKick", "Ground", SubResource( 95 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "BaseJump", "Ground", SubResource( 102 ), "Ground", "PlaceFlag", SubResource( 128 ), "PlaceFlag", "Ground", SubResource( 129 ), "GetItem", "Ground", SubResource( 131 ), "Ground", "GetItem", SubResource( 132 ), "Ground", "Damaged", SubResource( 134 ), "Fall", "Damaged", SubResource( 135 ), "Damaged", "Ground", SubResource( 136 ), "Damaged", "Fall", SubResource( 137 ), "Ground", "Hover", SubResource( 143 ), "Hover", "Fall", SubResource( 144 ), "Fall", "Hover", SubResource( 145 ), "Ground", "Sit_Floor", SubResource( 154 ), "Sit_Floor", "Sitting_Floor-loop", SubResource( 155 ), "Sitting_Floor-loop", "Ground", SubResource( 156 ), "Sitting_Floor-loop", "BaseJump", SubResource( 157 ), "Sitting_Floor-loop", "Fall", SubResource( 158 ), "Dash", "Ground", SubResource( 160 ), "Fall", "Dash", SubResource( 161 ), "Dash", "Fall", SubResource( 162 ), "RollJump", "Dash", SubResource( 163 ), "Dash", "SpinKickLeft", SubResource( 164 ), "RollFall", "Dash", SubResource( 165 ), "BaseJump", "Dash", SubResource( 166 ), "SpinKickLeft", "Dash", SubResource( 167 ), "Dash", "DiveStart", SubResource( 168 ) ]
 start_node = "Ground"
-graph_offset = Vector2( -165, -323 )
+graph_offset = Vector2( -115, -139 )
 
 [sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -641.639, -128.806 )
+graph_offset = Vector2( -632, -57 )
 nodes/Aim/node = SubResource( 115 )
 nodes/Aim/position = Vector2( -540, 160 )
 nodes/Animation/node = SubResource( 125 )
@@ -677,6 +678,7 @@ material_override = ExtResource( 2 )
 
 [node name="hover_board" parent="Armature/Skeleton" index="2"]
 time_scale_response = false
+visible = false
 layers = 2
 
 [node name="jackie" parent="Armature/Skeleton" index="3"]
@@ -691,7 +693,7 @@ material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
 time_scale_response = false
-transform = Transform( 0.152548, -0.00827833, -0.988261, 0.265357, -0.962902, 0.0490263, -0.952005, -0.269721, -0.144692, 0.224232, 0.159487, 0.10804 )
+transform = Transform( 0.0512689, 0.0399971, -0.997883, -0.757997, -0.649013, -0.0649579, -0.650238, 0.759723, -0.00295643, 0.118693, 0.108999, -0.00192492 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -716,7 +718,7 @@ draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
 time_scale_response = false
-transform = Transform( 0.0502018, -0.0422883, 0.997844, 0.762315, -0.643869, -0.0656401, 0.645257, 0.763966, -8.63373e-05, -0.119617, 0.108057, -0.00187525 )
+transform = Transform( 0.0480283, -0.0429236, 0.997923, 0.756116, -0.651261, -0.0644034, 0.652672, 0.757638, 0.00117607, -0.118177, 0.109068, -0.00128399 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -741,7 +743,7 @@ draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
 time_scale_response = false
-transform = Transform( 0.993233, -0.0941638, -0.0679788, -0.0040767, 0.556699, -0.830704, 0.116066, 0.82536, 0.552549, 0.00733114, 0.580968, 0.110532 )
+transform = Transform( 1, -0.000546232, 0.000864863, 0.000410545, 0.988716, 0.149799, -0.000936926, -0.149799, 0.988716, -0.00237583, 1.01907, 0.000230672 )
 bone_name = "BackUpper"
 
 [node name="time_trail" type="ImmediateGeometry" parent="Armature/Skeleton/chest" index="0"]
@@ -768,7 +770,7 @@ one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
 time_scale_response = false
-transform = Transform( 0.995439, -0.0932689, -0.0200299, -0.0199719, 0.00155365, -0.999799, 0.0932814, 0.99564, -0.000315666, -0.00185003, 0.709071, 0.253934 )
+transform = Transform( 0.999993, -0.00268597, -0.00243419, -0.00194535, 0.16897, -0.985619, 0.00305848, 0.985618, 0.168963, -0.00234286, 1.21079, 0.00369834 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -787,7 +789,7 @@ one_shot = true
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="9"]
 time_scale_response = false
-transform = Transform( -0.288731, 0.12201, 0.949604, 0.726877, -0.617602, 0.300363, 0.623125, 0.77697, 0.0896348, 0.174358, 0.518498, 0.263562 )
+transform = Transform( 0.737874, -0.110197, 0.665882, -0.151391, -0.988465, 0.0041772, 0.657741, -0.10389, -0.746046, 0.210275, 0.705007, -0.0247892 )
 bone_name = "Gun.R"
 script = ExtResource( 9 )
 
@@ -869,7 +871,7 @@ target_node = NodePath("../gun/gun_ik/target")
 
 [node name="handRight" type="BoneAttachment" parent="Armature/Skeleton" index="11"]
 time_scale_response = false
-transform = Transform( 0.263265, -0.0821088, -0.961223, -0.328303, -0.944527, -0.00923511, -0.907143, 0.318004, -0.275618, -0.243527, 0.351381, 0.174138 )
+transform = Transform( 0.726353, 0.0816022, -0.682461, 0.0385379, -0.9962, -0.0780995, -0.686241, 0.0304269, -0.726738, -0.20884, 0.715544, -0.000231559 )
 bone_name = "Object.R"
 
 [node name="ref" type="Spatial" parent="Armature/Skeleton/handRight" index="0"]
@@ -877,14 +879,14 @@ time_scale_response = false
 transform = Transform( 0.707107, -0.707107, -2.23517e-08, -8.61473e-09, -4.47035e-08, 1, -0.707107, -0.707107, -2.23517e-08, 0, 0, 0 )
 
 [node name="knee_left" type="BoneAttachment" parent="Armature/Skeleton" index="12"]
-transform = Transform( 0.454124, 0.213507, -0.864978, -0.866537, 0.331514, -0.373113, 0.20709, 0.918974, 0.335559, 0.118976, 0.391806, 0.0270474 )
+transform = Transform( -0.0319364, 0.0567395, -0.997878, -0.0337988, -0.997878, -0.0556578, -0.998918, 0.0319498, 0.0337863, 0.0843015, 0.809345, 0.0208689 )
 bone_name = "Thign.L"
 
 [node name="ref_leg_left" type="Spatial" parent="Armature/Skeleton/knee_left" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="knee_right" type="BoneAttachment" parent="Armature/Skeleton" index="13"]
-transform = Transform( 0.22395, -0.434362, 0.872454, 0.931837, -0.166835, -0.322254, 0.285531, 0.885153, 0.367391, -0.054204, 0.399014, 0.0291828 )
+transform = Transform( -0.0236754, -0.0496854, 0.998485, 0.042672, -0.997905, -0.0486448, 0.998809, 0.0414554, 0.0257458, -0.0890416, 0.809345, 0.020869 )
 bone_name = "Thign.R"
 
 [node name="ref_leg_right" type="Spatial" parent="Armature/Skeleton/knee_right" index="0"]
@@ -904,7 +906,7 @@ parameters/Fire/active = false
 parameters/Gun/blend_amount = 0.0
 parameters/GunHold/blend_amount = 0
 parameters/WholeBody/playback = SubResource( 8 )
-parameters/WholeBody/Ground/blend_position = Vector2( 0.996516, -0.0192307 )
+parameters/WholeBody/Ground/blend_position = Vector2( -0.00991082, -0.0431035 )
 parameters/WholeBody/Hover/blend_position = Vector2( 0, 0 )
 parameters/WholeBody/LungeKick/blend_position = 0
 

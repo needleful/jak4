@@ -29,6 +29,9 @@ func _process(delta):
 		MIN_ZOOM, MAX_ZOOM)
 	ref_cam_arm.spring_length = c_zoom
 
+func _ready():
+	set_process(false)
+
 func set_active(active):
 	if active:
 		viewport.size = view_window.rect_size
