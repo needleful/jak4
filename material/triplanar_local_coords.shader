@@ -33,7 +33,6 @@ void fragment() {
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
-	//ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
 }
 
 void light()
@@ -44,7 +43,7 @@ void light()
 	}
 	else {
 		float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
-		DIFFUSE_LIGHT += light * ATTENUATION * ALBEDO;
+		DIFFUSE_LIGHT += 0.4*light * LIGHT_COLOR * ATTENUATION * ALBEDO;
 		
 		// Specular
 		vec3 h = normalize(VIEW + LIGHT);

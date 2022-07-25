@@ -3,14 +3,14 @@ shader_type spatial;
 uniform sampler2D main_texture: hint_albedo;
 uniform float subsurface_scattering: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
-uniform float specularity: hint_range(1, 16) = 1.0;
+uniform float specularity: hint_range(1, 32) = 1.0;
 
 varying vec3 vert_color;
 
 void fragment()
 {
 	ALBEDO = texture(main_texture, UV).rgb;
-	ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
+	ROUGHNESS = (32.0 - specularity)/32.0;
 	vert_color = COLOR.rgb;
 }
 
@@ -21,7 +21,7 @@ void light()
 		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
 	}
 	else {
-		float smoothness = (specularity + 2.0) / (8.0*3.1416);
+		float smoothness = specularity/32.0;
 		
 		float ndotl = dot(NORMAL, LIGHT);
 		float light = 0.4*(1.0-smoothness)*smoothstep(0, softness, ndotl);

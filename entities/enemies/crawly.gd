@@ -169,6 +169,9 @@ func set_state(new_ai, force := false):
 				aggro_to(last_attacker)
 			anim.play("Damaged")
 		AI.Dead:
+			angular_damp = 10
+			linear_damp = 5
+			gravity_scale = 8
 			collision_layer = 0
 			anim.play("Die")
 			anim.queue("Dead-loop")
