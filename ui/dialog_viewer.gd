@@ -468,6 +468,9 @@ func remember(note: String, subject: String = ""):
 	Global.add_note("people", subject, note)
 	return true
 
+func knows(person: String):
+	return Global.has_note("people", person)
+
 func task_note(task: String, note: String):
 	if Global.has_note("completed", task):
 		Global.add_note("completed", task, note)

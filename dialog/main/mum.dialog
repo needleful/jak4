@@ -1,12 +1,21 @@
 // There's special music for this dialog
 {event("play_music", false)}
 // So there's a lot of stuff that'll be here.
-{Global.stat("mum/info") == 0}
+?{mum/info}
+	{Global.add_stat("mum/true_talked") == 1}
+		M-mum?
+		{pick_highest()}
+			?{mum/leader}
+			?{mum/damsel}
+			?{mum/brute} What? 
+			?{mum/absent} Hm? I think you're mistaken.
+{otherwise}
 	{talked == 0}
 		* The thing in front of you is almost nothing at all.
 		* The outline of a dress. Her arched nose. That's all you can make out. Somehow this is more than you could recall.
 		* It's unmistakable.
 		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")}
+		{task_note("mum", "The medium really works. But")}
 		[You] Hi mum.
 			I-.. I....
 		* {animation("sit")} You can't think of anything to say.
@@ -34,123 +43,3 @@
 		{animation("plateau")} * She lived up in the plateaus. If anyone would remember her, they're most likely to be there.
 		[You] I should go.
 	{exit()}
-
-// This is for how many times you've actually talked to her
-{Global.add_stat("mum/true_talked") == 1}
-	Oh? Hello.
-	Who are you?
-	[You] Hi mum...
-	... Jackie? But you're so-
-	* She looks around.
-	What is this place? How did I get here?
-	[You] It's the Medium.
-	What? That thing in the old village? Someone fixed it?
-	[You] I did.
-		To... talk to you.
-	... So that means...
-	{animation("hug")} ...
-	That explains why you've grown so much.
-	{animation("end_hug")} ... How did I die?
-	[You] I don't know. One day you left, and just... didn't come back.
-	{Global.stat("mum/tick")} Huh.
-	Are you sure I died?
-	[You] ...
-	...
-	So why did you bring me back? Did you need to talk to me?
-	[You] It's because of exactly that. I want to figure out how you died.
-		Or where you went.
-		Or just... why you left.
-	... Jackie.
-	I was told how the machine works. And I assume you were, too.
-	I'm just a memory. The machine reads your mind and makes some kind of copy.
-	How could I possibly know things you do not?
-	[You] Yes. That's what I thought, too.
-		But I read into it. The Mediums, they weren't perfect, but they could sometimes tell you things you couldn't have possibly guessed.
-		They don't just, like, take the memories of a person and replay them. It's really, really sophisticated. It knows how people's memories change over time, or how they process facts, and ways to reconstruct true information from flawed perspectives. It can use information about the region someone grew up, and things like that.
-		It's not magic, but it's an incredibly powerful data aggregator. Even now... You're...
-		I didn't even remember your face at first. But looking at you now...
-		It's perfect.
-	Of course you think it's perfect! It's your memories.
-	But I'm sorry to say, I don't know where... I? Died, or live now, or really... anything. It's all a blur besides the family, I guess what you knew about them.
-	{Global.stat("mum/info") == 1}
-		[You]... I can find more information. We can figure this out, mum.
-	{otherwise}
-		[You]... I've learned so much about you. Maybe we can talk through it? Help you jog your memories?
-	I suppose.
-
-{otherwise if not Global.stat("mum/time")}
-	Did you forget something? I thought you were leaving?
-	{seconds_since_conversation() > 60}
-		[You] What do you mean? I did leave...
-		But you came right back? Stepping out for a few second doesn't count as "leaving".
-		[You] But... I.. wasn't gone for a few seconds? It was a little while?
-		...
-		{Global.add_stat("mum/time")}
-		{Global.stat("mum/tick")} Huh.
-		[You] Is everything okay?
-		... As okay as it'll ever be, I guess.
-		Did you want to talk about something?
-		{goto("main")}
-	{otherwise}
-		[You] Uh yeah, one more thing, actually.
-		{goto("main")}
-
-:main
-> Do you remember anything near the end of your life?
-> {Global.flag("mum/info/village")} What was life like in the old village?
-> What do you remember of the plateaus?
-> {can_discuss("capacitor_113")} I had to blow up a tower to power this thing up.
-	No... The Tree Tower?
-	[You] Uh, I don't think that's the one. The one by the village here.
-	Oh. What happened?
-	[You] I pulled out the capacitor at the top for the Medium, and the whole thing came apart with me on it.
-	That's terrible! You don't look hurt, at least.
-	[You] Oh no, it wasn't bad. It didn't cause any damage, as far as I could tell.
-	{Global.stat("riley/113/argue")}
-		[You] There's this uh, young woman, Riley, who got quite angry with me for it.
-		> She was overreacting about the damage, basically.
-		> I was being careless.
-	{mark_discussed("capacitor_113")}
-	{goto("main")}
-> I'll see you later.
-	{exiting()}
-	Okay sweetie. I'll see you.
-
-{goto("track_and_exit")}
-
-:_exit:
-[You] I have to go. Bye, mum.
-{Global.stat("mum/info") > 2} I'll see you, sweetie.
-
-:track_and_exit
-{track_conversation_time()}
-{exit()}
-
-
-:accuracy_1
-
-{back()}
-
-
-
-
-:old_village
-The old village... Did you see my home?
-{Global.count("mum/knife")} Say, I just thought of something. I had an old knife that I lost in the dust when we were run out. Did you find that?
-	[You] ... yes. I did... I had no idea it was yours.
-	I had another one when you were born. It's an excellent knife, isn't it? It cuts through the specters' metal bodies like nothing. I don't remember where it originally came from, of course. Presumably whoever made them made the weapons to deal with them.
-{Global.stat("something_or_other")} When the specters started emerging, we were is just about the worst strategic place. The Tree Tower was one of the specter sources, and we were boxed in on the other sides by the cliffs. It was a considerable fight clearing out the quarry for a safe evacuation.
-	[You] 
-
-:memory
-I want to explain my problem. I realized some time ago that when you leave, I stop existing. This computer shuts me down, or whatever it does.
-So, when you find what you're looking for...
-[You] Oh... Right... I hadn't thought about that.
-
-
-
---- Okay what the fuck do I even want?
-Mum has several old friends you can learn about:
-	The shopkeeper
-	Crab Hill chief
-	

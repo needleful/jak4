@@ -7,16 +7,19 @@ var NPSequence = preload("res://addons/np_dialog/resource/sequence.gd")
 var r_comment := RegEx.new()
 var r_whitespace_start := RegEx.new()
 var r_label := RegEx.new()
-var r_condition := RegEx.new()
+var r_expression := RegEx.new()
 var r_narrate := RegEx.new()
 var r_reply := RegEx.new()
 var r_speaker := RegEx.new()
+
+var f_query := "Global.stat('%s')"
+var f_add := "Global.add_stat('%s')"
 
 func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
 	r_label.compile("^\\s*:(\\w+)")
-	r_condition.compile("#?\\{([^\\}]+)\\}")
+	r_expression.compile("[#+?]?\\{([^\\}]+)\\}")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
 	r_speaker.compile("^\\s*\\[\\s*(\\w+)\\s*\\]\\s*")
@@ -101,7 +104,7 @@ func parse_text(text: String, src_path = "<local>"):
 		var wd := DialogItem.new()
 		seq.dialog[line_number] = wd
 		
-		var sp := extract_conditions(line)
+		var sp := extract_expressions(line)
 		line = sp.line
 		wd.conditions = sp.conditions
 		
@@ -186,18 +189,24 @@ func extract_whitespace(line: String, indent: String, src_path, line_number) -> 
 		dict.indent_level = 0
 	return dict
 
-func extract_conditions(line: String) -> Dictionary:
+func extract_expressions(line: String) -> Dictionary:
 	var dict = {}
 	dict.line = line
 	dict.conditions = []
-	var matches = r_condition.search_all(line)
+	var matches = r_expression.search_all(line)
 	for rm in matches:
 		var s: String=  rm.get_string()
 		if s.begins_with("#"):
 			continue
-		else:
-			dict.line = dict.line.replace(s, "")
-			dict.conditions.append(rm.get_string(1))
+		
+		var ex : String = rm.get_string(1)
+		dict.line = dict.line.replace(s, "")
+		if s.begins_with("?"):
+			ex = f_query % ex
+			print("query: ", ex)
+		elif s.begins_with("+"):
+			ex = f_add % ex
+		dict.conditions.append(ex)
 	return dict
 
 func extract_type(line: String) -> Dictionary:

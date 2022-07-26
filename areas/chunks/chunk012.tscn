@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://_glb/chunks/chunk012.glb" type="PackedScene" id=1]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=3]
+[ext_resource path="res://dialog/main/balter.dialog" type="Resource" id=4]
+
+[sub_resource type="SpatialMaterial" id=1]
+params_cull_mode = 2
+
+[node name="chunk012" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="wall" parent="." index="0"]
+material/0 = SubResource( 1 )
+
+[node name="npc_balter" parent="." index="4" instance=ExtResource( 3 )]
+transform = Transform( -0.852288, 0, 0.523072, 0, 1, 0, -0.523072, 0, -0.852288, -122.35, -6.87402, -180.573 )
+dialog = ExtResource( 4 )
+visual_name = "Balter"
+friendly_id = "balter"
