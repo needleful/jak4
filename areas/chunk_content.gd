@@ -10,12 +10,10 @@ func _ready():
 		var world_node = world.instance()
 		if world_node.has_node(name):
 			print_debug("Previewing ", name)
-			var m = MeshInstance.new()
+			var m = world_node.get_node(name)
+			m.get_parent().remove_child(m)
 			add_child(m)
 			m.name = "__autogen_preview"
-			m.mesh = world_node.get_node(name).mesh
-			m.generate_lightmap = false
-			m.use_in_baked_light = true
 			m.transform = Transform()
 		else:
 			print_debug("No chunk of name ", name)

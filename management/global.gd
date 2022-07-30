@@ -51,7 +51,7 @@ func _ready():
 	call_deferred("place_flags")
 
 func place_flags():
-	var flag_scene = load("res://entities/flag.tscn")
+	var flag_scene = load("res://entities/visual/flag.tscn")
 	for transform in game_state.flags:
 		var node = flag_scene.instance()
 		get_tree().current_scene.add_child(node)
@@ -100,6 +100,14 @@ func add_note(category: String, subject: String, note: String):
 	if !(subject in game_state.journal[category]):
 		game_state.journal[category][subject] = []
 	game_state.journal[category][subject].append(note)
+	return true
+
+func note_task(task_id: String, note: String):
+	var j = game_state.journal
+	if "completed" in j and task_id in j["completed"]:
+		return add_note("completed", task_id, note)
+	else:
+		return add_note("tasks", task_id, note)
 
 func get_notes(category: String, subject: String = ""):
 	var cat_notes := {}

@@ -473,9 +473,9 @@ func knows(person: String):
 
 func task_note(task: String, note: String):
 	if Global.has_note("completed", task):
-		Global.add_note("completed", task, note)
+		return Global.add_note("completed", task, note)
 	else:
-		Global.add_note("tasks", task, note)
+		return Global.add_note("tasks", task, note)
 
 func game_stat(sub_stat):
 	if !main_speaker:

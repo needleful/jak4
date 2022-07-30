@@ -5,6 +5,7 @@ signal game_failed
 
 export(int) var max_jumps := 1
 export(int) var bugs_earned := 2
+export(int) var gems_earned := 4
 export(String) var friendly_id := ""
 
 var active := false
@@ -56,8 +57,13 @@ func _on_target_entered(body):
 	if body is PlayerBody:
 		body.game_ui.complete_game()
 		body.celebrate(null)
-		var _x = Global.add_stat(get_stat() + "/completed")
-		_x = Global.add_item("bug", bugs_earned)
+		var complete_stat := get_stat() + "/completed"
+		if !Global.stat(complete_stat):
+			var _x = Global.add_stat(complete_stat)
+			_x = Global.add_item("bug", bugs_earned)
+		else:
+			var _x = Global.add_stat(complete_stat)
+			_x = Global.add_item("gem", gems_earned)
 		_end()
 		emit_signal("game_completed")
 

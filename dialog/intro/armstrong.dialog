@@ -13,11 +13,11 @@
 	> {skip()} (Continue Tutorial)
 		{exit()}
 	> Who made these pistols?
-		The Old Kingdom. At least, that's what we think, since they're made of mostly copper.  There are some Ancient weapons as well, and they work very differently.
+		The Old Kingdom. At least, that's what I'd guess, since they're made of mostly copper.  There are some Ancient weapons as well, and they work very differently.
 		> Alright.
 		> This distinction between "Old" and "Ancient" is lost on me.
-			The simple rule is: white metal and gems are Ancient Kingdom. Old green copper is Old.
-			The Ancient Kingdom ruled before the river dried up. When it did, they left. Then the Old Kingdom took over.
+			The simple rule is: white metal and gems are Ancient Kingdom. Old green copper is Old Kingdom.
+			The Ancient Kingdom ruled before the river dried up. When it did, they left. Then the Old Kingdom took over. They disappeared around 1700-something. Then our people moved in.
 	> Why was this in the Medium's waiting room? 
 		Beats me. I think somebody used it for storage. Probably for the best. It is an impressive machine, but not worth the maintenance.
 		[You] Wouldn't it drive business here?
@@ -62,6 +62,20 @@
 	There's one in city, I think. But others? Don't know.
 	[You] Well... I guess I'll have to find them.
 	{Global.add_stat("need_capacitors")} {task_note("activate_the_medium", "Armstrong says I need to find three capacitors to activate the medium. There's possibly one in the village, but I don't know about the others.")}
+{otherwise if Global.stat("hdw_gate") and !Global.stat("armstrong/gate")}
+	{Global.add_stat("armstrong/gate")} Hey, I heard you cleared the Specters in front of the gate. Impressive!
+	[You] Oh, it was nothing.
+	Far from nothing! I did not know Vaelers could fight.
+	[You] Funny, the guard at the gate said something similar.
+	Perhaps it was merely a stereotype from the war.
+	[You] The Vael-Yaqazi war? That was, what, 40 years ago?
+	You say that like it's a long time.
+	[You] It is!
+	Not for wars, it isn't. Especially not one for our homeland.
+	> Do you know anyone who was in the war?
+	> Well, I hope I've broken your stereotypes.
+		Eh. It may be a fluke. I'll reconsider if a second Vaeler impresses me.
+
 {otherwise if !Global.stat("medium/activated")}
 	{Global.stat("medium/open")}
 		You did it! Three capacitors!
@@ -78,15 +92,26 @@
 		> {Global.stat("cave_capacitor_124")} There was a capacitor in the cave.
 			Wow! You would think they had been picked clean by now. Lucky find!
 			> They look different than the other ruins around here.
-				They are. There were two difference civilizations before us. Some made metal out of copper, and others out of white metal, impossible to corrode. Incredible material.
+				They are. There were two difference civilizations before us. Some made structures out of copper, and others out of white metal, impossible to corrode. Incredible material.
 				[You] And presumably they built the Medium?
 				I do not know, actually.
 			> Are there other caves in the area?
 				There are a few scattered about, but none in walking distance. But be very careful: they run deep, and it's easy to get lost.
 				You would have better luck with the small towers you'll find along the river basin. They often used capacitors for some kind of worship.
-		> How do I get out of the village?
+		> {!Global.stat("hdw_gate")}How do I get out of the village?
 			Right... it's not safe to lower the whole gate right now.
 			Have you tried climbing the fence?
+			> Why isn't it safe?
+				There's a pack of Specters up on the cliff.
+				> What on earth is a Specter?
+					They are a sort of mechanical creature, wrapped around the bones of the long dead.
+					They were made by the ancient kingdom, and reemerged some decades ago.
+				> If I removed them, would you lower the gate?
+					I didn't take you for a hunter!
+					You can talk to the guard at the gate about that.
+					But be careful, there not normal animals.
+			> Alright, I'll just climb it.
+				Good luck! And stay safe out there.
 		> {!Global.stat("capacitor_113")} I was wondering if you knew about that tower on the cliff, just past the village exit.
 			Oh, of course. That's ancient technology.
 			[You] Would there be a capacitor up there?

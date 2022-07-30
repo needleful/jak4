@@ -1,21 +1,79 @@
-{talked == 0}
+?{hdw_gate}
+	I am still surprised you actually cleared out the gate.
+	[You] What, you thought a Vaeler would be too weak to handle it?
+	Yes. But also. These are very dangerous creatures. We hunt them in groups, with rifles. Are you not afraid of them?
+	> It's not like I'll die out here.
+		Hahahaha! Not with that attitude, I suppose.
+		Take care, hopefully you are right.
+	> I don't know, honestly.
+{otherwise if Global.has_stat("hdw/clear")}
+	[You] I cleared the gate.
+	{subtopic("gate_cleared")}
+{otherwise if Global.has_note("tasks", "the_village_gate")}
+	[You] Can you open the gate now?
+	Is the front clear of specters?
+	[You] Uh...
+	Past the village entrance is a small cliff, on the right. There, under the rocks, is where they like to rest. Some also come down directly in front of the gate.
+	If you remove all of them, I can open the gate.
+{otherwise}
 	[You] Hi, I'm going out. Can you unlock the gate?
 	No.
 	[You] What? But I need to leave the village!
 	We only open when clear of specters.
-	{Global.stat("tyler_tutorial")}
-		[You] A little boy and I were running all up and down the wall earlier today. How much protection does it even offer?
+	> ?{hdw/clear} They were the skull creatures outside, right? I believe I took care of all of them.
+		{subtopic("gate_cleared")}
+	> Specters? Pardon me?
+		Foul ghost machine. They kill for sport.
+		Remnant of the ancient kingdom. They were, eh.. decadent? Demoral? Their sins are ours to bear, shaped as skulls and bones.
+		> What?
+			Hm. Ancient people made something. It awoke.
+			[You] I'm not going to let some pests get in my way. What if I clear the gate for you?
+			{subtopic("gate_clear")}
+		> What if I clear out these "specters"?
+			{subtopic("gate_clear")}
+	> What if I clear these specters for you?
+		{subtopic("gate_clear")}
+	>{Global.stat("tyler_tutorial")} A little boy and I were running all up and down the wall earlier today. How much protection does it even offer?
 		Enough to protect the lives of everyone here.
 		If you climbed wall before, you can again.
-	{otherwise} [You] What am I supposed to do, climb over it?
+	> {otherwise} What am I supposed to do, climb over it?
 		If you want to leave, yes.
 		[You] Ugh. But I might tear my coat...
-{otherwise}
-	[You] Can you open the gate now?
-	No.
-	[You] Ugh.
+	> Fine. I'll find some other way around.
 {exit()}
-:_coat:
+
+:gate_clear
+What? You are Vaelic, yes?
+[You] I am. And?
+The same Vaelics who invaded Yaqaz with one hundred thousand men?
+And left here with two hundred sixteen men?
+[You] ... That's a rather uncharitable view of Vaeland.
+Ok
+[You] No, but seriously. If these "specters" are going to be in my way, I'll deal with them posthaste.
+{task_note("the_village_gate", "They won't open the gate to Hideaway unless I clear out all the \"Specters\" out front of it. I could also just climb the fence.")} Do not kill yourself for small convenience. But if they are gone, tell me and I can open gate.
+[You] Alright, I will.
+{back()}
+
+:gate_cleared
+What? You did?
+{!Global.stat("weapon")} How? Where is your gun?
+	[You] I kicked them mostly.
+{otherwise} With a pistol?
+	[You] Well, kicking is faster actually.
+You KICKED them to death? Hm, it makes sense. You are rather tall.
+{Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
+{back()}
+
+:_coat
+{!Global.stat("hdw_gate")}
+	[You] That's a lovely fabric you're wearing.
+	If this is flattery, it will not work.
+	> Never mind. It was just a compliment.
+	> I was asking because I wanted to trade my jacket for yours.
+		What? Why?
+		[You] Because I like yours more than mine.
+		Hm... No. I should not be swapping clothes with strangers while I have a job to do.
+		[You] Um, alright.
 {traded_coats()} [You] Hi again! How do you like my coat?
 	It's not so bad. Cleaner than mine.
 	> That's good to hear. Take care!
