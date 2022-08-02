@@ -81,10 +81,6 @@ func get_valid_game_state():
 
 # Game state management
 func mark_map(id:String, note:String):
-	if id in game_state.map_markers:
-		game_state.map_markers[id].append(note)
-	else:
-		game_state.map_markers[id] = [note]
 	add_note("places", id, note)
 	return true
 
@@ -102,13 +98,6 @@ func add_note(category: String, subject: String, note: String):
 	game_state.journal[category][subject].append(note)
 	return true
 
-func note_task(task_id: String, note: String):
-	var j = game_state.journal
-	if "completed" in j and task_id in j["completed"]:
-		return add_note("completed", task_id, note)
-	else:
-		return add_note("tasks", task_id, note)
-
 func get_notes(category: String, subject: String = ""):
 	var cat_notes := {}
 	if category in game_state.journal:
@@ -123,24 +112,111 @@ func get_notes(category: String, subject: String = ""):
 	else:
 		return []
 
-func complete_task(task: String, note := "")->bool:
-	if !("tasks" in game_state.journal):
-		print_debug("No tasks to remove: ", task)
-		return false
-	elif "completed" in game_state.journal and task in game_state.journal.completed:
-		print_debug("Already completed: ", task)
-		return false
-	elif !(task in game_state.journal.tasks):
-		print_debug("Task never started: ", task)
-		return false
-	else:
-		if !("completed" in game_state.journal):
-			game_state.journal["completed"] = {}
-		game_state.journal.completed[task] = game_state.journal.tasks[task]
-		game_state.journal.tasks.erase(task)
-		if note != "":
-			add_note("completed", task, note)
-		return true
+func note_task(task_id: String, note: String) -> bool:
+	for t in game_state.active_tasks:
+		if t.id == task_id:
+			t.general_notes.append(note)
+			return true
+	for t in game_state.completed_tasks:
+		if t.id == task_id:
+			t.general_notes.append(note)
+			return true
+	var task := Task.new(task_id)
+	task.general_notes.append(note)
+	game_state.active_tasks.append(task)
+	print("Noted task %s [of %d]: %s" % [task_id, game_state.active_tasks.size(), note])
+	return true
+
+func complete_task(task_id: String, note := "")-> bool:
+	var task : Task
+	for t in game_state.active_tasks:
+		if t.id == task_id:
+			game_state.active_tasks.remove(game_state.active_tasks.find(t))
+			game_state.completed_tasks.append(t)
+			task = t
+			break
+	if !task:
+		for t in game_state.completed_tasks:
+			if t.id == task_id:
+				print_debug("Tried to complete already completed task: ", task_id)
+				task = t
+				break
+	if !task:
+		task = Task.new(task_id)
+		game_state.completed_tasks.append(task)
+	if note != "":
+		task.general_notes.append(note)
+	return true
+
+func find_task(id: String, active: bool):
+	var l = game_state.active_tasks if active else game_state.completed_tasks
+	for task in l:
+		if task.id == id:
+			return task
+	return null
+
+func task_note_person(task_id: String, person: String, note: String):
+	var t = find_task(task_id, true)
+	if !t:
+		t = find_task(task_id, false)
+	if !t:
+		t = Task.new(task_id)
+		t = game_state.active_tasks.append(t)
+	t.people_notes[person] = note
+	return true
+
+func task_remove_person(task_id: String, person: String):
+	var t = find_task(task_id, true)
+	if !t:
+		t = find_task(task_id, false)
+	if t is Task and person in t.people_notes:
+		t.people_notes.erase(person)
+	return true
+		
+func task_note_place(task_id: String, place: String, note: String):
+	var t = find_task(task_id, true)
+	if !t:
+		t = find_task(task_id, false)
+	if !t:
+		t = Task.new(task_id)
+		t = game_state.active_tasks.append(t)
+	t.place_notes[place] = note
+	return true
+
+func task_remove_place(task_id: String, place: String):
+	var t = find_task(task_id, true)
+	if !t:
+		t = find_task(task_id, false)
+	if t is Task and place in t.people_notes:
+		t.place_notes.erase(place)
+	return true
+
+func task_notes_by_person(person: String):
+	var notes := []
+	for task in game_state.active_tasks:
+		if !(task is Task):
+			print_debug("Bad task in active tasks: ", task)
+			return
+		if person in task.people_notes:
+			notes.append(task.people_notes[person])
+	return notes
+
+func task_notes_by_place(place: String):
+	var notes := []
+	for task in game_state.active_tasks:
+		if !(task is Task):
+			print_debug("Bad task in active tasks: ", task)
+			return
+		if place in task.place_notes:
+			notes.append(task.place_notes[place])
+	return notes
+
+func get_task_notes(task_id: String, active := true) -> Array:
+	var list: Array = game_state.active_tasks if active else game_state.completed_tasks
+	for task in list:
+		if task.id == task_id:
+			return task.general_notes
+	return []
 
 func place_flag(node: Spatial, transform: Transform):
 	var _x = add_item("flag", -1)

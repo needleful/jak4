@@ -471,12 +471,6 @@ func remember(note: String, subject: String = ""):
 func knows(person: String):
 	return Global.has_note("people", person)
 
-func task_note(task: String, note: String):
-	if Global.has_note("completed", task):
-		return Global.add_note("completed", task, note)
-	else:
-		return Global.add_note("tasks", task, note)
-
 func game_stat(sub_stat):
 	if !main_speaker:
 		return ""

@@ -32,8 +32,8 @@ func _physics_process(delta):
 		velocity = velocity.slide(pos)
 	anim["parameters/blend_position"] = pos
 
-func process_player_distance(pos: Vector3):
-	if (pos - global_transform.origin).length_squared() <= 25:
+func process_player_distance(p_pos: Vector3):
+	if (p_pos - global_transform.origin).length_squared() <= 25:
 		set_physics_process(true)
 	else:
 		set_physics_process(false)

@@ -88,7 +88,10 @@ func set_active(a):
 	set_process(active)
 	if active:
 		for g in scroll_area.get_children():
-			if g.name in Global.game_state.map_markers:
-				g.show_with_notes(Global.game_state.map_markers[g.name])
+			var t = Global.task_notes_by_place(g.name)
+			if !t.empty() or Global.has_note("places", g.name):
+				var n:Array = Global.get_notes("places", g.name)
+				n.append_array(t)
+				g.show_with_notes(n)
 			else:
 				g.hide()
