@@ -1,7 +1,6 @@
 shader_type spatial;
 render_mode cull_back, depth_draw_opaque, world_vertex_coords, async_hidden;
 
-
 uniform sampler2D wall: hint_albedo;
 uniform sampler2D ground: hint_albedo;
 uniform sampler2D ceiling: hint_albedo;
@@ -11,7 +10,7 @@ uniform float softness = 0.5;
 uniform float specularity_ground: hint_range(1, 32) = 1.0;
 uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
-uniform float light_bias = 0.0;
+uniform float light_bias: hint_range(-1.0, 1.0) = 0.0;
 
 varying vec3 position;
 varying vec3 normal;

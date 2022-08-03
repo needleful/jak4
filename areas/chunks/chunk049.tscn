@@ -1,0 +1,115 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material/env/copper/copper_corroded1.png" type="Texture" id=4]
+[ext_resource path="res://material/env/stone/cobblestone1.png" type="Texture" id=5]
+[ext_resource path="res://material/env/stone/sand_brick1.jpg" type="Texture" id=6]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=7]
+[ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=8]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=9]
+[ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=10]
+[ext_resource path="res://areas/chunks/_lightmaps/chunk049.lmbake" type="BakedLightmapData" id=11]
+[ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=12]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 9 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 12.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 10 )
+shader_param/ground = ExtResource( 10 )
+shader_param/ceiling = ExtResource( 10 )
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.867
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 6 )
+shader_param/ground = ExtResource( 5 )
+shader_param/ceiling = ExtResource( 6 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 9 )
+shader_param/uv_scale = -0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 2.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 12 )
+shader_param/ground = ExtResource( 12 )
+shader_param/ceiling = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.4
+shader_param/power = 0.2
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 2.734
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 8 )
+shader_param/ground = ExtResource( 4 )
+shader_param/ceiling = ExtResource( 4 )
+
+[node name="chunk049" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+lighting_preview = true
+
+[node name="muzna_cross" parent="." index="0"]
+material/0 = SubResource( 3 )
+material/2 = SubResource( 1 )
+material/3 = SubResource( 4 )
+
+[node name="static_collision" parent="muzna_cross" index="0"]
+collision_layer = 257
+
+[node name="boarding_docks" parent="." index="1"]
+material/0 = SubResource( 1 )
+
+[node name="static_collision" parent="boarding_docks" index="0"]
+collision_layer = 257
+
+[node name="train_shelter" parent="." index="2"]
+material/0 = SubResource( 2 )
+
+[node name="static_collision" parent="train_shelter" index="0"]
+collision_layer = 257
+
+[node name="fountain" parent="." index="3" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8506, 11.1009, 101.718 )
+
+[node name="BakedLightmap" type="BakedLightmap" parent="." index="4"]
+transform = Transform( 0.593583, 0, -0.804773, 0, 1, 0, 0.804773, 0, 0.593583, 69.9053, 18.9446, 89.1121 )
+extents = Vector3( 38.8598, 26.0005, 26.7953 )
+environment_mode = 1
+light_data = ExtResource( 11 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="BakedLightmap" index="0"]
+transform = Transform( 0.999898, 0, 0.0142855, 0, 1, 0, -0.0142855, 0, 0.999898, -21.8944, -4.32786, 0.247974 )
+max_distance = 16384.0
+extents = Vector3( 9.96179, 4.74854, 6.92097 )
+origin_offset = Vector3( 0, -0.34375, 0 )
+interior_enable = true
+interior_ambient_color = Color( 0.0862745, 0.0862745, 0.0862745, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="BakedLightmap" index="1"]
+transform = Transform( 0.933416, -0.358081, 0.0226555, 0.358286, 0.933595, -0.00561321, -0.019141, 0.0133566, 0.999728, -14.6336, -8.37095, 0.193855 )
+intensity = 0.1
+max_distance = 16384.0
+extents = Vector3( 3.88984, 3.7859, 1.60752 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="BakedLightmap" index="3"]
+transform = Transform( 0.999898, 0, 0.0142855, 0, 1, 0, -0.0142855, 0, 0.999898, -21.8944, 1.33086, 0.247974 )
+intensity = 0.63
+max_distance = 16384.0
+extents = Vector3( 10.0476, 3.90006, 4.78005 )
