@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -12,6 +12,14 @@
 [ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=10]
 [ext_resource path="res://areas/chunks/_lightmaps/chunk049.lmbake" type="BakedLightmapData" id=11]
 [ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=12]
+[ext_resource path="res://material/env/vaeler/faux_marble.png" type="Texture" id=13]
+[ext_resource path="res://material/env/vaeler/roof_tiles.png" type="Texture" id=14]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=15]
+[ext_resource path="res://material/env/vaeler/decayed_wood.png" type="Texture" id=16]
+[ext_resource path="res://entities/env/plants/juniper_small.tscn" type="PackedScene" id=17]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=18]
+[ext_resource path="res://dialog/side_content/letter_delivery/natia.dialog" type="Resource" id=19]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=20]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -23,6 +31,17 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 10 )
 shader_param/ground = ExtResource( 10 )
 shader_param/ceiling = ExtResource( 10 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 9 )
+shader_param/uv_scale = 0.5
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 13 )
+shader_param/ground = ExtResource( 12 )
+shader_param/ceiling = ExtResource( 12 )
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 7 )
@@ -61,14 +80,55 @@ shader_param/wall = ExtResource( 8 )
 shader_param/ground = ExtResource( 4 )
 shader_param/ceiling = ExtResource( 4 )
 
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 15 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 14 )
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = ExtResource( 9 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 13 )
+shader_param/ground = ExtResource( 10 )
+shader_param/ceiling = ExtResource( 10 )
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = ExtResource( 15 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 16 )
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 5.769
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 4 )
+shader_param/ground = ExtResource( 8 )
+shader_param/ceiling = ExtResource( 4 )
+
 [node name="chunk049" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 lighting_preview = true
 
 [node name="muzna_cross" parent="." index="0"]
 material/0 = SubResource( 3 )
+material/1 = SubResource( 5 )
 material/2 = SubResource( 1 )
 material/3 = SubResource( 4 )
+material/4 = SubResource( 2 )
+material/5 = SubResource( 7 )
 
 [node name="static_collision" parent="muzna_cross" index="0"]
 collision_layer = 257
@@ -85,10 +145,16 @@ material/0 = SubResource( 2 )
 [node name="static_collision" parent="train_shelter" index="0"]
 collision_layer = 257
 
-[node name="fountain" parent="." index="3" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8506, 11.1009, 101.718 )
+[node name="windows" parent="." index="3"]
+material/0 = SubResource( 8 )
 
-[node name="BakedLightmap" type="BakedLightmap" parent="." index="4"]
+[node name="tracks" parent="." index="4"]
+use_in_baked_light = false
+generate_lightmap = false
+material/0 = SubResource( 10 )
+material/1 = SubResource( 9 )
+
+[node name="BakedLightmap" type="BakedLightmap" parent="." index="5"]
 transform = Transform( 0.593583, 0, -0.804773, 0, 1, 0, 0.804773, 0, 0.593583, 69.9053, 18.9446, 89.1121 )
 extents = Vector3( 38.8598, 26.0005, 26.7953 )
 environment_mode = 1
@@ -108,8 +174,30 @@ intensity = 0.1
 max_distance = 16384.0
 extents = Vector3( 3.88984, 3.7859, 1.60752 )
 
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="BakedLightmap" index="3"]
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="BakedLightmap" index="2"]
 transform = Transform( 0.999898, 0, 0.0142855, 0, 1, 0, -0.0142855, 0, 0.999898, -21.8944, 1.33086, 0.247974 )
 intensity = 0.63
 max_distance = 16384.0
 extents = Vector3( 10.0476, 3.90006, 4.78005 )
+
+[node name="fountain" parent="." index="6" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8506, 11.1009, 101.718 )
+
+[node name="juniper_small" parent="." index="17" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 61.7524, 12.2767, 91.8713 )
+
+[node name="juniper_small2" parent="." index="18" instance=ExtResource( 17 )]
+transform = Transform( -0.520051, 0, -0.734539, 0, 0.9, 0, 0.734539, 0, -0.520051, 61.012, 12.3403, 91.4617 )
+
+[node name="npc" parent="." index="19" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 75.8045, 33.1857, 99.3442 )
+
+[node name="mother_activated" type="Spatial" parent="." index="20"]
+transform = Transform( 0.690771, 0, 0.723074, 0, 1, 0, -0.723074, 0, 0.690771, 80.9499, 12.5603, 94.5916 )
+script = ExtResource( 20 )
+condition = "!Global.stat(\"mother/activated\")"
+
+[node name="npc_natia" parent="mother_activated" index="0" instance=ExtResource( 18 )]
+dialog = ExtResource( 19 )
+visual_name = "Natia"
+friendly_id = "natia"

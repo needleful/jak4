@@ -55,7 +55,9 @@ func process_player_distance(pos: Vector3):
 func boast():
 	anim.play("ArmsToHips")
 	anim.queue("ArmsOnHips-loop")
+	return true
 
 func shrug():
 	anim.play("Shrug")
 	anim.queue("Idle-loop")
+	return true
