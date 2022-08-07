@@ -1,4 +1,4 @@
-extends Node
+extends PhysicsBody
 
 export(NodePath) var mesh_path = NodePath("..")
 
@@ -29,6 +29,13 @@ func set_coat(c: Coat):
 	node.material_override = coat.generate_material(!double_sided)
 	if persistent:
 		Global.set_stat(get_coat_stat(), c)
+	if has_node("light"):
+		var l := $light as Light
+		if l:
+			var c_start: Color = coat.gradient.interpolate(0.0)
+			var c_end: Color = coat.gradient.interpolate(1.0)
+			var c_mid: Color = coat.gradient.interpolate(0.5)
+			l.light_color = (c_start + c_end + c_mid)/3
 
 func start_coat_trade(player: PlayerBody):
 	var _x = Global.add_stat("find_coat")

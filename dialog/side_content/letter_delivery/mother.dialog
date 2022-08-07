@@ -15,10 +15,9 @@
 	{format("italics")} [You] "Outlines. Honeydew. Unheard. Testament."
 	{format("italics")} [You] "Without. Within. Throughout. Begin."
 	{format("italics")} [You] "Seventeen. Dock. One. Truth."
-	{Global.add_stat("mother/activated")} Oh. How... lovely.
+	{Global.add_stat("mother/activated")}{Global.complete_task("letter_delivery", "I think that was all she needed? The woman seemed satisfied and ran off to run errands. A very strange interaction all around.")} Oh. How... lovely.
 	[You] I'm not sure I, uhm, understand it. Here's the note.
 	Oh no, I can't take the note. You can have it.
-	{Global.remove_item("mother_poem")}* You have no need for the note.
 	Well, I'll probably be off running errands when you get back. Thanks again. If you'd like to trade coats, I'll be here for a moment.
 {otherwise}
 	It is nice when the gate is clear. The kids love playing on the rocks.
@@ -29,9 +28,14 @@
 
 :_coat
 {Global.stat("mother/activated")}
-	[You] Say, about our deal?
-	Hm? Oh. Yes. Right.
-	{swap_coats()} I hope you enjoy it! You may not see me again for some time. Not to worry, the kids have plenty of supervision, and I heard you were the one who cleared the front of the gate. Excellent work! Anyway, see you! Bye!
+	{traded_coats()}
+		[You] Could we trade coats again?
+		Having some indecision? Alright, I'll be here for a few more minutes.
+		{swap_coats()} Here you go!
+	{otherwise}
+		[You] So about our deal?
+		Oh. Yes. Right.
+		{swap_coats()} I hope you enjoy it! You may not see me again for some time. Not to worry, the kids have plenty of supervision, and I heard you were the one who cleared the front of the gate. Excellent work! Anyway, see you! Bye!
 {otherwise if Global.count("mother_letter")}
 	[You] Say, would you like to trade coats?
 	Did you forget our deal, young lady? If you deliver the letter, I'll trade coats with you.

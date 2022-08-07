@@ -1,21 +1,174 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk012.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=3]
 [ext_resource path="res://dialog/main/balter.dialog" type="Resource" id=4]
+[ext_resource path="res://material/env/stone/cobblestone1.png" type="Texture" id=5]
+[ext_resource path="res://material/env/stone/sand_brick1.jpg" type="Texture" id=6]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=7]
+[ext_resource path="res://material/env/stone/bricks.material" type="Material" id=9]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/empire/shop_stand.tscn" type="PackedScene" id=11]
 
-[sub_resource type="SpatialMaterial" id=1]
-params_cull_mode = 2
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.4
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 6 )
+shader_param/ground = ExtResource( 5 )
+shader_param/ceiling = ExtResource( 5 )
 
 [node name="chunk012" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+lighting_preview = true
 
-[node name="wall" parent="." index="0"]
+[node name="fort" parent="." index="0"]
 material/0 = SubResource( 1 )
 
-[node name="npc_balter" parent="." index="4" instance=ExtResource( 3 )]
-transform = Transform( -0.852288, 0, 0.523072, 0, 1, 0, -0.523072, 0, -0.852288, -122.35, -6.87402, -180.573 )
+[node name="static_collision" parent="fort" index="0"]
+collision_layer = 257
+
+[node name="tower$multi" parent="." index="1"]
+material/0 = SubResource( 1 )
+
+[node name="tower$multi001" parent="." index="2"]
+material/0 = SubResource( 1 )
+
+[node name="tower$multi002" parent="." index="3"]
+material/0 = SubResource( 1 )
+
+[node name="tower$multi003" parent="." index="4"]
+material/0 = SubResource( 1 )
+
+[node name="topwer$multi" parent="." index="5"]
+material/0 = SubResource( 1 )
+
+[node name="ramp" parent="." index="6"]
+material/0 = SubResource( 1 )
+
+[node name="tower$multi004" parent="." index="7"]
+material/0 = SubResource( 1 )
+
+[node name="tower$multi005" parent="." index="8"]
+material/0 = SubResource( 1 )
+
+[node name="stairs" parent="." index="9"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs001" parent="." index="10"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs002" parent="." index="11"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs_entrance" parent="." index="12"]
+material/0 = ExtResource( 9 )
+
+[node name="ramp2" parent="." index="13"]
+material/0 = SubResource( 1 )
+
+[node name="stairs003" parent="." index="14"]
+material/0 = ExtResource( 9 )
+
+[node name="arch" parent="." index="15"]
+material/0 = ExtResource( 9 )
+
+[node name="small_tower" parent="." index="16"]
+material/0 = ExtResource( 9 )
+
+[node name="npc_balter" parent="." index="17" instance=ExtResource( 3 )]
+transform = Transform( 0.754779, 0, 0.655978, 0, 1, 0, -0.655978, 0, 0.754779, -85.4461, -7.09392, -165.635 )
 dialog = ExtResource( 4 )
 visual_name = "Balter"
 friendly_id = "balter"
+
+[node name="shop_stand" parent="." index="18" instance=ExtResource( 11 )]
+transform = Transform( 0.746542, 0, 0.665338, 0, 1, 0, -0.665338, 0, 0.746542, 53.7494, -37.5722, -53.1161 )
+
+[node name="shop_stand6" parent="." index="19" instance=ExtResource( 11 )]
+transform = Transform( -0.669823, 0, -0.742521, 0, 1, 0, 0.742521, 0, -0.669823, 40.1209, -37.5722, -81.4414 )
+enable_light = false
+
+[node name="shop_stand2" parent="." index="20" instance=ExtResource( 11 )]
+transform = Transform( -0.269349, 0, -0.963043, 0, 1, 0, 0.963043, 0, -0.269349, 36.599, -37.5722, -75.633 )
+
+[node name="shop_stand3" parent="." index="21" instance=ExtResource( 11 )]
+transform = Transform( 0.859471, 0, 0.511184, 0, 1, 0, -0.511184, 0, 0.859471, 47.58, -37.5722, -48.8676 )
+
+[node name="shop_stand4" parent="." index="22" instance=ExtResource( 11 )]
+transform = Transform( 0.778889, 0, 0.627162, 0, 1, 0, -0.627162, 0, 0.778889, 50.5224, -37.5722, -50.614 )
+
+[node name="shop_stand5" parent="." index="23" instance=ExtResource( 11 )]
+transform = Transform( -0.522573, 0, -0.852595, 0, 1, 0, 0.852595, 0, -0.522573, 37.8427, -37.5722, -78.5001 )
+
+[node name="fountain" parent="." index="24" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 48.5428, -38.0632, -64.1719 )
+
+[node name="ramp3" parent="." index="25"]
+material/0 = SubResource( 1 )
+
+[node name="stairs004" parent="." index="26"]
+material/0 = ExtResource( 9 )
+
+[node name="arch2" parent="." index="27"]
+material/0 = ExtResource( 9 )
+
+[node name="arch3" parent="." index="28"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs-small" parent="." index="29"]
+material/0 = ExtResource( 9 )
+
+[node name="ramp4" parent="." index="30"]
+material/0 = SubResource( 1 )
+
+[node name="stairs-small2" parent="." index="31"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs005" parent="." index="33"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs006" parent="." index="34"]
+material/0 = ExtResource( 9 )
+
+[node name="railing" parent="." index="35"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs007" parent="." index="36"]
+material/0 = ExtResource( 9 )
+
+[node name="column" parent="." index="37"]
+material/0 = ExtResource( 9 )
+
+[node name="spiral_stairs" parent="column" index="1"]
+material/0 = ExtResource( 9 )
+
+[node name="column001" parent="." index="38"]
+material/0 = ExtResource( 9 )
+
+[node name="spiral_stairs001" parent="column001" index="1"]
+material/0 = ExtResource( 9 )
+
+[node name="column002" parent="." index="39"]
+material/0 = ExtResource( 9 )
+
+[node name="stairs_large" parent="." index="40"]
+material/0 = ExtResource( 9 )
+
+[node name="rail" parent="stairs_large" index="0"]
+material/0 = ExtResource( 9 )
+
+[node name="rail001" parent="stairs_large" index="1"]
+material/0 = ExtResource( 9 )
+
+[node name="rail002" parent="stairs_large" index="2"]
+material/0 = ExtResource( 9 )
+
+[node name="fountain2" parent="." index="50" instance=ExtResource( 10 )]
+transform = Transform( -0.84482, 0, -0.53505, 0, 1, 0, 0.53505, 0, -0.84482, -43.711, -15.9551, -108.863 )
