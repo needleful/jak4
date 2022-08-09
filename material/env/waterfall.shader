@@ -3,13 +3,23 @@ shader_type spatial;
 uniform vec4 albedo : hint_color;
 uniform float refraction : hint_range(-5,5);
 uniform float brightness : hint_range(0, 2);
+uniform float speed : hint_range(-20, 20);
+uniform float vertex_deform: hint_range(0, 4);
+uniform sampler2D normal_map : hint_normal;
+
+void vertex() {
+	float deform = sin(3.14*UV.y + 6.0*VERTEX.x+4.0*VERTEX.z + TIME*speed)*vertex_deform;
+	VERTEX += NORMAL*deform;
+	UV.y += TIME*speed;
+}
 
 void fragment() {
 	ALBEDO = albedo.rgb;
 	SPECULAR = 1.0;
 	METALLIC = 1.0;
 	ROUGHNESS = 0.0;
-	vec3 ref_normal = NORMAL;
+	NORMALMAP = texture(normal_map, UV).rgb;
+	vec3 ref_normal = normalize(NORMAL + NORMALMAP);
 	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
 	float ref_amount = 1.0;
 	EMISSION = texture(SCREEN_TEXTURE, ref_ofs).rgb * ALBEDO;

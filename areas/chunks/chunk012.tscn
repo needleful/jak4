@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk012.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -7,9 +7,17 @@
 [ext_resource path="res://material/env/stone/cobblestone1.png" type="Texture" id=5]
 [ext_resource path="res://material/env/stone/sand_brick1.jpg" type="Texture" id=6]
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=7]
+[ext_resource path="res://material/env/grass.png" type="Texture" id=8]
 [ext_resource path="res://material/env/stone/bricks.material" type="Material" id=9]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=10]
 [ext_resource path="res://entities/env/empire/shop_stand.tscn" type="PackedScene" id=11]
+[ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=12]
+[ext_resource path="res://_glb/mat_basic.material" type="Material" id=13]
+[ext_resource path="res://_glb/circle.material" type="Material" id=14]
+[ext_resource path="res://material/env/fountain-waterfall.material" type="Material" id=15]
+[ext_resource path="res://entities/save_zone.gd" type="Script" id=16]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=17]
+[ext_resource path="res://material/env/vaeler/decayed_wood.png" type="Texture" id=18]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 7 )
@@ -24,6 +32,29 @@ shader_param/wall = ExtResource( 6 )
 shader_param/ground = ExtResource( 5 )
 shader_param/ceiling = ExtResource( 5 )
 
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.2
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 12 )
+shader_param/ground = ExtResource( 8 )
+shader_param/ceiling = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 17 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 0.399
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 18 )
+
+[sub_resource type="SphereShape" id=3]
+radius = 9.97388
+
 [node name="chunk012" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 lighting_preview = true
@@ -31,7 +62,7 @@ lighting_preview = true
 [node name="fort" parent="." index="0"]
 material/0 = SubResource( 1 )
 
-[node name="static_collision" parent="fort" index="0"]
+[node name="StaticBody" parent="fort" index="0"]
 collision_layer = 257
 
 [node name="tower$multi" parent="." index="1"]
@@ -51,6 +82,9 @@ material/0 = SubResource( 1 )
 
 [node name="ramp" parent="." index="6"]
 material/0 = SubResource( 1 )
+
+[node name="StaticBody" parent="ramp" index="0"]
+collision_layer = 257
 
 [node name="tower$multi004" parent="." index="7"]
 material/0 = SubResource( 1 )
@@ -73,6 +107,9 @@ material/0 = ExtResource( 9 )
 [node name="ramp2" parent="." index="13"]
 material/0 = SubResource( 1 )
 
+[node name="StaticBody" parent="ramp2" index="0"]
+collision_layer = 257
+
 [node name="stairs003" parent="." index="14"]
 material/0 = ExtResource( 9 )
 
@@ -83,7 +120,7 @@ material/0 = ExtResource( 9 )
 material/0 = ExtResource( 9 )
 
 [node name="npc_balter" parent="." index="17" instance=ExtResource( 3 )]
-transform = Transform( 0.754779, 0, 0.655978, 0, 1, 0, -0.655978, 0, 0.754779, -85.4461, -7.09392, -165.635 )
+transform = Transform( 0.999337, 0, 0.0363825, 0, 1, 0, -0.0363825, 0, 0.999337, -124.801, 7.27377, -128.587 )
 dialog = ExtResource( 4 )
 visual_name = "Balter"
 friendly_id = "balter"
@@ -91,84 +128,221 @@ friendly_id = "balter"
 [node name="shop_stand" parent="." index="18" instance=ExtResource( 11 )]
 transform = Transform( 0.746542, 0, 0.665338, 0, 1, 0, -0.665338, 0, 0.746542, 53.7494, -37.5722, -53.1161 )
 
-[node name="shop_stand6" parent="." index="19" instance=ExtResource( 11 )]
+[node name="shop_stand7" parent="." index="19" instance=ExtResource( 11 )]
+transform = Transform( 0.479557, 0, 0.877511, 0, 1, 0, -0.877511, 0, 0.479557, -6.7435, -21.7239, -71.835 )
+
+[node name="shop_stand8" parent="." index="20" instance=ExtResource( 11 )]
+transform = Transform( -0.3689, 0, 0.929469, 0, 1, 0, -0.929469, 0, -0.3689, -6.79597, -21.7239, -76.3967 )
+
+[node name="shop_stand6" parent="." index="21" instance=ExtResource( 11 )]
 transform = Transform( -0.669823, 0, -0.742521, 0, 1, 0, 0.742521, 0, -0.669823, 40.1209, -37.5722, -81.4414 )
 enable_light = false
 
-[node name="shop_stand2" parent="." index="20" instance=ExtResource( 11 )]
+[node name="shop_stand2" parent="." index="22" instance=ExtResource( 11 )]
 transform = Transform( -0.269349, 0, -0.963043, 0, 1, 0, 0.963043, 0, -0.269349, 36.599, -37.5722, -75.633 )
 
-[node name="shop_stand3" parent="." index="21" instance=ExtResource( 11 )]
+[node name="shop_stand3" parent="." index="23" instance=ExtResource( 11 )]
 transform = Transform( 0.859471, 0, 0.511184, 0, 1, 0, -0.511184, 0, 0.859471, 47.58, -37.5722, -48.8676 )
 
-[node name="shop_stand4" parent="." index="22" instance=ExtResource( 11 )]
+[node name="shop_stand4" parent="." index="24" instance=ExtResource( 11 )]
 transform = Transform( 0.778889, 0, 0.627162, 0, 1, 0, -0.627162, 0, 0.778889, 50.5224, -37.5722, -50.614 )
 
-[node name="shop_stand5" parent="." index="23" instance=ExtResource( 11 )]
+[node name="shop_stand5" parent="." index="25" instance=ExtResource( 11 )]
 transform = Transform( -0.522573, 0, -0.852595, 0, 1, 0, 0.852595, 0, -0.522573, 37.8427, -37.5722, -78.5001 )
 
-[node name="fountain" parent="." index="24" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 48.5428, -38.0632, -64.1719 )
-
-[node name="ramp3" parent="." index="25"]
+[node name="ramp3" parent="." index="26"]
 material/0 = SubResource( 1 )
 
-[node name="stairs004" parent="." index="26"]
+[node name="StaticBody" parent="ramp3" index="0"]
+collision_layer = 257
+
+[node name="stairs004" parent="." index="27"]
 material/0 = ExtResource( 9 )
 
-[node name="arch2" parent="." index="27"]
+[node name="arch2" parent="." index="28"]
 material/0 = ExtResource( 9 )
 
-[node name="arch3" parent="." index="28"]
+[node name="arch3" parent="." index="29"]
 material/0 = ExtResource( 9 )
 
-[node name="stairs-small" parent="." index="29"]
+[node name="stairs-small" parent="." index="30"]
 material/0 = ExtResource( 9 )
 
-[node name="ramp4" parent="." index="30"]
+[node name="ramp4" parent="." index="31"]
 material/0 = SubResource( 1 )
 
-[node name="stairs-small2" parent="." index="31"]
+[node name="StaticBody" parent="ramp4" index="0"]
+collision_layer = 257
+
+[node name="stairs-small2" parent="." index="32"]
 material/0 = ExtResource( 9 )
 
-[node name="stairs005" parent="." index="33"]
+[node name="stairs005" parent="." index="34"]
 material/0 = ExtResource( 9 )
 
-[node name="stairs006" parent="." index="34"]
+[node name="stairs006" parent="." index="35"]
 material/0 = ExtResource( 9 )
 
-[node name="railing" parent="." index="35"]
+[node name="railing" parent="." index="36"]
 material/0 = ExtResource( 9 )
 
-[node name="stairs007" parent="." index="36"]
+[node name="stairs007" parent="." index="37"]
 material/0 = ExtResource( 9 )
 
-[node name="column" parent="." index="37"]
+[node name="column" parent="." index="38"]
 material/0 = ExtResource( 9 )
 
 [node name="spiral_stairs" parent="column" index="1"]
 material/0 = ExtResource( 9 )
 
-[node name="column001" parent="." index="38"]
+[node name="column001" parent="." index="39"]
 material/0 = ExtResource( 9 )
 
 [node name="spiral_stairs001" parent="column001" index="1"]
 material/0 = ExtResource( 9 )
 
-[node name="column002" parent="." index="39"]
+[node name="column002" parent="." index="40"]
 material/0 = ExtResource( 9 )
 
-[node name="stairs_large" parent="." index="40"]
+[node name="stairs_large" parent="." index="41"]
 material/0 = ExtResource( 9 )
 
-[node name="rail" parent="stairs_large" index="0"]
+[node name="garden004" parent="stairs_large" index="0"]
 material/0 = ExtResource( 9 )
 
-[node name="rail001" parent="stairs_large" index="1"]
+[node name="garden_soil004" parent="stairs_large/garden004" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="garden005" parent="stairs_large" index="1"]
 material/0 = ExtResource( 9 )
 
-[node name="rail002" parent="stairs_large" index="2"]
+[node name="garden_soil005" parent="stairs_large/garden005" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="rail" parent="stairs_large" index="2"]
 material/0 = ExtResource( 9 )
 
-[node name="fountain2" parent="." index="50" instance=ExtResource( 10 )]
+[node name="rail001" parent="stairs_large" index="3"]
+material/0 = ExtResource( 9 )
+
+[node name="rail002" parent="stairs_large" index="4"]
+material/0 = ExtResource( 9 )
+
+[node name="garden" parent="." index="42"]
+material/0 = ExtResource( 9 )
+
+[node name="garden_soul" parent="garden" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="doorway_large" parent="." index="43"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="doorway_large001" parent="." index="44"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="doorway_large002" parent="." index="45"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="garden001" parent="." index="46"]
+material/0 = ExtResource( 9 )
+
+[node name="garden_soil001" parent="garden001" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="garden002" parent="." index="47"]
+material/0 = ExtResource( 9 )
+
+[node name="garden_soil003" parent="garden002" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="housing" parent="." index="48"]
+material/0 = ExtResource( 9 )
+
+[node name="doorway_large003" parent="housing" index="0"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="doorway_large004" parent="housing" index="1"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="garden003" parent="." index="49"]
+material/0 = ExtResource( 9 )
+
+[node name="garden_soil002" parent="garden003" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="garden006" parent="." index="50"]
+material/0 = ExtResource( 9 )
+
+[node name="garden_soil006" parent="garden006" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="fountain2" parent="." index="51" instance=ExtResource( 10 )]
 transform = Transform( -0.84482, 0, -0.53505, 0, 1, 0, 0.53505, 0, -0.84482, -43.711, -15.9551, -108.863 )
+
+[node name="garden007" parent="." index="52"]
+material/0 = ExtResource( 9 )
+
+[node name="garden-rocks" parent="garden007" index="0"]
+material/0 = ExtResource( 13 )
+
+[node name="garden-water" parent="garden007" index="1"]
+material/0 = ExtResource( 14 )
+
+[node name="garden-waterfall" parent="garden007" index="2"]
+material/0 = ExtResource( 15 )
+
+[node name="garden_soil" parent="garden007" index="3"]
+material/0 = SubResource( 2 )
+
+[node name="doorway_large005" parent="." index="53"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="doorway_large006" parent="." index="54"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="doorway_large007" parent="." index="55"]
+material/0 = ExtResource( 9 )
+material/1 = SubResource( 4 )
+
+[node name="housing001" parent="." index="56"]
+material/0 = ExtResource( 9 )
+
+[node name="housing002" parent="." index="57"]
+material/0 = ExtResource( 9 )
+
+[node name="housing003" parent="." index="58"]
+material/0 = ExtResource( 9 )
+
+[node name="housing004" parent="." index="59"]
+material/0 = ExtResource( 9 )
+
+[node name="housing005" parent="." index="60"]
+material/0 = ExtResource( 9 )
+
+[node name="housing006" parent="." index="61"]
+material/0 = ExtResource( 9 )
+
+[node name="housing007" parent="." index="62"]
+material/0 = ExtResource( 9 )
+
+[node name="housing008" parent="." index="63"]
+material/0 = ExtResource( 9 )
+
+[node name="housing009" parent="." index="64"]
+material/0 = ExtResource( 9 )
+
+[node name="fort_entry" type="Area" parent="." index="65"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 48.1617, -36.3123, -64.2764 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 16 )
+
+[node name="CollisionShape" type="CollisionShape" parent="fort_entry" index="0"]
+shape = SubResource( 3 )
