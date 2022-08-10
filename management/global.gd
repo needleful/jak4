@@ -161,7 +161,7 @@ func task_note_person(task_id: String, person: String, note: String):
 		t = find_task(task_id, false)
 	if !t:
 		t = Task.new(task_id)
-		t = game_state.active_tasks.append(t)
+		game_state.active_tasks.append(t)
 	t.people_notes[person] = note
 	return true
 
@@ -179,7 +179,7 @@ func task_note_place(task_id: String, place: String, note: String):
 		t = find_task(task_id, false)
 	if !t:
 		t = Task.new(task_id)
-		t = game_state.active_tasks.append(t)
+		game_state.active_tasks.append(t)
 	t.place_notes[place] = note
 	return true
 

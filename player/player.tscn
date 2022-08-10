@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -887,6 +887,10 @@ radius = 0.35
 radius = 0.32775
 height = 0.269648
 
+[sub_resource type="CapsuleShape" id=71]
+radius = 0.381165
+height = 0.602266
+
 [sub_resource type="PrismMesh" id=12]
 size = Vector3( 0.2, 0.2, 0.2 )
 
@@ -1056,7 +1060,6 @@ shape = SubResource( 41 )
 [node name="standing_col" type="CollisionShape" parent="."]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.75, 0 )
-visible = false
 shape = SubResource( 2 )
 
 [node name="crouching_col" type="CollisionShape" parent="."]
@@ -1203,7 +1206,6 @@ percent_visible = false
 [node name="debug" type="Panel" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -1697,6 +1699,14 @@ collision_layer = 0
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.996834, 0 )
 shape = SubResource( 8 )
+
+[node name="climbArea" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.534752, 0 )
+collision_layer = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="climbArea"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.163397, 7.14229e-09 )
+shape = SubResource( 71 )
 
 [node name="intention" type="Spatial" parent="."]
 time_scale_response = false
