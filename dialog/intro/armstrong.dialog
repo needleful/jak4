@@ -83,12 +83,55 @@
 		I think so! I've never used the Medium before!  Good luck.
 	{otherwise}
 		How goes your search, Coats Girl?
-		[You] Progress as always.
-		Good to hear!
 		:choice_loop_search
-		> See you around.
-			See you!
+		> Progress as always. I'll see you later.
+			Good to hear! See you.
 			{exit()}
+		> I have no idea where to look.
+			Lets see...
+			Have you searched the cave in town? We have a lot of scrap in there.
+			{Global.stat("cave_capacitor_124")}
+				[You] {Global.task_remove_place("activate_the_medium", "hideaway")} I found a capacitor there.
+			{otherwise if Global.stat("cave_124_entered")}
+				[You] I've been in the cave, but I didn't find anything.
+				I would make sure to be thorough. Don't want to miss anything right under our noses.
+			{otherwise if Global.task_note_place("activate_the_medium", "hideaway", "Armstrong thinks there's a capacitor in the caves.")}
+				[You] I haven't.
+				That's the first place I would check.
+
+
+			> {!Global.stat("cave_capacitor_124")} So about this cave...
+				[You] Do you really think there's just be a capacitor lying in the cave?
+				If anyone's found one recently, they would have put it with the rest of the scrap for transport to Maslikir.
+				> "Rest of the scrap"? I thought these capacitors were important?
+					The capacitors are very impressive, but they are also seventy thousand Volts, thirty Farads.
+					[You] What does that mean?
+					It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are eventually exported I assume.
+					:l_power
+					> Where does the power come from for the Medium to need three of these?
+						We would have to dismantle the Medium to find the power source, but I suspect one of the ancient reactor units. Nobody knows how they work, and they are still active, so it would be dangerous to dismantle one.
+						{goto("l_power")}
+					> Where is this "Maslikir"? Could I buy a capacitor there?
+						{Global.task_note_place("activate_the_medium", "maslikir", "I could possibly buy capacitors here.")} It is a junk town at the base of the plateau, further down the valley. We sell them scrap and they make useful things from it. Mostly copper wire.
+						If you have the money, and don't mind the twenty minute trip, they may have some.
+						{goto("l_power")}
+					> So these capacitors are leaving the country?
+						I would assume so. Power grids or research may use them, though I do not get much news of it.
+						{goto("l_power")}
+					> Well, I suppose that's clear enough. I'll take a look in the cave.
+						Hopefully there is one. Let us hope for three, even! Save you a trip out of town.
+				> Alright, I'll take a look in there.
+					Hopefully there is one. Let us hope for three, even! Save you a trip out of town.
+			> {!Global.stat("tower_capacitor_124")} How far around the village should I look?
+				Have you ventured out of town? There are some ancient structures which may have capacitors.
+			> {!Global.stat("capacitor_113") and !Global.stat("armstrong/asked_tower")} There's a tower up on the cliff, would there be one there?
+				The Tree Tower? I really wouldn't go there without security...
+				[You] Oh, I meant the smaller one nearby, just up the cliff.
+				{Global.add_stat("armstrong/asked_tower")}{Global.note_task("activate_the_medium", "The tower on the cliff near the village has a capacitor. Armstrong says the thing could collapse if I took it. I don't see them using it, so I'm not sure what the issue is.")}Oh, eh, there actually is a capacitor at the top of it. But I wouldn't touch it. The tower could collapse without power.
+				[You] Really? But surely if it's been standing for centuries, it could go without power?
+				Seriously. It is dangerous. Those towers use power for self-repair. I would not even go near it.
+				[You] ...
+			{otherwise}
 		> {Global.stat("cave_capacitor_124")} There was a capacitor in the cave.
 			Wow! You would think they had been picked clean by now. Lucky find!
 			> They look different than the other ruins around here.
@@ -98,6 +141,19 @@
 			> Are there other caves in the area?
 				There are a few scattered about, but none in walking distance. But be very careful: they run deep, and it's easy to get lost.
 				You would have better luck with the small towers you'll find along the river basin. They often used capacitors for some kind of worship.
+		> {Global.stat("tower_capacitor_124")} There was a capacitor in one of those copper buildings.
+			There was? Interesting. I wonder who left it there.
+			> What do you mean?
+				Those round copper buildings are palaces for the Old Kingdom, which came centuries after the Ancient Kingdom.
+				[You] Not terribly informative names...
+				We have no record of their languages, so those are the best names we have. But the Ancient Kingdom built incredible technology, such as the capacitors and the white towers. The Old used copper, and made some marvelous feats of their own, but never used ancient technology. We do not think they ever reverse engineered it like us.
+				[You] Is that why you're confused I found a capacitor there? Because they had no reason to use them?
+				Exactly. Was it connected to anything?
+				[You] No. Just lying at the top of the tower.
+				It was certainly left there recently.  A free capacitor is a big find. But I do not know who would do such a thing, or why...
+				Keep your eyes out, okay?
+			> Whoever it was, it's ours now.
+				So it is. So it is.. 
 		> {!Global.stat("hdw_gate")}How do I get out of the village?
 			Right... it's not safe to lower the whole gate right now.
 			Have you tried climbing the fence?
@@ -112,7 +168,7 @@
 					But be careful, there not normal animals.
 			> Alright, I'll just climb it.
 				Good luck! And stay safe out there.
-		> {!Global.stat("capacitor_113")} I was wondering if you knew about that tower on the cliff, just past the village exit.
+		> {!Global.stat("capacitor_113") and !Global.stat("armstrong/asked_tower")} I was wondering if you knew about that tower on the cliff, just past the village exit.
 			Oh, of course. That's ancient technology.
 			[You] Would there be a capacitor up there?
 			{Global.add_stat("armstrong/asked_tower")} Well... yes, but you should not take it. Those structures can fall apart without power. {Global.note_task("activate_the_medium", "The tower on the cliff near the village has a capacitor. Armstrong says the thing could collapse if I took it. I don't see them using it, so I'm not sure what the issue is.")}
@@ -156,6 +212,9 @@
 			{goto("pistol_tutorial")}
 
 {exit()}
+
+:_exit
+[You] I've got to go, see you.
 
 :pistol_tutorial
 > {skip()} Yes (Begin Weapons Tutorial)

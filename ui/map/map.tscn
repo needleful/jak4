@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/map/map.png" type="Texture" id=1]
 [ext_resource path="res://ui/map/map.gd" type="Script" id=2]
 [ext_resource path="res://icon.png" type="Texture" id=3]
 [ext_resource path="res://ui/map/node.gd" type="Script" id=4]
+[ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=5]
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 35.3104
@@ -49,6 +50,36 @@ visual_name = "Hideaway"
 texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="scrollable_map/hideaway"]
+shape = SubResource( 2 )
+
+[node name="village_tower" type="KinematicBody2D" parent="scrollable_map"]
+position = Vector2( 328, 450 )
+scale = Vector2( 0.453125, 0.453125 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+visual_name = "Village Tower"
+
+[node name="sprite" type="Sprite" parent="scrollable_map/village_tower"]
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="scrollable_map/village_tower"]
+shape = SubResource( 2 )
+
+[node name="maslikir" type="KinematicBody2D" parent="scrollable_map"]
+position = Vector2( -204, 386 )
+scale = Vector2( 0.453125, 0.453125 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+visual_name = "Maslikir"
+
+[node name="sprite" type="Sprite" parent="scrollable_map/maslikir"]
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="scrollable_map/maslikir"]
 shape = SubResource( 2 )
 
 [node name="plateau_town" type="KinematicBody2D" parent="scrollable_map"]
@@ -109,30 +140,43 @@ margin_right = 33.0
 margin_bottom = 31.0
 color = Color( 1, 1, 1, 0.439216 )
 
-[node name="panel" type="Panel" parent="reticle"]
-visible = false
+[node name="panel" type="PanelContainer" parent="reticle"]
 margin_left = 78.0
 margin_top = -101.0
-margin_right = 671.0
-margin_bottom = 237.0
+margin_right = 392.0
+margin_bottom = -29.0
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Label" type="Label" parent="reticle/panel"]
-anchor_right = 1.0
-margin_left = 10.0
+[node name="vbox" type="VBoxContainer" parent="reticle/panel"]
+margin_left = 7.0
 margin_top = 7.0
-margin_right = -10.0
-margin_bottom = 25.0
+margin_right = 407.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 400, 0 )
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="reticle/panel/vbox"]
+margin_right = 400.0
+margin_bottom = 14.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 2
 text = "Select a Node"
 
-[node name="Notes" type="VBoxContainer" parent="reticle/panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 40.0
-margin_right = -10.0
-margin_bottom = -20.0
+[node name="headline" type="Label" parent="reticle/panel/vbox"]
+margin_top = 24.0
+margin_right = 400.0
+margin_bottom = 38.0
+autowrap = true
+
+[node name="spacer" type="Panel" parent="reticle/panel/vbox"]
+margin_top = 48.0
+margin_right = 400.0
+margin_bottom = 48.0
+custom_styles/panel = ExtResource( 5 )
+
+[node name="Notes" type="VBoxContainer" parent="reticle/panel/vbox"]
+margin_top = 58.0
+margin_right = 400.0
+margin_bottom = 58.0

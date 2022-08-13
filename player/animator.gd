@@ -9,6 +9,16 @@ var sounds := {
 		preload("res://audio/player/stepdirt4.wav"),
 	],
 	"stepSteepGround": [],
+	"climb_hand":[
+		preload("res://audio/player/climb_hand1.wav"),
+		preload("res://audio/player/climb_hand2.wav")
+	],
+	"climb_step": [
+		preload("res://audio/player/stepdirt1.wav"),
+		preload("res://audio/player/stepdirt2.wav"),
+		preload("res://audio/player/stepdirt3.wav"),
+		preload("res://audio/player/stepdirt4.wav"),
+	],
 	"gem": [
 		preload("res://audio/pickup/gem1.wav"),
 		preload("res://audio/pickup/gem2.wav"),
@@ -35,7 +45,15 @@ var sounds := {
 	]
 }
 
+export(AudioStream) var sound_roll : AudioStream
+export(AudioStream) var sound_roll_jump : AudioStream
+export(AudioStream) var sound_lunge_kick : AudioStream
+export(AudioStream) var sound_spin_kick : AudioStream
+export(AudioStream) var sound_uppercut : AudioStream
+
+
 onready var anim: AnimationTree = $AnimationTree
+onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 onready var player : PlayerBody = get_parent()
 onready var audio := $audio
@@ -60,17 +78,13 @@ func _on_time_scale_changed(_time_scale):
 	print("time shift")
 	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
 
-func set_movement_animation(speed: float, state: int):
-	var target := 0.0
-	if state == PlayerBody.State.Crouch or state == PlayerBody.State.Sitting:
-		target = 1.0
-	elif state == PlayerBody.State.Climb:
-		target = 2.0
-	elif state == PlayerBody.State.Slide:
-		target = -1.0
-	move_blend = lerp(move_blend, target, 0.45)
-	
-	anim["parameters/WholeBody/Ground/blend_position"] = Vector2(move_blend, speed)
+func blend_run_animation(speed: float):
+	anim["parameters/WholeBody/Walk/blend_position"] = speed
+	anim["parameters/WholeBody/Crouch/blend_position"] = speed
+	anim["parameters/WholeBody/Slide/blend_position"] = speed
+
+func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
+	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(velocity.x, velocity.y)
 
 func force_play(state):
 	body.start(state)
@@ -114,6 +128,29 @@ func stop_particles():
 	$max_dive_particles.emitting = false
 	$dive_particles.emitting = false
 
+func ground_transition(state: String):
+	transition_to(state)
+
+func play_roll():
+	play_attack_sound(sound_roll)
+	transition_to("Roll")
+
+func play_roll_jump(max_damage: bool):
+	if max_damage:
+		start_roll_particles()
+	transition_to("RollJump")
+	play_attack_sound(sound_roll_jump)
+
+func play_spin_kick(max_damage: bool):
+	force_play("SpinKickLeft")
+	start_kick_left(max_damage)
+	play_attack_sound(sound_spin_kick)
+
+func play_uppercut(max_damage: bool):
+	start_kick_left(max_damage)
+	start_kick_right(max_damage)
+	play_attack_sound(sound_uppercut)
+
 func play_lunge_kick(max_damage: bool):
 	anim["parameters/WholeBody/LungeKick/blend_position"] = float(lunge_right_foot)
 	transition_to("LungeKick")
@@ -122,9 +159,18 @@ func play_lunge_kick(max_damage: bool):
 	else:
 		start_kick_left(max_damage)
 	lunge_right_foot = !lunge_right_foot
+	play_attack_sound(sound_lunge_kick)
+
+func play_attack_sound(sound: AudioStream):
+	attack_sounds.stop()
+	attack_sounds.stream = sound
+	attack_sounds.play()
 
 func play_sit():
 	transition_to("Sit_Floor")
+
+func play_ledge_grab():
+	transition_to("LedgeGrab")
 
 func start_kick_left(max_damage: bool):
 	$Armature/Skeleton/footLeft/kick_particles.emitting = true

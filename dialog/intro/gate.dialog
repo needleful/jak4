@@ -1,11 +1,14 @@
 ?{hdw_gate}
 	I am still surprised you actually cleared out the gate.
 	[You] What, you thought a Vaeler would be too weak to handle it?
-	Yes. But also. These are very dangerous creatures. We hunt them in groups, with rifles. Are you not afraid of them?
+	Yes.
+	But also. These are very dangerous creatures. We hunt them in groups, with rifles. Are you not afraid of them?
 	> It's not like I'll die out here.
-		Hahahaha! Not with that attitude, I suppose.
-		Take care, hopefully you are right.
-	> I don't know, honestly.
+		Hahahaha! Hopefully you are right.
+		Perhaps your immense arrogance will not lead you as your forefathers'.
+	> It's just very important to me I can use the Medium without so many barriers.
+		Ah, I see. They must be someone very important.
+		I suppose even the Vaelic can feel love...
 {otherwise if Global.has_stat("hdw/clear")}
 	[You] I cleared the gate.
 	{subtopic("gate_cleared")}
@@ -23,17 +26,16 @@
 	> ?{hdw/clear} They were the skull creatures outside, right? I believe I took care of all of them.
 		{subtopic("gate_cleared")}
 	> Specters? Pardon me?
-		Foul ghost machine. They kill for sport.
-		Remnant of the ancient kingdom. They were, eh.. decadent? Demoral? Their sins are ours to bear, shaped as skulls and bones.
+		Foul ghost machine. Ancient metal mixed with the centuries of rot and decay. The sins of the ancestors rendered ours to bear as skulls and bones.
 		> What?
-			Hm. Ancient people made something. It awoke.
+			Hm. Bone monsters that bite and shoot bullets.
 			[You] I'm not going to let some pests get in my way. What if I clear the gate for you?
 			{subtopic("gate_clear")}
 		> What if I clear out these "specters"?
 			{subtopic("gate_clear")}
 	> What if I clear these specters for you?
 		{subtopic("gate_clear")}
-	>{Global.stat("tyler_tutorial")} A little boy and I were running all up and down the wall earlier today. How much protection does it even offer?
+	>{Global.stat("tyler_tutorial")} A little boy and I were running all up and down this wall earlier today. How much protection does it even offer?
 		Enough to protect the lives of everyone here.
 		If you climbed wall before, you can again.
 	> {otherwise} What am I supposed to do, climb over it?
@@ -45,12 +47,14 @@
 :gate_clear
 What? You are Vaelic, yes?
 [You] I am. And?
-The same Vaelics who invaded Yaqaz with one hundred thousand men?
-And left here with two hundred sixteen men?
+The same Vaelic who invaded Yaqaz with one hundred thousand men, and left here with two hundred sixteen?
+The same Vaelic who govern by papers and proxies, terrified to leave their villas and subject themselves to our ugly faces?
+The same Vaelic who die instantly without their chilled tea on a warm day?
+The very face of weakness and arrogance, that Vaelic?
 [You] ... That's a rather uncharitable view of Vaeland.
 Ok
 [You] No, but seriously. If these "specters" are going to be in my way, I'll deal with them posthaste.
-{Global.note_task("the_village_gate", "They won't open the gate to Hideaway unless I clear out all the \"Specters\" out front of it. I could also just climb the fence.")} Do not kill yourself for small convenience. But if they are gone, tell me and I can open gate.
+{Global.note_task("the_village_gate", "They won't open the gate to Hideaway unless I clear out all the \"Specters\" out front of it. I can just climb the wall in the meantime.")} Do not kill yourself for small convenience. It is bad for tourism. But if they are gone, tell me and I can open gate.
 [You] Alright, I will.
 {back()}
 
@@ -59,7 +63,7 @@ What? You did?
 {!Global.stat("weapon")} How? Where is your gun?
 	[You] I kicked them mostly.
 {otherwise} With a pistol?
-	[You] Well, kicking is faster actually.
+	[You] Well, kicking is faster usually.
 You KICKED them to death? Hm, it makes sense. You are rather tall.
 {Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
 {back()}

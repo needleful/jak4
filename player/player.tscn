@@ -303,6 +303,87 @@ tracks/1/keys = {
 "values": [ Vector3( -0.2, 0.863, 0 ), Vector3( 0, 0.863, 0 ) ]
 }
 
+[sub_resource type="Animation" id=30]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=31]
+resource_name = "fadein"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.574349, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=32]
+resource_name = "fadeout"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.517632, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
 [sub_resource type="Animation" id=9]
 length = 0.001
 tracks/0/type = "value"
@@ -799,87 +880,6 @@ tracks/0/keys = {
 [sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0, 0, 0, 0.745098 )
 
-[sub_resource type="Animation" id=30]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=31]
-resource_name = "fadein"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.574349, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=32]
-resource_name = "fadeout"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 0.517632, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-
 [sub_resource type="SphereShape" id=66]
 radius = 0.35
 
@@ -1086,7 +1086,7 @@ current = true
 
 [node name="pitch" type="Spatial" parent="camera_rig/yaw"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.863214, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0 )
 
 [node name="SpringArm" type="SpringArm" parent="camera_rig/yaw/pitch"]
 time_scale_response = false
@@ -1109,6 +1109,20 @@ anims/dialog_end = SubResource( 25 )
 anims/dialog_start = SubResource( 26 )
 anims/wardrobe_lock = SubResource( 28 )
 anims/wardrobe_unlock = SubResource( 29 )
+
+[node name="cam_tween" type="Tween" parent="camera_rig"]
+
+[node name="fade" type="ColorRect" parent="."]
+time_scale_response = false
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="fade"]
+autoplay = "fadein"
+anims/RESET = SubResource( 30 )
+anims/fadein = SubResource( 31 )
+anims/fadeout = SubResource( 32 )
 
 [node name="ui" type="Control" parent="."]
 pause_mode = 2
@@ -1206,6 +1220,7 @@ percent_visible = false
 [node name="debug" type="Panel" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -1670,18 +1685,6 @@ custom_constants/shadow_as_outline = 1
 text = "Next >>"
 align = 2
 
-[node name="fade" type="ColorRect" parent="."]
-time_scale_response = false
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="fade"]
-autoplay = "fadein"
-anims/RESET = SubResource( 30 )
-anims/fadein = SubResource( 31 )
-anims/fadeout = SubResource( 32 )
-
 [node name="groundArea" type="Area" parent="."]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
@@ -1701,7 +1704,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.99
 shape = SubResource( 8 )
 
 [node name="climbArea" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.534752, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
 collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="climbArea"]

@@ -3,7 +3,9 @@ extends Node
 onready var player: PlayerBody = get_parent()
 onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
+onready var spring : SpringArm = $yaw/pitch/SpringArm
 onready var camera := $yaw/pitch/SpringArm/Camera
+onready var tween := $cam_tween
 
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 1.0
@@ -16,6 +18,20 @@ const H_DIFF_BOUND := 2.5
 
 const LEDGE_GRAB_RAISE := 1.0
 var raise := 0.0
+
+const POS_YAW_DEFAULT := Vector3(0, 0.7, 0)
+const SPRING_DEFAULT := 2.5
+const POS_YAW_AIM := Vector3(-0.5, 0.75, 0)
+const SPRING_AIM := 1.5
+const POS_YAW_DIALOG := Vector3(1.0, 0.7, 0)
+const SPRING_DIALOG := 1.5
+const POS_YAW_WARDROBE := Vector3(-0.2, 0.7, 0)
+const SPRING_WARDROBE := 1.0
+
+const TWEEN_TIME_AIM := 0.4
+const TWEEN_TIME_AIM_RESET := 0.6
+const TWEEN_TIME_DIALOG := 2.0
+const TWEEN_TIME_WARDROBE := 1.5
 
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
@@ -115,14 +131,35 @@ func reset():
 func lock_follow():
 	locked = true
 
-func play_animation(anim: String):
-	$AnimationPlayer.play(anim)
-
 func set_aiming(aim: bool):
 	if aiming == aim:
 		return
 	aiming = aim
 	if aiming:
-		$AnimationPlayer.play("aim")
+		tween_to(POS_YAW_AIM, SPRING_AIM, TWEEN_TIME_AIM)
 	else:
-		$AnimationPlayer.play_backwards("aim")
+		tween_to(POS_YAW_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_AIM_RESET)
+
+func start_dialog():
+	tween_to(POS_YAW_DIALOG, SPRING_DIALOG, TWEEN_TIME_DIALOG)
+
+func end_dialog():
+	tween_to(POS_YAW_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)
+
+func start_wardrobe():
+	tween_to(POS_YAW_WARDROBE, SPRING_WARDROBE, TWEEN_TIME_WARDROBE)
+
+func end_wardrobe():
+	tween_to(POS_YAW_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)
+
+func tween_to(pos: Vector3, distance: float, time: float):
+		tween.remove_all()
+		tween.interpolate_property(pitch, "translation",
+			pitch.translation, pos,
+			time,
+			Tween.TRANS_CUBIC, Tween.EASE_OUT)
+		tween.interpolate_property(spring, "spring_length",
+			spring.spring_length, distance,
+			time,
+			Tween.TRANS_CUBIC, Tween.EASE_OUT)
+		tween.start()

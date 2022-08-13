@@ -231,3 +231,6 @@ func show_air_combat_tutorial():
 		player.show_prompt([keyboard_crouch, keyboard_lunge], "Uppercut")
 	air_tutorial = true
 	$tutorial_swap.start()
+
+func get_wind_audio():
+	return $audio_wind

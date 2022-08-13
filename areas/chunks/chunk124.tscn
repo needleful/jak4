@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=85 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -63,6 +63,7 @@
 [ext_resource path="res://areas/chunks/_lightmaps/chunk124.lmbake" type="BakedLightmapData" id=61]
 [ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=62]
 [ext_resource path="res://_glb/npc_clothes/hats_goggles_asym.mesh" type="ArrayMesh" id=63]
+[ext_resource path="res://entities/control/trigger_zone.gd" type="Script" id=64]
 
 [sub_resource type="OccluderShapePolygon" id=263]
 polygon_points = PoolVector2Array( 141.68, -113.101, 88.7279, 18.4084, -117.586, -18.3186, -109.166, -90.4652, -5.99673, 33.6345 )
@@ -133,6 +134,10 @@ tracks/1/keys = {
 
 [sub_resource type="BoxShape" id=262]
 extents = Vector3( 9.25974, 2.62014, 2.34377 )
+
+[sub_resource type="CapsuleShape" id=270]
+radius = 19.7535
+height = 41.165
 
 [sub_resource type="CubeMesh" id=253]
 
@@ -930,6 +935,16 @@ origin_offset = Vector3( 0.533203, 7.74805, 4.45508 )
 enable_shadows = true
 interior_ambient_color = Color( 0.152941, 0.164706, 0.317647, 1 )
 
+[node name="enter_cave" type="Area" parent="village_area" index="50"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 66.8006, 5.80942, 0 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 64 )
+stat = "cave_124_entered"
+
+[node name="CollisionShape" type="CollisionShape" parent="village_area/enter_cave" index="0"]
+shape = SubResource( 270 )
+
 [node name="mountain_pickups" type="MultiMeshSystem" parent="." index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -147.011, -71.2366, -73.8094 )
 
@@ -1224,6 +1239,7 @@ transform = Transform( -0.807444, 0.0384404, -0.588691, -2.2435e-08, 0.997875, 0
 
 [node name="capacitor_pickup" parent="palace_area/palace1/pickups" index="38" instance=ExtResource( 12 )]
 transform = Transform( 0.999326, 0.0367135, 8.04663e-07, -0.0367135, 0.999327, -3.72529e-09, -8.64267e-07, -2.23517e-08, 1, 11.6974, 37.7352, 2.55336 )
+friendly_name = "tower_capacitor_124"
 
 [node name="bug_pickup" parent="palace_area/palace1/pickups" index="39" instance=ExtResource( 14 )]
 transform = Transform( 1, 1.11759e-08, 2.98023e-08, 2.6077e-08, 1, 0, -4.47035e-07, 1.49012e-08, 1, 5.82867, 13.1976, -0.287354 )

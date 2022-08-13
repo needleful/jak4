@@ -68,8 +68,15 @@ func _process(delta: float):
 		reticle.get_node("panel").hide()
 	elif highlighted_point != old_point:
 		reticle.get_node("panel").show()
-		reticle.get_node("panel/Label").text = highlighted_point.visual_name
-		var note_box:Container = reticle.get_node("panel/Notes")
+		reticle.get_node("panel/vbox/Label").text = highlighted_point.visual_name
+		var head = reticle.get_node("panel/vbox/headline")
+		
+		if highlighted_point.headline != "":
+			head.text = highlighted_point.headline
+			head.show()
+		else:
+			head.hide()
+		var note_box:Container = reticle.get_node("panel/vbox/Notes")
 		for c in note_box.get_children():
 			c.queue_free()
 		for n in highlighted_point.notes:
@@ -89,9 +96,13 @@ func set_active(a):
 	if active:
 		for g in scroll_area.get_children():
 			var t = Global.task_notes_by_place(g.name)
-			if !t.empty() or Global.has_note("places", g.name):
-				var n:Array = Global.get_notes("places", g.name)
-				n.append_array(t)
-				g.show_with_notes(n)
-			else:
+			var n = Global.get_notes("places", g.name)
+			if t and !t.empty():
+				g.notes = t
+			if n and !n.empty():
+				g.headline = n[n.size() - 1]
+
+			if (!t or t.empty()) and (!n or n.empty()):
 				g.hide()
+			else:
+				g.show()

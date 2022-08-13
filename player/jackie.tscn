@@ -1,4 +1,4 @@
-[gd_scene load_steps=172 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://_glb/player/jackie.glb" type="PackedScene" id=1]
 [ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=2]
@@ -12,6 +12,12 @@
 [ext_resource path="res://entities/visual/laser.gd" type="Script" id=10]
 [ext_resource path="res://addons/np_trail/trail.gd" type="Script" id=11]
 [ext_resource path="res://entities/visual/follow.gd" type="Script" id=12]
+[ext_resource path="res://audio/player/whoosh_roll.wav" type="AudioStream" id=13]
+[ext_resource path="res://audio/player/whoosh_rolljump.wav" type="AudioStream" id=14]
+[ext_resource path="res://audio/player/whoosh_small.wav" type="AudioStream" id=15]
+[ext_resource path="res://audio/player/whoosh_large.wav" type="AudioStream" id=16]
+[ext_resource path="res://audio/player/whoosh_spin.wav" type="AudioStream" id=17]
+[ext_resource path="res://player/anim/jackie_animator.tres" type="AnimationNodeBlendTree" id=18]
 
 [sub_resource type="Gradient" id=64]
 offsets = PoolRealArray( 0.126437, 0.475096, 0.858238 )
@@ -158,493 +164,6 @@ height = 0.14
 radial_segments = 5
 rings = 5
 
-[sub_resource type="AnimationNodeAnimation" id=110]
-animation = "AimF"
-
-[sub_resource type="AnimationNodeAnimation" id=111]
-animation = "AimLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=116]
-animation = "AimBackLeftUp"
-
-[sub_resource type="AnimationNodeAnimation" id=112]
-animation = "AimRight"
-
-[sub_resource type="AnimationNodeAnimation" id=113]
-animation = "AimUpF"
-
-[sub_resource type="AnimationNodeAnimation" id=114]
-animation = "AimDownF"
-
-[sub_resource type="AnimationNodeAnimation" id=117]
-animation = "AimBackRight"
-
-[sub_resource type="AnimationNodeAnimation" id=118]
-animation = "AimBackRightDown"
-
-[sub_resource type="AnimationNodeAnimation" id=119]
-animation = "AimBackRightUp"
-
-[sub_resource type="AnimationNodeAnimation" id=120]
-animation = "AimBackLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=121]
-animation = "AimBackLeftDown"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=115]
-blend_point_0/node = SubResource( 110 )
-blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 111 )
-blend_point_1/pos = Vector2( -1, 0 )
-blend_point_2/node = SubResource( 112 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 113 )
-blend_point_3/pos = Vector2( 0, 1 )
-blend_point_4/node = SubResource( 114 )
-blend_point_4/pos = Vector2( 0, -1 )
-blend_point_5/node = SubResource( 117 )
-blend_point_5/pos = Vector2( 2, 0 )
-blend_point_6/node = SubResource( 118 )
-blend_point_6/pos = Vector2( 2, -1 )
-blend_point_7/node = SubResource( 119 )
-blend_point_7/pos = Vector2( 2, 1 )
-blend_point_8/node = SubResource( 120 )
-blend_point_8/pos = Vector2( -2, 0 )
-blend_point_9/node = SubResource( 121 )
-blend_point_9/pos = Vector2( -2, -1 )
-blend_point_10/node = SubResource( 116 )
-blend_point_10/pos = Vector2( -2, 1 )
-min_space = Vector2( -2, -1 )
-max_space = Vector2( 2, 1 )
-
-[sub_resource type="AnimationNodeAnimation" id=125]
-animation = "AimF"
-
-[sub_resource type="AnimationNodeOneShot" id=124]
-filter_enabled = true
-filters = [ "Armature/Skeleton:Forearm.L", "Armature/Skeleton:Hand.L" ]
-mix_mode = 1
-
-[sub_resource type="AnimationNodeAnimation" id=123]
-animation = "Fire"
-
-[sub_resource type="AnimationNodeBlend2" id=109]
-filter_enabled = true
-filters = [ "Armature/Skeleton:BackLower", "Armature/Skeleton:BackUpper", "Armature/Skeleton:Bicep.L", "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Armature/Skeleton:C_Thumb.L", "Armature/Skeleton:Collar.L", "Armature/Skeleton:Fingers1.L", "Armature/Skeleton:Fingers2.L", "Armature/Skeleton:Fingers3.L", "Armature/Skeleton:Forearm.L", "Armature/Skeleton:Gun.R", "Armature/Skeleton:Hand.L", "Armature/Skeleton:Head", "Armature/Skeleton:Index1.L", "Armature/Skeleton:Index2.L", "Armature/Skeleton:Index3.L", "Armature/Skeleton:Neck", "Armature/Skeleton:Sleeve.L", "Armature/Skeleton:Thumb1.L", "Armature/Skeleton:Thumb2.L", "Armature/Skeleton:Thumb3.L" ]
-
-[sub_resource type="AnimationNodeBlend2" id=126]
-filter_enabled = true
-filters = [ "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Armature/Skeleton:C_Thumb.L", "Armature/Skeleton:Fingers1.L", "Armature/Skeleton:Fingers2.L", "Armature/Skeleton:Fingers3.L", "Armature/Skeleton:Index1.L", "Armature/Skeleton:Index2.L", "Armature/Skeleton:Index3.L", "Armature/Skeleton:Thumb1.L", "Armature/Skeleton:Thumb2.L", "Armature/Skeleton:Thumb3.L" ]
-
-[sub_resource type="AnimationNodeAnimation" id=12]
-animation = "BaseJump"
-
-[sub_resource type="AnimationNodeAnimation" id=133]
-animation = "Damaged"
-
-[sub_resource type="AnimationNodeAnimation" id=159]
-animation = "Dash"
-
-[sub_resource type="AnimationNodeAnimation" id=53]
-animation = "Dive_End"
-
-[sub_resource type="AnimationNodeAnimation" id=54]
-animation = "Dive_Start"
-
-[sub_resource type="AnimationNodeAnimation" id=9]
-animation = "Fall-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=130]
-animation = "ItemGet"
-
-[sub_resource type="AnimationNodeAnimation" id=1]
-animation = "Idle-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=2]
-animation = "Crouch-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=3]
-animation = "Run-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=4]
-animation = "Crawl-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=44]
-animation = "Climb-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=45]
-animation = "Climb_Idle-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=103]
-animation = "Fall-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=104]
-animation = "SlideRun-loop"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=5]
-blend_point_0/node = SubResource( 1 )
-blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 2 )
-blend_point_1/pos = Vector2( 1, 0 )
-blend_point_2/node = SubResource( 3 )
-blend_point_2/pos = Vector2( 0, 1 )
-blend_point_3/node = SubResource( 4 )
-blend_point_3/pos = Vector2( 1, 1 )
-blend_point_4/node = SubResource( 44 )
-blend_point_4/pos = Vector2( 2, 1 )
-blend_point_5/node = SubResource( 45 )
-blend_point_5/pos = Vector2( 2, 0 )
-blend_point_6/node = SubResource( 103 )
-blend_point_6/pos = Vector2( -1, 0 )
-blend_point_7/node = SubResource( 104 )
-blend_point_7/pos = Vector2( -1, 1 )
-min_space = Vector2( -1, 0 )
-max_space = Vector2( 2, 1 )
-
-[sub_resource type="AnimationNodeAnimation" id=138]
-animation = "Hover_Idle-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=139]
-animation = "Hover_LeanUp-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=140]
-animation = "Hover_LeanDown-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=141]
-animation = "Hover_LeanLeft-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=146]
-animation = "Hover-LeanRight-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=147]
-animation = "Hover_LeanHardLeft-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=148]
-animation = "Hover_LeanHardRight-loop"
-
-[sub_resource type="AnimationNodeBlendSpace2D" id=142]
-blend_point_0/node = SubResource( 138 )
-blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 139 )
-blend_point_1/pos = Vector2( 0, 1 )
-blend_point_2/node = SubResource( 140 )
-blend_point_2/pos = Vector2( 0, -1 )
-blend_point_3/node = SubResource( 141 )
-blend_point_3/pos = Vector2( 1, 0 )
-blend_point_4/node = SubResource( 146 )
-blend_point_4/pos = Vector2( -1, 0 )
-blend_point_5/node = SubResource( 147 )
-blend_point_5/pos = Vector2( 2, 0 )
-blend_point_6/node = SubResource( 148 )
-blend_point_6/pos = Vector2( -2, 0 )
-min_space = Vector2( -2, -1 )
-max_space = Vector2( 2, 1 )
-
-[sub_resource type="AnimationNodeAnimation" id=25]
-animation = "LedgeGrab"
-
-[sub_resource type="AnimationNodeAnimation" id=26]
-animation = "LedgeHang-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=99]
-animation = "LungeKickLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=100]
-animation = "LungeKickRight"
-
-[sub_resource type="AnimationNodeBlendSpace1D" id=93]
-blend_point_0/node = SubResource( 99 )
-blend_point_0/pos = 0.0
-blend_point_1/node = SubResource( 100 )
-blend_point_1/pos = 1.0
-
-[sub_resource type="AnimationNodeAnimation" id=127]
-animation = "PlaceFlag"
-
-[sub_resource type="AnimationNodeAnimation" id=15]
-animation = "Roll"
-
-[sub_resource type="AnimationNodeAnimation" id=20]
-animation = "RollFall-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=18]
-animation = "RollJump"
-
-[sub_resource type="AnimationNodeAnimation" id=152]
-animation = "Sit_Floor"
-
-[sub_resource type="AnimationNodeAnimation" id=153]
-animation = "Sitting_Floor-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=37]
-animation = "SpinKickLeft"
-
-[sub_resource type="AnimationNodeAnimation" id=46]
-animation = "Uppercut"
-
-[sub_resource type="AnimationNodeAnimation" id=170]
-animation = "WallCling-Loop"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=10]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
-xfade_time = 0.07
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=14]
-switch_mode = 2
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=16]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=17]
-xfade_time = 0.04
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=19]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=21]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=22]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=23]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=24]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=27]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=28]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=29]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=30]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=31]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=32]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=33]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=38]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=39]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=40]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=41]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=42]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=43]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=47]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=49]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=50]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=51]
-xfade_time = 0.3
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=55]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=56]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=57]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=58]
-xfade_time = 0.25
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=59]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=60]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=62]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=83]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=84]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=94]
-xfade_time = 0.03
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=95]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=96]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=97]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=98]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=101]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=102]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=128]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=129]
-xfade_time = 0.25
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=131]
-xfade_time = 0.2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=132]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=134]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=135]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=136]
-xfade_time = 0.15
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=137]
-xfade_time = 0.15
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=143]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=144]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=145]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=154]
-xfade_time = 0.04
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=155]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=156]
-xfade_time = 0.03
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=157]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=158]
-xfade_time = 0.4
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=160]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=161]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=162]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=163]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=164]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=165]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=166]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=167]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=168]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=171]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=172]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=173]
-xfade_time = 0.1
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=174]
-xfade_time = 0.05
-
-[sub_resource type="AnimationNodeStateMachine" id=6]
-states/BaseJump/node = SubResource( 12 )
-states/BaseJump/position = Vector2( 759, 286 )
-states/Damaged/node = SubResource( 133 )
-states/Damaged/position = Vector2( 888, -221 )
-states/Dash/node = SubResource( 159 )
-states/Dash/position = Vector2( 995, 403 )
-states/DiveEnd/node = SubResource( 53 )
-states/DiveEnd/position = Vector2( 367, 408 )
-states/DiveStart/node = SubResource( 54 )
-states/DiveStart/position = Vector2( 586, 408 )
-states/Fall/node = SubResource( 9 )
-states/Fall/position = Vector2( 546, 79 )
-states/GetItem/node = SubResource( 130 )
-states/GetItem/position = Vector2( -106, -258 )
-states/Ground/node = SubResource( 5 )
-states/Ground/position = Vector2( 307, 25 )
-states/Hover/node = SubResource( 142 )
-states/Hover/position = Vector2( 255, -221 )
-states/LedgeGrab/node = SubResource( 25 )
-states/LedgeGrab/position = Vector2( 779, 62 )
-states/LedgeHang/node = SubResource( 26 )
-states/LedgeHang/position = Vector2( 990, 181 )
-states/LungeKick/node = SubResource( 93 )
-states/LungeKick/position = Vector2( 63, 408 )
-states/PlaceFlag/node = SubResource( 127 )
-states/PlaceFlag/position = Vector2( 9, -92 )
-states/Roll/node = SubResource( 15 )
-states/Roll/position = Vector2( 194, -97 )
-states/RollFall/node = SubResource( 20 )
-states/RollFall/position = Vector2( 409, -221 )
-states/RollJump/node = SubResource( 18 )
-states/RollJump/position = Vector2( 637, -181 )
-states/Sit_Floor/node = SubResource( 152 )
-states/Sit_Floor/position = Vector2( 967, -13 )
-states/Sitting_Floor-loop/node = SubResource( 153 )
-states/Sitting_Floor-loop/position = Vector2( 1172, -97 )
-states/SpinKickLeft/node = SubResource( 37 )
-states/SpinKickLeft/position = Vector2( -206, 315 )
-states/Uppercut/node = SubResource( 46 )
-states/Uppercut/position = Vector2( -23, 40 )
-states/WallCling/node = SubResource( 170 )
-states/WallCling/position = Vector2( 912, -97 )
-transitions = [ "Ground", "Fall", SubResource( 10 ), "Fall", "Ground", SubResource( 11 ), "Ground", "BaseJump", SubResource( 13 ), "BaseJump", "Fall", SubResource( 14 ), "Roll", "Ground", SubResource( 16 ), "Ground", "Roll", SubResource( 17 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "RollFall", "Ground", SubResource( 23 ), "RollJump", "Ground", SubResource( 24 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "SpinKickLeft", "Ground", SubResource( 38 ), "Ground", "SpinKickLeft", SubResource( 39 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Uppercut", "Ground", SubResource( 47 ), "Roll", "Uppercut", SubResource( 49 ), "Ground", "Uppercut", SubResource( 50 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "DiveEnd", "Ground", SubResource( 58 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "Ground", "LungeKick", SubResource( 94 ), "LungeKick", "Ground", SubResource( 95 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "BaseJump", "Ground", SubResource( 102 ), "Ground", "PlaceFlag", SubResource( 128 ), "PlaceFlag", "Ground", SubResource( 129 ), "GetItem", "Ground", SubResource( 131 ), "Ground", "GetItem", SubResource( 132 ), "Ground", "Damaged", SubResource( 134 ), "Fall", "Damaged", SubResource( 135 ), "Damaged", "Ground", SubResource( 136 ), "Damaged", "Fall", SubResource( 137 ), "Ground", "Hover", SubResource( 143 ), "Hover", "Fall", SubResource( 144 ), "Fall", "Hover", SubResource( 145 ), "Ground", "Sit_Floor", SubResource( 154 ), "Sit_Floor", "Sitting_Floor-loop", SubResource( 155 ), "Sitting_Floor-loop", "Ground", SubResource( 156 ), "Sitting_Floor-loop", "BaseJump", SubResource( 157 ), "Sitting_Floor-loop", "Fall", SubResource( 158 ), "Dash", "Ground", SubResource( 160 ), "Fall", "Dash", SubResource( 161 ), "Dash", "Fall", SubResource( 162 ), "RollJump", "Dash", SubResource( 163 ), "Dash", "SpinKickLeft", SubResource( 164 ), "RollFall", "Dash", SubResource( 165 ), "BaseJump", "Dash", SubResource( 166 ), "SpinKickLeft", "Dash", SubResource( 167 ), "Dash", "DiveStart", SubResource( 168 ), "Fall", "WallCling", SubResource( 171 ), "RollFall", "WallCling", SubResource( 172 ), "WallCling", "Fall", SubResource( 173 ), "WallCling", "BaseJump", SubResource( 174 ) ]
-start_node = "Ground"
-graph_offset = Vector2( 68, -180 )
-
-[sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -632, -57 )
-nodes/Aim/node = SubResource( 115 )
-nodes/Aim/position = Vector2( -540, 160 )
-nodes/Animation/node = SubResource( 125 )
-nodes/Animation/position = Vector2( 60, 180 )
-nodes/Fire/node = SubResource( 124 )
-nodes/Fire/position = Vector2( -300, 180 )
-nodes/FireAnim/node = SubResource( 123 )
-nodes/FireAnim/position = Vector2( -520, 360 )
-nodes/Gun/node = SubResource( 109 )
-nodes/Gun/position = Vector2( -100, 80 )
-nodes/GunHold/node = SubResource( 126 )
-nodes/GunHold/position = Vector2( 160, -40 )
-nodes/WholeBody/node = SubResource( 6 )
-nodes/WholeBody/position = Vector2( -340, -20 )
-nodes/output/position = Vector2( 380, 40 )
-node_connections = [ "output", 0, "GunHold", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation" ]
-
 [sub_resource type="AnimationNodeStateMachinePlayback" id=8]
 
 [sub_resource type="Curve" id=80]
@@ -676,6 +195,11 @@ scale_curve = SubResource( 81 )
 [node name="jackie" instance=ExtResource( 1 )]
 time_scale_response = false
 script = ExtResource( 3 )
+sound_roll = ExtResource( 13 )
+sound_roll_jump = ExtResource( 14 )
+sound_lunge_kick = ExtResource( 15 )
+sound_spin_kick = ExtResource( 17 )
+sound_uppercut = ExtResource( 16 )
 
 [node name="Armature" parent="." index="0"]
 time_scale_response = false
@@ -710,7 +234,7 @@ material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
 time_scale_response = false
-transform = Transform( 0.286362, -0.140029, -0.947834, -0.205138, -0.975281, 0.0821075, -0.935902, 0.170925, -0.308009, 0.107989, 0.15481, 0.00767909 )
+transform = Transform( 0.0502664, 0.0418718, -0.997857, -0.767707, -0.637451, -0.0654211, -0.638825, 0.76935, 0.000103231, 0.118956, 0.108667, 0.00130727 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -735,7 +259,7 @@ draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
 time_scale_response = false
-transform = Transform( -0.0304774, 0.137028, 0.990098, -0.0776653, -0.987888, 0.134332, 0.996513, -0.0728022, 0.0407509, -0.0331044, 0.231959, 0.0716733 )
+transform = Transform( 0.0492892, -0.0417282, 0.997913, 0.761693, -0.644711, -0.0645811, 0.646059, 0.763286, 6.46943e-06, -0.118658, 0.108859, -0.00308692 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -760,7 +284,7 @@ draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
 time_scale_response = false
-transform = Transform( 0.994738, -0.0384296, 0.0949647, 0.0571759, 0.977431, -0.203368, -0.0850061, 0.207728, 0.974486, 3.57253e-05, 1.02395, -0.0179289 )
+transform = Transform( 1, 3.81777e-09, 3.11169e-07, -5.5384e-08, 0.988174, 0.153337, -2.59086e-07, -0.153337, 0.988174, -0.00166227, 1.01897, -0.00806327 )
 bone_name = "BackUpper"
 
 [node name="time_trail" type="ImmediateGeometry" parent="Armature/Skeleton/chest" index="0"]
@@ -787,7 +311,7 @@ one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
 time_scale_response = false
-transform = Transform( 0.998465, 0.0139375, -0.0536024, -0.0414331, -0.454268, -0.8899, -0.0367529, 0.890755, -0.452994, -0.00446431, 1.2036, 0.0502432 )
+transform = Transform( 0.999988, -0.00375765, -0.00298228, -0.00231893, 0.165608, -0.986189, 0.00419975, 0.986184, 0.165597, -0.00151804, 1.21052, -0.00430886 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -806,7 +330,7 @@ one_shot = true
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="9"]
 time_scale_response = false
-transform = Transform( 0.455509, 0.455767, 0.764715, 0.610672, -0.78501, 0.10411, 0.647759, 0.419566, -0.635902, 0.248096, 0.809966, 0.0633462 )
+transform = Transform( 0.726615, -0.111406, 0.677952, -0.123258, -0.991894, -0.0308908, 0.675898, -0.0611169, -0.734457, 0.210252, 0.705463, -0.0252767 )
 bone_name = "Gun.R"
 script = ExtResource( 9 )
 
@@ -888,7 +412,7 @@ target_node = NodePath("../gun/gun_ik/target")
 
 [node name="handRight" type="BoneAttachment" parent="Armature/Skeleton" index="11"]
 time_scale_response = false
-transform = Transform( 0.581254, -0.608305, -0.540471, -0.639215, -0.752344, 0.159321, -0.503536, 0.25287, -0.82614, -0.256269, 0.784883, 0.0498466 )
+transform = Transform( 0.707038, 0.0864184, -0.701876, 0.00281472, -0.992841, -0.119408, -0.70717, 0.0824502, -0.702219, -0.208757, 0.715808, 0.0138344 )
 bone_name = "Object.R"
 
 [node name="ref" type="Spatial" parent="Armature/Skeleton/handRight" index="0"]
@@ -896,14 +420,14 @@ time_scale_response = false
 transform = Transform( 0.707107, -0.707107, -2.23517e-08, -8.61473e-09, -4.47035e-08, 1, -0.707107, -0.707107, -2.23517e-08, 0, 0, 0 )
 
 [node name="knee_left" type="BoneAttachment" parent="Armature/Skeleton" index="12"]
-transform = Transform( -0.0201539, 0.082846, -0.996359, -0.398829, -0.914503, -0.0679725, -0.916804, 0.396007, 0.0514722, 0.0866715, 0.809257, 0.0144759 )
+transform = Transform( -0.0286417, 0.055886, -0.998026, -0.0501654, -0.997258, -0.0544034, -0.99833, 0.048508, 0.0313668, 0.0850093, 0.809319, 0.0124618 )
 bone_name = "Thign.L"
 
 [node name="ref_leg_left" type="Spatial" parent="Armature/Skeleton/knee_left" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="knee_right" type="BoneAttachment" parent="Armature/Skeleton" index="13"]
-transform = Transform( -0.215857, -0.122645, 0.968692, 0.681501, -0.729393, 0.0595136, 0.699258, 0.673011, 0.241027, -0.0866715, 0.809257, 0.0144759 )
+transform = Transform( -0.0219013, -0.0510986, 0.998454, 0.0506812, -0.997466, -0.0499363, 0.998475, 0.0495091, 0.0244354, -0.0883338, 0.809319, 0.0124618 )
 bone_name = "Thign.R"
 
 [node name="ref_leg_right" type="Spatial" parent="Armature/Skeleton/knee_right" index="0"]
@@ -914,7 +438,7 @@ time_scale_response = false
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 time_scale_response = false
-tree_root = SubResource( 7 )
+tree_root = ExtResource( 18 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 process_mode = 0
@@ -923,9 +447,12 @@ parameters/Fire/active = false
 parameters/Gun/blend_amount = 0.0
 parameters/GunHold/blend_amount = 0
 parameters/WholeBody/playback = SubResource( 8 )
-parameters/WholeBody/Ground/blend_position = Vector2( -0.00991082, -0.0431035 )
+parameters/WholeBody/Climb/blend_position = Vector2( 0, 0 )
+parameters/WholeBody/Crouch/blend_position = 0
 parameters/WholeBody/Hover/blend_position = Vector2( 0, 0 )
 parameters/WholeBody/LungeKick/blend_position = 0
+parameters/WholeBody/Slide/blend_position = 0
+parameters/WholeBody/Walk/blend_position = 0
 
 [node name="audio" type="Spatial" parent="." index="3"]
 time_scale_response = false
@@ -943,6 +470,10 @@ bus = "SFX_Player"
 [node name="feet" type="AudioStreamPlayer" parent="audio" index="2"]
 time_scale_response = false
 stream = ExtResource( 6 )
+volume_db = -10.0
+bus = "SFX_Player"
+
+[node name="attack" type="AudioStreamPlayer" parent="audio" index="3"]
 volume_db = -10.0
 bus = "SFX_Player"
 

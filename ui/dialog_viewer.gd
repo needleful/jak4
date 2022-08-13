@@ -14,12 +14,11 @@ var last_speaker: String
 var current_item : DialogItem
 var sequence: Resource
 
-export(Font) var speaker_font
-export(Font) var narration_font
-export(Font) var player_font
-
-export(Color) var narration_color := Color.dimgray
-export(Color) var player_color := Color.deeppink
+export(Dictionary) var fonts := {}
+export(Dictionary) var colors := {
+	"narration": Color.dimgray,
+	"you":Color.deeppink
+}
 
 onready var replies := $messages/replies
 onready var messages := $messages/messages/list
@@ -66,6 +65,7 @@ func _process(_delta):
 func _ready():
 	var _x = r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
 	_x = r_interpolate.compile("#\\{([^\\}]+)\\}")
+	ui_settings_apply()
 	end()
 
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, starting_label:= ""):
@@ -128,6 +128,7 @@ func advance():
 	clear_replies()
 	var result := false
 	var noskip := false
+	var font_override := ""
 	while !result:
 		if !current_item:
 			exit()
@@ -138,6 +139,7 @@ func advance():
 			break
 		var cond: Array = current_item.conditions
 		result = true
+		font_override = ""
 		for c in cond:
 			var r = check_condition(c)
 			if r is Dictionary:
@@ -151,6 +153,8 @@ func advance():
 					return
 				elif r == RESULT_NOSKIP:
 					noskip = true
+				elif "_format" in r:
+					font_override = r._format
 			elif !r:
 				result = false
 				break
@@ -165,22 +169,26 @@ func advance():
 	if current_item.text != "":
 		match current_item.type:
 			DialogItem.Type.MESSAGE:
-				show_message()
+				show_message(font_override)
 			DialogItem.Type.REPLY:
 				list_replies()
 			DialogItem.Type.NARRATION:
-				show_narration()
+				show_narration(font_override)
 
 func list_replies():
 	var reply: DialogItem = current_item
 	while reply and reply.type == DialogItem.Type.REPLY:
+		var font_override := ""
 		skip_reply = false
 		var cond = reply.conditions
 		var result := true
 		for c in cond:
-			if !check_condition(c):
+			var r = check_condition(c)
+			if !r:
 				result = false
 				break
+			elif r is Dictionary and "_format" in r:
+				font_override = r._format
 		if result:
 			var b := Button.new()
 			b.clip_text = false
@@ -197,6 +205,8 @@ func list_replies():
 			l.margin_bottom = -5
 			l.autowrap = true
 			l.text = reply.text
+			if font_override in fonts:
+				l.add_font_override("font", fonts[font_override])
 			call_deferred("resize_replies")
 			var r = reply
 			var s = skip_reply
@@ -224,7 +234,7 @@ func _on_input_timer_timeout():
 
 func choose_reply(item: DialogItem, skip: bool):
 	if !skip:
-		insert_label("You: %s" % item.text, player_font, player_color)
+		insert_label("You: %s" % item.text, "you")
 		last_speaker = "You"
 	current_item = item
 	get_next()
@@ -235,7 +245,7 @@ func get_speaker_name() -> String:
 	else:
 		return main_speaker.name.capitalize()
 
-func show_message():
+func show_message(font_override: String):
 	var speaker: String = current_item.speaker
 	if speaker == "":
 		speaker = get_speaker_name()
@@ -247,15 +257,23 @@ func show_message():
 		text = current_item.text
 	last_speaker = speaker
 	
-	if speaker == "You":
-		insert_label(text, player_font, player_color)
-	else:
-		insert_label(text, speaker_font)
+	insert_label(text, speaker.to_lower(), font_override)
 
-func show_narration():
-	insert_label(current_item.text, narration_font, narration_color)
+func show_narration(font_override: String):
+	insert_label(current_item.text, "narration", font_override)
 
-func insert_label(text: String, font: Font, color := Color.black):
+func insert_label(text: String, format: String, font_override := ""):
+	var color:Color = colors["default"]
+	var font:Font = fonts["default"]
+	
+	if font_override in fonts:
+		font = fonts[font_override]
+	elif format in fonts:
+		font = fonts[format]
+	
+	if format in colors:
+		color = colors[format]
+	
 	var label := Label.new()
 	label.autowrap = true
 	label.text = interpolate(text)
@@ -314,7 +332,7 @@ func trade_coats():
 		current_item = coat_item
 		advance()
 	else:
-		insert_label("[You cannot trade coats with this person]", narration_font, narration_color)
+		insert_label("[You cannot trade coats with this person]", "narration")
 
 func fast_exit():
 	if is_exiting:
@@ -341,10 +359,12 @@ func get_talked_stat():
 	return "talked" + speaker_stat()
 
 func ui_settings_apply():
-	if player_font is DynamicFont:
-		player_font.size = get_theme_default_font().size
-	if narration_font is DynamicFont:
-		narration_font.size = get_theme_default_font().size
+	for f in fonts.values():
+		if f is DynamicFont:
+			f.size = get_theme_default_font().size
+	
+	fonts["default"] = get_theme_default_font()
+	colors["default"] = get_color("font_color", "Label")
 
 func set_shopping(s):
 	shopping = s
@@ -368,8 +388,8 @@ func seconds_since_conversation() -> int:
 	return now - prev
 
 # TODO
-func format(_style: String):
-	return true
+func format(style: String):
+	return {"_format":style}
 
 # TODO
 func animation(_animation: String, _node: String = ""):

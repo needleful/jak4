@@ -7,6 +7,7 @@ signal deactivated
 
 export(float) var delay := 0.0
 export(float) var min_active_time := 0.0
+export(String) var stat := ""
 
 enum State {
 	Idle,
@@ -16,10 +17,12 @@ enum State {
 }
 var state = State.Idle
 
-onready var timer = $Timer
+var timer: Timer
 var active_body: Node
 
 func _ready():
+	if has_node("Timer"):
+		timer = $Timer
 	if delay:
 		if !timer:
 			print_debug("NO TIMER FOUND: ", get_path())
@@ -30,6 +33,8 @@ func _ready():
 	_x = connect("body_exited", self, "_on_body_exited")
 
 func _on_body_entered(body):
+	if stat != "":
+		var _x = Global.add_stat(stat)
 	print("Body entered: ", body.name)
 	match state:
 		State.Idle:
@@ -39,7 +44,8 @@ func _on_body_entered(body):
 			else:
 				alert(body)
 		State.Active:
-			timer.stop()
+			if timer:
+				timer.stop()
 
 func _on_body_exited(body):
 	print("Body exited: ", body.name)
@@ -67,14 +73,15 @@ func alert(body):
 	emit_signal("alerted")
 	state = State.Alerted
 	active_body = body
-	timer.start(delay)
+	if timer and delay:
+		timer.start(delay)
 
 func activate():
 	print("Activated")
 	emit_signal("activated")
 	emit_signal("activated_by", active_body)
 	state = State.Active
-	if min_active_time:
+	if timer and min_active_time:
 		timer.start(min_active_time)
 
 func deactivate():
