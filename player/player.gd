@@ -426,7 +426,7 @@ func _physics_process(delta):
 			best_floor_dot = dot
 			best_normal = normal
 			best_floor = col.collider as Node
-	if best_floor_dot > 0:
+	if best_floor_dot > MIN_DOT_GROUND:
 		ground_normal = best_normal
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
@@ -866,6 +866,7 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
+			
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true
@@ -877,7 +878,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
-			mesh.blend_run_animation(velocity.length()/SPEED_RUN)
+			mesh.blend_run_animation(desired_velocity.length())
 			rotate_to_velocity(desired_velocity)
 		State.BaseJump, State.HighJump:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
@@ -900,7 +901,6 @@ func _physics_process(delta):
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB, best_normal)
-			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
 			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
 			rotate_mesh(-best_normal)
 		State.CrouchJump, State.LedgeJump:
@@ -1723,28 +1723,28 @@ func set_state(next_state: int):
 			can_wall_cling = true
 			emit_signal("jumped")
 			velocity.y = jump_factor*JUMP_VEL_BASE
-			mesh.transition_to("BaseJump")
+			mesh.play_jump()
 		State.HighJump:
 			can_wall_cling = true
 			emit_signal("jumped")
 			velocity.y = jump_factor*JUMP_VEL_HIGH
-			mesh.transition_to("BaseJump")
+			mesh.play_crouch_jump()
 		State.WallJump:
 			can_wall_cling = true
 			emit_signal("jumped")
-			mesh.transition_to("BaseJump")
+			mesh.play_jump()
 		State.LedgeJump:
 			can_wall_cling = true
 			emit_signal("jumped")
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
-			mesh.transition_to("BaseJump")
+			mesh.play_ledge_jump()
 		State.CrouchJump:
 			can_wall_cling = true
 			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity.y = jump_factor*JUMP_VEL_CROUCH
-			mesh.transition_to("BaseJump")
+			mesh.play_crouch_jump()
 		State.RollJump:
 			can_wall_cling = true
 			damaged_objects = []
@@ -1822,17 +1822,15 @@ func set_state(next_state: int):
 			gun.lock()
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
-			mesh.transition_to("DiveStart")
-			mesh.start_kick_left(max_damage)
+			mesh.play_dive_windup(max_damage)
 			gun.lock()
 		State.DiveStart:
 			damaged_objects = []
-			mesh.start_kick_left(max_damage)
+			mesh.play_dive_start(max_damage)
 			gun.lock()
 		State.DiveEnd:
 			damaged_objects = []
-			mesh.transition_to("DiveEnd")
-			mesh.start_dive_shockwave(max_damage)
+			mesh.play_dive_end(max_damage)
 		State.Damaged:
 			velocity.y = speed_factor*VEL_DAMAGED_V
 			mesh.force_play("Damaged")

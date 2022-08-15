@@ -8,16 +8,33 @@ var sounds := {
 		preload("res://audio/player/stepdirt3.wav"),
 		preload("res://audio/player/stepdirt4.wav"),
 	],
-	"stepSteepGround": [],
+	"stepSteepGround": [
+		preload("res://audio/player/stepsteep1.wav"),
+		preload("res://audio/player/stepsteep2.wav"),
+		preload("res://audio/player/stepsteep3.wav"),
+		preload("res://audio/player/stepsteep4.wav"),
+	],
 	"climb_hand":[
 		preload("res://audio/player/climb_hand1.wav"),
 		preload("res://audio/player/climb_hand2.wav")
 	],
 	"climb_step": [
-		preload("res://audio/player/stepdirt1.wav"),
-		preload("res://audio/player/stepdirt2.wav"),
-		preload("res://audio/player/stepdirt3.wav"),
-		preload("res://audio/player/stepdirt4.wav"),
+		preload("res://audio/player/stepsteep1.wav"),
+		preload("res://audio/player/stepsteep2.wav"),
+		preload("res://audio/player/stepsteep3.wav"),
+		preload("res://audio/player/stepsteep4.wav"),
+	],
+	"dive_windup":[
+		preload("res://audio/player/lunge_kick1.wav")
+	],
+	"dive_start": [
+		preload("res://audio/player/dive_start1.wav")
+	],
+	"crouch_jump": [
+		preload("res://audio/player/crouch_jump1.wav")
+	],
+	"jump": [
+		preload("res://audio/player/jump1.wav")
 	],
 	"gem": [
 		preload("res://audio/pickup/gem1.wav"),
@@ -51,7 +68,6 @@ export(AudioStream) var sound_lunge_kick : AudioStream
 export(AudioStream) var sound_spin_kick : AudioStream
 export(AudioStream) var sound_uppercut : AudioStream
 
-
 onready var anim: AnimationTree = $AnimationTree
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
@@ -84,6 +100,8 @@ func blend_run_animation(speed: float):
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
+	if velocity.length_squared() < 0.005:
+		velocity = Vector3.ZERO
 	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(velocity.x, velocity.y)
 
 func force_play(state):
@@ -131,6 +149,19 @@ func stop_particles():
 func ground_transition(state: String):
 	transition_to(state)
 
+func play_jump():
+	play_sound("feet", "jump", true)
+	transition_to("BaseJump")
+
+func play_ledge_jump():
+	play_sound("attack", "crouch_jump", true)
+	transition_to("BaseJump")
+
+func play_crouch_jump():
+	play_sound("attack", "crouch_jump", true)
+	play_sound("feet", "jump", true)
+	transition_to("BaseJump")
+
 func play_roll():
 	play_attack_sound(sound_roll)
 	transition_to("Roll")
@@ -140,6 +171,20 @@ func play_roll_jump(max_damage: bool):
 		start_roll_particles()
 	transition_to("RollJump")
 	play_attack_sound(sound_roll_jump)
+	play_sound("feet", "jump", true)
+
+func play_dive_windup(max_damage: bool):
+	play_sound("attack", "dive_windup", true)
+	transition_to("DiveStart")
+
+func play_dive_start(max_damage: bool):
+	start_kick_left(max_damage)
+	play_sound("attack", "dive_start")
+
+func play_dive_end(max_damage: bool):
+	play_sound("attack", "dive_end", true)
+	transition_to("DiveEnd")
+	start_dive_shockwave(max_damage)
 
 func play_spin_kick(max_damage: bool):
 	force_play("SpinKickLeft")
@@ -162,6 +207,7 @@ func play_lunge_kick(max_damage: bool):
 	play_attack_sound(sound_lunge_kick)
 
 func play_attack_sound(sound: AudioStream):
+	attack_sounds.pitch_scale = 1.0
 	attack_sounds.stop()
 	attack_sounds.stream = sound
 	attack_sounds.play()
