@@ -380,14 +380,14 @@ func exiting():
 	return true
 
 func track_conversation_time():
-	Global.set_stat("talk_time"+main_speaker.get_path(), OS.get_unix_time())
+	Global.set_stat("talk_time"+get_speaker_name(), OS.get_unix_time())
+	return true
 
 func seconds_since_conversation() -> int:
-	var prev: int = Global.stat("talk_time"+main_speaker.get_path())
+	var prev: int = Global.stat("talk_time"+get_speaker_name())
 	var now: int = OS.get_unix_time()
 	return now - prev
 
-# TODO
 func format(style: String):
 	return {"_format":style}
 

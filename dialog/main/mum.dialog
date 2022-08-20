@@ -1,22 +1,78 @@
 // There's special music for this dialog
 {event("play_music", false)}
+{track_conversation_time()}
 // So there's a lot of stuff that'll be here.
 ?{mum/info}
 	{Global.add_stat("mum/true_talked") == 1}
-		M-mum?
-		{pick_highest()}
-			?{mum/leader}
-			?{mum/damsel}
-			?{mum/brute} What? 
-			?{mum/absent} Hm? I think you're mistaken.
+		Excuse me, do I know you?
+		[You] Hi Mum... It's me, Jackie.
+		What? No, she is just a... where are we?
+		[You] The "Medium of Braalna", it said.
+		Someone got that old thing working again?
+		Oh.
+		?{mum/huh} Huh...
+		{otherwise} Oh...
+		.... What happened to me, then?
+		?{mum/absent}
+			[You] I don't know. You left when I was born and never came back.
+			Oh.
+		{otherwise}
+			[You] We uh, don't know. You went missing.
+			Really? I could still be alive, then?
+			[You] It's possible.
+		So you came here to find out what happened to me? Or, well, your mother?
+		> Yes.
+			+{mum/seek}
+			[You] If there's anyone who would know what happened to you, it would be the very person I'm looking for.
+			Oh, Jackie... You understand how the Medium works, do you not? I am just a memory.
+			[You] Of course I do. It scans the user's brain and constructs an AI to match their understanding of the subject. But it's so much more than a memory...
+				From what I understand, the Medium is capable of correcting for deficiencies in memory. It not only knows what I know, but it knows how my mind distorts information.
+				And they connect with a network of computing machines to track information about the world and use that to further aide in reconstructing a subject.
+				It's not magic, but it's an immensely powerful data processor.
+			You seem to know what you are talking about. But do you really think I can provide what you could not learn on your own?
+			[You] I'm confident you can.
+			Well, alright. What did you want to know?
+		> No.
+			[You] I mean, I don't expect I'll be able to. I just...
+				My father remarried after you left. Until I was about twelve, I thought my stepmother Elissa was my mother. I love her dearly, but, well, I don't know....
+				I don't think she ever quite loved me as much as my brother, her actual child.
+				And I think Father saw me as an illegitimate child. Evidence of a love gone wrong, so to speak. Especially once I started asking him about you. But I just...
+			I think I understand, Jackie.
+			{event("hug", false)}
+			* She presses into you as if she can feel your body.
+			* You feel nothing but the stagnant air of the Medium.
+			[You] ...
+				Thanks.
+				{event("end_hug", false)}
+			What do you want to talk about?
+		{goto("main_loop")}
+
+	{otherwise if !Global.stat("mum/time")}
+		Hm? Did you forget something?
+		{seconds_since_conversation() > 200}
+			[You] What do you mean?
+			You sounded like you were leaving.
+			[You] I... did leave? I was gone for some time...
+			No. You left, and then...
+			?{mum/huh} ... Huh.
+			{otherwise} ...
+			[You] Is something wrong?
+			No. It's nothing. Just my memory failing me for a moment. Did you want to talk?
+		{otherwise}
+			[You] Yeah, I guess I wanted to ask about some more stuff.
+		{goto("main_loop")}
+
+	{otherwise if Global.stat("mum/info") < 3}
+		[You] Hi mum.
+		Hello again, Jackie. Did you need something?
+		{goto("main_loop")}
 
 {otherwise}
 	{talked == 0}
+		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")} {Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")} {Global.add_stat("mum/info_needed")}
 		* The thing in front of you is almost nothing at all.
 		* The outline of a dress. Her arched nose. That's all you can make out. Somehow this is more than you could recall.
 		* It's unmistakable.
-		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")}
-		{Global.note_task("mum", "The medium really works. But")}
 		[You] Hi mum.
 			I-.. I....
 		* {animation("sit")} You can't think of anything to say.
@@ -40,9 +96,13 @@
 			But I just... don't know what to look for.
 			Think... Where specifically did she live? I think it was...
 		The plateau?
-		{animation("stand")} * You're startled by the voice. It's not really your mother's voice, as far as you can tell, but she's right.
-		{animation("plateau")} * She lived up in the plateaus. If anyone would remember her, they're most likely to be there.
+		{animation("stand")} * You're startled by the voice. It's not really your mother's, as far as you can tell, but she's right.
+		{animation("plateau")} * She lived up on the plateau. If anyone would remember her, they're most likely to be there.
 		[You] I should go.
+{exit()}
+
+:main_loop
+
 {exit()}
 
 :family
