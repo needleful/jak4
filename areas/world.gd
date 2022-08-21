@@ -23,12 +23,12 @@ var chunks: Array
 var chunk_load_waitlist : Dictionary = {}
 var chunk_unload_waitlist : Dictionary = {}
 var active_chunks: Array
-onready var player: PlayerBody = $player
 var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
 
 var chunk_scenes: Dictionary = {}
 
+onready var player: PlayerBody = $player
 onready var player_last_postion: Vector3 = player.global_transform.origin
 
 export(Material) var debug_active_chunk_material
@@ -39,6 +39,17 @@ const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
+
+onready var env := $WorldEnvironment
+onready var env_tween := $env_tween
+
+onready var fog_defaults := {
+	"color":env.environment.fog_color,
+	"begin":env.environment.fog_depth_begin,
+	"end":env.environment.fog_depth_end
+}
+
+const FOG_TWEEN_TIME := 2.5
 
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
@@ -234,3 +245,35 @@ func show_air_combat_tutorial():
 
 func get_wind_audio():
 	return $audio_wind
+
+func set_fog_override(fog: Color, begin: float, end:float):
+	env_tween.remove_all()
+	env_tween.interpolate_property(env.environment, "fog_color",
+		env.environment.fog_color, fog,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+		env.environment.fog_depth_begin, begin,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_end",
+		env.environment.fog_depth_end, end,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.start()
+
+func clear_fog_override():
+	env_tween.remove_all()
+	env_tween.interpolate_property(env.environment, "fog_color",
+		env.environment.fog_color, fog_defaults.color,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+		env.environment.fog_depth_begin, fog_defaults.begin,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_end",
+		env.environment.fog_depth_end, fog_defaults.end,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.start()

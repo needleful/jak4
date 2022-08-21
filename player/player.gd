@@ -41,7 +41,7 @@ const JUMP_VEL_HIGH := 15.0
 const JUMP_VEL_WALL := 5.0
 const JUMP_VEL_WALL_V := 8.0
 
-const MIN_SPEED_ROLL := 2.0
+const MIN_SPEED_ROLL := 4.0
 
 const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
@@ -742,8 +742,11 @@ func _physics_process(delta):
 			elif timer_state >= TIME_SPIN_MIN:
 				if Input.is_action_just_pressed("combat_lunge"):
 					next_state = State.LungeKick
-				elif best_floor_dot > MIN_DOT_SLIDE and Input.is_action_just_pressed("mv_crouch"):
-					next_state = State.Roll
+				elif best_floor_dot > MIN_DOT_SLIDE and Input.is_action_pressed("mv_crouch"):
+					if velocity.length_squared() > MIN_SPEED_ROLL*MIN_SPEED_ROLL:
+						next_state = State.Roll
+					else:
+						next_state = State.Crouch
 		State.AirSpinKick:
 			if can_dash() and Input.is_action_just_pressed("mv_jump"):
 				next_state = State.Dash
@@ -898,7 +901,7 @@ func _physics_process(delta):
 			mesh.blend_run_animation(velocity.length()/SPEED_CROUCH)
 			rotate_to_velocity(desired_velocity)
 		State.Climb:
-			if best_normal != Vector3.ZERO:
+			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB, best_normal)
 			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
@@ -930,7 +933,9 @@ func _physics_process(delta):
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
-			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
+			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
+				ground_normal = best_normal
+			accel(delta, desired_velocity*SPEED_RUN)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
@@ -1473,6 +1478,7 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 		die()
 		return true
 	velocity = VEL_DAMAGED_H*direction
+	print("damage: ", velocity)
 	if can_flinch():
 		set_state(State.Damaged)
 	return false
@@ -1832,7 +1838,7 @@ func set_state(next_state: int):
 			damaged_objects = []
 			mesh.play_dive_end(max_damage)
 		State.Damaged:
-			velocity.y = speed_factor*VEL_DAMAGED_V
+			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)
 			mesh.force_play("Damaged")
 		State.Locked:
 			mesh.ground_transition("Walk")

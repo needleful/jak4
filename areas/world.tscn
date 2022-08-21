@@ -2,21 +2,21 @@
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
-[ext_resource path="res://_glb/world.glb" type="PackedScene" id=3]
-[ext_resource path="res://player/player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
-[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://ui/prompts/gamepad1.png" type="Texture" id=7]
+[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://_glb/world.glb" type="PackedScene" id=4]
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/default_theme.tres" type="Theme" id=6]
+[ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=7]
 [ext_resource path="res://ui/prompts/gamepad2.png" type="Texture" id=8]
-[ext_resource path="res://ui/prompts/key_f.png" type="Texture" id=9]
-[ext_resource path="res://ui/prompts/key_r.png" type="Texture" id=10]
+[ext_resource path="res://ui/prompts/key_r.png" type="Texture" id=9]
+[ext_resource path="res://ui/prompts/key_f.png" type="Texture" id=10]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=11]
-[ext_resource path="res://dialog/border.dialog" type="Resource" id=12]
-[ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=13]
-[ext_resource path="res://ui/prompts/key_space.png" type="Texture" id=14]
-[ext_resource path="res://ui/prompts/gamepad0.png" type="Texture" id=15]
-[ext_resource path="res://ui/prompts/gamepadLT.png" type="Texture" id=16]
-[ext_resource path="res://audio/env/amb_wind.ogg" type="AudioStream" id=17]
+[ext_resource path="res://audio/env/amb_wind.ogg" type="AudioStream" id=12]
+[ext_resource path="res://ui/prompts/gamepad1.png" type="Texture" id=13]
+[ext_resource path="res://ui/prompts/gamepadLT.png" type="Texture" id=14]
+[ext_resource path="res://ui/prompts/key_space.png" type="Texture" id=15]
+[ext_resource path="res://ui/prompts/gamepad0.png" type="Texture" id=16]
+[ext_resource path="res://dialog/border.dialog" type="Resource" id=17]
 [ext_resource path="res://audio/wind_controller.gd" type="Script" id=18]
 
 [sub_resource type="OccluderShapePolygon" id=12]
@@ -68,7 +68,7 @@ glow_strength = 0.82
 size = 108
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 6 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="BoxShape" id=5]
 extents = Vector3( 14, 350, 3174 )
@@ -79,16 +79,16 @@ extents = Vector3( 95, 299, 803 )
 [sub_resource type="BoxShape" id=7]
 extents = Vector3( 3750, 2000, 100 )
 
-[node name="world" instance=ExtResource( 3 )]
+[node name="world" instance=ExtResource( 4 )]
 script = ExtResource( 2 )
-gamepad_spin = ExtResource( 7 )
+gamepad_spin = ExtResource( 13 )
 gamepad_lunge = ExtResource( 8 )
-gamepad_crouch = ExtResource( 16 )
-gamepad_jump = ExtResource( 15 )
-keyboard_spin = ExtResource( 10 )
-keyboard_lunge = ExtResource( 9 )
-keyboard_crouch = ExtResource( 13 )
-keyboard_jump = ExtResource( 14 )
+gamepad_crouch = ExtResource( 14 )
+gamepad_jump = ExtResource( 16 )
+keyboard_spin = ExtResource( 9 )
+keyboard_lunge = ExtResource( 10 )
+keyboard_crouch = ExtResource( 7 )
+keyboard_jump = ExtResource( 15 )
 
 [node name="Occluder" type="Occluder" parent="." index="0"]
 transform = Transform( 0.185079, 0, 0.982724, 0, 1, 0, -0.982724, 0, 0.185079, 784.329, -121.759, 461.348 )
@@ -740,13 +740,15 @@ directional_shadow_max_distance = 1500.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="207"]
 environment = SubResource( 3 )
 
-[node name="debug" type="Panel" parent="." index="208"]
+[node name="env_tween" type="Tween" parent="." index="208"]
+
+[node name="debug" type="Panel" parent="." index="209"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -574.0
-theme = ExtResource( 5 )
+theme = ExtResource( 6 )
 
 [node name="box" type="VBoxContainer" parent="debug" index="0"]
 anchor_right = 1.0
@@ -793,7 +795,7 @@ margin_right = 574.0
 margin_bottom = 178.0
 autowrap = true
 
-[node name="Label" type="Label" parent="." index="209"]
+[node name="Label" type="Label" parent="." index="210"]
 pause_mode = 2
 visible = false
 anchor_right = 1.0
@@ -804,15 +806,15 @@ align = 1
 valign = 1
 script = ExtResource( 1 )
 
-[node name="tutorial_swap" type="Timer" parent="." index="210"]
+[node name="tutorial_swap" type="Timer" parent="." index="211"]
 wait_time = 3.0
 one_shot = true
 
-[node name="border" type="Area" parent="." index="211"]
+[node name="border" type="Area" parent="." index="212"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
-dialog_sequence = ExtResource( 12 )
+dialog_sequence = ExtResource( 17 )
 
 [node name="CollisionShape" type="CollisionShape" parent="border" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2996.72, 0, 0 )
@@ -834,43 +836,43 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="player" parent="." index="212" instance=ExtResource( 4 )]
+[node name="player" parent="." index="213" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.45, 746 )
 
-[node name="audio_wind" type="AudioStreamPlayer" parent="." index="213" groups=["distance_activated"]]
+[node name="audio_wind" type="AudioStreamPlayer" parent="." index="214" groups=["distance_activated"]]
 pause_mode = 2
-stream = ExtResource( 17 )
+stream = ExtResource( 12 )
 volume_db = -80.0
 autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="mapcam" type="Camera" parent="." index="214"]
+[node name="mapcam" type="Camera" parent="." index="215"]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="215"]
+[node name="StaticBody" type="StaticBody" parent="." index="216"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="216"]
+[node name="StaticBody2" type="StaticBody" parent="." index="217"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="217"]
+[node name="StaticBody3" type="StaticBody" parent="." index="218"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="218"]
+[node name="StaticBody4" type="StaticBody" parent="." index="219"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]

@@ -9,7 +9,6 @@ var sounds := {
 		preload("res://audio/player/stepdirt4.wav"),
 	],
 	"stepSteepGround": [
-		preload("res://audio/player/stepsteep1.wav"),
 		preload("res://audio/player/stepsteep2.wav"),
 		preload("res://audio/player/stepsteep3.wav"),
 		preload("res://audio/player/stepsteep4.wav"),
@@ -19,7 +18,6 @@ var sounds := {
 		preload("res://audio/player/climb_hand2.wav")
 	],
 	"climb_step": [
-		preload("res://audio/player/stepsteep1.wav"),
 		preload("res://audio/player/stepsteep2.wav"),
 		preload("res://audio/player/stepsteep3.wav"),
 		preload("res://audio/player/stepsteep4.wav"),
@@ -99,7 +97,7 @@ func blend_run_animation(speed: float):
 	anim["parameters/WholeBody/Crouch/blend_position"] = speed
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
 
-func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
+func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
 	if velocity.length_squared() < 0.005:
 		velocity = Vector3.ZERO
 	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(velocity.x, velocity.y)
@@ -173,7 +171,7 @@ func play_roll_jump(max_damage: bool):
 	play_attack_sound(sound_roll_jump)
 	play_sound("feet", "jump", true)
 
-func play_dive_windup(max_damage: bool):
+func play_dive_windup(_max_damage: bool):
 	play_sound("attack", "dive_windup", true)
 	transition_to("DiveStart")
 

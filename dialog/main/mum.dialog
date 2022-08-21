@@ -1,6 +1,5 @@
 // There's special music for this dialog
 {event("play_music", false)}
-{track_conversation_time()}
 // So there's a lot of stuff that'll be here.
 ?{mum/info}
 	{Global.add_stat("mum/true_talked") == 1}
@@ -46,7 +45,6 @@
 				{event("end_hug", false)}
 			What do you want to talk about?
 		{goto("main_loop")}
-
 	{otherwise if !Global.stat("mum/time")}
 		Hm? Did you forget something?
 		{seconds_since_conversation() > 200}
@@ -99,10 +97,15 @@
 		{animation("stand")} * You're startled by the voice. It's not really your mother's, as far as you can tell, but she's right.
 		{animation("plateau")} * She lived up on the plateau. If anyone would remember her, they're most likely to be there.
 		[You] I should go.
+{track_conversation_time()}
 {exit()}
 
 :main_loop
+{track_conversation_time()}
+{exit()}
 
+:_exit
+{track_conversation_time()}
 {exit()}
 
 :family
