@@ -5,6 +5,7 @@ enum Mode {
 	Dialog,
 	Paused,
 	Status,
+	DebugConsole,
 	Custom
 }
 
@@ -30,6 +31,8 @@ func _input(event):
 				set_mode(Mode.Status)
 			elif event.is_action_pressed("pause"):
 				set_mode(Mode.Paused)
+			elif event.is_action_pressed("debug_console"):
+				set_mode(Mode.DebugConsole)
 		Mode.Status:
 			if event.is_action_pressed("status_toggle") or event.is_action_pressed("pause"):
 				set_mode(mode_before_pause)
@@ -37,14 +40,23 @@ func _input(event):
 				status.next()
 			elif event.is_action_pressed("ui_page_down"):
 				status.prev()
+			elif event.is_action_pressed("debug_console"):
+				set_mode(Mode.DebugConsole)
 		Mode.Paused:
 			if event.is_action_pressed("pause"):
 				set_mode(mode_before_pause)
+			elif event.is_action_pressed("debug_console"):
+				set_mode(Mode.DebugConsole)
 		Mode.Custom:
 			if event.is_action_pressed("status_toggle"):
 				set_mode(Mode.Status)
 			elif event.is_action_pressed("pause"):
 				set_mode(Mode.Gameing)
+			elif event.is_action_pressed("debug_console"):
+				set_mode(Mode.DebugConsole)
+		Mode.DebugConsole:
+			if event.is_action_pressed("debug_console"):
+				set_mode(mode_before_pause)
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	set_mode(Mode.Dialog)
@@ -55,7 +67,7 @@ func set_mode(m):
 		print_debug("Bad mode! ", m)
 		return
 	
-	var should_pause: bool = (m == Mode.Paused or m == Mode.Status)
+	var should_pause: bool = (m == Mode.Paused or m == Mode.Status or m == Mode.DebugConsole)
 	if should_pause and !get_tree().paused:
 		mode_before_pause = mode
 	get_tree().paused = should_pause
