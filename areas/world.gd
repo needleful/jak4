@@ -97,7 +97,7 @@ func get_or_load(chunk_name: String) -> PackedScene:
 		return loaded_chunks[chunk_name] as PackedScene
 	var content_file: String = PATH_CONTENT % chunk_name
 	if ResourceLoader.exists(content_file):
-		var content = ResourceLoader.load(content_file) as PackedScene
+		var content = ResourceLoader.load(content_file, "PackedScene", true) as PackedScene
 		if content:
 			loaded_chunks[chunk_name] = content
 		return content
