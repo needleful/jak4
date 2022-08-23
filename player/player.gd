@@ -41,7 +41,7 @@ const JUMP_VEL_HIGH := 15.0
 const JUMP_VEL_WALL := 5.0
 const JUMP_VEL_WALL_V := 8.0
 
-const MIN_SPEED_ROLL := 4.0
+const MIN_SPEED_ROLL := 3.0
 
 const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5

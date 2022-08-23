@@ -12,21 +12,24 @@ export(Texture) var keyboard_jump
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 200
-const MIN_DIST_MUST_LOAD := 100
+const MIN_DIST_LOAD := 150
+const MIN_DIST_MUST_LOAD := 50
 const MIN_SQDIST_UPDATE := 10
 
 const LOAD_TIME := 3.0
 const UNLOAD_TIME := 10.0
 
 var chunks: Array
-var chunk_load_waitlist : Dictionary = {}
-var chunk_unload_waitlist : Dictionary = {}
 var active_chunks: Array
+
+var loading : Spatial
+var load_thread := Thread.new()
+var load_queue: Array = []
+var loaded_chunks: Dictionary = {}
+
+var chunk_unload_waitlist : Dictionary = {}
 var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
-
-var chunk_scenes: Dictionary = {}
 
 onready var player: PlayerBody = $player
 onready var player_last_postion: Vector3 = player.global_transform.origin
@@ -80,24 +83,24 @@ func _process(delta):
 		update_active_chunks(player_new_position)
 		player_last_postion = player_new_position
 	
-	for ch in chunk_load_waitlist:
-		chunk_load_waitlist[ch] += delta
-		if chunk_load_waitlist[ch] > LOAD_TIME:
-			mark_active(get_node(ch))
-			
+	if !load_queue.empty() and !load_thread.is_alive():
+		if load_thread.is_active():
+			load_thread.wait_to_finish()
+		var _x = load_thread.start(self, "load_async", load_queue.pop_front())
+	
 	for ch in chunk_unload_waitlist:
 		chunk_unload_waitlist[ch] += delta
 		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
 			mark_inactive(get_node(ch))
 
 func get_or_load(chunk_name: String) -> PackedScene:
-	if chunk_name in chunk_scenes:
-		return chunk_scenes[chunk_name] as PackedScene
+	if chunk_name in loaded_chunks:
+		return loaded_chunks[chunk_name] as PackedScene
 	var content_file: String = PATH_CONTENT % chunk_name
 	if ResourceLoader.exists(content_file):
 		var content = ResourceLoader.load(content_file) as PackedScene
 		if content:
-			chunk_scenes[chunk_name] = content
+			loaded_chunks[chunk_name] = content
 		return content
 	else:
 		return null
@@ -128,7 +131,7 @@ func update_active_chunks(position: Vector3, instant := false):
 		
 		if load_zone.has_point(local):
 			if instant or must_load_zone.has_point(local):
-				mark_active(ch)
+				load_sync(ch)
 			else:
 				queue_load(ch)
 		else:
@@ -147,8 +150,8 @@ func update_active_chunks(position: Vector3, instant := false):
 		$debug/box/Label2.text = active_str
 		
 		var load_str = "Load Queue"
-		for c in chunk_load_waitlist:
-			load_str += "\n\t" + c
+		for c in load_queue:
+			load_str += "\n\t" + c.name
 		$debug/box/Label3.text = load_str
 		
 		var unload_str = "Unload Queue:"
@@ -156,48 +159,68 @@ func update_active_chunks(position: Vector3, instant := false):
 			unload_str += "\n\t" + c
 		$debug/box/Label4.text = unload_str
 		
-	if active_chunks.size() == 0 and chunk_load_waitlist.size() == 0:
+	if position.y < -1000:
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
+	if loading == ch:
+		return
 	if ch in active_chunks:
 		return
-	if !(ch.name in chunk_load_waitlist):
-		chunk_load_waitlist[ch.name] = 0.0 
-	#ch.material_override = debug_active_chunk_material
+	var load_i = load_queue.find(ch)
+	if load_i >= 0:
+		return
+	if ch.name in loaded_chunks:
+		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
+	load_queue.push_back(ch)
+
+func load_async(ch:Spatial):
+	loading = ch
+	var scn: PackedScene = get_or_load(ch.name)
+	call_deferred("add_dynamic_content", ch, scn.instance())
+	active_chunks.append(ch)
+	loading = null
+
+func load_sync(chunk: Spatial):
+	if loading == chunk and load_thread.is_active():
+		load_thread.wait_to_finish()
+	if chunk.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(chunk.name)
+	if (chunk in active_chunks):
+		return
+	var load_i = load_queue.find(chunk)
+	if load_i >= 0:
+		load_queue.remove(load_i)
+	active_chunks.append(chunk)
+	var scn: PackedScene = get_or_load(chunk.name)
+	if scn:
+		add_dynamic_content(chunk, scn.instance())
+
+func add_dynamic_content(chunk: Spatial, node: Node):
+	if chunk.has_node("dynamic_content"):
+		print_debug("Tried adding duplicate content: ", chunk.name)
+		return
+	node.name = "dynamic_content"
+	chunk.add_child(node)
+	if chunk.has_node("lowres"):
+		chunk.remove_child(chunk.get_node("lowres"))
 
 func queue_unload(ch: Spatial):
-	if ch.name in chunk_load_waitlist:
-		var _x = chunk_load_waitlist.erase(ch.name)
+	var load_i = load_queue.find(ch)
+	if load_i >= 0:
+		load_queue.remove(load_i)
 	if !(ch in active_chunks):
 		return
 	if !(ch.name in chunk_unload_waitlist):
 		chunk_unload_waitlist[ch.name] = 0.0 
 	#ch.material_override = debug_inactive_chunk_material
 
-func mark_active(chunk: Spatial):
-	if chunk.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(chunk.name)
-	if (chunk in active_chunks):
-		return
-	if chunk.name in chunk_load_waitlist:
-		var _x = chunk_load_waitlist.erase(chunk.name)
-	active_chunks.append(chunk)
-	var scn: PackedScene = get_or_load(chunk.name)
-	if scn:
-		var node: Node = scn.instance()
-		node.name = "dynamic_content"
-		chunk.add_child(node)
-		if chunk.has_node("lowres"):
-			chunk.remove_child(chunk.get_node("lowres"))
-	#if !chunk.has_node("static_collision"):
-	#	chunk.add_child(chunk_collider[chunk.name])
-
 func mark_inactive(chunk: Spatial):
-	if chunk.name in chunk_load_waitlist:
-		var _x = chunk_load_waitlist.erase(chunk.name)
+	var load_i = load_queue.find(chunk)
+	if load_i >= 0:
+		load_queue.remove(load_i)
 	if !(chunk in active_chunks):
 		return
 	if chunk.name in chunk_unload_waitlist:
