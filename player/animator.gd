@@ -1,6 +1,5 @@
 extends Spatial
 
-
 var sounds := {
 	"stepLevelGround": [
 		preload("res://audio/player/stepdirt1.wav"),

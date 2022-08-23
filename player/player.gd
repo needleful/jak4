@@ -224,6 +224,12 @@ var ledge_local_position : Vector3
 # Global transform
 var ledge_last_transform : Transform
 
+onready var equipment_inventory := {
+	"flag_placer": preload("res://items/usable/flag_placer.gd").new()
+}
+
+onready var equipped_item : Usable = equipment_inventory["flag_placer"]
+
 enum State {
 	Ground,
 	Fall,
@@ -311,21 +317,26 @@ onready var health_bar := $ui/gameing/stats/health/base
 onready var stamina_bar := $ui/gameing/stats/stamina/base
 onready var armor_bar := $ui/gameing/stats/health/extra
 onready var energy_bar := $ui/gameing/stats/stamina/extra
+onready var equipment := $ui/gameing/equipment
 
 onready var ui := $ui
 onready var game_ui := $ui/gameing/custom_game
 
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
+onready var light := $jackie/Armature/Skeleton/coat_tails/light
 export(PackedScene) var flag : PackedScene
 export(PackedScene) var capacitor : PackedScene
 
-var held_item: Spatial
+var held_item
+var choosing_item := false
+const TIME_ITEM_CHOOSE := 0.25
+var timer_item_choose := 0.0
+var equipment_path_f := "res://items/usable/%s.gd"
 
 const VISIBLE_ITEMS := [
 	"bug",
 	"capacitor",
-	"flag",
 	"gem",
 ]
 
@@ -396,6 +407,11 @@ func _input(event):
 		best_trade.start_coat_trade(self)
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
+	elif choosing_item:
+		if event.is_action_pressed("ui_up"):
+			equip_previous()
+		elif event.is_action_pressed("ui_down"):
+			equip_next()
 
 func _physics_process(delta):
 	if velocity.y < TERMINAL_VELOCITY:
@@ -437,8 +453,9 @@ func _physics_process(delta):
 				next_state = State.BaseJump
 			elif should_hover():
 				next_state = State.Hover
-			elif can_place_flag() and Input.is_action_just_pressed("place_flag"):
-				next_state = State.PlaceFlag
+			elif !choosing_item and Input.is_action_just_released("use_item") and equipped_item and equipped_item.can_use():
+				equipped_item.use()
+				next_state = state
 			elif Input.is_action_pressed("mv_crouch"):
 				if velocity.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
@@ -990,6 +1007,14 @@ func _physics_process(delta):
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
+	if Input.is_action_pressed("choose_item"):
+		timer_item_choose += delta
+		if timer_item_choose >= TIME_ITEM_CHOOSE:
+			choosing_item = true
+	else:
+		choosing_item = false
+		timer_item_choose = false
+	equipment.visible = choosing_item
 
 func _process(_delta):
 	update_stamina()
@@ -1002,7 +1027,7 @@ func complete_save():
 	$ui/gameing/saveStats/AnimationPlayer.queue("save_complete")
 
 func update_inventory():
-	for item in VISIBLE_ITEMS:
+	for item in Global.game_state.inventory.keys():
 		on_item_changed(item, 0, Global.count(item))
 	for item in UPGRADE_ITEMS:
 		on_item_changed(item, 0, Global.count(item))
@@ -1075,6 +1100,16 @@ func on_item_changed(item: String, change: int, count: int):
 				energy_bar.visible = energy > 0
 			"hover_speed_up":
 				hover_speed_factor = 1.0 + hover_speed_up_percent*count
+			_:
+				if ResourceLoader.exists(equipment_path_f % item):
+					if count == 0 and item in equipment_inventory:
+						equipment_inventory.erase(item)
+					elif count > 0 and !(item in equipment_inventory):
+						var s: Script = ResourceLoader.load(equipment_path_f % item)
+						if s:
+							equipment_inventory[item] = s.new()
+							equipped_item = equipment_inventory[item]
+							update_equipment()
 
 func debug_show_inventory():
 	var state_viewer: Control = $ui/gameing/debug/game_state
@@ -1109,6 +1144,42 @@ func update_stamina():
 	energy_bar.rect_min_size.x = extra_stamina*EXTRA_STAMINA_BAR_SIZE
 	stamina_bar.max_value = max_stamina
 	stamina_bar.value = stamina
+func equip_previous():
+	if equipment_inventory.size() == 1:
+		return update_equipment()
+	else:
+		var index = equipment_inventory.values().find(equipped_item)
+		equip(index - 1)
+
+func equip_next():
+	if equipment_inventory.size() == 1:
+		return update_equipment()
+	else:
+		var index = equipment_inventory.values().find(equipped_item)
+		equip(index + 1)
+
+func equip(index):
+	var ln = equipment_inventory.size()
+	while index < 0:
+		index += ln
+	while index >= ln:
+		index -= ln
+	equipped_item = equipment_inventory.values()[index]
+	update_equipment()
+
+func update_equipment():
+	var values = equipment_inventory.values()
+	var index = values.find(equipped_item)
+	if index >= 0:
+		equipment.temp_show()
+		var prev_index = index - 1
+		var next_index = index + 1
+		var ln = values.size()
+		if prev_index < 0:
+			prev_index += ln
+		if next_index >= ln:
+			next_index -= ln
+		equipment.preview(values[index], values[prev_index], values[next_index])
 
 func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
@@ -1533,13 +1604,6 @@ func can_dash() -> bool:
 	var d := dash_charges > 0
 	return d
 
-func can_place_flag():
-	if !best_floor:
-		return false
-	elif best_floor.is_in_group("dynamic"):
-		return false 
-	return Global.count("flag")
-
 func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $jackie/flag_ref.global_transform)
@@ -1650,6 +1714,7 @@ func show_inventory():
 			g.visible = true
 	$ui/gameing/inventory.show()
 	$ui/gameing/inventory/vis_timer.start()
+	equipment.temp_show()
 
 func show_specific_item(item):
 	if !$ui/gameing/inventory.visible:
@@ -1835,7 +1900,6 @@ func set_state(next_state: int):
 			mesh.play_dive_start(max_damage)
 			gun.lock()
 		State.DiveEnd:
-			damaged_objects = []
 			mesh.play_dive_end(max_damage)
 		State.Damaged:
 			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)

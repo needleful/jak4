@@ -84,6 +84,8 @@ func _input(event):
 			time_since_fired = 0
 			enable()
 		aim_toggle = !aim_toggle
+	elif player.choosing_item:
+		return
 	elif event.is_action_pressed("wep_1"):
 		swap_to("wep_pistol")
 	elif event.is_action_pressed("wep_2"):

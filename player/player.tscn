@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -29,6 +29,7 @@
 [ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=27]
 [ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=28]
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
+[ext_resource path="res://ui/equipment.gd" type="Script" id=30]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -846,36 +847,6 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=56]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=57]
-resource_name = "show"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
 [sub_resource type="StyleBoxEmpty" id=65]
 
 [sub_resource type="StyleBoxFlat" id=5]
@@ -1387,6 +1358,7 @@ anims/start = SubResource( 68 )
 [node name="weapon" type="TextureRect" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -448.0
@@ -1562,40 +1534,84 @@ text = "+ 1"
 anims/RESET = SubResource( 54 )
 anims/show = SubResource( 55 )
 
-[node name="flag_icon" type="TextureRect" parent="ui/gameing/inventory"]
-margin_top = 348.0
+[node name="vis_timer" type="Timer" parent="ui/gameing/inventory"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="equipment" type="VBoxContainer" parent="ui/gameing"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 51.0
+margin_top = -108.0
+margin_right = 353.0
+margin_bottom = 108.0
+alignment = 1
+script = ExtResource( 30 )
+
+[node name="prev_item" type="TextureRect" parent="ui/gameing/equipment"]
+margin_right = 302.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 0, 48 )
+texture = ExtResource( 28 )
+expand = true
+stretch_mode = 6
+
+[node name="up" type="TextureRect" parent="ui/gameing/equipment"]
+margin_top = 52.0
+margin_right = 302.0
+margin_bottom = 68.0
+texture = ExtResource( 15 )
+stretch_mode = 4
+
+[node name="equipped" type="HBoxContainer" parent="ui/gameing/equipment"]
+margin_top = 72.0
+margin_right = 302.0
+margin_bottom = 172.0
+
+[node name="icon" type="TextureRect" parent="ui/gameing/equipment/equipped"]
 margin_right = 100.0
-margin_bottom = 448.0
+margin_bottom = 100.0
 rect_min_size = Vector2( 100, 100 )
 texture = ExtResource( 28 )
 expand = true
 stretch_mode = 6
 
-[node name="flag_count" type="Label" parent="ui/gameing/inventory"]
-margin_left = 118.0
-margin_top = 371.0
-margin_right = 145.0
-margin_bottom = 425.0
+[node name="count" type="Label" parent="ui/gameing/equipment/equipped"]
+margin_left = 104.0
+margin_top = 23.0
+margin_right = 198.0
+margin_bottom = 77.0
+size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "0"
+align = 1
 
-[node name="flag_added" type="Label" parent="ui/gameing/inventory"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 163.0
-margin_top = 371.0
-margin_right = 232.0
-margin_bottom = 425.0
-custom_fonts/font = ExtResource( 6 )
-text = "+ 1"
+[node name="spacer" type="Control" parent="ui/gameing/equipment/equipped"]
+margin_left = 202.0
+margin_right = 302.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 0 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/flag_added"]
-anims/RESET = SubResource( 56 )
-anims/show = SubResource( 57 )
+[node name="down" type="TextureRect" parent="ui/gameing/equipment"]
+margin_top = 176.0
+margin_right = 302.0
+margin_bottom = 192.0
+texture = ExtResource( 15 )
+stretch_mode = 4
+flip_v = true
 
-[node name="vis_timer" type="Timer" parent="ui/gameing/inventory"]
-wait_time = 5.0
+[node name="next_item" type="TextureRect" parent="ui/gameing/equipment"]
+margin_top = 196.0
+margin_right = 302.0
+margin_bottom = 244.0
+rect_min_size = Vector2( 0, 48 )
+texture = ExtResource( 28 )
+expand = true
+stretch_mode = 6
+
+[node name="Timer" type="Timer" parent="ui/gameing/equipment"]
 one_shot = true
-autostart = true
 
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
 pause_mode = 1
@@ -1687,6 +1703,7 @@ text = "Next >>"
 align = 2
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
+visible = false
 anchor_bottom = 1.0
 margin_left = 7.0
 margin_top = 7.0
@@ -1817,5 +1834,6 @@ script = ExtResource( 22 )
 
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="unlock_timer" to="." method="_on_unlock_timer_timeout"]
