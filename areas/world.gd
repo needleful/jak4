@@ -16,7 +16,6 @@ const MIN_DIST_LOAD := 150
 const MIN_DIST_MUST_LOAD := 50
 const MIN_SQDIST_UPDATE := 10
 
-const LOAD_TIME := 3.0
 const UNLOAD_TIME := 10.0
 
 var chunks: Array
