@@ -40,10 +40,14 @@ item_id = "wave_shot"
 quantity = 7
 persistent = false
 
-[node name="wave_shot_ammo" parent="." index="3" instance=ExtResource( 2 )]
+[node name="VisibilityEnabler" type="VisibilityEnabler" parent="." index="3"]
+aabb = AABB( -0.305912, -0.0393014, -0.257196, 0.611825, 0.53954, 0.514392 )
+
+[node name="wave_shot_ammo" parent="VisibilityEnabler" index="0" instance=ExtResource( 2 )]
 transform = Transform( 2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0.266542, 0 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VisibilityEnabler" index="1"]
+root_node = NodePath("../..")
 autoplay = "spin"
 anims/RESET = SubResource( 1 )
 anims/spin = SubResource( 2 )

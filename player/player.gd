@@ -1103,7 +1103,7 @@ func on_item_changed(item: String, change: int, count: int):
 			_:
 				if ResourceLoader.exists(equipment_path_f % item):
 					if count == 0 and item in equipment_inventory:
-						equipment_inventory.erase(item)
+						var _x = equipment_inventory.erase(item)
 					elif count > 0 and !(item in equipment_inventory):
 						var s: Script = ResourceLoader.load(equipment_path_f % item)
 						if s:

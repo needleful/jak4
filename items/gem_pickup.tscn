@@ -71,11 +71,15 @@ persistent = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.318765, 0 )
 shape = SubResource( 1 )
 
-[node name="mesh_component" type="MultiMeshComponent" parent="." index="2"]
+[node name="VisibilityEnabler" type="VisibilityEnabler" parent="." index="2"]
+aabb = AABB( -0.2982, -0.628406, -0.289003, 0.5964, 1.25681, 0.578006 )
+
+[node name="mesh_component" type="MultiMeshComponent" parent="VisibilityEnabler" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.323171, 0 )
 mesh = ExtResource( 2 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VisibilityEnabler" index="1"]
+root_node = NodePath("../..")
 autoplay = "spin"
 anims/RESET = SubResource( 2 )
 anims/spin = SubResource( 3 )
@@ -83,7 +87,7 @@ anims/spin = SubResource( 3 )
 [node name="CollisionShape" parent="area" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.337273, 0 )
 
-[node name="OmniLight" parent="." index="5"]
+[node name="OmniLight" parent="." index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0905272, 0 )
 light_color = Color( 0.694118, 0, 0.466667, 1 )
 light_energy = 0.2

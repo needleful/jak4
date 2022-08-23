@@ -168,31 +168,40 @@ func queue_load(ch: Spatial):
 		return
 	if ch in active_chunks:
 		return
+	if ch.has_node("dynamic_content"):
+		print_debug("Duplicate dynamic content: ", ch.name)
+		return
 	var load_i = load_queue.find(ch)
 	if load_i >= 0:
 		return
 	if ch.name in loaded_chunks:
+		active_chunks.append(ch)
 		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
-	load_queue.push_back(ch)
+	else:
+		load_queue.push_back(ch)
 
 func load_async(ch:Spatial):
+	if ch.has_node("dynamic_content") or (ch in active_chunks):
+		print_debug("Duplicate dynamic content: ", ch.name)
+		return
+	active_chunks.append(ch)
 	loading = ch
 	var scn: PackedScene = get_or_load(ch.name)
 	call_deferred("add_dynamic_content", ch, scn.instance())
-	active_chunks.append(ch)
 	loading = null
 
 func load_sync(chunk: Spatial):
 	if loading == chunk and load_thread.is_active():
 		load_thread.wait_to_finish()
+		return
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
 	if (chunk in active_chunks):
 		return
+	active_chunks.append(chunk)
 	var load_i = load_queue.find(chunk)
 	if load_i >= 0:
 		load_queue.remove(load_i)
-	active_chunks.append(chunk)
 	var scn: PackedScene = get_or_load(chunk.name)
 	if scn:
 		add_dynamic_content(chunk, scn.instance())
@@ -201,10 +210,10 @@ func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):
 		print_debug("Tried adding duplicate content: ", chunk.name)
 		return
-	node.name = "dynamic_content"
-	chunk.add_child(node)
 	if chunk.has_node("lowres"):
 		chunk.remove_child(chunk.get_node("lowres"))
+	node.name = "dynamic_content"
+	chunk.add_child(node)
 
 func queue_unload(ch: Spatial):
 	var load_i = load_queue.find(ch)

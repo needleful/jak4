@@ -40,15 +40,18 @@ item_id = "pistol"
 quantity = 10
 persistent = false
 
-[node name="OmniLight" parent="." index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0836798, 0.479844, -0.132623 )
-light_color = Color( 1, 0.878431, 0.223529, 1 )
-light_energy = 1.0
+[node name="VisibilityEnabler" type="VisibilityEnabler" parent="." index="3"]
+aabb = AABB( -0.228571, -0.169255, -0.265735, 0.457142, 0.672494, 0.531469 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VisibilityEnabler" index="0"]
+root_node = NodePath("../..")
 autoplay = "rotate"
 anims/RESET = SubResource( 1 )
 anims/rotate = SubResource( 2 )
 
-[node name="pistol_mag" parent="." index="4" instance=ExtResource( 1 )]
+[node name="pistol_mag" parent="VisibilityEnabler" index="1" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230008, 0 )
+
+[node name="OmniLight" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0836798, 0.479844, -0.132623 )
+light_color = Color( 1, 0.878431, 0.223529, 1 )
