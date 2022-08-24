@@ -17,7 +17,6 @@ func set_enabled(e):
 		for c in get_children():
 			if c is Light:
 				c.visible = light_enabled
-		# TODO: material swapping
 		if dark_material:
 			if light_enabled:
 				mesh.set_surface_material(1, light_material)

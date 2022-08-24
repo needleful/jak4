@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=95 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/junkyard.tscn" type="PackedScene" id=2]
@@ -48,23 +48,72 @@
 [ext_resource path="res://entities/env/electrical/gen_part_pvc.tscn" type="PackedScene" id=46]
 [ext_resource path="res://areas/chunks/_lightmaps/chunk075.lmbake" type="BakedLightmapData" id=47]
 [ext_resource path="res://_glb/chunks/chunk075.glb" type="PackedScene" id=48]
-[ext_resource path="res://material/env/stone/bricks.material" type="Material" id=49]
+[ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=49]
 [ext_resource path="res://entities/control/dswitch.tscn" type="PackedScene" id=50]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=51]
-[ext_resource path="res://material/env/copper/copper_local_coords.tres" type="Material" id=52]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=53]
 [ext_resource path="res://entities/hurtbox.gd" type="Script" id=54]
 [ext_resource path="res://entities/env/ancient/fountainA.tscn" type="PackedScene" id=55]
 [ext_resource path="res://entities/shop_stock/foreman.inv" type="Resource" id=56]
 [ext_resource path="res://dialog/foundry/worker.dialog" type="Resource" id=57]
 [ext_resource path="res://material/gem_transparent.shader" type="Shader" id=58]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=59]
+[ext_resource path="res://material/env/foundry/concrete.jpg" type="Texture" id=60]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=61]
+[ext_resource path="res://material/env/foundry/metal_siding.png" type="Texture" id=62]
+[ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=63]
+[ext_resource path="res://areas/chunks/_lightmaps/chunk075_foundry.lmbake" type="BakedLightmapData" id=64]
+[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=65]
+[ext_resource path="res://material/env/foundry/metal_generic.png" type="Texture" id=66]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=67]
+[ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=68]
+[ext_resource path="res://entities/env/foundry/bucket_small.tscn" type="PackedScene" id=69]
+[ext_resource path="res://entities/control/power_thing.tscn" type="PackedScene" id=70]
+[ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=71]
+[ext_resource path="res://entities/env/copper/light_hang1.tscn" type="PackedScene" id=72]
 
-[sub_resource type="BoxShape" id=1]
-extents = Vector3( 2, 2, 2 )
+[sub_resource type="ShaderMaterial" id=25]
+shader = ExtResource( 59 )
+shader_param/wall_scale = 0.75
+shader_param/ground_scale = 0.4
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 63 )
+shader_param/ground = ExtResource( 60 )
+shader_param/ceiling = ExtResource( 60 )
 
-[sub_resource type="CubeMesh" id=2]
-material = ExtResource( 52 )
-size = Vector3( 4, 4, 4 )
+[sub_resource type="ShaderMaterial" id=26]
+shader = ExtResource( 61 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 0.622
+shader_param/specularity = 14.658
+shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="ShaderMaterial" id=29]
+shader = ExtResource( 67 )
+shader_param/uv_scale = 0.7
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 63 )
+shader_param/ground = ExtResource( 49 )
+shader_param/ceiling = ExtResource( 66 )
+
+[sub_resource type="ShaderMaterial" id=28]
+shader = ExtResource( 67 )
+shader_param/uv_scale = 0.6
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 63 )
+shader_param/ground = ExtResource( 49 )
+shader_param/ceiling = ExtResource( 66 )
 
 [sub_resource type="Animation" id=3]
 resource_name = "Activate"
@@ -152,9 +201,40 @@ tracks/1/keys = {
 "values": [ Vector3( 0, -63.9932, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=15]
 resource_name = "Activate"
-length = 6.0
+length = 14.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.1, 3.2, 5.2, 6.6, 14 ),
+"transitions": PoolRealArray( 0.659754, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 154.477, 51.7856, -10.5718 ), Transform( -0.216977, -0.24329, -0.945373, 0, 0.968445, -0.249228, 0.976177, -0.0540768, -0.210131, 153.326, 50.9938, -10.8276 ), Transform( 0.132171, 0.0230396, -0.990959, -0.00812343, 0.999721, 0.0221599, 0.991194, 0.00512109, 0.132322, 149.343, 52.2095, -9.93877 ), Transform( 0.169984, 0.0242326, -0.985149, 0.0121611, 0.99957, 0.0266857, 0.985372, -0.0165166, 0.169616, 146.973, 52.7015, -6.20097 ), Transform( 0.170658, 0.0249618, -0.985014, 0.0251408, 0.999243, 0.0296781, 0.98501, -0.0298288, 0.169901, 144.533, 53.0046, -5.31996 ), Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 126.104, 59.3012, -4.75372 ) ]
+}
+
+[sub_resource type="Animation" id=16]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 154.477, 51.7856, -10.5718 ) ]
+}
+
+[sub_resource type="Animation" id=37]
+resource_name = "Activate"
+length = 7.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:translation")
 tracks/0/interp = 1
@@ -162,13 +242,13 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 6 ),
+"times": PoolRealArray( 0, 7 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 128.682, 36.2438, 24.847 ), Vector3( 128.682, 11.0203, 24.847 ) ]
+"values": [ Vector3( 128.778, 36.5942, 26.2682 ), Vector3( 128.778, 8.83497, 26.2682 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=38]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:translation")
@@ -180,7 +260,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector3( 128.682, 36.2438, 24.847 ) ]
+"values": [ Vector3( 128.778, 36.5942, 26.2682 ) ]
 }
 
 [sub_resource type="Animation" id=13]
@@ -214,37 +294,6 @@ tracks/0/keys = {
 "values": [ Vector3( 157.311, 43.259, -14.3697 ) ]
 }
 
-[sub_resource type="Animation" id=15]
-resource_name = "Activate"
-length = 14.0
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:transform")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1.1, 3.2, 5.2, 6.6, 14 ),
-"transitions": PoolRealArray( 0.659754, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 154.477, 51.7856, -10.5718 ), Transform( -0.216977, -0.24329, -0.945373, 0, 0.968445, -0.249228, 0.976177, -0.0540768, -0.210131, 153.326, 50.9938, -10.8276 ), Transform( 0.132171, 0.0230396, -0.990959, -0.00812343, 0.999721, 0.0221599, 0.991194, 0.00512109, 0.132322, 149.343, 52.2095, -9.93877 ), Transform( 0.169984, 0.0242326, -0.985149, 0.0121611, 0.99957, 0.0266857, 0.985372, -0.0165166, 0.169616, 146.973, 52.7015, -6.20097 ), Transform( 0.170658, 0.0249618, -0.985014, 0.0251408, 0.999243, 0.0296781, 0.98501, -0.0298288, 0.169901, 144.533, 53.0046, -5.31996 ), Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 126.104, 59.3012, -4.75372 ) ]
-}
-
-[sub_resource type="Animation" id=16]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:transform")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 154.477, 51.7856, -10.5718 ) ]
-}
-
 [sub_resource type="Animation" id=17]
 resource_name = "Activate"
 length = 8.5
@@ -258,7 +307,19 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 8.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 109.962, 59.4883, -4.35928 ), Vector3( 109.962, 11.1121, -4.35928 ) ]
+"values": [ Vector3( 109.603, 59.4883, -6.97608 ), Vector3( 109.603, 8.5604, -6.97608 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 8.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, -136.647, 0 ), Vector3( 0, -136.647, 0 ) ]
 }
 
 [sub_resource type="Animation" id=18]
@@ -273,7 +334,19 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector3( 109.962, 59.4883, -4.35928 ) ]
+"values": [ Vector3( 109.603, 59.4883, -6.97608 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, -136.647, 0 ) ]
 }
 
 [sub_resource type="CylinderShape" id=19]
@@ -282,6 +355,17 @@ radius = 4.8
 [sub_resource type="SpatialMaterial" id=20]
 flags_unshaded = true
 albedo_color = Color( 12.1412, 0.588235, 0.290196, 1 )
+
+[sub_resource type="ShaderMaterial" id=27]
+shader = ExtResource( 67 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 66 )
+shader_param/ground = ExtResource( 66 )
+shader_param/ceiling = ExtResource( 66 )
 
 [sub_resource type="CapsuleShape" id=21]
 radius = 50.869
@@ -295,7 +379,7 @@ albedo_color = Color( 41.04, 1.74, 38.73, 1 )
 
 [sub_resource type="ShaderMaterial" id=24]
 shader = ExtResource( 58 )
-shader_param/albedo = Color( 0.866667, 0.992157, 1, 1 )
+shader_param/albedo = Color( 0.2, 0.211765, 0.219608, 1 )
 shader_param/refraction = 0.0
 shader_param/brightness = 0.0
 
@@ -303,7 +387,17 @@ shader_param/brightness = 0.0
 script = ExtResource( 1 )
 lighting_preview = true
 
+[node name="foundry" parent="." index="0"]
+material/0 = SubResource( 25 )
+material/1 = SubResource( 26 )
+
 [node name="static_collision" parent="foundry" index="0"]
+collision_layer = 257
+
+[node name="office" parent="." index="1"]
+material/0 = SubResource( 29 )
+
+[node name="static_collision" parent="office" index="0"]
 collision_layer = 257
 
 [node name="area_scrapyard" type="Spatial" parent="." index="2"]
@@ -711,79 +805,89 @@ transform = Transform( -0.528089, -0.594257, -0.606614, -0.400818, 0.804195, -0.
 
 [node name="area_foundry" type="Spatial" parent="." index="4"]
 
-[node name="rock9" parent="area_foundry" index="0" instance=ExtResource( 32 )]
+[node name="light_wall" parent="area_foundry" index="0" instance=ExtResource( 71 )]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 137.724, 13.2462, 7.4408 )
+
+[node name="BakedLightmap" type="BakedLightmap" parent="area_foundry" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 110.697, 0, -29.6819 )
+extents = Vector3( 83.3184, 77.0269, 99.9003 )
+environment_mode = 1
+capture_enabled = false
+light_data = ExtResource( 64 )
+
+[node name="rock9" parent="area_foundry" index="2" instance=ExtResource( 32 )]
 transform = Transform( -0.515573, -0.856846, 0, 0.856846, -0.515573, 0, 0, 0, 1, 14.39, 13.5977, -14.9135 )
 
-[node name="scrap_pile4" parent="area_foundry" index="1" instance=ExtResource( 8 )]
+[node name="scrap_pile4" parent="area_foundry" index="3" instance=ExtResource( 8 )]
 transform = Transform( 0.866542, 0.499081, -0.0048256, -0.498407, 0.86478, -0.0612072, -0.0263743, 0.0554438, 0.998114, 106.824, 12.9055, -49.6397 )
 
-[node name="CSGBox" type="CSGBox" parent="area_foundry" index="2"]
+[node name="CSGBox" type="CSGBox" parent="area_foundry" index="4"]
 transform = Transform( 0.570264, 0, 0.821461, 0, 1, 0, -0.821461, 0, 0.570264, 98.3348, 12.8409, -42.0048 )
 use_collision = true
 width = 11.6696
 height = 8.38614
 depth = 14.7267
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="CSGBox6" type="CSGBox" parent="area_foundry" index="3"]
+[node name="CSGBox6" type="CSGBox" parent="area_foundry" index="5"]
 transform = Transform( -0.672851, 0, 0.73978, 0, 1, 0, -0.73978, 0, -0.672851, 146.178, 48.4102, 14.786 )
 use_collision = true
 width = 3.17129
 height = 1.07015
 depth = 4.84746
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="CSGBox7" type="CSGBox" parent="area_foundry" index="4"]
+[node name="CSGBox7" type="CSGBox" parent="area_foundry" index="6"]
 transform = Transform( -0.984752, 0, 0.173973, 0, 1, 0, -0.173973, 0, -0.984752, 157.794, 44.849, -8.27614 )
 use_collision = true
 width = 7.27589
 height = 1.07015
 depth = 7.73949
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="CSGBox5" type="CSGBox" parent="area_foundry" index="5"]
+[node name="CSGBox5" type="CSGBox" parent="area_foundry" index="7"]
 transform = Transform( -0.356509, 0, 0.934292, 0, 1, 0, -0.934292, 0, -0.356509, 136.264, 38.0601, 25.0438 )
 use_collision = true
 width = 6.55273
 height = 3.16432
 depth = 7.76131
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox" type="CSGBox" parent="area_foundry/CSGBox5" index="0"]
 transform = Transform( 0.985062, 0, 0.172208, 0, 1, 0, -0.172208, 0, 0.985062, 1.88388, 6.0667, 3.67114 )
 width = 3.17129
 height = 1.07015
 depth = 4.84746
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox2" type="CSGBox" parent="area_foundry/CSGBox5" index="1"]
 transform = Transform( 0.982544, 0, 0.186037, 0, 1, 0, -0.186037, 0, 0.982544, -0.267868, -3.54955, 4.6013 )
 width = 7.81904
 height = 1.07015
 depth = 4.84746
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="CSGBox3" type="CSGBox" parent="area_foundry" index="6"]
+[node name="CSGBox3" type="CSGBox" parent="area_foundry" index="8"]
 transform = Transform( -0.915199, 0, 0.403001, 0, 1, 0, -0.403001, 0, -0.915199, 98.1667, 36.6226, 25.0431 )
 use_collision = true
 width = 6.34132
 height = 3.18126
 depth = 6.94998
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGCylinder5" type="CSGCylinder" parent="area_foundry/CSGBox3" index="0"]
 transform = Transform( -0.357674, 0.00551528, -0.933831, 0.933845, 0.00338698, -0.35766, 0.00119029, -0.99998, -0.00636184, -3.87924, -1.20454, -0.0441113 )
 radius = 0.821898
 height = 5.48429
-material = ExtResource( 49 )
+material = ExtResource( 68 )
 
-[node name="CSGBox4" type="CSGBox" parent="area_foundry" index="7"]
+[node name="CSGBox4" type="CSGBox" parent="area_foundry" index="9"]
 transform = Transform( -0.985064, 0, -0.172187, 0, 1, 0, 0.172187, 0, -0.985064, 123.897, 36.6226, 28.8779 )
 use_collision = true
 width = 6.34132
 height = 3.18126
 depth = 6.94998
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox5" type="CSGBox" parent="area_foundry/CSGBox4" index="0"]
 transform = Transform( 1, -5.95364e-11, -3.22592e-09, -3.22592e-09, -0.0369002, -0.999319, -5.95364e-11, 0.999319, -0.0369002, 0, 3.76758, -0.230679 )
@@ -791,186 +895,144 @@ use_collision = true
 width = 6.98904
 height = 3.18126
 depth = 6.94998
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="CSGBox2" type="CSGBox" parent="area_foundry" index="8"]
+[node name="CSGBox2" type="CSGBox" parent="area_foundry" index="10"]
 transform = Transform( -0.176079, 0, 0.984376, 0, 1, 0, -0.984376, 0, -0.176079, 78.9195, 32.1082, -6.22143 )
 use_collision = true
 width = 11.6696
 height = 8.38614
 depth = 14.7267
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGCylinder" type="CSGCylinder" parent="area_foundry/CSGBox2" index="0"]
 transform = Transform( 0.00441753, -0.965628, 0.259891, 0.99999, 0.00426573, -0.00114811, 2.35159e-08, 0.259894, 0.965638, -9.4978, 0.00431824, -5.34435 )
 height = 9.58369
-material = ExtResource( 49 )
+material = ExtResource( 68 )
 
 [node name="CSGCylinder2" type="CSGCylinder" parent="area_foundry/CSGBox2" index="1"]
 transform = Transform( 0.0044176, -0.841747, 0.539855, 0.99999, 0.00371855, -0.00238486, -2.67755e-08, 0.53986, 0.841756, -18.3247, 0.0433121, -1.34817 )
 height = 11.4653
-material = ExtResource( 49 )
+material = ExtResource( 68 )
 
 [node name="CSGCylinder4" type="CSGCylinder" parent="area_foundry/CSGBox2" index="2"]
 transform = Transform( 0.00441756, -0.766715, 0.641974, 0.99999, 0.00338703, -0.00283599, 1.04192e-08, 0.641981, 0.766722, -27.0117, -3.84355, 6.99123 )
 height = 7.66889
-material = ExtResource( 49 )
+material = ExtResource( 68 )
 
 [node name="CSGCylinder3" type="CSGCylinder" parent="area_foundry/CSGBox2" index="3"]
 transform = Transform( 0.886533, 0.00441758, 0.462645, -0.00391637, 0.999991, -0.00204379, -0.46265, -6.40284e-10, 0.886542, -22.6185, 0.0622787, 3.10857 )
 radius = 3.28734
 height = 8.02586
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox" type="CSGBox" parent="area_foundry/CSGBox2" index="4"]
 transform = Transform( 0.773426, -0.257463, 0.579246, 0, 0.9138, 0.406165, -0.633887, -0.314139, 0.706757, -29.0102, 2.55139, 5.49798 )
 height = 9.52694
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox3" type="CSGBox" parent="area_foundry/CSGBox2/CSGBox" index="0"]
 transform = Transform( 1, 1.04308e-07, 2.98023e-08, 4.47035e-08, 0.777443, -0.628953, -1.49012e-07, 0.628953, 0.777443, 0, -7.7411, -2.7654 )
 height = 9.52694
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox2" type="CSGBox" parent="area_foundry/CSGBox2" index="5"]
 transform = Transform( 0.773427, -0.257463, 0.579246, 0, 0.9138, 0.406165, -0.633887, -0.314139, 0.706757, -30.8917, 2.55139, 7.11897 )
 height = 9.26373
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
 [node name="CSGBox4" type="CSGBox" parent="area_foundry/CSGBox2/CSGBox2" index="0"]
 transform = Transform( 1, 1.04308e-07, 8.9407e-08, 3.12924e-07, 0.777443, -0.628953, -7.45058e-07, 0.628953, 0.777443, 0.00389099, -7.7163, -2.8212 )
 height = 9.52694
-material = ExtResource( 49 )
+material = SubResource( 28 )
 
-[node name="dswitch" parent="area_foundry" index="9" instance=ExtResource( 50 )]
+[node name="dswitch" parent="area_foundry" index="11" instance=ExtResource( 50 )]
 transform = Transform( -0.811587, 0, 0.584232, 0, 1, 0, -0.584232, 0, -0.811587, 102.104, 17.034, -37.869 )
 
-[node name="crane1" type="KinematicBody" parent="area_foundry" index="10"]
+[node name="crane1" type="Spatial" parent="area_foundry" index="12"]
 transform = Transform( 0.8137, 0, -0.581284, 0, 1, 0, 0.581284, 0, 0.8137, 96.5931, 14.8709, -33.3309 )
-motion/sync_to_physics = true
 script = ExtResource( 51 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/crane1" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/crane1/CollisionShape" index="0"]
-mesh = SubResource( 2 )
+[node name="bucket_small" parent="area_foundry/crane1" index="0" instance=ExtResource( 69 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -2, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/crane1" index="1"]
 playback_process_mode = 0
 anims/Activate = SubResource( 3 )
 anims/RESET = SubResource( 4 )
 
-[node name="dswitch2" parent="area_foundry" index="11" instance=ExtResource( 50 )]
+[node name="dswitch2" parent="area_foundry" index="13" instance=ExtResource( 50 )]
 transform = Transform( 0.414944, 0, 0.909847, 0, 1, 0, -0.909847, 0, 0.414944, 98.9914, 38.2133, 22.5439 )
 
-[node name="crane2" type="KinematicBody" parent="area_foundry" index="12"]
+[node name="crane2" type="Spatial" parent="area_foundry" index="14"]
 transform = Transform( 0.438478, 0, -0.898742, 0, 1, 0, 0.898742, 0, 0.438478, 94.1423, 36.2647, 7.56404 )
 script = ExtResource( 51 )
 
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/crane2" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/crane2/CollisionShape" index="0"]
-mesh = SubResource( 2 )
+[node name="bucket_small" parent="area_foundry/crane2" index="0" instance=ExtResource( 69 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.04628, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/crane2" index="1"]
 playback_process_mode = 0
 anims/Activate = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 
-[node name="shortcut_crane" type="KinematicBody" parent="area_foundry" index="13"]
-transform = Transform( 0.9578, 0, 0.287434, 0, 1, 0, -0.287434, 0, 0.9578, 128.682, 36.2438, 24.847 )
-motion/sync_to_physics = true
-script = ExtResource( 51 )
-__meta__ = {
-"_edit_group_": true
-}
-generate_stat = true
-
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/shortcut_crane" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/shortcut_crane/CollisionShape" index="0"]
-mesh = SubResource( 2 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcut_crane" index="1"]
-playback_process_mode = 0
-anims/Activate = SubResource( 7 )
-anims/RESET = SubResource( 8 )
-
-[node name="dswitch" parent="area_foundry/shortcut_crane" index="2" instance=ExtResource( 50 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47457, 2.12629, 0.108116 )
-
-[node name="shortcut_crane2" type="KinematicBody" parent="area_foundry" index="14"]
-transform = Transform( 0.179668, 0, 0.983727, 0, 1, 0, -0.983727, 0, 0.179668, 157.311, 43.259, -14.3697 )
-motion/sync_to_physics = true
-script = ExtResource( 51 )
-__meta__ = {
-"_edit_group_": true
-}
-generate_stat = true
-
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/shortcut_crane2" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/shortcut_crane2/CollisionShape" index="0"]
-mesh = SubResource( 2 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcut_crane2" index="1"]
-playback_process_mode = 0
-anims/Activate = SubResource( 13 )
-anims/RESET = SubResource( 14 )
-
-[node name="dswitch" parent="area_foundry/shortcut_crane2" index="2" instance=ExtResource( 50 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47457, 2.12629, 0.108116 )
-
 [node name="dswitch3" parent="area_foundry" index="15" instance=ExtResource( 50 )]
 transform = Transform( -0.192398, 0, -0.981317, 0, 1, 0, 0.981317, 0, -0.192398, 157.482, 45.3841, -7.15066 )
 
-[node name="crane3" type="KinematicBody" parent="area_foundry" index="16"]
+[node name="crane3" type="Spatial" parent="area_foundry" index="16"]
 transform = Transform( -0.216977, 0, -0.976177, 0, 1, 0, 0.976177, 0, -0.216977, 154.477, 51.7856, -10.5718 )
-motion/sync_to_physics = true
 script = ExtResource( 51 )
 
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/crane3" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/crane3/CollisionShape" index="0"]
-mesh = SubResource( 2 )
+[node name="bucket_small" parent="area_foundry/crane3" index="0" instance=ExtResource( 69 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -1, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/crane3" index="1"]
 playback_process_mode = 0
 anims/Activate = SubResource( 15 )
 anims/RESET = SubResource( 16 )
 
-[node name="shortcut_crane3" type="KinematicBody" parent="area_foundry" index="17"]
-transform = Transform( -0.939997, 0, 0.341181, 0, 1, 0, -0.341181, 0, -0.939997, 109.962, 59.4883, -4.35928 )
+[node name="shortcut_elevator" parent="area_foundry" index="17" instance=ExtResource( 36 )]
+transform = Transform( 0.9578, 0, 0.287434, 0, 1, 0, -0.287434, 0, 0.9578, 128.778, 36.5942, 26.2682 )
 motion/sync_to_physics = true
-script = ExtResource( 51 )
-__meta__ = {
-"_edit_group_": true
-}
-generate_stat = true
 
-[node name="CollisionShape" type="CollisionShape" parent="area_foundry/shortcut_crane3" index="0"]
-shape = SubResource( 1 )
+[node name="dswitch" parent="area_foundry/shortcut_elevator" index="4" instance=ExtResource( 50 )]
+transform = Transform( -2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, 0.706528, 1.39045, 1.94501 )
 
-[node name="MeshInstance" type="MeshInstance" parent="area_foundry/shortcut_crane3/CollisionShape" index="0"]
-mesh = SubResource( 2 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcut_elevator" index="5"]
+anims/Activate = SubResource( 37 )
+anims/RESET = SubResource( 38 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcut_crane3" index="1"]
+[node name="light_wall" parent="area_foundry/shortcut_elevator" index="6" instance=ExtResource( 71 )]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1.92842, 1.3679, -3.02883 )
+
+[node name="shortcurt_elevator2" parent="area_foundry" index="18" instance=ExtResource( 36 )]
+transform = Transform( -0.983727, 0, 0.179668, 0, 1, 0, -0.179668, 0, -0.983727, 157.311, 43.259, -14.3697 )
+motion/sync_to_physics = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcurt_elevator2" index="4"]
+playback_process_mode = 0
+anims/Activate = SubResource( 13 )
+anims/RESET = SubResource( 14 )
+
+[node name="dswitch" parent="area_foundry/shortcurt_elevator2" index="5" instance=ExtResource( 50 )]
+transform = Transform( -4.47035e-08, 0, -1, 0, 1, 0, 1, 0, -4.47035e-08, 0.549988, 1.46604, 1.83049 )
+
+[node name="shortcut_elevator3" parent="area_foundry" index="19" instance=ExtResource( 36 )]
+transform = Transform( -0.727138, 0, -0.686491, 0, 1, 0, 0.686491, 0, -0.727138, 109.603, 59.4883, -6.97608 )
+motion/sync_to_physics = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="area_foundry/shortcut_elevator3" index="1"]
 playback_process_mode = 0
 anims/Activate = SubResource( 17 )
 anims/RESET = SubResource( 18 )
 
-[node name="dswitch" parent="area_foundry/shortcut_crane3" index="2" instance=ExtResource( 50 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47457, 2.12629, 0.108116 )
+[node name="dswitch" parent="area_foundry/shortcut_elevator3" index="2" instance=ExtResource( 50 )]
+transform = Transform( -0.0441284, 0, -0.999025, 0, 1, 0, 0.999025, 0, -0.0441284, 0.334267, 1.41996, 1.5921 )
 
-[node name="ladle_large" parent="area_foundry" index="18" instance=ExtResource( 10 )]
+[node name="ladle_large" parent="area_foundry" index="20" instance=ExtResource( 10 )]
 transform = Transform( -0.998245, 0, 0.0592247, 0, 1, 0, -0.0592247, 0, -0.998245, 147.596, 43.8063, 2.13743 )
 
 [node name="hurtbox" type="Area" parent="area_foundry/ladle_large" index="0"]
@@ -1002,27 +1064,30 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5138, 0 )
 light_color = Color( 1, 0.65098, 0.156863, 1 )
 omni_range = 6.98818
 
-[node name="fountainA" parent="area_foundry" index="19" instance=ExtResource( 55 )]
+[node name="CSGCylinder2" type="CSGCylinder" parent="area_foundry/ladle_large" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.0795, 0 )
+radius = 0.497165
+height = 8.72941
+material = SubResource( 27 )
+
+[node name="fountainA" parent="area_foundry" index="21" instance=ExtResource( 55 )]
 transform = Transform( 0.1914, 0, 0.981512, 0, 1, 0, -0.981512, 0, 0.1914, 159.618, 45.3841, -8.84392 )
 
-[node name="npc_worker" parent="area_foundry" index="20" instance=ExtResource( 22 )]
+[node name="npc_worker" parent="area_foundry" index="22" instance=ExtResource( 22 )]
 transform = Transform( 0.970484, 0, 0.241167, 0, 1, 0, -0.241167, 0, 0.970484, 115.81, 9.14317, -45.2842 )
 dialog = ExtResource( 57 )
 visual_name = "Foundry Worker"
 
-[node name="npc_shop_foreman" parent="area_foundry" index="21" instance=ExtResource( 14 )]
+[node name="npc_shop_foreman" parent="area_foundry" index="23" instance=ExtResource( 14 )]
 transform = Transform( 0.569266, 0, 0.822153, 0, 1, 0, -0.822153, 0, 0.569266, 114.216, 61.4356, -4.82937 )
 visual_name = "Bossman"
 friendly_id = "075_foreman"
 inventory_data = ExtResource( 56 )
 
-[node name="scrap1" parent="area_foundry" index="22" instance=ExtResource( 9 )]
+[node name="scrap1" parent="area_foundry" index="24" instance=ExtResource( 9 )]
 transform = Transform( 0.255429, -0.519348, -0.815496, 0, -0.843476, 0.537167, -0.966828, -0.137208, -0.215448, 59.1221, 4.05967, 48.731 )
 
-[node name="Position3D" type="Position3D" parent="area_foundry" index="23"]
-transform = Transform( 0.836626, 0, 0.547774, 0, 1, 0, -0.547774, 0, 0.836626, 138.83, 42.6918, 14.8244 )
-
-[node name="env_override" type="Area" parent="area_foundry" index="24"]
+[node name="env_override" type="Area" parent="area_foundry" index="25"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.911, 3.23162, -15.276 )
 collision_layer = 0
 collision_mask = 2
@@ -1035,12 +1100,12 @@ fog_end = 100.0
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.9144, 9.53674e-07 )
 shape = SubResource( 21 )
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="area_foundry" index="25"]
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_foundry" index="26"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.797, 26.8499, -15.5 )
 max_distance = 16384.0
 extents = Vector3( 49.0127, 48.965, 52.8748 )
 
-[node name="MeshInstance9" type="MeshInstance" parent="area_foundry" index="26"]
+[node name="MeshInstance9" type="MeshInstance" parent="area_foundry" index="27"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.911, 14.8971, -15.276 )
 cast_shadow = 0
 mesh = SubResource( 22 )
@@ -1048,14 +1113,65 @@ skeleton = NodePath("../..")
 material/0 = SubResource( 23 )
 
 [node name="reactor_light" type="OmniLight" parent="area_foundry/MeshInstance9" index="0"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.31628, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.25134, 0 )
 light_color = Color( 1, 0.411765, 0.960784, 1 )
 light_energy = 9.159
 shadow_enabled = true
 omni_range = 29.7304
 
+[node name="npc" parent="area_foundry" index="28" instance=ExtResource( 22 )]
+transform = Transform( -0.266542, 0, 0.963823, 0, 1, 0, -0.963823, 0, -0.266542, 134.885, 9.14791, 9.03025 )
+
+[node name="light_wall2" parent="area_foundry" index="29" instance=ExtResource( 71 )]
+transform = Transform( 0.5, 0.866025, -3.78552e-08, 0, -4.37114e-08, -1, -0.866025, 0.5, -2.18557e-08, 106.299, 16.0086, -40.5649 )
+
+[node name="light_hang1" parent="area_foundry" index="30" instance=ExtResource( 72 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.541, 44.1269, -6.25538 )
+
+[node name="light_hang2" parent="area_foundry" index="31" instance=ExtResource( 72 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 98.2638, 42.8744, 25.1542 )
+
+[node name="light_hang3" parent="area_foundry" index="32" instance=ExtResource( 72 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 138.966, 43.6633, 21.5461 )
+
+[node name="light_wall3" parent="area_foundry" index="33" instance=ExtResource( 71 )]
+transform = Transform( 0.965926, -0.258819, 1.13133e-08, 0, -4.37114e-08, -1, 0.258819, 0.965926, -4.2222e-08, 115.242, 63.6893, -5.16634 )
+
+[node name="light_wall4" parent="area_foundry" index="34" instance=ExtResource( 71 )]
+transform = Transform( -0.466595, -0.884471, 0, 0.884471, -0.466595, 0, 0, 0, 1, 159.051, 49.6708, -9.65399 )
+
+[node name="power_thing" parent="area_foundry" index="35" instance=ExtResource( 70 )]
+transform = Transform( -0.96513, 0, 0.261773, 0, 1, 0, -0.261773, 0, -0.96513, 137.262, 9.14792, 6.28738 )
+active = true
+
+[node name="power_thing2" parent="area_foundry" index="36" instance=ExtResource( 70 )]
+transform = Transform( -0.99162, 0, 0.129189, 0, 1, 0, -0.129189, 0, -0.99162, 137.023, 9.14792, 7.49134 )
+active = true
+
+[node name="power_thing3" parent="area_foundry" index="37" instance=ExtResource( 70 )]
+transform = Transform( -0.995106, 0, -0.098813, 0, 1, 0, 0.098813, 0, -0.995106, 136.959, 9.14792, 8.74042 )
+active = true
+
+[node name="reactor" parent="." index="5"]
+material/0 = ExtResource( 65 )
+
 [node name="static_collision" parent="reactor" index="0"]
 collision_layer = 257
+
+[node name="furnace" parent="." index="6"]
+material/0 = SubResource( 27 )
+
+[node name="static_collision" parent="furnace" index="0"]
+collision_layer = 257
+
+[node name="cable" parent="." index="7"]
+material/0 = SubResource( 27 )
+
+[node name="cable001" parent="." index="8"]
+material/0 = SubResource( 27 )
+
+[node name="furnace_vent" parent="." index="9"]
+material/0 = SubResource( 27 )
 
 [node name="reactor_windows" parent="." index="10"]
 cast_shadow = 0
@@ -1063,7 +1179,7 @@ material/0 = SubResource( 24 )
 
 [connection signal="toggled" from="area_foundry/dswitch" to="area_foundry/crane1" method="_on_toggled"]
 [connection signal="toggled" from="area_foundry/dswitch2" to="area_foundry/crane2" method="_on_toggled"]
-[connection signal="toggled" from="area_foundry/shortcut_crane/dswitch" to="area_foundry/shortcut_crane" method="_on_toggled"]
-[connection signal="toggled" from="area_foundry/shortcut_crane2/dswitch" to="area_foundry/shortcut_crane2" method="_on_toggled"]
 [connection signal="toggled" from="area_foundry/dswitch3" to="area_foundry/crane3" method="_on_toggled"]
-[connection signal="toggled" from="area_foundry/shortcut_crane3/dswitch" to="area_foundry/shortcut_crane3" method="_on_toggled"]
+[connection signal="toggled" from="area_foundry/shortcut_elevator/dswitch" to="area_foundry/shortcut_elevator" method="_on_toggled"]
+[connection signal="toggled" from="area_foundry/shortcurt_elevator2/dswitch" to="area_foundry/shortcurt_elevator2" method="_on_toggled"]
+[connection signal="toggled" from="area_foundry/shortcut_elevator3/dswitch" to="area_foundry/shortcut_elevator3" method="_on_toggled"]

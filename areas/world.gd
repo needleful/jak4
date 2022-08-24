@@ -162,6 +162,7 @@ func update_active_chunks(position: Vector3, instant := false):
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):
+	print("queue_load ", ch.name)
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
 	if loading == ch:
@@ -179,8 +180,10 @@ func queue_load(ch: Spatial):
 		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
 	else:
 		load_queue.push_back(ch)
+	print("queue_load complete ", ch.name)
 
 func load_async(ch:Spatial):
+	print("load_async ", ch.name)
 	if ch.has_node("dynamic_content") or (ch in active_chunks):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
@@ -189,8 +192,10 @@ func load_async(ch:Spatial):
 	var scn: PackedScene = get_or_load(ch.name)
 	call_deferred("add_dynamic_content", ch, scn.instance())
 	loading = null
+	print("load_async complete ", ch.name)
 
 func load_sync(chunk: Spatial):
+	print("load_sync ", chunk.name)
 	if loading == chunk and load_thread.is_active():
 		load_thread.wait_to_finish()
 		return
@@ -205,6 +210,7 @@ func load_sync(chunk: Spatial):
 	var scn: PackedScene = get_or_load(chunk.name)
 	if scn:
 		add_dynamic_content(chunk, scn.instance())
+	print("load_sync complete", chunk.name)
 
 func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):

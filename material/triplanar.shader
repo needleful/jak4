@@ -4,7 +4,8 @@ render_mode cull_back, depth_draw_opaque, world_vertex_coords, async_hidden;
 uniform sampler2D wall: hint_albedo;
 uniform sampler2D ground: hint_albedo;
 uniform sampler2D ceiling: hint_albedo;
-uniform float uv_scale = 0.125;
+uniform float wall_scale = 0.125;
+uniform float ground_scale = 0.125;
 uniform float power = 5.0;
 uniform float softness = 0.5;
 uniform float specularity_ground: hint_range(1, 32) = 1.0;
@@ -23,10 +24,10 @@ void vertex() {
 
 void fragment() {
 	vec3 n = normalize(normal);
-	vec4 color_x = texture(wall, position.zy*uv_scale);
-	vec4 color_z = texture(wall, position.xy*uv_scale);
-	vec4 color_y_up = texture(ground, position.xz*uv_scale);
-	vec4 color_y_down = texture(ceiling, position.xz*uv_scale);
+	vec4 color_x = texture(wall, position.zy*wall_scale);
+	vec4 color_z = texture(wall, position.xy*wall_scale);
+	vec4 color_y_up = texture(ground, position.xz*ground_scale);
+	vec4 color_y_down = texture(ceiling, position.xz*ground_scale);
 	
 	float y_pow = sign(n.y)*pow(abs(n.y), power);
 	

@@ -2,14 +2,14 @@ extends Spatial
 
 signal activated
 
+export(bool) var active := false
 var anim: AnimationPlayer
-var active := false
 
 func _ready():
 	if has_node("AnimationPlayer"):
 		anim = $AnimationPlayer
 	if Global.valid_game_state:
-		if Global.is_activated(self):
+		if active or Global.is_activated(self):
 			activate(true)
 
 func _on_Area_body_entered(_body):
