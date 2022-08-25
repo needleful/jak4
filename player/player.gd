@@ -382,14 +382,12 @@ func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
-	for item in WEAPONS:
-		if Global.count(item):
-			gun.add_weapon(item)
 	update_inventory()
 	health = max_health
 	stamina = max_stamina
 	update_health()
 	gun.camera = cam_rig.camera
+	equip(0)
 
 func _input(event):
 	if( can_talk()

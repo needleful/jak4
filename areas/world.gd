@@ -162,16 +162,16 @@ func update_active_chunks(position: Vector3, instant := false):
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):
-	print("queue_load ", ch.name)
-	if ch.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(ch.name)
-	if loading == ch:
-		return
 	if ch in active_chunks:
+		return
+	if loading == ch:
 		return
 	if ch.has_node("dynamic_content"):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
+	print("queue_load ", ch.name)
+	if ch.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(ch.name)
 	var load_i = load_queue.find(ch)
 	if load_i >= 0:
 		return
@@ -195,15 +195,18 @@ func load_async(ch:Spatial):
 	print("load_async complete ", ch.name)
 
 func load_sync(chunk: Spatial):
-	print("load_sync ", chunk.name)
+	if (chunk in active_chunks):
+		return
 	if loading == chunk and load_thread.is_active():
 		load_thread.wait_to_finish()
 		return
+	if chunk.has_node("dynamic_content"):
+		print_debug("Duplicate dynamic content: ", chunk.name)
+		return
+	print("load_sync ", chunk.name)
+	active_chunks.append(chunk)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
-	if (chunk in active_chunks):
-		return
-	active_chunks.append(chunk)
 	var load_i = load_queue.find(chunk)
 	if load_i >= 0:
 		load_queue.remove(load_i)
