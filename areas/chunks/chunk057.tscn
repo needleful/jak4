@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://material/env/ancient/gem.material" type="Material" id=1]
 [ext_resource path="res://material/env/ancient/white_metal_matte.material" type="Material" id=2]
@@ -14,7 +14,7 @@
 [ext_resource path="res://material/env/ancient/gem_transparent.tres" type="Material" id=12]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=13]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=14]
-[ext_resource path="res://entities/control/power_thing.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/control/dswitch_a.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/control/show_on_active.gd" type="Script" id=16]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=17]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=18]
@@ -36,6 +36,7 @@
 [ext_resource path="res://entities/env/ancient/fountainA.tscn" type="PackedScene" id=34]
 [ext_resource path="res://areas/chunks/_lightmaps/chunk057.lmbake" type="BakedLightmapData" id=35]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=36]
+[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=37]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "chunk057_office"
@@ -351,8 +352,8 @@ height = 18.9711
 extents = Vector3( 14.9396, 12.2703, 27.2555 )
 
 [sub_resource type="CylinderShape" id=30]
-height = 81.713
-radius = 36.5632
+height = 115.099
+radius = 28.8129
 
 [sub_resource type="SphereShape" id=31]
 radius = 29.4499
@@ -417,6 +418,12 @@ tracks/1/keys = {
 "values": [ Vector3( 0, 8.79834, 0.180389 ) ]
 }
 
+[sub_resource type="OccluderShapePolygon" id=32]
+polygon_points = PoolVector2Array( 155.784, -151.251, 43.4184, 2.42249, -18.5287, 3.32263, -183.987, -291.879 )
+
+[sub_resource type="OccluderShapePolygon" id=33]
+polygon_points = PoolVector2Array( 19.0153, -80.0974, 19.1542, 8.7511, -60.6602, 11.4557, -49.3706, -90.3358 )
+
 [node name="chunk057" type="MultiMeshSystem"]
 script = ExtResource( 4 )
 lighting_preview = true
@@ -433,22 +440,43 @@ max_distance = 16384.0
 extents = Vector3( 8.69492, 6.3853, 5.83119 )
 origin_offset = Vector3( 0, 1.50781, -2.78125 )
 enable_shadows = true
+interior_ambient_color = Color( 0.0431373, 0.054902, 0.121569, 1 )
 
 [node name="ReflectionProbe9" type="ReflectionProbe" parent="BakedLightmap"]
-transform = Transform( 0.9606, 0, 0.277933, 0, 1, 0, -0.277933, 0, 0.9606, 28.2891, -68.1272, 35.2351 )
+transform = Transform( 0.987846, 0, 0.155437, 0, 1, 0, -0.155437, 0, 0.987846, 25.5157, -68.1272, 35.7156 )
 max_distance = 35.9
-extents = Vector3( 18.1526, 2.1073, 2.98384 )
+extents = Vector3( 6.80734, 2.1073, 2.27686 )
 origin_offset = Vector3( 0, -2.23517e-10, 0 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.0352941, 0.0352941, 0.0509804, 1 )
+
+[node name="ReflectionProbe11" type="ReflectionProbe" parent="BakedLightmap"]
+transform = Transform( 0.922998, 0.220715, 0.315213, 0, 0.819152, -0.573576, -0.384804, 0.52941, 0.756076, 39.2797, -69.1798, 31.7617 )
+max_distance = 35.9
+extents = Vector3( 8.87645, 2.9775, 2.27686 )
+origin_offset = Vector3( 0, -2.23517e-10, 0 )
+enable_shadows = true
+interior_enable = true
+interior_ambient_color = Color( 0.0862745, 0.101961, 0.196078, 1 )
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="BakedLightmap"]
-transform = Transform( 0.924288, -0.0123276, 0.381497, 0.00984432, 0.999916, 0.0084602, -0.38157, -0.00406408, 0.924331, 4.05753, -60.4564, 37.8553 )
+transform = Transform( 0.924288, -0.0123276, 0.381498, 0.00984432, 0.999916, 0.00846022, -0.38157, -0.00406409, 0.924331, 5.24854, -64.244, 40.6426 )
 max_distance = 16384.0
-extents = Vector3( 16.0215, 12.511, 16.9338 )
+extents = Vector3( 16.0215, 7.86224, 14.6431 )
 origin_offset = Vector3( -0.0224609, 1.24609, 2.56836 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.129412, 0.156863, 0.192157, 1 )
+
+[node name="ReflectionProbe10" type="ReflectionProbe" parent="BakedLightmap"]
+transform = Transform( 0.924288, -0.0123276, 0.381498, 0.00984432, 0.999916, 0.00846022, -0.38157, -0.00406409, 0.924331, 5.11457, -53.3781, 40.5984 )
+max_distance = 16384.0
+extents = Vector3( 9.89051, 7.86224, 8.63917 )
+origin_offset = Vector3( -0.0224609, 1.24609, 2.56836 )
+enable_shadows = true
+interior_enable = true
+interior_ambient_color = Color( 0.0745098, 0.105882, 0.141176, 1 )
 
 [node name="ReflectionProbe3" type="ReflectionProbe" parent="BakedLightmap"]
 transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -1.21062e-08, -0.383866, 0.00498308, 0.923375, -9.41332, -51.3186, 10.2944 )
@@ -457,22 +485,25 @@ extents = Vector3( 18.545, 8.76364, 26.0184 )
 origin_offset = Vector3( -0.0224609, 1.24609, -3.99414 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.133333, 0.164706, 0.188235, 1 )
 
 [node name="ReflectionProbe4" type="ReflectionProbe" parent="BakedLightmap"]
-transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -3.86841e-10, -0.383866, 0.00498309, 0.923375, -16.3243, -36.744, -16.2142 )
+transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -1.21062e-08, -0.383866, 0.00498308, 0.923375, -16.2885, -39.7273, -16.2291 )
 max_distance = 16384.0
-extents = Vector3( 27.0351, 13.055, 26.4961 )
+extents = Vector3( 27.0351, 12.0444, 26.4961 )
 origin_offset = Vector3( -0.0224609, 1.24609, -1.70801 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.0431373, 0.054902, 0.121569, 1 )
 
 [node name="ReflectionProbe5" type="ReflectionProbe" parent="BakedLightmap"]
-transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -3.86841e-10, -0.383866, 0.00498309, 0.923375, -34.0935, -20.0579, -45.7796 )
+transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -1.21062e-08, -0.383866, 0.00498308, 0.923375, -30.7907, -20.0115, -47.1528 )
 max_distance = 16384.0
-extents = Vector3( 17.8182, 13.9669, 15.1977 )
+extents = Vector3( 18.8494, 13.9669, 18.4776 )
 origin_offset = Vector3( 1.86133, 2.23517e-10, 2.18555 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.0431373, 0.054902, 0.121569, 1 )
 
 [node name="ReflectionProbe6" type="ReflectionProbe" parent="BakedLightmap"]
 transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -3.86841e-10, -0.383866, 0.00498309, 0.923375, -30.7268, 6.16882, -47.1793 )
@@ -481,6 +512,7 @@ extents = Vector3( 17.8182, 13.9669, 15.1977 )
 origin_offset = Vector3( 1.86133, 2.23517e-10, 2.18555 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.0431373, 0.054902, 0.121569, 1 )
 
 [node name="ReflectionProbe7" type="ReflectionProbe" parent="BakedLightmap"]
 transform = Transform( 0.923298, -0.0119856, 0.383898, 0.0129802, 0.999916, -3.86841e-10, -0.383866, 0.00498309, 0.923375, -28.396, 32.3335, -49.6477 )
@@ -489,20 +521,40 @@ extents = Vector3( 17.8182, 13.9669, 15.1977 )
 origin_offset = Vector3( 1.86133, 2.23517e-10, 2.18555 )
 enable_shadows = true
 interior_enable = true
+interior_ambient_color = Color( 0.0431373, 0.054902, 0.121569, 1 )
 
 [node name="ReflectionProbe8" type="ReflectionProbe" parent="BakedLightmap"]
-transform = Transform( 0.304127, -0.0119856, 0.952556, 0.00839272, 0.999916, 0.00990194, -0.952595, 0.00498309, 0.304202, -30.5531, 73.6907, -54.7933 )
+transform = Transform( 0.304127, -0.0119856, 0.952556, 0.00839272, 0.999916, 0.00990192, -0.952595, 0.00498309, 0.304202, -30.5531, 54.3789, -54.7933 )
 max_distance = 16384.0
-extents = Vector3( 17.8182, 13.9669, 24.131 )
+extents = Vector3( 17.8182, 10.4602, 24.131 )
 origin_offset = Vector3( 0.0712891, 2.23517e-10, 0.142578 )
 enable_shadows = true
+interior_enable = true
+interior_ambient_color = Color( 0.0901961, 0.105882, 0.176471, 1 )
+
+[node name="ReflectionProbe12" type="ReflectionProbe" parent="BakedLightmap"]
+transform = Transform( 0.225873, -0.011542, 0.974088, 0.00839272, 0.999916, 0.00990192, -0.97412, 0.00593866, 0.225951, -35.9061, 72.4432, -54.7933 )
+max_distance = 16384.0
+extents = Vector3( 9.24948, 8.56647, 16.0653 )
+origin_offset = Vector3( 0.0712891, 2.23517e-10, 0.142578 )
+enable_shadows = true
+interior_enable = true
+interior_ambient_color = Color( 0.309804, 0.45098, 0.65098, 1 )
+
+[node name="ReflectionProbe13" type="ReflectionProbe" parent="BakedLightmap"]
+transform = Transform( 0.475032, -0.0127004, 0.879877, 0.00839272, 0.999916, 0.00990192, -0.879929, 0.00268083, 0.475098, -14.0635, 76.1877, -48.9991 )
+max_distance = 16384.0
+extents = Vector3( 8.62767, 8.56647, 9.41853 )
+origin_offset = Vector3( 0.0712891, 2.23517e-10, 0.142578 )
+enable_shadows = true
+interior_ambient_color = Color( 0.309804, 0.45098, 0.65098, 1 )
 
 [node name="office" type="MeshInstance" parent="."]
 transform = Transform( 3.70795, 0, 1.50037, 0, 1, 0, -1.50037, 0, 3.70795, -33.3079, 1118.39, 97.3867 )
 use_in_baked_light = true
 mesh = SubResource( 1 )
 material/0 = ExtResource( 2 )
-material/1 = ExtResource( 1 )
+material/1 = ExtResource( 37 )
 
 [node name="static_collision" type="StaticBody" parent="office"]
 collision_layer = 257
@@ -515,7 +567,7 @@ transform = Transform( 3.70795, 0, 1.50037, 0, 1, 0, -1.50037, 0, 3.70795, -51.7
 use_in_baked_light = true
 mesh = SubResource( 3 )
 material/0 = ExtResource( 2 )
-material/1 = ExtResource( 1 )
+material/1 = ExtResource( 37 )
 
 [node name="static_collision" type="StaticBody" parent="hall1"]
 collision_layer = 257
@@ -553,6 +605,9 @@ material/0 = ExtResource( 12 )
 [node name="shape_" type="CollisionShape" parent="door2-kine"]
 shape = SubResource( 8 )
 
+[node name="dswitch_a" parent="." instance=ExtResource( 15 )]
+transform = Transform( 0.927079, 0, 0.374867, 0, 1, 0, -0.374867, 0, 0.927079, -39.1283, 1119.47, 102.561 )
+
 [node name="window" type="MeshInstance" parent="."]
 transform = Transform( 3.70795, 0, 1.50037, 0, 1, 0, -1.50037, 0, 3.70795, -33.3079, 1118.39, 97.3867 )
 use_in_baked_light = true
@@ -569,7 +624,7 @@ transform = Transform( 3.70795, 0, 1.50037, 0, 1, 0, -1.50037, 0, 3.70795, -99.0
 use_in_baked_light = true
 mesh = SubResource( 11 )
 material/0 = ExtResource( 2 )
-material/1 = ExtResource( 1 )
+material/1 = ExtResource( 37 )
 
 [node name="static_collision" type="StaticBody" parent="balances"]
 collision_layer = 257
@@ -593,7 +648,7 @@ transform = Transform( 0.887458, 0, -0.460888, 0, 1, 0, 0.460888, 0, 0.887458, -
 use_in_baked_light = true
 mesh = SubResource( 15 )
 material/0 = ExtResource( 13 )
-material/1 = ExtResource( 1 )
+material/1 = ExtResource( 37 )
 
 [node name="exit_door-kine" type="KinematicBody" parent="exit"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65845, 0 )
@@ -671,6 +726,21 @@ light_color = Color( 1, 0.4, 0.94902, 1 )
 shadow_enabled = true
 spot_range = 9.92357
 spot_angle = 17.6438
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -99.1231, 1133.3, 75.6362 )
+light_color = Color( 0.654902, 0.894118, 1, 1 )
+light_energy = 0.5
+
+[node name="OmniLight4" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102.001, 1150.03, 52.6575 )
+light_color = Color( 0.654902, 0.894118, 1, 1 )
+light_energy = 0.5
+
+[node name="OmniLight5" type="OmniLight" parent="."]
+transform = Transform( 0.891325, 0, 0.453366, 0, 1, 0, -0.453366, 0, 0.891325, -107.733, 1149.99, 54.9926 )
+light_color = Color( 0.654902, 0.894118, 1, 1 )
+light_energy = 0.5
 
 [node name="wind_reduction" type="Area" parent="."]
 transform = Transform( 0.930674, 0, 0.365848, 0, 1, 0, -0.365848, 0, 0.930674, -36.0944, 1120.56, 99.1927 )
@@ -839,17 +909,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -76.2519, 1136.87, 111.401 )
 [node name="ascrap5" parent="." instance=ExtResource( 8 )]
 transform = Transform( -0.489169, 0, 0.872189, 0, 1, 0, -0.872189, 0, -0.489169, -33.073, 1119.39, 98.5568 )
 
-[node name="power_thing" parent="." instance=ExtResource( 15 )]
-transform = Transform( 0.933104, 0, 0.359606, 0, 1, 0, -0.359606, 0, 0.933104, -38.8822, 1119.39, 102.363 )
-
-[node name="SpotLight" type="SpotLight" parent="power_thing"]
-transform = Transform( 1, 0, 0, 0, -0.0545668, 0.99851, 0, -0.99851, -0.0545669, 7.62939e-06, 5.33655, -0.364502 )
+[node name="SpotLight4" type="SpotLight" parent="."]
+transform = Transform( 0.933104, -0.35907, -0.0196226, 0, -0.0545668, 0.99851, -0.359606, -0.931714, -0.0509165, -39.0133, 1124.73, 102.023 )
 spot_range = 6.57912
 spot_angle = 22.8859
 script = ExtResource( 16 )
 
 [node name="crawly" parent="." instance=ExtResource( 17 )]
-transform = Transform( 0.018674, 0, 0.999826, 0, 1, 0, -0.999826, 0, 0.018674, -86.6932, 1121.06, 110.515 )
+transform = Transform( 0.018674, 0, 0.999826, 0, 1, 0, -0.999826, 0, 0.018674, -86.4909, 1120.39, 110.616 )
 
 [node name="tut_grav_gun" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72.8313, 1119.02, 108.812 )
@@ -892,14 +959,14 @@ angle = 45.0
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 0.834293, -0.52978, 0.152609, 0.0472686, 0.344521, 0.937588, -0.549292, -0.775009, 0.312473, -104.666, 1156.43, 52.8155 )
-light_color = Color( 0.988235, 1, 0.901961, 1 )
+light_color = Color( 0.678431, 0.882353, 0.945098, 1 )
 shadow_enabled = true
 spot_range = 24.9774
 spot_angle = 25.4873
 
 [node name="SpotLight2" type="SpotLight" parent="."]
 transform = Transform( 0.999176, 0.0375292, 0.0154413, -0.0263454, 0.31045, 0.950224, 0.0308674, -0.949848, 0.311183, -113.573, 1180.52, 38.8326 )
-light_color = Color( 0.988235, 1, 0.901961, 1 )
+light_color = Color( 0.717647, 0.898039, 0.968627, 1 )
 shadow_enabled = true
 spot_range = 28.1349
 spot_angle = 25.4873
@@ -1567,6 +1634,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.4038, 1073.64, 113.458 )
 [node name="crawly8" parent="." instance=ExtResource( 17 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.1361, 1087.46, 133.248 )
 
-[connection signal="activated" from="power_thing" to="door-kine" method="_on_activated"]
-[connection signal="activated" from="power_thing" to="power_thing/SpotLight" method="_on_activated"]
+[node name="Occluder" type="Occluder" parent="."]
+transform = Transform( 0.972881, 0.229669, -0.0274627, -0.0312057, 0.0126805, -0.999433, -0.229191, 0.973186, 0.0195036, -105.804, 1156.45, 49.3273 )
+shape = SubResource( 32 )
+
+[node name="Occluder2" type="Occluder" parent="."]
+transform = Transform( 0.972881, -0.0274626, -0.229669, -0.0312056, -0.999433, -0.0126804, -0.229191, 0.0195035, -0.973186, -105.416, 1170.6, 49.0513 )
+shape = SubResource( 33 )
+
+[connection signal="toggled" from="dswitch_a" to="door-kine" method="_on_toggled"]
 [connection signal="body_entered" from="door_trigger" to="door_trigger" method="_on_signal"]

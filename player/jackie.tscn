@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://_glb/player/jackie.glb" type="PackedScene" id=1]
 [ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://audio/player/roll.wav" type="AudioStream" id=16]
 [ext_resource path="res://audio/player/spin_kick1.wav" type="AudioStream" id=17]
 [ext_resource path="res://player/anim/jackie_animator.tres" type="AnimationNodeBlendTree" id=18]
+[ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=19]
 
 [sub_resource type="Gradient" id=64]
 offsets = PoolRealArray( 0.126437, 0.475096, 0.858238 )
@@ -164,17 +165,6 @@ height = 0.14
 radial_segments = 5
 rings = 5
 
-[sub_resource type="SpatialMaterial" id=170]
-flags_unshaded = true
-albedo_color = Color( 4.05, 0.95, 0.6, 1 )
-
-[sub_resource type="SphereMesh" id=171]
-material = SubResource( 170 )
-radius = 0.04
-height = 0.08
-radial_segments = 8
-rings = 8
-
 [sub_resource type="AnimationNodeStateMachinePlayback" id=8]
 
 [sub_resource type="Curve" id=80]
@@ -245,7 +235,7 @@ material_override = ExtResource( 2 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
 time_scale_response = false
-transform = Transform( 0.0494148, 0.0410266, -0.997935, -0.76282, -0.643412, -0.0642245, -0.644718, 0.764419, -0.000498445, 0.118776, 0.108874, -0.00196115 )
+transform = Transform( 0.049643, 0.0419395, -0.997885, -0.764026, -0.641901, -0.0649873, -0.643271, 0.765638, 0.00017658, 0.118647, 0.108851, 0.00156054 )
 bone_name = "Ankle.L"
 
 [node name="kick_particles" type="Particles" parent="Armature/Skeleton/footLeft" index="0"]
@@ -270,7 +260,7 @@ draw_pass_1 = SubResource( 69 )
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
 time_scale_response = false
-transform = Transform( 0.0493834, -0.0418267, 0.997904, 0.762567, -0.643663, -0.0647161, 0.645021, 0.764164, 0.000109213, -0.1185, 0.108877, -0.00282604 )
+transform = Transform( 0.0490882, -0.0414179, 0.997936, 0.759153, -0.647735, -0.0642258, 0.649058, 0.760739, -0.000353756, -0.118664, 0.108875, -0.00300928 )
 bone_name = "Ankle.R"
 
 [node name="max_kick_particles" type="Particles" parent="Armature/Skeleton/footRight" index="0"]
@@ -295,7 +285,7 @@ draw_pass_1 = SubResource( 91 )
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
 time_scale_response = false
-transform = Transform( 1, -9.73917e-10, 3.52191e-07, -5.15662e-08, 0.988174, 0.153337, -2.73785e-07, -0.153337, 0.988174, -0.00194545, 1.01898, -0.000516401 )
+transform = Transform( 1, 2.84331e-08, 3.42089e-07, -7.96995e-08, 0.988174, 0.153337, -2.58979e-07, -0.153337, 0.988174, -0.000347395, 1.01892, -0.0232897 )
 bone_name = "BackUpper"
 
 [node name="time_trail" type="ImmediateGeometry" parent="Armature/Skeleton/chest" index="0"]
@@ -322,7 +312,7 @@ one_shot = true
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
 time_scale_response = false
-transform = Transform( 0.999997, -0.00199117, -0.00160977, -0.00121705, 0.18352, -0.983015, 0.00225286, 0.983014, 0.183517, -0.00186631, 1.21085, 0.00149066 )
+transform = Transform( 0.999983, -0.00457214, -0.00359821, -0.00283372, 0.157413, -0.987528, 0.00508159, 0.987522, 0.157397, -0.00017471, 1.21031, -0.0187395 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -341,7 +331,7 @@ one_shot = true
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="9"]
 time_scale_response = false
-transform = Transform( 0.733345, -0.116568, 0.669789, -0.143689, -0.989511, -0.014889, 0.664499, -0.0853224, -0.742402, 0.209769, 0.703636, -0.01616 )
+transform = Transform( 0.679857, -0.108278, 0.725307, 0.012327, -0.987213, -0.158931, 0.733241, 0.116992, -0.669829, 0.21139, 0.707823, 0.0254581 )
 bone_name = "Gun.R"
 script = ExtResource( 9 )
 
@@ -423,7 +413,7 @@ target_node = NodePath("../gun/gun_ik/target")
 
 [node name="handRight" type="BoneAttachment" parent="Armature/Skeleton" index="11"]
 time_scale_response = false
-transform = Transform( 0.718991, 0.0856288, -0.689724, 0.0254953, -0.994963, -0.0969469, -0.694551, 0.052119, -0.717553, -0.209269, 0.715439, 0.0088992 )
+transform = Transform( 0.681066, 0.0880375, -0.72691, -0.0530896, -0.984196, -0.16894, -0.730294, 0.15365, -0.665629, -0.208274, 0.717208, 0.0354622 )
 bone_name = "Object.R"
 
 [node name="ref" type="Spatial" parent="Armature/Skeleton/handRight" index="0"]
@@ -431,37 +421,26 @@ time_scale_response = false
 transform = Transform( 0.707107, -0.707107, -2.23517e-08, -8.61473e-09, -4.47035e-08, 1, -0.707107, -0.707107, -2.23517e-08, 0, 0, 0 )
 
 [node name="knee_left" type="BoneAttachment" parent="Armature/Skeleton" index="12"]
-transform = Transform( -0.0308259, 0.0559529, -0.997958, -0.0330549, -0.997943, -0.054931, -0.998978, 0.0312941, 0.0326119, 0.0847261, 0.80933, 0.0200087 )
+transform = Transform( -0.0231111, 0.054357, -0.998254, -0.0818265, -0.995273, -0.0523003, -0.996379, 0.0804749, 0.0274495, 0.0863241, 0.80927, -0.00276457 )
 bone_name = "Thign.L"
 
 [node name="ref_leg_left" type="Spatial" parent="Armature/Skeleton/knee_left" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="knee_right" type="BoneAttachment" parent="Armature/Skeleton" index="13"]
-transform = Transform( -0.0218922, -0.0499602, 0.998512, 0.0358138, -0.998149, -0.049157, 0.999119, 0.0346846, 0.0236406, -0.088617, 0.80933, 0.0200087 )
+transform = Transform( -0.022559, -0.0535328, 0.998312, 0.0768926, -0.995701, -0.0516554, 0.996784, 0.0755976, 0.0265779, -0.0870189, 0.80927, -0.00276457 )
 bone_name = "Thign.R"
 
 [node name="ref_leg_right" type="Spatial" parent="Armature/Skeleton/knee_right" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="coat_tails" type="BoneAttachment" parent="Armature/Skeleton" index="14"]
-transform = Transform( 1.29375e-07, -4.68213e-08, -1, 0, -1, 5.74366e-08, -1, 2.98023e-08, -1.97014e-07, -0.00466368, 0.917873, 0.0299338 )
+transform = Transform( 1.29142e-07, -7.66164e-08, -1, 0, -1, 8.72535e-08, -1, 2.98023e-08, -1.97014e-07, -0.00306563, 0.917813, 0.00716054 )
 bone_name = "Coat"
 
-[node name="light" type="MeshInstance" parent="Armature/Skeleton/coat_tails" index="0"]
-transform = Transform( 1, 2.98023e-08, 2.32831e-10, -2.67849e-17, 1, 7.28306e-12, 3.87359e-10, 4.54019e-10, 1, 0.0714119, 0.0476274, -0.110902 )
+[node name="lantern" parent="Armature/Skeleton/coat_tails" index="0" instance=ExtResource( 19 )]
+transform = Transform( 0.907347, -0.419767, -0.0227483, -0.395735, -0.834639, -0.383109, 0.14183, 0.356615, -0.923424, 0.120476, 0.0975425, -0.110806 )
 visible = false
-cast_shadow = 0
-mesh = SubResource( 171 )
-
-[node name="OmniLight" type="OmniLight" parent="Armature/Skeleton/coat_tails/light" index="0"]
-light_color = Color( 1, 0.937255, 0.596078, 1 )
-light_cull_mask = 4293918722
-
-[node name="OmniLight2" type="OmniLight" parent="Armature/Skeleton/coat_tails/light" index="1"]
-light_color = Color( 1, 0.894118, 0.403922, 1 )
-light_cull_mask = 4294967293
-shadow_enabled = true
 
 [node name="AnimationPlayer" parent="." index="1"]
 time_scale_response = false

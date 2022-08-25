@@ -5,6 +5,7 @@ signal died(id, fullPath)
 
 export(String) var id
 export(bool) var respawns := true
+export(bool) var reset_on_player_death := false
 export(bool) var drops_coat := false
 export(float, 0.0, 1.0) var drops_ammo := 0.3
 export(Coat.Rarity) var minimum_rarity = Coat.Rarity.Common
@@ -34,7 +35,6 @@ enum AI {
 	GravityStunDead
 }
 var ai = AI.Idle
-
 
 var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
 var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
@@ -72,11 +72,16 @@ const COUNTS := {
 	"grav_gun": 5
 }
 
+var original: EnemyBody
+
 func _init():
 	contact_monitor = true
 	contacts_reported = 4
 
 func _ready():
+	if reset_on_player_death:
+		original = self.duplicate()
+		var _x = Global.get_player().connect("died", self, "_on_player_died")
 	sleeping = false
 	call_deferred("set_state", ai)
 	if !respawns and Global.is_picked(get_path()):
@@ -301,3 +306,9 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 	orb.turn_speed = seeking
 	orb.global_transform.origin = position
 	orb.fire(target, Vector3.UP*0.5)
+
+func _on_player_died():
+	print("resetting ", name)
+	var copy = original.duplicate()
+	get_parent().add_child(copy)
+	queue_free()

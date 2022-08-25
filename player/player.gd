@@ -2,6 +2,7 @@ extends KinematicBody
 class_name PlayerBody
 
 signal jumped
+signal died
 
 const GRAVITY := Vector3.DOWN*24
 
@@ -324,7 +325,7 @@ onready var game_ui := $ui/gameing/custom_game
 
 onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
-onready var light := $jackie/Armature/Skeleton/coat_tails/light
+onready var lantern := $jackie/Armature/Skeleton/coat_tails/lantern
 export(PackedScene) var flag : PackedScene
 export(PackedScene) var capacitor : PackedScene
 
@@ -1108,7 +1109,10 @@ func on_item_changed(item: String, change: int, count: int):
 						var s: Script = ResourceLoader.load(equipment_path_f % item)
 						if s:
 							equipment_inventory[item] = s.new()
+							if equipped_item:
+								equipped_item.unequip()
 							equipped_item = equipment_inventory[item]
+							equipped_item.equip()
 							update_equipment()
 
 func debug_show_inventory():
@@ -1159,12 +1163,15 @@ func equip_next():
 		equip(index + 1)
 
 func equip(index):
+	if equipped_item:
+		equipped_item.unequip()
 	var ln = equipment_inventory.size()
 	while index < 0:
 		index += ln
 	while index >= ln:
 		index -= ln
 	equipped_item = equipment_inventory.values()[index]
+	equipped_item.equip()
 	update_equipment()
 
 func update_equipment():
@@ -1555,6 +1562,7 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 	return false
 
 func die():
+	emit_signal("died")
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
 	# TODO : Animation here

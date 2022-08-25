@@ -5,11 +5,13 @@ uniform float light_bias : hint_range(-1.0, 1.0, 0.1);
 uniform float softness: hint_range(0, 1) = 1.0;
 uniform float specularity: hint_range(1, 32) = 1.0;
 uniform vec4 subsurface: hint_color = vec4(0.0);
+uniform float emission: hint_range(0, 3) = 0.0;
 
 void fragment()
 {
 	ALBEDO = texture(main_texture, UV).rgb;
 	ROUGHNESS = (32.0 - specularity)/32.0;
+	EMISSION = (subsurface*emission).rgb;
 }
 
 void light()

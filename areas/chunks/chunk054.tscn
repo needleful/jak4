@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -14,6 +14,65 @@
 [ext_resource path="res://entities/env/copper/tower.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/copper/scrap4.tscn" type="PackedScene" id=14]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=15]
+[ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/env/copper/mine_shack.tscn" type="PackedScene" id=17]
+[ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=18]
+[ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=19]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=20]
+[ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/env/stone/rock_collapsible.tscn" type="PackedScene" id=22]
+[ext_resource path="res://entities/enemies/tentpole.tscn" type="PackedScene" id=23]
+[ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=24]
+[ext_resource path="res://material/env/ancient/white_metal_matte.material" type="Material" id=25]
+
+[sub_resource type="SphereShape" id=1]
+radius = 54.0252
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.788 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "loop"
+length = 8.0
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:light_energy")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5.5, 5.55, 5.6, 5.7, 6.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.788, 0.551, 1.262, 0.195, 0.788, 0.907 ]
+}
+
+[sub_resource type="OccluderShapePolygon" id=4]
+polygon_points = PoolVector2Array( 220.514, 160.61, 370.593, -372.753, -212.896, -294.231, -111.069, 143.681 )
+
+[sub_resource type="OccluderShapePolygon" id=5]
+polygon_points = PoolVector2Array( 131.822, 259.221, 125.974, -20.6415, -735.308, -180.059, -596.326, 295.225 )
+
+[sub_resource type="OccluderShapePolygon" id=7]
+polygon_points = PoolVector2Array( 227.972, -147.562, -310.241, -151.602, 65.8582, 167.936, -338.876, 170.887 )
+
+[sub_resource type="OccluderShapePolygon" id=8]
+polygon_points = PoolVector2Array( 300.046, -292.246, -358.154, -271.182, -29.8138, 238.848, -352.893, 242.403 )
 
 [node name="chunk054" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -72,28 +131,174 @@ transform = Transform( 0.305095, 0.952322, 0, -0.952322, 0.305095, 0, 0, 0, 1, 4
 [node name="scrap5" parent="area_cave_entrance" instance=ExtResource( 14 )]
 transform = Transform( -0.00141701, -0.0176897, -0.999843, -0.999227, -0.0392581, 0.00211071, -0.0392893, 0.999072, -0.0176204, 45.2755, -0.547802, 30.3839 )
 
-[node name="area_cave" type="MultiMeshSystem" parent="."]
+[node name="area_cave_lower" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 125.322, -64.176, 116.732 )
 
-[node name="fountain2" parent="area_cave" instance=ExtResource( 2 )]
+[node name="fountain2" parent="area_cave_lower" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 0.999394, 0.0348273, 0, -0.0348273, 0.999394, 6.08481, -7.37797, 74.2371 )
 
-[node name="phone_pickup" parent="area_cave" instance=ExtResource( 5 )]
+[node name="phone_pickup" parent="area_cave_lower" instance=ExtResource( 5 )]
 transform = Transform( -0.98355, 0.110702, -0.14274, 0.168605, 0.84618, -0.505521, 0.0648217, -0.521272, -0.850925, 6.3148, -5.48907, 78.9261 )
 item_id = "dropped_phone"
 
-[node name="phone" parent="area_cave/phone_pickup" instance=ExtResource( 7 )]
+[node name="phone" parent="area_cave_lower/phone_pickup" instance=ExtResource( 7 )]
 on = true
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="area_cave"]
-transform = Transform( 0.978703, 0.0788166, 0.18955, 0, 0.923358, -0.38394, -0.205283, 0.375764, 0.903693, -9.5499, 22.9652, 4.89059 )
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_cave_lower"]
+transform = Transform( 0.978703, 0.0788165, 0.18955, 0, 0.923358, -0.383941, -0.205283, 0.375764, 0.903693, -7.60795, 7.01247, 47.0784 )
 max_distance = 16384.0
-extents = Vector3( 48.8898, 63.0263, 107.02 )
+extents = Vector3( 48.8898, 63.0263, 60.02 )
 origin_offset = Vector3( 11.9551, -18.6631, 0 )
 interior_enable = true
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="area_cave"]
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="area_cave_lower"]
+transform = Transform( 0.842105, -0.179812, -0.508456, 0.16393, 0.983516, -0.0763127, 0.513796, -0.0190879, 0.8577, -32.9151, 31.2461, -34.0965 )
+max_distance = 16384.0
+extents = Vector3( 66.5025, 51.6043, 35.155 )
+origin_offset = Vector3( 11.9551, -18.6631, 0 )
+interior_enable = true
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="area_cave_lower"]
 transform = Transform( 0.293003, -0.36709, -0.882833, 0, 0.923358, -0.38394, 0.956112, 0.112496, 0.270546, 33.709, 95.0596, 0.908844 )
 extents = Vector3( 35.4203, 26.3622, 67.2005 )
 origin_offset = Vector3( 12.6641, -0.564453, 0 )
 interior_enable = true
+
+[node name="mine_shack" parent="area_cave_lower" instance=ExtResource( 17 )]
+transform = Transform( 0.00938575, 0.149296, -0.988748, -0.836046, 0.543625, 0.0741485, 0.548578, 0.825943, 0.129921, 5.53255, -27.8436, 37.6622 )
+
+[node name="env" type="Area" parent="area_cave_lower"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 15 )
+wind_reduction_db = 64.1936
+custom_fog = Color( 0.0745098, 0.0745098, 0.0745098, 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.68779, 79.3822 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.02037, -18.826, 39.5211 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1288, 6.12913, -10.6787 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -51.1779, 33.6726, -38.692 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape5" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.0471, 59.7093, 10.5064 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape6" type="CollisionShape" parent="area_cave_lower/env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7053, 87.3799, 5.86646 )
+shape = SubResource( 1 )
+
+[node name="bug_pickup" parent="area_cave_lower" instance=ExtResource( 19 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2082, -18.9416, 42.1949 )
+
+[node name="gem_pickup" parent="area_cave_lower" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.83718, -25.2465, 37.985 )
+
+[node name="gem_pickup2" parent="area_cave_lower" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.91877, -24.8351, 37.3458 )
+
+[node name="bug_pickup2" parent="area_cave_lower" instance=ExtResource( 19 )]
+transform = Transform( -0.113697, 0, -0.993515, 0, 1, 0, 0.993515, 0, -0.113697, 1.90499, 18.3611, -14.1878 )
+quantity = 8
+
+[node name="gem_pickup3" parent="area_cave_lower" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5284, 23.357, -43.4289 )
+
+[node name="gem_pickup4" parent="area_cave_lower" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.3317, 24.2969, -45.0159 )
+
+[node name="gem_pickup5" parent="area_cave_lower" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.7987, 26.0695, -47.786 )
+
+[node name="rock1" parent="area_cave_lower" instance=ExtResource( 20 )]
+transform = Transform( 0.996175, -0.0805256, 0.0339255, -0.0756179, -0.599897, 0.796496, -0.0437864, -0.796015, -0.603691, -9.90175, 20.4734, -20.5703 )
+
+[node name="rock_collapsible" parent="area_cave_lower" instance=ExtResource( 22 )]
+transform = Transform( -0.989146, -0.13799, 0.050481, -0.13781, 0.990434, 0.00703314, -0.0509685, 0, -0.9987, 2.30434, 16.4303, -18.7363 )
+
+[node name="lantern_pickup" parent="area_cave_lower" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.41854, -5.61925, 76.0955 )
+item_id = "lantern"
+friendly_name = "lantern_054"
+
+[node name="lantern" parent="area_cave_lower/lantern_pickup" instance=ExtResource( 16 )]
+
+[node name="rock_kinematic" parent="area_cave_lower" instance=ExtResource( 21 )]
+transform = Transform( 0.851952, 0.457044, -0.255517, -0.52362, 0.74363, -0.415737, 0, 0.487981, 0.872854, 3.27447, -12.6613, 5.49327 )
+
+[node name="tentpole" parent="area_cave_lower" instance=ExtResource( 23 )]
+transform = Transform( -0.787909, 0, 0.615792, 0, 1, 0, -0.615792, 0, -0.787909, -55.3807, 48.5123, -41.2333 )
+reset_on_player_death = true
+
+[node name="SpotLight" type="SpotLight" parent="area_cave_lower"]
+transform = Transform( -0.306005, -0.476129, 0.824416, -0.0206254, 0.869069, 0.494261, -0.951806, 0.134243, -0.27576, -47.5571, 61.2275, -35.2157 )
+light_color = Color( 0.745098, 1, 0.67451, 1 )
+light_energy = 0.788
+spot_range = 19.2284
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="area_cave_lower/SpotLight"]
+autoplay = "loop"
+anims/RESET = SubResource( 2 )
+anims/loop = SubResource( 3 )
+
+[node name="rock2" parent="area_cave_lower" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 0.799332, -0.60089, 0, 0.60089, 0.799332, -47.5344, 41.1017, -71.6592 )
+
+[node name="scrap_pile2" parent="area_cave_lower" instance=ExtResource( 11 )]
+transform = Transform( 0.962097, 0, -0.272707, 0, 1, 0, 0.272707, 0, 0.962097, -58.6608, 61.559, -40.9584 )
+
+[node name="scrap4" parent="area_cave_lower" instance=ExtResource( 14 )]
+transform = Transform( 0.728186, 0.254926, -0.636206, -0.191976, 0.966961, 0.167727, 0.657944, 0, 0.753067, -48.2344, 55.4453, -52.5702 )
+
+[node name="area_thing" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.16, 47.8818, 37.4358 )
+
+[node name="CSGBox" type="CSGBox" parent="area_thing"]
+transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 18.2481, 0, 9.98888 )
+use_collision = true
+width = 73.2793
+height = 61.0268
+depth = 104.548
+material = ExtResource( 25 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_thing"]
+transform = Transform( 0.921663, 0, -0.387992, 0, 1, 0, 0.387992, 0, 0.921663, 16.7088, 0, 7.13963 )
+extents = Vector3( 55.9729, 42.56, 71.7057 )
+interior_enable = true
+interior_ambient_color = Color( 0.137255, 0.14902, 0.239216, 1 )
+
+[node name="OmniLight" type="OmniLight" parent="area_thing"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1899, -12.0623, 58.0293 )
+light_color = Color( 0.188235, 0.258824, 0.4, 1 )
+light_energy = 0.5
+
+[node name="OmniLight2" type="OmniLight" parent="area_thing"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6475, -12.0623, 63.8687 )
+light_color = Color( 0.188235, 0.258824, 0.4, 1 )
+light_energy = 0.5
+
+[node name="Occluder" type="Occluder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5714, 311.821, -178.35 )
+shape = SubResource( 4 )
+
+[node name="Occluder2" type="Occluder" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.897741, 0.440523, 0, -0.440523, 0.897741, 170.712, 1.52588e-05, 157.868 )
+shape = SubResource( 5 )
+
+[node name="Occluder3" type="Occluder" parent="."]
+transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, 316.451, 3.71597, 10.0292 )
+shape = SubResource( 7 )
+
+[node name="Occluder4" type="Occluder" parent="."]
+transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, -194.47, 151.448, -5.07466 )
+shape = SubResource( 8 )

@@ -7,7 +7,7 @@
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=5]
 [ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=6]
 [ext_resource path="res://material/env/copper/copper_corroded1.png" type="Texture" id=7]
-[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=8]
+[ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=8]
 
 [sub_resource type="ShaderMaterial" id=28]
 shader = ExtResource( 5 )
@@ -69,7 +69,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "Chop", 0, "Damaged", "Chop", 1, "Animation 2", "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3" ]
+node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -153,7 +153,7 @@ material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999933, 0.0113956, 0.00219366, -0.0114242, 0.999844, 0.0134948, -0.00203953, -0.013519, 0.999907, -0.0167463, 0.829856, -0.00113059 )
+transform = Transform( 0.99996, 0.00288783, 0.00848361, -0.00290325, 0.999994, 0.00180494, -0.00847835, -0.0018295, 0.999962, 0.0314579, 0.838097, -0.0096709 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
@@ -167,7 +167,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0694797, 0.962658, -0.261651, -0.945198, -0.02035, -0.325863, -0.319019, 0.269952, 0.908489, 0.0856561, 1.76567, -0.0444437 )
+transform = Transform( 0.0700367, 0.97267, -0.221376, -0.934778, -0.0134826, -0.354975, -0.348259, 0.231798, 0.908287, 0.125696, 1.77519, -0.0426188 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]

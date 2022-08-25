@@ -19,3 +19,9 @@ func can_use() -> bool:
 func use():
 	if ammo != "":
 		var _x = Global.remove_item(ammo)
+
+func equip():
+	pass
+
+func unequip():
+	pass
