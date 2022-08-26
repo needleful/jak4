@@ -20,14 +20,15 @@ void light()
 		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
 	}
 	else {
+		float spec = specularity/32.0;
 		float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
-		DIFFUSE_LIGHT += light * ATTENUATION * ALBEDO;
+		DIFFUSE_LIGHT += 0.4*(1.0-spec) * light * LIGHT_COLOR * ATTENUATION * ALBEDO;
 		
 		// Specular
 		vec3 h = normalize(VIEW + LIGHT);
 		float cNdotH = max(0.0, dot(NORMAL, h));
 		float blinn = pow(cNdotH, specularity);
-		blinn *= (specularity + 2.0) / (8.0*3.1416);
+		blinn *= spec;
 		float intensity = blinn; 
 		DIFFUSE_LIGHT += LIGHT_COLOR * intensity * ATTENUATION * ALBEDO;
 	}

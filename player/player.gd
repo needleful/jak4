@@ -145,7 +145,7 @@ const HOVER_EXTRA_GRAVITY := 1.0
 
 var hover_normal := Vector3.UP
 var hover_speed_factor := 1.0
-var hover_speed_up_percent := 0.25
+const HOVER_SPEED_BOOST := 0.5
 # Broad things
 
 var velocity := Vector3.ZERO
@@ -153,11 +153,11 @@ var timer_coyote := 0.0
 var timer_state := 0.0
 
 const DEFAULT_MAX_HEALTH := 50
-const HEALTH_UP_BOOST := 0.25
+const HEALTH_UP_BOOST := 0.5
 var max_health := DEFAULT_MAX_HEALTH
 var health := max_health
 
-const ARMOR_BOOST := 12.0
+const ARMOR_BOOST := 20.0
 var armor := 0
 var extra_health := 0.0
 
@@ -165,31 +165,31 @@ const HEALTH_BAR_DEFAULT_SIZE := 400
 const ARMOR_BAR_DEFAULT_SIZE := 96.0
 
 const DEFAULT_MAX_STAMINA := 40.0
-const STAMINA_UP_BOOST := 0.25
+const STAMINA_UP_BOOST := 0.5
 var max_stamina := DEFAULT_MAX_STAMINA
 var stamina_recover := 16.0
 var stamina := max_stamina
 
-const EXTRA_STAMINA_BOOST := 10.0
+const EXTRA_STAMINA_BOOST := 15.0
 var energy := 0
 var extra_stamina := 0.0
 
 const STAMINA_BAR_DEFAULT_SIZE := 280
 const EXTRA_STAMINA_BAR_SIZE := 7
 
-const STAMINA_RECOVERY_BOOST := 0.20
+const STAMINA_RECOVERY_BOOST := 0.5
 var stamina_factor := 1.0
 
 const MAX_DAMAGE_UP := 10
-const DAMAGE_UP_BOOST := 0.15
+const DAMAGE_UP_BOOST := 0.4
 var damage_factor := 1.0
 var max_damage := false
 var damaged_objects: Array = []
 
-const JUMP_UP_BOOST := 0.10
+const JUMP_UP_BOOST := 0.5
 var jump_factor := 1.0
 
-const SPEED_UP_BOOST := .10
+const SPEED_UP_BOOST := .5
 var speed_factor := 1.0
 
 const SPEED_STAMINA_BOOST := 0.04
@@ -225,11 +225,9 @@ var ledge_local_position : Vector3
 # Global transform
 var ledge_last_transform : Transform
 
-onready var equipment_inventory := {
-	"flag_placer": preload("res://items/usable/flag_placer.gd").new()
-}
+onready var equipment_inventory := {}
 
-onready var equipped_item : Usable = equipment_inventory["flag_placer"]
+onready var equipped_item : Usable
 
 enum State {
 	Ground,
@@ -731,7 +729,10 @@ func _physics_process(delta):
 					next_state = State.Fall
 		State.LungeKick:
 			if timer_state >= TIME_LUNGE_MAX:
-				next_state = State.Ground
+				if best_floor_dot > MIN_DOT_GROUND:
+					next_state = State.Ground
+				else:
+					next_state = State.Fall
 			elif ( timer_state >= TIME_LUNGE_MIN
 				and Input.is_action_just_pressed("combat_spin")
 			):
@@ -1014,6 +1015,10 @@ func _physics_process(delta):
 		choosing_item = false
 		timer_item_choose = false
 	equipment.visible = choosing_item
+	if TimeManagement.time_slowed and is_on_floor():
+		var fv = get_floor_velocity()
+		velocity -= fv*(1-TimeManagement.slow_time_rate)
+	
 
 func _process(_delta):
 	update_stamina()
@@ -1098,7 +1103,7 @@ func on_item_changed(item: String, change: int, count: int):
 				energy = new_energy
 				energy_bar.visible = energy > 0
 			"hover_speed_up":
-				hover_speed_factor = 1.0 + hover_speed_up_percent*count
+				hover_speed_factor = 1.0 + HOVER_SPEED_BOOST*count
 			_:
 				if ResourceLoader.exists(equipment_path_f % item):
 					if count == 0 and item in equipment_inventory:

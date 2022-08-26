@@ -35,7 +35,7 @@ func _ready():
 func _on_body_entered(body):
 	if stat != "":
 		var _x = Global.add_stat(stat)
-	print("Body entered: ", body.name)
+	print("Body entered: ", body.name, " in ", State.keys()[state])
 	match state:
 		State.Idle:
 			if !delay:
@@ -49,7 +49,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	print("Body exited: ", body.name)
-	if body == active_body:
+	if body != active_body:
 		return
 	match state:
 		State.Alerted, State.ActiveTimeExceeded:
