@@ -9,7 +9,7 @@ onready var anim := $AnimationTree
 onready var playback:AnimationNodeStateMachinePlayback = anim["parameters/StateMachine/playback"]
 onready var chopper_hitbox:Area = $Armature/Skeleton/chopper/Area
 
-const TIME_TO_QUIT := 2.0
+const TIME_TO_QUIT := 12.0
 const TIME_ALERT := 1.0
 const TIME_DAMAGED := 0.8
 var quit_timer := 0.0

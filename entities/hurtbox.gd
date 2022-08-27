@@ -1,6 +1,7 @@
 extends Area
 
 export(Vector3) var direction := Vector3.ZERO
+export(Vector3) var relative_direciton_factor := Vector3(1,1,1)
 export(int) var damage := 10
 export(bool) var active := false
 export(bool) var time_sensitive := false
@@ -22,5 +23,5 @@ func _on_body_entered(body):
 	print("damaged!")
 	var dir := direction
 	if dir == Vector3.ZERO:
-		dir = (body.global_transform.origin - global_transform.origin).normalized()
+		dir = (relative_direciton_factor*(body.global_transform.origin - global_transform.origin).normalized())
 	body.take_damage(damage, dir, self)

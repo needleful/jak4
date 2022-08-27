@@ -1,18 +1,37 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://_glb/env/ancient/fan.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/fan.gd" type="Script" id=2]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=3]
 [ext_resource path="res://entities/hurtbox.gd" type="Script" id=4]
 [ext_resource path="res://entities/windbox.gd" type="Script" id=5]
+[ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=6]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=7]
+[ext_resource path="res://material/env/foundry/metal_generic.png" type="Texture" id=8]
+
+[sub_resource type="CylinderShape" id=23]
+height = 0.370375
+radius = 2.96014
 
 [sub_resource type="CylinderShape" id=17]
-height = 0.642058
-radius = 2.87555
+height = 0.961344
+radius = 2.96014
 
 [sub_resource type="CylinderShape" id=19]
-height = 16.0
-radius = 3.24382
+resource_local_to_scene = true
+height = 15.0
+radius = 2.29988
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 8 )
+shader_param/ground = ExtResource( 8 )
+shader_param/ceiling = ExtResource( 8 )
 
 [sub_resource type="BoxShape" id=18]
 extents = Vector3( 2.68644, 0.299023, 0.347413 )
@@ -92,76 +111,88 @@ radial_segments = 6
 rings = 4
 
 [node name="fan" instance=ExtResource( 1 )]
-collision_layer = 0
 script = ExtResource( 2 )
 
-[node name="hurtbox" type="Area" parent="." index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0211786, 0 )
+[node name="blockade" type="KinematicBody" parent="." index="0"]
+
+[node name="CollisionShape" type="CollisionShape" parent="blockade" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.487274, 0 )
+shape = SubResource( 23 )
+
+[node name="hurtbox" type="Area" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.230584, 0 )
 collision_layer = 0
 collision_mask = 6
 script = ExtResource( 4 )
-direction = Vector3( 0, 2, 0 )
+relative_direciton_factor = Vector3( 0, 1, 0 )
 active = true
 time_sensitive = true
 
 [node name="CollisionShape" type="CollisionShape" parent="hurtbox" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.587458, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238733, 0 )
 shape = SubResource( 17 )
 
-[node name="windbox" type="Area" parent="." index="1"]
+[node name="windbox" type="Area" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.567885, 0 )
 collision_layer = 0
-collision_mask = 6
+collision_mask = 22
 script = ExtResource( 5 )
 
 [node name="CollisionShape" type="CollisionShape" parent="windbox" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0 )
 shape = SubResource( 19 )
 
+[node name="fan_body" parent="." index="3"]
+material/0 = ExtResource( 6 )
+
+[node name="propeller" parent="fan_body" index="0"]
+material/0 = SubResource( 22 )
+
 [node name="KinematicBody" type="KinematicBody" parent="fan_body/propeller" index="0"]
-collision_mask = 6
+collision_layer = 0
+collision_mask = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="fan_body/propeller/KinematicBody" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.515718, 0 )
 shape = SubResource( 18 )
 
-[node name="CollisionShape12" type="CollisionShape" parent="." index="3"]
+[node name="CollisionShape12" type="CollisionShape" parent="." index="4"]
 shape = SubResource( 2 )
 
-[node name="CollisionShape11" type="CollisionShape" parent="." index="4"]
+[node name="CollisionShape11" type="CollisionShape" parent="." index="5"]
 shape = SubResource( 3 )
 
-[node name="CollisionShape10" type="CollisionShape" parent="." index="5"]
+[node name="CollisionShape10" type="CollisionShape" parent="." index="6"]
 shape = SubResource( 4 )
 
-[node name="CollisionShape9" type="CollisionShape" parent="." index="6"]
+[node name="CollisionShape9" type="CollisionShape" parent="." index="7"]
 shape = SubResource( 5 )
 
-[node name="CollisionShape8" type="CollisionShape" parent="." index="7"]
+[node name="CollisionShape8" type="CollisionShape" parent="." index="8"]
 shape = SubResource( 6 )
 
-[node name="CollisionShape7" type="CollisionShape" parent="." index="8"]
+[node name="CollisionShape7" type="CollisionShape" parent="." index="9"]
 shape = SubResource( 7 )
 
-[node name="CollisionShape6" type="CollisionShape" parent="." index="9"]
+[node name="CollisionShape6" type="CollisionShape" parent="." index="10"]
 shape = SubResource( 8 )
 
-[node name="CollisionShape5" type="CollisionShape" parent="." index="10"]
+[node name="CollisionShape5" type="CollisionShape" parent="." index="11"]
 shape = SubResource( 9 )
 
-[node name="CollisionShape4" type="CollisionShape" parent="." index="11"]
+[node name="CollisionShape4" type="CollisionShape" parent="." index="12"]
 shape = SubResource( 10 )
 
-[node name="CollisionShape3" type="CollisionShape" parent="." index="12"]
+[node name="CollisionShape3" type="CollisionShape" parent="." index="13"]
 shape = SubResource( 11 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="." index="13"]
+[node name="CollisionShape2" type="CollisionShape" parent="." index="14"]
 shape = SubResource( 12 )
 
-[node name="CollisionShape" type="CollisionShape" parent="." index="14"]
+[node name="CollisionShape" type="CollisionShape" parent="." index="15"]
 shape = SubResource( 13 )
 
-[node name="Particles" type="Particles" parent="." index="15"]
+[node name="Particles" type="Particles" parent="." index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0443417, 0.914848, 0 )
 lifetime = 3.0
 visibility_aabb = AABB( -4, -6.86932, -4, 8, 13.7386, 8 )

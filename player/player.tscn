@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -30,6 +30,8 @@
 [ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=28]
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
 [ext_resource path="res://ui/equipment.gd" type="Script" id=30]
+[ext_resource path="res://player/tutorial.gd" type="Script" id=31]
+[ext_resource path="res://ui/prompts/key_q.png" type="Texture" id=32]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -1095,6 +1097,12 @@ autoplay = "fadein"
 anims/RESET = SubResource( 30 )
 anims/fadein = SubResource( 31 )
 anims/fadeout = SubResource( 32 )
+
+[node name="tutorial_equipment" type="Node" parent="."]
+script = ExtResource( 31 )
+gamepad_textures = [ ExtResource( 20 ) ]
+keyboard_textures = [ ExtResource( 32 ) ]
+gamepad_text = "Use Item"
 
 [node name="ui" type="Control" parent="."]
 pause_mode = 2

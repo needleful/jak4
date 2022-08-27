@@ -25,4 +25,4 @@ func set_enabled(e):
 		else:
 			var m := mesh.get_surface_material(1) as SpatialMaterial
 			if m:
-				m.emission_enabled = float(light_enabled)
+				m.emission_enabled = light_enabled

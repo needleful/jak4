@@ -21,10 +21,12 @@ func _physics_process(delta):
 	if Engine.editor_hint:
 		return
 	windbox.velocity = imparted_velocity
-	speed = lerp(speed, max_rotation_speed if active else 0, delta*ACCEL)
+	speed = lerp(speed, max_rotation_speed if active else 0.0, delta*ACCEL)
 	prop.rotate_y(speed*delta)
 	var p: ParticlesMaterial = particles.process_material
 	p.initial_velocity = imparted_velocity
+	particles.lifetime = effective_range/imparted_velocity
+	$blockade/CollisionShape.disabled = TimeManagement.time_slowed
 
 func set_active(a):
 	active = a
@@ -34,7 +36,7 @@ func set_active(a):
 
 func set_range(r):
 	effective_range = r
-	var height = r + 1
-	var position = r/2 - 1
+	var height = r
+	var position = r/2
 	$windbox/CollisionShape.shape.height = height
 	$windbox/CollisionShape.transform.origin.y = position

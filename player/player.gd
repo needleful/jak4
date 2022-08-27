@@ -380,7 +380,7 @@ func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
 	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
-	update_inventory()
+	update_inventory(true)
 	health = max_health
 	stamina = max_stamina
 	update_health()
@@ -1007,13 +1007,14 @@ func _physics_process(delta):
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
-	if Input.is_action_pressed("choose_item"):
+
+	if equipment_inventory.size() > 1 and Input.is_action_pressed("choose_item"):
 		timer_item_choose += delta
 		if timer_item_choose >= TIME_ITEM_CHOOSE:
 			choosing_item = true
 	else:
 		choosing_item = false
-		timer_item_choose = false
+		timer_item_choose = 0.0
 	equipment.visible = choosing_item
 	if TimeManagement.time_slowed and is_on_floor():
 		var fv = get_floor_velocity()
@@ -1030,11 +1031,11 @@ func prepare_save():
 func complete_save():
 	$ui/gameing/saveStats/AnimationPlayer.queue("save_complete")
 
-func update_inventory():
+func update_inventory(startup:= false):
 	for item in Global.game_state.inventory.keys():
-		on_item_changed(item, 0, Global.count(item))
+		on_item_changed(item, 0, Global.count(item), startup)
 	for item in UPGRADE_ITEMS:
-		on_item_changed(item, 0, Global.count(item))
+		on_item_changed(item, 0, Global.count(item), startup)
 	$ui/gameing/weapon/ammo_label.text = str(Global.count(current_weapon))
 
 func get_target_ref():
@@ -1043,7 +1044,7 @@ func get_target_ref():
 func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
-func on_item_changed(item: String, change: int, count: int):
+func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
 		var l_count: Label = get_node("ui/gameing/inventory/"+item+"_count")
 		l_count.text = str(count)
@@ -1105,6 +1106,7 @@ func on_item_changed(item: String, change: int, count: int):
 			"hover_speed_up":
 				hover_speed_factor = 1.0 + HOVER_SPEED_BOOST*count
 			_:
+				var old_item_count := equipment_inventory.size()
 				if ResourceLoader.exists(equipment_path_f % item):
 					if count == 0 and item in equipment_inventory:
 						var _x = equipment_inventory.erase(item)
@@ -1117,6 +1119,8 @@ func on_item_changed(item: String, change: int, count: int):
 							equipped_item = equipment_inventory[item]
 							equipped_item.equip()
 							update_equipment()
+				if !startup and equipment_inventory.size() > old_item_count:
+					$tutorial_equipment.show()
 
 func debug_show_inventory():
 	var state_viewer: Control = $ui/gameing/debug/game_state
