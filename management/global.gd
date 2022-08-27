@@ -69,7 +69,10 @@ func remove_flag(transform: Transform):
 		game_state.flags.remove(index)
 
 func get_player() -> Node:
-	return get_tree().current_scene.get_node("player")
+	for n in get_tree().get_nodes_in_group("player"):
+		return n
+	print_debug("No player exists")
+	return null
 
 func set_valid_game_state(state):
 	valid_game_state = state and game_state

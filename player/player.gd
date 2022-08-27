@@ -1166,6 +1166,8 @@ func equip_next():
 		equip(index + 1)
 
 func equip(index):
+	if equipment_inventory.size() == 0:
+		return
 	if equipped_item:
 		equipped_item.unequip()
 	var ln = equipment_inventory.size()
