@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=2]
+[gd_scene load_steps=105 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -533,12 +533,6 @@ _data = {
 "tilts": PoolRealArray( 0, 0, 0, 0, 0 )
 }
 
-[sub_resource type="CubeMesh" id=253]
-
-[sub_resource type="SpatialMaterial" id=254]
-metallic = 1.0
-roughness = 0.0
-
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
 lighting_preview = true
@@ -1008,6 +1002,11 @@ visual_name = "Shop Keeper"
 friendly_id = "village_shop"
 sitting = true
 inventory_data = ExtResource( 70 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_village/hut_shop" index="9"]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, 3.8584, 0 )
+extents = Vector3( 7.31912, 4.93845, 7.65296 )
+origin_offset = Vector3( 0.505859, -2.11914, 0.792969 )
 
 [node name="hut2" parent="area_village" index="27" instance=ExtResource( 12 )]
 transform = Transform( 0.0472285, 0, 0.998884, 0, 1, 0, -0.998884, 0, 0.0472285, -10.6374, 1.17274, 32.2418 )
@@ -1756,11 +1755,6 @@ layers = 1048575
 max_distance = 16384.0
 extents = Vector3( 33.6028, 21.6685, 31.2508 )
 origin_offset = Vector3( 0, 3.6875, -4.98926 )
-
-[node name="MeshInstance" type="MeshInstance" parent="area_village" index="55"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -41.721, 5.1265, -1.20208 )
-mesh = SubResource( 253 )
-material/0 = SubResource( 254 )
 
 [node name="rock3" parent="." index="19" instance=ExtResource( 36 )]
 transform = Transform( -0.970786, 0.0865772, 0.223784, -0.190196, -0.846249, -0.497683, 0.146289, -0.525707, 0.837993, 243.904, -186.236, -173.316 )

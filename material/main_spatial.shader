@@ -3,7 +3,7 @@ shader_type spatial;
 uniform sampler2D main_texture: hint_albedo;
 uniform float subsurface_scattering: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
-uniform float specularity: hint_range(1, 32) = 1.0;
+uniform float specularity: hint_range(0.1, 32) = 1.0;
 
 varying vec3 vert_color;
 

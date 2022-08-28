@@ -1595,6 +1595,7 @@ func respawn():
 	$fade/AnimationPlayer.play("fadein")
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
+	TimeManagement.resume()
 
 func teleport_to(t: Transform):
 	$fade/AnimationPlayer.play("fadein")

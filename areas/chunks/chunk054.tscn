@@ -46,6 +46,8 @@
 [ext_resource path="res://entities/env/ancient/bobble.tscn" type="PackedScene" id=44]
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=45]
 [ext_resource path="res://material/death_plane.shader" type="Shader" id=46]
+[ext_resource path="res://entities/enemies/speeder.tscn" type="PackedScene" id=47]
+[ext_resource path="res://entities/env/ancient/falling_platform.tscn" type="PackedScene" id=48]
 
 [sub_resource type="OccluderShapePolygon" id=4]
 polygon_points = PoolVector2Array( 220.514, 160.61, 370.593, -372.753, -212.896, -294.231, -111.069, 143.681 )
@@ -60,7 +62,7 @@ polygon_points = PoolVector2Array( 211.429, -146.281, -310.241, -151.602, 70.239
 polygon_points = PoolVector2Array( 300.046, -292.246, -358.154, -271.182, -29.8138, 238.848, -352.893, 242.403 )
 
 [sub_resource type="OccluderShapePolygon" id=45]
-polygon_points = PoolVector2Array( 50.1172, -123.535, 127.977, 53.1668, -84.8359, -113.874, -75.2387, 75.9996 )
+polygon_points = PoolVector2Array( -5.42625, -206.532, 76.9063, 76.4255, -84.8359, -113.874, -75.2387, 75.9996 )
 
 [sub_resource type="SphereShape" id=1]
 radius = 54.0252
@@ -723,11 +725,6 @@ uv1_scale = Vector3( 7, 7, 7 )
 [sub_resource type="BoxShape" id=44]
 extents = Vector3( 3.29716, 3.64209, 0.109073 )
 
-[sub_resource type="SphereMesh" id=47]
-
-[sub_resource type="SpatialMaterial" id=48]
-roughness = 0.0
-
 [sub_resource type="ShaderMaterial" id=46]
 resource_local_to_scene = true
 shader = ExtResource( 46 )
@@ -953,23 +950,29 @@ transform = Transform( 0.728186, 0.254926, -0.636206, -0.191976, 0.966961, 0.167
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.16, 47.8818, 37.4358 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_main_encounter"]
-transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 27.7582, 0, 2.43266 )
-extents = Vector3( 32.1393, 26.668, 64.0663 )
-origin_offset = Vector3( 0, 4.51953, 7.07227 )
+transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 25.7214, 0, 7.82772 )
+extents = Vector3( 32.1393, 17.902, 64.0663 )
+origin_offset = Vector3( 0, 9.99414, 7.07227 )
 interior_enable = true
 interior_ambient_color = Color( 0.2, 0.211765, 0.32549, 1 )
 
+[node name="ReflectionProbe7" type="ReflectionProbe" parent="area_main_encounter"]
+transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 25.7214, 16.3713, 7.82772 )
+extents = Vector3( 11.7134, 10.0183, 64.0663 )
+origin_offset = Vector3( 0, 4.86523, 7.07227 )
+interior_enable = true
+interior_ambient_color = Color( 0.027451, 0.0431373, 0.054902, 1 )
+
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="area_main_encounter"]
-transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 67.5421, 3.1014, 17.4524 )
-extents = Vector3( 13.0568, 11.7108, 64.0663 )
-origin_offset = Vector3( -10.5039, 3.34766, 0 )
+transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 62.5883, 3.1014, 15.5822 )
+extents = Vector3( 8.50808, 10.7888, 64.0663 )
+origin_offset = Vector3( -8.49808, 3.34766, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.0980392, 0.0980392, 0.109804, 1 )
-interior_ambient_contrib = 0.44
 
 [node name="ReflectionProbe3" type="ReflectionProbe" parent="area_main_encounter"]
-transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, -11.5343, 0, -12.4015 )
-extents = Vector3( 13.0568, 33.0087, 64.0663 )
+transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, -11.5343, 1.43127, -12.4015 )
+extents = Vector3( 13.0568, 12.7948, 64.0663 )
 origin_offset = Vector3( -3.61719, 0, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.0980392, 0.0980392, 0.109804, 1 )
@@ -979,19 +982,33 @@ transform = Transform( 0.929924, 0, -0.367752, 0, 1, 0, 0.367752, 0, 0.929924, 5
 extents = Vector3( 43.9015, 26.7052, 38.055 )
 interior_enable = true
 interior_ambient_color = Color( 0.301961, 0.396078, 0.760784, 1 )
-interior_ambient_contrib = 0.32
 
 [node name="ReflectionProbe5" type="ReflectionProbe" parent="area_main_encounter"]
 transform = Transform( 0.935548, 0, -0.3532, 0, 1, 0, 0.3532, 0, 0.935548, 61.9975, -10.7918, -75.2812 )
 extents = Vector3( 36.6684, 37.7513, 36.2827 )
 interior_enable = true
 interior_ambient_color = Color( 0.713726, 0.490196, 0.380392, 1 )
-interior_ambient_contrib = 0.32
 
 [node name="ReflectionProbe6" type="ReflectionProbe" parent="area_main_encounter"]
 transform = Transform( 0.974105, 0, -0.226096, 0, 1, 0, 0.226096, 0, 0.974105, 85.0056, 9.83456, -106.461 )
 extents = Vector3( 4.96759, 30.5354, 4.19072 )
 interior_enable = true
+
+[node name="ReflectionProbe8" type="ReflectionProbe" parent="area_main_encounter"]
+transform = Transform( 0.928206, 0, -0.372067, 0, 1, 0, 0.372067, 0, 0.928206, 56.7182, 16.8934, 2.94928 )
+intensity = 0.01
+max_distance = 16384.0
+extents = Vector3( 18.1661, 3.11048, 4.8263 )
+interior_enable = true
+interior_ambient_color = Color( 0.027451, 0.027451, 0.027451, 1 )
+
+[node name="ReflectionProbe9" type="ReflectionProbe" parent="area_main_encounter"]
+transform = Transform( 0.928206, 0, -0.372067, 0, 1, 0, 0.372067, 0, 0.928206, -0.852417, 16.8934, -18.3889 )
+intensity = 0.03
+max_distance = 16384.0
+extents = Vector3( 23.5204, 3.11048, 4.8263 )
+interior_enable = true
+interior_ambient_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
 
 [node name="OmniLight" type="OmniLight" parent="area_main_encounter"]
 transform = Transform( 0.990993, 0, -0.133912, 0, 1, 0, 0.133912, 0, 0.990993, -1.58087, -7.86792, 62.8754 )
@@ -1857,17 +1874,23 @@ aabb = AABB( -54.3876, -12.6786, -93.3843, 108.775, 25.3572, 186.769 )
 [node name="ReflectionProbe7" type="ReflectionProbe" parent="area_main_encounter/room3"]
 transform = Transform( 0.999556, 0, 0.0297917, 0, 1, 0, -0.0297917, 0, 0.999556, -6.77415, -5.52303, -9.57198 )
 extents = Vector3( 58.1867, 7.48127, 82.2365 )
+origin_offset = Vector3( 7.61523, 0, 10.666 )
 interior_enable = true
-interior_ambient_contrib = 0.32
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_main_encounter/room3"]
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 17.8862, -15.3779, 41.62 )
 max_distance = 16384.0
 extents = Vector3( 49.5591, 2.85176, 51.2742 )
-origin_offset = Vector3( 2.4707, 2.59983, 6.86719 )
+origin_offset = Vector3( 2.4707, -0.151367, 6.78906 )
 interior_enable = true
 interior_ambient_color = Color( 0.231373, 0.129412, 0.129412, 1 )
-interior_ambient_contrib = 0.48
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="area_main_encounter/room3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.0789, -59.2745, 36.0606 )
+extents = Vector3( 19.6546, 41.48, 22.2957 )
+origin_offset = Vector3( 0, 14.1406, 1.06055 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.309804, 0.403922, 1 )
 
 [node name="fan3" parent="area_main_encounter/room3" instance=ExtResource( 37 )]
 transform = Transform( 0.996861, 0, 0.0791644, 0, 1, 0, -0.0791644, 0, 0.996861, 1.20027, -63.3318, -76.7661 )
@@ -1948,7 +1971,7 @@ transform = Transform( 1, -0.000268042, -1.17168e-11, 0, -4.37114e-08, 1, -0.000
 imparted_velocity = 12.0
 effective_range = 75.0
 wide = true
-audio_scale = 20.0
+audio_scale = 9.0
 
 [node name="OmniLight" type="OmniLight" parent="area_main_encounter/room3/fan6"]
 transform = Transform( 1, 0, -1.77636e-15, 0, 1, -3.55271e-15, 0, 1.06581e-14, 1, 0, 1.46536, 2.00185 )
@@ -2061,13 +2084,25 @@ transform = Transform( 1, -2.38419e-07, -8.88178e-15, 0, -4.37114e-08, 1, -2.086
 spot_range = 3.32463
 spot_angle = 35.2191
 
-[node name="SpotLight2" type="SpotLight" parent="area_main_encounter/room3"]
-transform = Transform( -1, -2.38419e-07, 7.10543e-15, 0, -4.37114e-08, -1, 2.08616e-07, -1, 4.37114e-08, 20.4259, -14.8546, 48.3477 )
+[node name="crawly2" parent="area_main_encounter/room3" instance=ExtResource( 42 )]
+transform = Transform( -0.31922, 0, -0.947681, 0, 1, 0, 0.947681, 0, -0.31922, 29.2262, -17.5935, 49.2792 )
 
-[node name="MeshInstance" type="MeshInstance" parent="area_main_encounter/room3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.0112, -15.7537, 47.9776 )
-mesh = SubResource( 47 )
-material/0 = SubResource( 48 )
+[node name="crawly3" parent="area_main_encounter/room3" instance=ExtResource( 42 )]
+transform = Transform( -0.570079, 0, -0.82159, 0, 1, 0, 0.82159, 0, -0.570079, 26.9666, -17.5935, 53.816 )
+
+[node name="speeder" parent="area_main_encounter/room3" instance=ExtResource( 47 )]
+transform = Transform( 0.438846, 0, -0.898562, 0, 1, 0, 0.898562, 0, 0.438846, 35.4442, -17.2868, 59.6113 )
+
+[node name="crawly4" parent="area_main_encounter/room3" instance=ExtResource( 42 )]
+transform = Transform( 0.0955713, 0, -0.995423, 0, 1, 0, 0.995423, 0, 0.0955713, 25.0816, -17.5935, 55.4384 )
+
+[node name="fountainA2" parent="area_main_encounter/room3" instance=ExtResource( 33 )]
+transform = Transform( 0.965317, 0, -0.26108, 0, 1, 0, 0.26108, 0, 0.965317, -1.62169, -11.7724, 68.2188 )
+
+[node name="fan7" parent="area_main_encounter/room3" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44.9654, -31.369, 26.2329 )
+imparted_velocity = 15.0
+effective_range = 5.0
 
 [node name="CSGBox3" type="CSGBox" parent="area_main_encounter"]
 transform = Transform( 0.930571, 0, -0.366111, 0, 1, 0, 0.366111, 0, 0.930571, 86.2237, -12.8894, 18.6303 )
@@ -2084,15 +2119,12 @@ radius = 42.0
 height = 6.0
 material = ExtResource( 25 )
 
-[node name="CSGCylinder2" type="CSGCylinder" parent="area_main_encounter/CSGBox3/CSGCylinder"]
+[node name="CSGCylinder2" type="CSGCylinder" parent="area_main_encounter/CSGBox3"]
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -30.7601, 46.4477, 9.40192 )
 operation = 2
 radius = 37.1269
 height = 4.0
 sides = 24
-material = ExtResource( 25 )
-
-[node name="CSGBox2" type="CSGBox" parent="area_main_encounter/CSGBox3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 43.4315, 0 )
 material = ExtResource( 25 )
 
 [node name="overpass3" type="CSGBox" parent="area_main_encounter/CSGBox3"]
@@ -2118,9 +2150,36 @@ radius = 3.0
 height = 11.1557
 material = ExtResource( 25 )
 
+[node name="CSGCylinder3" type="CSGCylinder" parent="area_main_encounter/CSGBox3"]
+transform = Transform( 1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, 2.54553, 40.1147, 2.90652 )
+operation = 2
+radius = 3.90939
+height = 13.0716
+
+[node name="CSGBox2" type="CSGBox" parent="area_main_encounter/CSGBox3"]
+transform = Transform( 1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, 1, -6.37143, 30.3159, -2.98901 )
+height = 28.1499
+
+[node name="CSGBox4" type="CSGBox" parent="area_main_encounter/CSGBox3"]
+transform = Transform( 1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, -8.72989, 30.3159, -0.588322 )
+height = 28.1499
+
+[node name="CSGBox3" type="CSGBox" parent="area_main_encounter/CSGBox3"]
+transform = Transform( 1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, -6.37143, 30.3159, -5.78639 )
+height = 28.1499
+
 [node name="death_plane" parent="." instance=ExtResource( 45 )]
 transform = Transform( 37.446, 16.7653, 2.30256e-08, 0, -1.79338e-06, 1.28909, 16.7653, -37.446, -5.14288e-08, 276.854, 49.8862, 53.8556 )
 material/0 = SubResource( 46 )
+
+[node name="falling_platform" parent="." instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 276.696, 71.4281, 59.7525 )
+
+[node name="falling_platform2" parent="." instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 279.549, 69.0735, 55.2696 )
+
+[node name="falling_platform3" parent="." instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 281.017, 69.0735, 50.0573 )
 
 [connection signal="toggled" from="area_main_encounter/dswitch_a" to="area_main_encounter/room1/entrance" method="_on_toggled"]
 [connection signal="activated" from="area_main_encounter/room1/fast_door/trigger_zone" to="area_main_encounter/room1/fast_door" method="_on_activated"]
