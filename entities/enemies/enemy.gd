@@ -11,8 +11,8 @@ export(float, 0.0, 1.0) var drops_ammo := 0.3
 export(Coat.Rarity) var minimum_rarity = Coat.Rarity.Common
 export(Coat.Rarity) var maximum_rarity = Coat.Rarity.Rare
 export(int) var gem_drop_max = 5
-export(int) var health = 15
-export(int) var attack_damage = 10
+export(int) var health := 15
+export(int) var attack_damage := 10
 export(bool) var shielded := false setget set_shielded
 
 const GRAV_DECAY := 1.0
@@ -72,7 +72,8 @@ const COUNTS := {
 	"grav_gun": 5
 }
 
-var original: EnemyBody
+onready var starting_position := global_transform
+onready var starting_heath := health
 
 func _init():
 	contact_monitor = true
@@ -80,10 +81,9 @@ func _init():
 
 func _ready():
 	if reset_on_player_death:
-		original = self.duplicate()
 		var _x = Global.get_player().connect("died", self, "_on_player_died")
 	sleeping = false
-	call_deferred("set_state", ai)
+	call_deferred("set_state", AI.Idle)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
@@ -308,7 +308,10 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 	orb.fire(target, Vector3.UP*0.5)
 
 func _on_player_died():
-	print("resetting ", name)
-	var copy = original.duplicate()
-	get_parent().add_child(copy)
-	queue_free()
+	if ai == AI.Dead and !respawns:
+		return
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	health = starting_heath
+	global_transform = starting_position
+	_ready()

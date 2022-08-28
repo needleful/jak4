@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=2]
+[gd_scene load_steps=107 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -447,7 +447,8 @@ radius = 2.91933
 
 [sub_resource type="ShaderMaterial" id=236]
 shader = ExtResource( 43 )
-shader_param/uv_scale = 0.5
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
 shader_param/power = 5.0
 shader_param/softness = 0.5
 shader_param/specularity_ground = 1.0
@@ -460,7 +461,8 @@ shader_param/ceiling = ExtResource( 42 )
 
 [sub_resource type="ShaderMaterial" id=237]
 shader = ExtResource( 43 )
-shader_param/uv_scale = 1.0
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
 shader_param/power = 5.0
 shader_param/softness = 0.5
 shader_param/specularity_ground = 1.0
@@ -530,6 +532,12 @@ _data = {
 "points": PoolVector3Array( -0.0838547, -0.000427246, -0.0209808, 0.0838547, 0.000427246, 0.0209808, 0.0769806, -0.0140228, -0.0220032, -0.22747, -0.0157471, -0.17543, 0.22747, 0.0157471, 0.17543, 0.477402, -0.0808563, 0.181808, -0.169876, 0.00765991, -0.406509, 0.169876, -0.00765991, 0.406509, 1.01693, -0.0773315, 1.06708, -0.668465, -0.0182037, -0.0806885, 0.668465, 0.0182037, 0.0806885, 1.45148, -0.0857391, 2.05721, -0.0533371, -0.0791931, 0.395264, 0.0533371, 0.0791931, -0.395264, 1.7019, 0.00886536, 1.59796 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0 )
 }
+
+[sub_resource type="CubeMesh" id=253]
+
+[sub_resource type="SpatialMaterial" id=254]
+metallic = 1.0
+roughness = 0.0
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
@@ -1741,6 +1749,18 @@ curve = SubResource( 247 )
 
 [node name="garden" parent="area_village" index="53" instance=ExtResource( 50 )]
 transform = Transform( -0.287132, 0.0190271, 0.957702, 0.00711776, 0.999817, -0.0177299, -0.957865, 0.00172589, -0.287215, 40.8296, 3.75574, -17.0899 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="area_village" index="54"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2912, 7.13287, 9.83134 )
+layers = 1048575
+max_distance = 16384.0
+extents = Vector3( 33.6028, 21.6685, 31.2508 )
+origin_offset = Vector3( 0, 3.6875, -4.98926 )
+
+[node name="MeshInstance" type="MeshInstance" parent="area_village" index="55"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -41.721, 5.1265, -1.20208 )
+mesh = SubResource( 253 )
+material/0 = SubResource( 254 )
 
 [node name="rock3" parent="." index="19" instance=ExtResource( 36 )]
 transform = Transform( -0.970786, 0.0865772, 0.223784, -0.190196, -0.846249, -0.497683, 0.146289, -0.525707, 0.837993, 243.904, -186.236, -173.316 )

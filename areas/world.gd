@@ -55,7 +55,6 @@ const FOG_TWEEN_TIME := 2.5
 
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
-		print("Loading game...")
 		Global.load_sync()
 		
 func _ready():
@@ -169,7 +168,7 @@ func queue_load(ch: Spatial):
 	if ch.has_node("dynamic_content"):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
-	print("queue_load ", ch.name)
+	#print("queue_load ", ch.name)
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
 	var load_i = load_queue.find(ch)
@@ -180,10 +179,10 @@ func queue_load(ch: Spatial):
 		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
 	else:
 		load_queue.push_back(ch)
-	print("queue_load complete ", ch.name)
+	#print("queue_load complete ", ch.name)
 
 func load_async(ch:Spatial):
-	print("load_async ", ch.name)
+	#print("load_async ", ch.name)
 	if ch.has_node("dynamic_content") or (ch in active_chunks):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
@@ -192,7 +191,7 @@ func load_async(ch:Spatial):
 	var scn: PackedScene = get_or_load(ch.name)
 	call_deferred("add_dynamic_content", ch, scn.instance())
 	loading = null
-	print("load_async complete ", ch.name)
+	#print("load_async complete ", ch.name)
 
 func load_sync(chunk: Spatial):
 	if (chunk in active_chunks):
@@ -203,7 +202,7 @@ func load_sync(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
 		print_debug("Duplicate dynamic content: ", chunk.name)
 		return
-	print("load_sync ", chunk.name)
+	#print("load_sync ", chunk.name)
 	active_chunks.append(chunk)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
@@ -213,7 +212,7 @@ func load_sync(chunk: Spatial):
 	var scn: PackedScene = get_or_load(chunk.name)
 	if scn:
 		add_dynamic_content(chunk, scn.instance())
-	print("load_sync complete", chunk.name)
+	#print("load_sync complete", chunk.name)
 
 func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):

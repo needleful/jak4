@@ -1108,7 +1108,13 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			_:
 				var old_item_count := equipment_inventory.size()
 				if ResourceLoader.exists(equipment_path_f % item):
-					if count == 0 and item in equipment_inventory:
+					if count <= 0 and item in equipment_inventory:
+						if equipment_inventory[item] == equipped_item:
+							if equipment_inventory.size() > 1:
+								equip_previous()
+							elif equipped_item:
+								equipped_item.unequip()
+								equipped_item = null
 						var _x = equipment_inventory.erase(item)
 					elif count > 0 and !(item in equipment_inventory):
 						var s: Script = ResourceLoader.load(equipment_path_f % item)
@@ -1565,12 +1571,12 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 		die()
 		return true
 	velocity = VEL_DAMAGED_H*direction
-	print("damage: ", velocity)
 	if can_flinch():
 		set_state(State.Damaged)
 	return false
 
 func die():
+	print("Dead!")
 	emit_signal("died")
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
@@ -1646,7 +1652,6 @@ func _on_dialog_exited():
 	unlock()
 
 func _on_dialog_event(id: String, _source: Node):
-	print("Dialog: ", id)
 	match id:
 		"unlock_player":
 			cam_rig.start_dialog()
@@ -1693,7 +1698,6 @@ func gravity_stun(dam):
 		set_state(State.GravityStun)
 
 func show_prompt(textures: Array, text: String):
-	print("Show prompt: ", text)
 	$ui/gameing/tutorial/prompt_timer.stop()
 	if textures.size() >= 1:
 		$ui/gameing/tutorial/TextureRect1.show()
@@ -1713,7 +1717,6 @@ func show_prompt(textures: Array, text: String):
 	$ui/gameing/tutorial/prompt_timer.start()
 
 func _on_prompt_timer_timeout():
-	print("Hid prompt: ", $ui/gameing/tutorial/Label.text)
 	$ui/gameing/tutorial.hide()
 
 func celebrate(item: Spatial):

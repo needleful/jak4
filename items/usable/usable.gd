@@ -14,7 +14,7 @@ func _init():
 
 func can_use() -> bool:
 	player.update_equipment()
-	return ammo == "" or Global.count(ammo)
+	return ammo == "" or Global.count(ammo) > 0
 
 func use():
 	if ammo != "":

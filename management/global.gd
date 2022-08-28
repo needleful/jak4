@@ -10,7 +10,6 @@ var game_state := GameState.new()
 
 export(Array, Texture) var coat_textures: Array
 
-
 const save_path := "user://autosave.tres"
 const old_save_backup := "user://autosave.backup.tres"
 var valid_game_state := false setget set_valid_game_state, get_valid_game_state
@@ -222,7 +221,6 @@ func get_task_notes(task_id: String, active := true) -> Array:
 	return []
 
 func place_flag(node: Spatial, transform: Transform):
-	var _x = add_item("flag", -1)
 	get_tree().current_scene.add_child(node)
 	node.global_transform = transform
 	game_state.flags.append(transform)

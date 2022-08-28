@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://_glb/env/ancient/fan.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/fan.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=6]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=7]
 [ext_resource path="res://material/env/foundry/metal_generic.png" type="Texture" id=8]
+[ext_resource path="res://audio/env/drill.ogg" type="AudioStream" id=9]
 
 [sub_resource type="CylinderShape" id=23]
 height = 0.370375
@@ -112,6 +113,7 @@ rings = 4
 
 [node name="fan" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+audio_scale = 3.0
 
 [node name="blockade" type="KinematicBody" parent="." index="0"]
 
@@ -195,6 +197,14 @@ shape = SubResource( 13 )
 [node name="Particles" type="Particles" parent="." index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0443417, 0.914848, 0 )
 lifetime = 3.0
-visibility_aabb = AABB( -4, -6.86932, -4, 8, 13.7386, 8 )
+visibility_aabb = AABB( -4, -1, -4, 8, 12.2435, 8 )
 process_material = SubResource( 14 )
 draw_pass_1 = SubResource( 16 )
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="17"]
+stream = ExtResource( 9 )
+unit_db = -8.25806
+autoplay = true
+bus = "SFX"
+
+[node name="Tween" type="Tween" parent="." index="18"]
