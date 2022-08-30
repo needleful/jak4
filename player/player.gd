@@ -1137,7 +1137,7 @@ func debug_show_inventory():
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
 
 func is_dead():
-	return state == State.Dead
+	return state == State.Dead or state == State.FallingDeath
 
 func add_label(box: Control, text: String):
 	var l := Label.new()
@@ -1283,9 +1283,10 @@ func accel_climb(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 	var charge_accel = ACCEL_CLIMB
 	var charge: Vector3
 	var steer: Vector3
-	if velocity != Vector3.ZERO:
-		charge = desired_velocity.project(velocity.normalized())
-		steer = desired_velocity.slide(velocity.normalized())
+	var vn = velocity.normalized()
+	if vn.is_normalized():
+		charge = desired_velocity.project(vn)
+		steer = desired_velocity.slide(vn)
 		if (charge.dot(velocity) > 0 
 			and charge.length() < velocity.length()
 		):
@@ -1426,7 +1427,8 @@ func can_flinch():
 
 func takes_damage():
 	return not (
-		state == State.Locked
+		is_dead()
+		or state == State.Locked
 		or state == State.Damaged
 		or ( timer_state < TIME_SPIN_INVINCIBILITY
 			and ( state == State.SpinKick
@@ -1577,7 +1579,6 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 
 func die():
 	print("Dead!")
-	emit_signal("died")
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
 	# TODO : Animation here
@@ -1587,6 +1588,7 @@ func fall_to_death():
 	set_state(State.FallingDeath)
 
 func respawn():
+	emit_signal("died")
 	if game_ui.in_game:
 		game_ui.cancel_game()
 	cam_rig.reset()
