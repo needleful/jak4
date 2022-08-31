@@ -454,7 +454,8 @@ func _physics_process(delta):
 				equipped_item.use()
 				next_state = state
 			elif Input.is_action_pressed("mv_crouch"):
-				if velocity.length() > MIN_SPEED_ROLL:
+				var speed = (velocity - get_floor_normal()).slide(ground_normal)
+				if speed.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
@@ -582,7 +583,7 @@ func _physics_process(delta):
 				* delta
 				* (1.0-sqrt(max(best_floor_dot, 0)))
 			)
-			if stamina >= STAMINA_DRAIN_WALLJUMP and Input.is_action_just_pressed("mv_jump"):
+			if stamina >= 0 and Input.is_action_just_pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if best_normal == Vector3.ZERO:
 					best_normal = ground_normal
@@ -864,7 +865,7 @@ func _physics_process(delta):
 				on_wall = false
 			if can_ledge_grab():
 				next_state = State.LedgeHang
-			elif stamina >= STAMINA_DRAIN_WALLJUMP and Input.is_action_just_pressed("mv_jump"):
+			elif stamina >= 0 and Input.is_action_just_pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if best_normal == Vector3.ZERO:
 					best_normal = ground_normal
@@ -1828,6 +1829,8 @@ func set_state(next_state: int):
 			emit_signal("jumped")
 			mesh.play_jump()
 		State.LedgeJump:
+			$crouching_col.disabled = true
+			$standing_col.disabled = true
 			can_wall_cling = true
 			emit_signal("jumped")
 			velocity.y += jump_factor*JUMP_VEL_LEDGE
@@ -1867,6 +1870,8 @@ func set_state(next_state: int):
 			stamina -= STAMINA_DRAIN_CLIMB_START
 			gun.lock()
 		State.LedgeHang:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			can_wall_cling = true
 			stamina_recharges = false
 			mesh.play_ledge_grab()
