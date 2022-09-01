@@ -805,6 +805,8 @@ func _physics_process(delta):
 				next_state = State.Dash
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.DiveEnd
+			elif velocity.y > 0:
+				next_state = State.Fall
 		State.DiveEnd:
 			if timer_state > TIME_DIVE_END_MAX:
 				next_state = State.Ground

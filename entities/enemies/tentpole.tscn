@@ -69,7 +69,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
+node_connections = [ "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2", "output", 0, "Chop" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -141,7 +141,7 @@ node_connections = [ "output", 0, "StateMachine" ]
 radius = 8.97288
 
 [node name="tentpole" groups=["dynamic", "enemy", "push"] instance=ExtResource( 1 )]
-collision_layer = 17
+collision_layer = 65553
 mass = 180.0
 axis_lock_angular_x = true
 axis_lock_angular_z = true
@@ -149,17 +149,21 @@ script = ExtResource( 3 )
 id = "tentpole"
 health = 50
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [ NodePath("head") ]
+bones/3/bound_children = [ NodePath("chopper") ]
+
 [node name="tentpole" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999985, 0.00512788, 0.00211413, -0.00515476, 0.999903, 0.0129078, -0.00204774, -0.0129185, 0.999914, -0.00131709, 0.838484, -6.75199e-05 )
+transform = Transform( 0.999843, 6.69556e-05, 0.0177409, 0.000185215, 0.999899, -0.0142127, -0.01774, 0.0142137, 0.999742, 0.0669951, 0.835416, -0.0205958 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
 transform = Transform( 1, 0, -4.90691e-08, -4.65661e-09, 1, 1.49012e-08, 1.39698e-08, 7.45058e-09, 1, -5.96046e-08, 2.04996, 0.0255386 )
-collision_layer = 4
+collision_layer = 65540
 collision_mask = 6
 script = ExtResource( 2 )
 source_path = NodePath("../../../..")
@@ -168,7 +172,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0801572, 0.953022, -0.292103, -0.950278, -0.0154023, -0.311021, -0.300909, 0.30251, 0.904401, 0.095217, 1.77495, -0.0428188 )
+transform = Transform( 0.0192838, 0.999801, -0.00509208, -0.882765, 0.0146348, -0.469587, -0.469419, 0.0135505, 0.882871, 0.158296, 1.7732, -0.0393478 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]
