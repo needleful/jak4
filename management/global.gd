@@ -36,6 +36,8 @@ var stats_temp := {}
 
 var ammo_drop_pity := randf()
 
+var gravity_stunned_bodies := {}
+
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
@@ -48,6 +50,19 @@ func _input(event):
 func _ready():
 	randomize()
 	call_deferred("place_flags")
+
+func _physics_process(delta):
+	for b in gravity_stunned_bodies.keys():
+		gravity_stunned_bodies[b] -= delta
+		if gravity_stunned_bodies[b] <= 0:
+			b.gravity_scale = 1
+			gravity_stunned_bodies.erase(b)
+
+func gravity_stun_body(b: RigidBody):
+	gravity_stunned_bodies[b] = gravity_stun_time
+	b.sleeping = false
+	b.gravity_scale = 0
+	b.apply_central_impulse(Vector3.UP*b.mass*gravity_stun_velocity)
 
 func place_flags():
 	var flag_scene = load("res://entities/visual/flag.tscn")

@@ -18,6 +18,8 @@ func _ready():
 
 func _on_body_entered(body):
 	if !body.has_method("gravity_stun"):
+		if body is RigidBody:
+			Global.gravity_stun_body(body)
 		return
 	if body in damaged_nodes:
 		return
