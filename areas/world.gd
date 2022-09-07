@@ -115,7 +115,7 @@ func detect_enemies(_delta):
 			else:
 				enemies_present = true
 	
-	Music.tension = enemies_present
+	Music.in_combat = enemies_present
 	if air_enemies_present and !Global.stat("air_combat_tutorial"):
 		show_air_combat_tutorial()
 	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):

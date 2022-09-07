@@ -1,7 +1,7 @@
 {talked == 0}
 	Excuse me, ma'am! Can you help me?
 	[You] Well, sure. What do you need?
-	I was taking pictures and dropped my phone in the cave! Could you find it? You seem very climbable.
+	{Global.note_task("lost_phone", "A woman dropped her phone down a cave and desperately wants it back. Not enough to go down there herself, of course. It looks like a hundred-yard drop!")}{task_note_place("lost_phone", "copper_coin", "There's a cave under the city where a woman dropped her phone.")}I was taking pictures and dropped my phone in the cave! Could you find it? You seem very climbable.
 	[You] What?
 	Er, "climbable" was not the right word. I mean you are able to climb, yes?
 	[You] I understood that just fine. But you dropped an ENTIRE telephone into the cave? And what does that have to do with taking pictures?
@@ -14,7 +14,15 @@
 		[You] Is it this befuddling rectangle I found? I was already down in those caves for a moment.
 		Oh, yes it is!
 		{subtopic("reward")}
-{otherwise if Global.stat("phone_quest/complete")}
+		Thank you so much for the help!
+		[You] Uh, no problem. I suppose...
+	{otherwise}
+		* You look down into the cave.
+		[You] ...You dropped it all the way down there?
+		Yes. I can see it still on down there. Please, if you can help, I would greatly appreciate it!
+		[You] Well... if I have some free time, I'll take a look.
+		Please do! Thank you very much!
+{otherwise if Global.task_is_complete("lost_phone")}
 	Thank you again for getting my phone!
 	Maybe someday your people will have phones, too!
 	[You] Uh, no problem.
@@ -33,7 +41,7 @@
 
 :reward
 {Global.remove_item("dropped_phone")}
-{Global.add_stat("phone_quest/complete")}
+{Global.complete_task("lost_phone", "These \"cell phones\" seem more trouble than they're worth. I'll just send a courier if it's so important!")}
 {Global.add_item("bug", 15)}
 {Global.add_item("gem", 30)}
 {back()}

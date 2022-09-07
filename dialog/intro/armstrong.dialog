@@ -56,12 +56,10 @@
 	{Global.add_stat("armstrong/coats_girl")}
 	No.
 	[You] No?! Just like that?
-	Not without three capacitors. Big heavy ones. They go in the machines here. Can't run without it.
+	{Global.add_stat("need_capacitors")} {Global.note_task("activate_the_medium", "Armstrong says I need to find three capacitors to activate the medium. There's possibly one in the village, but I don't know about the others.")}Not without three capacitors. Big heavy ones. They go in the machines here. Can't run without it.
 	[You] Where do we get them?
 	Don't know. They are ancient things. Buried with all the other machines. Have to find them.
-	There's one in city, I think. But others? Don't know.
-	[You] Well... I guess I'll have to find them.
-	{Global.add_stat("need_capacitors")} {Global.note_task("activate_the_medium", "Armstrong says I need to find three capacitors to activate the medium. There's possibly one in the village, but I don't know about the others.")}
+	If anyone found one, they would have stored it in the cave at the back of the village. You can check there if you want.
 {otherwise if Global.stat("hdw_gate") and !Global.stat("armstrong/gate")}
 	{Global.add_stat("armstrong/gate")} Hey, I heard you cleared the Specters in front of the gate. Impressive!
 	[You] Oh, it was nothing.
@@ -75,7 +73,6 @@
 	> Do you know anyone who was in the war?
 	> Well, I hope I've broken your stereotypes.
 		Eh. It may be a fluke. I'll reconsider if a second Vaeler impresses me.
-
 {otherwise if !Global.stat("medium/activated")}
 	{Global.stat("medium/open")}
 		You did it! Three capacitors!
@@ -83,10 +80,9 @@
 		I think so! I've never used the Medium before!  Good luck.
 	{otherwise}
 		How goes your search, Coats Girl?
+		[You] Progress as always.
+		Good to hear!
 		:choice_loop_search
-		> Progress as always. I'll see you later.
-			Good to hear! See you.
-			{exit()}
 		> I have no idea where to look.
 			Lets see...
 			Have you searched the cave in town? We have a lot of scrap in there.
@@ -98,8 +94,6 @@
 			{otherwise if Global.task_note_place("activate_the_medium", "hideaway", "Armstrong thinks there's a capacitor in the caves.")}
 				[You] I haven't.
 				That's the first place I would check.
-
-
 			> {!Global.stat("cave_capacitor_124")} So about this cave...
 				[You] Do you really think there's just be a capacitor lying in the cave?
 				If anyone's found one recently, they would have put it with the rest of the scrap for transport to Maslikir. I don't think anyone's been in the back since the ceiling fell in.
@@ -133,12 +127,14 @@
 				[You] ...
 			{otherwise}
 		> {Global.stat("cave_capacitor_124")} There was a capacitor in the cave.
-			Wow! You would think they had been picked clean by now. Lucky find!
-			> They look different than the other ruins around here.
-				They are. There were two difference civilizations before us. Some made structures out of copper, and others out of white metal, impossible to corrode. Incredible material.
+			As I suspected!
+			> It looks different than the other artifacts around here.
+				There were two difference civilizations before us. Some made structures out of copper, and others out of white metal, impossible to corrode. Incredible material.
 				[You] And presumably they built the Medium?
 				I do not know, actually.
-			> Are there other caves in the area?
+			> Are there other caves in the area? Would they have more?
+				Eh... it is complicated.
+				We used that cave for storing scrap before the ceiling fell in.
 				There are a few scattered about, but none in walking distance. But be very careful: they run deep, and it's easy to get lost.
 				You would have better luck with the small towers you'll find along the river basin. They often used capacitors for some kind of worship.
 		> {Global.stat("tower_capacitor_124")} There was a capacitor in one of those copper buildings.
@@ -175,27 +171,33 @@
 			[You] Really? But surely if it's been standing for centuries, it could go without power?
 			Seriously. It is dangerous. I would not even go near it.
 			[You] ...
+		> I'll see you later.
+			See you!
+			{exit()}
 		{goto("choice_loop_search")}
 {otherwise}
-	How did it go with the Medium?
 	{Global.stat("talked/mum")}
-		{!Global.stat("mum/info")} 
-			[You] I talked to my mum.
-			[You] Well, I mean, sort of. She was like a ghost. I never knew her that well.
-			... Wait, did you not understand how the Medium worked? It uses your memories.
-			[You] Of course I understand. That's why I came to this Medium. My mother lived in the area. But I don't know where, exactly.
-			What was her name? There aren't many cities out here. Maybe I knew her?
-			[You] Teltara.
-			... No, that doesn't ring a bell.  Your best bet would be the other cities.  One on the plateau to the west, and the other, Crab Hill, all the way to the northwest. You could visit both in one trip.
-			{Global.mark_map("plateau_town", "The Plateau. Armstrong said it's one of the two other settlements in the area.")}
-			{Global.mark_map("crab_hill", "Crab Hill. Armstrong said it's one of the two other settlements in the area.")}
-			[You] Right. So the plateau, then Crab Hill.
-			That would be my plan. Good luck to you.
+		{!Global.stat("mum/info")}
+			?{armstrong/mum_info}
+			{otherwise}
+				[You] I talked to my mum.
+				[You] Well, I mean, sort of. She was like a ghost. I never knew her that well.
+				... Wait, did you not understand how the Medium worked? It uses your memories.
+				[You] Of course I understand. That's why I came to this Medium, specifically. My mother lived in the area. But I don't know where, exactly.
+				What was her name? There aren't many cities out here. Maybe I knew her?
+				[You] Teltara Sylde.
+				Hm. I have known several Teltaras, but "Sylde" is unfamiliar. It means "of the plateau". Maybe her family was still living on a plateau?
+				{Global.mark_map("plateau_town", "The Great Plateau. Armstrong said it's one of the two major settlements in the area.")} The obvious one would the the Great Plateau. It's already big enough, but with the Tree Tower it's impossible to miss.
+				{Global.mark_map("crab_hill", "Crab Hill. Armstrong said it's one of the two major settlements in the area.")} Your second option is Crab Hill. It is smaller, and further north, but a major settlement, especially nowadays.
+				[You] Right. So I should check the plateau, then Crab Hill.
+				+{armstrong/mum_info} That would be my plan. Good luck to you.
 		{otherwise}
+			How did it go with the Medium?
 			[You] ...
 	{otherwise} 
+		How did it go with the Medium?
 		[You] I, uh... haven't talked to her yet.
-		What? Just go in there and do it!
+		What? Go in there and do it!
 
 	{Global.count("wep_pistol") and !Global.stat("armstrong/tutorial_complete/pistol")}
 		{Global.add_stat("armstrong/ask_tutorial") == 1}

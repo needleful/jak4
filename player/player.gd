@@ -889,7 +889,6 @@ func _physics_process(delta):
 	
 	match state:
 		State.Ground:
-			
 			if timer_state > TIME_RESET_GROUND:
 				can_air_spin = true
 				can_slide_lunge = true

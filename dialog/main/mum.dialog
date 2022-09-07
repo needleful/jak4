@@ -8,13 +8,15 @@
 		What? No, she is just a... where are we?
 		[You] The "Medium of Braalna", it said.
 		Someone got that old thing working again?
+		...
 		Oh.
-		?{mum/huh} Huh...
+		?{mum/huh} Huh.
 		{otherwise} Oh...
 		.... What happened to me, then?
 		?{mum/absent}
 			[You] I don't know. You left when I was born and never came back.
-			Oh.
+			Oh.  I could still be alive, then?
+			[You] ...
 		{otherwise}
 			[You] We uh, don't know. You went missing.
 			Really? I could still be alive, then?
@@ -50,7 +52,7 @@
 		{seconds_since_conversation() > 200}
 			[You] What do you mean?
 			You sounded like you were leaving.
-			[You] I... did leave? I was gone for some time...
+			[You] I... did leave? I was gone for some time.
 			No. You left, and then...
 			?{mum/huh} ... Huh.
 			{otherwise} ...
@@ -60,8 +62,8 @@
 			[You] Yeah, I guess I wanted to ask about some more stuff.
 		{goto("main_loop")}
 
-	{otherwise if Global.stat("mum/info") < 3}
-		[You] Hi mum.
+	{otherwise if !Global.stat("mum/network")}
+		[You] Hi Mum.
 		Hello again, Jackie. Did you need something?
 		{goto("main_loop")}
 
@@ -101,12 +103,61 @@
 {exit()}
 
 :main_loop
+> {skip()} (Discuss events)
+	> {Global.count('wep_pistol')}{!Global.stat("mum/discussed/pistol")} I found a pistol when I first activated the Medium.
+		+{mum/discussed/pistol} Oh my God. Vaeler Officers used those in the war.
+	> {Global.count('wep_wave_shot')}{!Global.stat("mum/discussed/wave_shot")} I found a curious bubble-shooting weapon.
+		+{mum/discussed/wave_shot}
+	> {Global.count('wep_grav_gun')}{!Global.stat('mum/discussed/grav_gun')} I found a gravity-distorting cannon.
+		+{mum/discussed/grav_gun}
+	> {Global.count('wep_time_gun')}{!Global.stat('mum/discussed/time_gun')} I can slow down time with this gadget I found!
+		+{mum/discussed/time_gun}
+	> (Back)
+		{goto("main_loop")}
+> {skip()} (Discuss people)
+	> (Back)
+		{goto("main_loop")}
+> {skip()} (Discuss places)
+	> (Back)
+		{goto("main_loop")}
 {track_conversation_time()}
 {exit()}
 
-:_exit
-{track_conversation_time()}
-{exit()}
+:entry_network054
+{mention("network054")}
+{goto("_network")}
+
+:_network
+?{mum/info}
+	?{mum/network}
+	{otherwise}
+		+{mum/network}{remember("Mum can apparently travel between different machines throughout the area.")}
+		[You] M-mum?! What are you doing here?
+		Huh? I don't know? What is this?
+		{mentioned("network054") and Global.task_exists("lost_phone")}
+			[You] This place is inside a cave. I was helping a woman who dropped her phone and found myself stuck down here.
+			Did you find the phone?
+			{Global.count("dropped_phone")}
+				[You] I think so? I believe it's this little black bar.
+				... Yes honey, that's what phones are.
+				[You] Oh, whatever. These befuddling artifacts are more trouble than they're worth.
+			{otherwise}
+				[You] I haven't found anything so far.
+				Well, where did she drop it?
+				[You] At the entrance to the cave.
+				Did you check there?
+				[You] Obviously, mum. I didn't find it.
+				And you're going to find it in here? At...
+				* She pauses for a moment.
+				{mention("network_knowledge")}What, you think it bounced up through the cave, unlocked the door, and made its way up here? Clearly it would be at the entrance, still.
+				[You] Wait, how...
+			[You] Alright Mum, we're getting side-tracked. My question for you is, how are you here? Does this building connect to the Medium somehow?
+		{otherwise}
+			[You] I stumbled onto this strange facility. It must connect to the Medium somehow.
+		I think... that is the only explanation.  
+{otherwise}
+	* [ERROR] This conversation should not occur.
+	{exit()}
 
 :family
 Whatever happened after I left?
@@ -115,3 +166,8 @@ Whatever happened after I left?
 	> She's been as good as a step-mother can be.
 	> I don't think she could ever love me like my brother.
 > I was shuffled between boarding schools.
+{fast_exit()}
+
+:_exit
+{track_conversation_time()}
+{exit()}

@@ -56,7 +56,7 @@ func _physics_process(delta):
 		gravity_stunned_bodies[b] -= delta
 		if gravity_stunned_bodies[b] <= 0:
 			b.gravity_scale = 1
-			gravity_stunned_bodies.erase(b)
+			var _x = gravity_stunned_bodies.erase(b)
 
 func gravity_stun_body(b: RigidBody):
 	gravity_stunned_bodies[b] = gravity_stun_time
@@ -234,6 +234,21 @@ func get_task_notes(task_id: String, active := true) -> Array:
 		if task.id == task_id:
 			return task.general_notes
 	return []
+
+func task_is_active(task_id: String) -> bool:
+	for task in game_state.active_tasks:
+		if task.id == task_id:
+			return true
+	return false
+
+func task_is_complete(task_id: String) -> bool:
+	for task in game_state.completed_tasks:
+		if task.id == task_id:
+			return true
+	return false
+
+func task_exists(task_id: String) -> bool:
+	return task_is_complete(task_id) or task_is_active(task_id)
 
 func place_flag(node: Spatial, transform: Transform):
 	get_tree().current_scene.add_child(node)

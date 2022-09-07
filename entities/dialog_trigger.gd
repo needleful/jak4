@@ -1,6 +1,7 @@
 extends Area
 
 export(Resource) var dialog_sequence
+export(String) var custom_entry := ""
 export(NodePath) var main_speaker
 export(String) var friendly_id
 
@@ -16,4 +17,4 @@ func _on_body_entered(body):
 		print_debug("BUG: Non-player triggered dialog node ", get_path())
 		return
 	if body.can_talk():
-		body.start_dialog(self, dialog_sequence, speaker)
+		body.start_dialog(self, dialog_sequence, speaker, custom_entry)
