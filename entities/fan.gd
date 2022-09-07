@@ -32,7 +32,7 @@ func _physics_process(delta):
 	windbox.velocity = imparted_velocity
 	speed = lerp(speed, max_rotation_speed if active else 0.0, delta*ACCEL)
 	prop.rotate_y(speed*delta)
-	$blockade/CollisionShape.disabled = TimeManagement.time_slowed
+	$blockade/CollisionShape.disabled = !active or TimeManagement.time_slowed
 
 func set_active(a):
 	active = a

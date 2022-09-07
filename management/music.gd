@@ -17,6 +17,9 @@ var fadeout := false
 var next_up_explore : AudioStream
 var next_up_combat : AudioStream
 
+func _ready():
+	reset()
+
 func _process(delta):
 	if fadeout:
 		var change = FADEOUT_SPEED*delta

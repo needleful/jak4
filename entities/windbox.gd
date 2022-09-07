@@ -1,7 +1,7 @@
 extends Area
 
 export(float) var velocity := 2.0
-const FORCE_ON_BODIES := 2.0
+const FORCE_ON_BODIES := 4.0
 
 func _physics_process(_delta):
 	var dir = global_transform.basis.y

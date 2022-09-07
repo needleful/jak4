@@ -69,7 +69,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2", "output", 0, "Chop" ]
+node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -149,16 +149,12 @@ script = ExtResource( 3 )
 id = "tentpole"
 health = 50
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/2/bound_children = [ NodePath("head") ]
-bones/3/bound_children = [ NodePath("chopper") ]
-
 [node name="tentpole" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999843, 6.69556e-05, 0.0177409, 0.000185215, 0.999899, -0.0142127, -0.01774, 0.0142137, 0.999742, 0.0669951, 0.835416, -0.0205958 )
+transform = Transform( 0.999984, 0.00529473, 0.00211438, -0.00532164, 0.999902, 0.0129234, -0.00204575, -0.0129345, 0.999914, -0.00239205, 0.837883, -0.000122627 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
@@ -172,7 +168,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0192838, 0.999801, -0.00509208, -0.882765, 0.0146348, -0.469587, -0.469419, 0.0135505, 0.882871, 0.158296, 1.7732, -0.0393478 )
+transform = Transform( 0.0799604, 0.953108, -0.291874, -0.950247, -0.0155511, -0.311108, -0.301058, 0.302228, 0.904445, 0.0942983, 1.77433, -0.0428887 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]

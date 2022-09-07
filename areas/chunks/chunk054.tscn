@@ -1,4 +1,4 @@
-[gd_scene load_steps=108 format=2]
+[gd_scene load_steps=110 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -741,6 +741,19 @@ tracks/7/keys = {
 [sub_resource type="CylinderShape" id=251]
 radius = 0.634045
 
+[sub_resource type="SphereMesh" id=252]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SpatialMaterial" id=253]
+flags_no_depth_test = true
+flags_fixed_size = true
+emission_enabled = true
+emission = Color( 0.4, 0.156863, 0.156863, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
 [sub_resource type="QuadMesh" id=42]
 size = Vector2( 7, 7 )
 
@@ -762,7 +775,7 @@ shader_param/max_depth = 20.0
 shader_param/depth_color = null
 
 [sub_resource type="OccluderShapePolygon" id=47]
-polygon_points = PoolVector2Array( 99.8781, -9.43847, 94.6906, 39.7408, -89.7526, 39.7733, -93.1411, -5.55135 )
+polygon_points = PoolVector2Array( 104.426, -8.30534, 94.6906, 39.7408, -89.7526, 39.7733, -62.9585, -1.56058 )
 
 [sub_resource type="ShaderMaterial" id=48]
 resource_local_to_scene = true
@@ -793,27 +806,22 @@ collision_layer = 257
 
 [node name="Occluder" type="Occluder" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5714, 311.821, -178.35 )
-visible = false
 shape = SubResource( 4 )
 
 [node name="Occluder2" type="Occluder" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 0.882174, 0.470923, 0, -0.470923, 0.882174, 170.712, 6.5246, 171.164 )
-visible = false
 shape = SubResource( 5 )
 
 [node name="Occluder3" type="Occluder" parent="." index="7"]
 transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, 323.036, 3.71597, 11.1988 )
-visible = false
 shape = SubResource( 7 )
 
 [node name="Occluder4" type="Occluder" parent="." index="8"]
 transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, -194.47, 151.448, -5.07466 )
-visible = false
 shape = SubResource( 8 )
 
 [node name="Occluder5" type="Occluder" parent="." index="9"]
 transform = Transform( 0.949219, 0.314615, 1.37523e-08, 0, -4.37114e-08, 1, 0.314615, -0.949219, -4.14917e-08, 250.071, 78.7166, -1.54715 )
-visible = false
 shape = SubResource( 45 )
 
 [node name="scrap1" parent="." index="10" instance=ExtResource( 6 )]
@@ -1228,8 +1236,10 @@ width = 12.0804
 height = 9.66341
 depth = 20.346
 
-[node name="room1" type="Spatial" parent="area_main_encounter" index="7"]
+[node name="room1" type="VisibilityEnabler" parent="area_main_encounter" index="7"]
 transform = Transform( 0.932283, 0, -0.36173, 0, 1, 0, 0.36173, 0, 0.932283, 18.2826, 0, 18.124 )
+aabb = AABB( -42.3277, -26.906, -47.0578, 84.6553, 53.812, 94.1155 )
+children_only = true
 
 [node name="entrance" type="MeshInstance" parent="area_main_encounter/room1" index="0"]
 transform = Transform( -0.00690711, 0, -0.999976, 0, 1, 0, 0.999976, 0, -0.00690711, 4.13316, -13.4598, 46.2635 )
@@ -1318,6 +1328,7 @@ collision_layer = 257
 shape = SubResource( 20 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="area_main_encounter/room1/fast_door" index="3"]
+playback_process_mode = 0
 anims/Activate = SubResource( 25 )
 anims/RESET = SubResource( 26 )
 
@@ -1429,19 +1440,19 @@ script = ExtResource( 30 )
 
 [node name="platform_square2" parent="area_main_encounter/room1/stairs2" index="0" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.917023, -6.79264, 3.52321 )
-motion/sync_to_physics = true
+collision_layer = 65793
 
 [node name="platform_square3" parent="area_main_encounter/room1/stairs2" index="1" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.917053, -6.77566, -0.767487 )
-motion/sync_to_physics = true
+collision_layer = 65793
 
 [node name="platform_square4" parent="area_main_encounter/room1/stairs2" index="2" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.917023, -6.79124, -5.31564 )
-motion/sync_to_physics = true
+collision_layer = 65793
 
 [node name="platform_square5" parent="area_main_encounter/room1/stairs2" index="3" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.917068, -6.78603, -10.8666 )
-motion/sync_to_physics = true
+collision_layer = 65793
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="area_main_encounter/room1/stairs2" index="4"]
 playback_process_mode = 0
@@ -1581,16 +1592,18 @@ shape = SubResource( 251 )
 [node name="mum" parent="area_main_encounter/room1/mum_network/mom" index="2" instance=ExtResource( 62 )]
 transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0.0466156, -0.994339, 0.879108 )
 
-[node name="room2" type="Spatial" parent="area_main_encounter" index="8"]
-transform = Transform( 0.939757, 0, -0.341842, 0, 1, 0, 0.341842, 0, 0.939757, 59.3756, 5.38567, -76.7593 )
+[node name="room2" type="VisibilityEnabler" parent="area_main_encounter" index="8"]
+transform = Transform( 0.939757, 0, -0.341842, 0, 1, 0, 0.341842, 0, 0.939757, 60.2222, 5.38568, -78.8357 )
+aabb = AABB( -38.6006, -32.4514, -54.7149, 80.7665, 64.9028, 92.5958 )
+children_only = true
 
 [node name="fan3" parent="area_main_encounter/room2" index="0" instance=ExtResource( 37 )]
-transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.6368, -23.1377, -41.5618 )
+transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.6059, -23.1377, -39.4012 )
 imparted_velocity = 20.0
 effective_range = 8.0
 
 [node name="fan4" parent="area_main_encounter/room2" index="1" instance=ExtResource( 37 )]
-transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.5526, -8.04017, -41.787 )
+transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.5217, -8.04017, -39.6264 )
 imparted_velocity = 20.0
 effective_range = 8.0
 
@@ -1602,7 +1615,7 @@ spot_range = 17.5834
 spot_angle = 35.079
 
 [node name="fan5" parent="area_main_encounter/room2" index="2" instance=ExtResource( 37 )]
-transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.5526, 7.00933, -41.7871 )
+transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.5217, 7.00933, -39.6265 )
 imparted_velocity = 8.0
 effective_range = 30.0
 
@@ -1851,8 +1864,10 @@ origin_offset = Vector3( 0, 14.1406, 1.06055 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.309804, 0.403922, 1 )
 
-[node name="room3" type="Spatial" parent="area_main_encounter" index="10"]
+[node name="room3" type="VisibilityEnabler" parent="area_main_encounter" index="10"]
 transform = Transform( 0.92461, 0, -0.380915, 0, 1, 0, 0.380915, 0, 0.92461, 54.1992, 49.1518, -36.2615 )
+aabb = AABB( -33.6689, -10.9626, -99.1835, 95.4364, 31.4682, 198.367 )
+children_only = true
 
 [node name="ReflectionProbe7" type="ReflectionProbe" parent="area_main_encounter/room3" index="0"]
 transform = Transform( 0.999556, 0, 0.0297919, 0, 1, 0, -0.0297919, 0, 0.999556, -6.8951, -3.0369, -13.6302 )
@@ -1871,6 +1886,7 @@ interior_ambient_color = Color( 0.0862745, 0.168627, 0.172549, 1 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_main_encounter/room3" index="2"]
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 17.8862, -15.3779, 47.4199 )
+intensity = 0.35
 max_distance = 16384.0
 extents = Vector3( 40.8337, 2.85176, 43.7841 )
 origin_offset = Vector3( 2.4707, -0.151367, 6.78906 )
@@ -1878,8 +1894,13 @@ interior_enable = true
 interior_ambient_color = Color( 0.231373, 0.129412, 0.129412, 1 )
 
 [node name="tentpole2" parent="area_main_encounter/room3" index="3" instance=ExtResource( 23 )]
-transform = Transform( -0.998117, 0, -0.061342, 0, 1, 0, 0.061342, 0, -0.998117, 1.10909, -9.25133, -46.2822 )
+transform = Transform( -0.998117, 0, -0.061342, 0, 1, 0, 0.061342, 0, -0.998117, 1.1091, -9.15674, -46.2822 )
 reset_on_player_death = true
+
+[node name="MeshInstance" type="MeshInstance" parent="area_main_encounter/room3/tentpole2" index="7"]
+visible = false
+mesh = SubResource( 252 )
+material/0 = SubResource( 253 )
 
 [node name="crawly" parent="area_main_encounter/room3" index="4" instance=ExtResource( 42 )]
 transform = Transform( -0.0180194, 0, 0.999838, 0, 1, 0, -0.999838, 0, -0.0180194, -0.707367, -8.86153, 39.3407 )
@@ -2188,8 +2209,10 @@ transform = Transform( 0.632501, 0, 0.774559, 0, 1, 0, -0.774559, 0, 0.632501, -
 min_rarity = 1
 max_rarity = 4
 
-[node name="room4" type="Spatial" parent="area_main_encounter" index="11"]
+[node name="room4" type="VisibilityEnabler" parent="area_main_encounter" index="11"]
 transform = Transform( 0.919369, 0, -0.393395, 0, 1, 0, 0.393395, 0, 0.919369, 88.236, 0, 14.466 )
+aabb = AABB( -9.04801, -23.6529, -12.4888, 21.6243, 47.3058, 32.9347 )
+children_only = true
 
 [node name="OmniLight8" type="OmniLight" parent="area_main_encounter/room4" index="0"]
 transform = Transform( 0.919369, 0, 0.393395, 0, 1, 0, -0.393395, 0, 0.919369, -11.0727, 15.2137, 0.296654 )
@@ -2286,7 +2309,6 @@ height = 28.1499
 
 [node name="Occluder" type="Occluder" parent="area_main_encounter" index="13"]
 transform = Transform( 0.929783, 0, -0.368108, 0, 1, 0, 0.368108, 0, 0.929783, 49.2472, 0, -35.6 )
-visible = false
 shape = SubResource( 47 )
 
 [node name="area_elevate" type="Spatial" parent="." index="16"]
@@ -2295,6 +2317,7 @@ transform = Transform( 0.939307, 0, -0.343077, 0, 1, 0, 0.343077, 0, 0.939307, 9
 [node name="room1" type="VisibilityEnabler" parent="area_elevate" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 61.2992, 9.06164, 3.80663 )
 aabb = AABB( -5.77845, -20.1261, -5.61718, 11.5569, 40.2521, 11.2344 )
+children_only = true
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_elevate/room1" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.53058, -1.92953, -0.851231 )
@@ -2367,6 +2390,7 @@ light_color = Color( 0.52549, 0.701961, 0.760784, 1 )
 [node name="room2" type="VisibilityEnabler" parent="area_elevate" index="1"]
 transform = Transform( 0.929885, 0, 0.367851, 0, 1, 0, -0.367851, 0, 0.929885, -2.02489, 83.9068, -3.67168 )
 aabb = AABB( -51.1126, -140.986, -47.0008, 102.225, 281.971, 94.0015 )
+children_only = true
 
 [node name="death_plane" parent="area_elevate/room2" index="0" instance=ExtResource( 45 )]
 transform = Transform( 92.5527, 36.6127, 1.60793e-08, 0, -4.35065e-06, 1, 36.6127, -92.5527, -4.06466e-08, 2.9158, -108.078, -3.00259 )
@@ -2503,7 +2527,6 @@ depth = 13.7939
 
 [node name="Occluder" type="Occluder" parent="area_elevate" index="3"]
 transform = Transform( -4.37114e-08, -2.98023e-08, -1, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, -2.98023e-08, 69.3647, 0, 3.8147e-06 )
-visible = false
 shape = SubResource( 49 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_elevate" index="4"]
