@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=2]
+[gd_scene load_steps=108 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -54,6 +54,12 @@
 [ext_resource path="res://entities/env/ancient/circle_thing.tscn" type="PackedScene" id=52]
 [ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=53]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=54]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=55]
+[ext_resource path="res://audio/music/ancient_caverns.ogg" type="AudioStream" id=56]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=57]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=58]
+[ext_resource path="res://dialog/main/mum.dialog" type="Resource" id=61]
+[ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=62]
 
 [sub_resource type="OccluderShapePolygon" id=4]
 polygon_points = PoolVector2Array( 220.514, 160.61, 370.593, -372.753, -212.896, -294.231, -111.069, 143.681 )
@@ -74,7 +80,7 @@ polygon_points = PoolVector2Array( 30.9947, -123.941, 55.4621, 66.4565, -95.4837
 radius = 54.0252
 
 [sub_resource type="BoxShape" id=32]
-extents = Vector3( 94.7559, 45.3589, 71.1916 )
+extents = Vector3( 94.7559, 49.195, 158.838 )
 
 [sub_resource type="BoxShape" id=52]
 extents = Vector3( 94.7559, 64.6563, 71.1916 )
@@ -732,6 +738,9 @@ tracks/7/keys = {
 "values": [ Vector3( 0.917068, -6.78603, -10.8666 ) ]
 }
 
+[sub_resource type="CylinderShape" id=251]
+radius = 0.634045
+
 [sub_resource type="QuadMesh" id=42]
 size = Vector2( 7, 7 )
 
@@ -784,22 +793,27 @@ collision_layer = 257
 
 [node name="Occluder" type="Occluder" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5714, 311.821, -178.35 )
+visible = false
 shape = SubResource( 4 )
 
 [node name="Occluder2" type="Occluder" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 0.882174, 0.470923, 0, -0.470923, 0.882174, 170.712, 6.5246, 171.164 )
+visible = false
 shape = SubResource( 5 )
 
 [node name="Occluder3" type="Occluder" parent="." index="7"]
 transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, 323.036, 3.71597, 11.1988 )
+visible = false
 shape = SubResource( 7 )
 
 [node name="Occluder4" type="Occluder" parent="." index="8"]
 transform = Transform( -0.174881, 0, -0.98459, 0, 1, 0, 0.98459, 0, -0.174881, -194.47, 151.448, -5.07466 )
+visible = false
 shape = SubResource( 8 )
 
 [node name="Occluder5" type="Occluder" parent="." index="9"]
 transform = Transform( 0.949219, 0.314615, 1.37523e-08, 0, -4.37114e-08, 1, 0.314615, -0.949219, -4.14917e-08, 250.071, 78.7166, -1.54715 )
+visible = false
 shape = SubResource( 45 )
 
 [node name="scrap1" parent="." index="10" instance=ExtResource( 6 )]
@@ -812,6 +826,8 @@ collision_mask = 2
 script = ExtResource( 15 )
 wind_reduction_db = 80.0
 custom_fog = Color( 0.113725, 0.113725, 0.113725, 1 )
+override_music = true
+default_music = ExtResource( 56 )
 
 [node name="CollisionShape" type="CollisionShape" parent="cave_env" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.68779, 79.3822 )
@@ -838,18 +854,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7053, 87.3799, 5.86646 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape7" type="CollisionShape" parent="cave_env" index="6"]
-transform = Transform( 0.942376, 0, -0.334556, 0, 1, 0, 0.334556, 0, 0.942376, 74.1421, 125.607, -74.1483 )
+transform = Transform( 0.942376, 0, -0.334556, 0, 1, 0, 0.334556, 0, 0.942376, 96.5866, 116.7, -137.37 )
 shape = SubResource( 32 )
 
 [node name="CollisionShape10" type="CollisionShape" parent="cave_env" index="7"]
 transform = Transform( 0.942376, 0, -0.334556, 0, 1, 0, 0.334556, 0, 0.942376, 1.88534, 137.799, -99.8004 )
 shape = SubResource( 52 )
 
-[node name="CollisionShape8" type="CollisionShape" parent="cave_env" index="8"]
-transform = Transform( 0.942376, 0, -0.334556, 0, 1, 0, 0.334556, 0, 0.942376, 107.039, 125.607, -166.812 )
-shape = SubResource( 32 )
-
-[node name="CollisionShape9" type="CollisionShape" parent="cave_env" index="9"]
+[node name="CollisionShape9" type="CollisionShape" parent="cave_env" index="8"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -33.502, 190.772, -137.775 )
 shape = SubResource( 53 )
 
@@ -916,6 +928,7 @@ on = true
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_cave_lower" index="2"]
 transform = Transform( 0.978703, 0.0788165, 0.18955, 0, 0.923358, -0.383941, -0.205283, 0.375764, 0.903693, -7.60795, 7.01247, 47.0784 )
+intensity = 0.12
 max_distance = 16384.0
 extents = Vector3( 48.8898, 63.0263, 60.02 )
 origin_offset = Vector3( 11.9551, -18.6631, 0 )
@@ -923,6 +936,7 @@ interior_enable = true
 
 [node name="ReflectionProbe3" type="ReflectionProbe" parent="area_cave_lower" index="3"]
 transform = Transform( 0.842105, -0.179812, -0.508456, 0.16393, 0.983516, -0.0763127, 0.513796, -0.0190879, 0.8577, -32.9151, 31.2461, -34.0965 )
+intensity = 0.12
 max_distance = 16384.0
 extents = Vector3( 66.5025, 51.6043, 35.155 )
 origin_offset = Vector3( 11.9551, -18.6631, 0 )
@@ -930,6 +944,7 @@ interior_enable = true
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="area_cave_lower" index="4"]
 transform = Transform( 0.293003, -0.36709, -0.882833, 0, 0.923358, -0.38394, 0.956112, 0.112496, 0.270546, 33.709, 95.0596, 0.908844 )
+intensity = 0.12
 extents = Vector3( 35.4203, 26.3622, 67.2005 )
 origin_offset = Vector3( 12.6641, -0.564453, 0 )
 interior_enable = true
@@ -1130,6 +1145,18 @@ height = 4.71286
 depth = 4.00904
 material = ExtResource( 25 )
 
+[node name="CSGBox" type="CSGBox" parent="area_main_encounter/CSGBox/overpass2" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9994, -0.327164, 5.98921 )
+width = 3.29221
+height = 4.0
+depth = 8.24546
+
+[node name="CSGBox2" type="CSGBox" parent="area_main_encounter/CSGBox/overpass2" index="1"]
+transform = Transform( 0, 0, 1, 0, 1, 0, -1, 0, 0, -12.9995, -0.327164, 7.99652 )
+width = 6.1533
+height = 4.0
+depth = 8.24546
+
 [node name="CSGBox2" type="CSGBox" parent="area_main_encounter" index="6"]
 transform = Transform( 0.935378, 0, -0.35365, 0, 1, 0, 0.35365, 0, 0.935378, 60.1694, 0, -77.1473 )
 use_collision = true
@@ -1201,9 +1228,8 @@ width = 12.0804
 height = 9.66341
 depth = 20.346
 
-[node name="room1" type="VisibilityEnabler" parent="area_main_encounter" index="7"]
+[node name="room1" type="Spatial" parent="area_main_encounter" index="7"]
 transform = Transform( 0.932283, 0, -0.36173, 0, 1, 0, 0.36173, 0, 0.932283, 18.2826, 0, 18.124 )
-aabb = AABB( -49.7448, -24.7008, -47.2826, 99.4895, 49.4016, 94.5652 )
 
 [node name="entrance" type="MeshInstance" parent="area_main_encounter/room1" index="0"]
 transform = Transform( -0.00690711, 0, -0.999976, 0, 1, 0, 0.999976, 0, -0.00690711, 4.13316, -13.4598, 46.2635 )
@@ -1216,6 +1242,7 @@ script = ExtResource( 30 )
 
 [node name="exit_door-kine" type="KinematicBody" parent="area_main_encounter/room1/entrance" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65845, 0 )
+collision_layer = 65537
 
 [node name="mesh" type="MeshInstance" parent="area_main_encounter/room1/entrance/exit_door-kine" index="0"]
 use_in_baked_light = true
@@ -1228,7 +1255,7 @@ shape = SubResource( 17 )
 
 [node name="exit_door2-kine" type="KinematicBody" parent="area_main_encounter/room1/entrance" index="1"]
 transform = Transform( 1, 0, 0, 0, -1, 1.2168e-13, 0, -1.2168e-13, -1, 0, 8.79834, 0.180389 )
-collision_layer = 257
+collision_layer = 65537
 
 [node name="mesh" type="MeshInstance" parent="area_main_encounter/room1/entrance/exit_door2-kine" index="0"]
 use_in_baked_light = true
@@ -1260,6 +1287,7 @@ script = ExtResource( 30 )
 
 [node name="exit_door-kine" type="KinematicBody" parent="area_main_encounter/room1/fast_door" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.92014, 0 )
+collision_layer = 65537
 
 [node name="mesh" type="MeshInstance" parent="area_main_encounter/room1/fast_door/exit_door-kine" index="0"]
 use_in_baked_light = true
@@ -1272,7 +1300,7 @@ shape = SubResource( 17 )
 
 [node name="exit_door2-kine" type="KinematicBody" parent="area_main_encounter/room1/fast_door" index="1"]
 transform = Transform( 1, 0, 0, 0, -1, 1.2168e-13, 0, -1.2168e-13, -1, 7.62939e-06, 12.9553, 0.180435 )
-collision_layer = 257
+collision_layer = 65537
 
 [node name="mesh" type="MeshInstance" parent="area_main_encounter/room1/fast_door/exit_door2-kine" index="0"]
 use_in_baked_light = true
@@ -1438,6 +1466,7 @@ transform = Transform( 0.932283, 0, 0.36173, 0, 1, 0, -0.36173, 0, 0.932283, -10
 active = false
 imparted_velocity = 25.0
 effective_range = 4.0
+audio_scale = 1.0
 
 [node name="OmniLight" type="OmniLight" parent="area_main_encounter/room1/fan" index="19"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1354, 0 )
@@ -1446,6 +1475,7 @@ omni_range = 3.14687
 [node name="fan2" parent="area_main_encounter/room1" index="11" instance=ExtResource( 37 )]
 transform = Transform( 0.932283, 0, 0.36173, 0, 1, 0, -0.36173, 0, 0.932283, 15.9555, -12.9301, -12.5507 )
 imparted_velocity = 4.0
+audio_scale = 1.0
 
 [node name="OmniLight2" type="OmniLight" parent="area_main_encounter/room1/fan2" index="19"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26577, 0 )
@@ -1516,9 +1546,43 @@ origin_offset = Vector3( 0, 4.86523, 7.07227 )
 interior_enable = true
 interior_ambient_color = Color( 0.027451, 0.0431373, 0.054902, 1 )
 
-[node name="room2" type="VisibilityEnabler" parent="area_main_encounter" index="8"]
+[node name="mum_network" type="Spatial" parent="area_main_encounter/room1" index="28"]
+transform = Transform( 0.999999, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 0.999999, -21.177, 14.8525, -20.5581 )
+script = ExtResource( 55 )
+condition = "Global.stat(\"mum/info\") > 0"
+
+[node name="OmniLight" type="OmniLight" parent="area_main_encounter/room1/mum_network" index="0"]
+transform = Transform( 1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 2.03204, 0.254818, 1.36987 )
+light_color = Color( 0.694118, 0.941176, 1, 1 )
+light_energy = 0.2
+omni_range = 2.68715
+
+[node name="OmniLight2" type="OmniLight" parent="area_main_encounter/room1/mum_network" index="1"]
+transform = Transform( 1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, 1, -1.75383, 0.254818, 1.36986 )
+light_color = Color( 0.694118, 0.941176, 1, 1 )
+light_energy = 0.2
+omni_range = 2.6728
+
+[node name="mom" type="Area" parent="area_main_encounter/room1/mum_network" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0450439, 0.842815, 1.68478 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 57 )
+dialog_sequence = ExtResource( 61 )
+custom_entry = "entry_network054"
+friendly_id = "mum"
+
+[node name="dialog_circle" parent="area_main_encounter/room1/mum_network/mom" index="0" instance=ExtResource( 58 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.996246, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="area_main_encounter/room1/mum_network/mom" index="1"]
+shape = SubResource( 251 )
+
+[node name="mum" parent="area_main_encounter/room1/mum_network/mom" index="2" instance=ExtResource( 62 )]
+transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0.0466156, -0.994339, 0.879108 )
+
+[node name="room2" type="Spatial" parent="area_main_encounter" index="8"]
 transform = Transform( 0.939757, 0, -0.341842, 0, 1, 0, 0.341842, 0, 0.939757, 59.3756, 5.38567, -76.7593 )
-aabb = AABB( -45.6788, -28.2483, -27.6565, 91.3577, 56.4965, 55.3129 )
 
 [node name="fan3" parent="area_main_encounter/room2" index="0" instance=ExtResource( 37 )]
 transform = Transform( 0.999303, 0, 0.0373294, 0, 1, 0, -0.0373294, 0, 0.999303, 13.6368, -23.1377, -41.5618 )
@@ -1787,9 +1851,8 @@ origin_offset = Vector3( 0, 14.1406, 1.06055 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.309804, 0.403922, 1 )
 
-[node name="room3" type="VisibilityEnabler" parent="area_main_encounter" index="10"]
+[node name="room3" type="Spatial" parent="area_main_encounter" index="10"]
 transform = Transform( 0.92461, 0, -0.380915, 0, 1, 0, 0.380915, 0, 0.92461, 54.1992, 49.1518, -36.2615 )
-aabb = AABB( -54.3876, -12.6786, -93.3843, 108.775, 25.3572, 186.769 )
 
 [node name="ReflectionProbe7" type="ReflectionProbe" parent="area_main_encounter/room3" index="0"]
 transform = Transform( 0.999556, 0, 0.0297919, 0, 1, 0, -0.0297919, 0, 0.999556, -6.8951, -3.0369, -13.6302 )
@@ -1864,7 +1927,6 @@ transform = Transform( 1, -0.000268042, -1.17168e-11, 0, -4.37114e-08, 1, -0.000
 imparted_velocity = 12.0
 effective_range = 75.0
 wide = true
-audio_scale = 9.0
 
 [node name="OmniLight" type="OmniLight" parent="area_main_encounter/room3/fan6" index="19"]
 transform = Transform( 1, 0, -1.77636e-15, 0, 1, -3.55271e-15, 0, 1.06581e-14, 1, 0, 1.46536, 2.00185 )
@@ -2126,9 +2188,8 @@ transform = Transform( 0.632501, 0, 0.774559, 0, 1, 0, -0.774559, 0, 0.632501, -
 min_rarity = 1
 max_rarity = 4
 
-[node name="room4" type="VisibilityEnabler" parent="area_main_encounter" index="11"]
+[node name="room4" type="Spatial" parent="area_main_encounter" index="11"]
 transform = Transform( 0.919369, 0, -0.393395, 0, 1, 0, 0.393395, 0, 0.919369, 88.236, 0, 14.466 )
-aabb = AABB( -11.2064, -30.7788, -21.7437, 22.4127, 61.5575, 43.4875 )
 
 [node name="OmniLight8" type="OmniLight" parent="area_main_encounter/room4" index="0"]
 transform = Transform( 0.919369, 0, 0.393395, 0, 1, 0, -0.393395, 0, 0.919369, -11.0727, 15.2137, 0.296654 )
@@ -2225,6 +2286,7 @@ height = 28.1499
 
 [node name="Occluder" type="Occluder" parent="area_main_encounter" index="13"]
 transform = Transform( 0.929783, 0, -0.368108, 0, 1, 0, 0.368108, 0, 0.929783, 49.2472, 0, -35.6 )
+visible = false
 shape = SubResource( 47 )
 
 [node name="area_elevate" type="Spatial" parent="." index="16"]
@@ -2441,6 +2503,7 @@ depth = 13.7939
 
 [node name="Occluder" type="Occluder" parent="area_elevate" index="3"]
 transform = Transform( -4.37114e-08, -2.98023e-08, -1, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, 1, -2.98023e-08, 69.3647, 0, 3.8147e-06 )
+visible = false
 shape = SubResource( 49 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_elevate" index="4"]
