@@ -3,6 +3,8 @@ extends KinematicBody
 class_name ItemPickup
 
 signal gravity_stun(stun)
+signal picked
+signal picked_item(id)
 
 export(String) var item_id
 export(int) var quantity := 1
@@ -27,7 +29,7 @@ func _ready():
 	if Engine.editor_hint:
 		return
 	if persistent and Global.is_picked(get_path()):
-		queue_free()
+		pick()
 		return
 	if from_kill:
 		$area/CollisionShape.disabled = true
@@ -60,6 +62,11 @@ func _on_area_body_entered(body):
 		Global.mark_picked(get_path())
 		if friendly_name != "":
 			_x = Global.add_stat(friendly_name)
+	pick()
+
+func pick():
+	emit_signal("picked")
+	emit_signal("picked_item", item_id)
 	queue_free()
 
 func gravity_stun(_damage):

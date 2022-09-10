@@ -10,6 +10,7 @@ export(bool) var open := false
 var open_stat := ""
 
 var power := 0
+onready var anim = $AnimationPlayer
 
 func _ready():
 	if !is_in_group("dynamic"):
@@ -51,12 +52,15 @@ func add_power(amount:= 1):
 	if open_stat != "":
 		Global.set_stat(open_stat, should_open)
 	
-	if should_open and !open:
-		if has_node("AnimationPlayer"):
-			$AnimationPlayer.play("Activate")
-		else:
-			print("ERROR: %s has no AnimationPlayer" % name)
-	elif !should_open and open:
-		if has_node("AnimationPlayer"):
-			$AnimationPlayer.play_backwards("Activate")
+	if is_inside_tree():
+		if should_open and !open:
+			if anim.has_animation("Activate"):
+				anim.play("Activate")
+			else:
+				anim.play_backwards("Deactivate")
+		elif !should_open and open:
+			if anim.has_animation("Deactivate"):
+				anim.play("Deactivate")
+			else:
+				anim.play_backwards("Activate")
 	open = should_open

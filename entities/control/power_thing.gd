@@ -1,6 +1,9 @@
 extends Spatial
 
 signal activated
+signal deactivated
+
+signal toggled(active)
 
 export(bool) var active := false
 var anim: AnimationPlayer
@@ -11,6 +14,8 @@ func _ready():
 	if Global.valid_game_state:
 		if active or Global.is_activated(self):
 			activate(true)
+		else:
+			deactivate()
 
 func _on_Area_body_entered(_body):
 	if active:
@@ -19,7 +24,7 @@ func _on_Area_body_entered(_body):
 		activate()
 
 func activate(auto: bool = false):
-	$capacitor.visible = true
+	$capacitor.show()
 	active = true
 	if anim:
 		anim.play("Activate")
@@ -28,3 +33,10 @@ func activate(auto: bool = false):
 	if !auto: 
 		Global.mark_activated(self)
 	emit_signal("activated")
+	emit_signal("toggled", active)
+
+func deactivate():
+	active = false
+	$capacitor.hide()
+	emit_signal("deactivated")
+	emit_signal("toggled", active)
