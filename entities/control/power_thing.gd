@@ -15,7 +15,7 @@ func _ready():
 		if active or Global.is_activated(self):
 			activate(true)
 		else:
-			deactivate()
+			deactivate(true)
 
 func _on_Area_body_entered(_body):
 	if active:
@@ -35,7 +35,9 @@ func activate(auto: bool = false):
 	emit_signal("activated")
 	emit_signal("toggled", active)
 
-func deactivate():
+func deactivate(auto := false):
+	if !auto:
+		Global.remove_activated(self)
 	active = false
 	$capacitor.hide()
 	emit_signal("deactivated")

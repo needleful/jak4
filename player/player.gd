@@ -1018,10 +1018,6 @@ func _physics_process(delta):
 		choosing_item = false
 		timer_item_choose = 0.0
 	equipment.visible = choosing_item
-	if TimeManagement.time_slowed and is_on_floor():
-		var fv = get_floor_velocity()
-		velocity -= fv*(1-TimeManagement.slow_time_rate)
-	
 
 func _process(_delta):
 	update_stamina()

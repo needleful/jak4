@@ -6,6 +6,7 @@ export(int) var required_power := 1
 export(String) var tracked_stat = ""
 export(bool) var generate_stat = false
 export(bool) var open := false
+export(bool) var deactivate_upon_death := false
 
 var open_stat := ""
 
@@ -20,11 +21,13 @@ func _ready():
 	if tracked_stat != "":
 		open_stat = tracked_stat + "/open"
 		var stat_power = Global.stat(tracked_stat)
-		add_power(stat_power)
+		add_power(stat_power, true)
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
 	if open:
 		open = false
-		add_power(required_power)
+		add_power(required_power, true)
+	if deactivate_upon_death:
+		var _x = Global.get_player().connect("died", self, "clear_power")
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:
@@ -43,7 +46,10 @@ func _on_deactivated():
 func _on_toggled(active):
 	add_power(1 if active else -1)
 
-func add_power(amount:= 1):
+func clear_power():
+	add_power(-power)
+
+func add_power(amount:= 1, instant := false):
 	power += amount
 	if power <= 0:
 		# Dumb bug I introduced
@@ -58,9 +64,13 @@ func add_power(amount:= 1):
 				anim.play("Activate")
 			else:
 				anim.play_backwards("Deactivate")
+			if instant:
+				anim.advance(anim.current_animation_length())
 		elif !should_open and open:
 			if anim.has_animation("Deactivate"):
 				anim.play("Deactivate")
 			else:
 				anim.play_backwards("Activate")
+			if instant:
+				anim.advance(anim.current_animation_length())
 	open = should_open

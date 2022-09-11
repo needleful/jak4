@@ -342,6 +342,11 @@ func is_activated(node: Node) -> bool:
 func mark_activated(node: Node):
 	if !node.get_path() in game_state.activated:
 		game_state.activated.append(node.get_path())
+func remove_activated(node: Node):
+	var i = game_state.activated.find(node.get_path())
+	
+	if i >= 0:
+		game_state.activated.remove(i)
 
 func get_rarity_color(rarity: int) -> Color:
 	match rarity:
