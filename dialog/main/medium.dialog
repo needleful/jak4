@@ -1,15 +1,32 @@
-* {talked == 0} The machine clicks to life. A brassy voice echos from the walls.
-	{format("italic")} Kholt mi! Braalni Mhote® guuta murate inela pa. Us nom leshene ine kirtte pa?
-	If you would like to use Vaelic, please say "Vaelic".
-	[You] Vaelic, please.
-	Understood. Welcome! The Medium® of Bralna would be delighted to serve you. Who would you like to commune with?
-	[You] My mom.
-	{event("activate_scanner", false)}
-	"Your mom"! Excellent choice! Please enter the scanner to continue.
-	"Your mom" will be reconstructed with astonishing accuracy using the latest in Medium Memory Scanning® technology.
+* {talked == 0} You hear the hum of machinery. It grows in pitch for several seconds, then winds down.
+	* A brassy voice echos from the walls.
+	Welcome, Jackie.
+	[You] W-what? You already know my name?
+	Of course, love. I am the Medium, am I not? And you are looking to commune with your mother, correct?
+	> ...Yes.
+		Then without further ado, enter the room on your left, and we may begin the communion.
+	> I would rather talk with you at the moment.
+		I'm terribly sorry, love. I am but a conduit, with nothing to discuss and no secrets to disclose. Would you like to commune today?
+		> So be it. I want to talk to my mum.
+			A most excellent choice, Jackie!
+			{event("activate_scanner", false)} Please enter the room to your left to begin the communion.
+		> I guess I'll be going, then.
+			Until next time, love.
 
-{otherwise} Welcome back, "Jackie"! Would you like to commune with "your mom" again, or a new subject?
-	[You] My mom again.
-	{event("activate_scanner", false)}
-	"Your mom"! Understood. Please enter the scanner to continue.
-	"Your mom" will be reconstructed with astonishing accuracy using the latest in Medium Memory Scanning® technology.
+{otherwise} * The machinery hums, and once again a voice rings out like brass. 
+	Welcome again, Jackie. Do you wish to commune?
+	:main_loop
+	> Yes, with mum.
+		{event("activate_scanner", false)} Excellent choice as always.
+		{talked <= 5} As before, enter the room on your left to begin the communion.
+		{otherwise} I hope my service exceeds expectations.
+	> {!Globa.stat("medium/personality")}I'm still intrigued by you. I never knew the Mediums had personalities!
+		+{medium/personality} Like any good host, I provide my guests what they want and need, without their ever asking.
+		[You] Does that mean you create a different personality for every visitor?  Or don't have a personality at all if they don't wish for one?  How quickly do you scan a person's mind for such a thing to be possible?
+		I see the constellations of curiosity behind your brow! It may be frustrating, but I am here for communion, not conversation.
+		Would you like to commune today?
+		{goto("main_loop")}
+	> Not today, thanks.
+		Very well.
+		{Global.stat("mum/info") >= 5} Do take care, alright love? It's a dangerous world.
+		{otherwise} You are always welcome.
