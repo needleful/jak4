@@ -13,6 +13,11 @@ func _refresh():
 
 func set_action(a):
 	action = a
+	if action == "":
+		$texture.hide()
+		$key_prompt.hide()
+		return
+
 	if !InputMap.has_action(action):
 		print_debug("MISSING_ACTION: ", action, " FOR NODE: ", get_path())
 		show_text(action)

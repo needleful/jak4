@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=84 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -17,9 +17,6 @@
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
 [ext_resource path="res://player/ui.gd" type="Script" id=17]
-[ext_resource path="res://ui/button_prompt.gd" type="Script" id=18]
-[ext_resource path="res://ui/prompts/pad_generic/gamepadLB.png" type="Texture" id=19]
-[ext_resource path="res://ui/prompts/pad_generic/gamepadRB.png" type="Texture" id=20]
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
@@ -1638,7 +1635,6 @@ visible = false
 
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1676,14 +1672,13 @@ custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 text = "<< Previous"
 
-[node name="TextureRect" type="TextureRect" parent="ui/status_menu/PromptLeft"]
+[node name="input_prompt" parent="ui/status_menu/PromptLeft" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 108.0
 margin_right = 236.0
 margin_bottom = 128.0
-texture = ExtResource( 19 )
-stretch_mode = 6
-script = ExtResource( 18 )
-gamepad_prompt = ExtResource( 19 )
+action = "ui_page_down"
 
 [node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
 anchor_left = 1.0
@@ -1693,14 +1688,13 @@ margin_right = -15.0
 margin_bottom = 128.0
 alignment = 2
 
-[node name="TextureButton" type="TextureRect" parent="ui/status_menu/PromptRight"]
+[node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 110.0
 margin_right = 238.0
 margin_bottom = 128.0
-texture = ExtResource( 20 )
-stretch_mode = 5
-script = ExtResource( 18 )
-gamepad_prompt = ExtResource( 20 )
+action = "ui_page_up"
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
 margin_left = 242.0
