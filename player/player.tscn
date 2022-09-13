@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=6]
 [ext_resource path="res://player/status_menu.gd" type="Script" id=7]
-[ext_resource path="res://ui/prompts/key_shift.png" type="Texture" id=8]
+[ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=10]
 [ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=11]
@@ -18,8 +18,8 @@
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
 [ext_resource path="res://player/ui.gd" type="Script" id=17]
 [ext_resource path="res://ui/button_prompt.gd" type="Script" id=18]
-[ext_resource path="res://ui/prompts/gamepadLB.png" type="Texture" id=19]
-[ext_resource path="res://ui/prompts/gamepadRB.png" type="Texture" id=20]
+[ext_resource path="res://ui/prompts/pad_generic/gamepadLB.png" type="Texture" id=19]
+[ext_resource path="res://ui/prompts/pad_generic/gamepadRB.png" type="Texture" id=20]
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
@@ -30,8 +30,6 @@
 [ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=28]
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
 [ext_resource path="res://ui/equipment.gd" type="Script" id=30]
-[ext_resource path="res://player/tutorial.gd" type="Script" id=31]
-[ext_resource path="res://ui/prompts/key_q.png" type="Texture" id=32]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -1110,12 +1108,6 @@ anims/RESET = SubResource( 30 )
 anims/fadein = SubResource( 31 )
 anims/fadeout = SubResource( 32 )
 
-[node name="tutorial_equipment" type="Node" parent="."]
-script = ExtResource( 31 )
-gamepad_textures = [ ExtResource( 20 ) ]
-keyboard_textures = [ ExtResource( 32 ) ]
-gamepad_text = "Use Item"
-
 [node name="ui" type="Control" parent="."]
 pause_mode = 2
 time_scale_response = false
@@ -1285,41 +1277,41 @@ margin_top = -148.0
 margin_bottom = -68.0
 alignment = 1
 
-[node name="TextureRect1" type="TextureRect" parent="ui/gameing/tutorial"]
+[node name="input_prompt" parent="ui/gameing/tutorial" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 196.0
 margin_right = 324.0
-margin_bottom = 80.0
-texture = ExtResource( 8 )
-stretch_mode = 6
+margin_bottom = 128.0
 
 [node name="plus" type="Label" parent="ui/gameing/tutorial"]
 margin_left = 328.0
-margin_top = 13.0
+margin_top = 37.0
 margin_right = 388.0
-margin_bottom = 67.0
+margin_bottom = 91.0
 rect_min_size = Vector2( 60, 0 )
 custom_fonts/font = ExtResource( 6 )
 text = "+"
 align = 1
 
-[node name="TextureRect2" type="TextureRect" parent="ui/gameing/tutorial"]
+[node name="input_prompt2" parent="ui/gameing/tutorial" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 392.0
 margin_right = 520.0
-margin_bottom = 80.0
-texture = ExtResource( 8 )
-stretch_mode = 6
+margin_bottom = 128.0
 
 [node name="spacer" type="Control" parent="ui/gameing/tutorial"]
 margin_left = 524.0
 margin_right = 584.0
-margin_bottom = 80.0
+margin_bottom = 128.0
 rect_min_size = Vector2( 60, 0 )
 
 [node name="Label" type="Label" parent="ui/gameing/tutorial"]
 margin_left = 588.0
-margin_top = 13.0
+margin_top = 37.0
 margin_right = 827.0
-margin_bottom = 67.0
+margin_bottom = 91.0
 custom_fonts/font = ExtResource( 6 )
 text = "Stuff here!"
 

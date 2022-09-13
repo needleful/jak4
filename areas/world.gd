@@ -1,14 +1,5 @@
 extends Spatial
 
-export(Texture) var gamepad_spin
-export(Texture) var gamepad_lunge
-export(Texture) var gamepad_crouch
-export(Texture) var gamepad_jump
-export(Texture) var keyboard_spin
-export(Texture) var keyboard_lunge
-export(Texture) var keyboard_crouch
-export(Texture) var keyboard_jump
-
 var air_tutorial := false
 
 # Distance from the bounding box edge
@@ -161,6 +152,8 @@ func update_active_chunks(position: Vector3, instant := false):
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):
+	if ch.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(ch.name)
 	if ch in active_chunks:
 		return
 	if loading == ch:
@@ -169,8 +162,6 @@ func queue_load(ch: Spatial):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
 	#print("queue_load ", ch.name)
-	if ch.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(ch.name)
 	var load_i = load_queue.find(ch)
 	if load_i >= 0:
 		return
@@ -194,6 +185,8 @@ func load_async(ch:Spatial):
 	#print("load_async complete ", ch.name)
 
 func load_sync(chunk: Spatial):
+	if chunk.name in chunk_unload_waitlist:
+		var _x = chunk_unload_waitlist.erase(chunk.name)
 	if (chunk in active_chunks):
 		return
 	if loading == chunk and load_thread.is_active():
@@ -254,33 +247,22 @@ func mark_inactive(chunk: Spatial):
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
-	if Global.using_gamepad:
-		player.show_prompt([gamepad_lunge], "Lunge Kick")
-	else:
-		player.show_prompt([keyboard_lunge], "Lunge Kick")
+	player.show_prompt(["combat_lunge"], "Lunge Kick")
 	air_tutorial = false
+	$tutorial_swap.start()
+
+func show_air_combat_tutorial():
+	var _x = Global.add_stat("air_combat_tutorial")
+	player.show_prompt(["mv_crouch", "combat_lunge"], "Uppercut")
+	air_tutorial = true
 	$tutorial_swap.start()
 
 func _on_tutorial_swap_timeout():
 	if air_tutorial:
-		if Global.using_gamepad:
-			player.show_prompt([gamepad_jump, gamepad_lunge], "Dive")
-		else:
-			player.show_prompt([keyboard_jump, keyboard_lunge], "Dive")
+		player.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick")
 	else:
-		if Global.using_gamepad:
-			player.show_prompt([gamepad_spin], "Spin Kick")
-		else:
-			player.show_prompt([keyboard_spin], "Spin Kick")
+		player.show_prompt(["combat_spin"], "Spin Kick")
 
-func show_air_combat_tutorial():
-	var _x = Global.add_stat("air_combat_tutorial")
-	if Global.using_gamepad:
-		player.show_prompt([gamepad_crouch, gamepad_lunge], "Uppercut")
-	else:
-		player.show_prompt([keyboard_crouch, keyboard_lunge], "Uppercut")
-	air_tutorial = true
-	$tutorial_swap.start()
 
 func get_wind_audio():
 	return $audio_wind

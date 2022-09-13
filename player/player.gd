@@ -1124,7 +1124,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 							equipped_item.equip()
 							update_equipment()
 				if !startup and equipment_inventory.size() > old_item_count:
-					$tutorial_equipment.show()
+					show_prompt(["use_item"], tr("Use Item"))
 
 func debug_show_inventory():
 	var state_viewer: Control = $ui/gameing/debug/game_state
@@ -1698,20 +1698,20 @@ func gravity_stun(dam):
 	if !dead:
 		set_state(State.GravityStun)
 
-func show_prompt(textures: Array, text: String):
+func show_prompt(actions: Array, text: String):
 	$ui/gameing/tutorial/prompt_timer.stop()
-	if textures.size() >= 1:
-		$ui/gameing/tutorial/TextureRect1.show()
-		$ui/gameing/tutorial/TextureRect1.texture = textures[0]
+	if actions.size() >= 1:
+		$ui/gameing/tutorial/input_prompt.show()
+		$ui/gameing/tutorial/input_prompt.action = actions[0]
 	else:
-		$ui/gameing/tutorial/TextureRect1.hide()
-	if textures.size() >= 2:
+		$ui/gameing/tutorial/input_prompt.hide()
+	if actions.size() >= 2:
 		$ui/gameing/tutorial/plus.show()
-		$ui/gameing/tutorial/TextureRect2.show()
-		$ui/gameing/tutorial/TextureRect2.texture = textures[1]
+		$ui/gameing/tutorial/input_prompt2.show()
+		$ui/gameing/tutorial/input_prompt2.action = actions[1]
 	else:
 		$ui/gameing/tutorial/plus.hide()
-		$ui/gameing/tutorial/TextureRect2.hide()
+		$ui/gameing/tutorial/input_prompt2.hide()
 
 	$ui/gameing/tutorial/Label.text = text
 	$ui/gameing/tutorial.show()
