@@ -19,10 +19,11 @@ func _physics_process(delta):
 	state_timer += delta
 	match ai:
 		AI.Idle:
-			for b in $awareness.get_overlapping_bodies():
-				if b.is_in_group("player"):
-					target = b
-					set_state(AI.Chasing)
+			if state_timer > TIME_MIN_IDLE:
+				for b in $awareness.get_overlapping_bodies():
+					if b.is_in_group("player"):
+						target = b
+						set_state(AI.Chasing)
 			walk(0, acceleration)
 		AI.Alerted:
 			if !target:
@@ -66,7 +67,7 @@ func take_damage(damage, dir, source):
 			target = last_attacker
 		.take_damage(damage, dir, source)
 
-func set_state(new_ai):
+func set_state(new_ai, force := false):
 	ai = new_ai
 	state_timer = 0
 	gravity_scale = 1

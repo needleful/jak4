@@ -58,10 +58,11 @@ func _physics_process(delta):
 	var next = ai
 	match ai:
 		AI.Idle:
-			for b in awareness.get_overlapping_bodies():
-				if b.is_in_group("player"):
-					aggro_to(b)
-					next = AI.Alerted
+			if state_timer > TIME_MIN_IDLE:
+				for b in awareness.get_overlapping_bodies():
+					if b.is_in_group("player"):
+						aggro_to(b)
+						next = AI.Alerted
 		AI.Alerted:
 			if state_timer > alert_time:
 				next = AI.Chasing

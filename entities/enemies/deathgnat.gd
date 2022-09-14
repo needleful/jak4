@@ -44,10 +44,11 @@ func _physics_process(delta):
 	var next_state = ai
 	match ai:
 		AI.Idle:
-			for b in awareness.get_overlapping_bodies():
-				if b.is_in_group("player"):
-					target = b
-					next_state = AI.Chasing
+			if state_timer > TIME_MIN_IDLE:
+				for b in awareness.get_overlapping_bodies():
+					if b.is_in_group("player"):
+						target = b
+						next_state = AI.Chasing
 		AI.Chasing:
 			if no_target():
 				next_state = AI.Idle
@@ -139,14 +140,17 @@ func get_shield():
 	else:
 		return null
 
-func set_state(new_state):
-	if ai == new_state:
+func set_state(new_state, force:=false):
+	if !force and ai == new_state:
 		return
 	ai = new_state
 	state_timer = 0
 	gravity_scale = 0
 	match ai:
+		AI.Idle:
+			target = null
 		AI.Chasing:
+			print("GOTCHA!!!")
 			$AnimationPlayer.play("Idle-loop")
 			quit_timer = 0
 			orb_timer = orb_cooldown

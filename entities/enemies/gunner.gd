@@ -54,10 +54,11 @@ func _physics_process(delta):
 	
 	match ai:
 		AI.Idle:
-			for b in $awareness.get_overlapping_bodies():
-				if b.is_in_group("player"):
-					target = b
-					set_state(AI.Chasing)
+			if state_timer > TIME_MIN_IDLE:
+				for b in $awareness.get_overlapping_bodies():
+					if b.is_in_group("player"):
+						target = b
+						set_state(AI.Chasing)
 			walk(0, 100)
 		AI.Chasing:
 			shot_timer += delta
@@ -183,7 +184,7 @@ func fire():
 		+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
 	particles.emitting = true
 
-func set_state(new_ai):
+func set_state(new_ai, force := false):
 	grounded = true
 	state_timer = 0.0
 	ai = new_ai

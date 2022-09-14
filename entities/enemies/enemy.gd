@@ -18,6 +18,8 @@ export(bool) var shielded := false setget set_shielded
 const GRAV_DECAY := 1.0
 const projectile: PackedScene = preload("res://entities/projectile.tscn")
 
+const TIME_MIN_IDLE := 0.15
+
 var damaged_speed := 0.5
 var gravity_stun_speed := 0.5
 var square_distance_activation := 2400.0
@@ -72,8 +74,8 @@ const COUNTS := {
 	"grav_gun": 5
 }
 
-onready var starting_position := global_transform
-onready var starting_heath := health
+var starting_position: Transform
+var starting_health: float
 
 func _init():
 	contact_monitor = true
@@ -81,9 +83,21 @@ func _init():
 
 func _ready():
 	if reset_on_player_death:
-		var _x = Global.get_player().connect("died", self, "_on_player_died")
-	sleeping = false
-	call_deferred("set_state", AI.Idle)
+		var p = Global.get_player() as PlayerBody
+		if !p.is_connected("died", self, "_on_player_died"):
+			var _x = Global.get_player().connect("died", self, "_on_player_died")
+			starting_position = global_transform
+			starting_health = health
+		else:
+			print("Resetting ", name)
+			linear_velocity = Vector3.ZERO
+			angular_velocity = Vector3.ZERO
+			health = starting_health
+			global_transform = starting_position
+			var state := PhysicsServer.body_get_direct_state(get_rid())
+			state.transform = starting_position
+			target = null
+	call_deferred("set_state", AI.Idle, true)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
@@ -168,9 +182,10 @@ func rotate_up(speed: float, up := Vector3.UP):
 
 func die():
 	var _x = Global.add_stat("killed/"+id)
-	remove_from_group("enemy")
-	if is_in_group("target"):
-		remove_from_group("target")
+	if !respawns or !reset_on_player_death:
+		remove_from_group("enemy")
+		if is_in_group("target"):
+			remove_from_group("target")
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
@@ -273,7 +288,7 @@ func fall_down(_delta: float):
 	pass
 
 # Implemented by subclasses
-func set_state(_ai: int):
+func set_state(_ai: int, force := false):
 	pass
 
 func play_damage_sfx():
@@ -310,8 +325,7 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 func _on_player_died():
 	if ai == AI.Dead and !respawns:
 		return
-	linear_velocity = Vector3.ZERO
-	angular_velocity = Vector3.ZERO
-	health = starting_heath
-	global_transform = starting_position
-	_ready()
+	var p = get_parent()
+	p.remove_child(self)
+	request_ready()
+	p.add_child(self)

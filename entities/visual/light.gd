@@ -1,10 +1,9 @@
-tool
 extends Spatial
 
 export(bool) var light_enabled := true setget set_enabled
 export(Material) var light_material
 export(Material) var dark_material
-export(NodePath) var mesh_instance
+export(NodePath) var mesh_instance := NodePath(".")
 
 onready var mesh: MeshInstance = get_node(mesh_instance)
 
@@ -26,3 +25,9 @@ func set_enabled(e):
 			var m := mesh.get_surface_material(1) as SpatialMaterial
 			if m:
 				m.emission_enabled = light_enabled
+
+func enable():
+	set_enabled(true)
+
+func disable():
+	set_enabled(false)

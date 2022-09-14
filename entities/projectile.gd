@@ -16,6 +16,9 @@ const TOTAL_TIME := 6.0
 var timer := 0.0
 
 func fire(p_target: Spatial, p_offset := Vector3.ZERO):
+	var p = Global.get_player() as PlayerBody
+	if !p.is_connected("died", self, "_on_player_died"):
+		p.connect("died", self, "_on_player_died")
 	offset = p_offset
 	target = p_target
 	if target:
@@ -61,3 +64,6 @@ func _on_projectile_body_entered(body):
 	if timer > INACTIVE_TIME:
 		dir_damage(body)
 		queue_free()
+
+func _on_player_died():
+	queue_free()

@@ -402,6 +402,8 @@ func _input(event):
 			if new_dist < current_dist:
 				best_trade = b
 		best_trade.start_coat_trade(self)
+	elif !choosing_item and event.is_action_pressed("use_item") and equipped_item and equipped_item.can_use():
+		equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
 	elif choosing_item:
@@ -450,9 +452,6 @@ func _physics_process(delta):
 				next_state = State.BaseJump
 			elif should_hover():
 				next_state = State.Hover
-			elif !choosing_item and Input.is_action_just_released("use_item") and equipped_item and equipped_item.can_use():
-				equipped_item.use()
-				next_state = state
 			elif Input.is_action_pressed("mv_crouch"):
 				var speed = (velocity - get_floor_normal()).slide(ground_normal)
 				if speed.length() > MIN_SPEED_ROLL:
@@ -1057,15 +1056,16 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		gun.add_weapon(item)
 		gun.show_weapon()
 		show_ammo()
-		match item:
-			"wep_pistol":
-				show_prompt(["wep_1"], tr("Pistol"))
-			"wep_wave_shot":
-				show_prompt(["wep_2"], tr("Bubble Shot"))
-			"wep_grav_gun":
-				show_prompt(["wep_3"], tr("Gravity Cannon"))
-			"wep_time_gun":
-				show_prompt(["wep_4"], tr("Time Gun"))
+		if !startup:
+			match item:
+				"wep_pistol":
+					show_prompt(["wep_1"], tr("Pistol"))
+				"wep_wave_shot":
+					show_prompt(["wep_2"], tr("Bubble Shot"))
+				"wep_grav_gun":
+					show_prompt(["wep_3"], tr("Gravity Cannon"))
+				"wep_time_gun":
+					show_prompt(["wep_4"], tr("Time Gun"))
 	elif current_weapon == item:
 		$ui/gameing/weapon/ammo_label.text = str(count)
 		if current_weapon and !$ui/gameing/weapon.visible:
