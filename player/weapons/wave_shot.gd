@@ -22,15 +22,23 @@ var bubble_pool : Array
 onready var bubble := $bubble
 onready var scene = get_tree().current_scene
 
+var speed = 2.0 setget set_speed
+
 func _ready():
 	bubble_pool = [bubble]
 	remove_child(bubble)
+	set_speed(speed)
 
 func _process(delta):
 	$Particles.emitting = charging
 	time_since_fired += delta
 	if charging:
-		charging_time += delta
+		charging_time += delta*speed
+
+func set_speed(s):
+	speed = s
+	$ChargeSound.pitch_scale = speed
+	$AnimationPlayer.playback_speed = speed
 
 func can_charge():
 	return time_since_fired > time_firing
