@@ -67,7 +67,7 @@ func take_damage(damage, dir, source):
 			target = last_attacker
 		.take_damage(damage, dir, source)
 
-func set_state(new_ai, force := false):
+func set_state(new_ai, _force := false):
 	ai = new_ai
 	state_timer = 0
 	gravity_scale = 1

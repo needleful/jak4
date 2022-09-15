@@ -75,7 +75,7 @@ const COUNTS := {
 }
 
 var starting_position: Transform
-var starting_health: float
+var starting_health: int
 
 func _init():
 	contact_monitor = true
@@ -288,7 +288,7 @@ func fall_down(_delta: float):
 	pass
 
 # Implemented by subclasses
-func set_state(_ai: int, force := false):
+func set_state(_ai: int, _force := false):
 	pass
 
 func play_damage_sfx():
