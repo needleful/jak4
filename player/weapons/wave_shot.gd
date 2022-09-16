@@ -3,15 +3,15 @@ class_name WaveShot
 
 const MAX_RADIUS = 8
 const MIN_RADIUS = 1
-const RADIUS_SEC = 2
+const RADIUS_SEC = 4
 
 const MAX_RECOIL = 16
 const MIN_RECOIL = 5
-const RECOIL_SEC = 4
+const RECOIL_SEC = 8
 
 var charge_fire := true
 var infinite_ammo := false
-var time_firing := 0.4
+var time_firing := 0.2
 
 var charging := false
 var charging_time := 0.0
@@ -22,7 +22,7 @@ var bubble_pool : Array
 onready var bubble := $bubble
 onready var scene = get_tree().current_scene
 
-var speed = 2.0 setget set_speed
+var speed = 1.0 setget set_speed
 
 func _ready():
 	bubble_pool = [bubble]
