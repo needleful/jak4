@@ -8,21 +8,19 @@
 	It is, yes.
 	[You] ... It's rather plain, no?
 	How do you mean?
-	[You] It's just a fountain. It's large, sure, but it's unadorned. The city is otherwise quite impressive.
-	What did you have in mind? Banners? A statue?
 	{Global.note_task("fountain_statue", "I think there should be a statue on the fountain in Crab Hill.")}
-	[You] ... hm, yes, I think a statue would be lovely. Perhaps made of that curious white metal, to stand out from the stone!
-	I will admit, that would be impressive.  I'm not sure who you would talk to for that to happen. Probably the administration building at the top of the city?
-	[You] {Global.task_note_location("fountain_statue", "crab_hill", "People at the administration building would be in charge of adding a statue at the front of town.")}Well, I've little else to do while I explore. I'll see what they think of it.
+	[You] I think there should be a statue on top of the fountain.
+	What?
+	[You] ... hm, yes, I can imagine it now. Perhaps made of that curious white metal, to stand out from the stone!
+	I do not know who you would talk to for that to happen. Probably the administration building at the top of the city?
+	[You] {Global.task_note_location("fountain_statue", "crab_hill", "The administration building would be the place to ask about installing a statue.")}Of course! I'll see what they think of it.
+	{Global.stat("talkedbalter")} Perhaps Balter would know who to ask.
 {otherwise if !Global.task_completed("fountain_statue")}
 	How goes your quest to add a statue to the fountain?
-	{Global.stat("fountain_statue/ready")}
+	{Global.stat("fountain_statue/status") == "ready"}
 		[You] The artist is working on it right now, actually! It should be ready
-	{otherwise if Global.stat("fountain_statue/commissioned")}
-		{Global.stat("fountain_statue/maslikir")}
-			[You] The owner of the foundry in Maslikir is helping with the cost.
-		{otherwise}
-			[You] I've contracted an artist, I'm collecting the materials now.
+	{otherwise if Global.stat("fountain_statue/status") == "commissioned"}
+		[You] I've contracted an artist, I'm collecting the materials now.
 		Well, that is good news! Hopefully it turns out well.
 {otherwise}
 	I have to say, this is an impressive statue.

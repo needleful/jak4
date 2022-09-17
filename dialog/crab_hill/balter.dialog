@@ -1,11 +1,30 @@
-Your mother was a bloodthirsty idiot. Her pride left her so dead-set on destroying the Specters that she led dozens of people to their deaths at the Tree Tower. She survived, of course. Time and time again...
-Perhaps she wasn't as brave as she claimed to be.
-> Don't say that about my mother.
-	Oh, I'm sure you're the expert on her character. I don't know what kind of mother she was to you, but allow me to guess: not great.
-	[You] I... No... She left when I was young, but-
-	Of course. Did she come back to this sand pit to settle the score? Traveled five thousand miles to beat her head against her favorite stone wall? Left you and your family alone so she could die in glory like she always wanted?
-	> If she were so compelled to fight these specters, why did she ever leave?
-	> 
-> ...
-	That being said, her lackey Orstad was absolutely the coward of the two.
-	It's one thing to be firmly set on the wrong path, it's another to endlessly flip-flop. He's still up on the plateau, isn't he? Suffering the brunt of those creatures? Not willing to go on a suicide mission to destroy the Tree Tower, but not willing to cut his losses and come to safety.
+{talked == 0}
+	* A man is sitting at his desk, flipping through documents, signing some, stamping others. He notices you.
+	Who are you? From the Embassy?
+	> Just a tourist.
+	> ?{crab_hill/balter} You're Balter, right? the... -governor? mayor?- of this town?
+{otherwise}
+	What do you need, Jacqueline?
+> {Global.task_is_active("fountain_statue") and !Global.stat("fountain_statue/asked_balter")} Who would I ask about installing a statue at the entrance of the city?
+	Eh? It depends where exactly you want to put it, I suppose.
+	[You] At the top of the fountain at the entrance, I'd say. It could do with some more drama.
+	Hm... The front plaza fountain is considered one of the gardens, so you would need to ask Siraj, the head gardener.
+	I would need to approve the statue as well, of course.
+	And because it would be a large change, you would need to get a three-quarters consensus from the businesses in the front plaza. I can schedule a meeting once we're at that point.
+	[You] Alright, that doesn't seem so bad. Do you know any artists who could build it?
+	... I thought you already had a statue.
+	[You] Uh, no.
+	I hope you weren't counting on us to pay for a statue, especially since you're the one who asked.
+	[You] I hadn't thought about it, but I'm not keen on taking home a chest of gemstones and biting insects, so I'll see if I can get the funds together.
+	Good. And please commission a local artist. That will be my only stipulation for approving the project. Unless I think of others, of course.
+	[You] There's a lot of constraints on this project suddenly...
+	Welcome to my life.
+	{Global.}
+	{Global.note_task("fountain_statue", "Balter must approve the statue's design")}
+	{Global.note_task("fountain_statue", "I need to ask Siraj, the head gardener, to change the fountain.")} 
+	{Global.note_task("fountain_statue", "Once Balter and Siraj approve the statue, Balter will schedule a hearing with the local businesses on placing the statue.")}
+	{Global.note_task("fountain_statue", "I have to find an artist and pay them from my own pocket if I really want a statue in the plaza.")}
+	{Global.task_note_place("fountain_statue", "crab_hill", "I need to commission a local artist for the fountain statue.")}
+> {Global.task_is_active("fountain_statue") and Global.stat("fountain_statue/asked_balter")} So about the statue... 
+> ?{mum/balter} You were apparently friends with my mum.
+> Uh... nothing, sorry. I'll let you get back to work.
