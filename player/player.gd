@@ -402,7 +402,7 @@ func _input(event):
 			if new_dist < current_dist:
 				best_trade = b
 		best_trade.start_coat_trade(self)
-	elif !choosing_item and event.is_action_pressed("use_item") and equipped_item and equipped_item.can_use():
+	elif !choosing_item and event.is_action_released("use_item") and equipped_item and equipped_item.can_use():
 		equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
 		show_inventory()
