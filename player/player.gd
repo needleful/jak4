@@ -149,8 +149,6 @@ const HOVER_SPEED_BOOST := 0.5
 # Broad things
 
 var velocity := Vector3.ZERO
-var timer_coyote := 0.0
-var timer_state := 0.0
 
 const DEFAULT_MAX_HEALTH := 50
 const HEALTH_UP_BOOST := 0.5
@@ -201,7 +199,6 @@ var can_slide_lunge := true
 var can_wall_cling := true
 
 const TIME_LEDGE_LEAVE := 0.1
-var timer_leave_ledge := 0.0
 
 const TIME_PLACE_FLAG := 0.5
 const TIME_GET_ITEM := 0.9
@@ -213,7 +210,6 @@ const TIME_GRAVITY_STUN := 2
 const TIME_WAVE_JUMP_ROLL := 0.1
 
 const TIME_TO_SIT := 2.5
-var sit_timer := 0.0
 
 const TIME_TO_DASH := 0.05
 const TIME_DASH := 0.5
@@ -230,6 +226,7 @@ onready var equipment_inventory := {}
 onready var equipped_item : Usable
 
 enum State {
+	None,
 	Ground,
 	Fall,
 	Slide,
@@ -330,8 +327,9 @@ export(PackedScene) var capacitor : PackedScene
 var held_item
 var choosing_item := false
 const TIME_ITEM_CHOOSE := 0.25
-var timer_item_choose := 0.0
 var equipment_path_f := "res://items/usable/%s.gd"
+var timers := PoolRealArray()
+const TIMERS_MAX := 2
 
 const VISIBLE_ITEMS := [
 	"bug",
@@ -388,10 +386,7 @@ func _ready():
 	equip(0)
 
 func _input(event):
-	if( can_talk()
-		and event.is_action_pressed("dialog_coat")
-		and coat_zone.get_overlapping_bodies().size() != 0
-	):
+	if can_talk() and event.is_action_pressed("dialog_coat") and !empty(coat_zone):
 		var c = coat_zone.get_overlapping_bodies()
 		var best_trade = c[0]
 		for b in c :
@@ -415,7 +410,8 @@ func _input(event):
 func _physics_process(delta):
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
-	timer_state += delta
+	for i in range(timers.size()):
+		timers[i] += delta
 	if stamina_recharges:
 		stamina += stamina_factor*stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
@@ -445,132 +441,111 @@ func _physics_process(delta):
 		ground_normal = best_normal
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
 	
-	var next_state := state
+	var next_state = State.None
 	match state:
 		State.Ground:
-			if Input.is_action_just_pressed("mv_jump"):
+			if pressed("mv_jump"):
 				next_state = State.BaseJump
 			elif should_hover():
 				next_state = State.Hover
-			elif Input.is_action_pressed("mv_crouch"):
-				var speed = (velocity - get_floor_normal()).slide(ground_normal)
+			elif holding("mv_crouch"):
+				var speed = (velocity - get_floor_velocity()).slide(ground_normal)
 				if speed.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
-			elif ( crouch_head.get_overlapping_bodies().size() > 0
-				and $standing_col.disabled):
+			elif !empty(crouch_head) and $standing_col.disabled:
 				next_state = State.Crouch
-			elif Input.is_action_just_released("combat_lunge"):
+			elif released("combat_lunge"):
 				next_state = State.LungeKick
-			elif Input.is_action_just_pressed("combat_spin"):
+			elif pressed("combat_spin"):
 				next_state = State.SpinKick
-			elif ground_area.get_overlapping_bodies().size() == 0:
-				timer_coyote += delta
-				if timer_coyote > TIME_COYOTE:
-					next_state = State.Fall
-			elif best_normal != Vector3.ZERO and best_floor_dot < MIN_DOT_GROUND:
-				timer_coyote += delta
-				if timer_coyote > TIME_COYOTE:
-					next_state = State.Slide
-			else:
-				timer_coyote = 0
+			elif after(TIME_COYOTE, empty(ground_area)):
+				next_state = State.Fall
+			elif after(TIME_COYOTE, best_normal != Vector3.ZERO and best_floor_dot < MIN_DOT_GROUND):
+				next_state = State.Slide
 		State.PlaceFlag, State.GetItem:
-			if timer_state > time_animation:
+			if after(time_animation):
 				next_state = State.Ground
 		State.Slide:
-			if Input.is_action_just_pressed("combat_spin"):
+			if pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
-			elif can_slide_lunge and Input.is_action_just_pressed("combat_lunge"):
+			elif can_slide_lunge and pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
-			elif best_floor_dot >= MIN_DOT_CLIMB and total_stamina() > MIN_CLIMB_STAMINA and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot >= MIN_DOT_CLIMB and total_stamina() > MIN_CLIMB_STAMINA and holding("mv_crouch"):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif best_floor_dot < MIN_DOT_SLIDE:
-				timer_coyote += delta
-				if timer_coyote > TIME_COYOTE:
-					next_state = State.Fall
+			elif after(TIME_COYOTE, empty(ground_area)):
+				next_state = State.Fall
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			else:
-				timer_coyote = 0
 		State.Dash:
-			if Input.is_action_just_pressed("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif Input.is_action_just_pressed("combat_spin"):
+			elif pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and Input.is_action_pressed("mv_crouch"):
+			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Slide
-			elif timer_state > TIME_DASH:
+			elif after(TIME_DASH):
 				next_state = State.Fall
 		State.BaseJump, State.LedgeJump, State.HighJump, State.WallJump:
-			if Input.is_action_just_pressed("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif Input.is_action_just_pressed("combat_spin"):
+			elif pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
-			elif timer_state > TIME_BASE_JUMP:
+			elif after(TIME_BASE_JUMP):
 				next_state = State.Fall
-			elif timer_state > TIME_JUMP_MIN:
+			elif after(TIME_JUMP_MIN):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				elif best_floor_dot > MIN_DOT_SLIDE:
 					next_state = State.Slide
 		State.Crouch:
-			if Input.is_action_just_pressed("mv_jump"):
+			if pressed("mv_jump"):
 				next_state = State.CrouchJump
-			elif Input.is_action_just_released("combat_lunge"):
-				# TODO: HighKick
+			elif released("combat_lunge"):
 				next_state = State.UppercutWindup
-			elif !Input.is_action_pressed("mv_crouch") and (
-				crouch_head.get_overlapping_bodies().size() == 0
-			):
+			elif !holding("mv_crouch") and empty(crouch_head):
 				next_state = State.Ground
-			elif ground_area.get_overlapping_bodies().size() == 0:
-				timer_coyote += delta
-				if timer_coyote > TIME_COYOTE:
-					next_state = State.Fall
+			elif after(TIME_COYOTE, empty(ground_area)):
+				next_state = State.Fall
 			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot > MIN_DOT_CLIMB:
 				if total_stamina() > MIN_CLIMB_STAMINA:
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
 			else:
-				timer_coyote = 0
-				if desired_velocity.length() < 0.001:
-					sit_timer += delta
-					if sit_timer > TIME_TO_SIT:
-						next_state = State.Sitting
-				else:
-					sit_timer = 0
+				if after(TIME_TO_SIT, desired_velocity.length() < 0.001, 1):
+					next_state = State.Sitting
 		State.CrouchJump:
-			if Input.is_action_just_pressed("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
-			elif timer_state > TIME_CROUCH_JUMP:
+			elif after(TIME_CROUCH_JUMP):
 				next_state = State.Fall
-			elif timer_state > TIME_JUMP_MIN:
+			elif after(TIME_JUMP_MIN):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				elif best_floor_dot > MIN_DOT_SLIDE:
@@ -582,45 +557,31 @@ func _physics_process(delta):
 				* delta
 				* (1.0-sqrt(max(best_floor_dot, 0)))
 			)
-			if stamina >= 0 and Input.is_action_just_pressed("mv_jump"):
+			if stamina >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if best_normal == Vector3.ZERO:
 					best_normal = ground_normal
 				velocity = JUMP_VEL_WALL*best_normal
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
-			elif best_floor_dot > MIN_DOT_GROUND:
-				timer_coyote += delta
-				if timer_coyote > TIME_STOP_CLIMB:
-					next_state = State.Crouch
-			elif climb_area.get_overlapping_bodies().empty():
+			elif after(TIME_STOP_CLIMB) and best_floor_dot > MIN_DOT_GROUND:
+				next_state = State.Crouch
+			elif after(TIME_STOP_CLIMB) and empty(climb_area):
 				$ui/gameing/debug/stats/a6.text = "!!!"
-				timer_coyote += delta
-				if timer_coyote > TIME_STOP_CLIMB:
-					next_state = State.Fall
-			elif total_stamina() <= 0 or !Input.is_action_pressed("mv_crouch"):
+				next_state = State.Fall
+			elif total_stamina() <= 0 or !holding("mv_crouch"):
 				next_state = State.Slide
 			else:
 				$ui/gameing/debug/stats/a6.text = "all good"
-				timer_coyote = 0.0
 		State.Roll:
-			if (timer_state > TIME_ROLL_MIN_JUMP 
-				and Input.is_action_just_pressed("mv_jump")
-			):
+			if after(TIME_ROLL_MIN_JUMP) and pressed("mv_jump"):
 				next_state = State.RollJump
-			elif (timer_state > TIME_ROLL_MIN 
-				and Input.is_action_just_pressed("combat_lunge")
-			):
+			elif after(TIME_ROLL_MIN) and pressed("combat_lunge"):
 				next_state = State.UppercutWindup
-			elif (timer_state > TIME_ROLL_MIN
-				and best_floor_dot < MIN_DOT_SLIDE
-			):
-				timer_coyote += delta
-				if timer_coyote > TIME_COYOTE:
-					next_state = State.Fall
+			elif after(TIME_ROLL_MIN) and best_floor_dot < MIN_DOT_SLIDE:
+				next_state = State.Fall
 			else:
-				timer_coyote = 0
-				if timer_state > TIME_ROLL_MAX:
+				if after(TIME_ROLL_MAX):
 					if best_floor_dot < MIN_DOT_GROUND:
 						next_state = State.Slide
 					elif Input.is_action_pressed("mv_crouch"):
@@ -630,7 +591,7 @@ func _physics_process(delta):
 		State.RollJump:
 			if Input.is_action_just_pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif timer_state > TIME_TO_DASH and can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
@@ -638,7 +599,7 @@ func _physics_process(delta):
 				and best_floor_dot < MIN_DOT_SLIDE
 			):
 				next_state = State.BonkFall
-			elif timer_state > TIME_CROUCH_JUMP:
+			elif after(TIME_CROUCH_JUMP):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				elif best_floor_dot > MIN_DOT_SLIDE:
@@ -646,44 +607,44 @@ func _physics_process(delta):
 				else:
 					next_state = State.RollFall
 		State.RollFall:
-			if Input.is_action_just_pressed("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			elif best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if pressed("mv_crouch"):
 					next_state = State.Crouch
-				elif crouch_head.get_overlapping_bodies().size() == 0:
+				elif empty(crouch_head):
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and pressed("mv_crouch"):
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and Input.is_action_pressed("mv_crouch"):
+			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and pressed("mv_crouch"):
 				next_state = State.WallCling
-			elif best_floor_dot > MIN_DOT_SLIDE and crouch_head.get_overlapping_bodies().size() == 0:
+			elif best_floor_dot > MIN_DOT_SLIDE and empty(crouch_head):
 				next_state = State.Slide
 			elif best_normal != Vector3.ZERO:
 				next_state = State.BonkFall
 		State.Fall, State.BonkFall:
-			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
+			if can_air_spin and pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif Input.is_action_just_pressed("combat_lunge"):
+			elif pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and Input.is_action_pressed("mv_crouch"):
+			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
@@ -698,89 +659,78 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
-			elif intent_dot < 0 or !ledgeCastCenter.is_colliding():
-				timer_leave_ledge += delta
-				if timer_leave_ledge > TIME_LEDGE_LEAVE:
-					next_state = State.LedgeFall
-			else:
-				timer_leave_ledge = 0
+			elif after(TIME_LEDGE_LEAVE, intent_dot < 0 or !ledgeCastCenter.is_colliding()):
+				next_state = State.LedgeFall
 		State.LedgeFall:
-			if can_air_spin and Input.is_action_just_pressed("combat_spin"):
+			if can_air_spin and pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif Input.is_action_just_pressed("combat_lunge"):
+			elif pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif should_hover():
 				next_state = State.Hover
 			elif best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and Input.is_action_pressed("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and Input.is_action_pressed("mv_crouch"):
+			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
-			else:
-				if timer_state >= TIME_LEDGE_FALL:
-					next_state = State.Fall
+			elif after(TIME_LEDGE_FALL):
+				next_state = State.Fall
 		State.LungeKick:
-			if timer_state >= TIME_LUNGE_MAX:
+			if after(TIME_LUNGE_MAX):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				else:
 					next_state = State.Fall
-			elif ( timer_state >= TIME_LUNGE_MIN
-				and Input.is_action_just_pressed("combat_spin")
-			):
+			elif after(TIME_LUNGE_MIN) and pressed("combat_spin"):
 				next_state = State.SpinKick
-			elif (timer_state >= TIME_LUNGE_MIN_UPPERCUT
-				and Input.is_action_just_pressed("mv_jump")
-			):
+			elif after(TIME_LUNGE_MIN_UPPERCUT) and pressed("mv_jump"):
 				next_state = State.UppercutWindup
 		State.SlideLungeKick:
-			if timer_state >= TIME_LUNGE_MAX:
+			if after(TIME_LUNGE_MAX):
 				next_state = State.Slide
-			elif ( timer_state >= TIME_LUNGE_MIN
-				and Input.is_action_just_pressed("combat_spin")
-			):
+			elif after(TIME_LUNGE_MIN) and pressed("combat_spin"):
 				next_state = State.AirSpinKick
 		State.SpinKick:
-			if timer_state >= TIME_SPIN_MAX:
+			if after(TIME_SPIN_MAX):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				elif best_floor_dot > MIN_DOT_SLIDE:
 					next_state = State.Slide
 				else:
 					next_state = State.Fall
-			elif timer_state >= TIME_SPIN_MIN:
-				if Input.is_action_just_pressed("combat_lunge"):
+			elif after(TIME_SPIN_MIN):
+				if pressed("combat_lunge"):
 					next_state = State.LungeKick
-				elif best_floor_dot > MIN_DOT_SLIDE and Input.is_action_pressed("mv_crouch"):
+				elif best_floor_dot > MIN_DOT_SLIDE and holding("mv_crouch"):
 					if velocity.length_squared() > MIN_SPEED_ROLL*MIN_SPEED_ROLL:
 						next_state = State.Roll
 					else:
 						next_state = State.Crouch
 		State.AirSpinKick:
-			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+			if can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
 			else:
-				if timer_state >= TIME_SPIN_MAX:
+				if after(TIME_SPIN_MAX):
 					next_state = State.Fall
-				elif timer_state >= TIME_SPIN_MIN and Input.is_action_just_pressed("combat_lunge"):
+				elif after(TIME_SPIN_MIN) and pressed("combat_lunge"):
 					next_state = State.DiveWindup
 		State.UppercutWindup:
-			if timer_state > TIME_UPPERCUT_WINDUP:
+			if after(TIME_UPPERCUT_WINDUP):
 				next_state = State.Uppercut
 		State.Uppercut:
 			if Input.is_action_just_released("combat_lunge"):
@@ -789,15 +739,15 @@ func _physics_process(delta):
 				next_state = State.AirSpinKick
 			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
 				next_state = State.Dash
-			elif timer_state > TIME_UPPERCUT_MIN and best_floor_dot > MIN_DOT_GROUND:
+			elif after(TIME_UPPERCUT_MIN) and best_floor_dot > MIN_DOT_GROUND:
 				if Input.is_action_pressed("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif timer_state > TIME_UPPERCUT_MAX:
+			elif after(TIME_UPPERCUT_MAX):
 				next_state = State.Fall
 		State.DiveWindup:
-			if timer_state > TIME_DIVE_WINDUP:
+			if after(TIME_DIVE_WINDUP):
 				next_state = State.DiveStart
 		State.DiveStart:
 			if can_dash() and Input.is_action_just_pressed("mv_jump"):
@@ -807,48 +757,42 @@ func _physics_process(delta):
 			elif velocity.y > 0:
 				next_state = State.Fall
 		State.DiveEnd:
-			if timer_state > TIME_DIVE_END_MAX:
+			if after(TIME_DIVE_END_MAX):
 				next_state = State.Ground
-			elif timer_state > TIME_DIVE_END_MIN:
+			elif after(TIME_DIVE_END_MIN):
 				if Input.is_action_just_pressed("combat_lunge"):
 					next_state = State.LungeKick
 				elif Input.is_action_just_pressed("combat_spin"):
 					next_state = State.AirSpinKick
-			elif ( timer_state > TIME_DIVE_UPPERCUT
-				and best_floor_dot > MIN_DOT_GROUND 
-				and Input.is_action_just_pressed("combat_lunge")
-			):
+			elif after(TIME_DIVE_UPPERCUT) and best_floor_dot > MIN_DOT_GROUND and pressed("combat_lunge"):
 				next_state = State.UppercutWindup
-			elif ( timer_state < TIME_DIVE_HIGHJUMP
-				and Input.is_action_just_pressed("mv_jump")
-			):
+			elif after(TIME_DIVE_HIGHJUMP) and pressed("mv_jump"):
 				next_state = State.HighJump
 		State.Damaged:
-			if Input.is_action_just_released("combat_lunge"):
+			if released("combat_lunge"):
 				next_state = State.LungeKick
-			elif Input.is_action_just_pressed("combat_spin"):
+			elif pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif timer_state > TIME_DAMAGED:
+			elif after(TIME_DAMAGED):
 				next_state = State.Fall
 		State.FallingDeath:
-			if timer_state > TIME_FALLING_DEATH:
-				next_state = State.Fall
+			if after(TIME_FALLING_DEATH):
 				die()
 		State.GravityStun:
-			if timer_state > TIME_GRAVITY_STUN:
+			if after(TIME_GRAVITY_STUN):
 				next_state = State.Fall
 		State.Hover:
-			if Input.is_action_just_pressed("hover_toggle"):
+			if pressed("hover_toggle"):
 				next_state = State.Fall
 		State.WaveJumpRoll:
-			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+			if can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
-			elif timer_state > TIME_WAVE_JUMP_ROLL:
+			elif after(TIME_WAVE_JUMP_ROLL):
 				next_state = State.RollFall
 		State.Sitting:
-			if Input.is_action_just_pressed("mv_jump"):
+			if pressed("mv_jump"):
 				next_state = State.BaseJump
-			elif ground_area.get_overlapping_bodies().size() == 0:
+			elif empty(ground_area):
 				next_state = State.Fall
 			elif desired_velocity.length() > 0.05:
 				next_state = State.Ground
@@ -860,13 +804,13 @@ func _physics_process(delta):
 				* (1.0-sqrt(max(best_floor_dot, 0)))
 			)
 			var on_wall := true
-			if best_normal != Vector3.ZERO and best_floor_dot < MIN_DOT_CLIMB:
+			if best_floor and best_floor_dot < MIN_DOT_CLIMB:
 				on_wall = false
-			elif climb_area.get_overlapping_bodies().empty():
+			elif empty(climb_area):
 				on_wall = false
 			if can_ledge_grab():
 				next_state = State.LedgeHang
-			elif stamina >= 0 and Input.is_action_just_pressed("mv_jump"):
+			elif stamina >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if best_normal == Vector3.ZERO:
 					best_normal = ground_normal
@@ -874,21 +818,22 @@ func _physics_process(delta):
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
 			elif best_floor_dot >= MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
 			elif ( total_stamina() <= 0 
-				or timer_state > MAX_TIME_WALL_CLING
+				or after(MAX_TIME_WALL_CLING)
 				or !on_wall
-				or !Input.is_action_pressed("mv_crouch")
+				or !holding("mv_crouch")
 			):
 				next_state = State.Fall
-	set_state(next_state)
+	if next_state != State.None:
+		set_state(next_state)
 	
 	match state:
 		State.Ground:
-			if timer_state > TIME_RESET_GROUND:
+			if after(TIME_RESET_GROUND):
 				can_air_spin = true
 				can_slide_lunge = true
 			accel(delta, desired_velocity*SPEED_RUN)
@@ -940,11 +885,12 @@ func _physics_process(delta):
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
-			if timer_state > TIME_LUNGE_PARTICLES:
+			if after(TIME_LUNGE_PARTICLES):
 				mesh.stop_particles()
-			if (timer_state > TIME_LUNGE_COMBO
+			if (after(TIME_LUNGE_COMBO)
 				and !gun.in_combo()
-				and damaged_objects.size() > 0):
+				and damaged_objects.size() > 0
+			):
 				gun.start_combo()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
@@ -1009,17 +955,36 @@ func _physics_process(delta):
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
 
-	if equipment_inventory.size() > 1 and Input.is_action_pressed("choose_item"):
-		timer_item_choose += delta
-		if timer_item_choose >= TIME_ITEM_CHOOSE:
-			choosing_item = true
+	if after(TIME_ITEM_CHOOSE, equipment_inventory.size() > 1 and holding ("choose_item"),
+		TIMERS_MAX
+	):
+		choosing_item = true
 	else:
 		choosing_item = false
-		timer_item_choose = 0.0
 	equipment.visible = choosing_item
 
 func _process(_delta):
 	update_stamina()
+
+func after(time: float, condition := true, id := 0):
+	if id >= timers.size():
+		timers.resize(id+1)
+		timers[id] = 0
+	if !condition:
+		timers[id] = 0
+	return timers[id] >= time
+
+func pressed(action:String):
+	return Input.is_action_just_pressed(action)
+
+func released(action:String):
+	return Input.is_action_just_released(action)
+
+func holding(action:String):
+	return Input.is_action_pressed(action)
+
+func empty(area: Area):
+	return area.get_overlapping_bodies().size() == 0
 
 func prepare_save():
 	Global.game_state.current_coat = current_coat
@@ -1437,12 +1402,12 @@ func takes_damage():
 		is_dead()
 		or state == State.Locked
 		or state == State.Damaged
-		or ( timer_state < TIME_SPIN_INVINCIBILITY
+		or ( !after(TIME_SPIN_INVINCIBILITY)
 			and ( state == State.SpinKick
 				or state == State.AirSpinKick))
-		or (timer_state < TIME_LUNGE_INVINCIBILITY
+		or (!after(TIME_LUNGE_INVINCIBILITY)
 			and state == State.LungeKick)
-		or (timer_state < TIME_ROLL_INVINCIBILITY
+		or (!after(TIME_ROLL_INVINCIBILITY)
 			and state == State.Roll)
 		# These moves suck so just give em i-frames during windup lol
 		or state == State.UppercutWindup
@@ -1788,12 +1753,10 @@ func shake_camera():
 		$camera_rig/cam_shake.play("shot_shake")
 
 func set_state(next_state: int):
-	if state == next_state:
-		return
-	timer_coyote = 0.0
-	timer_state = 0.0
-	timer_leave_ledge = 0
-	sit_timer = 0
+	var i = 0
+	while i < TIMERS_MAX:
+		timers[i] = 0.0
+		i += 1
 	mesh.stop_particles()
 	var head_blocked = crouch_head.get_overlapping_bodies().size() > 0
 	$crouching_col.disabled = !head_blocked
