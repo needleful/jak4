@@ -1943,13 +1943,13 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 			gun.disable()
 		State.PlaceFlag:
-			mesh.transition_to("PlaceFlag")
+			mesh.play_custom("PlaceFlag")
 			velocity = Vector3.ZERO
 			gun.aim_lock()
 			mesh.hold_item(flag.instance())
 			time_animation = TIME_PLACE_FLAG
 		State.GetItem:
-			mesh.transition_to("GetItem")
+			mesh.play_custom("ItemGet")
 			velocity = Vector3.ZERO
 			gun.aim_lock()
 			if held_item:

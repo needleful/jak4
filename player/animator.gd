@@ -66,6 +66,8 @@ export(AudioStream) var sound_spin_kick : AudioStream
 export(AudioStream) var sound_uppercut : AudioStream
 
 onready var anim: AnimationTree = $AnimationTree
+onready var anim_tree: AnimationNodeBlendTree = anim.tree_root
+onready var custom_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomAnimation")
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
 onready var player : PlayerBody = get_parent()
@@ -103,6 +105,10 @@ func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
 
 func force_play(state):
 	body.start(state)
+
+func play_custom(animation):
+	custom_node.animation = animation
+	body.travel("CustomAnimation")
 
 func transition_to(state):
 	body.travel(state)

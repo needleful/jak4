@@ -20,7 +20,7 @@ func _on_text_entered(new_text):
 	
 	var output = ex.execute([Global], self)
 	if ex.has_execute_failed():
-		label.text = ex.get_error_text()
+		label.text = ex.get_error_text() + str(output)
 	else:
 		label.text = str(output)
 
