@@ -75,7 +75,7 @@
 		* It's unmistakable.
 		[You] Hi mum.
 			I-.. I....
-		* {animation("sit")} You can't think of anything to say.
+		* {player.play_custom("sit")} You can't think of anything to say.
 		* Can she even hear you like this? Would talking to her mean anything?
 		* {animation("comfort")} 
 		[You] You lived around here.  Maybe I can find.. I don't know. Old friends? Your home?
@@ -120,6 +120,8 @@
 > {skip()} (Discuss places)
 	> (Back)
 		{goto("main_loop")}
+> I'll see you later, mum.
+	Until next time, Jackie.
 {track_conversation_time()}
 {exit()}
 
@@ -131,7 +133,7 @@
 ?{mum/info}
 	?{mum/network}
 	{otherwise}
-		+{mum/network}{remember("Mum can apparently travel between different machines throughout the area.")}
+		+{mum/network}{remember("Mum can apparently travel between different machines throughout the region.")}
 		[You] M-mum?! What are you doing here?
 		Huh? I don't know? What is this?
 		{mentioned("network054") and Global.task_exists("lost_phone")}
@@ -155,6 +157,9 @@
 		{otherwise}
 			[You] I stumbled onto this strange facility. It must connect to the Medium somehow.
 		I think... that is the only explanation.  
+
+		{goto("main_loop")}
+		{goto("_exit")}
 {otherwise}
 	* [ERROR] This conversation should not occur.
 	{exit()}

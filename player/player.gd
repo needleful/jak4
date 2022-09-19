@@ -584,12 +584,12 @@ func _physics_process(delta):
 				if after(TIME_ROLL_MAX):
 					if best_floor_dot < MIN_DOT_GROUND:
 						next_state = State.Slide
-					elif Input.is_action_pressed("mv_crouch"):
+					elif holding("mv_crouch"):
 						next_state = State.Crouch
 					else:
 						next_state = State.Ground
 		State.RollJump:
-			if Input.is_action_just_pressed("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
@@ -651,9 +651,9 @@ func _physics_process(delta):
 		State.LedgeHang:
 			drain_stamina(STAMINA_DRAIN_HANG*delta)
 			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
-			if Input.is_action_just_pressed("combat_spin"):
+			if pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif Input.is_action_just_pressed("mv_jump"):
+			elif pressed("mv_jump"):
 				next_state = State.LedgeJump
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
@@ -733,14 +733,14 @@ func _physics_process(delta):
 			if after(TIME_UPPERCUT_WINDUP):
 				next_state = State.Uppercut
 		State.Uppercut:
-			if Input.is_action_just_released("combat_lunge"):
+			if released("combat_lunge"):
 				next_state = State.DiveWindup
-			elif Input.is_action_just_released("combat_spin"):
+			elif released("combat_spin"):
 				next_state = State.AirSpinKick
-			elif can_dash() and Input.is_action_just_pressed("mv_jump"):
+			elif can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif after(TIME_UPPERCUT_MIN) and best_floor_dot > MIN_DOT_GROUND:
-				if Input.is_action_pressed("mv_crouch"):
+				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
@@ -750,7 +750,7 @@ func _physics_process(delta):
 			if after(TIME_DIVE_WINDUP):
 				next_state = State.DiveStart
 		State.DiveStart:
-			if can_dash() and Input.is_action_just_pressed("mv_jump"):
+			if can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.DiveEnd
@@ -760,9 +760,9 @@ func _physics_process(delta):
 			if after(TIME_DIVE_END_MAX):
 				next_state = State.Ground
 			elif after(TIME_DIVE_END_MIN):
-				if Input.is_action_just_pressed("combat_lunge"):
+				if pressed("combat_lunge"):
 					next_state = State.LungeKick
-				elif Input.is_action_just_pressed("combat_spin"):
+				elif pressed("combat_spin"):
 					next_state = State.AirSpinKick
 			elif after(TIME_DIVE_UPPERCUT) and best_floor_dot > MIN_DOT_GROUND and pressed("combat_lunge"):
 				next_state = State.UppercutWindup
@@ -975,13 +975,13 @@ func after(time: float, condition := true, id := 0):
 	return timers[id] >= time
 
 func pressed(action:String):
-	return Input.is_action_just_pressed(action)
+	return pressed(action)
 
 func released(action:String):
-	return Input.is_action_just_released(action)
+	return released(action)
 
 func holding(action:String):
-	return Input.is_action_pressed(action)
+	return holding(action)
 
 func empty(area: Area):
 	return area.get_overlapping_bodies().size() == 0
@@ -1414,7 +1414,7 @@ func takes_damage():
 		or state == State.DiveWindup)
 
 func should_hover() -> bool:
-	return Input.is_action_just_pressed("hover_toggle") and Global.count("hover_scooter")
+	return pressed("hover_toggle") and Global.count("hover_scooter")
 
 func can_ledge_grab() -> bool:
 	if crouch_head.get_overlapping_bodies().size() > 0:
@@ -1754,7 +1754,7 @@ func shake_camera():
 
 func set_state(next_state: int):
 	var i = 0
-	while i < TIMERS_MAX:
+	while i < min(timers.size(), TIMERS_MAX):
 		timers[i] = 0.0
 		i += 1
 	mesh.stop_particles()

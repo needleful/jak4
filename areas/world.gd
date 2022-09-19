@@ -60,8 +60,6 @@ func _ready():
 					node.name = "lowres"
 					lowres_chunks[c.name] = node
 					c.add_child(node)
-			#if c.has_node("static_collision"):
-			#	chunk_collider[c.name] = c.get_node("static_collision")
 	update_active_chunks(player_last_postion, true)
 
 func _process(delta):
@@ -161,7 +159,6 @@ func queue_load(ch: Spatial):
 	if ch.has_node("dynamic_content"):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
-	#print("queue_load ", ch.name)
 	var load_i = load_queue.find(ch)
 	if load_i >= 0:
 		return
@@ -170,10 +167,8 @@ func queue_load(ch: Spatial):
 		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
 	else:
 		load_queue.push_back(ch)
-	#print("queue_load complete ", ch.name)
 
 func load_async(ch:Spatial):
-	#print("load_async ", ch.name)
 	if ch.has_node("dynamic_content") or (ch in active_chunks):
 		print_debug("Duplicate dynamic content: ", ch.name)
 		return
@@ -182,7 +177,6 @@ func load_async(ch:Spatial):
 	var scn: PackedScene = get_or_load(ch.name)
 	call_deferred("add_dynamic_content", ch, scn.instance())
 	loading = null
-	#print("load_async complete ", ch.name)
 
 func load_sync(chunk: Spatial):
 	if chunk.name in chunk_unload_waitlist:
@@ -195,7 +189,6 @@ func load_sync(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
 		print_debug("Duplicate dynamic content: ", chunk.name)
 		return
-	#print("load_sync ", chunk.name)
 	active_chunks.append(chunk)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
@@ -205,7 +198,6 @@ func load_sync(chunk: Spatial):
 	var scn: PackedScene = get_or_load(chunk.name)
 	if scn:
 		add_dynamic_content(chunk, scn.instance())
-	#print("load_sync complete", chunk.name)
 
 func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):
@@ -224,7 +216,6 @@ func queue_unload(ch: Spatial):
 		return
 	if !(ch.name in chunk_unload_waitlist):
 		chunk_unload_waitlist[ch.name] = 0.0 
-	#ch.material_override = debug_inactive_chunk_material
 
 func mark_inactive(chunk: Spatial):
 	var load_i = load_queue.find(chunk)
@@ -241,9 +232,6 @@ func mark_inactive(chunk: Spatial):
 			var l: Node = lowres_chunks[chunk.name]
 			l.request_ready()
 			chunk.add_child(l)
-	
-	#if chunk.has_node("static_collision"):
-	#	chunk.remove_child(chunk.get_node("static_collision"))
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
