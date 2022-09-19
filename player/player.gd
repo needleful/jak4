@@ -830,7 +830,6 @@ func _physics_process(delta):
 				next_state = State.Fall
 	if next_state != State.None:
 		set_state(next_state)
-	
 	match state:
 		State.Ground:
 			if after(TIME_RESET_GROUND):
@@ -975,13 +974,13 @@ func after(time: float, condition := true, id := 0):
 	return timers[id] >= time
 
 func pressed(action:String):
-	return pressed(action)
+	return Input.is_action_just_pressed(action)
 
 func released(action:String):
-	return released(action)
+	return Input.is_action_just_released(action)
 
 func holding(action:String):
-	return holding(action)
+	return Input.is_action_pressed(action)
 
 func empty(area: Area):
 	return area.get_overlapping_bodies().size() == 0
