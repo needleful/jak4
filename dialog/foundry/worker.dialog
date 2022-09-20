@@ -1,3 +1,4 @@
+:_entry_front
 {talked==0}
 	[You] Wow. What is this place?
 	Huh? Vaeler?
@@ -25,6 +26,30 @@
 	{goto("_exit")}
 {goto("main_loop")}
 
+:_entry_capacitor
+?{need_capacitors}
+	?{foundry/arc_furnace}
+		[You] Hello again.
+		Hi.
+		[You] You said I could buy a capacitor from the foreman, correct?
+		If we have any surplus, you would ask him. At his office above the whole foundry.
+	{otherwise}
+		+{foundry/arc_furnace}
+		[You] Excuse me, sir! Are those capacitors?
+		Hm? These? Eh, yes.
+		[You] Would you be able to lend me one?
+		What? No. These power the arc furnace. If we have any surplus to sell, the foreman would know.
+
+{otherwise if talked == 0}
+	[You] Hello. What's this?
+	Hm? Arc furnace. It melts the copper.
+	[You] That seems dangerous.
+	Very.
+{otherwise}
+	[You] Hello again.
+	Hi.
+{exit()}
+
 :_exit
 Goodbye.
 {exit()}
@@ -34,15 +59,15 @@ Goodbye.
 	It's good, thank you.
 	> That's good to hear. Take care!
 	> Could we trade again?
-		Again? Uh... okay?
+		Again? Uh... sure.
 		{swap_coats()} [You] Excellent, thank you!
 {otherwise} [You] Excuse me! I couldn't help but notice that beautiful fabric you're wearing!
-	Oh, this? Thank you!
+	Uh, thank you?
 	> I just thought I'd mention it. Take care!
 		{exit()}
 	> I'd like to trade my jacket for yours.
-		Really?
-		[You] Of course! If you don't mind...
-		I... guess it's fine?
+		...?
+		[You] Uh, if you don't mind...
+		I suppose we can.
 		{swap_coats()} Here you go.
-		[You] Wonderful! Thank you very much! Take care!
+		[You] Thank you kindly!

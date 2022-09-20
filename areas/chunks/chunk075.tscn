@@ -104,6 +104,23 @@ shader_param/wall = ExtResource( 63 )
 shader_param/ground = ExtResource( 49 )
 shader_param/ceiling = ExtResource( 66 )
 
+[sub_resource type="ShaderMaterial" id=27]
+shader = ExtResource( 67 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 66 )
+shader_param/ground = ExtResource( 66 )
+shader_param/ceiling = ExtResource( 66 )
+
+[sub_resource type="ShaderMaterial" id=24]
+shader = ExtResource( 58 )
+shader_param/albedo = Color( 0.2, 0.211765, 0.219608, 1 )
+shader_param/refraction = 0.0
+shader_param/brightness = 0.0
+
 [sub_resource type="ShaderMaterial" id=28]
 shader = ExtResource( 67 )
 shader_param/uv_scale = 0.6
@@ -332,17 +349,6 @@ radius = 4.8
 flags_unshaded = true
 albedo_color = Color( 12.1412, 0.588235, 0.290196, 1 )
 
-[sub_resource type="ShaderMaterial" id=27]
-shader = ExtResource( 67 )
-shader_param/uv_scale = 0.5
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity = 1.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 66 )
-shader_param/ground = ExtResource( 66 )
-shader_param/ceiling = ExtResource( 66 )
-
 [sub_resource type="CapsuleShape" id=21]
 radius = 50.869
 height = 17.3781
@@ -352,12 +358,6 @@ height = 17.3781
 [sub_resource type="SpatialMaterial" id=23]
 flags_unshaded = true
 albedo_color = Color( 41.04, 1.74, 38.73, 1 )
-
-[sub_resource type="ShaderMaterial" id=24]
-shader = ExtResource( 58 )
-shader_param/albedo = Color( 0.2, 0.211765, 0.219608, 1 )
-shader_param/refraction = 0.0
-shader_param/brightness = 0.0
 
 [node name="chunk075" instance=ExtResource( 48 )]
 script = ExtResource( 1 )
@@ -376,7 +376,32 @@ material/0 = SubResource( 29 )
 [node name="static_collision" parent="office" index="0"]
 collision_layer = 257
 
-[node name="area_scrapyard" type="Spatial" parent="." index="2"]
+[node name="reactor" parent="." index="2"]
+material/0 = ExtResource( 65 )
+
+[node name="static_collision" parent="reactor" index="0"]
+collision_layer = 257
+
+[node name="furnace" parent="." index="3"]
+material/0 = SubResource( 27 )
+
+[node name="static_collision" parent="furnace" index="0"]
+collision_layer = 257
+
+[node name="cable" parent="." index="4"]
+material/0 = SubResource( 27 )
+
+[node name="cable001" parent="." index="5"]
+material/0 = SubResource( 27 )
+
+[node name="furnace_vent" parent="." index="6"]
+material/0 = SubResource( 27 )
+
+[node name="reactor_windows" parent="." index="7"]
+cast_shadow = 0
+material/0 = SubResource( 24 )
+
+[node name="area_scrapyard" type="Spatial" parent="." index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -139.049, 4.58447, 0.849531 )
 
 [node name="BakedLightmap" type="BakedLightmap" parent="area_scrapyard" index="0"]
@@ -743,7 +768,7 @@ transform = Transform( -0.210467, 0.91716, 0.338409, -0.855112, -0.00494405, -0.
 [node name="gen_part_pvc2" parent="area_scrapyard" index="97" instance=ExtResource( 46 )]
 transform = Transform( 0.399837, 0.915257, 0.0493342, -0.11915, -0.00146645, 0.992875, 0.908809, -0.402867, 0.108466, 46.71, 8.03983, -8.34473 )
 
-[node name="area_cliff" type="Spatial" parent="." index="3"]
+[node name="area_cliff" type="Spatial" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 138.343, 101.545, 204.384 )
 
 [node name="fountain" parent="area_cliff" index="0" instance=ExtResource( 4 )]
@@ -779,7 +804,7 @@ transform = Transform( 0.913162, 0.389394, -0.120448, 0, 0.295508, 0.95534, 0.40
 [node name="rock4" parent="area_cliff" index="10" instance=ExtResource( 7 )]
 transform = Transform( -0.528089, -0.594257, -0.606614, -0.400818, 0.804195, -0.438881, 0.748644, 0.0113731, -0.662875, 25.9986, 7.39322, 14.3674 )
 
-[node name="area_foundry" type="Spatial" parent="." index="4"]
+[node name="area_foundry" type="Spatial" parent="." index="10"]
 
 [node name="light_wall" parent="area_foundry" index="0" instance=ExtResource( 71 )]
 transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 137.724, 13.2462, 7.4408 )
@@ -1081,8 +1106,10 @@ shape = SubResource( 21 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_foundry" index="26"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.797, 26.8499, -15.5 )
+layers = 32
 max_distance = 16384.0
 extents = Vector3( 49.0127, 48.965, 52.8748 )
+origin_offset = Vector3( 0, 7.59375, 0 )
 
 [node name="MeshInstance9" type="MeshInstance" parent="area_foundry" index="27"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.911, 14.8971, -15.276 )
@@ -1100,6 +1127,8 @@ omni_range = 29.7304
 
 [node name="npc" parent="area_foundry" index="28" instance=ExtResource( 22 )]
 transform = Transform( -0.266542, 0, 0.963823, 0, 1, 0, -0.963823, 0, -0.266542, 134.885, 9.14791, 9.03025 )
+dialog = ExtResource( 57 )
+custom_entry = "_entry_capacitor"
 
 [node name="light_wall2" parent="area_foundry" index="29" instance=ExtResource( 71 )]
 transform = Transform( 0.5, 0.866025, -3.78552e-08, 0, -4.37114e-08, -1, -0.866025, 0.5, -2.18557e-08, 106.299, 16.0086, -40.5649 )
@@ -1130,31 +1159,6 @@ active = true
 [node name="power_thing3" parent="area_foundry" index="37" instance=ExtResource( 70 )]
 transform = Transform( -0.995106, 0, -0.098813, 0, 1, 0, 0.098813, 0, -0.995106, 136.959, 9.14792, 8.74042 )
 active = true
-
-[node name="reactor" parent="." index="5"]
-material/0 = ExtResource( 65 )
-
-[node name="static_collision" parent="reactor" index="0"]
-collision_layer = 257
-
-[node name="furnace" parent="." index="6"]
-material/0 = SubResource( 27 )
-
-[node name="static_collision" parent="furnace" index="0"]
-collision_layer = 257
-
-[node name="cable" parent="." index="7"]
-material/0 = SubResource( 27 )
-
-[node name="cable001" parent="." index="8"]
-material/0 = SubResource( 27 )
-
-[node name="furnace_vent" parent="." index="9"]
-material/0 = SubResource( 27 )
-
-[node name="reactor_windows" parent="." index="10"]
-cast_shadow = 0
-material/0 = SubResource( 24 )
 
 [connection signal="toggled" from="area_foundry/dswitch" to="area_foundry/crane1" method="_on_toggled"]
 [connection signal="toggled" from="area_foundry/dswitch2" to="area_foundry/crane2" method="_on_toggled"]

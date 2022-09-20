@@ -66,6 +66,7 @@
 		[You] Hi Mum.
 		Hello again, Jackie. Did you need something?
 		{goto("main_loop")}
+	{otherwise if !Global.stat("mum/network")}
 
 {otherwise}
 	{talked == 0}
@@ -103,6 +104,8 @@
 {exit()}
 
 :main_loop
+> {skip()} (Ask about mum)
+	> ?{mum/network}{!Global.stat("mum/discussed/network")}{!mentioned("network")}
 > {skip()} (Discuss events)
 	> {Global.count('wep_pistol')}{!Global.stat("mum/discussed/pistol")} I found a pistol when I first activated the Medium.
 		+{mum/discussed/pistol} Oh my God. Vaeler Officers used those in the war.
@@ -130,6 +133,7 @@
 {goto("_network")}
 
 :_network
+{mention("network")}
 ?{mum/info}
 	?{mum/network}
 	{otherwise}
