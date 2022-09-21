@@ -4,7 +4,7 @@ var keeper: Node
 onready var items_window := $items
 
 const proper_name: Dictionary = {
-	"gem": "Moonstones",
+	"gem": "Gems",
 	"bug": "Deathgnats"
 }
 

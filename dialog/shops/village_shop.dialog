@@ -1,39 +1,43 @@
 :shop_entry
 {talked == 0} Ah, the tourist has found fit to visit me!
 	* The shop smells of burning incense. It's different from home. A stronger, more bitter smell.
-	[You] Hi, I'm Jackie!
-		It's nice to meet you!
+	[You] Hello, I'm Jackie!
+		Pleased to meet you!
 	Welcome to my shop, Jackie! Whatever brings you so far from your home, to our modest city?
 	> I'm here to see the Medium.
 		{mention("medium")}... Ah.
 		{format("italic")} Braalni Mhote.
 		{animation("show_medium")} "The Medium of Bralna". I do not believe the machine has worked in some years.
-		{Global.stat("need_capacitors")}[You] Yeah. I talked with Armstrong about it.
-		{otherwise} I'm going to talk with the repair man working at it to see what I can do.
-		So Armstrong has roped you into repairing that contraption?
-		[You] I'm glad to help! Especially since I need to see it.
+		{Global.task_exists("activate_the_medium")}
+			[You] I've talked with that gentleman Armstrong about it. Apparently it just needs some missing parts.
+			So Armstrong has roped you into repairing that contraption?
+			[You] Well, of course! I need to use it.
+		{otherwise} 
+			[You] I'm going to talk with the repair man working at it to see what I can do.
+			So Armstrong finally has someone else to help fix that contraption!
+			[You] If that's what he needs, of course I'll help. I need to use it.
 		So you do...
 		But let's put aside such matters. I doubt you came in here to have me talk your ears off. You probably came here to buy something.
-	> My mom used to live around here...
+	> My mum used to live around here...
 		And from the tone in your voice...
 		I presume she is not with us.
-		[You] That's... yeah.
-			She's not.
+		[You] ... She's not.
 		I am sorry to hear that. The loss of a parent is deep, though better than the alternative. You are here for unsettled affairs, or memories?
-		[You] Uh, both, I guess...
+		[You] Uh, both, I suppose...
 		> I'm here to see the Medium.
 			{mention("medium")} Oh.
 			And you wish to commune with her.
 			{animation("show_medium")} Quite frankly, I do not think the Medium is such a useful machine.
 			It does not talk to souls. Only simulacra. Faint reflections of those lost.
-			[You] Yeah. I know how it works. It's just... important to me.
+			[You] I understand how it works. But it's....
+				It's important to me all the same.
 			I hope you find what you are looking for. I hope that machine can help you.
 			If you need anything during your stay, I probably have it in my shop.
 		> {skip()} (Say nothing more)
-			I see. Well, if you need anything for your travels, perhaps I have it in my shop.
+			... I see. Well, if you need anything for your travels, perhaps I have it in my shop.
 	> {skip()} (Come up with a clever excuse)
 		[You] I, uh... um, I
-		There is no need to tell me if you are shy.  It must be important to come all this way.
+		There is no need to tell me if you are shy. It must be important to come all this way.
 		Besides, you probably came in here to buy something, not to have me talk your ears off.
 
 {otherwise} Welcome back, Jackie!
@@ -50,27 +54,28 @@
 > Sure, I'll buy some stuff.
 	With pleasure, Jackie!
 	{shop()}
-	{exiting()} [You] Thanks!
+	{exiting()} [You] Thank you!
 	I hope you found what you were looking for...
-> {Global.stat("need_capacitors")} Do you sell capacitors?
-	Hm, I do not.  They are very rare, and not much use besides powering ancient machines.
+> {Global.task_exists("activate_the_medium")} Do you sell capacitors?
+	Hm, I do not. They are very rare, and not much use besides powering ancient machines.
 	If you find them anywhere, they would be in the ruins, either those of green copper or the ancient white metal.
 	They both used the machines to some extent.
 > What do you sell?
 	Elixirs! Deathgnats! Flags!
 	> What do the elixirs do?
 		Many things.
-		Increase your stamina, strength, speed.
+		Increase your stamina, strength, vitality.
 		Some temporarily, others permanently.
 	> {format("italic")} Deathgnats?
-		{animation("show_deathgnat")}A nasty pest, but not nearly as harmful as its larger cousins.
+		A nasty pest made of crystal and white metal, but not nearly as harmful as its larger cousins.
 		We catch them to use as a second currency. Typically for larger purchases, such as capacitors.
-		{animation("reset")}
-		{Global.stat('bug') == 0} You do not have any gnats, but I'm sure you shall find some.
+		{Global.stat('bug') == 0}
+			[You] What do they look like, exactly?
+			I have one in a jar on the table, if you would like to examine it.
 		{otherwise if Global.stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
-			[You] It keeps vibrating. People carry these around?
+			[You] It keeps vibrating. Do people really carry these around?
 			Hahaha!
-			You do not need to keep it alive. It would be quite unbearable keeping dozens of live deathgnats.
+			You do not need to keep it alive. It would be quite unbearable carrying dozens of live deathgnats.
 			{animation("show_deathgnat")} The one I keep is quite a handful.
 			{animation("reset")}
 		{otherwise} You have #{Global.count('bug')} gnats on your person, and have found a total of #{Global.stat('bug')}.
@@ -79,10 +84,8 @@
 			Ha! Where can you not find them? They are pervasive!
 			Sun or shade, sand or snow, they love to flutter about, biting at any who are not careful.
 		> ... What are the capacitors for?
-			Many ancient machines, doors and elevators and such, need them for power.
-			{mentioned("medium")} I have heard the Medium requires three capacitors.
-			There are not many left in this canyon, though some traders will have one or two for sale.
-			So would you like to buy my gnat?
+			Armstrong would be a better expert than I.
+			{!Global.stat("talkedarmstrong")} He is by the medium, wearing goggles.
 		> Okay, I think I understand.
 			Immaculate! Let me know if you want one. Once it is gone, it is gone!
 	> What are the flags for?

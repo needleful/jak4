@@ -216,6 +216,7 @@ func add_weapon(id):
 	enabled_wep[id] = true
 	call_deferred("set_current_weapon", weapons[id])
 	call_deferred("disable")
+	Global.add_stat("weapon")
 
 func show_weapon():
 	call_deferred("set_state", State.Free, true)

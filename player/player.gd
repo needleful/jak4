@@ -462,7 +462,7 @@ func _physics_process(delta):
 				next_state = State.SpinKick
 			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
-			elif after(TIME_COYOTE, best_normal != Vector3.ZERO and best_floor_dot < MIN_DOT_GROUND):
+			elif best_normal != Vector3.ZERO and after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
 				next_state = State.Slide
 		State.PlaceFlag, State.GetItem:
 			if after(time_animation):
@@ -766,7 +766,7 @@ func _physics_process(delta):
 					next_state = State.AirSpinKick
 			elif after(TIME_DIVE_UPPERCUT) and best_floor_dot > MIN_DOT_GROUND and pressed("combat_lunge"):
 				next_state = State.UppercutWindup
-			elif after(TIME_DIVE_HIGHJUMP) and pressed("mv_jump"):
+			elif !after(TIME_DIVE_HIGHJUMP) and pressed("mv_jump"):
 				next_state = State.HighJump
 		State.Damaged:
 			if released("combat_lunge"):
@@ -1106,6 +1106,9 @@ func debug_show_inventory():
 	add_label(state_viewer, "Inventory:")
 	for i in Global.game_state.inventory:
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
+
+func play_animation(animation):
+	mesh.play_custom(animation)
 
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath
