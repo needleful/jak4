@@ -53,6 +53,7 @@ func set_level(l: int):
 			$foreground/audioOptions.hide()
 			$foreground/controlOptions.hide()
 			$foreground/displayOptions.hide()
+			$foreground/graphicsOptions.hide()
 		1:
 			if level == 0:
 				for c in $foreground/main_menu.get_children():
@@ -71,6 +72,7 @@ func set_level(l: int):
 			$foreground/audioOptions.hide()
 			$foreground/controlOptions.hide()
 			$foreground/displayOptions.hide()
+			$foreground/graphicsOptions.hide()
 		2:
 					
 			if level == 0:
@@ -162,7 +164,6 @@ func _on_graphics_pressed():
 	$foreground/displayOptions.hide()
 	$foreground/graphicsOptions.show()
 	$foreground/graphicsOptions.grab_focus()
-	
 
 func _on_new_game_pressed():
 	$new_game.popup_centered()
