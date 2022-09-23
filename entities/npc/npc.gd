@@ -44,8 +44,9 @@ func start_coat_trade(player: PlayerBody):
 		player.start_dialog(self, dialog, self, "_coat")
 
 func process_player_distance(pos: Vector3):
+	var gr2 = Global.render_distance*Global.render_distance
 	var diff = pos - global_transform.origin
-	if diff.length_squared() > anim_range:
+	if diff.length_squared() > gr2*anim_range:
 		if anim.is_playing():
 			last_animation = anim.current_animation
 			anim.stop()

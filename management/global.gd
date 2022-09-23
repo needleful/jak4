@@ -37,6 +37,8 @@ var stats_temp := {}
 var ammo_drop_pity := randf()
 
 var gravity_stunned_bodies := {}
+var render_distance := 1.0
+var show_lowres := true
 
 func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS

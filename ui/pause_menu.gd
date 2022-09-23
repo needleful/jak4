@@ -91,6 +91,7 @@ func save_settings():
 	file = $foreground/audioOptions.save_to(file)
 	file = $foreground/controlOptions.save_to(file)
 	file = $foreground/displayOptions.save_to(file)
+	file = $foreground/graphicsOptions.save_to(file)
 
 	var res = file.save(save_path)
 	if res != OK:
@@ -135,6 +136,7 @@ func _on_audio_pressed():
 	$foreground/audioOptions.show()
 	$foreground/controlOptions.hide()
 	$foreground/displayOptions.hide()
+	$foreground/graphicsOptions.hide()
 	$foreground/audioOptions.grab_focus()
 
 func _on_controls_pressed():
@@ -142,6 +144,7 @@ func _on_controls_pressed():
 	$foreground/audioOptions.hide()
 	$foreground/controlOptions.show()
 	$foreground/displayOptions.hide()
+	$foreground/graphicsOptions.hide()
 	$foreground/controlOptions.grab_focus()
 	
 func _on_display_pressed():
@@ -149,8 +152,17 @@ func _on_display_pressed():
 	$foreground/audioOptions.hide()
 	$foreground/controlOptions.hide()
 	$foreground/displayOptions.show()
+	$foreground/graphicsOptions.hide()
 	$foreground/displayOptions.grab_focus()
 
+func _on_graphics_pressed():
+	set_level(2)
+	$foreground/audioOptions.hide()
+	$foreground/controlOptions.hide()
+	$foreground/displayOptions.hide()
+	$foreground/graphicsOptions.show()
+	$foreground/graphicsOptions.grab_focus()
+	
 
 func _on_new_game_pressed():
 	$new_game.popup_centered()

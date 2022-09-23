@@ -87,13 +87,13 @@ func grab_focus():
 func save_to(file: ConfigFile):
 	for property in options.get_property_list():
 		if property.usage & USAGE_FLAGS == USAGE_FLAGS:
-			file.set_value(name, property.name, options.get(property.name))
+			file.set_value(get_name(), property.name, options.get(property.name))
 	return file
 
 func load_from(file: ConfigFile):
 	if options.has_method("set_option"):
-		for property in file.get_section_keys(name):
+		for property in file.get_section_keys(get_name()):
 			options.set_option(property, file.get_value(name, property))
 	else:
-		for property in file.get_section_keys(name):
+		for property in file.get_section_keys(get_name()):
 			options.set(property, file.get_value(name, property))

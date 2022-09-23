@@ -76,9 +76,10 @@ func gravity_stun(_damage):
 	emit_signal("gravity_stun", true)
 
 func process_player_distance(origin: Vector3):
+	var gr2 = Global.render_distance*Global.render_distance
 	var sq_dist = (origin - global_transform.origin).length_squared()
-	var vis:bool = sq_dist < sq_distance_visible
-	var animated: bool = sq_dist < sq_distance_animated
+	var vis:bool = sq_dist < gr2*sq_distance_visible
+	var animated: bool = sq_dist < gr2*sq_distance_animated
 	if visible != vis:
 		visible = vis
 		set_physics_process(vis)

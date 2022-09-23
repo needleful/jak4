@@ -52,14 +52,15 @@ func _ready():
 	for c in get_children():
 		if c.name.begins_with("chunk"):
 			chunks.append(c)
-			var lowres_file: String = PATH_LOWRES % c.name
-			if ResourceLoader.exists(lowres_file):
-				var scn: PackedScene = load(lowres_file)
-				if scn:
-					var node = scn.instance()
-					node.name = "lowres"
-					lowres_chunks[c.name] = node
-					c.add_child(node)
+			if Global.show_lowres:
+				var lowres_file: String = PATH_LOWRES % c.name
+				if ResourceLoader.exists(lowres_file):
+					var scn: PackedScene = load(lowres_file)
+					if scn:
+						var node = scn.instance()
+						node.name = "lowres"
+						lowres_chunks[c.name] = node
+						c.add_child(node)
 	update_active_chunks(player_last_postion, true)
 
 func _process(delta):
