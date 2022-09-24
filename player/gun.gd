@@ -223,9 +223,11 @@ func show_weapon():
 
 func set_current_weapon(weapon: Node):
 	if current_weapon:
-		ref.remove_child(current_weapon)
+		current_weapon.stow()
 	current_weapon = weapon
-	ref.add_child(current_weapon)
+	if !current_weapon.is_inside_tree():
+		ref.add_child(current_weapon)
+	current_weapon.show()
 	holder.track_weapon(current_weapon.name)
 
 func fire():
@@ -324,6 +326,7 @@ func swap_to(id: String):
 	if !visible:
 		time_since_fired = 0
 		enable()
+	set_state(State.Free, true)
 
 func set_state(new_state, force := false):
 	#$debug/list/d1.text = 'State: '+State.keys()[new_state]
@@ -332,7 +335,13 @@ func set_state(new_state, force := false):
 	state_timer = 0.0
 	set_process(true)
 	set_process_input(true)
-	laser.visible = true
+	if current_weapon:
+		laser.visible = current_weapon.locks_on
+		if !current_weapon.locks_on:
+			gun_ik.interpolation = 0
+			gun_ik.stop()
+	else:
+		new_state = State.NoWeapon
 	match new_state:
 		State.NoWeapon:
 			set_process(false)
@@ -353,8 +362,9 @@ func set_state(new_state, force := false):
 			visible = true
 			holder.hold_gun(1.0)
 			holder.blend_gun(1.0)
-			gun_ik.interpolation = 1.0
-			gun_ik.start()
+			if current_weapon.locks_on:
+				gun_ik.interpolation = 1.0
+				gun_ik.start()
 		State.DelayedFire, State.ComboDelayFire:
 			visible = true
 			holder.blend_gun(1.0)
@@ -373,14 +383,17 @@ func set_state(new_state, force := false):
 			visible = true
 			holder.blend_gun(0.7)
 			holder.hold_gun(1.0)
-			gun_ik.start()
+			if current_weapon.locks_on:
+				gun_ik.start()
 		State.Firing:
 			if current_weapon.fire():
 				if !current_weapon.charge_fire:
 					holder.blend_gun(1.0)
 				holder.play_fire()
-				gun_ik.interpolation = 0.2
-				gun_ik.start()
+				
+				if current_weapon.locks_on:
+					gun_ik.interpolation = 0.2
+					gun_ik.start()
 				laser.visible = false
 				visible = true
 				holder.hold_gun(1.0)
@@ -397,8 +410,9 @@ func set_state(new_state, force := false):
 				if !current_weapon.charge_fire:
 					holder.blend_gun(1.0)
 				holder.play_fire()
-				gun_ik.interpolation = 0.2
-				gun_ik.start()
+				if current_weapon.locks_on:
+					gun_ik.interpolation = 0.2
+					gun_ik.start()
 				laser.visible = false
 				visible = true
 				holder.hold_gun(1.0)
@@ -410,7 +424,6 @@ func set_state(new_state, force := false):
 				state_before_fire = State.Free
 			else:
 				state_before_fire = state
-				
 		State.Charging:
 			visible = true
 			holder.hold_gun(1.0)

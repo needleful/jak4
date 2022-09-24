@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="CSGBox" type="CSGBox" parent="."]
+use_collision = true
+collision_mask = 257
+width = 49.0333
+depth = 45.5567
+
+[node name="CSGBox" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.47909, 16.6487 )
+
+[node name="CSGBox2" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5172, 2.33026, -1.00913 )
+
+[node name="CSGBox3" type="CSGBox" parent="CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.56698, 2.14067, -7.46149 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.0277 )
+extents = Vector3( 17.2227, 8.90787, 11.0572 )
+interior_enable = true
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.56805, 14.9059 )
+light_color = Color( 1.50196, 1.4, 0.0117647, 1 )
+omni_range = 4.04649
+
+[node name="OmniLight2" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.57501, 3.56805, 11.5407 )
+light_color = Color( 1.46667, 0.0862745, 1.50196, 1 )
+omni_range = 4.04649
+
+[node name="OmniLight3" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.22267, 3.56805, 11.2429 )
+light_color = Color( 0.0470588, 1.50196, 1.50196, 1 )
+omni_range = 4.04649
+
+[node name="player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.74121, 0.999999, 7.56822 )

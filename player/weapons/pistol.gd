@@ -1,13 +1,13 @@
-extends Spatial
+extends Weapon
 
 const BASE_DAMAGE := 5.0
 const BASE_RANGE := 60.0
-const time_firing := 0.15
 
 onready var cast_start := $cast_start
 onready var impact := $impact/Particles
-var charge_fire := false
-var infinite_ammo := false
+
+func _init():
+	time_firing = 0.15
 
 func fire() -> bool:
 	if !Global.count("pistol"):
@@ -31,9 +31,6 @@ func fire() -> bool:
 		impact.global_transform.origin = collision.position
 		impact.emitting = true
 	return true
-
-func stow():
-	pass
 
 func combo_fire():
 	var _x = $AnimationPlayer.connect("animation_finished", self, "_combo_fire_mid", [], CONNECT_ONESHOT)

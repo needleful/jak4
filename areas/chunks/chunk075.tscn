@@ -1,4 +1,4 @@
-[gd_scene load_steps=95 format=2]
+[gd_scene load_steps=97 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/junkyard.tscn" type="PackedScene" id=2]
@@ -353,11 +353,25 @@ albedo_color = Color( 12.1412, 0.588235, 0.290196, 1 )
 radius = 50.869
 height = 17.3781
 
+[sub_resource type="BoxShape" id=40]
+extents = Vector3( 3.60445, 4.57191, 9.74674 )
+
 [sub_resource type="SphereMesh" id=22]
 
 [sub_resource type="SpatialMaterial" id=23]
 flags_unshaded = true
 albedo_color = Color( 41.04, 1.74, 38.73, 1 )
+
+[sub_resource type="ShaderMaterial" id=39]
+shader = ExtResource( 67 )
+shader_param/uv_scale = 1.0
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity = 2.0
+shader_param/light_bias = -0.2
+shader_param/wall = ExtResource( 62 )
+shader_param/ground = ExtResource( 62 )
+shader_param/ceiling = ExtResource( 62 )
 
 [node name="chunk075" instance=ExtResource( 48 )]
 script = ExtResource( 1 )
@@ -367,26 +381,14 @@ lighting_preview = true
 material/0 = SubResource( 25 )
 material/1 = SubResource( 26 )
 
-[node name="static_collision" parent="foundry" index="0"]
-collision_layer = 257
-
 [node name="office" parent="." index="1"]
 material/0 = SubResource( 29 )
-
-[node name="static_collision" parent="office" index="0"]
-collision_layer = 257
 
 [node name="reactor" parent="." index="2"]
 material/0 = ExtResource( 65 )
 
-[node name="static_collision" parent="reactor" index="0"]
-collision_layer = 257
-
 [node name="furnace" parent="." index="3"]
 material/0 = SubResource( 27 )
-
-[node name="static_collision" parent="furnace" index="0"]
-collision_layer = 257
 
 [node name="cable" parent="." index="4"]
 material/0 = SubResource( 27 )
@@ -1099,10 +1101,15 @@ script = ExtResource( 53 )
 custom_fog = Color( 0.4, 0.364706, 0.364706, 1 )
 fog_start = 0.0
 fog_end = 100.0
+show_sun = false
 
 [node name="CollisionShape" type="CollisionShape" parent="area_foundry/env_override" index="0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 13.9144, 9.53674e-07 )
 shape = SubResource( 21 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="area_foundry/env_override" index="1"]
+transform = Transform( 0.999947, 0, 0.0102464, 0, 1, 0, -0.0102464, 0, 0.999947, -19.7642, 6.0694, -48.9428 )
+shape = SubResource( 40 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="area_foundry" index="26"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.797, 26.8499, -15.5 )
@@ -1159,6 +1166,16 @@ active = true
 [node name="power_thing3" parent="area_foundry" index="37" instance=ExtResource( 70 )]
 transform = Transform( -0.995106, 0, -0.098813, 0, 1, 0, 0.098813, 0, -0.995106, 136.959, 9.14792, 8.74042 )
 active = true
+
+[node name="entry" parent="." index="12"]
+material/0 = SubResource( 25 )
+material/1 = SubResource( 39 )
+
+[node name="stairs" parent="entry" index="0"]
+material/0 = SubResource( 25 )
+
+[node name="stairs2" parent="entry" index="1"]
+material/0 = SubResource( 25 )
 
 [connection signal="toggled" from="area_foundry/dswitch" to="area_foundry/crane1" method="_on_toggled"]
 [connection signal="toggled" from="area_foundry/dswitch2" to="area_foundry/crane2" method="_on_toggled"]

@@ -1,4 +1,4 @@
-extends Spatial
+extends Weapon
 class_name WaveShot
 
 const MAX_RADIUS = 8
@@ -8,10 +8,6 @@ const RADIUS_SEC = 4
 const MAX_RECOIL = 16
 const MIN_RECOIL = 5
 const RECOIL_SEC = 8
-
-var charge_fire := true
-var infinite_ammo := false
-var time_firing := 0.2
 
 var charging := false
 var charging_time := 0.0
@@ -23,6 +19,12 @@ onready var bubble := $bubble
 onready var scene = get_tree().current_scene
 
 var speed = 1.0 setget set_speed
+
+func _init():
+	charge_fire = true
+	infinite_ammo = false
+	time_firing = 0.2
+	locks_on = false
 
 func _ready():
 	bubble_pool = [bubble]
@@ -85,6 +87,7 @@ func stow():
 	$ChargeSound.stop()
 	$AnimationPlayer.stop()
 	charging = false
+	.stow()
 
 func _on_bubble_remove(node):
 	scene.remove_child(node)

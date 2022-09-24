@@ -35,6 +35,8 @@ var MIN_DIST_SQ_ENEMIES := 2000.0
 
 onready var env := $WorldEnvironment
 onready var env_tween := $env_tween
+onready var sun_tween := $sun_tween
+onready var sun := $DirectionalLight
 
 onready var fog_defaults := {
 	"color":env.environment.fog_color,
@@ -252,9 +254,23 @@ func _on_tutorial_swap_timeout():
 	else:
 		player.show_prompt(["combat_spin"], "Spin Kick")
 
-
 func get_wind_audio():
 	return $audio_wind
+
+func set_sun_enabled(enabled:bool):
+	sun_tween.remove_all()
+	sun_tween.interpolate_property(sun, "light_energy",
+		sun.light_energy,
+		1.0 if enabled else 0.0,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	
+	if !enabled and sun.visible:
+		sun_tween.interpolate_callback(sun, 
+			FOG_TWEEN_TIME, "hide")
+	elif enabled:
+		sun.show()
+	sun_tween.start()
 
 func set_fog_override(fog: Color, begin: float, end:float):
 	env_tween.remove_all()

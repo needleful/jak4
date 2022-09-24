@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=2]
+[gd_scene load_steps=124 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -93,6 +93,18 @@ extents = Vector3( 94.7559, 64.6563, 71.1916 )
 [sub_resource type="CapsuleShape" id=53]
 radius = 57.7926
 height = 286.731
+
+[sub_resource type="BoxShape" id=280]
+extents = Vector3( 31.7952, 42.5466, 8.12152 )
+
+[sub_resource type="BoxShape" id=281]
+extents = Vector3( 7.39042, 24.1323, 36.2517 )
+
+[sub_resource type="SphereShape" id=282]
+radius = 51.3584
+
+[sub_resource type="SphereShape" id=283]
+radius = 36.7582
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -1865,6 +1877,7 @@ collision_mask = 2
 script = ExtResource( 15 )
 wind_reduction_db = 80.0
 custom_fog = Color( 0.113725, 0.113725, 0.113725, 1 )
+show_sun = false
 override_music = true
 default_music = ExtResource( 56 )
 
@@ -1903,6 +1916,38 @@ shape = SubResource( 52 )
 [node name="CollisionShape9" type="CollisionShape" parent="cave_env" index="8"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -33.502, 190.772, -137.775 )
 shape = SubResource( 53 )
+
+[node name="CollisionShape12" type="CollisionShape" parent="cave_env" index="9"]
+transform = Transform( 0.997702, 0, 0.0677605, 0, 1, 0, -0.0677605, 0, 0.997702, -41.5183, 451.791, -210.139 )
+shape = SubResource( 280 )
+
+[node name="CollisionShape8" type="CollisionShape" parent="cave_env" index="10"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.7542, 410.765, -200.961 )
+shape = SubResource( 281 )
+
+[node name="CollisionShape13" type="CollisionShape" parent="cave_env" index="11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -97.7604, 475.512, -219.542 )
+shape = SubResource( 282 )
+
+[node name="CollisionShape14" type="CollisionShape" parent="cave_env" index="12"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -155.379, 475.512, -224.141 )
+shape = SubResource( 282 )
+
+[node name="CollisionShape15" type="CollisionShape" parent="cave_env" index="13"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -150.552, 410.391, -224.141 )
+shape = SubResource( 282 )
+
+[node name="CollisionShape16" type="CollisionShape" parent="cave_env" index="14"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4039, 410.391, -224.141 )
+shape = SubResource( 282 )
+
+[node name="CollisionShape17" type="CollisionShape" parent="cave_env" index="15"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -151.557, 506.054, -268.206 )
+shape = SubResource( 282 )
+
+[node name="CollisionShape11" type="CollisionShape" parent="cave_env" index="16"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.2967, 379.255, -143.781 )
+shape = SubResource( 283 )
 
 [node name="area_cave_entrance" type="MultiMeshSystem" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 141.345, 2.39909, 233.943 )
@@ -2063,7 +2108,6 @@ transform = Transform( -0.290805, 0, -0.956783, 0, 1, 0, 0.956783, 0, -0.290805,
 transform = Transform( -0.269908, 0, -0.962886, 0, 1, 0, 0.962886, 0, -0.269908, 39.4704, 40.0349, -39.656 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="area_main_encounter/tentpole" index="7"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 visible = false
 mesh = SubResource( 276 )
 skeleton = NodePath("")
@@ -2074,7 +2118,6 @@ transform = Transform( -0.897735, 0, 0.440535, 0, 1, 0, -0.440535, 0, -0.897735,
 reset_on_player_death = true
 
 [node name="MeshInstance2" type="MeshInstance" parent="area_main_encounter/tentpole3" index="7"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 visible = false
 mesh = SubResource( 276 )
 skeleton = NodePath("")

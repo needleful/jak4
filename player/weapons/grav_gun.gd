@@ -1,9 +1,4 @@
-extends Spatial
-
-const time_firing := 0.25
-
-var charge_fire := false
-var infinite_ammo := false
+extends Weapon
 
 # On fire, launches the explosive.
 # If fire is held for more than 0.25 seconds, it explodes on release
@@ -19,6 +14,9 @@ onready var scene = get_tree().current_scene
 var proj_pool : Array
 var expl_pool : Array
 var sound_pool : Array
+
+func _init():
+	time_firing = 0.35
 
 func _ready():
 	explosion.make_unique()

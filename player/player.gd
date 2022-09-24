@@ -193,7 +193,6 @@ var speed_factor := 1.0
 const SPEED_STAMINA_BOOST := 0.04
 var stamina_drain_factor := 1.0
 
-const TIME_RESET_GROUND := 0.01
 var can_air_spin := true
 var can_slide_lunge := true
 var can_wall_cling := true
@@ -406,6 +405,9 @@ func _input(event):
 			equip_previous()
 		elif event.is_action_pressed("ui_down"):
 			equip_next()
+	
+	if event.is_action_pressed("combat_spin"):
+		$ui/gameing/debug/stats/a1.text = "Spin!!"
 
 func _physics_process(delta):
 	if velocity.y < TERMINAL_VELOCITY:
@@ -449,7 +451,7 @@ func _physics_process(delta):
 			elif should_hover():
 				next_state = State.Hover
 			elif holding("mv_crouch"):
-				var speed = (velocity - get_floor_velocity()).slide(ground_normal)
+				var speed = (velocity).slide(ground_normal)
 				if speed.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
 				else:
@@ -578,11 +580,13 @@ func _physics_process(delta):
 				next_state = State.RollJump
 			elif after(TIME_ROLL_MIN) and pressed("combat_lunge"):
 				next_state = State.UppercutWindup
-			elif after(TIME_ROLL_MIN) and best_floor_dot < MIN_DOT_SLIDE:
+			elif after(TIME_ROLL_MIN) and after(TIME_COYOTE, empty(ground_area), 1):
 				next_state = State.Fall
 			else:
 				if after(TIME_ROLL_MAX):
-					if best_floor_dot < MIN_DOT_GROUND:
+					if empty(ground_area):
+						next_state = State.Fall
+					elif best_floor_dot < MIN_DOT_GROUND:
 						next_state = State.Slide
 					elif holding("mv_crouch"):
 						next_state = State.Crouch
@@ -832,9 +836,6 @@ func _physics_process(delta):
 		set_state(next_state)
 	match state:
 		State.Ground:
-			if after(TIME_RESET_GROUND):
-				can_air_spin = true
-				can_slide_lunge = true
 			accel(delta, desired_velocity*SPEED_RUN)
 			mesh.blend_run_animation(velocity.length()/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
@@ -964,6 +965,7 @@ func _physics_process(delta):
 
 func _process(_delta):
 	update_stamina()
+	$ui/gameing/debug/stats/a7.text = str(timers)
 
 func after(time: float, condition := true, id := 0):
 	if id >= timers.size():
@@ -997,7 +999,7 @@ func update_inventory(startup:= false):
 		on_item_changed(item, 0, Global.count(item), startup)
 	for item in UPGRADE_ITEMS:
 		on_item_changed(item, 0, Global.count(item), startup)
-	$ui/gameing/weapon/ammo_label.text = str(Global.count(current_weapon))
+	$ui/gameing/weapon/ammo/ammo_label.text = str(Global.count(current_weapon))
 
 func get_target_ref():
 	return global_transform.origin + (Vector3.UP*0.5 if is_crouching() else Vector3.UP*0.75)
@@ -1031,7 +1033,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				"wep_time_gun":
 					show_prompt(["wep_4"], tr("Time Gun"))
 	elif current_weapon == item:
-		$ui/gameing/weapon/ammo_label.text = str(count)
+		$ui/gameing/weapon/ammo/ammo_label.text = str(count)
 		if current_weapon and !$ui/gameing/weapon.visible:
 			show_ammo()
 	else:
@@ -1740,9 +1742,22 @@ func track_weapon(weapon: String):
 	$ui/gameing/weapon/ArrowRight.visible = gun.enabled_wep["wep_time_gun"]
 	current_weapon = weapon
 	$ui/gameing/weapon.icon = weapon
+	var ammo_ui = $ui/gameing/weapon/ammo
 	if gun.current_weapon:
-		$ui/gameing/weapon/ammo_label.visible = !gun.current_weapon.infinite_ammo
-		$ui/gameing/weapon/ammo_label.text = str(Global.count(weapon))
+		if "custom_ui" in gun.current_weapon:
+			ammo_ui.get_node("ammo_label").visible = false
+			if ammo_ui.has_node("custom_ui"):
+				ammo_ui.remove_child(ammo_ui.get_node('custom_ui'))
+			ammo_ui.add_child(gun.current_weapon.custom_ui)
+			gun.current_weapon.custom_ui.show()
+			gun.current_weapon.custom_ui.name = "custom_ui"
+		else:
+			if ammo_ui.has_node("custom_ui"):
+				ammo_ui.get_node('custom_ui').hide()
+			ammo_ui.get_node("ammo_label").visible = !gun.current_weapon.infinite_ammo
+			ammo_ui.get_node("ammo_label").text = str(Global.count(weapon))
+	else:
+		ammo_ui.hide()
 
 func show_ammo():
 	$ui/gameing/weapon.show()
@@ -1779,6 +1794,8 @@ func set_state(next_state: int):
 	# Entry effects
 	match next_state:
 		State.Ground:
+			can_air_spin = true
+			can_slide_lunge = true
 			can_wall_cling = true
 			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
