@@ -3,6 +3,7 @@ extends Control
 signal pause_toggled(paused)
 
 var level := 0
+onready var ui := get_parent().get_parent().get_parent()
 
 const save_path = "user://settings.cfg"
 
@@ -15,7 +16,7 @@ func _input(event):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event.is_action_pressed("ui_cancel"):
 		if level == 0:
-			get_parent().unpause()
+			ui.unpause()
 			get_tree().set_input_as_handled()
 		else:
 			set_level(level - 1)
@@ -119,14 +120,14 @@ func load_settings():
 		menu.load_from(file)
 
 func _on_resume_pressed():
-	get_parent().unpause()
+	ui.unpause()
 
 func _on_options_pressed():
 	set_level(1)
 
 func _on_reload_pressed():
-	get_parent().unpause()
 	Global.get_player().respawn()
+	ui.unpause()
 
 func _on_quit_pressed():
 	Global.save_sync()

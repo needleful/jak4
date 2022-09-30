@@ -63,6 +63,7 @@ const DECEL_AGAINST := 45.0
 const DECEL_WITH := 15.0
 
 const DECEL_DASH := 25.0
+const DECEL_APPLIED_GROUND := 0.1
 
 const ACCEL_CLIMB := 45.0
 const DECEL_CLIMB := 45.0
@@ -257,6 +258,7 @@ enum State {
 	FallingDeath,
 	GravityStun,
 	Hover,
+	WaveJump,
 	WaveJumpRoll,
 	Sitting,
 	Dash,
@@ -328,6 +330,8 @@ var choosing_item := false
 const TIME_ITEM_CHOOSE := 0.25
 var equipment_path_f := "res://items/usable/%s.gd"
 var timers := PoolRealArray()
+var applied_ground_velocity := Vector3.ZERO
+
 const TIMERS_MAX := 2
 
 const VISIBLE_ITEMS := [
@@ -466,6 +470,8 @@ func _physics_process(delta):
 				next_state = State.Fall
 			elif best_normal != Vector3.ZERO and after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
 				next_state = State.Slide
+			elif (empty(ground_area) or best_floor_dot < MIN_DOT_GROUND) and can_ledge_grab():
+				next_state = State.LedgeHang
 		State.PlaceFlag, State.GetItem:
 			if after(time_animation):
 				next_state = State.Ground
@@ -509,7 +515,7 @@ func _physics_process(delta):
 					next_state = State.Slide
 			elif after(TIME_DASH):
 				next_state = State.Fall
-		State.BaseJump, State.LedgeJump, State.HighJump, State.WallJump:
+		State.BaseJump, State.LedgeJump, State.HighJump, State.WallJump, State.WaveJump:
 			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif pressed("combat_spin"):
@@ -846,7 +852,7 @@ func _physics_process(delta):
 			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
 			mesh.blend_run_animation(desired_velocity.length())
 			rotate_to_velocity(desired_velocity)
-		State.BaseJump, State.HighJump:
+		State.BaseJump, State.HighJump, State.WaveJump:
 			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
 			rotate_to_velocity(desired_velocity)
 		State.Roll:
@@ -976,10 +982,10 @@ func after(time: float, condition := true, id := 0):
 	return timers[id] >= time
 
 func pressed(action:String):
-	return Input.is_action_just_pressed(action)
+	return Input.is_action_just_pressed(action) and !ui.recently_paused()
 
 func released(action:String):
-	return Input.is_action_just_released(action)
+	return Input.is_action_just_released(action) and !ui.recently_paused()
 
 func holding(action:String):
 	return Input.is_action_pressed(action)
@@ -1279,7 +1285,9 @@ func accel_climb(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 	velocity = move(velocity)
 
 func accel_air(delta: float, desired_velocity: Vector3, accel: float, gravity := GRAVITY):
-	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, accel*delta)
+	applied_ground_velocity = applied_ground_velocity.move_toward(Vector3.ZERO, delta*DECEL_APPLIED_GROUND)
+	var av := Engine.time_scale*applied_ground_velocity
+	var hvel := Vector3(velocity.x, av.y, velocity.z).move_toward(desired_velocity + av, accel*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	velocity += gravity*delta
@@ -1297,7 +1305,9 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, gravity :=
 			velocity.y = max(velocity.y, pre_slide_vel.y)
 
 func accel_low_gravity(delta, desired_velocity, gravity_factor):
-	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity, ACCEL*delta)
+	applied_ground_velocity = applied_ground_velocity.move_toward(Vector3.ZERO, delta*DECEL_APPLIED_GROUND)
+	var av := Engine.time_scale*applied_ground_velocity
+	var hvel := Vector3(velocity.x, av.y, velocity.z).move_toward(desired_velocity + av, ACCEL*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	velocity += gravity_factor*GRAVITY*delta
@@ -1437,7 +1447,7 @@ func can_ledge_grab() -> bool:
 		ledgeCastCenter.is_colliding()
 		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
 	# debug
-	if false:
+	if true:
 		if !ledgeCastCenter.is_colliding():
 			$jackie/debug_center.material_override.albedo_color = Color.red
 		elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
@@ -1457,10 +1467,10 @@ func can_ledge_grab() -> bool:
 		else:
 			$jackie/debug_right.material_override.albedo_color = Color.green
 	
-	return center and (left or right)
+	return center or (left or right)
 
-func snap_to_ledge():
-	var change = ledgeCastCenter.get_collision_point() - ledgeRef.global_transform.origin
+func snap_to_ledge(ledgeCast):
+	var change = ledgeCast.get_collision_point() - ledgeRef.global_transform.origin
 	global_translate(change)
 
 func should_slow_follow():
@@ -1668,8 +1678,11 @@ func _on_unlock_timer_timeout():
 func is_roll_jumping():
 	return state == State.RollJump or state == State.RollFall or state == State.WaveJumpRoll
 
-func wave_jump_roll():
-	set_state(State.WaveJumpRoll)
+func wave_jump():
+	if is_roll_jumping():
+		set_state(State.WaveJumpRoll)
+	elif state == State.WallCling or state == State.Fall or state == State.BonkFall:
+		set_state(State.WaveJump)
 
 func gravity_stun(dam):
 	var dead = take_damage(dam, Vector3.ZERO, self)
@@ -1769,6 +1782,11 @@ func shake_camera():
 	if cam_rig.aiming:
 		$camera_rig/cam_shake.play("shot_shake")
 
+func start_jump(vel:float):
+	can_wall_cling = true
+	emit_signal("jumped")
+	velocity += Vector3.UP*jump_factor*vel
+
 func set_state(next_state: int):
 	var i = 0
 	while i < min(timers.size(), TIMERS_MAX):
@@ -1779,7 +1797,7 @@ func set_state(next_state: int):
 	$crouching_col.disabled = !head_blocked
 	$standing_col.disabled = head_blocked
 	gun.unlock()
-	
+	applied_ground_velocity = get_floor_velocity()
 	# Exit effects
 	match state: 
 		State.PlaceFlag:
@@ -1800,17 +1818,13 @@ func set_state(next_state: int):
 			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
 			mesh.ground_transition("Walk")
-		State.Fall, State.LedgeFall:
+		State.Fall, State.LedgeFall, State.WaveJump:
 			mesh.transition_to("Fall")
 		State.BaseJump:
-			can_wall_cling = true
-			emit_signal("jumped")
-			velocity.y = jump_factor*JUMP_VEL_BASE
+			start_jump(JUMP_VEL_BASE)
 			mesh.play_jump()
 		State.HighJump:
-			can_wall_cling = true
-			emit_signal("jumped")
-			velocity.y = jump_factor*JUMP_VEL_HIGH
+			start_jump(JUMP_VEL_HIGH)
 			mesh.play_crouch_jump()
 		State.WallJump:
 			can_wall_cling = true
@@ -1819,26 +1833,20 @@ func set_state(next_state: int):
 		State.LedgeJump:
 			$crouching_col.disabled = true
 			$standing_col.disabled = true
-			can_wall_cling = true
-			emit_signal("jumped")
-			velocity.y += jump_factor*JUMP_VEL_LEDGE
+			start_jump(JUMP_VEL_LEDGE)
 			mesh.play_ledge_jump()
 		State.CrouchJump:
-			can_wall_cling = true
-			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			velocity.y = jump_factor*JUMP_VEL_CROUCH
+			start_jump(JUMP_VEL_CROUCH)
 			mesh.play_crouch_jump()
 		State.RollJump:
-			can_wall_cling = true
 			damaged_objects = []
-			emit_signal("jumped")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			var dir = mesh.global_transform.basis.z
 			velocity = speed_factor*dir*JUMP_VEL_ROLL_FORWARD
-			velocity.y = jump_factor*JUMP_VEL_ROLL
+			start_jump(JUMP_VEL_ROLL)
 			mesh.play_roll_jump(max_damage)
 			gun.lock()
 		State.Slide:
@@ -1863,8 +1871,16 @@ func set_state(next_state: int):
 			can_wall_cling = true
 			stamina_recharges = false
 			mesh.play_ledge_grab()
-			snap_to_ledge()
-			ledge = ledgeCastCenter.get_collider()
+			var ledgeCast = ledgeCastCenter
+			if !ledgeCast.is_colliding():
+				print("left")
+				ledgeCast = ledgeCastLeft
+			if !ledgeCast.is_colliding():
+				ledgeCast = ledgeCastRight
+			if !ledgeCast.is_colliding():
+				print_debug("Tried to ledge grab without a ledge!")
+			snap_to_ledge(ledgeCast)
+			ledge = ledgeCast.get_collider()
 			ledge_last_transform = ledge.global_transform
 			ledge_local_position = ledge.global_transform.xform_inv(global_transform.origin)
 			velocity = Vector3.ZERO

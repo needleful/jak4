@@ -22,6 +22,8 @@ func _init():
 	can_fly = true
 
 func _ready():
+	axis_lock_angular_x = true
+	axis_lock_angular_z = true
 	if coat:
 		$Armature/Skeleton/bug.set_surface_material(0, coat.generate_material())
 

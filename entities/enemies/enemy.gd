@@ -56,26 +56,9 @@ var last_attacker: Node
 var best_floor_normal : Vector3
 var contact_count := 0
 
-# Ammo drop logic
-const ammo_path_f := "res://items/ammo/%s_pickup.tscn"
-const WEIGHTS := {
-	"pistol": 1.12,
-	"wave_shot": 1.07,
-	"grav_gun": 1.0
-}
-const IDEAL_COUNT := {
-	"pistol": 100.0,
-	"wave_shot":70.0,
-	"grav_gun": 25.0
-}
-const COUNTS := {
-	"pistol": 10,
-	"wave_shot":7,
-	"grav_gun": 5
-}
-
 var starting_position: Transform
 var starting_health: int
+var starting_collision_layer : int
 
 func _init():
 	contact_monitor = true
@@ -88,8 +71,9 @@ func _ready():
 			var _x = Global.get_player().connect("died", self, "_on_player_died")
 			starting_position = global_transform
 			starting_health = health
+			starting_collision_layer = collision_layer
 		else:
-			print("Resetting ", name)
+			collision_layer = starting_collision_layer
 			linear_velocity = Vector3.ZERO
 			angular_velocity = Vector3.ZERO
 			health = starting_health
@@ -199,18 +183,8 @@ func die():
 		Global.ammo_drop_pity += drops_ammo
 		if Global.ammo_drop_pity >= 1:
 			Global.ammo_drop_pity -= 1
-			var best_wep := ""
-			var best_desire := -INF
-			for a in WEIGHTS.keys():
-				if Global.count("wep_"+a):
-					var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/IDEAL_COUNT[a])
-					if desire >= best_desire:
-						best_wep = a
-						best_desire = desire
-			if best_wep != "":
-				var tscn = load(ammo_path_f % best_wep) as PackedScene
-				var ammo = tscn.instance() as ItemPickup
-				ammo.quantity = COUNTS[best_wep]
+			var ammo = AmmoSpawner.get_random_ammo()
+			if ammo:
 				drop_item(ammo)
 	if !respawns:
 		Global.mark_picked(get_path())

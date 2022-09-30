@@ -2,17 +2,27 @@ extends Spatial
 
 signal activated
 signal toggled(on)
+signal insta_toggled(on)
 
 export(bool) var on := false
 export(float) var time_deactivate := 0.0
 export(bool) var persistent := false
+export(bool) var reset_upon_death := false
 
 onready var anim: AnimationPlayer = $AnimationPlayer
 
 func _ready():
 	if persistent and Global.has_stat(get_stat()):
 		on = Global.stat(get_stat())
+	if reset_upon_death:
+		var _x = Global.get_player().connect("died", self, "set_on", [on, true])
 	set_on(on, true)
+
+func activate():
+	set_on(true)
+
+func deactivate():
+	set_on(false, false, true)
 
 func _on_damaged(_damage, dir):
 	$AudioStreamPlayer3D.play()
@@ -28,17 +38,19 @@ func set_on(switch_on, force := false, auto := false):
 		anim.play("AlreadyOff")
 	elif switch_on:
 		emit_signal("activated")
-		emit_signal("toggled", true)
 		anim.play("SwitchOn")
 		if time_deactivate > 0:
 			$deactivate_timer.start(time_deactivate)
 	else:
-		emit_signal("toggled", false)
 		if auto and anim.has_animation("AutoDeactivate"):
 			anim.play("AutoDeactivate")
 		else:
 			anim.play("SwitchOff")
-	
+	if force:
+		emit_signal("insta_toggled", switch_on)
+	elif switch_on != on:
+		emit_signal("toggled", switch_on)
+		
 	on = switch_on
 	if persistent and !force:
 		Global.set_stat(get_stat(), on)

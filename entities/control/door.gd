@@ -1,6 +1,10 @@
 extends Node
 class_name Door
 
+signal opened
+signal closed
+signal toggled(value)
+
 export(int) var required_power := 1
 # Only for triggering doors through events persistently
 export(String) var tracked_stat = ""
@@ -27,7 +31,8 @@ func _ready():
 		open = false
 		add_power(required_power, true)
 	if deactivate_upon_death:
-		var _x = Global.get_player().connect("died", self, "clear_power")
+		var _x = Global.get_player().connect("died", self, "clear_power", [true])
+	assert(anim != null)
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:
@@ -43,11 +48,11 @@ func _on_activated():
 func _on_deactivated():
 	add_power(-1)
 
-func _on_toggled(active):
-	add_power(1 if active else -1)
+func _on_toggled(active, instant := false):
+	add_power(1 if active else -1, instant)
 
-func clear_power():
-	add_power(-power)
+func clear_power(instant := false):
+	add_power(-power, instant)
 
 func add_power(amount:= 1, instant := false):
 	power += amount
@@ -58,19 +63,27 @@ func add_power(amount:= 1, instant := false):
 	if open_stat != "":
 		Global.set_stat(open_stat, should_open)
 	
-	if is_inside_tree():
-		if should_open and !open:
-			if anim.has_animation("Activate"):
-				anim.play("Activate")
-			else:
-				anim.play_backwards("Deactivate")
+	if should_open and !open:
+		if anim.has_animation("Activate"):
+			anim.play("Activate")
 			if instant:
-				anim.advance(anim.current_animation_length())
-		elif !should_open and open:
-			if anim.has_animation("Deactivate"):
-				anim.play("Deactivate")
-			else:
-				anim.play_backwards("Activate")
+				anim.advance(anim.current_animation_length)
+		else:
+			anim.play_backwards("Deactivate")
 			if instant:
-				anim.advance(anim.current_animation_length())
+				anim.seek(0)
+		emit_signal("opened")
+		emit_signal("toggled", true)
+	elif !should_open and open:
+		print("deactivating")
+		if anim.has_animation("Deactivate"):
+			anim.play("Deactivate")
+			if instant:
+				anim.advance(anim.current_animation_length)
+		else:
+			anim.play_backwards("Activate")
+			if instant:
+				anim.seek(0)
+		emit_signal("closed")
+		emit_signal("toggled", false)
 	open = should_open

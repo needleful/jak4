@@ -6,7 +6,7 @@ export(float) var aim_speed_windup := 0.35
 export(float) var time_to_shoot := 3.0
 export(float) var flee_radius := 5.0
 export(float) var safe_radius := 10.0
-export(float) var bounce_impulse := 8.0
+export(float) var bounce_impulse := 5.0
 export(float) var bounce_impulse_h := 8.0
 export(float) var flee_acceleration := 40.0
 
@@ -20,7 +20,7 @@ const TIME_QUIT := 5.0
 const BOUNCE_WINDUP_TIME := 0.75
 const BOUNCE_TIME_TO_HITBOX := 0.1
 const BOUNCE_MIN_TIME := 0.25
-const BOUNCE_TURN_SPEED := 50.0
+const BOUNCE_TURN_SPEED := 300.0
 const DEFAULT_DISTANCE := 20.0
 
 const GRAV_STUN_TURN_SPEED := 10.0
@@ -44,7 +44,6 @@ func _ready():
 	aim_cast.add_excluded_object(self.get_rid())
 	if coat:
 		$Armature/Skeleton/gunner.set_surface_material(0, coat.generate_material())
-
 
 func _physics_process(delta):
 	state_timer += delta
@@ -120,6 +119,7 @@ func _physics_process(delta):
 						grounded = false
 				else:
 					look_at_target(BOUNCE_TURN_SPEED*delta)
+					look_at_target(BOUNCE_TURN_SPEED*delta)
 					if bounce_timer > BOUNCE_MIN_TIME and is_grounded():
 						anim.travel("Flee_Windup")
 						grounded = true
@@ -184,7 +184,7 @@ func fire():
 		+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
 	particles.emitting = true
 
-func set_state(new_ai, force := false):
+func set_state(new_ai, _force := false):
 	grounded = true
 	state_timer = 0.0
 	ai = new_ai
@@ -213,6 +213,7 @@ func set_state(new_ai, force := false):
 			anim.travel("Flee_Windup")
 			laser.hide()
 		AI.Dead:
+			collision_layer = 0
 			sleeping = false
 			anim.travel("Death")
 			laser.hide()

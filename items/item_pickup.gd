@@ -13,6 +13,7 @@ export(bool) var persistent := true
 export(bool) var gravity = false
 export(String) var friendly_name = ""
 export(bool) var from_kill := false
+export(bool) var reset_on_player_death := false
 
 const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50
@@ -22,6 +23,8 @@ var fall_velocity := 0.0
 
 var anim: AnimationPlayer
 var sub_anim : AnimationPlayer
+onready var starting_transform := transform
+onready var starting_parent := get_parent()
 
 func _ready():
 	if preview:
@@ -40,6 +43,8 @@ func _ready():
 	if has_node("bug/AnimationPlayer"):
 		sub_anim = $bug/AnimationPlayer
 		sub_anim.seek(rand_range(0, sub_anim.current_animation_length))
+	if reset_on_player_death:
+		Global.get_player().connect("died", self, "_reset")
 
 func _physics_process(delta):
 	if gravity:
@@ -64,10 +69,17 @@ func _on_area_body_entered(body):
 			_x = Global.add_stat(friendly_name)
 	pick()
 
+func _reset():
+	starting_parent.add_child(self)
+	transform = starting_transform
+
 func pick():
 	emit_signal("picked")
 	emit_signal("picked_item", item_id)
-	queue_free()
+	if reset_on_player_death:
+		get_parent().remove_child(self)
+	else:
+		queue_free()
 
 func gravity_stun(_damage):
 	gravity = true

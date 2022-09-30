@@ -56,6 +56,8 @@ func _physics_process(delta):
 		# Look at player, return
 		camera.global_transform = camera.global_transform.looking_at(player.global_transform.origin, Vector3.UP)
 		return
+	var floor_v = player.get_floor_velocity()
+	yaw.global_translate(delta*floor_v*0.8)
 	#Camera Movement
 	var target: Vector3 = player.global_transform.origin
 	var pos: Vector3 = yaw.global_transform.origin

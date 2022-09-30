@@ -108,8 +108,7 @@ func _process(delta):
 			combo_fire()
 		else:
 			fire()
-		if player.is_roll_jumping():
-			player.wave_jump_roll()
+			player.wave_jump()
 	if !aiming && !charging():
 		time_since_fired += delta
 		if time_since_fired > TIME_HIDE:
@@ -189,7 +188,7 @@ func _process(delta):
 			target_dir = current_dir
 			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
 	# Aiming:
-	if locked_aim:
+	if locked_aim or !current_weapon.locks_on:
 		holder.aim_gun(Vector2.ZERO, aiming)
 	else:
 		var y_cur: Vector3 = holder.global_transform.basis.z

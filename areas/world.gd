@@ -3,7 +3,7 @@ extends Spatial
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 150
+const MIN_DIST_LOAD := 550
 const MIN_DIST_MUST_LOAD := 50
 const MIN_SQDIST_UPDATE := 10
 
@@ -116,7 +116,7 @@ func detect_enemies(_delta):
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:
 		var local : Vector3 = position - ch.global_transform.origin
-		var load_zone: AABB = ch.get_aabb().grow(MIN_DIST_LOAD)
+		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*MIN_DIST_LOAD)
 		var must_load_zone: AABB = ch.get_aabb().grow(MIN_DIST_MUST_LOAD)
 		
 		if load_zone.has_point(local):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
 [ext_resource path="res://player/ui.gd" type="Script" id=17]
 [ext_resource path="res://player/camera.gd" type="Script" id=18]
+[ext_resource path="res://ui/reset_bar.gd" type="Script" id=19]
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
@@ -98,12 +99,12 @@ height = 1.10324
 radius = 1.40098
 
 [sub_resource type="CapsuleShape" id=2]
-radius = 0.35
-height = 0.8
+radius = 0.3
+height = 0.9
 
 [sub_resource type="CapsuleShape" id=7]
-radius = 0.35
-height = 0.2
+radius = 0.3
+height = 0.3
 
 [sub_resource type="CapsuleShape" id=72]
 radius = 0.227975
@@ -855,15 +856,15 @@ tracks/0/keys = {
 bg_color = Color( 0, 0, 0, 0.745098 )
 
 [sub_resource type="SphereShape" id=66]
-radius = 0.35
+radius = 0.3
 
 [sub_resource type="CapsuleShape" id=8]
-radius = 0.32775
+radius = 0.28584
 height = 0.269648
 
 [sub_resource type="CapsuleShape" id=71]
-radius = 0.381165
-height = 0.602266
+radius = 0.340094
+height = 0.655353
 
 [sub_resource type="PrismMesh" id=12]
 size = Vector3( 0.2, 0.2, 0.2 )
@@ -902,52 +903,52 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23645, 0.947519, 0.346891 )
 
 [node name="debug_center" type="MeshInstance" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, 0, 1.72277, 0.2413 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72277, 0.432003 )
 visible = false
 material_override = SubResource( 44 )
 mesh = SubResource( 43 )
 
 [node name="debug_right" type="MeshInstance" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, -0.12, 1.68075, 0.223277 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 1.68075, 0.356493 )
 visible = false
 material_override = SubResource( 45 )
 mesh = SubResource( 43 )
 
 [node name="debug_left" type="MeshInstance" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 0.992422, 0.122874, 0, -0.122874, 0.992422, 0.12, 1.67863, 0.248642 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 1.67863, 0.381858 )
 visible = false
 material_override = SubResource( 46 )
 mesh = SubResource( 43 )
 
 [node name="leftHandCast" type="RayCast" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, 0.12, 1.65147, 0.25723 )
+transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0.17, 1.65147, 0.390446 )
 enabled = true
-cast_to = Vector3( 0, -0.5, 0 )
+cast_to = Vector3( 0, -0.35, 0 )
 
 [node name="rightHandCast" type="RayCast" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, -0.12, 1.65147, 0.25723 )
+transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, -0.17, 1.65147, 0.390446 )
 enabled = true
-cast_to = Vector3( 0, -0.5, 0 )
+cast_to = Vector3( 0, -0.35, 0 )
 
 [node name="centerCast" type="RayCast" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, -1.37238e-07, 2.69007e-07, 0, 0.890776, 0.454442, -3.01992e-07, -0.454442, 0.890776, 0, 1.70647, 0.255652 )
+transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0, 1.70647, 0.446355 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 
 [node name="ceilingCast" type="RayCast" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 0.991954, -0.126597, 0, 0.126597, 0.991954, -7.45068e-08, 1.01541, 0.133882 )
+transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02713, 0.200637 )
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 
 [node name="reference" type="Position3D" parent="jackie"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.39747 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.459121 )
 
 [node name="attack_lunge" type="Area" parent="jackie"]
 time_scale_response = false
@@ -1632,16 +1633,32 @@ stretch_mode = 6
 [node name="Timer" type="Timer" parent="ui/gameing/equipment"]
 one_shot = true
 
+[node name="reset_bar" type="ProgressBar" parent="ui/gameing"]
+visible = false
+anchor_left = 0.1
+anchor_top = 1.0
+anchor_right = 0.9
+anchor_bottom = 1.0
+margin_top = -50.0
+margin_bottom = -13.0
+max_value = 1.0
+value = 0.5
+percent_visible = false
+script = ExtResource( 19 )
+
+[node name="Label" type="Label" parent="ui/gameing/reset_bar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Resetting"
+align = 1
+valign = 1
+
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
 pause_mode = 1
 time_scale_response = false
 visible = false
 anchor_left = 0.572
 rect_min_size = Vector2( 500, 0 )
-
-[node name="pause_menu" parent="ui" instance=ExtResource( 9 )]
-time_scale_response = false
-visible = false
 
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
@@ -1656,8 +1673,13 @@ anchor_bottom = 1.0
 custom_styles/panel = SubResource( 65 )
 custom_styles/tabs_panel = SubResource( 5 )
 
+[node name="Options" parent="ui/status_menu/tabs" instance=ExtResource( 9 )]
+time_scale_response = false
+margin_top = 32.0
+
 [node name="Map" parent="ui/status_menu/tabs" instance=ExtResource( 16 )]
 time_scale_response = false
+visible = false
 show_behind_parent = true
 margin_top = 32.0
 
@@ -1751,19 +1773,22 @@ margin_top = 552.0
 margin_right = 455.0
 margin_bottom = 584.0
 
+[node name="post_pause_timer" type="Timer" parent="ui"]
+wait_time = 0.1
+one_shot = true
+
 [node name="groundArea" type="Area" parent="."]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32671, 0 )
-visible = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312543, 0 )
 collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="groundArea"]
 time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0408306, 0 )
 shape = SubResource( 66 )
 
 [node name="crouchHeadArea" type="Area" parent="."]
 time_scale_response = false
-visible = false
 collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
@@ -1773,7 +1798,6 @@ shape = SubResource( 8 )
 
 [node name="climbArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
-visible = false
 collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="climbArea"]
@@ -1783,7 +1807,6 @@ shape = SubResource( 71 )
 [node name="intention" type="Spatial" parent="."]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
-visible = false
 
 [node name="MeshInstance" type="MeshInstance" parent="intention"]
 time_scale_response = false
@@ -1828,7 +1851,6 @@ enabled = true
 [node name="hover_area" type="Area" parent="."]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.294071, 0 )
-visible = false
 collision_layer = 0
 
 [node name="CollisionShape" type="CollisionShape" parent="hover_area"]
@@ -1856,5 +1878,6 @@ script = ExtResource( 22 )
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
+[connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="unlock_timer" to="." method="_on_unlock_timer_timeout"]
