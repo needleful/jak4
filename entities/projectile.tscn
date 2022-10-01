@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://entities/projectile.gd" type="Script" id=1]
+[ext_resource path="res://entities/enemies/hitbox.gd" type="Script" id=2]
 
 [sub_resource type="SphereMesh" id=1]
 radius = 0.3
@@ -15,8 +16,11 @@ albedo_color = Color( 39.88, 19.18, 8.09, 1 )
 [sub_resource type="SphereShape" id=5]
 radius = 0.172073
 
+[sub_resource type="SphereShape" id=6]
+radius = 0.309293
+
 [node name="projectile" type="Area"]
-collision_layer = 4
+collision_layer = 0
 collision_mask = 13
 script = ExtResource( 1 )
 
@@ -26,5 +30,14 @@ material/0 = SubResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 5 )
+
+[node name="hitbox" type="KinematicBody" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 2 )
+source_path = NodePath("..")
+
+[node name="CollisionShape2" type="CollisionShape" parent="hitbox"]
+shape = SubResource( 6 )
 
 [connection signal="body_entered" from="." to="." method="_on_projectile_body_entered"]

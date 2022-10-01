@@ -63,7 +63,7 @@ const DECEL_AGAINST := 45.0
 const DECEL_WITH := 15.0
 
 const DECEL_DASH := 25.0
-const DECEL_APPLIED_GROUND := 0.1
+const DECEL_APPLIED_GROUND := 0.005
 
 const ACCEL_CLIMB := 45.0
 const DECEL_CLIMB := 45.0
@@ -840,43 +840,52 @@ func _physics_process(delta):
 				next_state = State.Fall
 	if next_state != State.None:
 		set_state(next_state)
+	
+	var av: Vector3 = Vector3.ZERO
+	if is_on_floor():
+		av = Vector3.ZERO
+		applied_ground_velocity = get_floor_velocity()
+	else:
+		applied_ground_velocity *= (1 - DECEL_APPLIED_GROUND)
+		av = Engine.time_scale*applied_ground_velocity
+	
 	match state:
 		State.Ground:
-			accel(delta, desired_velocity*SPEED_RUN)
-			mesh.blend_run_animation(velocity.length()/SPEED_RUN)
+			accel(delta, desired_velocity*SPEED_RUN, av)
+			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
 		State.Fall, State.LedgeFall:
-			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
-			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
-			mesh.blend_run_animation(desired_velocity.length())
+			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
+			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
 		State.BaseJump, State.HighJump, State.WaveJump:
-			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL_START)
+			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL_START)
 			rotate_to_velocity(desired_velocity)
 		State.Roll:
-			accel(delta, desired_velocity * SPEED_ROLL, ACCEL, ACCEL_STEER_ROLL, 0.0)
+			accel(delta, desired_velocity * SPEED_ROLL, av, ACCEL, ACCEL_STEER_ROLL, 0.0)
 			rotate_to_velocity(desired_velocity)
 		State.RollJump, State.RollFall, State.WallJump:
-			accel_air(delta, desired_velocity*SPEED_ROLL, ACCEL_ROLL_AIR)
+			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity)
 			rotate_to_velocity(desired_velocity)
 		State.BonkFall, State.Damaged:
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_ROLL)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_ROLL)
 			rotate_to_velocity(desired_velocity)
 		State.Crouch:
-			accel(delta, desired_velocity*SPEED_CROUCH)
-			mesh.blend_run_animation(velocity.length()/SPEED_CROUCH)
+			accel(delta, desired_velocity*SPEED_CROUCH, av)
+			mesh.blend_run_animation((velocity - av)/SPEED_CROUCH)
 			rotate_to_velocity(desired_velocity)
 		State.Climb:
 			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = best_normal
-			accel_climb(delta, desired_velocity*SPEED_CLIMB, best_normal)
-			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
+			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, best_normal)
+			mesh.blend_climb_animation((velocity - av)/SPEED_CLIMB, best_normal)
 			rotate_mesh(-best_normal)
 		State.CrouchJump, State.LedgeJump:
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.LedgeHang:
 			if ledge.global_transform != ledge_last_transform:
@@ -887,7 +896,7 @@ func _physics_process(delta):
 				ledge_last_transform = new_transform
 		State.Dash:
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*SPEED_DASH, DECEL_DASH)
+			accel_lunge(delta, desired_velocity*SPEED_DASH, av, DECEL_DASH)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
@@ -899,48 +908,48 @@ func _physics_process(delta):
 			):
 				gun.start_combo()
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*SPEED_LUNGE)
+			accel_lunge(delta, desired_velocity*SPEED_LUNGE, av)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
 			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = best_normal
-			accel(delta, desired_velocity*SPEED_RUN)
+			accel(delta, desired_velocity*SPEED_RUN, av)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.AirSpinKick:
-			accel_low_gravity(delta, desired_velocity*SPEED_RUN, 0.75)
+			accel_low_gravity(delta, desired_velocity*SPEED_RUN, av, 0.75)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
 		State.UppercutWindup:
-			accel(delta, 0.5*desired_velocity*SPEED_CROUCH)
+			accel(delta, 0.5*desired_velocity*SPEED_CROUCH, av)
 			rotate_to_velocity(desired_velocity)
 		State.Uppercut:
 			velocity += delta*GRAVITY*GRAVITY_BOOST_UPPERCUT
-			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 			damage_point(uppercut_hitbox, DAMAGE_UPPERCUT, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.DiveWindup:
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_DIVE_WINDUP)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_DIVE_WINDUP)
 			rotate_to_velocity(desired_velocity)
 		State.DiveStart:
 			velocity += damage_factor*delta*GRAVITY*GRAVITY_BOOST_DIVE
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.DiveEnd:
 			if !gun.in_combo() and damaged_objects.size() > 0:
 				gun.start_combo()
-			accel_slide(delta, desired_velocity*SPEED_RUN, best_normal)
+			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.Locked, State.PlaceFlag, State.GetItem, State.Sitting:
 			desired_velocity = Vector3.ZERO
-			mesh.blend_run_animation(velocity.length()/SPEED_RUN)
+			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
-			accel_air(delta, desired_velocity*SPEED_RUN, ACCEL)
+			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 		State.GravityStun:
 			velocity *= clamp(1.0 - delta, 0.1, 0.995)
-			accel_air(delta, desired_velocity*SPEED_CROUCH, ACCEL_GRAVITY_STUN, Vector3.UP*Global.gravity_stun_velocity)
+			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_GRAVITY_STUN, Vector3.UP*Global.gravity_stun_velocity)
 			rotate_to_velocity(desired_velocity)
 		State.Hover:
 			var grounded:bool = hover_area.get_overlapping_bodies().size() > 0
@@ -950,13 +959,13 @@ func _physics_process(delta):
 			accel_hover(delta, desired_velocity*SPEED_HOVER*hover_speed_factor, grounded)
 			rotate_to_velocity(desired_velocity)
 		State.WaveJumpRoll:
-			accel_air(delta, desired_velocity * SPEED_ROLL, ACCEL_ROLL_WAVE_JUMP)
+			accel_air(delta, desired_velocity * SPEED_ROLL, av, ACCEL_ROLL_WAVE_JUMP)
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.WallCling:
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
-			var hvel := velocity.move_toward(Vector3.ZERO, ACCEL_CLIMB)
+			var hvel := velocity.move_toward(av, ACCEL_CLIMB)
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
@@ -1185,7 +1194,7 @@ func update_equipment():
 			next_index -= ln
 		equipment.preview(values[index], values[prev_index], values[next_index])
 
-func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
+func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,
 		desired_velocity.y,
@@ -1210,6 +1219,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 		desired_velocity.y,
 		desired_velocity.z
 	]
+	desired_velocity += applied_ground
 	var hvel := velocity
 	if gravity != Vector3.ZERO:
 		hvel = hvel.slide(gravity.normalized())
@@ -1249,7 +1259,7 @@ func accel(delta: float, desired_velocity: Vector3, accel_normal: float = ACCEL,
 
 	velocity = move(velocity, true)
 
-func accel_climb(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
+func accel_climb(delta: float, desired_velocity: Vector3, applied_ground: Vector3, wall_normal: Vector3):
 	var gravity := Vector3.ZERO
 	if wall_normal != Vector3.ZERO:
 		var axis = Vector3.UP.cross(wall_normal).normalized()
@@ -1262,32 +1272,12 @@ func accel_climb(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 				$debug_climb.global_transform.origin + desired_velocity, wall_normal
 			)
 	$debug_climb/mesh/dog.transform.origin.y = desired_velocity.length()/10
-	var charge_accel = ACCEL_CLIMB
-	var charge: Vector3
-	var steer: Vector3
-	var vn = velocity.normalized()
-	if vn.is_normalized():
-		charge = desired_velocity.project(vn)
-		steer = desired_velocity.slide(vn)
-		if (charge.dot(velocity) > 0 
-			and charge.length() < velocity.length()
-		):
-			charge_accel = DECEL_CLIMB/speed_factor
-		else:
-			charge_accel = ACCEL_CLIMB
-	else:
-		charge = desired_velocity
-		steer = Vector3.ZERO
-	velocity += delta*(
-		(charge - velocity)/SPEED_RUN*charge_accel 
-		+ (steer*ACCEL_CLIMB) 
-		+ gravity )
+	desired_velocity += applied_ground
+	velocity = velocity.move_toward(desired_velocity, ACCEL_CLIMB) + delta*gravity
 	velocity = move(velocity)
 
-func accel_air(delta: float, desired_velocity: Vector3, accel: float, gravity := GRAVITY):
-	applied_ground_velocity = applied_ground_velocity.move_toward(Vector3.ZERO, delta*DECEL_APPLIED_GROUND)
-	var av := Engine.time_scale*applied_ground_velocity
-	var hvel := Vector3(velocity.x, av.y, velocity.z).move_toward(desired_velocity + av, accel*delta)
+func accel_air(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel: float, gravity := GRAVITY):
+	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity + applied_ground, accel*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	velocity += gravity*delta
@@ -1304,10 +1294,8 @@ func accel_air(delta: float, desired_velocity: Vector3, accel: float, gravity :=
 		else:
 			velocity.y = max(velocity.y, pre_slide_vel.y)
 
-func accel_low_gravity(delta, desired_velocity, gravity_factor):
-	applied_ground_velocity = applied_ground_velocity.move_toward(Vector3.ZERO, delta*DECEL_APPLIED_GROUND)
-	var av := Engine.time_scale*applied_ground_velocity
-	var hvel := Vector3(velocity.x, av.y, velocity.z).move_toward(desired_velocity + av, ACCEL*delta)
+func accel_low_gravity(delta: float, desired_velocity: Vector3, applied_ground: Vector3, gravity_factor: float):
+	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity + applied_ground, ACCEL*delta)
 	velocity.x = hvel.x
 	velocity.z = hvel.z
 	velocity += gravity_factor*GRAVITY*delta
@@ -1315,7 +1303,7 @@ func accel_low_gravity(delta, desired_velocity, gravity_factor):
 	velocity = move(velocity)
 	velocity.y = min(pre_slide_vel.y, velocity.y)
 
-func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
+func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector3, wall_normal: Vector3):
 	if desired_velocity.dot(wall_normal) < 0:
 		desired_velocity = desired_velocity.slide(wall_normal)
 	var angle = Vector3.UP.angle_to(wall_normal)
@@ -1323,6 +1311,7 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 	if axis != Vector3.ZERO:
 		desired_velocity = desired_velocity.rotated(axis, angle)
 	desired_velocity.y = -1
+	desired_velocity += applied_ground
 	
 	var hvel := velocity
 	hvel = hvel.move_toward(desired_velocity, ACCEL_SLIDE*delta)
@@ -1333,13 +1322,9 @@ func accel_slide(delta: float, desired_velocity: Vector3, wall_normal: Vector3):
 		hvel.z)
 	velocity = move(velocity + delta*GRAVITY)
 
-func accel_lunge(delta, desired_velocity, decel := DECEL_KICK):
-	var hvel = velocity
-	hvel.y = 0
-	desired_velocity.y = 0
-	hvel = hvel.move_toward(desired_velocity, STEER_KICK*delta)
+func accel_lunge(delta: float, desired_velocity: Vector3, applied_ground: Vector3, decel := DECEL_KICK):
 	var v2 := move(velocity + GRAVITY*delta, true)
-	velocity = v2.move_toward(Vector3.ZERO, decel*delta)
+	velocity = v2.move_toward(applied_ground, decel*delta)
 	velocity.y = v2.y
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
@@ -1361,7 +1346,7 @@ func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
 		var vel_correction = -velocity.y*HOVER_CORRECTION_VELOCITY
 		var slope_correction = -hvel.dot(hover_normal)*HOVER_CORRECTION_SLOPE
 		h *= height_correction + vel_correction + slope_correction
-	
+		
 	var charge: Vector3
 	var steer: Vector3
 	var charge_accel : float
@@ -1525,8 +1510,6 @@ func damage(node: Node, damage: int, dir: Vector3):
 		node.take_damage(damage_factor*damage, dir, self)
 
 func move(p_vel: Vector3, grounded:= false) -> Vector3:
-	#global_translate(p_vel.slide(Vector3.UP))
-	#return Vector3.ZERO
 	if grounded:
 		return move_and_slide_with_snap(p_vel,
 			Vector3.DOWN*0.06125,
@@ -1678,11 +1661,14 @@ func _on_unlock_timer_timeout():
 func is_roll_jumping():
 	return state == State.RollJump or state == State.RollFall or state == State.WaveJumpRoll
 
-func wave_jump():
+func wave_jump(recoil: Vector3):
 	if is_roll_jumping():
 		set_state(State.WaveJumpRoll)
 	elif state == State.WallCling or state == State.Fall or state == State.BonkFall:
 		set_state(State.WaveJump)
+	if !is_grounded():
+		velocity.y = 0
+		velocity += recoil
 
 func gravity_stun(dam):
 	var dead = take_damage(dam, Vector3.ZERO, self)
@@ -1797,7 +1783,6 @@ func set_state(next_state: int):
 	$crouching_col.disabled = !head_blocked
 	$standing_col.disabled = head_blocked
 	gun.unlock()
-	applied_ground_velocity = get_floor_velocity()
 	# Exit effects
 	match state: 
 		State.PlaceFlag:

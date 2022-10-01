@@ -14,6 +14,11 @@ const INACTIVE_TIME := 0.1
 const TOTAL_TIME := 6.0
 
 var timer := 0.0
+var hitbox : Node
+
+func _ready():
+	if has_node("hitbox"):
+		hitbox = $hitbox
 
 func fire(p_target: Spatial, p_offset := Vector3.ZERO):
 	var p = Global.get_player() as PlayerBody
@@ -61,6 +66,8 @@ func _on_deletion_timer_timeout():
 	queue_free()
 
 func _on_projectile_body_entered(body):
+	if body == hitbox:
+		return
 	if timer > INACTIVE_TIME:
 		dir_damage(body)
 		queue_free()

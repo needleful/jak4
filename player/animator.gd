@@ -96,13 +96,16 @@ func _on_time_scale_changed(_time_scale):
 	print("time shift")
 	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
 
-func blend_run_animation(speed: float):
+func blend_run_animation(movement: Vector3):
+	var speed: float = Vector2(movement.x, movement.z).length()
+	if speed < 0.01:
+		speed = 0
 	anim["parameters/WholeBody/Walk/blend_position"] = speed
 	anim["parameters/WholeBody/Crouch/blend_position"] = speed
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
-	if velocity.length_squared() < 0.005:
+	if velocity.length_squared() < 0.05:
 		velocity = Vector3.ZERO
 	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(velocity.x, velocity.y)
 
@@ -333,7 +336,3 @@ func release_item() -> Spatial:
 		h.get_parent().remove_child(h)
 	held_item = null
 	return h
-
-func apply_velocity(vel: Vector3):
-	player.velocity.y = 0
-	player.velocity += vel

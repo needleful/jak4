@@ -108,7 +108,7 @@ func _process(delta):
 			combo_fire()
 		else:
 			fire()
-			player.wave_jump()
+			player.wave_jump(current_weapon.recoil)
 	if !aiming && !charging():
 		time_since_fired += delta
 		if time_since_fired > TIME_HIDE:
@@ -396,8 +396,6 @@ func set_state(new_state, force := false):
 				laser.visible = false
 				visible = true
 				holder.hold_gun(1.0)
-				if "recoil" in current_weapon:
-					holder.apply_velocity(current_weapon.recoil)
 			time_firing = current_weapon.time_firing
 			time_since_fired = 0
 			if state == State.DelayedFire or state == State.Charging:

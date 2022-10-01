@@ -44,7 +44,7 @@ func _ready():
 		sub_anim = $bug/AnimationPlayer
 		sub_anim.seek(rand_range(0, sub_anim.current_animation_length))
 	if reset_on_player_death:
-		Global.get_player().connect("died", self, "_reset")
+		var _x = Global.get_player().connect("died", self, "_reset")
 
 func _physics_process(delta):
 	if gravity:
