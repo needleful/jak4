@@ -36,11 +36,7 @@ var give_up_timer := 0.0
 
 var ground_normal := Vector3.UP
 
-
-export(NodePath) var animation_node = NodePath("crawly/AnimationPlayer")
-export(NodePath) var mesh_node = NodePath("crawly/Armature/Skeleton/crawly")
-
-onready var anim := get_node(animation_node)
+onready var anim := $AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
 onready var awareness := $awareness
 onready var ref_target = $ref_target
@@ -50,8 +46,6 @@ func _ready():
 		awareness = $custom_awareness as Area
 		if !awareness:
 			print_debug("ERROR: Area expected for ", $custom_awareness.get_path())
-	if coat:
-		get_node(mesh_node).material_override = coat.generate_material()
 
 func _physics_process(delta):
 	state_timer += delta

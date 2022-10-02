@@ -896,7 +896,7 @@ func _physics_process(delta):
 				ledge_last_transform = new_transform
 		State.Dash:
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*SPEED_DASH, av, DECEL_DASH)
+			accel_lunge(delta, av, DECEL_DASH)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
@@ -908,7 +908,7 @@ func _physics_process(delta):
 			):
 				gun.start_combo()
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, desired_velocity*SPEED_LUNGE, av)
+			accel_lunge(delta, av)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
@@ -1326,7 +1326,7 @@ func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector
 		hvel.z)
 	velocity = move(velocity + delta*GRAVITY)
 
-func accel_lunge(delta: float, desired_velocity: Vector3, applied_ground: Vector3, decel := DECEL_KICK):
+func accel_lunge(delta: float, applied_ground: Vector3, decel := DECEL_KICK):
 	var v2 := move(velocity + GRAVITY*delta, true)
 	velocity = v2.move_toward(applied_ground, decel*delta)
 	velocity.y = v2.y

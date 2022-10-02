@@ -14,10 +14,6 @@ onready var guns = [$gun0, $gun1, $gun2, $gun3]
 func _init():
 	damaged_speed = 0.0
 
-func _ready():
-	if coat:
-		$turtle.set_surface_material(0, coat.generate_material())
-
 func _physics_process(delta):
 	state_timer += delta
 	match ai:

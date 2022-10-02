@@ -11,9 +11,13 @@ export(float, 0.0, 1.0) var drops_ammo := 0.3
 export(Coat.Rarity) var minimum_rarity = Coat.Rarity.Common
 export(Coat.Rarity) var maximum_rarity = Coat.Rarity.Rare
 export(int) var gem_drop_max = 5
+export(NodePath) var mesh_node : NodePath
 export(int) var health := 15
 export(int) var attack_damage := 10
 export(bool) var shielded := false setget set_shielded
+export(bool) var cloaked := false
+
+const cloaked_material : Material = preload("res://material/characters/cloaked.material")
 
 const GRAV_DECAY := 1.0
 const projectile: PackedScene = preload("res://entities/projectile.tscn")
@@ -83,11 +87,19 @@ func _ready():
 			target = null
 	if drops_coat:
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)
+		get_node(mesh_node).set_surface_material(0, coat.generate_material())
+
+	if cloaked:
+		if is_in_group("target"):
+			remove_from_group("target")
+		var material: Material = get_node(mesh_node).get_surface_material(0)
+		material.next_pass = cloaked_material
 	call_deferred("set_state", AI.Idle, true)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
 		queue_free()
+		set_physics_process(false)
 		return
 	set_shielded(shielded)
 	var p = get_parent()

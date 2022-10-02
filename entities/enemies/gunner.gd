@@ -42,8 +42,6 @@ onready var anim_tree := $AnimationTree
 
 func _ready():
 	aim_cast.add_excluded_object(self.get_rid())
-	if coat:
-		$Armature/Skeleton/gunner.set_surface_material(0, coat.generate_material())
 
 func _physics_process(delta):
 	state_timer += delta

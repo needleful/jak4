@@ -99,15 +99,20 @@ func detect_enemies(_delta):
 	var were_present := enemies_present
 	enemies_present = false
 	var air_enemies_present = false
+	var cloaked_enemies_present = false
 	for e in get_tree().get_nodes_in_group("enemy"):
 		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
 		if dist_squared < MIN_DIST_SQ_ENEMIES:
 			if "can_fly" in e and e.can_fly:
 				air_enemies_present = true
+			elif e.cloaked:
+				cloaked_enemies_present = true
 			else:
 				enemies_present = true
 	
 	Music.in_combat = enemies_present
+	if cloaked_enemies_present and Global.count("wep_pistol") and !Global.stat("cloaked_combat_tutorial"):
+		show_cloaked_combat_tutorial()
 	if air_enemies_present and !Global.stat("air_combat_tutorial"):
 		show_air_combat_tutorial()
 	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):
@@ -241,6 +246,13 @@ func show_combat_tutorial():
 	player.show_prompt(["combat_lunge"], "Lunge Kick")
 	air_tutorial = false
 	$tutorial_swap.start()
+
+func show_cloaked_combat_tutorial():
+	var _x = Global.add_stat("cloaked_combat_tutorial")
+	if Global.using_gamepad:
+		player.show_prompt(["combat_aim_toggle"], "Toggle aim")
+	else:
+		player.show_prompt(["combat_aim"], "Aim")
 
 func show_air_combat_tutorial():
 	var _x = Global.add_stat("air_combat_tutorial")
