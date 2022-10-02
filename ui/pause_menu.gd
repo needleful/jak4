@@ -33,6 +33,7 @@ func set_active(active):
 	set_process_input(active)
 
 func set_level(l: int):
+	print("level: ", l)
 	if l < 0:
 		l = 0
 	if l > 2:
@@ -86,7 +87,6 @@ func set_level(l: int):
 					if c is Control:
 						c.focus_mode = Control.FOCUS_NONE
 				$foreground/mainOptions/AnimationPlayer.play("fade_out")
-				
 	level = l
 
 func save_settings():

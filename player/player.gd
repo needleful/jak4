@@ -953,6 +953,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.Hover:
 			var grounded:bool = hover_area.get_overlapping_bodies().size() > 0
+			$ui/gameing/debug/stats/a8.text = str(grounded)
 			if hover_floor_finder.is_colliding():
 				hover_normal = hover_floor_finder.get_collision_normal()
 				hover_cast.cast_to = -hover_normal
@@ -1093,6 +1094,9 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				energy_bar.visible = energy > 0
 			"hover_speed_up":
 				hover_speed_factor = 1.0 + HOVER_SPEED_BOOST*count
+			"hover_scooter":
+				if !startup:
+					show_prompt(["hover_toggle"], "Use hover-scooter")
 			_:
 				var old_item_count := equipment_inventory.size()
 				if ResourceLoader.exists(equipment_path_f % item):
@@ -1666,7 +1670,7 @@ func wave_jump(recoil: Vector3):
 		set_state(State.WaveJumpRoll)
 	elif state == State.WallCling or state == State.Fall or state == State.BonkFall:
 		set_state(State.WaveJump)
-	if !is_grounded():
+	if state == State.Slide or !is_grounded():
 		velocity.y = 0
 		velocity += recoil
 

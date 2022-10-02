@@ -81,14 +81,14 @@ func _ready():
 			var state := PhysicsServer.body_get_direct_state(get_rid())
 			state.transform = starting_position
 			target = null
+	if drops_coat:
+		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 	call_deferred("set_state", AI.Idle, true)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
 		queue_free()
 		return
-	if drops_coat:
-		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 	set_shielded(shielded)
 	var p = get_parent()
 	while p:
@@ -200,7 +200,16 @@ func drop_item(item: ItemPickup):
 func take_damage(damage: int, dir: Vector3, source: Node):
 	if is_dead():
 		return
-	var dead = subtract_health(damage, dir)
+	
+	if shielded:
+		var d := dir.dot(global_transform.basis.z)
+		if d < min_dot_shielded_damage:
+			# TODO: shield blocking state here?
+			return
+	health -= damage
+	
+	var dead := health <= 0
+	
 	apply_central_impulse(mass*damage*dir*damaged_speed)
 	if dead:
 		set_state(AI.Dead)
@@ -212,21 +221,13 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 			set_state(AI.Damaged)
 
 func gravity_stun(dam):
-	var dead = subtract_health(dam, Vector3.UP)
+	health -= dam
+	var dead := health <= 0
 	apply_central_impulse(mass*dam*Vector3.UP*gravity_stun_speed)
 	if dead:
 		set_state(AI.GravityStunDead)
 	else:
 		set_state(AI.GravityStun)
-
-func subtract_health(damage:int, dir: Vector3) -> bool:
-	if shielded:
-		var d := dir.dot(global_transform.basis.z)
-		if d < min_dot_shielded_damage:
-			# TODO: play shielded effect
-			return health <= 0
-	health -= damage
-	return health <= 0
 
 func is_grounded():
 	return best_floor_normal.y > 0

@@ -27,11 +27,11 @@ func set_hq_shadows(hq):
 	high_quality_shadows = hq
 	if high_quality_shadows: 
 		ProjectSettings["rendering/quality/directional_shadow/size"] = 8192
-		ProjectSettings["rendering/quality/directional_shadow/size"] = 4096
+		ProjectSettings["rendering/quality/shadow_atlas/size"] = 4096
 		ProjectSettings["rendering/quality/shadows/filter_mode"] = 1
 	else:
 		ProjectSettings["rendering/quality/directional_shadow/size"] = 2048
-		ProjectSettings["rendering/quality/directional_shadow/size"] = 1024
+		ProjectSettings["rendering/quality/shadow_atlas/size"] = 1024
 		ProjectSettings["rendering/quality/shadows/filter_mode"] = 0
 	if is_inside_tree() and get_tree().current_scene.has_node("DirectionalLight"):
 		var d:DirectionalLight = get_tree().current_scene.get_node("DirectionalLight")

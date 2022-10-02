@@ -4,22 +4,17 @@
 code = "shader_type spatial;
 render_mode cull_back, depth_draw_opaque, world_vertex_coords, async_hidden;
 
-
 uniform sampler2D wall: hint_albedo;
-uniform sampler2D ground_red: hint_albedo;
+uniform sampler2D ground_green: hint_albedo;
 uniform sampler2D ground_black: hint_albedo;
-uniform sampler2D ground_filter;
 uniform sampler2D ceiling: hint_albedo;
 uniform float uv_scale = 0.125;
 uniform float uv_scale_black = 0.17;
-uniform float uv_scale_filter = 0.092;
-uniform float uv_scale_filter2 = 0.16;
 uniform float power = 5.0;
 uniform float softness = 0.5;
 uniform float specularity_ground: hint_range(1, 32) = 1.0;
 uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
-uniform float light_bias = 0.0;
 
 varying vec3 position;
 varying vec3 normal;
@@ -39,13 +34,10 @@ void fragment() {
 	
 	float y_pow = sign(n.y)*pow(abs(n.y), power);
 	
-	vec4 color_red = texture(ground_red, position.xz*uv_scale);
+	vec4 color_green = texture(ground_green, position.xz*uv_scale);
 	vec4 color_black = texture(ground_black, position.xz*uv_scale_black);
-	float color_filter = texture(ground_filter, position.xz*uv_scale_filter).r;
-	float color_filter2 = texture(ground_filter, position.xz*uv_scale_filter2).r;
-	float f = 0.5*(color_filter + color_filter2);
-	float ground_mix = smoothstep(0, 0.05, COLOR.r - 0.6*f);
-	vec4 color_y_up = mix( color_black, color_red,
+	float ground_mix = COLOR.g;
+	vec4 color_y_up = mix( color_black, color_green,
 		ground_mix);
 		
 	vec4 color =
@@ -69,7 +61,7 @@ void light()
 	}
 	else {
 		float spec = specularity/32.0;
-		float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
+		float light = smoothstep(0, softness, dot(NORMAL, LIGHT));
 		DIFFUSE_LIGHT += 0.4*(1.0-spec) * light * LIGHT_COLOR * ATTENUATION * ALBEDO;
 		
 		// Specular
@@ -80,5 +72,4 @@ void light()
 		float intensity = blinn; 
 		DIFFUSE_LIGHT += LIGHT_COLOR * intensity * ATTENUATION * ALBEDO;
 	}
-}
-"
+}"

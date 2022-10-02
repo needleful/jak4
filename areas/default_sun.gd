@@ -11,8 +11,8 @@ const orthogonal_shadow_distance = 30.0
 
 func set_distance(d):
 	distance = d
-	directional_shadow_split_1 = lerp(0.05, d_split1, clamp(distance, 0, 1))
-	directional_shadow_split_2 = lerp(0.5, d_split2, clamp(distance, 0, 1))
+	directional_shadow_split_1 = lerp(0.1, d_split1, clamp(distance, 0, 1))
+	directional_shadow_split_2 = lerp(0.4, d_split2, clamp(distance, 0, 1))
 	apply_distance()
 
 func set_quality(q):

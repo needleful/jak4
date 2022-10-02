@@ -3,8 +3,8 @@ extends Spatial
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 550
-const MIN_DIST_MUST_LOAD := 50
+const MIN_DIST_LOAD := 300
+const MIN_DIST_MUST_LOAD := 30
 const MIN_SQDIST_UPDATE := 10
 
 const UNLOAD_TIME := 10.0

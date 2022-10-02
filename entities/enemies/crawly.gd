@@ -18,7 +18,9 @@ export(AudioStream) var quit_audio
 export(AudioStream) var attack_audio
 
 export(float) var windup_time := .5
-export(float) var attack_time := 0.75
+export(float) var attack_charge_time := 0.1
+export(float) var attack_time := 0.3
+export(float) var attack_end_time := 0.75
 export(float) var alert_time := 2.0
 export(float) var damaged_time := 1.0
 export(float) var cooldown_time := 2.0
@@ -81,7 +83,7 @@ func _physics_process(delta):
 			if state_timer > windup_time:
 				next = AI.Attacking
 		AI.Attacking:
-			if state_timer > attack_time:
+			if state_timer > attack_end_time:
 				next = AI.Chasing
 		AI.Damaged:
 			if state_timer > damaged_time:
@@ -98,7 +100,8 @@ func _physics_process(delta):
 		AI.Attacking:
 			look_at_target(turn_speed_attacking, 1.5)
 			walk(lunge_speed, accel_lunge, deceleration)
-			damage_direction($hurtbox, global_transform.basis.z)
+			if state_timer > attack_charge_time and state_timer < attack_time:
+				damage_direction($hurtbox, global_transform.basis.z)
 		AI.Chasing:
 			ground_normal = get_closest_floor()
 			if ground_normal.y > MIN_DOT_UP:
