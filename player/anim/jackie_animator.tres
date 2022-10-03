@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=172 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=175 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=110]
 animation = "AimF"
@@ -140,6 +140,9 @@ animation = "Dive_Start"
 
 [sub_resource type="AnimationNodeAnimation" id=9]
 animation = "Fall-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=254]
+animation = "HighJump"
 
 [sub_resource type="AnimationNodeAnimation" id=138]
 animation = "Hover_Idle-loop"
@@ -546,6 +549,15 @@ xfade_time = 0.05
 [sub_resource type="AnimationNodeStateMachineTransition" id=253]
 xfade_time = 0.15
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=255]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=256]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.1
+priority = 2
+
 [sub_resource type="AnimationNodeStateMachine" id=6]
 states/BaseJump/node = SubResource( 12 )
 states/BaseJump/position = Vector2( 729, -82 )
@@ -562,11 +574,13 @@ states/Damaged/position = Vector2( 18, -331 )
 states/Dash/node = SubResource( 159 )
 states/Dash/position = Vector2( 1201, -121 )
 states/DiveEnd/node = SubResource( 53 )
-states/DiveEnd/position = Vector2( 336, -257 )
+states/DiveEnd/position = Vector2( 119, 416 )
 states/DiveStart/node = SubResource( 54 )
-states/DiveStart/position = Vector2( 586, 408 )
+states/DiveStart/position = Vector2( 363, 416 )
 states/Fall/node = SubResource( 9 )
 states/Fall/position = Vector2( 126, -53 )
+states/HighJump/node = SubResource( 254 )
+states/HighJump/position = Vector2( 126, 148 )
 states/Hover/node = SubResource( 142 )
 states/Hover/position = Vector2( 108, -449 )
 states/LedgeGrab/node = SubResource( 25 )
@@ -595,12 +609,12 @@ states/Walk/node = SubResource( 178 )
 states/Walk/position = Vector2( 269, -649 )
 states/WallCling/node = SubResource( 170 )
 states/WallCling/position = Vector2( 985, -257 )
-transitions = [ "BaseJump", "Fall", SubResource( 14 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Roll", "Uppercut", SubResource( 49 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "Fall", "Damaged", SubResource( 135 ), "Damaged", "Fall", SubResource( 137 ), "Hover", "Fall", SubResource( 144 ), "Fall", "Hover", SubResource( 145 ), "Sit_Floor", "Sitting_Floor", SubResource( 155 ), "Sitting_Floor", "BaseJump", SubResource( 157 ), "Sitting_Floor", "Fall", SubResource( 158 ), "Fall", "Dash", SubResource( 161 ), "Dash", "Fall", SubResource( 162 ), "RollJump", "Dash", SubResource( 163 ), "Dash", "SpinKickLeft", SubResource( 164 ), "RollFall", "Dash", SubResource( 165 ), "BaseJump", "Dash", SubResource( 166 ), "SpinKickLeft", "Dash", SubResource( 167 ), "Dash", "DiveStart", SubResource( 168 ), "Fall", "WallCling", SubResource( 171 ), "RollFall", "WallCling", SubResource( 172 ), "WallCling", "Fall", SubResource( 173 ), "WallCling", "BaseJump", SubResource( 174 ), "Walk", "Hover", SubResource( 179 ), "Hover", "Walk", SubResource( 180 ), "Fall", "Walk", SubResource( 181 ), "BaseJump", "Walk", SubResource( 182 ), "Walk", "BaseJump", SubResource( 183 ), "Slide", "BaseJump", SubResource( 184 ), "Crouch", "Walk", SubResource( 185 ), "Walk", "Crouch", SubResource( 186 ), "Walk", "CustomAnimation", SubResource( 189 ), "CustomAnimation", "Walk", SubResource( 190 ), "Crouch", "Climb", SubResource( 195 ), "Climb", "Crouch", SubResource( 196 ), "Climb", "Slide", SubResource( 197 ), "Slide", "Climb", SubResource( 198 ), "Slide", "Walk", SubResource( 199 ), "Walk", "Slide", SubResource( 200 ), "RollFall", "Crouch", SubResource( 208 ), "RollFall", "Slide", SubResource( 209 ), "RollFall", "Climb", SubResource( 210 ), "Crouch", "Sit_Floor", SubResource( 211 ), "Sitting_Floor", "Walk", SubResource( 212 ), "Crouch", "Roll", SubResource( 213 ), "Roll", "Crouch", SubResource( 214 ), "Crouch", "SpinKickLeft", SubResource( 215 ), "Climb", "SpinKickLeft", SubResource( 216 ), "Slide", "SpinKickLeft", SubResource( 217 ), "Walk", "SpinKickLeft", SubResource( 218 ), "SpinKickLeft", "Slide", SubResource( 219 ), "SpinKickLeft", "Walk", SubResource( 220 ), "LungeKick", "Slide", SubResource( 221 ), "Slide", "LungeKick", SubResource( 222 ), "Walk", "LungeKick", SubResource( 223 ), "LungeKick", "Walk", SubResource( 224 ), "RollJump", "Walk", SubResource( 225 ), "RollJump", "Crouch", SubResource( 226 ), "Roll", "Slide", SubResource( 227 ), "Climb", "LungeKick", SubResource( 228 ), "Walk", "Roll", SubResource( 229 ), "Roll", "Walk", SubResource( 230 ), "DiveEnd", "Walk", SubResource( 231 ), "DiveEnd", "Crouch", SubResource( 232 ), "DiveEnd", "Slide", SubResource( 233 ), "Uppercut", "Slide", SubResource( 234 ), "Uppercut", "Walk", SubResource( 235 ), "Uppercut", "Climb", SubResource( 236 ), "Uppercut", "Crouch", SubResource( 237 ), "RollJump", "WallCling", SubResource( 238 ), "Dash", "WallCling", SubResource( 239 ), "Roll", "WallCling", SubResource( 240 ), "Walk", "LedgeGrab", SubResource( 241 ), "Crouch", "LedgeGrab", SubResource( 242 ), "Climb", "LedgeGrab", SubResource( 243 ), "Slide", "LedgeGrab", SubResource( 244 ), "Walk", "Fall", SubResource( 245 ), "Crouch", "Fall", SubResource( 246 ), "Slide", "Fall", SubResource( 247 ), "Climb", "Fall", SubResource( 248 ), "LungeKick", "Fall", SubResource( 249 ), "CustomAnimation", "CustomLoop", SubResource( 251 ), "CustomLoop", "Walk", SubResource( 252 ), "Fall", "Climb", SubResource( 253 ) ]
+transitions = [ "BaseJump", "Fall", SubResource( 14 ), "Roll", "RollJump", SubResource( 19 ), "RollJump", "RollFall", SubResource( 21 ), "RollFall", "Fall", SubResource( 22 ), "Fall", "LedgeGrab", SubResource( 27 ), "LedgeGrab", "Fall", SubResource( 28 ), "LedgeGrab", "BaseJump", SubResource( 29 ), "LedgeGrab", "LedgeHang", SubResource( 30 ), "LedgeHang", "Fall", SubResource( 31 ), "LedgeHang", "BaseJump", SubResource( 32 ), "RollJump", "Fall", SubResource( 33 ), "BaseJump", "SpinKickLeft", SubResource( 40 ), "Fall", "SpinKickLeft", SubResource( 41 ), "SpinKickLeft", "LedgeHang", SubResource( 42 ), "SpinKickLeft", "Fall", SubResource( 43 ), "Roll", "Uppercut", SubResource( 49 ), "Uppercut", "Fall", SubResource( 51 ), "Fall", "DiveStart", SubResource( 55 ), "BaseJump", "DiveStart", SubResource( 56 ), "DiveStart", "DiveEnd", SubResource( 57 ), "Uppercut", "DiveStart", SubResource( 59 ), "Uppercut", "SpinKickLeft", SubResource( 60 ), "DiveEnd", "SpinKickLeft", SubResource( 62 ), "SpinKickLeft", "Roll", SubResource( 83 ), "SpinKickLeft", "DiveStart", SubResource( 84 ), "LungeKick", "SpinKickLeft", SubResource( 96 ), "SpinKickLeft", "LungeKick", SubResource( 97 ), "DiveEnd", "LungeKick", SubResource( 98 ), "DiveEnd", "Uppercut", SubResource( 101 ), "Fall", "Damaged", SubResource( 135 ), "Damaged", "Fall", SubResource( 137 ), "Hover", "Fall", SubResource( 144 ), "Fall", "Hover", SubResource( 145 ), "Sit_Floor", "Sitting_Floor", SubResource( 155 ), "Sitting_Floor", "BaseJump", SubResource( 157 ), "Sitting_Floor", "Fall", SubResource( 158 ), "Fall", "Dash", SubResource( 161 ), "Dash", "Fall", SubResource( 162 ), "RollJump", "Dash", SubResource( 163 ), "Dash", "SpinKickLeft", SubResource( 164 ), "RollFall", "Dash", SubResource( 165 ), "BaseJump", "Dash", SubResource( 166 ), "SpinKickLeft", "Dash", SubResource( 167 ), "Dash", "DiveStart", SubResource( 168 ), "Fall", "WallCling", SubResource( 171 ), "RollFall", "WallCling", SubResource( 172 ), "WallCling", "Fall", SubResource( 173 ), "WallCling", "BaseJump", SubResource( 174 ), "Walk", "Hover", SubResource( 179 ), "Hover", "Walk", SubResource( 180 ), "Fall", "Walk", SubResource( 181 ), "BaseJump", "Walk", SubResource( 182 ), "Walk", "BaseJump", SubResource( 183 ), "Slide", "BaseJump", SubResource( 184 ), "Crouch", "Walk", SubResource( 185 ), "Walk", "Crouch", SubResource( 186 ), "Walk", "CustomAnimation", SubResource( 189 ), "CustomAnimation", "Walk", SubResource( 190 ), "Crouch", "Climb", SubResource( 195 ), "Climb", "Crouch", SubResource( 196 ), "Climb", "Slide", SubResource( 197 ), "Slide", "Climb", SubResource( 198 ), "Slide", "Walk", SubResource( 199 ), "Walk", "Slide", SubResource( 200 ), "RollFall", "Crouch", SubResource( 208 ), "RollFall", "Slide", SubResource( 209 ), "RollFall", "Climb", SubResource( 210 ), "Crouch", "Sit_Floor", SubResource( 211 ), "Sitting_Floor", "Walk", SubResource( 212 ), "Crouch", "Roll", SubResource( 213 ), "Roll", "Crouch", SubResource( 214 ), "Crouch", "SpinKickLeft", SubResource( 215 ), "Climb", "SpinKickLeft", SubResource( 216 ), "Slide", "SpinKickLeft", SubResource( 217 ), "Walk", "SpinKickLeft", SubResource( 218 ), "SpinKickLeft", "Slide", SubResource( 219 ), "SpinKickLeft", "Walk", SubResource( 220 ), "LungeKick", "Slide", SubResource( 221 ), "Slide", "LungeKick", SubResource( 222 ), "Walk", "LungeKick", SubResource( 223 ), "LungeKick", "Walk", SubResource( 224 ), "RollJump", "Walk", SubResource( 225 ), "RollJump", "Crouch", SubResource( 226 ), "Roll", "Slide", SubResource( 227 ), "Climb", "LungeKick", SubResource( 228 ), "Walk", "Roll", SubResource( 229 ), "Roll", "Walk", SubResource( 230 ), "DiveEnd", "Walk", SubResource( 231 ), "DiveEnd", "Crouch", SubResource( 232 ), "DiveEnd", "Slide", SubResource( 233 ), "Uppercut", "Slide", SubResource( 234 ), "Uppercut", "Walk", SubResource( 235 ), "Uppercut", "Climb", SubResource( 236 ), "Uppercut", "Crouch", SubResource( 237 ), "RollJump", "WallCling", SubResource( 238 ), "Dash", "WallCling", SubResource( 239 ), "Roll", "WallCling", SubResource( 240 ), "Walk", "LedgeGrab", SubResource( 241 ), "Crouch", "LedgeGrab", SubResource( 242 ), "Climb", "LedgeGrab", SubResource( 243 ), "Slide", "LedgeGrab", SubResource( 244 ), "Walk", "Fall", SubResource( 245 ), "Crouch", "Fall", SubResource( 246 ), "Slide", "Fall", SubResource( 247 ), "Climb", "Fall", SubResource( 248 ), "LungeKick", "Fall", SubResource( 249 ), "CustomAnimation", "CustomLoop", SubResource( 251 ), "CustomLoop", "Walk", SubResource( 252 ), "Fall", "Climb", SubResource( 253 ), "DiveEnd", "HighJump", SubResource( 255 ), "HighJump", "Fall", SubResource( 256 ) ]
 start_node = "Walk"
-graph_offset = Vector2( -105, -518 )
+graph_offset = Vector2( -150, 64 )
 
 [resource]
-graph_offset = Vector2( -696, -189 )
+graph_offset = Vector2( -715, -235 )
 nodes/Aim/node = SubResource( 115 )
 nodes/Aim/position = Vector2( -540, 160 )
 nodes/Animation/node = SubResource( 125 )
@@ -616,4 +630,4 @@ nodes/GunHold/position = Vector2( 160, -40 )
 nodes/WholeBody/node = SubResource( 6 )
 nodes/WholeBody/position = Vector2( -340, -80 )
 nodes/output/position = Vector2( 380, 40 )
-node_connections = [ "Gun", 0, "WholeBody", "Gun", 1, "Fire", "output", 0, "GunHold", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation" ]
+node_connections = [ "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation", "output", 0, "GunHold", "Gun", 0, "WholeBody", "Gun", 1, "Fire" ]

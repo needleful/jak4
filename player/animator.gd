@@ -167,6 +167,10 @@ func play_jump():
 	play_sound("feet", "jump", true)
 	transition_to("BaseJump")
 
+func play_high_jump():
+	play_sound("feet", "crouch_jump", true)
+	transition_to("HighJump")
+
 func play_ledge_jump():
 	play_sound("attack", "crouch_jump", true)
 	transition_to("BaseJump")

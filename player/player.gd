@@ -297,6 +297,7 @@ onready var ledgeCastLeft := $jackie/leftHandCast
 onready var ledgeCastRight := $jackie/rightHandCast
 onready var ledgeCastCenter := $jackie/centerCast
 onready var ledgeCastCeiling := $jackie/ceilingCast
+onready var ledge_area := $jackie/ledge_area
 onready var ledgeRef := $jackie/reference
 
 onready var lunge_hitbox := $jackie/attack_lunge
@@ -468,7 +469,7 @@ func _physics_process(delta):
 				next_state = State.SpinKick
 			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
-			elif best_normal != Vector3.ZERO and after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
+			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1):
 				next_state = State.Slide
 		State.PlaceFlag, State.GetItem:
 			if after(time_animation):
@@ -484,7 +485,7 @@ func _physics_process(delta):
 				next_state = State.SlideLungeKick
 			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
 				next_state = State.Climb
-			elif best_floor_dot > MIN_DOT_GROUND:
+			elif after(TIME_COYOTE, best_floor_dot > MIN_DOT_GROUND, 1):
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(climb_area)):
 				next_state = State.Fall
@@ -667,7 +668,7 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
-			elif after(TIME_LEDGE_LEAVE, intent_dot < 0 or !ledgeCastCenter.is_colliding()):
+			elif after(TIME_LEDGE_LEAVE, intent_dot < 0 or empty(ledge_area)):
 				next_state = State.LedgeFall
 		State.LedgeFall:
 			if can_air_spin and pressed("combat_spin"):
@@ -1776,7 +1777,7 @@ func shake_camera():
 func start_jump(vel:float):
 	can_wall_cling = true
 	emit_signal("jumped")
-	velocity += Vector3.UP*jump_factor*vel
+	velocity.y = jump_factor*vel
 
 func set_state(next_state: int):
 	var i = 0
@@ -1815,7 +1816,7 @@ func set_state(next_state: int):
 			mesh.play_jump()
 		State.HighJump:
 			start_jump(JUMP_VEL_HIGH)
-			mesh.play_crouch_jump()
+			mesh.play_high_jump()
 		State.WallJump:
 			can_wall_cling = true
 			emit_signal("jumped")
@@ -1959,7 +1960,7 @@ func set_state(next_state: int):
 			can_wall_cling = true
 			dash_charges -= 1
 			velocity += get_visual_forward()*SPEED_DASH
-			velocity.y =  SPEED_DASH_V
+			velocity.y = SPEED_DASH_V
 			mesh.force_play("Dash")
 		State.WallCling:
 			can_wall_cling = false
