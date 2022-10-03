@@ -927,24 +927,28 @@ time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0.17, 1.65147, 0.390446 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
+collision_mask = 17
 
 [node name="rightHandCast" type="RayCast" parent="jackie"]
 time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, -0.17, 1.65147, 0.390446 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
+collision_mask = 17
 
 [node name="centerCast" type="RayCast" parent="jackie"]
 time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0, 1.70647, 0.446355 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
+collision_mask = 17
 
 [node name="ceilingCast" type="RayCast" parent="jackie"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02713, 0.200637 )
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
+collision_mask = 17
 
 [node name="reference" type="Position3D" parent="jackie"]
 time_scale_response = false
@@ -1204,7 +1208,6 @@ percent_visible = false
 [node name="debug" type="Panel" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -1225,52 +1228,58 @@ margin_right = 414.0
 margin_bottom = 22.0
 text = "Debug Data"
 
-[node name="a1" type="Label" parent="ui/gameing/debug/stats"]
+[node name="debug_fps" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 26.0
 margin_right = 414.0
 margin_bottom = 48.0
-text = "Debug Data"
+script = ExtResource( 22 )
 
-[node name="a2" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a1" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 52.0
 margin_right = 414.0
 margin_bottom = 74.0
 text = "Debug Data"
 
-[node name="a3" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a2" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 78.0
 margin_right = 414.0
 margin_bottom = 100.0
 text = "Debug Data"
 
-[node name="a4" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a3" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 104.0
 margin_right = 414.0
 margin_bottom = 126.0
 text = "Debug Data"
 
-[node name="a5" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a4" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 130.0
 margin_right = 414.0
 margin_bottom = 152.0
 text = "Debug Data"
 
-[node name="a6" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a5" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 156.0
 margin_right = 414.0
 margin_bottom = 178.0
 text = "Debug Data"
 
-[node name="a7" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a6" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 182.0
 margin_right = 414.0
 margin_bottom = 204.0
 text = "Debug Data"
 
-[node name="a8" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a7" type="Label" parent="ui/gameing/debug/stats"]
 margin_top = 208.0
 margin_right = 414.0
 margin_bottom = 230.0
+text = "Debug Data"
+
+[node name="a8" type="Label" parent="ui/gameing/debug/stats"]
+margin_top = 234.0
+margin_right = 414.0
+margin_bottom = 256.0
 text = "Debug Data"
 
 [node name="game_state" type="VBoxContainer" parent="ui/gameing/debug"]
@@ -1785,8 +1794,8 @@ one_shot = true
 
 [node name="groundArea" type="Area" parent="."]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312543, 0 )
-collision_layer = 0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299583, 0 )
+collision_layer = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="groundArea"]
 time_scale_response = false
@@ -1795,7 +1804,7 @@ shape = SubResource( 66 )
 
 [node name="crouchHeadArea" type="Area" parent="."]
 time_scale_response = false
-collision_layer = 0
+collision_layer = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
 time_scale_response = false
@@ -1804,7 +1813,7 @@ shape = SubResource( 8 )
 
 [node name="climbArea" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
-collision_layer = 0
+collision_layer = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="climbArea"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.163397, 7.14229e-09 )
@@ -1857,29 +1866,12 @@ enabled = true
 [node name="hover_area" type="Area" parent="."]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.294071, 0 )
-collision_layer = 0
+collision_layer = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="hover_area"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0, -0.0106984, -9.91884e-09 )
 shape = SubResource( 73 )
-
-[node name="debug_fps" type="Control" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -220.0
-margin_top = -20.0
-margin_right = 221.0
-margin_bottom = 20.0
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="debug_fps"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 22 )
 
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]

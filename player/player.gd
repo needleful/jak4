@@ -77,7 +77,7 @@ const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 0.0
 const STAMINA_DRAIN_MIN := 0.05
 const STAMINA_DRAIN_WALLJUMP := 15.0
-const MIN_CLIMB_STAMINA := 0.0
+const MIN_CLIMB_STAMINA := 1.0
 const TIME_STOP_CLIMB := 0.0
 var stamina_recharges := true
 const MIN_STAMINA_LEDGE_HANG := 0.0
@@ -104,7 +104,7 @@ const TIME_DIVE_WINDUP := 0.2
 const TIME_DIVE_END_MIN := 0.4
 const TIME_DIVE_END_MAX := 0.5
 const TIME_DIVE_UPPERCUT := 0.1
-const TIME_DIVE_HIGHJUMP := 0.05
+const TIME_DIVE_HIGHJUMP := 0.1
 
 const SPEED_LUNGE := 25.0
 
@@ -470,8 +470,6 @@ func _physics_process(delta):
 				next_state = State.Fall
 			elif best_normal != Vector3.ZERO and after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
 				next_state = State.Slide
-			elif (empty(ground_area) or best_floor_dot < MIN_DOT_GROUND) and can_ledge_grab():
-				next_state = State.LedgeHang
 		State.PlaceFlag, State.GetItem:
 			if after(time_animation):
 				next_state = State.Ground
@@ -484,11 +482,11 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif can_slide_lunge and pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
-			elif best_floor_dot >= MIN_DOT_CLIMB and total_stamina() > MIN_CLIMB_STAMINA and holding("mv_crouch"):
+			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif after(TIME_COYOTE, empty(ground_area)):
+			elif after(TIME_COYOTE, empty(climb_area)):
 				next_state = State.Fall
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
@@ -504,7 +502,7 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
 			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
@@ -539,7 +537,7 @@ func _physics_process(delta):
 			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
 			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot > MIN_DOT_CLIMB:
-				if total_stamina() > MIN_CLIMB_STAMINA:
+				if can_climb():
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
@@ -628,7 +626,7 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				elif empty(crouch_head):
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and pressed("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
 			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and pressed("mv_crouch"):
 				next_state = State.WallCling
@@ -652,9 +650,9 @@ func _physics_process(delta):
 					next_state = State.Ground
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
+			elif can_wall_cling and total_stamina() > 0.0 and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
@@ -685,9 +683,9 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and holding("mv_crouch"):
+			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
+			elif can_wall_cling and total_stamina() > 0 and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
@@ -1418,6 +1416,9 @@ func takes_damage():
 
 func should_hover() -> bool:
 	return pressed("hover_toggle") and Global.count("hover_scooter")
+
+func can_climb() -> bool:
+	return total_stamina() > MIN_CLIMB_STAMINA and holding("mv_crouch")
 
 func can_ledge_grab() -> bool:
 	if crouch_head.get_overlapping_bodies().size() > 0:

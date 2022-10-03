@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=2]
@@ -25,6 +25,23 @@
 [ext_resource path="res://entities/env/copper/basin.tscn" type="PackedScene" id=23]
 [ext_resource path="res://entities/env/ancient/gem_big.tscn" type="PackedScene" id=24]
 [ext_resource path="res://entities/env/copper/drill2.tscn" type="PackedScene" id=25]
+[ext_resource path="res://entities/env/plants/tree3.tscn" type="PackedScene" id=26]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=27]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 80.2742, 32.7214, 37.0466 )
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 129.612, 46.1379, 91.1 )
+
+[sub_resource type="OccluderShapePolygon" id=3]
+polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
+
+[sub_resource type="OccluderShapePolygon" id=4]
+polygon_points = PoolVector2Array( 318.891, -242.667, 194.701, 63.7323, -161.064, 97.103, -255.78, -323.667 )
+
+[sub_resource type="OccluderShapePolygon" id=5]
+polygon_points = PoolVector2Array( 165.673, -209.4, 131.541, 10.1086, -89.1744, 0.57489, -260.457, -280.52 )
 
 [node name="chunk085" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -33,7 +50,7 @@ script = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 178.025, 395.148, -97.671 )
 
 [node name="tree4" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.761461, 0, -0.648211, 0, 1, 0, 0.648211, 0, -0.761461, 211.777, 341.944, -18.4915 )
+transform = Transform( -0.761461, 0, -0.648211, 0, 1, 0, 0.648211, 0, -0.761461, 199.762, 342.078, -44.3796 )
 
 [node name="tree5" parent="." instance=ExtResource( 2 )]
 transform = Transform( -0.761461, 0, -0.648211, 0, 1, 0, 0.648211, 0, -0.761461, 106.529, 374.512, -57.3019 )
@@ -45,7 +62,7 @@ transform = Transform( 0.852636, 0, -0.522506, 0, 1, 0, 0.522506, 0, 0.852636, 1
 transform = Transform( 0.678585, 0, 0.734522, 0, 1, 0, -0.734522, 0, 0.678585, 139.128, 361.224, -65.1685 )
 
 [node name="tree3" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.525937, 0, -0.850524, 0, 1, 0, 0.850524, 0, -0.525937, 113.82, 401.333, -106.785 )
+transform = Transform( -0.525937, 0, -0.850524, 0, 1, 0, 0.850524, 0, -0.525937, 113.82, 401.101, -106.785 )
 
 [node name="fountain" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100.869, 401.172, -107.77 )
@@ -271,3 +288,40 @@ cloaked = true
 [node name="crawly12" parent="." instance=ExtResource( 22 )]
 transform = Transform( -0.170227, 0, -0.985405, 0, 1, 0, 0.985405, 0, -0.170227, 231.194, 341.868, -23.3131 )
 reset_on_player_death = true
+
+[node name="tree8" parent="." instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 95.8945, 376.621, -16.0612 )
+
+[node name="tree9" parent="." instance=ExtResource( 26 )]
+transform = Transform( 0.490117, 0, 0.871657, 0, 1, 0, -0.871657, 0, 0.490117, 224.141, 342.257, -21.3984 )
+
+[node name="env" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 133.791, 384.78, -48.7504 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 27 )
+wind_reduction_db = 20.6667
+
+[node name="CollisionShape2" type="CollisionShape" parent="env"]
+transform = Transform( 0.979395, 0, 0.201953, 0, 1, 0, -0.201953, 0, 0.979395, 193.177, -22.0265, -65.7605 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="env"]
+transform = Transform( 0.977084, 0, -0.212856, 0, 1, 0, 0.212856, 0, 0.977084, 184.141, -22.0265, 49.3991 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="env"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.73203, 0 )
+shape = SubResource( 2 )
+
+[node name="Occluder" type="Occluder" parent="."]
+transform = Transform( 0.999723, 0, 0.0235206, 0, 1, 0, -0.0235206, 0, 0.999723, 187.48, 423.625, -142.823 )
+shape = SubResource( 3 )
+
+[node name="Occluder2" type="Occluder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.847, 351.47, 46.7234 )
+shape = SubResource( 4 )
+
+[node name="Occluder3" type="Occluder" parent="."]
+transform = Transform( -0.0561853, 0, 0.99842, 0, 1, 0, -0.99842, 0, -0.0561853, 3.91424, 426.409, -57.7137 )
+shape = SubResource( 5 )

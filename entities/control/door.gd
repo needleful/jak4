@@ -32,7 +32,7 @@ func _ready():
 		add_power(required_power, true)
 	if deactivate_upon_death:
 		var _x = Global.get_player().connect("died", self, "clear_power", [true])
-	assert(anim != null)
+	assert(anim != null, get_path())
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:
