@@ -348,7 +348,6 @@ const UPGRADE_ITEMS := [
 	"jump_height_up",
 	"move_speed_up",
 	"stamina_booster",
-	"stamina_recovery_up",
 	"stamina_up",
 	"hover_speed_up"
 ]
@@ -1065,7 +1064,6 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				max_stamina = DEFAULT_MAX_STAMINA*s_factor
 				stamina_bar.max_value = max_stamina
 				stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
-			"stamina_recovery_up":
 				stamina_factor = (1 + STAMINA_RECOVERY_BOOST*count)
 			"jump_height_up":
 				jump_factor = (1 + JUMP_UP_BOOST*count)

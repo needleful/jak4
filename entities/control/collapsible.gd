@@ -6,10 +6,13 @@ export(Vector3) var falling_rotation := Vector3.ZERO
 var falling := false
 var velocity := Vector3.ZERO
 var angular_velocity := Vector3.ZERO
+onready var initial_transform = transform
 
 func _ready():
 	if !is_in_group("dynamic"):
 		add_to_group("dynamic")
+	var _x = Global.get_player().connect("died", self, "reset")
+	
 
 func _physics_process(delta):
 	if !falling:
@@ -30,3 +33,9 @@ func take_damage(damage, dir, _source: Node):
 	falling = true
 	set_physics_process(true)
 	velocity = damage*dir*damage_force
+
+func reset():
+	falling = false
+	set_physics_process(false)
+	transform = initial_transform
+	velocity = Vector3.ZERO

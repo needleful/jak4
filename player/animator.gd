@@ -93,7 +93,6 @@ func _ready():
 	var _x = TimeManagement.connect("time_scale_changed", self, "_on_time_scale_changed")
 
 func _on_time_scale_changed(_time_scale):
-	print("time shift")
 	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
 
 func blend_run_animation(movement: Vector3):

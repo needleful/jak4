@@ -92,8 +92,7 @@ func _ready():
 	if cloaked:
 		if is_in_group("target"):
 			remove_from_group("target")
-		var material: Material = get_node(mesh_node).get_surface_material(0)
-		material.next_pass = cloaked_material
+		get_node(mesh_node).material_override = cloaked_material
 	call_deferred("set_state", AI.Idle, true)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead

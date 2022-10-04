@@ -241,6 +241,19 @@ func mark_inactive(chunk: Spatial):
 			l.request_ready()
 			chunk.add_child(l)
 
+func unload_all():
+	print("Unloading all chunks..")
+	load_queue.clear()
+	chunk_unload_waitlist.clear()
+	for a in active_chunks:
+		if a.has_node("dynamic_content"):
+			a.get_node("dynamic_content").queue_free()
+		if a.name in lowres_chunks:
+			var l: Node = lowres_chunks[a.name]
+			l.request_ready()
+			a.add_child(l)
+	active_chunks.clear()
+
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
 	player.show_prompt(["combat_lunge"], "Lunge Kick")
@@ -265,6 +278,8 @@ func _on_tutorial_swap_timeout():
 		player.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick")
 	else:
 		player.show_prompt(["combat_spin"], "Spin Kick")
+
+# Environment
 
 func get_wind_audio():
 	return $audio_wind

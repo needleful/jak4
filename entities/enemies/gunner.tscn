@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=1]
 [ext_resource path="res://entities/enemies/gunner.gd" type="Script" id=2]
@@ -17,24 +17,41 @@ radius = 0.291365
 [sub_resource type="SphereShape" id=111]
 radius = 0.446617
 
-[sub_resource type="CylinderShape" id=152]
-height = 0.621092
-radius = 0.451079
-
 [sub_resource type="SphereShape" id=151]
 radius = 30.0
 
-[sub_resource type="SpatialMaterial" id=108]
-resource_local_to_scene = true
+[sub_resource type="SpatialMaterial" id=106]
+flags_transparent = true
 flags_unshaded = true
 params_blend_mode = 1
+params_cull_mode = 2
 albedo_color = Color( 3, 0.2, 0.2, 1 )
+
+[sub_resource type="ArrayMesh" id=1]
+resource_name = "laser_Cylinder"
+surfaces/0 = {
+"aabb": AABB( -0.00866025, -0.00500004, -2.18557e-10, 0.0173205, 0.01501, 1 ),
+"array_data": PoolByteArray( 0, 0, 0, 0, 10, 215, 35, 60, 79, 78, 240, 47, 176, 46, 210, 23, 0, 0, 0, 56, 0, 0, 0, 0, 10, 215, 35, 60, 79, 78, 240, 47, 126, 127, 126, 193, 0, 58, 20, 56, 0, 0, 0, 0, 10, 215, 35, 60, 79, 78, 240, 47, 80, 46, 210, 103, 0, 60, 0, 56, 0, 0, 0, 0, 219, 214, 35, 60, 0, 0, 128, 63, 176, 46, 210, 23, 0, 0, 0, 0, 0, 0, 0, 0, 219, 214, 35, 60, 0, 0, 128, 63, 0, 0, 126, 63, 0, 52, 20, 56, 0, 0, 0, 0, 219, 214, 35, 60, 0, 0, 128, 63, 80, 46, 210, 103, 0, 60, 0, 0, 189, 227, 13, 60, 11, 215, 163, 187, 80, 78, 112, 175, 0, 130, 126, 63, 85, 57, 0, 56, 189, 227, 13, 60, 11, 215, 163, 187, 80, 78, 112, 175, 126, 127, 126, 193, 169, 59, 245, 58, 189, 227, 13, 60, 11, 215, 163, 187, 80, 78, 112, 175, 80, 46, 210, 103, 85, 57, 0, 56, 189, 227, 13, 60, 105, 215, 163, 187, 0, 0, 128, 63, 0, 130, 126, 63, 85, 57, 0, 0, 189, 227, 13, 60, 105, 215, 163, 187, 0, 0, 128, 63, 0, 0, 126, 63, 83, 55, 245, 58, 189, 227, 13, 60, 105, 215, 163, 187, 0, 0, 128, 63, 80, 46, 210, 103, 85, 57, 0, 0, 189, 227, 13, 188, 8, 215, 163, 187, 76, 78, 112, 175, 176, 46, 210, 23, 85, 53, 0, 56, 189, 227, 13, 188, 8, 215, 163, 187, 76, 78, 112, 175, 0, 130, 126, 63, 85, 53, 0, 56, 189, 227, 13, 188, 8, 215, 163, 187, 76, 78, 112, 175, 126, 127, 126, 193, 86, 56, 245, 58, 189, 227, 13, 188, 102, 215, 163, 187, 0, 0, 128, 63, 176, 46, 210, 23, 85, 53, 0, 0, 189, 227, 13, 188, 102, 215, 163, 187, 0, 0, 128, 63, 0, 130, 126, 63, 85, 53, 0, 0, 189, 227, 13, 188, 102, 215, 163, 187, 0, 0, 128, 63, 0, 0, 126, 63, 101, 41, 245, 58 ),
+"array_index_data": PoolByteArray( 2, 0, 11, 0, 5, 0, 2, 0, 8, 0, 11, 0, 6, 0, 16, 0, 9, 0, 6, 0, 13, 0, 16, 0, 10, 0, 17, 0, 4, 0, 12, 0, 3, 0, 15, 0, 12, 0, 0, 0, 3, 0, 1, 0, 14, 0, 7, 0 ),
+"blend_shape_data": [  ],
+"format": 2194711,
+"index_count": 24,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 18
+}
 
 [sub_resource type="SphereMesh" id=107]
 radius = 0.07
 height = 0.14
 radial_segments = 5
 rings = 5
+
+[sub_resource type="SpatialMaterial" id=108]
+resource_local_to_scene = true
+flags_unshaded = true
+params_blend_mode = 1
+albedo_color = Color( 3, 0.2, 0.2, 1 )
 
 [sub_resource type="Curve" id=5]
 _data = [ Vector2( 0, 1 ), 0.0, -0.933152, 0, 0, Vector2( 0.593583, 0 ), -4.92613, 0.0, 0, 0 ]
@@ -201,8 +218,7 @@ node_connections = [ "output", 0, "StateMachine" ]
 [sub_resource type="AnimationNodeStateMachinePlayback" id=126]
 
 [node name="gunner" groups=["dynamic", "enemy", "push", "target"] instance=ExtResource( 5 )]
-collision_layer = 65540
-collision_mask = 13
+collision_layer = 65549
 mass = 50.0
 axis_lock_angular_x = true
 axis_lock_angular_z = true
@@ -231,12 +247,7 @@ shape = SubResource( 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0364776, 0.940261, -0.0565119 )
 shape = SubResource( 111 )
 
-[node name="CollisionShape3" type="CollisionShape" parent="." index="4"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.228619, 0.312007, 0.0783312 )
-shape = SubResource( 152 )
-disabled = true
-
-[node name="awareness" type="Area" parent="." index="5"]
+[node name="awareness" type="Area" parent="." index="4"]
 collision_layer = 0
 collision_mask = 6
 
@@ -244,19 +255,19 @@ collision_mask = 6
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19.7513 )
 shape = SubResource( 151 )
 
-[node name="laser" type="ImmediateGeometry" parent="." index="6"]
+[node name="laser" type="MeshInstance" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22144, 0.822621, 0.217506 )
-visible = false
-layers = 7
-material_override = SubResource( 108 )
+material_override = SubResource( 106 )
+mesh = SubResource( 1 )
 
-[node name="aim_cast" type="SpringArm" parent="laser" index="0"]
+[node name="aim_cast" type="SpringArm" parent="." index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22144, 0.822621, 0.217506 )
 collision_mask = 7
 spring_length = 80.0
 script = ExtResource( 6 )
-laser_geometry = NodePath("..")
+laser_geometry = NodePath("../laser")
 
-[node name="laser_end" type="MeshInstance" parent="laser/aim_cast" index="0"]
+[node name="laser_end" type="MeshInstance" parent="aim_cast" index="0"]
 time_scale_response = false
 mesh = SubResource( 107 )
 skeleton = NodePath("")

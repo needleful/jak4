@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=2]
@@ -27,6 +27,30 @@
 [ext_resource path="res://entities/env/copper/drill2.tscn" type="PackedScene" id=25]
 [ext_resource path="res://entities/env/plants/tree3.tscn" type="PackedScene" id=26]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=27]
+[ext_resource path="res://entities/env/plants/cactus_round_flower.tscn" type="PackedScene" id=28]
+[ext_resource path="res://entities/env/plants/cactus_round.tscn" type="PackedScene" id=29]
+[ext_resource path="res://entities/env/plants/juniper_small.tscn" type="PackedScene" id=30]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=31]
+[ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=32]
+[ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=33]
+[ext_resource path="res://entities/env/stone/garden_empty.tscn" type="PackedScene" id=34]
+[ext_resource path="res://entities/env/stone/pillar.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=36]
+[ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=37]
+[ext_resource path="res://material/death_plane.shader" type="Shader" id=38]
+[ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=39]
+
+[sub_resource type="OccluderShapePolygon" id=3]
+polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
+
+[sub_resource type="OccluderShapePolygon" id=4]
+polygon_points = PoolVector2Array( 318.891, -242.667, 195.017, 63.577, -238.205, 95.0053, -255.78, -323.667 )
+
+[sub_resource type="OccluderShapePolygon" id=5]
+polygon_points = PoolVector2Array( 165.673, -209.4, 131.541, 10.1086, -89.1744, 0.57489, -238.199, -278.237 )
+
+[sub_resource type="OccluderShapePolygon" id=8]
+polygon_points = PoolVector2Array( 467.255, -190.976, 524.802, 95.0254, -181.309, 95.0845, -162.194, -287.713 )
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 80.2742, 32.7214, 37.0466 )
@@ -34,17 +58,37 @@ extents = Vector3( 80.2742, 32.7214, 37.0466 )
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 129.612, 46.1379, 91.1 )
 
-[sub_resource type="OccluderShapePolygon" id=3]
-polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = ExtResource( 38 )
+shader_param/max_depth = 20.0
+shader_param/depth_color = null
 
-[sub_resource type="OccluderShapePolygon" id=4]
-polygon_points = PoolVector2Array( 318.891, -242.667, 194.701, 63.7323, -161.064, 97.103, -255.78, -323.667 )
-
-[sub_resource type="OccluderShapePolygon" id=5]
-polygon_points = PoolVector2Array( 165.673, -209.4, 131.541, 10.1086, -89.1744, 0.57489, -260.457, -280.52 )
+[sub_resource type="CylinderMesh" id=7]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.2
+radial_segments = 6
+rings = 1
 
 [node name="chunk085" type="MultiMeshSystem"]
 script = ExtResource( 1 )
+
+[node name="Occluder" type="Occluder" parent="."]
+transform = Transform( 0.999723, 0, 0.0235206, 0, 1, 0, -0.0235206, 0, 0.999723, 187.48, 423.625, -142.823 )
+shape = SubResource( 3 )
+
+[node name="Occluder2" type="Occluder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.847, 351.47, 46.7234 )
+shape = SubResource( 4 )
+
+[node name="Occluder3" type="Occluder" parent="."]
+transform = Transform( -0.0561853, 0, 0.99842, 0, 1, 0, -0.99842, 0, -0.0561853, 3.91424, 426.409, -57.7137 )
+shape = SubResource( 5 )
+
+[node name="Occluder4" type="Occluder" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 20.4576, 135.809, 65.9377 )
+shape = SubResource( 8 )
 
 [node name="tree2" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 178.025, 395.148, -97.671 )
@@ -77,7 +121,7 @@ transform = Transform( 1, 0, 0, 0, 0.675476, -0.737382, 0, 0.737382, 0.675476, 1
 transform = Transform( -0.615589, 0, 0.788067, -0.609912, 0.633267, -0.476425, -0.499057, -0.773933, -0.389832, 253.844, 340.323, -43.8973 )
 
 [node name="rock_collapsible" parent="." instance=ExtResource( 8 )]
-transform = Transform( 0.192537, 0, -0.98129, 0, 1, 0, 0.98129, 0, 0.192537, 305.425, 363.307, -82.736 )
+transform = Transform( -0.15624, 0, 0.987719, 0, 1, 0, -0.987719, 0, -0.15624, 298.551, 355.922, -16.6907 )
 
 [node name="rock_kinematic" parent="." instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 283.779, 343.034, -49.6563 )
@@ -105,15 +149,12 @@ transform = Transform( -0.823679, 0, 0.567056, 0, 1, 0, -0.567056, 0, -0.823679,
 
 [node name="random_ammo_pickup" parent="mine_shack/crate1" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00626755, 0.107727, -0.360306 )
-ignore_parent = false
 
 [node name="random_ammo_pickup2" parent="mine_shack/crate1" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218925, 0.107727, 0.0624008 )
-ignore_parent = false
 
 [node name="random_ammo_pickup3" parent="mine_shack/crate1" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0446548, 0.107727, 0.362602 )
-ignore_parent = false
 
 [node name="c_table" parent="mine_shack" instance=ExtResource( 16 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312637, 0, -0.065052 )
@@ -314,14 +355,200 @@ shape = SubResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.73203, 0 )
 shape = SubResource( 2 )
 
-[node name="Occluder" type="Occluder" parent="."]
-transform = Transform( 0.999723, 0, 0.0235206, 0, 1, 0, -0.0235206, 0, 0.999723, 187.48, 423.625, -142.823 )
-shape = SubResource( 3 )
+[node name="cactus_round" parent="." instance=ExtResource( 29 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.5518, 380.825, -62.6852 )
 
-[node name="Occluder2" type="Occluder" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.847, 351.47, 46.7234 )
-shape = SubResource( 4 )
+[node name="cactus_round2" parent="." instance=ExtResource( 29 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 70.4707, 381.097, -63.1085 )
 
-[node name="Occluder3" type="Occluder" parent="."]
-transform = Transform( -0.0561853, 0, 0.99842, 0, 1, 0, -0.99842, 0, -0.0561853, 3.91424, 426.409, -57.7137 )
-shape = SubResource( 5 )
+[node name="cactus_round_flower" parent="." instance=ExtResource( 28 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.4763, 380.962, -64.0775 )
+
+[node name="rock9" parent="." instance=ExtResource( 6 )]
+transform = Transform( 0.79241, 0.609989, 0, -0.609989, 0.79241, 0, 0, 0, 1, 181.486, 372.59, 7.21325 )
+
+[node name="rock8" parent="." instance=ExtResource( 5 )]
+transform = Transform( 0.18475, 0.982786, 0, -0.982786, 0.18475, 0, 0, 0, 1, 166.966, 369.916, 1.16781 )
+
+[node name="cactus_round3" parent="." instance=ExtResource( 29 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.8574, 380.97, -65.1891 )
+
+[node name="cactus_round4" parent="." instance=ExtResource( 29 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.9414, 380.846, -64.7033 )
+
+[node name="juniper_small" parent="." instance=ExtResource( 30 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 160.662, 395.923, -112.308 )
+
+[node name="juniper_small2" parent="." instance=ExtResource( 30 )]
+transform = Transform( -0.802486, 0, -0.596671, 0, 1, 0, 0.596671, 0, -0.802486, 162.12, 395.78, -113.126 )
+
+[node name="gem_pickup13" parent="." instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 298.507, 356.716, -16.6291 )
+
+[node name="zone_cliff" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 281.984, 471.714, 55.069 )
+
+[node name="hut" parent="zone_cliff" instance=ExtResource( 31 )]
+transform = Transform( 0.788031, 0, 0.615636, 0, 1, 0, -0.615636, 0, 0.788031, -9.1358, 1.68884, -1.70608 )
+
+[node name="wardrobe" parent="zone_cliff/hut" instance=ExtResource( 32 )]
+transform = Transform( 0.301524, 0, 0.953459, 0, 1, 0, -0.953459, 0, 0.301524, 1.12445, 1.93152, -3.62013 )
+
+[node name="coat_pickup" parent="zone_cliff/hut" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.573715, 4.09677, 1.77602 )
+
+[node name="coat_pickup2" parent="zone_cliff/hut" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.68671, 4.08035, -0.576187 )
+max_rarity = 3
+
+[node name="crawly" parent="zone_cliff/hut" instance=ExtResource( 22 )]
+transform = Transform( 0.640869, 0, 0.767651, 0, 1, 0, -0.767651, 0, 0.640869, -1.61852, 1.00098, 1.0968 )
+reset_on_player_death = true
+shielded = true
+cloaked = true
+
+[node name="crawly2" parent="zone_cliff/hut" instance=ExtResource( 22 )]
+transform = Transform( 0.990401, 0, -0.138228, 0, 1, 0, 0.138228, 0, 0.990401, 1.94429, 1.00098, 1.69176 )
+reset_on_player_death = true
+shielded = true
+cloaked = true
+
+[node name="garden_empty" parent="zone_cliff" instance=ExtResource( 34 )]
+transform = Transform( 0.0948804, 0.99547, 0.00612337, 0, 0.00615112, -0.999981, -0.995489, 0.0948786, 0.000583621, 26.6129, 3.67075, 23.323 )
+
+[node name="garden_empty2" parent="zone_cliff" instance=ExtResource( 34 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.9591, 1.61908, 26.1013 )
+
+[node name="pillar" parent="zone_cliff" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, -0.0803493, -0.996767, 0, 0.996767, -0.0803493, -33.4096, 4.07593, -13.7111 )
+
+[node name="ruin1" parent="zone_cliff" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.0058, 2.12878, 25.2767 )
+
+[node name="ruin3" parent="zone_cliff" instance=ExtResource( 36 )]
+transform = Transform( -0.73886, -0.234196, 0.631853, -0.177988, 0.972189, 0.152211, -0.649928, 0, -0.759996, 16.7529, 2.12878, -25.4092 )
+
+[node name="ruin2" parent="zone_cliff" instance=ExtResource( 36 )]
+transform = Transform( -0.525093, 0, -0.851045, 0, 1, 0, 0.851045, 0, -0.525093, -57.0943, 1.41788, -19.8954 )
+
+[node name="pillar2" parent="zone_cliff" instance=ExtResource( 35 )]
+transform = Transform( 0.998432, 0.0559709, 0, -0.0559393, 0.997869, 0.0335998, 0.00188061, -0.0335471, 0.999435, -71.8608, 0.705505, -12.4864 )
+
+[node name="bug_pickup" parent="zone_cliff/pillar2" instance=ExtResource( 19 )]
+transform = Transform( -0.928052, -0.119957, 0.352603, -0.0959668, 0.991764, 0.0848172, -0.359873, 0.0448767, -0.931921, 0.167328, 17.6537, 1.24221 )
+
+[node name="bug_pickup2" parent="zone_cliff/pillar2" instance=ExtResource( 19 )]
+transform = Transform( 1, -8.61473e-09, -1.16415e-10, -4.89672e-09, 1, 7.45058e-09, 2.32831e-10, 0, 1, -2.05196, 17.9504, -0.370724 )
+
+[node name="bug_pickup3" parent="zone_cliff/pillar2" instance=ExtResource( 19 )]
+transform = Transform( 1, -8.61473e-09, -1.16415e-10, -4.89672e-09, 1, 7.45058e-09, 2.32831e-10, 0, 1, 0.56665, 18.4735, -1.02718 )
+
+[node name="rock_kinematic2" parent="zone_cliff" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -69.4557, 2.05453, -17.5252 )
+initial_velocity = 5.0
+
+[node name="rock_kinematic3" parent="zone_cliff" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -65.4778, 1.97708, -11.8409 )
+
+[node name="rock_kinematic4" parent="zone_cliff" instance=ExtResource( 9 )]
+transform = Transform( 0.018355, 0, 0.999832, 0, 1, 0, -0.999832, 0, 0.018355, -69.6943, 1.97708, -7.58346 )
+initial_velocity = 7.0
+
+[node name="gem_pickup14" parent="zone_cliff" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.8578, -0.98111, 5.68172 )
+
+[node name="gem_pickup15" parent="zone_cliff" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 67.2074, -2.45517, 9.36575 )
+
+[node name="gem_pickup16" parent="zone_cliff" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.3954, -4.28476, 21.6389 )
+
+[node name="crawly13" parent="zone_cliff" instance=ExtResource( 22 )]
+transform = Transform( -0.205409, 0, -0.978676, 0, 1, 0, 0.978676, 0, -0.205409, 77.3177, -19.6026, 16.6084 )
+respawns = false
+reset_on_player_death = true
+
+[node name="crawly14" parent="zone_cliff" instance=ExtResource( 22 )]
+transform = Transform( -0.476195, 0, 0.87934, 0, 1, 0, -0.87934, 0, -0.476195, 69.5836, -21.9593, 15.0503 )
+respawns = false
+reset_on_player_death = true
+
+[node name="bug_pickup4" parent="zone_cliff" instance=ExtResource( 19 )]
+transform = Transform( -0.896941, 0, -0.442151, 0, 1, 0, 0.442151, 0, -0.89694, 68.4846, -21.7091, 10.1025 )
+quantity = 6
+
+[node name="crate1" parent="zone_cliff" instance=ExtResource( 12 )]
+transform = Transform( 0.960171, -0.263383, 0.093276, 0.279412, 0.905089, -0.320534, 0, 0.33383, 0.942633, 68.3437, -21.509, 9.73437 )
+
+[node name="random_ammo_pickup" parent="zone_cliff/crate1" instance=ExtResource( 13 )]
+transform = Transform( 1, -2.48723e-09, 4.27415e-10, 0, 1, 0, 0, 5.96046e-08, 1, -0.0233154, 0.0677185, -0.536633 )
+
+[node name="rock10" parent="zone_cliff" instance=ExtResource( 10 )]
+transform = Transform( -0.105965, 0.0164869, 0.994233, -0.153738, -0.988112, 0, 0.982413, -0.152851, 0.10724, 70.4801, -11.0019, 21.3943 )
+
+[node name="zone_cave1" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 164.546, 356.597, 78.129 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="zone_cave1"]
+transform = Transform( 0.980039, -0.189268, 0.0608314, 0.182214, 0.977543, 0.10587, -0.079503, -0.0926721, 0.992518, 0, 0, -2.71359 )
+intensity = 0.05
+extents = Vector3( 171.612, 32.287, 32.6937 )
+origin_offset = Vector3( 0.355469, 0, 1.10156 )
+interior_enable = true
+interior_ambient_color = Color( 0.0705882, 0.0705882, 0.0745098, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="zone_cave1"]
+transform = Transform( 0.923229, -0.0402709, 0.382133, 0.0372095, 0.999189, 0.0154014, -0.382444, 0, 0.923979, 137.479, 86.0844, -0.591194 )
+intensity = 0.28
+extents = Vector3( 17.4813, 27.2611, 20.1961 )
+interior_enable = true
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="zone_cave1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 135.809, 102.196, 21.5905 )
+extents = Vector3( 3.90549, 3.56122, 6.07052 )
+interior_ambient_color = Color( 0.447059, 0.243137, 0.243137, 1 )
+
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="zone_cave1"]
+transform = Transform( 1, 0, 0, 0, 0.978264, 0.207361, 0, -0.207361, 0.978264, -41.8618, -259.874, 21.6911 )
+intensity = 0.06
+extents = Vector3( 368.76, 222.716, 128.127 )
+origin_offset = Vector3( -13.5752, 2.23517e-10, 0 )
+interior_enable = true
+
+[node name="zone_cave2" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106.084, 0, 160.086 )
+
+[node name="OmniLight" type="OmniLight" parent="zone_cave2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.41999, 8.92444 )
+light_color = Color( 0.67451, 0.898039, 0.694118, 1 )
+light_energy = 0.205
+omni_range = 45.8396
+script = ExtResource( 39 )
+distance = 300.0
+
+[node name="death_plane" parent="zone_cave2" instance=ExtResource( 37 )]
+transform = Transform( 74.0136, 0, 0, 0, -3.23524e-06, 1, 0, -74.0136, -4.37114e-08, 3.8251, -23.7478, -0.0701904 )
+material/0 = SubResource( 6 )
+
+[node name="rock_kinematic" parent="zone_cave2" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65686, 1.53332, 37.2202 )
+
+[node name="rock_collapsible" parent="zone_cave2" instance=ExtResource( 8 )]
+transform = Transform( 0.981756, 0, -0.190146, 0, 1, 0, 0.190146, 0, 0.981756, -10.9729, -2.62127, 16.5222 )
+
+[node name="rock_collapsible2" parent="zone_cave2" instance=ExtResource( 8 )]
+transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -10.7202, -2.62127, 14.7359 )
+
+[node name="rock_collapsible3" parent="zone_cave2" instance=ExtResource( 8 )]
+transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -9.33702, -3.37846, -16.5102 )
+
+[node name="item_pickup" parent="zone_cave2" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0286, 0.533932, 37.1682 )
+item_id = "stamina_up"
+
+[node name="MeshInstance" type="MeshInstance" parent="zone_cave2/item_pickup"]
+transform = Transform( 0.807993, -0.589192, 0, 0.402386, 0.551816, 0.730469, -0.430386, -0.590214, 0.682946, 0, -0.151798, -0.0102997 )
+mesh = SubResource( 7 )
+
+[node name="wardrobe" parent="." instance=ExtResource( 32 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 52.4553, -29.2608, 64.5103 )

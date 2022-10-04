@@ -33,7 +33,7 @@ var bounce_timer := 0.0
 var grounded := true
 
 onready var laser := $laser
-onready var aim_cast := $laser/aim_cast
+onready var aim_cast := $aim_cast
 onready var awareness := $awareness
 onready var groundArea := $ground_area
 onready var clawHitbox := $claw_hitbox
@@ -134,7 +134,7 @@ func _physics_process(delta):
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Dead)
 		AI.Dead:
-			fall_down(delta)
+			pass
 	aim_cast.update()
 
 func aim(delta: float, speed: float):
@@ -215,9 +215,6 @@ func set_state(new_ai, _force := false):
 			sleeping = false
 			anim.travel("Death")
 			laser.hide()
-			$CollisionShape.disabled = true
-			$CollisionShape2.disabled = true
-			$CollisionShape3.disabled = false
 		AI.Damaged:
 			sleeping = false
 			if last_attacker:

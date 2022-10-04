@@ -33,6 +33,7 @@ func teleport(location):
 		var chunk_name = "chunk%03d" % location
 		var scn = get_tree().current_scene
 		if scn.has_node(chunk_name):
+			scn.unload_all()
 			var pos = scn.get_node(chunk_name).global_transform.origin
 			var player = Global.get_player()
 			var space = player.get_world().space
