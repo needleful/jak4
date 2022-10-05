@@ -121,10 +121,12 @@ func detect_enemies(_delta):
 func update_active_chunks(position: Vector3, instant := false):
 	for ch in chunks:
 		var local : Vector3 = position - ch.global_transform.origin
+		var hlocal : Vector3 = local
+		hlocal.y = 0
 		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*MIN_DIST_LOAD)
 		var must_load_zone: AABB = ch.get_aabb().grow(MIN_DIST_MUST_LOAD)
 		
-		if load_zone.has_point(local):
+		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
 			if instant or must_load_zone.has_point(local):
 				load_sync(ch)
 			else:
@@ -154,7 +156,7 @@ func update_active_chunks(position: Vector3, instant := false):
 			unload_str += "\n\t" + c
 		$debug/box/Label4.text = unload_str
 		
-	if position.y < -1000:
+	if position.y < -8000 and active_chunks.empty():
 		player.fall_to_death()
 
 func queue_load(ch: Spatial):

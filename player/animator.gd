@@ -273,11 +273,17 @@ func start_roll_particles():
 	start_kick_left(false)
 	start_kick_right(false)
 
-func play_pickup_sound(item: String):
-	if !item in sounds:
-		item = "_pickup"
-	play_sound("item_sound"+str(item_sound), item, true)
+func play_pickup_sound(item):
+	var part = "item_sound"+str(item_sound)
 	item_sound = item_sound != 1
+	if item is AudioStream:
+		var sound = audio.get_node(part)
+		sound.stream = item
+		sound.play()
+	else:
+		if !item in sounds:
+			item = "_pickup"
+		play_sound(part, item, true)
 
 func hold_gun(blend: float):
 	anim["parameters/GunHold/blend_amount"] = blend

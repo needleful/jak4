@@ -13,6 +13,7 @@ export(bool) var persistent := true
 export(bool) var gravity = false
 export(String) var friendly_name = ""
 export(bool) var from_kill := false
+export(AudioStream) var custom_sound
 
 const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50
@@ -57,7 +58,7 @@ func _physics_process(delta):
 
 func _on_area_body_entered(body):
 	var _x = Global.add_item(item_id, quantity)
-	body.get_item(item_id)
+	body.get_item(item_id, custom_sound)
 	if persistent:
 		Global.mark_picked(get_path())
 		if friendly_name != "":

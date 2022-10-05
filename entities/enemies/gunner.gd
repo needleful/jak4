@@ -33,7 +33,8 @@ var bounce_timer := 0.0
 var grounded := true
 
 onready var laser := $laser
-onready var aim_cast := $aim_cast
+onready var laser_geo := $laser/geomentry
+onready var aim_cast := $laser/aim_cast
 onready var awareness := $awareness
 onready var groundArea := $ground_area
 onready var clawHitbox := $claw_hitbox
@@ -189,13 +190,14 @@ func set_state(new_ai, _force := false):
 	if !laser:
 		return
 	
-	var mat_laser: SpatialMaterial = laser.material_override
+	var mat_laser: SpatialMaterial = laser_geo.material_override
 	gravity_scale = 1
 	match ai:
 		AI.Idle:
 			anim.travel("Idle")
 			laser.hide()
 		AI.Chasing:
+			quit_timer = 0.0
 			shot_timer = 0.0
 			anim.travel("Aim")
 			mat_laser.albedo_color = laser_color

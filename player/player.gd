@@ -1561,16 +1561,17 @@ func fall_to_death():
 	set_state(State.FallingDeath)
 
 func respawn():
-	emit_signal("died")
 	if game_ui.in_game:
 		game_ui.cancel_game()
 	cam_rig.reset()
 	set_state(State.Ground)
-	velocity = Vector3.ZERO
+	velocity = move_and_slide(Vector3.UP*0.1)
+	applied_ground_velocity = Vector3.ZERO
 	$fade/AnimationPlayer.play("fadein")
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
 	TimeManagement.resume()
+	emit_signal("died")
 
 func teleport_to(t: Transform):
 	$fade/AnimationPlayer.play("fadein")
@@ -1705,10 +1706,13 @@ func celebrate(item: Spatial):
 	held_item = item
 	set_state(State.GetItem)
 
-func get_item(id):
+func get_item(id, custom_sound: AudioStream = null):
 	if id == "capacitor":
 		celebrate(capacitor.instance())
-	mesh.play_pickup_sound(id)
+	if custom_sound:
+		mesh.play_pickup_sound(custom_sound)
+	else:
+		mesh.play_pickup_sound(id)
 
 func show_inventory():
 	for g in $ui/gameing/inventory.get_children():
