@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -9,7 +9,7 @@
 [ext_resource path="res://player/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
-[ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/item_get.gd" type="Script" id=10]
 [ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/diagetic/target.png" type="Texture" id=12]
 [ext_resource path="res://ui/icons/wep_pistol.svg" type="Texture" id=13]
@@ -853,6 +853,61 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
+[sub_resource type="Animation" id=76]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=75]
+resource_name = "show_and_fade"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2.5 ),
+"transitions": PoolRealArray( 6.27667, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [sub_resource type="StyleBoxEmpty" id=65]
 
 [sub_resource type="StyleBoxFlat" id=5]
@@ -896,7 +951,6 @@ collision/safe_margin = 0.01
 moving_platform_exclude_mask = 65536
 script = ExtResource( 1 )
 flag = ExtResource( 11 )
-capacitor = ExtResource( 10 )
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
 
@@ -1355,7 +1409,6 @@ wait_time = 6.0
 one_shot = true
 
 [node name="custom_game" type="Control" parent="ui/gameing"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
@@ -1681,6 +1734,28 @@ anchor_bottom = 1.0
 text = "Resetting"
 align = 1
 valign = 1
+
+[node name="item_get" type="Control" parent="ui/gameing"]
+visible = false
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 121.0
+margin_bottom = 155.0
+script = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="ui/gameing/item_get"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 1
+text = "Item Get: Wombo"
+align = 1
+valign = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/item_get"]
+anims/RESET = SubResource( 76 )
+anims/show_and_fade = SubResource( 75 )
 
 [node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
 pause_mode = 1

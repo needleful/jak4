@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=2]
@@ -43,6 +43,8 @@
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=41]
 [ext_resource path="res://entities/enemies/tentpole.tscn" type="PackedScene" id=42]
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=43]
+[ext_resource path="res://entities/visual/random_color.gd" type="Script" id=44]
+[ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=45]
 
 [sub_resource type="OccluderShapePolygon" id=3]
 polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
@@ -68,12 +70,8 @@ shader = ExtResource( 38 )
 shader_param/max_depth = 20.0
 shader_param/depth_color = null
 
-[sub_resource type="CylinderMesh" id=7]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 0.2
-radial_segments = 6
-rings = 1
+[sub_resource type="Gradient" id=9]
+colors = PoolColorArray( 0.683594, 1, 0.985168, 1, 0, 0.296875, 1, 1 )
 
 [node name="chunk085" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -730,12 +728,14 @@ transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.99998
 transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -9.33702, -3.37846, -16.5102 )
 
 [node name="item_pickup" parent="zone_cave2" instance=ExtResource( 14 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0286, 0.533932, 37.1682 )
+transform = Transform( 1, 0, 0, 0, 0.208538, 0.978014, 0, -0.978014, 0.208538, 11.0286, 0.379293, 37.1352 )
 item_id = "stamina_up"
 
-[node name="MeshInstance" type="MeshInstance" parent="zone_cave2/item_pickup"]
-transform = Transform( 0.807993, -0.589192, 0, 0.402386, 0.551816, 0.730469, -0.430386, -0.590214, 0.682946, 0, -0.151798, -0.0102997 )
-mesh = SubResource( 7 )
+[node name="preview" type="Spatial" parent="zone_cave2/item_pickup" instance=ExtResource( 45 )]
+transform = Transform( 1, 5.96046e-08, 2.23517e-08, 5.96046e-08, 1, -4.47035e-08, 1.49012e-08, 1.49012e-08, 1, 0.0322037, -0.147136, 0.00802612 )
+script = ExtResource( 44 )
+palette = SubResource( 9 )
+mesh_instance = NodePath("bottle2-kine/mesh")
 
 [node name="wardrobe" parent="zone_cave2" instance=ExtResource( 32 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 158.539, -29.2608, -95.5757 )

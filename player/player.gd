@@ -324,7 +324,6 @@ onready var coat_zone := $jackie/the_coat_zone
 onready var gun := $jackie/Armature/Skeleton/gun
 onready var lantern := $jackie/Armature/Skeleton/coat_tails/lantern
 export(PackedScene) var flag : PackedScene
-export(PackedScene) var capacitor : PackedScene
 
 var held_item
 var choosing_item := false
@@ -1702,17 +1701,25 @@ func show_prompt(actions: Array, text: String):
 func _on_prompt_timer_timeout():
 	$ui/gameing/tutorial.hide()
 
-func celebrate(item: Spatial):
+func celebrate(id: String, item: Spatial, local := Transform()):
 	held_item = item
 	set_state(State.GetItem)
+	held_item.transform = local
+	$ui/gameing/item_get.show_get(id)
 
-func get_item(id, custom_sound: AudioStream = null):
-	if id == "capacitor":
-		celebrate(capacitor.instance())
-	if custom_sound:
-		mesh.play_pickup_sound(custom_sound)
+func get_item(item: ItemPickup):
+	if item.item_id == "capacitor" or item.item_id in UPGRADE_ITEMS:
+		if item.has_node("preview"):
+			var preview = item.get_node("preview")
+			var t = preview.transform
+			item.remove_child(preview)
+			celebrate(item.item_id, preview, t)
+		else:
+			celebrate(item.item_id, null)
+	if item.custom_sound:
+		mesh.play_pickup_sound(item.custom_sound)
 	else:
-		mesh.play_pickup_sound(id)
+		mesh.play_pickup_sound(item.item_id)
 
 func show_inventory():
 	for g in $ui/gameing/inventory.get_children():

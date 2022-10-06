@@ -14,6 +14,7 @@ export(bool) var gravity = false
 export(String) var friendly_name = ""
 export(bool) var from_kill := false
 export(AudioStream) var custom_sound
+export(bool) var emit_signal_at_ready := false
 
 const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50
@@ -26,11 +27,16 @@ var sub_anim : AnimationPlayer
 
 func _ready():
 	if preview:
-		add_child(preview.instance())
+		var p = preview.instance()
+		add_child(p)
+		p.name = "preview"
 	if Engine.editor_hint:
 		return
 	if persistent and Global.is_picked(get_path()):
-		pick()
+		if emit_signal_at_ready:
+			pick()
+		else:
+			queue_free()
 		return
 	if from_kill:
 		$area/CollisionShape.disabled = true
@@ -58,7 +64,7 @@ func _physics_process(delta):
 
 func _on_area_body_entered(body):
 	var _x = Global.add_item(item_id, quantity)
-	body.get_item(item_id, custom_sound)
+	body.get_item(self)
 	if persistent:
 		Global.mark_picked(get_path())
 		if friendly_name != "":
