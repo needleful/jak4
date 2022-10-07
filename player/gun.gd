@@ -86,13 +86,13 @@ func _input(event):
 		aim_toggle = !aim_toggle
 	elif player.choosing_item:
 		return
-	elif event.is_action_pressed("wep_1"):
+	elif event.is_action_pressed("wep_1") and enabled_wep['wep_pistol']:
 		swap_to("wep_pistol")
-	elif event.is_action_pressed("wep_2"):
+	elif event.is_action_pressed("wep_2") and enabled_wep['wep_wave_shot']:
 		swap_to("wep_wave_shot")
-	elif event.is_action_pressed("wep_3"):
+	elif event.is_action_pressed("wep_3") and enabled_wep['wep_grav_gun']:
 		swap_to("wep_grav_gun")
-	elif event.is_action_pressed("wep_4"):
+	elif event.is_action_pressed("wep_4") and enabled_wep['wep_time_gun']:
 		swap_to("wep_time_gun")
 
 func _process(delta):

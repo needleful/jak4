@@ -483,7 +483,7 @@ func _physics_process(delta):
 				next_state = State.SlideLungeKick
 			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
 				next_state = State.Climb
-			elif after(TIME_COYOTE, best_floor_dot > MIN_DOT_GROUND, 1):
+			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(climb_area)):
 				next_state = State.Fall
@@ -864,9 +864,12 @@ func _physics_process(delta):
 		State.Roll:
 			accel(delta, desired_velocity * SPEED_ROLL, av, ACCEL, ACCEL_STEER_ROLL, 0.0)
 			rotate_to_velocity(desired_velocity)
-		State.RollJump, State.RollFall, State.WallJump:
+		State.RollJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity)
+			rotate_to_velocity(desired_velocity)
+		State.RollFall, State.WallJump:
+			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
 			rotate_to_velocity(desired_velocity)
 		State.BonkFall, State.Damaged:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_ROLL)

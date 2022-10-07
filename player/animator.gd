@@ -106,7 +106,8 @@ func blend_run_animation(movement: Vector3):
 func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
 	if velocity.length_squared() < 0.05:
 		velocity = Vector3.ZERO
-	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(velocity.x, velocity.y)
+	var l = velocity.length()
+	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(l,l)
 
 func force_play(state):
 	body.start(state)
