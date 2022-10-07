@@ -109,7 +109,7 @@ func _on_race_end(body):
 		overlay.new_best(race_time)
 
 	player.game_ui.complete_game()
-	player.celebrate(null)
+	player.celebrate("", null)
 	
 	var award: int
 	if race_time <= gold_seconds:

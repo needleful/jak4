@@ -805,7 +805,7 @@ func _physics_process(delta):
 				next_state = State.Ground
 		State.WallCling:
 			drain_stamina(
-				(desired_velocity.length() + STAMINA_DRAIN_MIN)
+				(STAMINA_DRAIN_MIN)
 				* STAMINA_DRAIN_CLIMB
 				* delta
 				* (1.0-sqrt(max(best_floor_dot, 0)))
