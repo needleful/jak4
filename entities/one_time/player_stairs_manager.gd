@@ -95,5 +95,5 @@ func descend():
 func randomize_lights(l):
 	for c in l.get_children():
 		if c is Light:
-			var r = sin(c.global_transform.origin.y)/2 + 0.5
+			var r = sin(12*c.global_transform.origin.y)/2 + 0.5
 			c.light_color = light_gradient.interpolate(r)
