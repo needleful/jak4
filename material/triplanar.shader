@@ -32,8 +32,8 @@ void fragment() {
 	float y_pow = sign(n.y)*pow(abs(n.y), power);
 	
 	vec4 color =
-		color_x*abs(n.x) 
-		+ color_z*abs(n.z)
+		color_x*pow(n.x, 2) 
+		+ color_z*pow(n.z, 2)
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	specularity = 

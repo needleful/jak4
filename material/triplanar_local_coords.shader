@@ -28,8 +28,8 @@ void fragment() {
 	float y_pow = sign(normal.y)*pow(abs(normal.y), power);
 	
 	vec4 color =
-		color_x*abs(normal.x) 
-		+ color_z*abs(normal.z)
+		color_x*pow(normal.x, 2) 
+		+ color_z*pow(normal.z, 2)
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
