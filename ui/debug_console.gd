@@ -38,7 +38,7 @@ func teleport(location):
 			var player = Global.get_player()
 			var space = player.get_world().space
 			var state = PhysicsServer.space_get_direct_state(space)
-			var ray_start = pos + Vector3.UP*2000
+			var ray_start = pos + Vector3.UP*3400
 			var ray_end = pos + Vector3.DOWN*1000
 			var col = state.intersect_ray(ray_start, ray_end)
 			if col:

@@ -2,10 +2,13 @@ extends Control
 
 export(String) var action setget set_action
 
+var default_size = rect_size
+
 # device/input event
 const prompt_path := "res://ui/prompts/%s/%s.png"
 
 func _ready():
+	default_size = rect_size
 	var _x = connect("visibility_changed", self, "_refresh")
 
 func _refresh():
@@ -64,11 +67,14 @@ func show_image(image: Texture):
 	$key_prompt.hide()
 	$texture.show()
 	$texture.texture = image
+	rect_size = image.get_size()
+	$texture.rect_min_size = image.get_size()
 
 func show_text(text):
 	$texture.hide()
 	$key_prompt.show()
 	$key_prompt/Label.text = text
+	rect_size = default_size
 
 func get_input_string(input:InputEvent):
 	if input is InputEventJoypadButton:
