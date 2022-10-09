@@ -338,18 +338,6 @@ func mark_picked(path: NodePath):
 func is_picked(path: NodePath) -> bool:
 	return path in game_state.picked_items
 
-func is_activated(node: Node) -> bool:
-	return node.get_path() in game_state.activated
-
-func mark_activated(node: Node):
-	if !node.get_path() in game_state.activated:
-		game_state.activated.append(node.get_path())
-func remove_activated(node: Node):
-	var i = game_state.activated.find(node.get_path())
-	
-	if i >= 0:
-		game_state.activated.remove(i)
-
 func get_rarity_color(rarity: int) -> Color:
 	match rarity:
 		Coat.Rarity.Common:

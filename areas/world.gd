@@ -230,6 +230,7 @@ func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):
 		print_debug("Tried adding duplicate content: ", chunk.name)
 		return
+	print("Loading ", chunk.name)
 	if chunk.has_node("lowres"):
 		chunk.remove_child(chunk.get_node("lowres"))
 	node.name = "dynamic_content"
@@ -250,6 +251,7 @@ func mark_inactive(chunk: Spatial):
 		load_queue.remove(load_i)
 	if !(chunk in active_chunks):
 		return
+	print("Unloading ", chunk.name)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
 	active_chunks.remove(active_chunks.find(chunk))

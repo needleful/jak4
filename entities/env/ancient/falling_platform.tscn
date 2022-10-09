@@ -13,6 +13,7 @@ height = 0.431063
 radius = 2.08642
 
 [node name="falling_platform" groups=["dynamic"] instance=ExtResource( 3 )]
+collision_layer = 0
 mode = 3
 mass = 250.0
 axis_lock_linear_x = true
@@ -40,6 +41,13 @@ collision_mask = 6
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0800614, 0 )
 shape = SubResource( 2 )
+
+[node name="KinematicBody" type="KinematicBody" parent="." index="4"]
+collision_layer = 24
+collision_mask = 15
+
+[node name="CollisionShape2" type="CollisionShape" parent="KinematicBody" index="0"]
+shape = SubResource( 1 )
 
 [connection signal="timeout" from="Timer" to="." method="_on_timeout"]
 [connection signal="body_entered" from="Area" to="." method="_on_body_entered"]

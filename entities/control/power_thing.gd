@@ -12,10 +12,15 @@ func _ready():
 	if has_node("AnimationPlayer"):
 		anim = $AnimationPlayer
 	if Global.valid_game_state:
-		if active or Global.is_activated(self):
-			activate(true)
+		if Global.has_stat(stat()):
+			if Global.stat(stat()):
+				print(get_path(), " is active")
+				activate(true)
+			else:
+				print(get_path(), " is not active")
+				deactivate(true)
 		else:
-			deactivate(true)
+			Global.set_stat(stat(), active)
 
 func _on_Area_body_entered(_body):
 	if active:
@@ -24,21 +29,24 @@ func _on_Area_body_entered(_body):
 		activate()
 
 func activate(auto: bool = false):
-	$capacitor.show()
 	active = true
+	$capacitor.show()
 	if anim:
 		anim.play("Activate")
 		if auto:
-			anim.seek(anim.current_animation_length)
-	if !auto: 
-		Global.mark_activated(self)
+			anim.advance(anim.current_animation_length)
+	if !auto:
+		Global.set_stat(stat(), active)
 	emit_signal("activated")
 	emit_signal("toggled", active)
 
 func deactivate(auto := false):
-	if !auto:
-		Global.remove_activated(self)
 	active = false
 	$capacitor.hide()
+	if !auto:
+		Global.set_stat(stat(), active)
 	emit_signal("deactivated")
 	emit_signal("toggled", active)
+
+func stat():
+	return str(get_path()) + "/activated"

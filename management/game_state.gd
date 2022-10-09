@@ -7,7 +7,6 @@ export(Vector3) var checkpoint_position: Vector3
 export(Resource) var current_coat: Resource
 export(Array, Resource) var all_coats: Array
 export(Array, NodePath) var picked_items: Array
-export(Array, NodePath) var activated: Array
 export(Array, Transform) var flags : Array
 # Dictionary(string category -> Dictionary(string subject -> Array(string) notes))
 export(Dictionary) var journal := {}

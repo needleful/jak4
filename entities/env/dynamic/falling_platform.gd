@@ -28,7 +28,7 @@ func _on_timeout():
 	else:
 		mode = RigidBody.MODE_RIGID
 		$Timer.start(time_to_unlock)
-		collision_layer = collision_layer | Global.get_player().moving_platform_exclude_mask
+		$KinematicBody.collision_layer = $KinematicBody.collision_layer | Global.get_player().moving_platform_exclude_mask
 
 func _on_player_died():
 	reset()

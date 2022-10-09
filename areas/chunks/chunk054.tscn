@@ -139,6 +139,9 @@ tracks/0/keys = {
 "values": [ 0.788, 0.551, 1.262, 0.195, 0.788, 0.907 ]
 }
 
+[sub_resource type="CylinderShape" id=254]
+radius = 31.0873
+
 [sub_resource type="SphereMesh" id=276]
 radius = 0.05
 height = 0.1
@@ -742,9 +745,6 @@ uv1_scale = Vector3( 7, 7, 7 )
 
 [sub_resource type="BoxShape" id=44]
 extents = Vector3( 3.29716, 3.64209, 0.109073 )
-
-[sub_resource type="CylinderShape" id=254]
-radius = 31.0873
 
 [sub_resource type="ShaderMaterial" id=46]
 resource_local_to_scene = true
@@ -1994,7 +1994,7 @@ transform = Transform( -0.00141701, -0.0176897, -0.999843, -0.999227, -0.0392581
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 125.322, -64.176, 116.732 )
 
 [node name="fountain2" parent="area_cave_lower" index="0" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 0.999394, 0.0348273, 0, -0.0348273, 0.999394, 6.08481, -7.37797, 74.2371 )
+transform = Transform( 1, 0, 0, 0, 0.999394, 0.0348273, 0, -0.0348273, 0.999394, 6.87601, -7.37148, 74.4232 )
 
 [node name="phone_pickup" parent="area_cave_lower" index="1" instance=ExtResource( 5 )]
 transform = Transform( -0.98355, 0.110702, -0.14274, 0.168605, 0.84618, -0.505521, 0.0648217, -0.521272, -0.850925, 6.3148, -5.48907, 78.9261 )
@@ -2035,7 +2035,7 @@ transform = Transform( 0.996175, -0.0805256, 0.0339255, -0.0756179, -0.599897, 0
 transform = Transform( -0.989146, -0.13799, 0.050481, -0.13781, 0.990434, 0.00703314, -0.0509685, 0, -0.9987, 2.30434, 16.4303, -18.7363 )
 
 [node name="lantern_pickup" parent="area_cave_lower" index="12" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.41854, -5.61925, 76.0955 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.15688, -6.04362, 76.0369 )
 item_id = "lantern"
 friendly_name = "lantern_054"
 
@@ -2104,7 +2104,16 @@ transform = Transform( -0.840057, 0, -0.542499, 0, 1, 0, 0.542499, 0, -0.840057,
 [node name="crawly5" parent="area_main_encounter" index="7" instance=ExtResource( 42 )]
 transform = Transform( -0.290805, 0, -0.956783, 0, 1, 0, 0.956783, 0, -0.290805, 56.2725, 29.3867, 24.8189 )
 
-[node name="tentpole" parent="area_main_encounter" index="8" instance=ExtResource( 23 )]
+[node name="speeder" parent="area_main_encounter" index="8" instance=ExtResource( 47 )]
+transform = Transform( -0.868088, 0, -0.496412, 0, 1, 0, 0.496412, 0, -0.868088, 63.9759, 29.5206, 37.209 )
+
+[node name="custom_awareness" type="Area" parent="area_main_encounter/speeder" index="11"]
+
+[node name="CollisionShape" type="CollisionShape" parent="area_main_encounter/speeder/custom_awareness" index="0"]
+transform = Transform( 1, 0, -3.72529e-09, 0, 1, 0, 3.72529e-09, 0, 1, 0, 0, 27.8503 )
+shape = SubResource( 254 )
+
+[node name="tentpole" parent="area_main_encounter" index="9" instance=ExtResource( 23 )]
 transform = Transform( -0.269908, 0, -0.962886, 0, 1, 0, 0.962886, 0, -0.269908, 39.4704, 40.0349, -39.656 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="area_main_encounter/tentpole" index="7"]
@@ -2113,7 +2122,7 @@ mesh = SubResource( 276 )
 skeleton = NodePath("")
 material/0 = SubResource( 278 )
 
-[node name="tentpole3" parent="area_main_encounter" index="9" instance=ExtResource( 23 )]
+[node name="tentpole3" parent="area_main_encounter" index="10" instance=ExtResource( 23 )]
 transform = Transform( -0.897735, 0, 0.440535, 0, 1, 0, -0.440535, 0, -0.897735, 69.9984, 40.0349, -71.6482 )
 reset_on_player_death = true
 
@@ -2123,7 +2132,7 @@ mesh = SubResource( 276 )
 skeleton = NodePath("")
 material/0 = SubResource( 279 )
 
-[node name="room1" type="VisibilityEnabler" parent="area_main_encounter" index="10"]
+[node name="room1" type="VisibilityEnabler" parent="area_main_encounter" index="11"]
 transform = Transform( 0.932283, 0, -0.36173, 0, 1, 0, 0.36173, 0, 0.932283, 18.2826, 0, 18.124 )
 aabb = AABB( -42.3277, -26.906, -47.0578, 84.6553, 53.812, 94.1155 )
 children_only = true
@@ -2390,7 +2399,7 @@ shape = SubResource( 272 )
 
 [node name="Timer" type="Timer" parent="area_main_encounter/room1/door_exit/trigger_zone" index="1"]
 
-[node name="room2" type="VisibilityEnabler" parent="area_main_encounter" index="11"]
+[node name="room2" type="VisibilityEnabler" parent="area_main_encounter" index="12"]
 transform = Transform( 0.926748, 0, -0.375684, 0, 1, 0, 0.375684, 0, 0.926748, 58.8363, -0.211205, -76.9333 )
 aabb = AABB( -41.6285, -32.4514, -58.7641, 86.8223, 64.9028, 100.694 )
 children_only = true
@@ -2663,7 +2672,7 @@ transform = Transform( 1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, 1, 15.7649, 
 [node name="dswitch_a" parent="area_main_encounter/room2" index="22" instance=ExtResource( 28 )]
 transform = Transform( -0.724489, 0, -0.689286, 0, 1, 0, 0.689286, 0, -0.724489, 21.9075, -18.6486, -21.9149 )
 
-[node name="room3" type="VisibilityEnabler" parent="area_main_encounter" index="12"]
+[node name="room3" type="VisibilityEnabler" parent="area_main_encounter" index="13"]
 transform = Transform( 0.92461, 0, -0.380915, 0, 1, 0, 0.380915, 0, 0.92461, 54.1992, 49.1518, -36.2615 )
 aabb = AABB( -33.6689, -10.9626, -99.1835, 95.4364, 31.4682, 198.367 )
 children_only = true
@@ -2884,21 +2893,12 @@ transform = Transform( 0.632501, 0, 0.774559, 0, 1, 0, -0.774559, 0, 0.632501, -
 min_rarity = 1
 max_rarity = 4
 
-[node name="room4" type="VisibilityEnabler" parent="area_main_encounter" index="13"]
+[node name="room4" type="VisibilityEnabler" parent="area_main_encounter" index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 57.8539, 30.3042, 0.267616 )
 aabb = AABB( -41.7805, -2.246, -22.3248, 69.9605, 8.17463, 64.3205 )
 children_only = true
 
-[node name="speeder" parent="area_main_encounter/room4" index="0" instance=ExtResource( 47 )]
-transform = Transform( -0.868088, 0, -0.496412, 0, 1, 0, 0.496412, 0, -0.868088, 6.15956, -0.783577, 37.0071 )
-
-[node name="custom_awareness" type="Area" parent="area_main_encounter/room4/speeder" index="11"]
-
-[node name="CollisionShape" type="CollisionShape" parent="area_main_encounter/room4/speeder/custom_awareness" index="0"]
-transform = Transform( 1, 0, -3.72529e-09, 0, 1, 0, 3.72529e-09, 0, 1, 0, 0, 27.8503 )
-shape = SubResource( 254 )
-
-[node name="room5" type="VisibilityEnabler" parent="area_main_encounter" index="14"]
+[node name="room5" type="VisibilityEnabler" parent="area_main_encounter" index="15"]
 transform = Transform( 0.919369, 0, -0.393395, 0, 1, 0, 0.393395, 0, 0.919369, 82.376, -4.18987, 15.2194 )
 aabb = AABB( -24.0437, -31.7849, -18.7378, 41.8744, 63.5697, 45.4327 )
 children_only = true
@@ -2987,10 +2987,10 @@ spot_range = 46.5939
 script = ExtResource( 60 )
 distance = 120.0
 
-[node name="bug_pickup" parent="area_main_encounter" index="15" instance=ExtResource( 19 )]
+[node name="bug_pickup" parent="area_main_encounter" index="16" instance=ExtResource( 19 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1634, -16.5464, 1.07346 )
 
-[node name="bug_pickup2" parent="area_main_encounter" index="16" instance=ExtResource( 19 )]
+[node name="bug_pickup2" parent="area_main_encounter" index="17" instance=ExtResource( 19 )]
 transform = Transform( -0.456177, 0, 0.889889, 0, 1, 0, -0.889889, 0, -0.456177, 9.21255, -15.618, 1.30307 )
 
 [node name="area_elevate" type="MultiMeshSystem" parent="." index="9"]
@@ -3035,15 +3035,12 @@ material = SubResource( 50 )
 
 [node name="falling_platform" parent="area_elevate/room1" index="1" instance=ExtResource( 48 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.74387, -3.05564, -3.39053 )
-collision_layer = 17
 
 [node name="falling_platform2" parent="area_elevate/room1" index="2" instance=ExtResource( 48 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.49803, 1.2455, 1.10647 )
-collision_layer = 17
 
 [node name="falling_platform3" parent="area_elevate/room1" index="3" instance=ExtResource( 48 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.90727, 6.07038, -2.33805 )
-collision_layer = 17
 
 [node name="bobble" parent="area_elevate/room1" index="4" instance=ExtResource( 44 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11938, -21.3046, 1.19205 )
@@ -3248,7 +3245,7 @@ children_only = true
 
 [node name="lighting" type="Spatial" parent="area_elevate/room3" index="0"]
 script = ExtResource( 32 )
-light_nodes = [ NodePath("../../../reflection_interior5"), NodePath("../../../reflection_interior6"), NodePath("../../../reflection_interior7") ]
+light_nodes = [ NodePath("../../../reflection_interior5"), NodePath("../../../reflection_interior6"), NodePath("../../../reflection_interior7"), NodePath("../../../reflection_interior1"), NodePath("../../../reflection_interior2"), NodePath("../../../reflection_interior3"), NodePath("../../../reflection_interior4") ]
 
 [node name="SpotLight" type="SpotLight" parent="area_elevate/room3/lighting" index="0"]
 transform = Transform( 1, -3.72529e-08, -1.77636e-15, 0, -4.37114e-08, 1, -3.72529e-08, -1, -4.37114e-08, 23.7371, 14.0525, 9.05491 )

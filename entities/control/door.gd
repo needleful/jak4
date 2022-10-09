@@ -30,6 +30,10 @@ func _ready():
 	if open:
 		open = false
 		add_power(required_power, true)
+	else:
+		if anim and anim.has_animation("Deactivate"):
+			anim.play("Deactivate")
+			anim.advance(anim.current_animation_length)
 	if deactivate_upon_death:
 		var _x = Global.get_player().connect("died", self, "clear_power", [true])
 	assert(anim != null, get_path())
@@ -74,6 +78,7 @@ func add_power(amount:= 1, instant := false):
 				anim.seek(0)
 		emit_signal("opened")
 		emit_signal("toggled", true)
+		print("opening ", name)
 	elif !should_open and open:
 		print("deactivating")
 		if anim.has_animation("Deactivate"):
@@ -86,4 +91,5 @@ func add_power(amount:= 1, instant := false):
 				anim.seek(0)
 		emit_signal("closed")
 		emit_signal("toggled", false)
+		print("closing ", name)
 	open = should_open
