@@ -21,6 +21,7 @@ const SPEED_DASH_V := 2.0
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
+const MIN_DOT_CLIMB_MOVEMENT := -0.7
 const MIN_DOT_CLIMB_AIR := 0.1
 const MIN_DOT_LEDGE := 0.2
 const MIN_DOT_CEILING := -0.7
@@ -535,8 +536,14 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
-			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot > MIN_DOT_CLIMB:
-				if can_climb():
+			elif (best_floor_dot < MIN_DOT_GROUND
+				and best_floor_dot > MIN_DOT_CLIMB
+				and desired_velocity.dot(best_normal) < MIN_DOT_CLIMB_MOVEMENT
+				and can_climb()
+			):
+				next_state = State.Climb
+			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
+				if best_floor_dot > MIN_DOT_CLIMB and can_climb():
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
@@ -1573,6 +1580,7 @@ func respawn():
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
 	TimeManagement.resume()
+	hide_prompt()
 	emit_signal("died")
 
 func teleport_to(t: Transform):
@@ -1700,6 +1708,10 @@ func show_prompt(actions: Array, text: String):
 	$ui/gameing/tutorial/Label.text = text
 	$ui/gameing/tutorial.show()
 	$ui/gameing/tutorial/prompt_timer.start()
+
+func hide_prompt():
+	$ui/gameing/tutorial.hide()
+	$ui/gameing/tutorial/prompt_timer.stop()
 
 func _on_prompt_timer_timeout():
 	$ui/gameing/tutorial.hide()
