@@ -213,7 +213,13 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 		return
 	
 	if shielded:
-		var d := dir.dot(global_transform.basis.z)
+		
+		var true_dir:Vector3
+		if source is Spatial:
+			true_dir = (global_transform.origin - source.global_transform.origin).normalized()
+		else:
+			true_dir = dir
+		var d := true_dir.dot(global_transform.basis.z)
 		if d < min_dot_shielded_damage:
 			# TODO: shield blocking state here?
 			return
