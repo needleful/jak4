@@ -27,6 +27,9 @@ func _on_body_entered(_body):
 	if override_music:
 		Music.set_music(default_music, combat_music)
 	scene.set_sun_enabled(show_sun)
+	for c in get_children():
+		if c is ReflectionProbe:
+			c.show()
 
 func _on_body_exited(_body):
 	wind.apply_volume(0)
@@ -35,3 +38,6 @@ func _on_body_exited(_body):
 	if override_music:
 		Music.reset()
 	scene.set_sun_enabled(true)
+	for c in get_children():
+		if c is ReflectionProbe:
+			c.hide()
