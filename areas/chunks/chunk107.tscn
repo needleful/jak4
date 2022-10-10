@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk107.glb" type="PackedScene" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=9]
 [ext_resource path="res://material/env/vaeler/trim_decayed.png" type="Texture" id=10]
 [ext_resource path="res://material/env/vaeler/wood-slats-old.png" type="Texture" id=11]
+[ext_resource path="res://entities/control/trigger_zone.gd" type="Script" id=12]
+[ext_resource path="res://entities/env/plants/grass1.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 9 )
@@ -41,6 +43,10 @@ shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/alpha_clip = 0.75
 shader_param/main_texture = ExtResource( 8 )
+
+[sub_resource type="CylinderShape" id=4]
+height = 15.0426
+radius = 12.1892
 
 [node name="chunk107" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
@@ -83,3 +89,27 @@ transform = Transform( 0.739197, 0, -0.673489, 0, 1, 0, 0.673489, 0, 0.739197, 2
 
 [node name="tree2" parent="." index="10" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 45.1653, 598.749, 59.9407 )
+
+[node name="house_trigger" type="Area" parent="." index="11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.7833, 600.828, 64.6553 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 12 )
+stat = "house_107"
+
+[node name="CollisionShape" type="CollisionShape" parent="house_trigger" index="0"]
+shape = SubResource( 4 )
+
+[node name="MultiMeshSystem" type="MultiMeshSystem" parent="." index="12"]
+
+[node name="grass1" parent="MultiMeshSystem" index="0" instance=ExtResource( 13 )]
+transform = Transform( 0.925068, 0.379802, 0, -0.379802, 0.925068, 0, 0, 0, 1, 36.0252, 603.438, 73.713 )
+
+[node name="grass3" parent="MultiMeshSystem" index="1" instance=ExtResource( 13 )]
+transform = Transform( -0.745797, 0.104189, -0.657976, 0.143893, 0.989573, -0.00640139, 0.650448, -0.0994522, -0.753012, 52.9499, 599.255, 71.3004 )
+
+[node name="grass2" parent="MultiMeshSystem" index="2" instance=ExtResource( 13 )]
+transform = Transform( 0.954852, 0.297083, 0, -0.297083, 0.954852, 0, 0, 0, 1, 40.5725, 600.339, 61.7958 )
+
+[node name="grass4" parent="MultiMeshSystem" index="3" instance=ExtResource( 13 )]
+transform = Transform( -0.825467, 0, 0.56445, 0, 1, 0, -0.56445, 0, -0.825467, 54.4743, 598.308, 67.6002 )

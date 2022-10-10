@@ -53,6 +53,11 @@ func process_player_distance(pos: Vector3):
 	elif !anim.is_playing():
 		anim.play(last_animation)
 
+func anim_queue(animation: String):
+	anim.play(animation)
+	anim.queue("Idle-loop")
+	return true
+
 func boast():
 	anim.play("ArmsToHips")
 	anim.queue("ArmsOnHips-loop")
