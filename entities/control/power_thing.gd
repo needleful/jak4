@@ -14,10 +14,8 @@ func _ready():
 	if Global.valid_game_state:
 		if Global.has_stat(stat()):
 			if Global.stat(stat()):
-				print(get_path(), " is active")
 				activate(true)
 			else:
-				print(get_path(), " is not active")
 				deactivate(true)
 		else:
 			Global.set_stat(stat(), active)

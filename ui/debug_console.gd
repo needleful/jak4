@@ -56,11 +56,12 @@ func view_history(offset):
 		line_edit.text = history[index]
 
 func teleport(location):
+	print("Teleport ", location)
 	if location is int:
 		var chunk_name = "chunk%03d" % location
 		var scn = get_tree().current_scene
 		if scn.has_node(chunk_name):
-			scn.unload_all()
+			#scn.unload_all()
 			var pos = scn.get_node(chunk_name).global_transform.origin
 			var player = Global.get_player()
 			var space = player.get_world().space
@@ -72,8 +73,9 @@ func teleport(location):
 				pos = col.position
 			var new_transform = player.global_transform
 			new_transform.origin = pos
+			print("Queue: ", get_tree().current_scene.chunk_loader.queue_size())
 			player.teleport_to(new_transform)
 		else:
-			return "No chunk: "+ chunk_name
+			return "No chunk: " + chunk_name
 	else:
 		return "Not yet supported"

@@ -9,8 +9,7 @@ const MIN_SQDIST_UPDATE := 10
 
 const UNLOAD_TIME := 10.0
 
-var chunks: Array
-var active: Dictionary
+var chunks: Dictionary
 
 var loading : Spatial
 var load_thread := Thread.new()
@@ -22,13 +21,7 @@ var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
 
 onready var player: PlayerBody = $player
-onready var player_last_postion: Vector3 = player.global_transform.origin
-
-export(Material) var debug_active_chunk_material
-export(Material) var debug_inactive_chunk_material
-
-const PATH_CONTENT := "res://areas/chunks/%s.tscn"
-const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
+onready var player_last_position: Vector3 = player.global_transform.origin
 
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
@@ -55,63 +48,35 @@ const FOG_MAX_HEIGHT := 3500
 onready var FOG_DISTANCE_MIN = fog_defaults.end
 onready var FOG_DISTANCE_MAX = fog_defaults.end*2.0
 
+var chunk_loader: ChunkLoader
+
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
 		Global.load_sync(false)
 		
+func _exit_tree():
+	chunk_loader.quit()
+		
 func _ready():
-	print("Readying world...")
 	for c in get_children():
 		if c.name.begins_with("chunk"):
-			chunks.append(c)
-			active[c.name] = 0
-			if Global.show_lowres:
-				var lowres_file: String = PATH_LOWRES % c.name
-				if ResourceLoader.exists(lowres_file):
-					var scn: PackedScene = load(lowres_file)
-					if scn:
-						var node = scn.instance()
-						node.name = "lowres"
-						lowres_chunks[c.name] = node
-						c.add_child(node)
-	update_active_chunks(player_last_postion)
+			chunks[c.name] = c
+	chunk_loader = ChunkLoader.new(chunks)
+	print("Readying world...")
+	
+	update_active_chunks(player_last_position)
 
 func _process(delta):
 	time += delta
 	var player_new_position = player.global_transform.origin
 	apply_fog(player_new_position.y)
-	if (player_last_postion - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
+	if (player_last_position - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
 		detect_enemies(delta)
 		update_active_chunks(player_new_position)
-		player_last_postion = player_new_position
-	
-	if !load_queue.empty() and !load_thread.is_alive():
-		if load_thread.is_active():
-			load_thread.wait_to_finish()
-		var _x = load_thread.start(self, "load_async", load_queue.pop_front())
-	
-	for ch in chunk_unload_waitlist:
-		chunk_unload_waitlist[ch] += delta
-		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
-			mark_inactive(get_node(ch))
-
-func get_chunk_path(chunk_name: String):
-	var content_file: String = PATH_CONTENT % chunk_name
-	if ResourceLoader.exists(content_file):
-		return content_file
-	else:
-		return null
-
-func get_or_load(chunk_name: String) -> PackedScene:
-	if chunk_name in loaded_chunks:
-		return loaded_chunks[chunk_name] as PackedScene
-	var content_file = get_chunk_path(chunk_name)
-	assert(content_file)
-	var content = ResourceLoader.load(content_file, "PackedScene", true) as PackedScene
-	if content:
-		loaded_chunks[chunk_name] = content
-	return content
+		player_last_position = player_new_position
+		if player_last_position.y < -8000:
+			player.fall_to_death()
 
 func detect_enemies(_delta):
 	var were_present := enemies_present
@@ -136,156 +101,27 @@ func detect_enemies(_delta):
 	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):
 		show_combat_tutorial()
 
-func update_active_chunks(position: Vector3, instant := false):
-	for ch in chunks:
+func update_active_chunks(position: Vector3):
+	print("Update chunks.")
+	for ch in chunks.values():
 		var local : Vector3 = position - ch.global_transform.origin
 		var hlocal : Vector3 = local
 		hlocal.y = 0
 		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*MIN_DIST_LOAD)
 		var must_load_zone: AABB = ch.get_aabb().grow(MIN_DIST_MUST_LOAD)
-		
+		# Reimplement load_sync and unloading over time
 		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
-			if instant or must_load_zone.has_point(local):
-				load_sync(ch)
-			else:
-				queue_load(ch)
-		else:
-			if instant:
-				mark_inactive(ch)
-			else:
-				queue_unload(ch)
-	if $debug.visible:
-		$debug/box/Label.text = "Moved from (%f, %f %f) to (%f %f %f)" % [
-			player_last_postion.x, player_last_postion.y, player_last_postion.z,
-			position.x, position.y, position.z
-		]
-		var active_str = "Active Chunks:"
-		for c in active.keys():
-			if active[c]:
-				active_str += "\n\t"+c
-		$debug/box/Label2.text = active_str
-		
-		var load_str = "Load Queue"
-		for c in load_queue:
-			load_str += "\n\t" + c.name
-		$debug/box/Label3.text = load_str
-		
-		var unload_str = "Unload Queue:"
-		for c in chunk_unload_waitlist:
-			unload_str += "\n\t" + c
-		$debug/box/Label4.text = unload_str
-		
-	if position.y < -8000:
-		var fall = true
-		for c in active:
-			if c:
-				fall = false
-				break
-		if fall:
-			player.fall_to_death()
+			if !chunk_loader.is_active(ch.name):
+				chunk_loader.queue_load(ch.name)
+		elif chunk_loader.is_active(ch.name):
+			chunk_loader.queue_unload(ch.name)
 
-func queue_load(ch: Spatial):
-	if ch.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(ch.name)
-	if !get_chunk_path(ch.name) or active[ch.name] or ch in load_queue or loading == ch:
-		return
-	if ch.has_node("dynamic_content"):
-		print_debug("Queued dynamic content [%d]: " % active[ch.name], ch.name)
-		return
-	if ch.name in loaded_chunks:
-		active[ch.name] += 1
-		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
-	else:
-		load_queue.push_back(ch)
-
-func load_async(ch:Spatial):
-	if ch.has_node("dynamic_content") or active[ch.name]:
-		print_debug("Async load dynamic content [%d]: " % active[ch.name], ch.name)
-		return
-	active[ch.name] += 1
-	print("Load async %d: " % active[ch.name], ch.name)
-	loading = ch
-	var scn: PackedScene = get_or_load(ch.name)
-	call_deferred("add_dynamic_content", ch, scn.instance())
-	loading = null
 
 func apply_fog(height: float):
 	var factor := clamp((height - FOG_MIN_HEIGHT)/(FOG_MAX_HEIGHT - FOG_MIN_HEIGHT), 0, 1)
 	fog_defaults.end = lerp(FOG_DISTANCE_MIN, FOG_DISTANCE_MAX, factor)
 	if !env_override:
 		env.environment.fog_depth_end = fog_defaults.end
-
-func load_sync(chunk: Spatial):
-	if chunk.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(chunk.name)
-	if active[chunk.name] or !get_chunk_path(chunk.name):
-		return
-	if loading == chunk and load_thread.is_active():
-		load_thread.wait_to_finish()
-		return
-	if chunk.has_node("dynamic_content"):
-		print_debug("Sync loaded dynamic content [%d]: " % active[chunk.name], chunk.name)
-		return
-	active[chunk.name] += 1
-	print("Load sync %d: " % active[chunk.name], chunk.name)
-	if chunk.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(chunk.name)
-	var load_i = load_queue.find(chunk)
-	if load_i >= 0:
-		load_queue.remove(load_i)
-	var scn: PackedScene = get_or_load(chunk.name)
-	if scn:
-		add_dynamic_content(chunk, scn.instance())
-
-func add_dynamic_content(chunk: Spatial, node: Node):
-	if chunk.has_node("dynamic_content"):
-		print_debug("Add dynamic content [%d]: " % active[chunk.name], chunk.name)
-		return
-	print("Content for ", chunk.name)
-	if chunk.has_node("lowres"):
-		chunk.remove_child(chunk.get_node("lowres"))
-	node.name = "dynamic_content"
-	chunk.add_child(node)
-
-func queue_unload(ch: Spatial):
-	var load_i = load_queue.find(ch)
-	if load_i >= 0:
-		load_queue.remove(load_i)
-	if !active[ch.name]:
-		return
-	if !(ch.name in chunk_unload_waitlist):
-		chunk_unload_waitlist[ch.name] = 0.0 
-
-func mark_inactive(chunk: Spatial):
-	var load_i = load_queue.find(chunk)
-	if load_i >= 0:
-		load_queue.remove(load_i)
-	if !active[chunk.name]:
-		return
-	active[chunk.name] -= 1
-	print("Unloading %d: " % active[chunk.name], chunk.name)
-	if chunk.name in chunk_unload_waitlist:
-		var _x = chunk_unload_waitlist.erase(chunk.name)
-	if chunk.has_node("dynamic_content"):
-		chunk.get_node("dynamic_content").queue_free()
-		if chunk.name in lowres_chunks:
-			var l: Node = lowres_chunks[chunk.name]
-			l.request_ready()
-			chunk.add_child(l)
-
-func unload_all():
-	print("Unloading all chunks..")
-	load_queue.clear()
-	chunk_unload_waitlist.clear()
-	for a in active.keys():
-		active[a] = 0
-	for ch in chunks:
-		if ch.has_node("dynamic_content"):
-			ch.get_node("dynamic_content").queue_free()
-		if ch.name in lowres_chunks:
-			var l: Node = lowres_chunks[ch.name]
-			l.request_ready()
-			ch.add_child(l)
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")

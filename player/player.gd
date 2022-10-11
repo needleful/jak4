@@ -1584,6 +1584,7 @@ func respawn():
 	emit_signal("died")
 
 func teleport_to(t: Transform):
+	print("teleporting to: ", t)
 	$fade/AnimationPlayer.play("fadein")
 	global_transform.origin = t.origin
 
