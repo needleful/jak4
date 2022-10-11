@@ -373,11 +373,13 @@ func save_checkpoint(pos: Vector3):
 func save_game():
 	save_sync()
 
-func load_sync():
+func load_sync(reload := true):
+	print("loading save")
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
 		valid_game_state = true
-		var _x = get_tree().reload_current_scene()
+		if reload:
+			var _x = get_tree().reload_current_scene()
 	else:
 		print_debug("Tried to load with no save at ", save_path)
 		valid_game_state = false

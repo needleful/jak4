@@ -10,7 +10,7 @@ const MIN_SQDIST_UPDATE := 10
 const UNLOAD_TIME := 10.0
 
 var chunks: Array
-var active_chunks: Array
+var active: Dictionary
 
 var loading : Spatial
 var load_thread := Thread.new()
@@ -57,12 +57,14 @@ onready var FOG_DISTANCE_MAX = fog_defaults.end*2.0
 
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
-		Global.load_sync()
+		Global.load_sync(false)
 		
 func _ready():
+	print("Readying world...")
 	for c in get_children():
 		if c.name.begins_with("chunk"):
 			chunks.append(c)
+			active[c.name] = 0
 			if Global.show_lowres:
 				var lowres_file: String = PATH_LOWRES % c.name
 				if ResourceLoader.exists(lowres_file):
@@ -72,7 +74,7 @@ func _ready():
 						node.name = "lowres"
 						lowres_chunks[c.name] = node
 						c.add_child(node)
-	update_active_chunks(player_last_postion, true)
+	update_active_chunks(player_last_postion)
 
 func _process(delta):
 	time += delta
@@ -94,17 +96,22 @@ func _process(delta):
 		if chunk_unload_waitlist[ch] > UNLOAD_TIME:
 			mark_inactive(get_node(ch))
 
+func get_chunk_path(chunk_name: String):
+	var content_file: String = PATH_CONTENT % chunk_name
+	if ResourceLoader.exists(content_file):
+		return content_file
+	else:
+		return null
+
 func get_or_load(chunk_name: String) -> PackedScene:
 	if chunk_name in loaded_chunks:
 		return loaded_chunks[chunk_name] as PackedScene
-	var content_file: String = PATH_CONTENT % chunk_name
-	if ResourceLoader.exists(content_file):
-		var content = ResourceLoader.load(content_file, "PackedScene", true) as PackedScene
-		if content:
-			loaded_chunks[chunk_name] = content
-		return content
-	else:
-		return null
+	var content_file = get_chunk_path(chunk_name)
+	assert(content_file)
+	var content = ResourceLoader.load(content_file, "PackedScene", true) as PackedScene
+	if content:
+		loaded_chunks[chunk_name] = content
+	return content
 
 func detect_enemies(_delta):
 	var were_present := enemies_present
@@ -153,8 +160,9 @@ func update_active_chunks(position: Vector3, instant := false):
 			position.x, position.y, position.z
 		]
 		var active_str = "Active Chunks:"
-		for c in active_chunks:
-			active_str += "\n\t"+c.name
+		for c in active.keys():
+			if active[c]:
+				active_str += "\n\t"+c
 		$debug/box/Label2.text = active_str
 		
 		var load_str = "Load Queue"
@@ -167,33 +175,35 @@ func update_active_chunks(position: Vector3, instant := false):
 			unload_str += "\n\t" + c
 		$debug/box/Label4.text = unload_str
 		
-	if position.y < -8000 and active_chunks.empty():
-		player.fall_to_death()
+	if position.y < -8000:
+		var fall = true
+		for c in active:
+			if c:
+				fall = false
+				break
+		if fall:
+			player.fall_to_death()
 
 func queue_load(ch: Spatial):
 	if ch.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(ch.name)
-	if ch in active_chunks:
-		return
-	if loading == ch:
+	if !get_chunk_path(ch.name) or active[ch.name] or ch in load_queue or loading == ch:
 		return
 	if ch.has_node("dynamic_content"):
-		print_debug("Duplicate dynamic content: ", ch.name)
-		return
-	var load_i = load_queue.find(ch)
-	if load_i >= 0:
+		print_debug("Queued dynamic content [%d]: " % active[ch.name], ch.name)
 		return
 	if ch.name in loaded_chunks:
-		active_chunks.append(ch)
+		active[ch.name] += 1
 		add_dynamic_content(ch, loaded_chunks[ch.name].instance())
 	else:
 		load_queue.push_back(ch)
 
 func load_async(ch:Spatial):
-	if ch.has_node("dynamic_content") or (ch in active_chunks):
-		print_debug("Duplicate dynamic content: ", ch.name)
+	if ch.has_node("dynamic_content") or active[ch.name]:
+		print_debug("Async load dynamic content [%d]: " % active[ch.name], ch.name)
 		return
-	active_chunks.append(ch)
+	active[ch.name] += 1
+	print("Load async %d: " % active[ch.name], ch.name)
 	loading = ch
 	var scn: PackedScene = get_or_load(ch.name)
 	call_deferred("add_dynamic_content", ch, scn.instance())
@@ -208,15 +218,16 @@ func apply_fog(height: float):
 func load_sync(chunk: Spatial):
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
-	if (chunk in active_chunks):
+	if active[chunk.name] or !get_chunk_path(chunk.name):
 		return
 	if loading == chunk and load_thread.is_active():
 		load_thread.wait_to_finish()
 		return
 	if chunk.has_node("dynamic_content"):
-		print_debug("Duplicate dynamic content: ", chunk.name)
+		print_debug("Sync loaded dynamic content [%d]: " % active[chunk.name], chunk.name)
 		return
-	active_chunks.append(chunk)
+	active[chunk.name] += 1
+	print("Load sync %d: " % active[chunk.name], chunk.name)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
 	var load_i = load_queue.find(chunk)
@@ -228,9 +239,9 @@ func load_sync(chunk: Spatial):
 
 func add_dynamic_content(chunk: Spatial, node: Node):
 	if chunk.has_node("dynamic_content"):
-		print_debug("Tried adding duplicate content: ", chunk.name)
+		print_debug("Add dynamic content [%d]: " % active[chunk.name], chunk.name)
 		return
-	print("Loading ", chunk.name)
+	print("Content for ", chunk.name)
 	if chunk.has_node("lowres"):
 		chunk.remove_child(chunk.get_node("lowres"))
 	node.name = "dynamic_content"
@@ -240,7 +251,7 @@ func queue_unload(ch: Spatial):
 	var load_i = load_queue.find(ch)
 	if load_i >= 0:
 		load_queue.remove(load_i)
-	if !(ch in active_chunks):
+	if !active[ch.name]:
 		return
 	if !(ch.name in chunk_unload_waitlist):
 		chunk_unload_waitlist[ch.name] = 0.0 
@@ -249,12 +260,12 @@ func mark_inactive(chunk: Spatial):
 	var load_i = load_queue.find(chunk)
 	if load_i >= 0:
 		load_queue.remove(load_i)
-	if !(chunk in active_chunks):
+	if !active[chunk.name]:
 		return
-	print("Unloading ", chunk.name)
+	active[chunk.name] -= 1
+	print("Unloading %d: " % active[chunk.name], chunk.name)
 	if chunk.name in chunk_unload_waitlist:
 		var _x = chunk_unload_waitlist.erase(chunk.name)
-	active_chunks.remove(active_chunks.find(chunk))
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
 		if chunk.name in lowres_chunks:
@@ -266,14 +277,15 @@ func unload_all():
 	print("Unloading all chunks..")
 	load_queue.clear()
 	chunk_unload_waitlist.clear()
-	for a in active_chunks:
-		if a.has_node("dynamic_content"):
-			a.get_node("dynamic_content").queue_free()
-		if a.name in lowres_chunks:
-			var l: Node = lowres_chunks[a.name]
+	for a in active.keys():
+		active[a] = 0
+	for ch in chunks:
+		if ch.has_node("dynamic_content"):
+			ch.get_node("dynamic_content").queue_free()
+		if ch.name in lowres_chunks:
+			var l: Node = lowres_chunks[ch.name]
 			l.request_ready()
-			a.add_child(l)
-	active_chunks.clear()
+			ch.add_child(l)
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
