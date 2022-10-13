@@ -58,54 +58,134 @@
 
 :_entry113
 
-{Global.stat("riley/apology")}
+{!Global.stat("riley/apology") and Global.stat("capacitor_113")}
+	?{riley/capacitor}
+		{Global.add_stat("riley/113/argue") == 1}
+			Oh my God! I told you not to take that capacitor! {remember("Riley's angry at me for taking the capacitor from the tower. Honestly I think she's overreacting.")}
+			{Global.stat("riley/113/days_collapse")}
+				[You] You said it would take days to collapse, not that it'd fall out from under me!
+				Oh, and it would be fine if it fell on the village tomorrow?
+			{otherwise}
+				[You] How was I supposed to know the whole tower would fall over?
+				Because I told you it would!
+			[You] Oh, whatever. It didn't fall on the village, so I don't see the issue.
+			It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
+			[You] I don't know! They move or something!
+			Ugh.
+		{otherwise}
+			I'm not in a talky mood right now. We'll probably see each other again. But seriously, if someone tells you something is a bad idea, listen to them.
+	{otherwise}
+		{Global.add_stat("riley/113/argue") == 1}
+			{talked == 0}
+				Ine kes?! Nurane kuloron ine?
+				[You] W-what?
+				What? A Vaeler? Nevermind, I'm asking about what you did to collapse the tower!
+			{otherwise}
+				What did you do?!
+			[You] What do you mean?
+			The entire tower collapsed! Did you shut down the power or something?!
+			?{armstrong/asked_tower}
+				[You] I... uh, assumed it would take longer.
+				You KNEW this would happen?
+			{otherwise}
+				{!task_exists("activate_the_medium")}
+					[You] I just took this curious thing! I didn't know it was important!
+				{otherwise}
+					[You] ... I don't see how that would have caused the tower to fall apart.
+				Vaelers...
+				These buildings are ancient. They have some sort of self-repair system. If you break the electrical system, they fall apart. Did you seriously think nothing would happen if you took it out?
+			You could have crushed that entire village in the valley!
+			[You] Well, it didn't fall on the village, so I don't see the issue.
+			It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
+			[You] I don't know! They move or something!
+			Ugh.
+		{otherwise}
+			I'm not in the mood to talk with you right now.
+	{exit()}
+
+?{riley/apology} {!Global.stat("riley/113/apologize")}
+	+{riley/113/apologize}
 	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
 	[You] Really? Wow!
 	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
+	Did you need anything?
+	+{riley/113/talk}
 
-{otherwise if Global.stat("capacitor_113")}
-	{Global.add_stat("riley/113/argue") == 1}
-		Oh my God! I told you not to take that capacitor! {remember("Riley's angry at me for taking the capacitor from the tower. Honestly I think she's overreacting.")}
-		{Global.stat("riley/113/days_collapse")}
-			[You] You said it would take days to collapse, not that it'd fall out from under me!
-			Oh, and it would be fine if it fell on the village tomorrow?
+// Never saved Riley up at the thing
+{otherwise if !Global.stat("riley/113/talk") and !Global.stat("riley/126/reward")}
+	// But they did talk to her
+	?{riley/126/talked}
+		+{riley/not_saved}
+		[You] Oh, I thought you were stranded on top of the scrap tower over there?
+		I managed to get down on my own. I never caught your name by the by.
+		[You] Oh, I'm Jackie. Sorry. I meant to help, but those creatures are rather difficult to hit.
+		Riley. Don't worry about it. I'll try again later. I couldn't get a good look if there was a capacitor up there.
+	{otherwise}
+		{format("italic")}N'seit mi!
+		> {skip()} N'seit mi.
+			+{language/nseit_mi}
+			[You] nset me.
+			// Your accent is interesting. Where are you from?
+			{format("italic")} Yuukirha inere uko ghimres. Pol tu ine?
+			[You] Uh... I don't know.
+		> Uh, hello.
+		Whoa, a Vaeler! I didn't know you guys ever came out here! Seems too sunny for you.
+		[You] Uh, I manage.
+		I'm Riley, by the way.
+		[You] Jackie.... So what is this place?
+		It's an ancient tower.  There's all sorts of structures like it. They're MILLIONS of years old!
+		[You] Really? That really stretches belief.
+		Yeah! They've been carbon dated and everything. The metal goes back to like two million years ago.
+		{Global.task_exists("activate_the_medium")}
+			[You] So I've been looking for ancient capacitors. Would there be one in the tower.
+			Oh. Uh. Yeah, most of the structures have capacitors. But you shouldn't take them.
+			[You] Why not?
+			+{riley/capacitor}
+			{Global.note_task("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it or the tower would collapse. I'm not sure I see what the harm of that is if it's been abandoned for centuries.")}
+			They're so old that they're on the brink of collapse. They have active, like, self-repair systems that keep them running. If the power gets interrupted, like by taking out capacitors, they can completely fall apart.
+			[You] ...
 		{otherwise}
-			[You] How was I supposed to know the whole tower would fall over?
-			Because I told you it would!
-		[You] Oh, whatever. It didn't fall on the village, so I don't see the issue.
-		It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
-		[You] I don't know! They move or something!
-		Ugh.
-	{otherwise}
-		I'm not in a talky mood right now. We'll probably see each other again. But seriously, if someone tells you something is a bad idea, listen to them.
+			[You] What's inside them? Anything interesting?
+			Well, yeah. They can be pretty cool, as long as you can fight off specters.
+		+{riley/113/talk}
+
+{otherwise if Global.add_stat("riley/113/talk") == 1}
+	[You] Hi Riley.
+	Hi again, uh...
+	[You] Jackie.
+	Right! Hi Jackie. Thanks for the help back with those deathgnats.
+	[You] So this is the tower you were talking about? With the capacitor?
+	Right. You shouldn't take it.
+	[You] ... Well, where else would I get a capacitor?
+	+{riley/capacitor}
+	{Global.note_task("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it or the tower would collapse. I'm not sure I see what the harm of that is if it's been abandoned for centuries.")}
+	I'm not sure. But seriously. These things are so old they're on the brink of collapse. They have active, like, self-repair systems that keep them running. If the power gets interrupted, like by taking out capacitors, they can completely fall apart.
+	[You] ...
+{otherwise if !Global.stat("capacitor_113") and !Global.stat("riley/113/days_collapse")}
+`	+{riley/capacitor}
+	[You] Do you really think this thing would collapse if I took the capacitor?
+	+{riley/113/days_collapse} Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
+	Did you need anything?
 {otherwise}
-	{Global.add_stat("riley/113/talk") == 1}
-		[You] Hi Riley.
-		Hi again, uh...
-		[You] Jackie.
-		Right! Hi Jackie. Thanks for the help back with those deathgnats.
-		[You] So this is the tower you were talking about? With the capacitor?
-		Right. You shouldn't take it.
-		[You] ... Well, where else would I get a capacitor?
-		I'm not sure. But seriously. These ancient structures are on the brink of collapse. They have active supports powered with their energy systems. Without the capacitors, they can completely fall apart.
-		[You] ...
-		{Global.note_task("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it. I'm not sure I see what the harm could be.")}
-	{otherwise}
-		[You] Do you really think this thing would collapse if I took the capacitor?
-		{Global.add_stat("riley/113/days_collapse")} Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
-	> Say, could I buy some supplies off you?
-		Sure, I have some spare gear.
-		{shop()}
-		{exiting()} Okay, see you around.
-		{exit()}
-	> Okay, see you.
-		{exit()}
+	Hey again Jackie. Did you need anything?
+
+> {!Global.stat("capacitor_113") and !Global.stat("riley/apology")} I wanted to apologize...
+	{subtopic("apology")}
+	{exit()}
+> Say, could I buy some supplies off you?
+	Sure, I have some spare gear.
+	{shop()}
+	{exiting()} Okay, see you around.
+	{exit()}
+> Okay, see you.
+	{exit()}
 {exit()}
 
 :_entry126
 // Riley's introduction
 // Placeholder
 {main_speaker.saved}
+	+{riley/126/talked}
 	{talked == 0} Wow miss, thanks for saving me!
 		{remember("She was quite grateful when I helped her off that scrap pile.")}
 		[You] I did?
@@ -140,7 +220,8 @@
 		> Okay, see you.
 			Safe travels!
 			{exit()}
-{otherwise if talked > 0} Seriously, I could use some help with those deathgnats.
+{otherwise if talked > 0}
+	Seriously, I could use some help with those deathgnats.
 	[You] No worries, they're tricky to hit but I've got it.
 	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
 {otherwise} Hey there! I could use some help. I'm stuck up here because of those two deathgnats! If you could take them out, I'll share some of the stuff I found with you! {remember("I found this strange girl stranded at the top of a scrap pile. How did she get here?")}
