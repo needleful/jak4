@@ -58,13 +58,16 @@ func _exit_tree():
 	chunk_loader.quit()
 		
 func _ready():
+	chunk_loader = ChunkLoader.new()
+	print("Readying world...")
+	var _x = chunk_loader.connect("load_start", self, "_on_load_started")
+	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
+	
 	for c in get_children():
 		if c.name.begins_with("chunk"):
 			chunks[c.name] = c
-	chunk_loader = ChunkLoader.new(chunks)
-	print("Readying world...")
-	
-	update_active_chunks(player_last_position)
+	update_active_chunks(player.global_transform.origin)
+	start_loading_chunks()
 
 func _process(delta):
 	time += delta
@@ -77,6 +80,24 @@ func _process(delta):
 		player_last_position = player_new_position
 		if player_last_position.y < -8000:
 			player.fall_to_death()
+
+func start_loading_chunks():
+	# Sort the chunks by distance from player
+	var sorted_chunks := chunks.values()
+	sorted_chunks.sort_custom(self, "compare_distances")
+	chunk_loader.start_loading(sorted_chunks)
+
+func _on_load_started():
+	$loading.show()
+
+func _on_load_complete():
+	chunk_loader.quit()
+	$loading.hide()
+
+func compare_distances(a: Spatial, b: Spatial):
+	var dist_a = (player_last_position - a.global_transform.origin).length_squared()
+	var dist_b = (player_last_position - b.global_transform.origin).length_squared()
+	return dist_a < dist_b
 
 func detect_enemies(_delta):
 	var were_present := enemies_present
@@ -112,9 +133,9 @@ func update_active_chunks(position: Vector3):
 		# Reimplement load_sync and unloading over time
 		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
 			if !chunk_loader.is_active(ch.name):
-				chunk_loader.queue_load(ch.name)
+				chunk_loader.queue_load(ch)
 		elif chunk_loader.is_active(ch.name):
-			chunk_loader.queue_unload(ch.name)
+			chunk_loader.queue_unload(ch)
 
 
 func apply_fog(height: float):

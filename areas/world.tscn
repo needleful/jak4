@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -74,6 +74,11 @@ extents = Vector3( 95, 299, 803 )
 extents = Vector3( 3750, 2000, 100 )
 
 [sub_resource type="BoxShape" id=14]
+
+[sub_resource type="DynamicFont" id=15]
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
 
 [node name="world" instance=ExtResource( 4 )]
 script = ExtResource( 2 )
@@ -1512,5 +1517,18 @@ script = ExtResource( 19 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 shape = SubResource( 14 )
+
+[node name="loading" type="Label" parent="." index="221"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -51.5
+margin_top = -7.0
+margin_right = 51.5
+margin_bottom = 7.0
+custom_fonts/font = SubResource( 15 )
+text = "Loading World..."
 
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

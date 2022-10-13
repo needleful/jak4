@@ -73,7 +73,6 @@ func teleport(location):
 				pos = col.position
 			var new_transform = player.global_transform
 			new_transform.origin = pos
-			print("Queue: ", get_tree().current_scene.chunk_loader.queue_size())
 			player.teleport_to(new_transform)
 		else:
 			return "No chunk: " + chunk_name
