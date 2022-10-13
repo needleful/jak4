@@ -108,9 +108,10 @@ func queue_unload(chunk: Spatial):
 		var d = chunk.get_node("dynamic_content")
 		chunk.remove_child(d)
 		_deletion_queue.push_back(d)
-	var c = _get_content(_loaded_content, chunk.name)
-	if c is Node:
-		chunk.add_child(c)
+	if !chunk.has_node("lowres"):
+		var c = _get_content(_lowres, chunk.name)
+		if c is Node:
+			chunk.add_child(c)
 
 func is_active(name: String) -> bool:
 	var res: bool
