@@ -441,8 +441,7 @@ func back():
 	if call_stack.empty():
 		return true
 	var caller = call_stack.pop_back()
-	current_item = caller
-	get_next()
+	current_item = sequence.canonical_next(caller)
 	return RESULT_SKIP
 
 func coat_trade_stat() -> String:

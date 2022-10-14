@@ -57,9 +57,10 @@ func gravity_stun(_damage):
 func take_damage(damage, dir, _source: Node):
 	velocity += damage*dir*damage_speed
 
-func _on_damage_area_body_exited(body):
-	if body in damaged_bodies or !body.has_method("take_damage"):
+func _on_damage_area_body_entered(body):
+	if state != State.Falling or body in damaged_bodies or !body.has_method("take_damage"):
 		return
 	var dir = (body.global_transform.origin - global_transform.origin).normalized()
 	body.take_damage(damage_on_hit, dir, self)
 	take_damage(1, -dir, self)
+

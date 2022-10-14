@@ -30,6 +30,7 @@ onready var env := $WorldEnvironment
 onready var env_tween := $env_tween
 onready var sun_tween := $sun_tween
 onready var sun := $DirectionalLight
+var sun_enabled := true
 
 onready var fog_defaults := {
 	"color":env.environment.fog_color,
@@ -66,8 +67,41 @@ func _ready():
 	for c in get_children():
 		if c.name.begins_with("chunk"):
 			chunks[c.name] = c
+	#load_everything()
 	update_active_chunks(player.global_transform.origin)
 	start_loading_chunks()
+
+func load_everything():
+	for c in chunks.values():
+		var path = chunk_loader.PATH_CONTENT % c.name
+		if ResourceLoader.exists(path):
+			var scn = load(path).instance()
+			scn.name = "dynamic_content"
+			c.add_child(scn)
+
+func free_everything():
+	print("everything mus go!!!")
+	free_between(10, 80)
+
+func free_between(start, end):
+	var i = 0
+	for c in chunks.values():
+		i += 1
+		if i < start:
+			continue
+		elif i > end:
+			break
+		if c.has_node("dynamic_content"):
+			print(c.name)
+			c.get_node('dynamic_content').queue_free()
+
+func free_every_other(on_even : bool):
+	var even = on_even
+	for c in chunks.values():
+		if c.has_node("dynamic_content") and even:
+			print(c.name)
+			c.get_node('dynamic_content').queue_free()
+		even = !even
 
 func _process(delta):
 	time += delta
@@ -175,6 +209,7 @@ func get_wind_audio():
 	return $audio_wind
 
 func set_sun_enabled(enabled:bool):
+	sun_enabled = enabled
 	if time < TIME_READY:
 		sun.visible = enabled
 		return

@@ -2,7 +2,12 @@ extends Control
 
 onready var tabs: TabContainer = $tabs
 
+func _input(event):
+	if visible and tabs.current_tab != 0 and event.is_action_pressed("ui_cancel"):
+		get_parent().unpause()
+
 func set_active(a):
+	set_process_input(a)
 	if a:
 		safe_set_tab(tabs.current_tab)
 	if !a:

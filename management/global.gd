@@ -60,6 +60,50 @@ func _physics_process(delta):
 			b.gravity_scale = 1
 			var _x = gravity_stunned_bodies.erase(b)
 
+func get_action_input_string(action: String, override = null):
+	var gamepad
+	if override != null:
+		gamepad = override
+	else:
+		gamepad = using_gamepad
+		
+	var input: InputEvent
+	for event in InputMap.get_action_list(action):
+		if gamepad and (
+			event is InputEventJoypadButton
+			or event is InputEventJoypadMotion
+		):
+			input = event
+			break
+
+		elif !gamepad and (
+			event is InputEventKey
+			or event is InputEventMouseButton
+		):
+			input = event
+			break
+	
+	if input is InputEventKey:
+		var scancode = input.physical_scancode
+		if !scancode:
+			scancode = input.scancode
+		var key_str = OS.get_scancode_string(scancode)
+		if key_str == "":
+			key_str = "<unbound>"
+		return key_str
+
+	return get_input_string(input)
+
+func get_input_string(input:InputEvent):
+	if input is InputEventJoypadButton:
+		return "gamepad"+str(input.button_index)
+	elif input is InputEventMouseButton:
+		return "mouse"+str(input.button_index)
+	elif input is InputEventJoypadMotion:
+		return "axis"+str(input.axis)
+	return str(input)
+
+
 func gravity_stun_body(b: RigidBody):
 	gravity_stunned_bodies[b] = gravity_stun_time
 	b.sleeping = false

@@ -24,7 +24,7 @@ func _ready():
 
 func _input(event):
 	match mode:
-		Mode.Gameing:
+		Mode.Gameing, Mode.Dialog:
 			if event.is_action_pressed("pause"):
 				set_mode(Mode.Paused)
 			elif event.is_action_pressed("debug_console"):

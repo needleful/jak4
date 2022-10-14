@@ -1,5 +1,6 @@
 :shop_entry
-{talked == 0} Ah, the tourist has found fit to visit me!
+{talked == 0}
+	Ah, the tourist has found fit to visit me!
 	* The shop smells of burning incense. It's different from home. A stronger, more bitter smell.
 	[You] Hello, I'm Jackie!
 		Pleased to meet you!
@@ -21,16 +22,20 @@
 	> My mum used to live around here...
 		And from the tone in your voice...
 		I presume she is not with us.
-		[You] ... She's not.
-		I am sorry to hear that. The loss of a parent is deep, though better than the alternative. You are here for unsettled affairs, or memories?
-		[You] Uh, both, I suppose...
+		> She's not.
+			I am sorry to hear that. The loss of a parent is deep, though better than the alternative.
+		> We don't know.
+			{mention("mum/alive")}
+			Oh. It's that sort of loss...
+		You are here for unsettled affairs then, or memories?
+		[You] Both, I suppose...
 		> I'm here to see the Medium.
 			{mention("medium")} Oh.
 			And you wish to commune with her.
+			{mentioned("mum/alive")} It is unusual for people to commune with the living, if she is alive.
 			{animation("show_medium")} Quite frankly, I do not think the Medium is such a useful machine.
 			It does not talk to souls. Only simulacra. Faint reflections of those lost.
-			[You] I understand how it works. But it's....
-				It's important to me all the same.
+			[You] I understand how it works. But it's important to me all the same.
 			I hope you find what you are looking for. I hope that machine can help you.
 			If you need anything during your stay, I probably have it in my shop.
 		> {skip()} (Say nothing more)
@@ -56,19 +61,21 @@
 	{shop()}
 	{exiting()} [You] Thank you!
 	I hope you found what you were looking for...
-> {Global.task_exists("activate_the_medium")} Do you sell capacitors?
-	Hm, I do not. They are very rare, and not much use besides powering ancient machines.
-	If you find them anywhere, they would be in the ruins, either those of green copper or the ancient white metal.
-	They both used the machines to some extent.
 > What do you sell?
-	Elixirs! Deathgnats! Flags!
+	:sell_loop
+	Mainly elixirs, deathgnats, flags, and other useful items.
+	> {Global.task_exists("activate_the_medium")} Do you sell capacitors?
+		Hm. That has to do with electronics, yes? Have you asked Armstrong?
+		[You] Yes. He's the one who said I need them, in fact.
+		Ah. Sending a tourist on his errands! With that spirit, he was destined for business.
+		Well, my only advice is to be careful when spelunking ancient ruins. Some of them run dangerously deep... 
 	> What do the elixirs do?
 		Many things.
 		Increase your stamina, strength, vitality.
 		Some temporarily, others permanently.
 	> {format("italic")} Deathgnats?
 		A nasty pest made of crystal and white metal, but not nearly as harmful as its larger cousins.
-		We catch them to use as a second currency. Typically for larger purchases, such as capacitors.
+		We catch them to use as a second currency. Typically for larger purchases.
 		{Global.stat('bug') == 0}
 			[You] What do they look like, exactly?
 			I have one in a jar on the table, if you would like to examine it.
@@ -83,24 +90,24 @@
 		> Where do I find deathgnats?
 			Ha! Where can you not find them? They are pervasive!
 			Sun or shade, sand or snow, they love to flutter about, biting at any who are not careful.
-		> ... What are the capacitors for?
-			Armstrong would be a better expert than I.
-			{!Global.stat("talkedarmstrong")} He is by the medium, wearing goggles.
 		> Okay, I think I understand.
 			Immaculate! Let me know if you want one. Once it is gone, it is gone!
 	> What are the flags for?
 		They mark where you have been, a reminder, I suppose.
 		Adventurers seem keen to stock up on them.
 		* [Hint: Flags serve as consumable checkpoints. When you place one, you will teleport back to it upon death.]
+	> What's that "Drinks" machine in the corner?
+		Ah, they're very popular! A merchant from Kiper gave me the machine for free, though the drinks have gotten quite pricey over the years.
 	> Do you sell any coats? So many people are wearing lovely fabrics.
 		They are not usually sold... We get our clothes from hunting alpha specters. It is too dangerous to hunt for profit.
 		You may be able to trade with people. They won't mind losing an outfit if they get another.
 		{!Global.stat("trade_coat")}
-			{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing Button 3 (the top face button) on the gamepad. This works both in and out of dialog.]
-			{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing 'C' on the keyboard. This works both in and out of dialog.]
+			{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing '#{Global.get_action_input_string('dialog_coat', true)}' (by default, the top face button, such as "Y") on the gamepad. This works both in and out of dialog.]
+			{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing '#{Global.get_action_input_string('dialog_coat', false)}' on the keyboard. This works both in and out of dialog.]
 	> Ah okay, that makes sense.
 		It does!
-	{goto("shop_replies")}
+		{goto("shop_replies")}
+	{goto("sell_loop")}
 > I'll see you around!
 	{exiting()}
 	Take care, Jackie...

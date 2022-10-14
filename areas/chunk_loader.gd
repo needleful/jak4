@@ -11,28 +11,21 @@ var _nodes := {}
 var _active := {}
 var _lowres := {}
 var _loaded_content := {}
-var _deletion_queue := []
 
 const PATH_CONTENT := "res://areas/chunks/%s.tscn"
 const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
-func update():
-	if !_deletion_queue.empty():
-		_deletion_queue.pop_front().queue_free()
-
 func start_loading(chunks: Array):
+	for c in chunks:
+		_nodes[c.name] = c
 	var _x = _thread.start(self, "_load_everything", chunks)
 
 func _load_everything(chunks: Array):
 	call_deferred("emit_signal", "load_start")
 	for chunk in chunks:
 		var name:String = chunk.name
-		print("checking ", name)
-		_nodes[name] = chunk
-
 		var hires_file :String = PATH_CONTENT % name
 		if ResourceLoader.exists(hires_file):
-			print(hires_file)
 			var content = load(hires_file)
 			_set_loaded(_loaded_content, name, content)
 			if is_active(name):
@@ -40,7 +33,6 @@ func _load_everything(chunks: Array):
 
 		var lowres_file: String = PATH_LOWRES % name
 		if ResourceLoader.exists(lowres_file):
-			print(lowres_file)
 			var content = load(lowres_file)
 			var l = content.instance()
 			l.name = "lowres"
@@ -67,12 +59,12 @@ func _add_lowres(chunk: String, scn: PackedScene):
 
 func _add_content(chunk: String, content: PackedScene):
 	var c:Node = _nodes[chunk]
-	print("Adding content to ", chunk)
 	if c.has_node("dynamic_content"):
 		return
 	else:
-		if chunk in _lowres:
-			_nodes[chunk].remove_child(_lowres[chunk])
+		if c.has_node("lowres"):
+			var l = c.get_node("lowres")
+			c.remove_child(l)
 		var n = content.instance()
 		n.name = "dynamic_content"
 		c.add_child(n)
@@ -89,7 +81,6 @@ func _get_content(dic:Dictionary, chunk: String):
 
 func queue_load(chunk: Spatial):
 	set_active(chunk.name, true)
-	print(chunk.name, " is active")
 	if chunk.has_node("dynamic_content"):
 		return
 
@@ -105,9 +96,7 @@ func queue_load(chunk: Spatial):
 func queue_unload(chunk: Spatial):
 	set_active(chunk.name, false)
 	if chunk.has_node("dynamic_content"):
-		var d = chunk.get_node("dynamic_content")
-		chunk.remove_child(d)
-		_deletion_queue.push_back(d)
+		chunk.get_node("dynamic_content").queue_free()
 	if !chunk.has_node("lowres"):
 		var c = _get_content(_lowres, chunk.name)
 		if c is Node:

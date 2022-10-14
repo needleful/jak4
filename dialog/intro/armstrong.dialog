@@ -70,7 +70,7 @@
 	> Why would one of these just be lying in a cave?
 		{subtopic("search_cave")}
 	> I'll look there. Thanks.
-	Excellent!  And I will be here if you need any advice.
+		Excellent!  And I will be here if you need any advice.
 {otherwise if Global.stat("hdw_gate") and !Global.stat("armstrong/gate")}
 	{Global.add_stat("armstrong/gate")} Hey, I heard you cleared the Specters in front of the gate. Impressive!
 	[You] Oh, it was nothing.
@@ -95,13 +95,17 @@
 		Good to hear!
 		:choice_loop_search
 		> I have no idea where to look.
-			Lets see...
-			Have you searched the cave in town? We have a lot of scrap in there.
-			{Global.stat("cave_capacitor_124")}
-				[You] {Global.task_remove_place("activate_the_medium", "hideaway")} I found a capacitor there.
-			{otherwise if Global.stat("cave_124_entered")}
-				[You] I've been in the cave, but I didn't find anything.
-				I would make sure to be thorough. Don't want to miss anything right under our noses.
+			Let's see...
+			?{armstrong/cave_capacitor}
+				You found one in the caves in town...
+			{otherwise}
+				Have you searched the cave in town? We have a lot of scrap in there.
+				{Global.stat("cave_capacitor_124")}
+					[You] {Global.task_remove_place("activate_the_medium", "hideaway")} I found a capacitor there.
+					{subtopic("cave_capacitor")}
+				{otherwise if Global.stat("cave_124_entered")}
+					[You] I've been in the cave, but I didn't find anything.
+					I would make sure to be thorough. Don't want to miss anything right under our noses.
 			{otherwise if Global.task_note_place("activate_the_medium", "hideaway", "Armstrong thinks there's a capacitor in the caves.")}
 				[You] I haven't.
 				That's the first place I would check.
@@ -134,7 +138,9 @@
 					Hopefully there is one. Let us hope for three, even! Save you a trip out of town.
 				{back()}
 			> {!Global.stat("tower_capacitor_124")} How far around the village should I look?
-				Have you ventured out of town? There are some ancient structures which may have capacitors.
+				Uh... I do not know, honestly.
+				We do not trade in them especially often. Maybe just check any structure that catches your eye?
+				They might be picked clean, but perhaps some were left behind.
 			> {!Global.stat("capacitor_113") and !Global.stat("armstrong/asked_tower")} There's a tower up on the cliff, would there be one there?
 				The Tree Tower? I really wouldn't go there without security...
 				[You] Oh, I meant the smaller one nearby, just up the cliff.
@@ -145,9 +151,11 @@
 				Seriously. It is dangerous. Those towers use power for self-repair. I would not even go near it.
 				[You] ...
 			{otherwise}
-		> {Global.stat("cave_capacitor_124")} There was a capacitor in the cave.
+		> {Global.stat("cave_capacitor_124") and !Global.stat("armstrong/cave_capacitor")} There was a capacitor in the cave.
+			:cave_capacitor
+			+{armstrong/cave_capacitor} {Global.task_remove_place("activate_the_medium", "hideaway")}
 			As I suspected!
-			> It looks different than the other artifacts around here.
+			> It looks different than the other artefacts around here.
 				There were two difference civilizations before us. Some made structures out of copper, and others out of white metal, impossible to corrode. Incredible material.
 				[You] And presumably they built the Medium?
 				I do not know, actually.
@@ -156,6 +164,7 @@
 				We used that cave for storing scrap before the ceiling fell in.
 				There are a few scattered about, but none in walking distance. But be very careful: they run deep, and it's easy to get lost.
 				You would have better luck with the small towers you'll find along the river basin. They often used capacitors for some kind of worship.
+			{back()}
 		> {Global.stat("tower_capacitor_124")} There was a capacitor in one of those copper buildings.
 			There was? Interesting. I wonder who left it there.
 			> What do you mean?
@@ -176,11 +185,13 @@
 				There's a pack of Specters up on the cliff.
 				> What on earth is a Specter?
 					They are a sort of mechanical creature, wrapped around the bones of the long dead.
-					They were made by the ancient kingdom, and reemerged some decades ago.
+					They were made by the ancient kingdom, and reemerged after the war.
+					[You] ...
 				> If I removed them, would you lower the gate?
 					I didn't take you for a hunter!
 					You can talk to the guard at the gate about that.
 					But be careful, there not normal animals.
+					[You] Alright. I'll be cautious.
 			> Alright, I'll just climb it.
 				Good luck! And stay safe out there.
 		> {!Global.stat("capacitor_113") and !Global.stat("armstrong/asked_tower")} I was wondering if you knew about that tower on the cliff, just past the village exit.

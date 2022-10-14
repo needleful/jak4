@@ -1635,6 +1635,7 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	lock()
 
 func _on_dialog_exited():
+	Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
 	unlock()

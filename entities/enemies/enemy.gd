@@ -111,19 +111,6 @@ func _ready():
 	if !source_chunk:
 		set_process(false)
 
-func _process(_delta):
-	var aabb := source_chunk.get_aabb().grow(10)
-	var point := global_transform.origin
-	point.y = aabb.position.y # disregard vertical position
-	if !aabb.has_point(point - source_chunk.global_transform.origin):
-		nomad = true
-		var gt = global_transform
-		var scene = get_tree().current_scene
-		get_parent().remove_child(self)
-		scene.add_child(self)
-		global_transform = gt
-		set_process(false)
-
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)
 	contact_count = state.get_contact_count()
@@ -143,6 +130,22 @@ func process_player_distance(pos: Vector3) -> float:
 		if nomad and !in_range and ai != AI.Chasing:
 			queue_free()
 		set_active(in_range and ai != AI.Dead)
+	if !nomad:
+		var aabb := source_chunk.get_aabb().grow(10)
+		var point := global_transform.origin
+		point.y = aabb.position.y + 1 # disregard vertical position
+		if !aabb.has_point(point - source_chunk.global_transform.origin):
+			print("Going nomad: ", get_path())
+			nomad = true
+			var gt = global_transform
+			var groups = get_groups()
+			var scene = get_tree().current_scene
+			get_parent().remove_child(self)
+			for g in groups:
+				add_to_group(g)
+			scene.add_child(self)
+			global_transform = gt
+			set_process(false)
 	return lensq
 
 func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
@@ -291,7 +294,7 @@ func aggro_to(node: Spatial):
 		target = node
 
 func no_target():
-	return !target or (target.has_method("is_dead") and target.is_dead())
+	return !is_instance_valid(target) or (target.has_method("is_dead") and target.is_dead())
 
 func is_dead():
 	return ai == AI.Dead or ai == AI.GravityStunDead
@@ -316,6 +319,9 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 
 func _on_player_died():
 	if ai == AI.Dead and !respawns:
+		return
+	if nomad:
+		queue_free()
 		return
 	var p = get_parent()
 	p.remove_child(self)

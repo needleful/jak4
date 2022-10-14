@@ -26,42 +26,17 @@ func set_action(a):
 		show_text(action)
 		return
 	
-	var input: InputEvent
-	
-	var gamepad = Global.using_gamepad
-	for event in InputMap.get_action_list(action):
-		if gamepad and (
-			event is InputEventJoypadButton
-			or event is InputEventJoypadMotion
-		):
-			input = event
-			break
-		elif !gamepad and (
-			event is InputEventKey
-			or event is InputEventMouseButton
-		):
-			input = event
-			break
-	
-	if input is InputEventKey:
-		var scancode = input.physical_scancode
-		if !scancode:
-			scancode = input.scancode
-		var key_str = OS.get_scancode_string(scancode)
-		if key_str == "":
-			key_str = "<unbound>"
-		show_text(key_str)
+	var input_str = Global.get_action_input_string(action)
+	if !Global.using_gamepad:
+		show_text(input_str)
 	else:
 		var device = "pad_generic"
-		if !gamepad:
-			device = "keyboard"
-		var event_str = get_input_string(input)
-		var prompt = prompt_path % [device, event_str]
+		var prompt = prompt_path % [device, input_str]
 		if ResourceLoader.exists(prompt):
 			var t = load(prompt)
 			show_image(t)
 		else:
-			show_text(event_str)
+			show_text(input_str)
 
 func show_image(image: Texture):
 	$key_prompt.hide()
@@ -75,12 +50,3 @@ func show_text(text):
 	$key_prompt.show()
 	$key_prompt/Label.text = text
 	rect_size = default_size
-
-func get_input_string(input:InputEvent):
-	if input is InputEventJoypadButton:
-		return "gamepad"+str(input.button_index)
-	elif input is InputEventMouseButton:
-		return "mouse"+str(input.button_index)
-	elif input is InputEventJoypadMotion:
-		return "axis"+str(input.axis)
-	return str(input)

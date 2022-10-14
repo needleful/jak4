@@ -8,7 +8,6 @@ func _ready():
 			print_debug("WARNING: enemy doesn't exist: %s")
 			continue
 		var g = get_node(n)
-		if !g.is_dead():
+		if g is EnemyBody and !g.is_dead():
 			queue_free()
 			return
-		
