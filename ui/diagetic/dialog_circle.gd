@@ -1,4 +1,5 @@
 extends Spatial
+class_name DialogCircle
 
 const vis_distance := 10.0
 const sq_distance_visible := vis_distance*vis_distance

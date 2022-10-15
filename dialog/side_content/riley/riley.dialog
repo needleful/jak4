@@ -134,7 +134,7 @@
 		I'm Riley, by the way.
 		[You] Jackie.... So what is this place?
 		It's an ancient tower.  There's all sorts of structures like it. They're MILLIONS of years old!
-		[You] Really? That really stretches belief.
+		[You] Really? That stretches belief.
 		Yeah! They've been carbon dated and everything. The metal goes back to like two million years ago.
 		{Global.task_exists("activate_the_medium")}
 			[You] So I've been looking for ancient capacitors. Would there be one in the tower.
@@ -147,7 +147,8 @@
 		{otherwise}
 			[You] What's inside them? Anything interesting?
 			Well, yeah. They can be pretty cool, as long as you can fight off specters.
-		+{riley/113/talk}
+	+{riley/113/talk}
+	{exit()}
 
 {otherwise if Global.add_stat("riley/113/talk") == 1}
 	[You] Hi Riley.
@@ -162,14 +163,14 @@
 	I'm not sure. But seriously. These things are so old they're on the brink of collapse. They have active, like, self-repair systems that keep them running. If the power gets interrupted, like by taking out capacitors, they can completely fall apart.
 	[You] ...
 {otherwise if !Global.stat("capacitor_113") and !Global.stat("riley/113/days_collapse")}
-`	+{riley/capacitor}
+	+{riley/capacitor}
 	[You] Do you really think this thing would collapse if I took the capacitor?
 	+{riley/113/days_collapse} Very likely. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
 	Did you need anything?
 {otherwise}
 	Hey again Jackie. Did you need anything?
 
-> {!Global.stat("capacitor_113") and !Global.stat("riley/apology")} I wanted to apologize...
+> {Global.stat("capacitor_113") and !Global.stat("riley/apology")} I wanted to apologize...
 	{subtopic("apology")}
 	{exit()}
 > Say, could I buy some supplies off you?

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -23,6 +23,28 @@
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=21]
 [ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=22]
 [ext_resource path="res://entities/env/ancient/platform_square.tscn" type="PackedScene" id=23]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=24]
+[ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=25]
+[ext_resource path="res://entities/visual/lighting_controller.gd" type="Script" id=26]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=27]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=28]
+[ext_resource path="res://entities/control/dswitch_a.tscn" type="PackedScene" id=29]
+[ext_resource path="res://entities/control/power_thing.gd" type="Script" id=30]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=31]
+[ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=32]
+[ext_resource path="res://dialog/intro/get_capacitor_113.dialog" type="Resource" id=33]
+
+[sub_resource type="OccluderShapePolygon" id=7]
+polygon_points = PoolVector2Array( 19.1686, -66.5112, -24.4647, 103.201, 18.7659, 93.1214, -24.48, -61.4066 )
+
+[sub_resource type="OccluderShapePolygon" id=8]
+polygon_points = PoolVector2Array( 18.6346, -78.7243, -23.0848, 103.08, 17.3397, 93.1139, -22.4295, -79.2837 )
+
+[sub_resource type="OccluderShapePolygon" id=9]
+polygon_points = PoolVector2Array( 30.0849, -79.0578, -30.3052, 105.494, 30.7454, 94.755, -28.1145, -75.9248 )
+
+[sub_resource type="OccluderShapePolygon" id=10]
+polygon_points = PoolVector2Array( 24.8412, -38.5391, -31.3258, 103.278, 25.8934, 93.8617, -32.0348, -29.7065 )
 
 [sub_resource type="ConvexPolygonShape" id=1]
 points = PoolVector3Array( -34.0129, -114.355, -4.73564, -11.3261, -114.355, 26.445, -34.0129, 33.8643, -4.73564, -2.84046, -114.355, -27.4264, 40.4628, -114.355, 3.74899, -11.3261, 25.3486, 26.445, -2.84046, 42.3953, -27.4264, 40.4628, 33.8643, 3.74899 )
@@ -41,6 +63,102 @@ radius = 4.666
 
 [sub_resource type="BoxShape" id=6]
 extents = Vector3( 3.76434, 3.59318, 4.90027 )
+
+[sub_resource type="Animation" id=262]
+resource_name = "Activate"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2.5, 4 ),
+"transitions": PoolRealArray( 1, 2.46229, 0.378929, 1 ),
+"update": 0,
+"values": [ Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -39.5141, 10.236 ), Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -39.5141, 10.236 ), Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -32.5912, 10.236 ), Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -25.6683, 10.236 ) ]
+}
+
+[sub_resource type="Animation" id=263]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -39.5141, 10.236 ) ]
+}
+
+[sub_resource type="Animation" id=264]
+resource_name = "Activate"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3.6, 8 ),
+"transitions": PoolRealArray( 3, 0.33, 1 ),
+"update": 0,
+"values": [ Transform( 0.75503, 0, -0.655691, 0, 1, 0, 0.655691, 0, 0.75503, 11.1143, -24.0913, 24.9087 ), Transform( 0.676036, 0, -0.736869, 0, 1, 0, 0.736869, 0, 0.676036, 29.2896, -20.0219, 5.96801 ), Transform( 0.231618, 0, 0.972807, 0, 1, 0, -0.972807, 0, 0.231618, 23.0528, -7.73514, -16.9475 ) ]
+}
+
+[sub_resource type="Animation" id=265]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.75503, 0, -0.655691, 0, 1, 0, 0.655691, 0, 0.75503, 11.1143, -24.0913, 24.9087 ) ]
+}
+
+[sub_resource type="Animation" id=266]
+resource_name = "Activate"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2.8, 4.1, 5.9, 10 ),
+"transitions": PoolRealArray( 2.07053, 2.07053, 1, 1, 0.554785, 1 ),
+"update": 0,
+"values": [ Transform( 0.965563, 0, -0.260169, 0, 1, 0, 0.260169, 0, 0.965563, 7.68893, -2.09839, -20.72 ), Transform( 0.965563, -0.00762148, -0.260057, 0, 0.999571, -0.0292944, 0.260169, 0.0282856, 0.965149, 7.63074, -2.07761, -20.504 ), Transform( 0.995263, 0, -0.0972143, 0, 1, 0, 0.0972143, 0, 0.995263, 1.93827, -1.23001, -8.21093 ), Transform( 0.875309, 0, 0.483563, 0, 1, 0, -0.483563, 0, 0.875309, 3.29546, -1.32492, -1.29155 ), Transform( 0.997657, 0, 0.0684072, 0, 1, 0, -0.0684072, 0, 0.997657, 10.4681, 5.47783, 13.2663 ), Transform( 0.921015, 0, 0.389527, 0, 1, 0, -0.389527, 0, 0.921015, 10.804, 23.8918, 11.6195 ) ]
+}
+
+[sub_resource type="Animation" id=267]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.965563, 0, -0.260169, 0, 1, 0, 0.260169, 0, 0.965563, 7.68893, -2.09839, -20.72 ) ]
+}
+
+[sub_resource type="SphereShape" id=261]
+radius = 0.589667
 
 [node name="chunk113" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
@@ -62,7 +180,58 @@ collision_layer = 257
 [node name="env_override" parent="." index="2"]
 visible = false
 
-[node name="palace1" parent="." index="3" instance=ExtResource( 4 )]
+[node name="mesh" parent="shrine-kine/shrine_arm-kine" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine001" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine002" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine003" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine004" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine005" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine/shrine_arm-kine006" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="shrine-kine" index="7"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="pole-kine" index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="mesh" parent="table-kine" index="0"]
+material/0 = ExtResource( 21 )
+material/1 = ExtResource( 3 )
+
+[node name="Occluder" type="Occluder" parent="." index="7"]
+transform = Transform( 0.85898, 0, -0.512008, 0, 1, 0, 0.512008, 0, 0.85898, 61.6896, 92.0828, 48.4292 )
+visible = false
+shape = SubResource( 7 )
+
+[node name="Occluder2" type="Occluder" parent="." index="8"]
+transform = Transform( -0.526401, 0, -0.850237, 0, 1, 0, 0.850237, 0, -0.526401, 51.0647, 100.553, 20.8547 )
+visible = false
+shape = SubResource( 8 )
+
+[node name="Occluder4" type="Occluder" parent="." index="9"]
+transform = Transform( -0.692928, 0, -0.721007, 0, 1, 0, 0.721007, 0, -0.692928, 98.6692, 89.4222, 34.646 )
+visible = false
+shape = SubResource( 9 )
+
+[node name="Occluder3" type="Occluder" parent="." index="10"]
+transform = Transform( 0.973801, 0, -0.2274, 0, 1, 0, 0.2274, 0, 0.973801, 94.5206, 100.553, 8.47476 )
+visible = false
+shape = SubResource( 10 )
+
+[node name="palace1" parent="." index="11" instance=ExtResource( 4 )]
 transform = Transform( -0.956232, 0, -0.292611, 0, 1, 0, 0.292611, 0, -0.956232, 147.159, 38.6994, -3.80229 )
 
 [node name="npc_riley" parent="palace1" index="1" instance=ExtResource( 16 )]
@@ -83,25 +252,25 @@ transform = Transform( 0.0407048, -0.099262, 0.994229, 0.329557, 0.940704, 0.080
 [node name="scrap4" parent="palace1" index="4" instance=ExtResource( 9 )]
 transform = Transform( 0.934973, -0.345052, 0.0822607, 0.334159, 0.934571, 0.122125, -0.119018, -0.0866953, 0.989101, 9.6805, 19.5872, -5.90258 )
 
-[node name="fountain" parent="." index="4" instance=ExtResource( 18 )]
+[node name="fountain" parent="." index="12" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 66.6298, -0.454576, -162.16 )
 
-[node name="rock1" parent="." index="5" instance=ExtResource( 12 )]
+[node name="rock1" parent="." index="13" instance=ExtResource( 12 )]
 transform = Transform( 0.351292, 0.936266, 0, -0.936266, 0.351292, 0, 0, 0, 1, 93.3741, 0.152008, -143.55 )
 
-[node name="ruin1" parent="." index="6" instance=ExtResource( 20 )]
+[node name="ruin1" parent="." index="14" instance=ExtResource( 20 )]
 transform = Transform( 0.996154, 0.087625, 0, -0.087625, 0.996154, 0, 0, 0, 1, 47.642, -2.66061, -149.146 )
 
-[node name="ruin2" parent="." index="7" instance=ExtResource( 20 )]
+[node name="ruin2" parent="." index="15" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 92.2196, 9.53674e-07, -182.309 )
 
-[node name="ruin3" parent="." index="8" instance=ExtResource( 20 )]
+[node name="ruin3" parent="." index="16" instance=ExtResource( 20 )]
 transform = Transform( -0.904022, 0.275145, -0.32717, 0, 0.765333, 0.643634, 0.427487, 0.58186, -0.691878, 54.3752, -4.57938, -179.801 )
 
-[node name="garden_empty" parent="." index="9" instance=ExtResource( 6 )]
+[node name="garden_empty" parent="." index="17" instance=ExtResource( 6 )]
 transform = Transform( -0.877965, -0.0291295, 0.477837, 0, 0.998147, 0.0608482, -0.478724, 0.0534226, -0.876339, 78.0383, 0.617816, -117.962 )
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="10"]
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="18"]
 transform = Transform( 0.780215, 0, -0.625511, 0, 1, 0, 0.625511, 0, 0.780215, 93.8685, 57.4384, 29.4874 )
 intensity = 0.35
 extents = Vector3( 4.95376, 12.9967, 16.0483 )
@@ -109,15 +278,7 @@ origin_offset = Vector3( 1.05859, 7.16992, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 
-[node name="ReflectionProbe5" type="ReflectionProbe" parent="." index="11"]
-transform = Transform( 0.969998, 0, -0.243112, 0, 1, 0, 0.243112, 0, 0.969998, 96.6169, 57.4384, 13.3541 )
-intensity = 0.35
-extents = Vector3( 17.5229, 25.0196, 3.59849 )
-origin_offset = Vector3( 1.05859, 7.56836, 0.671875 )
-interior_enable = true
-interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
-
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="." index="12"]
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="." index="19"]
 transform = Transform( 0.688555, 0, 0.725185, 0, 1, 0, -0.725185, 0, 0.688555, 95.5205, 57.4384, 35.4643 )
 intensity = 0.35
 extents = Vector3( 29.5525, 25.0196, 1.85811 )
@@ -125,7 +286,7 @@ origin_offset = Vector3( 1.05859, 6.94141, -1.84811 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 
-[node name="ReflectionProbe4" type="ReflectionProbe" parent="." index="13"]
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="." index="20"]
 transform = Transform( -0.867282, 0, 0.497817, 0, 1, 0, -0.497817, 0, -0.867282, 77.0359, 57.4384, 30.84 )
 intensity = 0.35
 extents = Vector3( 13.5829, 25.0196, 23.0512 )
@@ -133,7 +294,15 @@ origin_offset = Vector3( -4.90723, 12.6367, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 
-[node name="environment" type="Area" parent="." index="14"]
+[node name="ReflectionProbe5" type="ReflectionProbe" parent="." index="21"]
+transform = Transform( 0.969998, 0, -0.243112, 0, 1, 0, 0.243112, 0, 0.969998, 96.6169, 57.4384, 13.3541 )
+intensity = 0.35
+extents = Vector3( 17.5229, 25.0196, 3.59849 )
+origin_offset = Vector3( 1.05859, 7.56836, 0.671875 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
+
+[node name="environment" type="Area" parent="." index="22"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -155,7 +324,137 @@ interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
 shape = SubResource( 1 )
 
-[node name="floor1" type="MultiMeshSystem" parent="." index="15"]
+[node name="tower_lighting" type="Spatial" parent="." index="23"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.6161, 96.9976, 29.1848 )
+script = ExtResource( 26 )
+light_nodes = [ NodePath("../environment/ReflectionProbe"), NodePath("../ReflectionProbe2"), NodePath("../ReflectionProbe3"), NodePath("../ReflectionProbe4"), NodePath("../ReflectionProbe5") ]
+
+[node name="SpotLight5" type="SpotLight" parent="tower_lighting" index="0"]
+transform = Transform( 0.970276, 0.196285, 0.141552, -0.198905, 0.313658, 0.92847, 0.137846, -0.929027, 0.343377, 5.4147, -17.8135, 2.44733 )
+light_color = Color( 0.8, 1, 0.85098, 1 )
+shadow_enabled = true
+spot_range = 41.3233
+spot_angle = 43.0938
+script = ExtResource( 22 )
+distance = 100.0
+
+[node name="OmniLight8" type="OmniLight" parent="tower_lighting" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.74815, -29.6567, -6.15211 )
+light_color = Color( 0.760784, 1, 0.854902, 1 )
+light_energy = 0.602
+omni_range = 3.39344
+script = ExtResource( 22 )
+
+[node name="OmniLight9" type="OmniLight" parent="tower_lighting" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.2163, -20.2444, 5.63668 )
+light_color = Color( 0.760784, 1, 0.854902, 1 )
+light_energy = 0.602
+omni_range = 6.33966
+script = ExtResource( 22 )
+
+[node name="OmniLight10" type="OmniLight" parent="tower_lighting" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.2387, -22.5448, 11.5891 )
+light_color = Color( 0.760784, 1, 0.854902, 1 )
+light_energy = 0.602
+omni_range = 6.33966
+script = ExtResource( 22 )
+
+[node name="OmniLight11" type="OmniLight" parent="tower_lighting" index="4"]
+transform = Transform( 0.762925, 0, -0.646487, 0, 1, 0, 0.646487, 0, 0.762925, -34.7607, -20.5697, 5.09761 )
+light_color = Color( 0.760784, 1, 0.854902, 1 )
+light_energy = 0.602
+omni_range = 6.33966
+script = ExtResource( 22 )
+
+[node name="SpotLight3" type="SpotLight" parent="tower_lighting" index="5"]
+transform = Transform( 0.950144, 0, 0.311812, 0, 1, 0, -0.311812, 0, 0.950144, -26.3444, -16.4012, 14.2711 )
+light_color = Color( 0.666667, 1, 0.960784, 1 )
+light_energy = 0.205
+script = ExtResource( 22 )
+
+[node name="SpotLight4" type="SpotLight" parent="tower_lighting" index="6"]
+transform = Transform( 0.980738, 0.0121929, -0.194947, 0.195292, -0.0804647, 0.977439, -0.00376853, -0.996683, -0.081296, -28.4081, -15.3955, -3.55373 )
+light_color = Color( 0.729412, 0.815686, 0.878431, 1 )
+light_energy = 0.801
+spot_range = 11.185
+script = ExtResource( 22 )
+
+[node name="SpotLight" type="SpotLight" parent="tower_lighting" index="7"]
+transform = Transform( 0.994948, 0.0289403, -0.0961318, 0.0970169, -0.0309112, 0.994803, 0.0258183, -0.999103, -0.0335627, -19.1957, 6.68511, -18.0147 )
+shadow_enabled = true
+spot_range = 33.823
+spot_angle = 16.0811
+script = ExtResource( 22 )
+distance = 100.0
+
+[node name="OmniLight" type="OmniLight" parent="tower_lighting" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435478, 68.3261, -1.01557 )
+light_color = Color( 0.933333, 1, 0.972549, 1 )
+light_energy = 1.5
+omni_range = 15.5107
+
+[node name="OmniLight5" type="OmniLight" parent="tower_lighting" index="9"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5474, 8.85641, -3.71247 )
+light_color = Color( 0.572549, 1, 0.921569, 1 )
+light_energy = 0.2
+
+[node name="SpotLight2" type="SpotLight" parent="tower_lighting" index="10"]
+transform = Transform( 0.832407, -4.99464e-09, -0.554165, 0.552107, 0.0861032, 0.829316, 0.0477154, -0.996286, 0.0716729, -16.8483, 6.15822, 2.61014 )
+light_color = Color( 1, 0.827451, 0.529412, 1 )
+shadow_enabled = true
+spot_range = 26.2471
+script = ExtResource( 22 )
+distance = 100.0
+
+[node name="OmniLight3" type="OmniLight" parent="tower_lighting" index="11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9718, -4.69302, -8.90158 )
+light_color = Color( 0.313726, 1, 0.839216, 1 )
+light_energy = 0.304
+omni_range = 14.199
+script = ExtResource( 22 )
+distance = 70.0
+
+[node name="OmniLight4" type="OmniLight" parent="tower_lighting" index="12"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.24582, -8.18781, 17.0172 )
+light_color = Color( 0.313726, 1, 0.839216, 1 )
+light_energy = 0.304
+omni_range = 13.6344
+script = ExtResource( 22 )
+distance = 70.0
+
+[node name="OmniLight6" type="OmniLight" parent="tower_lighting" index="13"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.4782, -5.77625, 5.53041 )
+light_color = Color( 0.313726, 1, 0.839216, 1 )
+light_energy = 0.304
+omni_range = 13.029
+script = ExtResource( 22 )
+distance = 70.0
+
+[node name="OmniLight7" type="OmniLight" parent="tower_lighting" index="14"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5375, 0.729713, -13.1605 )
+light_color = Color( 0.313726, 1, 0.839216, 1 )
+light_energy = 0.304
+omni_range = 13.8183
+script = ExtResource( 22 )
+distance = 70.0
+
+[node name="SpotLight6" type="SpotLight" parent="tower_lighting" index="15"]
+transform = Transform( -0.161422, -0.913124, 0.374363, 0.276722, 0.322241, 0.90531, -0.947295, 0.249731, 0.200665, -5.92583, 85.2411, -1.96949 )
+light_energy = 1.5
+shadow_enabled = true
+spot_range = 13.6585
+script = ExtResource( 22 )
+
+[node name="OmniLight2" type="OmniLight" parent="tower_lighting" index="16"]
+transform = Transform( 0.813051, 0, -0.582193, 0, 1, 0, 0.582193, 0, 0.813051, -4.60197, 29.5439, 14.8689 )
+omni_range = 11.0666
+
+[node name="SpotLight7" type="SpotLight" parent="tower_lighting" index="17"]
+transform = Transform( 0.966676, 8.9407e-08, -0.256004, 0.240763, -0.339889, 0.909125, -0.0870127, -0.940466, -0.328562, -15.4636, 69.4409, -14.8309 )
+light_color = Color( 0.819608, 1, 0.945098, 1 )
+spot_range = 26.5693
+
+[node name="floor1" type="MultiMeshSystem" parent="." index="24"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.7459, 46.4986, 28.3168 )
 
 [node name="Area" type="Area" parent="floor1" index="0"]
@@ -276,65 +575,284 @@ removal_stat = "capacitor_113"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.71824, -1.84162 )
 shape = SubResource( 6 )
 
-[node name="SpotLight" type="SpotLight" parent="floor1" index="18"]
-transform = Transform( 0.970276, 0.196285, 0.141552, -0.198905, 0.313658, 0.92847, 0.137846, -0.929027, 0.343377, 14.2849, 32.6855, 3.31532 )
-light_color = Color( 0.8, 1, 0.85098, 1 )
-shadow_enabled = true
-spot_range = 41.3233
-spot_angle = 43.0938
-script = ExtResource( 22 )
-distance = 100.0
-
-[node name="OmniLight" type="OmniLight" parent="floor1" index="19"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12204, 20.8423, -5.28412 )
-light_color = Color( 0.760784, 1, 0.854902, 1 )
-light_energy = 0.602
-omni_range = 3.39344
-script = ExtResource( 22 )
-
-[node name="OmniLight2" type="OmniLight" parent="floor1" index="20"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.34606, 30.2546, 6.50467 )
-light_color = Color( 0.760784, 1, 0.854902, 1 )
-light_energy = 0.602
-omni_range = 6.33966
-script = ExtResource( 22 )
-
-[node name="OmniLight3" type="OmniLight" parent="floor1" index="21"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3685, 27.9542, 12.4571 )
-light_color = Color( 0.760784, 1, 0.854902, 1 )
-light_energy = 0.602
-omni_range = 6.33966
-script = ExtResource( 22 )
-
-[node name="platform_square" parent="floor1" index="22" instance=ExtResource( 23 )]
+[node name="platform_square" parent="floor1" index="18" instance=ExtResource( 23 )]
 transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -12.5586, 29.2052, 12.4948 )
 
-[node name="platform_square2" parent="floor1" index="23" instance=ExtResource( 23 )]
-transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.933, 8.07739 )
+[node name="platform_square2" parent="floor1" index="19" instance=ExtResource( 23 )]
+transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.5385, 8.07739 )
 
-[node name="SpotLight2" type="SpotLight" parent="floor1" index="24"]
-transform = Transform( 0.950144, 0, 0.311812, 0, 1, 0, -0.311812, 0, 0.950144, -17.4742, 34.0978, 15.1391 )
-light_color = Color( 0.666667, 1, 0.960784, 1 )
-light_energy = 0.205
-script = ExtResource( 22 )
-
-[node name="SpotLight3" type="SpotLight" parent="floor1" index="25"]
-transform = Transform( 0.980738, 0.012193, -0.194948, 0.195292, -0.0804647, 0.977439, -0.00376853, -0.996683, -0.0812959, -19.5379, 35.1035, -2.68575 )
-light_color = Color( 0.729412, 0.815686, 0.878431, 1 )
-light_energy = 0.801
-spot_range = 11.185
-
-[node name="floor2" type="MultiMeshSystem" parent="." index="16"]
+[node name="floor2" type="MultiMeshSystem" parent="." index="25"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 78.3545, 87.4238, 30.4353 )
 
-[node name="SpotLight" type="SpotLight" parent="floor2" index="0"]
-transform = Transform( 0.994948, 0.0289403, -0.0961319, 0.0970169, -0.0309112, 0.994803, 0.0258183, -0.999103, -0.0335628, -14.8938, 15.8417, -19.2511 )
-shadow_enabled = true
-spot_range = 33.823
-spot_angle = 16.0811
-
-[node name="fountainA_large" parent="floor2" index="1" instance=ExtResource( 10 )]
+[node name="fountainA_large" parent="floor2" index="0" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.06136, -4.12044, -18.4566 )
 
-[node name="column" parent="." index="17"]
-material/0 = ExtResource( 21 )
+[node name="CSGCylinder" type="CSGCylinder" parent="floor2" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3867, 0, -19.4947 )
+use_collision = true
+radius = 12.355
+height = 12.7388
+material = ExtResource( 21 )
+
+[node name="CSGCylinder2" type="CSGCylinder" parent="floor2/CSGCylinder" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.97339, 0 )
+operation = 2
+radius = 10.0893
+height = 20.9955
+material = ExtResource( 21 )
+
+[node name="CSGBox" type="CSGBox" parent="floor2/CSGCylinder" index="1"]
+transform = Transform( 0.953159, 0, 0.302471, 0, 1, 0, -0.302471, 0, 0.953159, 2.59929, -2.63165, 8.74789 )
+operation = 2
+height = 4.0
+depth = 9.23474
+material = ExtResource( 21 )
+
+[node name="CSGBox" type="CSGBox" parent="floor2" index="2"]
+transform = Transform( -0.985005, 0, -0.172527, 0, 1, 0, 0.172527, 0, -0.985005, -3.49026, 0, -2.12446 )
+use_collision = true
+height = 9.40651
+depth = 18.1918
+material = ExtResource( 21 )
+
+[node name="CSGBox2" type="CSGBox" parent="floor2/CSGBox" index="0"]
+transform = Transform( 0.424128, 0, 0.905603, 0, 1, 0, -0.905603, 0, 0.424128, 1.3274, -2.59616, -6.05037 )
+use_collision = true
+height = 3.32345
+depth = 18.1918
+material = ExtResource( 21 )
+
+[node name="CSGBox4" type="CSGBox" parent="floor2/CSGBox" index="1"]
+transform = Transform( 0.424128, -0.905602, -3.95852e-08, 0, -4.37114e-08, 1, -0.905603, -0.424128, -1.85392e-08, -11.1943, -0.52803, -0.827888 )
+use_collision = true
+height = 7.02093
+depth = 8.0
+material = ExtResource( 21 )
+
+[node name="CSGBox5" type="CSGBox" parent="floor2/CSGBox" index="2"]
+transform = Transform( 0.424128, -0.905602, -3.95852e-08, 0, -4.37114e-08, 1, -0.905603, -0.424128, -1.85392e-08, -14.8539, -0.52803, 6.98615 )
+use_collision = true
+width = 17.4153
+height = 11.4695
+material = ExtResource( 21 )
+
+[node name="CSGBox3" type="CSGBox" parent="floor2/CSGBox" index="3"]
+transform = Transform( 0.676234, 0, 0.736687, 0, 1, 0, -0.736687, 0, 0.676234, 22.1161, -2.59616, -3.95833 )
+use_collision = true
+width = 12.7662
+height = 3.32345
+depth = 18.1918
+material = ExtResource( 21 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="floor2/CSGBox" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.62376, 1.04236, -17.5539 )
+radius = 4.13373
+height = 10.1374
+
+[node name="crawly" parent="floor2" index="3" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.86575, 3.38087, -3.19563 )
+reset_on_player_death = true
+
+[node name="crawly2" parent="floor2" index="4" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.80759, 3.495, -3.61983 )
+reset_on_player_death = true
+
+[node name="crawly6" parent="floor2" index="5" instance=ExtResource( 24 )]
+transform = Transform( 0.331166, 0, 0.943572, 0, 1, 0, -0.943572, 0, 0.331166, 7.20331, -4.1132, -9.42399 )
+reset_on_player_death = true
+
+[node name="crawly3" parent="floor2" index="6" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.73737, -1.08591, 5.86178 )
+reset_on_player_death = true
+
+[node name="crawly4" parent="floor2" index="7" instance=ExtResource( 24 )]
+transform = Transform( 0.282357, 0, 0.959309, 0, 1, 0, -0.959309, 0, 0.282357, -20.1218, -4.12045, -2.28086 )
+reset_on_player_death = true
+
+[node name="crawly5" parent="floor2" index="8" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65391, 4.80527, 2.26766 )
+reset_on_player_death = true
+
+[node name="CSGBox2" type="CSGBox" parent="floor2" index="9"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.52212, 7.35639, -1.38322 )
+use_collision = true
+depth = 47.6487
+material = ExtResource( 21 )
+
+[node name="CSGBox3" type="CSGBox" parent="floor2/CSGBox2" index="0"]
+transform = Transform( -0.0659672, 0, 0.997822, 0, 1, 0, -0.997822, 0, -0.0659672, 0, 2.57072, 0 )
+use_collision = true
+depth = 47.6487
+material = ExtResource( 21 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="floor2/CSGBox2" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.68176, 0 )
+height = 15.1902
+
+[node name="platform_square" parent="floor2" index="10" instance=ExtResource( 23 )]
+transform = Transform( 0.853135, 0.521689, -2.28038e-08, 0, -4.37114e-08, -1, -0.521689, 0.853135, -3.72917e-08, 15.5787, 14.3106, -3.03116 )
+
+[node name="platform_square2" parent="floor2" index="11" instance=ExtResource( 23 )]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 14.7187, 16.513, -7.13037 )
+
+[node name="ascrap1" parent="floor2" index="12" instance=ExtResource( 25 )]
+transform = Transform( 0.36942, 0, -0.929263, 0, 1, 0, 0.929263, 0, 0.36942, -8.4993, -4.1205, -11.7547 )
+
+[node name="bobble" parent="floor2" index="13" instance=ExtResource( 14 )]
+transform = Transform( 0.555423, 0, -0.831568, 0, 1, 0, 0.831568, 0, 0.555423, 15.5305, -3.159, 3.2294 )
+
+[node name="bobble2" parent="floor2" index="14" instance=ExtResource( 14 )]
+transform = Transform( 0.605587, 0, 0.795779, 0, 1, 0, -0.795779, 0, 0.605587, -13.9056, -3.159, -2.9693 )
+
+[node name="bobble3" parent="floor2" index="15" instance=ExtResource( 14 )]
+transform = Transform( -6.11714e-08, -0.801585, -0.59788, 1, -4.37114e-08, -4.37093e-08, 8.90259e-09, -0.59788, 0.801585, -9.2483, -3.159, 11.3864 )
+
+[node name="bobble4" parent="floor2" index="16" instance=ExtResource( 14 )]
+transform = Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782e-08, 3.07983e-08, 0.96548, 0.260476, 3.2152, -3.159, -14.7864 )
+
+[node name="bobble5" parent="floor2" index="17" instance=ExtResource( 14 )]
+transform = Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 )
+
+[node name="floor3" type="MultiMeshSystem" parent="." index="26"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.7457, 149.931, 28.1692 )
+
+[node name="platform_square" parent="floor3" index="0" instance=ExtResource( 23 )]
+transform = Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -39.5141, 10.236 )
+motion/sync_to_physics = true
+script = ExtResource( 28 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="floor3/platform_square" index="2"]
+playback_process_mode = 0
+anims/Activate = SubResource( 262 )
+anims/RESET = SubResource( 263 )
+
+[node name="OmniLight" type="OmniLight" parent="floor3/platform_square" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04685, 0, 0.248745 )
+light_color = Color( 0.74902, 1, 0.929412, 1 )
+light_energy = 0.579
+omni_range = 4.03381
+script = ExtResource( 22 )
+
+[node name="dswitch_a" parent="floor3" index="1" instance=ExtResource( 29 )]
+transform = Transform( 0.650866, 0, 0.759193, 0, 1, 0, -0.759193, 0, 0.650866, 8.33631, -39.8298, 13.4057 )
+reset_upon_death = true
+
+[node name="fountainA_large" parent="floor3" index="2" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62538, -39.6744, -2.6897 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="floor3/fountainA_large" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.95872, 0 )
+use_collision = true
+radius = 3.4391
+
+[node name="CSGBox" type="CSGBox" parent="floor3" index="3"]
+transform = Transform( 0.777219, 0, -0.62923, 0, 1, 0, 0.62923, 0, 0.777219, -0.975433, -32.8632, 10.5412 )
+use_collision = true
+collision_layer = 257
+width = 20.6103
+height = 14.9184
+
+[node name="fountainA" parent="floor3" index="4" instance=ExtResource( 19 )]
+transform = Transform( -0.614635, 0, -0.788812, 0, 1, 0, 0.788812, 0, -0.614635, -0.745697, -25.4244, 10.8308 )
+
+[node name="falling_platform" parent="floor3" index="5" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8457, -24.4033, 17.5067 )
+delay = 0.5
+
+[node name="platform_square2" parent="floor3" index="6" instance=ExtResource( 23 )]
+transform = Transform( 0.75503, 0, -0.655691, 0, 1, 0, 0.655691, 0, 0.75503, 11.1143, -24.0913, 24.9087 )
+motion/sync_to_physics = true
+script = ExtResource( 28 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="floor3/platform_square2" index="2"]
+root_node = NodePath("../../platform_square2")
+playback_process_mode = 0
+anims/Activate = SubResource( 264 )
+anims/RESET = SubResource( 265 )
+
+[node name="OmniLight" type="OmniLight" parent="floor3/platform_square2" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.62939e-06, 0, 2.13269 )
+light_color = Color( 0.682353, 1, 0.94902, 1 )
+omni_range = 3.10797
+script = ExtResource( 22 )
+
+[node name="dswitch_a2" parent="floor3" index="7" instance=ExtResource( 29 )]
+transform = Transform( 0.603873, 0, 0.79708, 0, 1, 0, -0.79708, 0, 0.603873, 5.76041, -25.404, 16.7917 )
+reset_upon_death = true
+
+[node name="CSGBox2" type="CSGBox" parent="floor3" index="8"]
+transform = Transform( 0.971907, 0, -0.235365, 0, 1, 0, 0.235365, 0, 0.971907, 14.9392, -8.19257, -20.0737 )
+use_collision = true
+width = 9.91284
+height = 1.39368
+depth = 2.43734
+
+[node name="CSGBox3" type="CSGBox" parent="floor3" index="9"]
+transform = Transform( -0.235365, 0, -0.971907, 0, 1, 0, 0.971907, 0, -0.235365, 10.4163, -8.19257, -17.2764 )
+use_collision = true
+width = 9.91284
+height = 1.39368
+depth = 2.43734
+
+[node name="platform_square3" parent="floor3" index="10" instance=ExtResource( 23 )]
+transform = Transform( 0.965563, 0, -0.260169, 0, 1, 0, 0.260169, 0, 0.965563, 7.68893, -2.09839, -20.72 )
+motion/sync_to_physics = true
+script = ExtResource( 28 )
+
+[node name="OmniLight" type="OmniLight" parent="floor3/platform_square3" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.26956, 0, 0 )
+light_color = Color( 0.780392, 1, 0.870588, 1 )
+light_energy = 0.4
+omni_range = 2.78622
+script = ExtResource( 22 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="floor3/platform_square3" index="3"]
+playback_process_mode = 0
+anims/Activate = SubResource( 266 )
+anims/RESET = SubResource( 267 )
+
+[node name="dswitch_a3" parent="floor3" index="11" instance=ExtResource( 29 )]
+transform = Transform( 0.970198, 0, -0.242311, 0, 1, 0, 0.242311, 0, 0.970198, 9.21134, -7.49573, -16.0746 )
+reset_upon_death = true
+
+[node name="falling_platform2" parent="floor3" index="12" instance=ExtResource( 15 )]
+transform = Transform( 0.975884, 0, -0.218289, 0, 1, 0, 0.218289, 0, 0.975884, 8.37944, -5.23625, -10.0692 )
+delay = 0.6
+
+[node name="fountainA2" parent="floor3" index="13" instance=ExtResource( 19 )]
+transform = Transform( -0.28729, 0, -0.957844, 0, 1, 0, 0.957844, 0, -0.28729, 10.9278, -7.49573, -21.2649 )
+
+[node name="platform_square4" parent="floor3" index="14" instance=ExtResource( 23 )]
+transform = Transform( 0.942487, -0.334244, -1.46103e-08, 0, -4.37114e-08, 1, -0.334244, -0.942487, -4.11974e-08, 6.94491, -1.90343, -5.2659 )
+
+[node name="get_capacitor" type="Area" parent="floor3" index="15"]
+transform = Transform( -0.889847, 0, 0.456258, 0, 1, 0, -0.456258, 0, -0.889847, 9.21545, 24.4708, -1.89956 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 27 )
+dialog_sequence = ExtResource( 33 )
+main_speaker = NodePath("power")
+
+[node name="power" type="Spatial" parent="floor3/get_capacitor" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47418, 1.14517, -0.00568962 )
+script = ExtResource( 30 )
+active = true
+
+[node name="capacitor" parent="floor3/get_capacitor/power" index="0" instance=ExtResource( 32 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0662689, -0.25737, -0.528606 )
+
+[node name="dialog_circle" parent="floor3/get_capacitor" index="1" instance=ExtResource( 31 )]
+transform = Transform( 0.96871, 0, -0.248196, 0, 1, 0, 0.248196, 0, 0.96871, 0.352951, -0.410522, -0.821033 )
+
+[node name="CollisionShape" type="CollisionShape" parent="floor3/get_capacitor" index="2"]
+transform = Transform( 0.96871, 0, -0.248196, 0, 1, 0, 0.248196, 0, 0.96871, 0.352951, 0.22258, -0.821033 )
+shape = SubResource( 261 )
+
+[connection signal="insta_toggled" from="floor3/dswitch_a" to="floor3/platform_square" method="_on_toggled" binds= [ true ]]
+[connection signal="toggled" from="floor3/dswitch_a" to="floor3/platform_square" method="_on_toggled"]
+[connection signal="insta_toggled" from="floor3/dswitch_a2" to="floor3/platform_square2" method="_on_toggled" binds= [ true ]]
+[connection signal="toggled" from="floor3/dswitch_a2" to="floor3/platform_square2" method="_on_toggled"]
+[connection signal="insta_toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled" binds= [ true ]]
+[connection signal="toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled"]
+[connection signal="deactivated" from="floor3/get_capacitor/power" to="floor3/get_capacitor" method="set_enabled" binds= [ false ]]
+[connection signal="toggled" from="floor3/get_capacitor/power" to="tower_lighting" method="toggle"]

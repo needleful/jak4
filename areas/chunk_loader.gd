@@ -21,7 +21,7 @@ func start_loading(chunks: Array):
 	var _x = _thread.start(self, "_load_everything", chunks)
 
 func _load_everything(chunks: Array):
-	call_deferred("emit_signal", "load_start")
+	call_deferred("_start_loading")
 	for chunk in chunks:
 		var name:String = chunk.name
 		var hires_file :String = PATH_CONTENT % name
@@ -39,7 +39,13 @@ func _load_everything(chunks: Array):
 			_set_loaded(_lowres, name, l)
 			if !is_active(name):
 				call_deferred("_add_lowres", name, content)
-	call_deferred("emit_signal", "load_complete")
+	call_deferred("_complete_loading")
+
+func _start_loading():
+	emit_signal("load_start")
+
+func _complete_loading():
+	emit_signal("load_complete")
 
 func _set_loaded(dict: Dictionary, name: String, content: PackedScene):
 	_load_mutex.lock()

@@ -1,4 +1,4 @@
-extends Node
+extends Spatial
 
 export(Array, NodePath) var light_nodes
 
@@ -6,10 +6,6 @@ var ambient_info := {}
 var reflection_info := {}
 
 func _ready():
-	for c in get_children():
-		if c is ReflectionProbe and c.interior_enable:
-			ambient_info[c.get_path()] = c.interior_ambient_color
-			reflection_info[c.get_path()] = c.intensity
 	for l in light_nodes:
 		var c = get_node(l)
 		if c is ReflectionProbe and c.interior_enable:
@@ -17,9 +13,7 @@ func _ready():
 			reflection_info[c.get_path()] = c.intensity
 
 func toggle(lights_enabled):
-	for c in get_children():
-		if c is Light or c is ReflectionProbe:
-			process_item(c, lights_enabled)
+	visible = lights_enabled
 	for l in light_nodes:
 		process_item(get_node(l), lights_enabled)
 

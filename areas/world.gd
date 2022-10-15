@@ -71,6 +71,20 @@ func _ready():
 	update_active_chunks(player.global_transform.origin)
 	start_loading_chunks()
 
+func _process(delta):
+	time += delta
+	if time > TIME_READY:
+		sun.visible = sun_enabled
+	var player_new_position = player.global_transform.origin
+	apply_fog(player_new_position.y)
+	if (player_last_position - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
+		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
+		detect_enemies(delta)
+		update_active_chunks(player_new_position)
+		player_last_position = player_new_position
+		if player_last_position.y < -8000:
+			player.fall_to_death()
+
 func load_everything():
 	for c in chunks.values():
 		var path = chunk_loader.PATH_CONTENT % c.name
@@ -102,18 +116,6 @@ func free_every_other(on_even : bool):
 			print(c.name)
 			c.get_node('dynamic_content').queue_free()
 		even = !even
-
-func _process(delta):
-	time += delta
-	var player_new_position = player.global_transform.origin
-	apply_fog(player_new_position.y)
-	if (player_last_position - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
-		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
-		detect_enemies(delta)
-		update_active_chunks(player_new_position)
-		player_last_position = player_new_position
-		if player_last_position.y < -8000:
-			player.fall_to_death()
 
 func start_loading_chunks():
 	# Sort the chunks by distance from player

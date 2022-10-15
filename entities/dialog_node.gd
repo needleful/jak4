@@ -1,4 +1,5 @@
 extends Node
+class_name DialogNode
 
 signal dialog_entered
 

@@ -1,9 +1,11 @@
 extends Area
+class_name DialogTrigger
 
 export(Resource) var dialog_sequence
 export(String) var custom_entry := ""
 export(NodePath) var main_speaker
 export(String) var friendly_id
+export(bool) var enabled := true setget set_enabled
 
 var speaker: Node
 
@@ -18,3 +20,11 @@ func _on_body_entered(body):
 		return
 	if body.can_talk():
 		body.start_dialog(self, dialog_sequence, speaker, custom_entry)
+
+func set_enabled(e):
+	enabled = e
+	for c in get_children():
+		if c is CollisionShape:
+			c.disabled = !enabled
+		elif c is DialogCircle:
+			c.visible = enabled
