@@ -1,8 +1,8 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
-[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=3]
+[ext_resource path="res://entities/one_time/tower_113.gd" type="Script" id=3]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/stone/garden_empty.tscn" type="PackedScene" id=6]
@@ -33,6 +33,7 @@
 [ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=31]
 [ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=32]
 [ext_resource path="res://dialog/intro/get_capacitor_113.dialog" type="Resource" id=33]
+[ext_resource path="res://entities/one_time/tower_113_fall.anim" type="Animation" id=34]
 
 [sub_resource type="OccluderShapePolygon" id=7]
 polygon_points = PoolVector2Array( 19.1686, -66.5112, -24.4647, 103.201, 18.7659, 93.1214, -24.48, -61.4066 )
@@ -163,75 +164,211 @@ radius = 0.589667
 [node name="chunk113" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
 
-[node name="exterior" parent="." index="0"]
-material/0 = ExtResource( 21 )
-material/1 = ExtResource( 3 )
+[node name="door_bit_lower1-kine" parent="tower" index="0"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9707, -77.3291, -17.3971 )
 
-[node name="StaticBody" parent="exterior" index="0"]
-collision_layer = 257
+[node name="door_bit_lower2-kine" parent="tower" index="1"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9707, -77.3291, -17.3971 )
 
-[node name="interior" parent="." index="1"]
-material/0 = ExtResource( 21 )
-material/1 = ExtResource( 3 )
+[node name="door_bit_lower3-kine" parent="tower" index="2"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.364, -77.3317, -20.6262 )
 
-[node name="StaticBody" parent="interior" index="0"]
-collision_layer = 257
+[node name="door_bit_lower4-kine" parent="tower" index="3"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.5935, -77.3431, -12.4846 )
 
-[node name="env_override" parent="." index="2"]
+[node name="entry1-kine" parent="tower" index="4"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.4517, -50.1265, -8.72556 )
+
+[node name="entry2-kine" parent="tower" index="5"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 13.2203, -50.1313, -6.62405 )
+
+[node name="entry3-kine" parent="tower" index="6"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 19.5166, -50.1282, -4.54523 )
+
+[node name="entry4-kine" parent="tower" index="7"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 14.3003, -50.1306, -2.44238 )
+
+[node name="env_override" parent="tower" index="8"]
 visible = false
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine" parent="tower" index="12"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -0.780708, 29.6687, 17.2345 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine001" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine001" parent="tower" index="13"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -26.566, 34.6835, 7.75772 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine002" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine002" parent="tower" index="14"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, 26.0896, 35.0087, -9.98567 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine003" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine003" parent="tower" index="15"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -14.5813, 41.0006, -16.8785 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine004" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine004" parent="tower" index="16"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, 15.2966, 32.8589, 0.932001 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine005" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine005" parent="tower" index="17"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -20.7378, 37.5079, -3.4524 )
 
-[node name="mesh" parent="shrine-kine/shrine_arm-kine006" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine006" parent="tower" index="18"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, 3.42913, 38.4357, -14.1004 )
 
-[node name="mesh" parent="shrine-kine" index="7"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine007" parent="tower" index="19"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -16.1297, 32.7826, 11.1355 )
 
-[node name="mesh" parent="pole-kine" index="0"]
-material/0 = ExtResource( 21 )
+[node name="tower-roof-kine009" parent="tower" index="20"]
+transform = Transform( 0.869077, -0.0272255, 0.493927, 0.257916, 0.876968, -0.405471, -0.422119, 0.479778, 0.769174, -6.02045, 35.7464, -2.0966 )
 
-[node name="mesh" parent="table-kine" index="0"]
-material/0 = ExtResource( 21 )
-material/1 = ExtResource( 3 )
+[node name="tower_floor_upper1-kine001" parent="tower" index="22"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 2.89038, -50.1409, 1.23749 )
 
-[node name="Occluder" type="Occluder" parent="." index="7"]
-transform = Transform( 0.85898, 0, -0.512008, 0, 1, 0, 0.512008, 0, 0.85898, 61.6896, 92.0828, 48.4292 )
-visible = false
-shape = SubResource( 7 )
+[node name="tower_floor_upper1-kine002" parent="tower" index="23"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 6.00864, -50.1429, -9.04303 )
 
-[node name="Occluder2" type="Occluder" parent="." index="8"]
-transform = Transform( -0.526401, 0, -0.850237, 0, 1, 0, 0.850237, 0, -0.526401, 51.0647, 100.553, 20.8547 )
-visible = false
-shape = SubResource( 8 )
+[node name="tower_floor_upper1-kine003" parent="tower" index="24"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 17.189, -50.1476, 6.45518 )
 
-[node name="Occluder4" type="Occluder" parent="." index="9"]
-transform = Transform( -0.692928, 0, -0.721007, 0, 1, 0, 0.721007, 0, -0.692928, 98.6692, 89.4222, 34.646 )
-visible = false
-shape = SubResource( 9 )
+[node name="tower_floor_upper1-kine004" parent="tower" index="25"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 20.4201, -50.1278, -13.5885 )
 
-[node name="Occluder3" type="Occluder" parent="." index="10"]
-transform = Transform( 0.973801, 0, -0.2274, 0, 1, 0, 0.2274, 0, 0.973801, 94.5206, 100.553, 8.47476 )
-visible = false
-shape = SubResource( 10 )
+[node name="tower_floor_upper1-kine005" parent="tower" index="26"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 7.53662, -50.1181, -16.8719 )
 
-[node name="palace1" parent="." index="11" instance=ExtResource( 4 )]
+[node name="tower_floor_upper1-kine006" parent="tower" index="27"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -6.69136, -50.0737, -21.6212 )
+
+[node name="tower_floor_upper1-kine007" parent="tower" index="28"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.6983, -50.0854, -16.342 )
+
+[node name="tower_floor_upper1-kine008" parent="tower" index="29"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -22.0677, -50.1504, 2.05221 )
+
+[node name="tower_floor_upper1-kine009" parent="tower" index="30"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -8.96818, -50.1353, 15.9341 )
+
+[node name="tower_floor_upper1-kine010" parent="tower" index="31"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -8.96818, -50.1353, 15.9341 )
+
+[node name="tower_floor_upper1-kine011" parent="tower" index="32"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 6.00864, -50.1429, -9.04303 )
+
+[node name="tower_floor_upper1-kine012" parent="tower" index="33"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 2.89038, -50.1409, 1.23749 )
+
+[node name="tower_inner_lower-kine005" parent="tower" index="34"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -5.75687, -84.1642, -21.3144 )
+
+[node name="tower_inner_lower-kine006" parent="tower" index="35"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 0.475975, -85.0514, -7.44242 )
+
+[node name="tower_inner_lower-kine009" parent="tower" index="36"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.7337, -83.3706, -6.43962 )
+
+[node name="tower_inner_lower-kine010" parent="tower" index="37"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -19.9349, -80.0611, 9.94095 )
+
+[node name="tower_inner_lower-kine011" parent="tower" index="38"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -20.1239, -78.9496, 9.49611 )
+
+[node name="tower_inner_lower-kine013" parent="tower" index="39"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.3735, -88.9112, -2.48713 )
+
+[node name="tower_inner_lower-kine014" parent="tower" index="40"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.3736, -90.762, -14.3885 )
+
+[node name="tower_inner_lower-kine015" parent="tower" index="41"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -5.75385, -90.9377, -21.3054 )
+
+[node name="tower_lower_inner-kine" parent="tower" index="42"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9233, -84.033, 19.6693 )
+
+[node name="tower_lower_inner-kine001" parent="tower" index="43"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 13.0741, -85.6756, -18.4468 )
+
+[node name="tower_lower_inner-kine002" parent="tower" index="44"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.1522, -82.3887, -8.49313 )
+
+[node name="tower_lower_inner-kine003" parent="tower" index="45"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.7005, -87.4541, 9.41281 )
+
+[node name="tower_platform1-kine" parent="tower" index="46"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -1.428, -92.2169, 1.75392 )
+
+[node name="tower_platform2-kine" parent="tower" index="47"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -2.64944, -92.4736, -7.2305 )
+
+[node name="tower_roof_lower-kine" parent="tower" index="48"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.7058, -77.3327, 12.9304 )
+
+[node name="tower_roof_lower-kine001" parent="tower" index="49"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -16.5752, -77.2688, -17.5649 )
+
+[node name="tower_roof_lower-kine002" parent="tower" index="50"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 20.9657, -77.3515, -6.84184 )
+
+[node name="tower_roof_lower-kine003" parent="tower" index="51"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 12.6776, -77.2442, -16.6227 )
+
+[node name="tower_roof_lower-kine004" parent="tower" index="52"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 0.578941, -77.3379, -12.7138 )
+
+[node name="tower_roof_lower-kine005" parent="tower" index="53"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -0.734016, -77.333, 0.361219 )
+
+[node name="tower_wall_inner_mid1-kine" parent="tower" index="54"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.1137, -43.33, 19.2044 )
+
+[node name="tower_wall_inner_mid2-kine" parent="tower" index="55"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 12.7423, -38.0102, -19.2316 )
+
+[node name="tower_wall_inner_mid3-kine" parent="tower" index="56"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 21.1675, -43.1485, 7.70664 )
+
+[node name="tower_wall_inner_mid4-kine" parent="tower" index="57"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.9495, -38.1916, -8.49695 )
+
+[node name="tower_wall_lower-kine" parent="tower" index="58"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.0927, -63.5346, 9.96143 )
+
+[node name="tower_wall_lower-kine001" parent="tower" index="59"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.3022, -63.5346, -8.22092 )
+
+[node name="tower_wall_lower-kine002" parent="tower" index="60"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 10.8088, -63.5346, -18.9643 )
+
+[node name="tower_wall_lower-kine003" parent="tower" index="61"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -16.6203, -63.5346, 19.2322 )
+
+[node name="tower_wall_mid1-kine" parent="tower" index="62"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -26.0738, -62.2245, -8.76517 )
+
+[node name="tower_wall_mid2-kine" parent="tower" index="63"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 22.142, -72.2245, 9.3522 )
+
+[node name="tower_wall_mid3-kine" parent="tower" index="64"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 14.7446, -62.2245, -20.6892 )
+
+[node name="tower_wall_mid4-kine" parent="tower" index="65"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.6765, -72.2245, 21.2763 )
+
+[node name="tower_wall_upper1-kine" parent="tower" index="66"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -25.1446, 5.97922, -8.31126 )
+
+[node name="tower_wall_upper2-kine" parent="tower" index="67"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -17.3942, -3.63725, 20.7708 )
+
+[node name="tower_wall_upper3-kine" parent="tower" index="68"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 21.6377, -3.77295, 8.45456 )
+
+[node name="tower_wall_upper4-kine" parent="tower" index="69"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 13.9602, 6.06042, -19.9118 )
+
+[node name="AnimationPlayer" parent="." index="1"]
+anims/tower_113_fall = ExtResource( 34 )
+
+[node name="Node" type="Node" parent="." index="2"]
+script = ExtResource( 3 )
+
+[node name="palace1" parent="." index="3" instance=ExtResource( 4 )]
 transform = Transform( -0.956232, 0, -0.292611, 0, 1, 0, 0.292611, 0, -0.956232, 147.159, 38.6994, -3.80229 )
 
 [node name="npc_riley" parent="palace1" index="1" instance=ExtResource( 16 )]
@@ -252,57 +389,25 @@ transform = Transform( 0.0407048, -0.099262, 0.994229, 0.329557, 0.940704, 0.080
 [node name="scrap4" parent="palace1" index="4" instance=ExtResource( 9 )]
 transform = Transform( 0.934973, -0.345052, 0.0822607, 0.334159, 0.934571, 0.122125, -0.119018, -0.0866953, 0.989101, 9.6805, 19.5872, -5.90258 )
 
-[node name="fountain" parent="." index="12" instance=ExtResource( 18 )]
+[node name="fountain" parent="." index="4" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 66.6298, -0.454576, -162.16 )
 
-[node name="rock1" parent="." index="13" instance=ExtResource( 12 )]
+[node name="rock1" parent="." index="5" instance=ExtResource( 12 )]
 transform = Transform( 0.351292, 0.936266, 0, -0.936266, 0.351292, 0, 0, 0, 1, 93.3741, 0.152008, -143.55 )
 
-[node name="ruin1" parent="." index="14" instance=ExtResource( 20 )]
+[node name="ruin1" parent="." index="6" instance=ExtResource( 20 )]
 transform = Transform( 0.996154, 0.087625, 0, -0.087625, 0.996154, 0, 0, 0, 1, 47.642, -2.66061, -149.146 )
 
-[node name="ruin2" parent="." index="15" instance=ExtResource( 20 )]
+[node name="ruin2" parent="." index="7" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 92.2196, 9.53674e-07, -182.309 )
 
-[node name="ruin3" parent="." index="16" instance=ExtResource( 20 )]
+[node name="ruin3" parent="." index="8" instance=ExtResource( 20 )]
 transform = Transform( -0.904022, 0.275145, -0.32717, 0, 0.765333, 0.643634, 0.427487, 0.58186, -0.691878, 54.3752, -4.57938, -179.801 )
 
-[node name="garden_empty" parent="." index="17" instance=ExtResource( 6 )]
+[node name="garden_empty" parent="." index="9" instance=ExtResource( 6 )]
 transform = Transform( -0.877965, -0.0291295, 0.477837, 0, 0.998147, 0.0608482, -0.478724, 0.0534226, -0.876339, 78.0383, 0.617816, -117.962 )
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="18"]
-transform = Transform( 0.780215, 0, -0.625511, 0, 1, 0, 0.625511, 0, 0.780215, 93.8685, 57.4384, 29.4874 )
-intensity = 0.35
-extents = Vector3( 4.95376, 12.9967, 16.0483 )
-origin_offset = Vector3( 1.05859, 7.16992, 0 )
-interior_enable = true
-interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
-
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="." index="19"]
-transform = Transform( 0.688555, 0, 0.725185, 0, 1, 0, -0.725185, 0, 0.688555, 95.5205, 57.4384, 35.4643 )
-intensity = 0.35
-extents = Vector3( 29.5525, 25.0196, 1.85811 )
-origin_offset = Vector3( 1.05859, 6.94141, -1.84811 )
-interior_enable = true
-interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
-
-[node name="ReflectionProbe4" type="ReflectionProbe" parent="." index="20"]
-transform = Transform( -0.867282, 0, 0.497817, 0, 1, 0, -0.497817, 0, -0.867282, 77.0359, 57.4384, 30.84 )
-intensity = 0.35
-extents = Vector3( 13.5829, 25.0196, 23.0512 )
-origin_offset = Vector3( -4.90723, 12.6367, 0 )
-interior_enable = true
-interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
-
-[node name="ReflectionProbe5" type="ReflectionProbe" parent="." index="21"]
-transform = Transform( 0.969998, 0, -0.243112, 0, 1, 0, 0.243112, 0, 0.969998, 96.6169, 57.4384, 13.3541 )
-intensity = 0.35
-extents = Vector3( 17.5229, 25.0196, 3.59849 )
-origin_offset = Vector3( 1.05859, 7.56836, 0.671875 )
-interior_enable = true
-interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
-
-[node name="environment" type="Area" parent="." index="22"]
+[node name="environment" type="Area" parent="." index="10"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -311,7 +416,23 @@ custom_fog = Color( 0.121569, 0.145098, 0.168627, 1 )
 show_sun = false
 override_music = true
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="environment" index="0"]
+[node name="Occluder" type="Occluder" parent="environment" index="0"]
+transform = Transform( 0.85898, 0, -0.512008, 0, 1, 0, 0.512008, 0, 0.85898, 61.6896, 92.0828, 48.4292 )
+shape = SubResource( 7 )
+
+[node name="Occluder2" type="Occluder" parent="environment" index="1"]
+transform = Transform( -0.526401, 0, -0.850237, 0, 1, 0, 0.850237, 0, -0.526401, 51.0647, 100.553, 20.8547 )
+shape = SubResource( 8 )
+
+[node name="Occluder4" type="Occluder" parent="environment" index="2"]
+transform = Transform( -0.692928, 0, -0.721007, 0, 1, 0, 0.721007, 0, -0.692928, 98.6692, 89.4222, 34.646 )
+shape = SubResource( 9 )
+
+[node name="Occluder3" type="Occluder" parent="environment" index="3"]
+transform = Transform( 0.973801, 0, -0.2274, 0, 1, 0, 0.2274, 0, 0.973801, 94.5206, 100.553, 8.47476 )
+shape = SubResource( 10 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="environment" index="4"]
 transform = Transform( 0.687847, 0, 0.725856, 0, 1, 0, -0.725856, 0, 0.687847, 71.6737, 115.523, 26.2326 )
 visible = false
 intensity = 0.35
@@ -320,16 +441,47 @@ origin_offset = Vector3( 1.05859, 0, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 
-[node name="CollisionShape" type="CollisionShape" parent="environment" index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="environment" index="5"]
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
 shape = SubResource( 1 )
 
-[node name="tower_lighting" type="Spatial" parent="." index="23"]
+[node name="tower_lighting" type="Spatial" parent="." index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.6161, 96.9976, 29.1848 )
 script = ExtResource( 26 )
-light_nodes = [ NodePath("../environment/ReflectionProbe"), NodePath("../ReflectionProbe2"), NodePath("../ReflectionProbe3"), NodePath("../ReflectionProbe4"), NodePath("../ReflectionProbe5") ]
 
-[node name="SpotLight5" type="SpotLight" parent="tower_lighting" index="0"]
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="tower_lighting" index="0"]
+transform = Transform( 0.780215, 0, -0.625511, 0, 1, 0, 0.625511, 0, 0.780215, 11.2524, -39.5592, 0.302601 )
+intensity = 0.35
+extents = Vector3( 4.95376, 12.9967, 16.0483 )
+origin_offset = Vector3( 1.05859, 7.16992, 0 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="tower_lighting" index="1"]
+transform = Transform( 0.688555, 0, 0.725185, 0, 1, 0, -0.725185, 0, 0.688555, 12.9044, -39.5592, 6.2795 )
+intensity = 0.35
+extents = Vector3( 29.5525, 25.0196, 1.85811 )
+origin_offset = Vector3( 1.05859, 6.94141, -1.84811 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
+
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="tower_lighting" index="2"]
+transform = Transform( -0.867282, 0, 0.497817, 0, 1, 0, -0.497817, 0, -0.867282, -5.5802, -39.5592, 1.6552 )
+intensity = 0.35
+extents = Vector3( 13.5829, 25.0196, 23.0512 )
+origin_offset = Vector3( -4.90723, 12.6367, 0 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
+
+[node name="ReflectionProbe5" type="ReflectionProbe" parent="tower_lighting" index="3"]
+transform = Transform( 0.969998, 0, -0.243112, 0, 1, 0, 0.243112, 0, 0.969998, 14.0008, -39.5592, -15.8307 )
+intensity = 0.35
+extents = Vector3( 17.5229, 25.0196, 3.59849 )
+origin_offset = Vector3( 1.05859, 7.56836, 0.671875 )
+interior_enable = true
+interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
+
+[node name="SpotLight5" type="SpotLight" parent="tower_lighting" index="4"]
 transform = Transform( 0.970276, 0.196285, 0.141552, -0.198905, 0.313658, 0.92847, 0.137846, -0.929027, 0.343377, 5.4147, -17.8135, 2.44733 )
 light_color = Color( 0.8, 1, 0.85098, 1 )
 shadow_enabled = true
@@ -338,48 +490,48 @@ spot_angle = 43.0938
 script = ExtResource( 22 )
 distance = 100.0
 
-[node name="OmniLight8" type="OmniLight" parent="tower_lighting" index="1"]
+[node name="OmniLight8" type="OmniLight" parent="tower_lighting" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.74815, -29.6567, -6.15211 )
 light_color = Color( 0.760784, 1, 0.854902, 1 )
 light_energy = 0.602
 omni_range = 3.39344
 script = ExtResource( 22 )
 
-[node name="OmniLight9" type="OmniLight" parent="tower_lighting" index="2"]
+[node name="OmniLight9" type="OmniLight" parent="tower_lighting" index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.2163, -20.2444, 5.63668 )
 light_color = Color( 0.760784, 1, 0.854902, 1 )
 light_energy = 0.602
 omni_range = 6.33966
 script = ExtResource( 22 )
 
-[node name="OmniLight10" type="OmniLight" parent="tower_lighting" index="3"]
+[node name="OmniLight10" type="OmniLight" parent="tower_lighting" index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.2387, -22.5448, 11.5891 )
 light_color = Color( 0.760784, 1, 0.854902, 1 )
 light_energy = 0.602
 omni_range = 6.33966
 script = ExtResource( 22 )
 
-[node name="OmniLight11" type="OmniLight" parent="tower_lighting" index="4"]
+[node name="OmniLight11" type="OmniLight" parent="tower_lighting" index="8"]
 transform = Transform( 0.762925, 0, -0.646487, 0, 1, 0, 0.646487, 0, 0.762925, -34.7607, -20.5697, 5.09761 )
 light_color = Color( 0.760784, 1, 0.854902, 1 )
 light_energy = 0.602
 omni_range = 6.33966
 script = ExtResource( 22 )
 
-[node name="SpotLight3" type="SpotLight" parent="tower_lighting" index="5"]
+[node name="SpotLight3" type="SpotLight" parent="tower_lighting" index="9"]
 transform = Transform( 0.950144, 0, 0.311812, 0, 1, 0, -0.311812, 0, 0.950144, -26.3444, -16.4012, 14.2711 )
 light_color = Color( 0.666667, 1, 0.960784, 1 )
 light_energy = 0.205
 script = ExtResource( 22 )
 
-[node name="SpotLight4" type="SpotLight" parent="tower_lighting" index="6"]
+[node name="SpotLight4" type="SpotLight" parent="tower_lighting" index="10"]
 transform = Transform( 0.980738, 0.0121929, -0.194947, 0.195292, -0.0804647, 0.977439, -0.00376853, -0.996683, -0.081296, -28.4081, -15.3955, -3.55373 )
 light_color = Color( 0.729412, 0.815686, 0.878431, 1 )
 light_energy = 0.801
 spot_range = 11.185
 script = ExtResource( 22 )
 
-[node name="SpotLight" type="SpotLight" parent="tower_lighting" index="7"]
+[node name="SpotLight" type="SpotLight" parent="tower_lighting" index="11"]
 transform = Transform( 0.994948, 0.0289403, -0.0961318, 0.0970169, -0.0309112, 0.994803, 0.0258183, -0.999103, -0.0335627, -19.1957, 6.68511, -18.0147 )
 shadow_enabled = true
 spot_range = 33.823
@@ -387,18 +539,18 @@ spot_angle = 16.0811
 script = ExtResource( 22 )
 distance = 100.0
 
-[node name="OmniLight" type="OmniLight" parent="tower_lighting" index="8"]
+[node name="OmniLight" type="OmniLight" parent="tower_lighting" index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435478, 68.3261, -1.01557 )
 light_color = Color( 0.933333, 1, 0.972549, 1 )
 light_energy = 1.5
 omni_range = 15.5107
 
-[node name="OmniLight5" type="OmniLight" parent="tower_lighting" index="9"]
+[node name="OmniLight5" type="OmniLight" parent="tower_lighting" index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5474, 8.85641, -3.71247 )
 light_color = Color( 0.572549, 1, 0.921569, 1 )
 light_energy = 0.2
 
-[node name="SpotLight2" type="SpotLight" parent="tower_lighting" index="10"]
+[node name="SpotLight2" type="SpotLight" parent="tower_lighting" index="14"]
 transform = Transform( 0.832407, -4.99464e-09, -0.554165, 0.552107, 0.0861032, 0.829316, 0.0477154, -0.996286, 0.0716729, -16.8483, 6.15822, 2.61014 )
 light_color = Color( 1, 0.827451, 0.529412, 1 )
 shadow_enabled = true
@@ -406,7 +558,7 @@ spot_range = 26.2471
 script = ExtResource( 22 )
 distance = 100.0
 
-[node name="OmniLight3" type="OmniLight" parent="tower_lighting" index="11"]
+[node name="OmniLight3" type="OmniLight" parent="tower_lighting" index="15"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9718, -4.69302, -8.90158 )
 light_color = Color( 0.313726, 1, 0.839216, 1 )
 light_energy = 0.304
@@ -414,7 +566,7 @@ omni_range = 14.199
 script = ExtResource( 22 )
 distance = 70.0
 
-[node name="OmniLight4" type="OmniLight" parent="tower_lighting" index="12"]
+[node name="OmniLight4" type="OmniLight" parent="tower_lighting" index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.24582, -8.18781, 17.0172 )
 light_color = Color( 0.313726, 1, 0.839216, 1 )
 light_energy = 0.304
@@ -422,7 +574,7 @@ omni_range = 13.6344
 script = ExtResource( 22 )
 distance = 70.0
 
-[node name="OmniLight6" type="OmniLight" parent="tower_lighting" index="13"]
+[node name="OmniLight6" type="OmniLight" parent="tower_lighting" index="17"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -25.4782, -5.77625, 5.53041 )
 light_color = Color( 0.313726, 1, 0.839216, 1 )
 light_energy = 0.304
@@ -430,7 +582,7 @@ omni_range = 13.029
 script = ExtResource( 22 )
 distance = 70.0
 
-[node name="OmniLight7" type="OmniLight" parent="tower_lighting" index="14"]
+[node name="OmniLight7" type="OmniLight" parent="tower_lighting" index="18"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5375, 0.729713, -13.1605 )
 light_color = Color( 0.313726, 1, 0.839216, 1 )
 light_energy = 0.304
@@ -438,23 +590,23 @@ omni_range = 13.8183
 script = ExtResource( 22 )
 distance = 70.0
 
-[node name="SpotLight6" type="SpotLight" parent="tower_lighting" index="15"]
+[node name="SpotLight6" type="SpotLight" parent="tower_lighting" index="19"]
 transform = Transform( -0.161422, -0.913124, 0.374363, 0.276722, 0.322241, 0.90531, -0.947295, 0.249731, 0.200665, -5.92583, 85.2411, -1.96949 )
 light_energy = 1.5
 shadow_enabled = true
 spot_range = 13.6585
 script = ExtResource( 22 )
 
-[node name="OmniLight2" type="OmniLight" parent="tower_lighting" index="16"]
+[node name="OmniLight2" type="OmniLight" parent="tower_lighting" index="20"]
 transform = Transform( 0.813051, 0, -0.582193, 0, 1, 0, 0.582193, 0, 0.813051, -4.60197, 29.5439, 14.8689 )
 omni_range = 11.0666
 
-[node name="SpotLight7" type="SpotLight" parent="tower_lighting" index="17"]
+[node name="SpotLight7" type="SpotLight" parent="tower_lighting" index="21"]
 transform = Transform( 0.966676, 8.9407e-08, -0.256004, 0.240763, -0.339889, 0.909125, -0.0870127, -0.940466, -0.328562, -15.4636, 69.4409, -14.8309 )
 light_color = Color( 0.819608, 1, 0.945098, 1 )
 spot_range = 26.5693
 
-[node name="floor1" type="MultiMeshSystem" parent="." index="24"]
+[node name="floor1" type="MultiMeshSystem" parent="." index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.7459, 46.4986, 28.3168 )
 
 [node name="Area" type="Area" parent="floor1" index="0"]
@@ -581,7 +733,7 @@ transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -
 [node name="platform_square2" parent="floor1" index="19" instance=ExtResource( 23 )]
 transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.5385, 8.07739 )
 
-[node name="floor2" type="MultiMeshSystem" parent="." index="25"]
+[node name="floor2" type="MultiMeshSystem" parent="." index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 78.3545, 87.4238, 30.4353 )
 
 [node name="fountainA_large" parent="floor2" index="0" instance=ExtResource( 10 )]
@@ -713,7 +865,7 @@ transform = Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782
 [node name="bobble5" parent="floor2" index="17" instance=ExtResource( 14 )]
 transform = Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 )
 
-[node name="floor3" type="MultiMeshSystem" parent="." index="26"]
+[node name="floor3" type="MultiMeshSystem" parent="." index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.7457, 149.931, 28.1692 )
 
 [node name="platform_square" parent="floor3" index="0" instance=ExtResource( 23 )]
@@ -854,5 +1006,6 @@ shape = SubResource( 261 )
 [connection signal="toggled" from="floor3/dswitch_a2" to="floor3/platform_square2" method="_on_toggled"]
 [connection signal="insta_toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled"]
+[connection signal="deactivated" from="floor3/get_capacitor/power" to="environment" method="delete"]
 [connection signal="deactivated" from="floor3/get_capacitor/power" to="floor3/get_capacitor" method="set_enabled" binds= [ false ]]
 [connection signal="toggled" from="floor3/get_capacitor/power" to="tower_lighting" method="toggle"]
