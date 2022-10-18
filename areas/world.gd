@@ -68,12 +68,14 @@ func _ready():
 		if c.name.begins_with("chunk"):
 			chunks[c.name] = c
 	#load_everything()
+	# Briefly render the opposite light
+	sun.visible = !sun_enabled
 	update_active_chunks(player.global_transform.origin)
 	start_loading_chunks()
 
 func _process(delta):
 	time += delta
-	if time > TIME_READY:
+	if time > TIME_READY and sun.visible != sun_enabled:
 		sun.visible = sun_enabled
 	var player_new_position = player.global_transform.origin
 	apply_fog(player_new_position.y)
