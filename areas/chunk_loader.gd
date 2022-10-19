@@ -102,6 +102,7 @@ func queue_load(chunk: Spatial):
 func queue_unload(chunk: Spatial):
 	set_active(chunk.name, false)
 	if chunk.has_node("dynamic_content"):
+		print("Queuing %s to free", chunk.name)
 		chunk.get_node("dynamic_content").queue_free()
 	if !chunk.has_node("lowres"):
 		var c = _get_content(_lowres, chunk.name)

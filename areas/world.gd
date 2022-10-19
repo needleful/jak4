@@ -161,7 +161,6 @@ func detect_enemies(_delta):
 		show_combat_tutorial()
 
 func update_active_chunks(position: Vector3):
-	print("Update chunks.")
 	for ch in chunks.values():
 		var local : Vector3 = position - ch.global_transform.origin
 		var hlocal : Vector3 = local

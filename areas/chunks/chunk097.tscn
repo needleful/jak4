@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=2]
@@ -13,7 +13,7 @@
 [ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=11]
 [ext_resource path="res://entities/env/copper/glass-tools.tscn" type="PackedScene" id=12]
 [ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=13]
-[ext_resource path="res://entities/env/stone/rock3.tscn" type="PackedScene" id=14]
+[ext_resource path="res://entities/env/vaeler/v_rifle.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/plants/tree1.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/env/plants/cactus_round.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/env/plants/juniper_small.tscn" type="PackedScene" id=17]
@@ -50,7 +50,16 @@
 [ext_resource path="res://dialog/main/mum_found_sketches.dialog" type="Resource" id=48]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=49]
 [ext_resource path="res://entities/env/plants/tree3.tscn" type="PackedScene" id=50]
+[ext_resource path="res://entities/env/vaeler/cannon_wheel.tscn" type="PackedScene" id=51]
+[ext_resource path="res://entities/env/vaeler/cannon.tscn" type="PackedScene" id=52]
+[ext_resource path="res://entities/env/vaeler/saddle.tscn" type="PackedScene" id=53]
 [ext_resource path="res://entities/enemies/gunner.tscn" type="PackedScene" id=54]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/max_depth = 20.0
+shader_param/depth_color = null
 
 [sub_resource type="QuadMesh" id=2]
 
@@ -65,25 +74,8 @@ shader_param/main_texture = ExtResource( 36 )
 [sub_resource type="Gradient" id=4]
 colors = PoolColorArray( 0.683594, 1, 0.985168, 1, 0, 0.296875, 1, 1 )
 
-[sub_resource type="ShaderMaterial" id=1]
-resource_local_to_scene = true
-shader = ExtResource( 3 )
-shader_param/max_depth = 20.0
-shader_param/depth_color = null
-
 [node name="chunk097" type="MultiMeshSystem"]
 script = ExtResource( 1 )
-
-[node name="bug_pickup7" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.4485, 467.51, -36.8229 )
-quantity = 8
-
-[node name="bug_pickup8" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.7774, 467.092, -34.0755 )
-quantity = 8
-
-[node name="bug_pickup9" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02009, 485.313, -76.2354 )
 
 [node name="area_bowl" type="MultiMeshSystem" parent="."]
 
@@ -137,6 +129,30 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -37.4405, 400.997, -4.86066 )
 
 [node name="bug_pickup6" parent="area_bowl" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.8204, 411.365, -25.0017 )
+
+[node name="rock14" parent="area_bowl" instance=ExtResource( 11 )]
+transform = Transform( 0.989148, 0.0880393, 0.117623, 0.0852596, -0.995952, 0.0284687, 0.119653, -0.0181312, -0.99265, 252.229, 420.163, -109.683 )
+
+[node name="death_plane" parent="area_bowl" instance=ExtResource( 4 )]
+transform = Transform( 24.6384, -23.9397, -3.14189e-08, 0, -1.45585e-06, 1, -25.4727, -23.1555, -3.03898e-08, -39.3099, 330.383, -43.0729 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 1 )
+
+[node name="death_plane2" parent="area_bowl" instance=ExtResource( 4 )]
+transform = Transform( 24.6384, -23.9397, -3.14189e-08, 0, -1.45585e-06, 1, -25.4727, -23.1555, -3.03898e-08, -39.3099, 319.114, -43.0729 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 1 )
+
+[node name="bug_pickup7" parent="area_bowl" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.4485, 467.51, -36.8229 )
+quantity = 8
+
+[node name="bug_pickup8" parent="area_bowl" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.7774, 467.092, -34.0755 )
+quantity = 8
+
+[node name="bug_pickup9" parent="area_bowl" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02009, 485.313, -76.2354 )
 
 [node name="area_old_village" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 347.953, 430.476, 15.0423 )
@@ -270,6 +286,18 @@ open = true
 
 [node name="fountain" parent="area_old_village/water_hut" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 0.996625, -0.0820858, 0, 0.0820857, 0.996625, 0, 0.258087, 0 )
+
+[node name="cannon" parent="area_old_village" instance=ExtResource( 52 )]
+transform = Transform( 0.0913774, 0.421813, 0.902066, -0.0425113, 0.906683, -0.419666, -0.994909, 0, 0.100782, -67.8719, -5.76483, -27.4226 )
+
+[node name="cannon2" parent="area_old_village" instance=ExtResource( 52 )]
+transform = Transform( 0.0936276, -0.370054, 0.92428, 0.0372949, 0.92901, 0.36817, -0.994909, 0, 0.100782, -52.2802, -1.89612, -46.5459 )
+
+[node name="cannon_wheel" parent="area_old_village" instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, -0.0067338, 0.999977, 0, -0.999977, -0.0067338, -67.8993, -5.89319, -28.1845 )
+
+[node name="cannon_wheel2" parent="area_old_village" instance=ExtResource( 51 )]
+transform = Transform( 0.991941, 0.125674, -0.0161087, -0.126702, 0.983891, -0.126114, 0, 0.127138, 0.991885, -68.0945, -6.03793, -25.9314 )
 
 [node name="gunner" parent="area_old_village" instance=ExtResource( 54 )]
 transform = Transform( -0.528006, 0, -0.849241, 0, 1, 0, 0.849241, 0, -0.528006, 13.2719, 27.652, 44.4343 )
@@ -583,65 +611,72 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.36801, 32.0405, -92.7205 )
 [node name="cactus_round11" parent="area_old_village" instance=ExtResource( 16 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.01694, 32.3468, -95.6489 )
 
+[node name="random_ammo_pickup" parent="area_old_village" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.348, 34.236, -103.707 )
+generate_on_ready = true
+
+[node name="random_ammo_pickup2" parent="area_old_village" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.447, 34.228, -105.404 )
+generate_on_ready = true
+
+[node name="random_ammo_pickup3" parent="area_old_village" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.13, 34.262, -104.117 )
+generate_on_ready = true
+
+[node name="cannon_wheel3" parent="area_old_village" instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 0.102941, -0.994687, 0, 0.994687, 0.102941, -52.4435, -1.96777, -45.894 )
+
 [node name="juniper_small6" parent="area_old_village" instance=ExtResource( 17 )]
 transform = Transform( -0.694307, 0, 0.719679, 0, 1, 0, -0.719679, 0, -0.694307, 0.953156, 32.5767, -96.1573 )
 
-[node name="pillar3" parent="." instance=ExtResource( 23 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 167.172, 429.548, 44.3948 )
+[node name="bug_pickup5" parent="area_old_village" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.42, 33.49, -103.363 )
 
-[node name="bug_pickup" parent="pillar3" instance=ExtResource( 7 )]
+[node name="wall3" parent="area_old_village" instance=ExtResource( 22 )]
+transform = Transform( 0.951524, 0.13139, -0.278099, 0, 0.904166, 0.427181, 0.307575, -0.406473, 0.860335, -62.489, -9.93802, -13.0993 )
+
+[node name="area_village2" type="MultiMeshSystem" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 160.322, 436.22, 43.128 )
+
+[node name="pillar3" parent="area_village2" instance=ExtResource( 23 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8495, -6.67236, 1.26682 )
+
+[node name="bug_pickup" parent="area_village2/pillar3" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.04118, 17.3118, -1.36855 )
 
-[node name="bug_pickup2" parent="pillar3" instance=ExtResource( 7 )]
+[node name="bug_pickup2" parent="area_village2/pillar3" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.682343, 17.3258, -0.419659 )
 
-[node name="rock13" parent="." instance=ExtResource( 14 )]
-transform = Transform( -0.669112, 0.526218, 0.52477, -0.618176, -0.78604, 0, 0.41249, -0.3244, 0.851244, 237.815, 391.891, -76.4422 )
+[node name="pillar" parent="area_village2" instance=ExtResource( 23 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19.1715, -9.81537, 31.2025 )
 
-[node name="rock14" parent="." instance=ExtResource( 11 )]
-transform = Transform( 0.944681, 0.0898869, 0.315434, 0.0852596, -0.995952, 0.0284687, 0.316716, 0, -0.94852, 252.229, 416.7, -109.683 )
-
-[node name="death_plane" parent="." instance=ExtResource( 4 )]
-transform = Transform( 24.6384, -23.9397, -3.14189e-08, 0, -1.45585e-06, 1, -25.4727, -23.1555, -3.03898e-08, -39.3099, 330.383, -43.0729 )
-material/0 = SubResource( 1 )
-
-[node name="death_plane2" parent="." instance=ExtResource( 4 )]
-transform = Transform( 24.6384, -23.9397, -3.14189e-08, 0, -1.45585e-06, 1, -25.4727, -23.1555, -3.03898e-08, -39.3099, 319.114, -43.0729 )
-material/0 = SubResource( 1 )
-
-[node name="wall1" parent="." instance=ExtResource( 22 )]
-transform = Transform( 0.951524, 0.13139, -0.278099, 0, 0.904166, 0.427181, 0.307575, -0.406473, 0.860335, 285.464, 420.538, 1.94297 )
-
-[node name="pillar" parent="." instance=ExtResource( 23 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 179.494, 426.405, 74.3305 )
-
-[node name="bug_pickup" parent="pillar" instance=ExtResource( 7 )]
+[node name="bug_pickup" parent="area_village2/pillar" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.632584, 17.3159, -0.285095 )
 
-[node name="sitting_pillow" parent="pillar" instance=ExtResource( 28 )]
+[node name="sitting_pillow" parent="area_village2/pillar" instance=ExtResource( 28 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69472, 17.3102, -1.07785 )
 
-[node name="sitting_pillow2" parent="pillar" instance=ExtResource( 28 )]
+[node name="sitting_pillow2" parent="area_village2/pillar" instance=ExtResource( 28 )]
 transform = Transform( 0.635302, 0, 0.772264, 0, 1, 0, -0.772264, 0, 0.635302, 1.0106, 17.419, 0.102646 )
 
-[node name="bug_pickup2" parent="." instance=ExtResource( 7 )]
-transform = Transform( -0.215151, -0.000353584, 0.976581, -0.00164342, 0.999999, 0, -0.976579, -0.00160493, -0.215151, 87.3142, 444.999, 35.5555 )
+[node name="bug_pickup2" parent="area_village2" instance=ExtResource( 7 )]
+transform = Transform( -0.215151, -0.000353584, 0.976581, -0.00164342, 0.999999, 0, -0.976579, -0.00160493, -0.215151, -73.0083, 8.77863, -7.57248 )
 quantity = 12
 
-[node name="rock1" parent="." instance=ExtResource( 8 )]
-transform = Transform( 0.00164337, -0.999999, 0, 0.999999, 0.00164337, 0, 0, 0, 1, 85.378, 441.613, 35.9068 )
+[node name="rock1" parent="area_village2" instance=ExtResource( 8 )]
+transform = Transform( 0.00164337, -0.999999, 0, 0.999999, 0.00164337, 0, 0, 0, 1, -74.9445, 5.39264, -7.22118 )
 
-[node name="fountain" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 229.295, 442.557, 76.7709 )
+[node name="fountain" parent="area_village2" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.9725, 6.33664, 33.6429 )
 
-[node name="hut" parent="." instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 228.392, 442.356, 58.0025 )
+[node name="hut" parent="area_village2" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.0695, 6.13562, 14.8745 )
 
-[node name="glass1" parent="hut" instance=ExtResource( 45 )]
+[node name="glass1" parent="area_village2/hut" instance=ExtResource( 45 )]
 transform = Transform( 1, 0, 0, 0, 0.145784, -0.989316, 0, 0.989316, 0.145784, -0.174225, 1.01544, 1.12401 )
 
-[node name="crawly" parent="." instance=ExtResource( 20 )]
-transform = Transform( -0.205332, 0, 0.978692, 0, 1, 0, -0.978692, 0, -0.205332, 106.05, 441.106, 31.1864 )
+[node name="crawly" parent="area_village2" instance=ExtResource( 20 )]
+transform = Transform( -0.205332, 0, 0.978692, 0, 1, 0, -0.978692, 0, -0.205332, -54.2725, 4.88562, -11.9416 )
 reset_on_player_death = true
 drops_coat = true
 minimum_rarity = 1
@@ -651,19 +686,70 @@ attack_damage = 15
 shielded = true
 cloaked = true
 
-[node name="random_ammo_pickup" parent="." instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 335.605, 464.712, -88.6648 )
-generate_on_ready = true
+[node name="cannon" parent="." instance=ExtResource( 52 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 283.157, 424.588, 20.0975 )
 
-[node name="random_ammo_pickup2" parent="." instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 334.506, 464.704, -90.3621 )
-generate_on_ready = true
+[node name="cannon2" parent="." instance=ExtResource( 52 )]
+transform = Transform( 0.17181, 0, 0.98513, 0, 1, 0, -0.98513, 0, 0.17181, 303.839, 427.315, 19.1724 )
 
-[node name="random_ammo_pickup3" parent="." instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 333.823, 464.738, -89.0747 )
-generate_on_ready = true
+[node name="cannon3" parent="." instance=ExtResource( 52 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 336.393, 426.647, -162.731 )
 
-[node name="bug_pickup" parent="." instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 368.373, 463.966, -88.3211 )
+[node name="cannon4" parent="." instance=ExtResource( 52 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 323.145, 426.386, -165.451 )
+
+[node name="cannon5" parent="." instance=ExtResource( 52 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 351.138, 428.272, -162.684 )
+
+[node name="cannon_wheel" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 349.833, 427.598, -162.582 )
+
+[node name="cannon_wheel2" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 353.872, 428.209, -164.425 )
+
+[node name="cannon_wheel3" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 332.392, 425.408, -174.032 )
+
+[node name="cannon_wheel4" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 324.974, 425.745, -171.113 )
+
+[node name="cannon_wheel5" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 287.183, 425.01, 25.5167 )
+
+[node name="cannon_wheel6" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 302.953, 427.221, 19.738 )
+
+[node name="cannon6" parent="." instance=ExtResource( 52 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 350.405, 440.236, -38.0263 )
+
+[node name="cannon_wheel7" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 348.471, 440.61, -38.5042 )
+
+[node name="cannon_wheel8" parent="." instance=ExtResource( 51 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 351.391, 440.258, -38.9583 )
+
+[node name="saddle" parent="." instance=ExtResource( 53 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 315.294, 432.451, -0.667538 )
+
+[node name="saddle2" parent="." instance=ExtResource( 53 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 367.159, 441.679, -17.7731 )
+
+[node name="v_rifle" parent="." instance=ExtResource( 14 )]
+transform = Transform( 0.946812, -0.137146, 0.291098, -0.30266, -0.0723124, 0.950351, -0.109287, -0.987908, -0.109975, 346.119, 459.699, 126.523 )
+
+[node name="v_rifle2" parent="." instance=ExtResource( 14 )]
+transform = Transform( -0.06461, -0.337318, 0.939171, -0.133822, 0.935565, 0.326817, -0.988897, -0.104566, -0.105587, 339.176, 457.607, 123.001 )
+
+[node name="v_rifle3" parent="." instance=ExtResource( 14 )]
+transform = Transform( 0.0691101, 0.81749, 0.571781, -0.996446, 0.0842389, 0, -0.0481662, -0.569749, 0.820406, 342.497, 461.788, 126.327 )
+
+[node name="cannon7" parent="." instance=ExtResource( 52 )]
+transform = Transform( -0.930812, -0.17004, -0.323536, -0.160614, 0.985437, -0.0558269, 0.328317, 0, -0.944568, 347.009, 458.687, 112.677 )
+
+[node name="cannon_wheel9" parent="cannon7" instance=ExtResource( 51 )]
+transform = Transform( -0.028415, 0.999544, 0.0102639, 0.999596, 0.0284165, 0, -0.000291661, 0.0102596, -0.999947, -0.504944, 0.000854492, -0.00172424 )
+
+[node name="cannon_wheel10" parent="cannon7" instance=ExtResource( 51 )]
+transform = Transform( 0.156998, -0.987241, 0.026579, -0.986796, -0.157899, -0.0360793, 0.0398158, -0.0205637, -0.998996, 0.497803, -0.0327454, -0.00971985 )
 
 [connection signal="picked" from="area_old_village/mums_hut/pickup_sketches" to="area_old_village/mums_hut/item_dialog" method="enter_dialog"]

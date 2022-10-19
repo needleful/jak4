@@ -434,18 +434,23 @@ func _physics_process(delta):
 	
 	best_floor_dot = -1.0
 	var best_normal := Vector3.ZERO
+	var slide_dots := []
 	best_floor = null
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
 		var normal := col.normal
 		var dot := normal.dot(Vector3.UP)
+		slide_dots.append(dot)
 		if dot > best_floor_dot:
 			best_floor_dot = dot
 			best_normal = normal
 			best_floor = col.collider as Node
 	if best_floor_dot > MIN_DOT_GROUND:
 		ground_normal = best_normal
-	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f" % best_floor_dot
+	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f [of %d]" % [best_floor_dot, get_slide_count()]
+	$ui/gameing/debug/stats/a9.text = str(slide_dots)
+	if slide_dots.size() > 1:
+		print(slide_dots)
 	
 	var next_state = State.None
 	match state:
@@ -486,7 +491,7 @@ func _physics_process(delta):
 				next_state = State.Climb
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif after(TIME_COYOTE, empty(climb_area)):
+			elif after(TIME_COYOTE, empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB):
 				next_state = State.Fall
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
@@ -862,6 +867,8 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
+			if Input.is_action_pressed("mv_crouch"):
+				velocity *= 0.5
 			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
@@ -1316,11 +1323,11 @@ func accel_low_gravity(delta: float, desired_velocity: Vector3, applied_ground: 
 func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector3, wall_normal: Vector3):
 	if desired_velocity.dot(wall_normal) < 0:
 		desired_velocity = desired_velocity.slide(wall_normal)
-	var angle = Vector3.UP.angle_to(wall_normal)
-	var axis = Vector3.UP.cross(wall_normal).normalized()
-	if axis != Vector3.ZERO:
-		desired_velocity = desired_velocity.rotated(axis, angle)
-	desired_velocity.y = -1
+	#var angle = Vector3.UP.angle_to(wall_normal)
+	#var axis = Vector3.UP.cross(wall_normal).normalized()
+	#if axis != Vector3.ZERO:
+	#	desired_velocity = desired_velocity.rotated(axis, angle)
+	#desired_velocity.y = -1
 	desired_velocity += applied_ground
 	
 	var hvel := velocity
@@ -1522,7 +1529,7 @@ func damage(node: Node, damage: int, dir: Vector3):
 	if node.has_method("take_damage"):
 		node.take_damage(damage_factor*damage, dir, self)
 
-func move(p_vel: Vector3, grounded:= false) -> Vector3:
+func move(p_vel: Vector3, grounded := false) -> Vector3:
 	if grounded:
 		return move_and_slide_with_snap(p_vel,
 			Vector3.DOWN*0.06125,
@@ -1690,7 +1697,7 @@ func wave_jump(recoil: Vector3):
 func gravity_stun(dam):
 	var dead = take_damage(dam, Vector3.ZERO, self)
 	if !dead:
-		set_state(State.GravityStun)
+		set_state(State.Stun)
 
 func show_prompt(actions: Array, text: String):
 	$ui/gameing/tutorial/prompt_timer.stop()
