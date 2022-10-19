@@ -449,8 +449,6 @@ func _physics_process(delta):
 		ground_normal = best_normal
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f [of %d]" % [best_floor_dot, get_slide_count()]
 	$ui/gameing/debug/stats/a9.text = str(slide_dots)
-	if slide_dots.size() > 1:
-		print(slide_dots)
 	
 	var next_state = State.None
 	match state:
@@ -1897,7 +1895,6 @@ func set_state(next_state: int):
 			mesh.play_ledge_grab()
 			var ledgeCast = ledgeCastCenter
 			if !ledgeCast.is_colliding():
-				print("left")
 				ledgeCast = ledgeCastLeft
 			if !ledgeCast.is_colliding():
 				ledgeCast = ledgeCastRight
