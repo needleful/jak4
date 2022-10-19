@@ -865,8 +865,6 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
-			if Input.is_action_pressed("mv_crouch"):
-				velocity *= 0.5
 			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
