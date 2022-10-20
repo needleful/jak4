@@ -7,11 +7,13 @@ const WEIGHTS := {
 	"wave_shot": 1.07,
 	"grav_gun": 1.0
 }
-const IDEAL_COUNT := {
+
+var MAX := {
 	"pistol": 100.0,
 	"wave_shot":70.0,
 	"grav_gun": 25.0
 }
+
 const COUNTS := {
 	"pistol": 10,
 	"wave_shot":7,
@@ -23,7 +25,7 @@ func get_random_ammo():
 	var best_desire := -INF
 	for a in WEIGHTS.keys():
 		if Global.count("wep_"+a):
-			var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/IDEAL_COUNT[a])
+			var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/MAX[a])
 			if desire >= best_desire:
 				best_wep = a
 				best_desire = desire

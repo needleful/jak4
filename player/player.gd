@@ -352,11 +352,11 @@ const UPGRADE_ITEMS := [
 	"hover_speed_up"
 ]
 
-const AMMO := [
-	"pistol",
-	"wave_shot",
-	"grav_gun"
-]
+var AMMO := {
+	"pistol" : 100,
+	"wave_shot" : 70,
+	"grav_gun" : 40
+}
 
 const WEAPONS := [
 	"wep_pistol",
@@ -981,13 +981,15 @@ func _physics_process(delta):
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
 
-	if after(TIME_ITEM_CHOOSE, equipment_inventory.size() > 1 and holding ("choose_item"),
+	if after(TIME_ITEM_CHOOSE,
+		equipment_inventory.size() > 1 and holding("choose_item"),
 		TIMERS_MAX
 	):
 		choosing_item = true
-	else:
+		equipment.open()
+	elif choosing_item:
 		choosing_item = false
-	equipment.visible = choosing_item
+		equipment.close()
 
 func _process(_delta):
 	update_stamina()
@@ -1747,7 +1749,8 @@ func show_inventory():
 			g.visible = true
 	$ui/gameing/inventory.show()
 	$ui/gameing/inventory/vis_timer.start()
-	equipment.temp_show()
+	show_ammo()
+	update_equipment()
 
 func show_specific_item(item):
 	if !$ui/gameing/inventory.visible:
@@ -1768,6 +1771,8 @@ func show_specific_item(item):
 
 func _on_vis_timer_timeout():
 	$ui/gameing/inventory.hide()
+	if gun.state == Gun.State.Hidden:
+		hide_ammo()
 
 func track_weapon(weapon: String):
 	$ui/gameing/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
