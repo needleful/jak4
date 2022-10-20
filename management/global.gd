@@ -147,6 +147,10 @@ func mark_map(id:String, note:String):
 	add_note("places", id, note)
 	return true
 
+func map_marked(id: String):
+	var d:Array = get_notes("places", id)
+	return d.empty()
+
 func has_note(category: String, subject: String):
 	if !(category in game_state.journal):
 		return false

@@ -59,17 +59,38 @@ Okay
 {back()}
 
 :gate_cleared
-What? You did?
-{!Global.stat("weapon")} How? Where is your gun?
-	[You] I kicked them mostly.
-{otherwise} With a pistol?
-	[You] Well, kicking is faster usually.
-You KICKED them to death? Hm, it makes sense. You are rather tall.
-{Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
+?{capacitor_113}
+	Well, it's no use.
+	{goto("entry_collapsed")}
+{otherwise}
+	What? You did?
+	{!Global.stat("weapon")} How? Where is your gun?
+		[You] I kicked them mostly.
+	{otherwise} With a pistol?
+		[You] Well, kicking is faster usually.
+	You KICKED them to death? Hm, it makes sense. You are rather tall.
+	{Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
 {back()}
 
+:entry_collapsed
+We have to stay alert with that new collapse. Specters crawl from the metal like termites.
+?{hdw/clear}
+	[You] Can't I just clear them out like the others?
+	There might be dozens.
+Until we can get help from Crab Hill to clear the entire area, nobody comes in or out.
+{!Global.marked_map("crab_hill")}
+	[You] What's Crab Hill?
+	{Global.mark_map("crab_hill", "Effectively the capital of the region. The largest and most secure settlement.")}
+	The big city. Lots of people and guns. On a hill that looks like a crab.
+	They said they can help next week. But without the valley, we will have to get food delivered from down the cliff. Big headache.
+[You] ...
+{exit()}
+
 :_coat
-{!Global.stat("hdw_gate")}
+?{capacitor_113}
+	[You] That's a lovely fabric you're wearing.
+	Hm? Sorry. I have to keep a close watch with the specters outside. No time for dallying.
+{otherwise if !Global.stat("hdw_gate")}
 	[You] That's a lovely fabric you're wearing.
 	If this is flattery, it will not work.
 	> Never mind. It was just a compliment.
