@@ -41,8 +41,3 @@ func _on_body_exited(_body):
 	for c in get_children():
 		if c is ReflectionProbe:
 			c.hide()
-
-func delete():
-	if get_overlapping_bodies().size() > 0:
-		_on_body_exited(null)
-	queue_free()

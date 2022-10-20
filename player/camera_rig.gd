@@ -25,6 +25,7 @@ const SPRING_DIALOG := 1.5
 const SPRING_WARDROBE := 1.0
 const ANGLE_DEFAULT := Vector3(-15, 0, 0)
 const ANGLE_AIM := Vector3(-10, -20, 0)
+const ANGLE_DIALOG := Vector3(-10, 20, 0)
 
 const TWEEN_TIME_AIM := 0.4
 const TWEEN_TIME_AIM_RESET := 0.6
@@ -145,7 +146,7 @@ func set_aiming(aim: bool):
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_AIM_RESET)
 
 func start_dialog():
-	tween_to(ANGLE_AIM, SPRING_DIALOG, TWEEN_TIME_DIALOG)
+	tween_to(ANGLE_DIALOG, SPRING_DIALOG, TWEEN_TIME_DIALOG)
 
 func end_dialog():
 	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)

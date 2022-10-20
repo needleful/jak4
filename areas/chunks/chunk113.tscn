@@ -1,8 +1,8 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
-[ext_resource path="res://entities/one_time/tower_113.gd" type="Script" id=3]
+[ext_resource path="res://entities/one_time/chunks/chunk113.gd" type="Script" id=3]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/stone/garden_empty.tscn" type="PackedScene" id=6]
@@ -25,7 +25,7 @@
 [ext_resource path="res://entities/env/ancient/platform_square.tscn" type="PackedScene" id=23]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=24]
 [ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=25]
-[ext_resource path="res://entities/visual/lighting_controller.gd" type="Script" id=26]
+[ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=26]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=27]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=28]
 [ext_resource path="res://entities/control/dswitch_a.tscn" type="PackedScene" id=29]
@@ -33,7 +33,8 @@
 [ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=31]
 [ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=32]
 [ext_resource path="res://dialog/intro/get_capacitor_113.dialog" type="Resource" id=33]
-[ext_resource path="res://entities/one_time/tower_113_fall.anim" type="Animation" id=34]
+[ext_resource path="res://entities/one_time/chunks/tower_113_fall.anim" type="Animation" id=34]
+[ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=35]
 
 [sub_resource type="Animation" id=269]
 length = 0.001
@@ -50,7 +51,7 @@ tracks/0/keys = {
 "values": [ Transform( -0.640936, -0.767595, 3.35526e-08, 0, -4.37114e-08, -1, 0.767595, -0.640936, 2.80162e-08, 1.84922, 24.7033, -2.77272 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("floor1/platform_square:transform")
+tracks/1/path = NodePath("floor2/bobble:transform")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -59,10 +60,10 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -12.5586, 29.2052, 12.4948 ) ]
+"values": [ Transform( 0.555423, 0, -0.831568, 0, 1, 0, 0.831568, 0, 0.555423, 15.5305, -3.159, 3.2294 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("floor1/platform_square2:transform")
+tracks/2/path = NodePath("floor2/bobble2:transform")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -71,10 +72,10 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.5385, 8.07739 ) ]
+"values": [ Transform( 0.605587, 0, 0.795779, 0, 1, 0, -0.795779, 0, 0.605587, -13.9056, -3.159, -2.9693 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("floor2/bobble:transform")
+tracks/3/path = NodePath("floor2/bobble3:transform")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -83,10 +84,10 @@ tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.555423, 0, -0.831568, 0, 1, 0, 0.831568, 0, 0.555423, 15.5305, -3.159, 3.2294 ) ]
+"values": [ Transform( -6.11714e-08, -0.801585, -0.59788, 1, -4.37114e-08, -4.37093e-08, 8.90259e-09, -0.59788, 0.801585, -9.2483, -3.159, 11.3864 ) ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("floor2/bobble2:transform")
+tracks/4/path = NodePath("floor2/bobble4:transform")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -95,10 +96,10 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.605587, 0, 0.795779, 0, 1, 0, -0.795779, 0, 0.605587, -13.9056, -3.159, -2.9693 ) ]
+"values": [ Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782e-08, 3.07983e-08, 0.96548, 0.260476, 3.2152, -3.159, -14.7864 ) ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("floor2/bobble3:transform")
+tracks/5/path = NodePath("floor2/bobble5:transform")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -107,10 +108,10 @@ tracks/5/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( -6.11714e-08, -0.801585, -0.59788, 1, -4.37114e-08, -4.37093e-08, 8.90259e-09, -0.59788, 0.801585, -9.2483, -3.159, 11.3864 ) ]
+"values": [ Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("floor2/bobble4:transform")
+tracks/6/path = NodePath("floor1/bobble:transform")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -119,10 +120,10 @@ tracks/6/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782e-08, 3.07983e-08, 0.96548, 0.260476, 3.2152, -3.159, -14.7864 ) ]
+"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1811, -0.165054, -11.1552 ) ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("floor2/bobble5:transform")
+tracks/7/path = NodePath("floor1/bobble2:transform")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -131,10 +132,10 @@ tracks/7/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 ) ]
+"values": [ Transform( -0.537556, 0, 0.843228, 0, 1, 0, -0.843228, 0, -0.537556, -5.89093, -0.165054, -3.82374 ) ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("floor2/platform_square:transform")
+tracks/8/path = NodePath("floor1/bobble3:transform")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -143,10 +144,10 @@ tracks/8/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.853135, 0.521689, -2.28038e-08, 0, -4.37114e-08, -1, -0.521689, 0.853135, -3.72917e-08, 15.5787, 14.3106, -3.03116 ) ]
+"values": [ Transform( 0.0637589, 0, 0.997965, 0, 1, 0, -0.997965, 0, 0.0637589, 9.0949, 1.86016, -11.267 ) ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("floor2/platform_square2:transform")
+tracks/9/path = NodePath("floor2/bug_pickup:transform")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
@@ -155,79 +156,7 @@ tracks/9/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 14.7187, 16.513, -7.13037 ) ]
-}
-tracks/10/type = "value"
-tracks/10/path = NodePath("floor3/platform_square6:transform")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 16.9924, -39.4153, 1.40131 ) ]
-}
-tracks/11/type = "value"
-tracks/11/path = NodePath("floor3/platform_square5:transform")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 13.6619, -39.4153, 4.78128 ) ]
-}
-tracks/12/type = "value"
-tracks/12/path = NodePath("floor3/platform_square4:transform")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.942487, -0.334244, -1.46103e-08, 0, -4.37114e-08, 1, -0.334244, -0.942487, -4.11974e-08, 6.94491, -1.90343, -5.2659 ) ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("floor1/bobble:transform")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1811, -0.165054, -11.1552 ) ]
-}
-tracks/14/type = "value"
-tracks/14/path = NodePath("floor1/bobble2:transform")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( -0.537556, 0, 0.843228, 0, 1, 0, -0.843228, 0, -0.537556, -5.89093, -0.165054, -3.82374 ) ]
-}
-tracks/15/type = "value"
-tracks/15/path = NodePath("floor1/bobble3:transform")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.0637589, 0, 0.997965, 0, 1, 0, -0.997965, 0, 0.0637589, 9.0949, 1.86016, -11.267 ) ]
+"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.28143, -3.37856, -19.4736 ) ]
 }
 
 [sub_resource type="Animation" id=268]
@@ -246,194 +175,86 @@ tracks/0/keys = {
 "values": [ Transform( -0.640936, -0.767595, 3.35526e-08, 0, -4.37114e-08, -1, 0.767595, -0.640936, 2.80162e-08, 1.84922, 24.7033, -2.77272 ), Transform( -0.398429, -0.767595, 0.502049, -0.783306, -3.42394e-08, -0.621636, 0.477165, -0.640936, -0.601261, 1.84922, 6.7033, -2.77272 ), Transform( -0.627189, -0.767595, 0.132033, -0.586425, 0.353826, -0.728638, 0.512582, -0.534421, -0.672052, 2.34637, 1.64812, -2.77272 ), Transform( -0.398429, -0.767595, 0.502049, -0.892495, 0.450646, -0.0192866, -0.211442, -0.45576, -0.864624, 2.51208, -0.0369377, -2.77272 ), Transform( 0.104194, -0.856423, 0.505652, -0.905947, 0.128055, 0.403563, -0.410371, -0.500143, -0.76253, 1.71843, 0.277634, -2.23551 ), Transform( -0.0229843, -0.864534, 0.502049, -0.999696, 0.0153777, -0.0192866, 0.00895353, -0.502339, -0.864624, 1.9716, -0.166996, -3.08366 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("floor1/bobble:transform")
+tracks/1/path = NodePath("floor2/bobble:transform")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1811, -0.165054, -11.1552 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("floor1/bobble2:transform")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( -0.537556, 0, 0.843228, 0, 1, 0, -0.843228, 0, -0.537556, -5.89093, -0.165054, -3.82374 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("floor1/bobble3:transform")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.0637589, 0, 0.997965, 0, 1, 0, -0.997965, 0, 0.0637589, 9.0949, 1.86016, -11.267 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("floor2/bobble:transform")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
 "times": PoolRealArray( 0, 1.2, 1.9, 2.7, 5.1, 6.7, 7.9, 8.7, 12.1, 12.9, 15.7, 16.5 ),
 "transitions": PoolRealArray( 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0.420448, 1 ),
 "update": 0,
 "values": [ Transform( 0.555423, 0, -0.831568, 0, 1, 0, 0.831568, 0, 0.555423, 15.5305, -3.159, 3.2294 ), Transform( 0.549816, 0.0796764, -0.831477, -0.121475, 0.992485, 0.0147796, 0.826406, 0.0928774, 0.555362, 15.5008, -5.71868, 3.23742 ), Transform( 0.479023, 0.289151, -0.828811, -0.437738, 0.8971, 0.0599785, 0.760869, 0.334072, 0.556304, 14.9492, -3.46059, 3.61908 ), Transform( 0.824757, -0.227128, -0.51787, 0.454465, 0.811193, 0.368004, 0.336508, -0.538867, 0.772259, 14.7152, -11.9275, 3.82989 ), Transform( 0.555423, 0.219373, -0.80211, 0, 0.964576, 0.263806, 0.831568, -0.146524, 0.535748, 15.4533, -19.9989, 3.28096 ), Transform( 0.277153, 0.431048, -0.85871, -0.0653016, 0.900105, 0.430751, 0.958604, -0.0633087, 0.277615, 17.2211, -20.6745, 4.00672 ), Transform( 0.0452792, 0.727432, -0.684684, -0.0763021, 0.685903, 0.723681, 0.996056, 0.0194752, 0.0865617, 18.2478, -21.8058, 4.59497 ), Transform( -0.111262, 0.622995, -0.774272, -0.064898, 0.772892, 0.63121, 0.99167, 0.120478, -0.0455622, 18.9323, -22.56, 4.98715 ), Transform( -0.111262, 0.622995, -0.774272, -0.064898, 0.772892, 0.63121, 0.99167, 0.120478, -0.0455622, 18.9323, -22.56, 4.98715 ), Transform( -0.601655, -0.196249, -0.774272, -0.756519, -0.171035, 0.63121, -0.256302, 0.965522, -0.0455622, 23.6115, -24.1484, 5.40819 ), Transform( -0.937245, -0.196249, -0.288199, -0.25669, -0.171035, 0.95124, -0.235972, 0.965522, 0.109926, 33.4259, -48.4772, 3.09339 ), Transform( -0.937245, -0.196249, -0.288199, -0.25669, -0.171035, 0.95124, -0.235972, 0.965522, 0.109926, 33.5785, -48.9808, 3.03518 ) ]
 }
-tracks/5/type = "value"
-tracks/5/path = NodePath("floor2/bobble2:transform")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
+tracks/2/type = "value"
+tracks/2/path = NodePath("floor2/bobble2:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0, 1.4, 4, 4.2, 4.4 ),
 "transitions": PoolRealArray( 1, 2, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( 0.605587, 0, 0.795779, 0, 1, 0, -0.795779, 0, 0.605587, -13.9056, -3.159, -2.9693 ), Transform( 0.266257, -0.601391, 0.753283, 0.946476, 0.0151912, -0.322415, 0.182454, 0.79881, 0.573247, -15.058, -2.7879, -1.22395 ), Transform( -0.0558548, -0.573672, 0.817179, 0.981626, -0.181116, -0.0600514, 0.182454, 0.79881, 0.573247, -15.3198, -40.9476, -1.22395 ), Transform( -0.221453, -0.573672, 0.78858, 0.973222, -0.181116, 0.141548, 0.0616227, 0.79881, 0.598419, -15.8608, -40.6519, -1.54543 ), Transform( -0.0200295, -0.573711, 0.818812, 0.999768, -0.0179895, 0.0118514, 0.00793072, 0.81886, 0.573938, -15.8827, -41.0625, -1.54475 ) ]
 }
-tracks/6/type = "value"
-tracks/6/path = NodePath("floor2/bobble3:transform")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/keys = {
+tracks/3/type = "value"
+tracks/3/path = NodePath("floor2/bobble3:transform")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
 "times": PoolRealArray( 0, 0.9, 1.7, 2.4, 2.8, 2.9, 4.2, 5.4, 7, 9.2, 11.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( -6.11714e-08, -0.801585, -0.59788, 1, -4.37114e-08, -4.37093e-08, 8.90259e-09, -0.59788, 0.801585, -9.2483, -3.159, 11.3864 ), Transform( -0.274572, -0.781597, -0.560104, 0.933622, -0.0772894, -0.349823, 0.230131, -0.618977, 0.750938, -10.0075, -4.70468, 12.3851 ), Transform( -0.20326, -0.781597, -0.589738, 0.969693, -0.0772893, -0.231781, 0.135579, -0.618977, 0.773618, -12.9071, -9.68628, 16.7813 ), Transform( 0.138049, -0.781597, -0.608316, 0.946257, -0.0772894, 0.314045, -0.292473, -0.618977, 0.728922, -14.2256, -14.7929, 19.0838 ), Transform( -0.397054, -0.781597, -0.481097, 0.826956, -0.0772893, -0.556929, 0.398111, -0.618977, 0.677034, -14.9011, -18.1738, 20.3589 ), Transform( -0.409245, -0.871357, -0.270656, 0.169416, 0.218909, -0.960925, 0.896558, -0.439107, 0.0580343, -14.9011, -18.1738, 20.3589 ), Transform( -0.409245, -0.871357, -0.270656, 0.169416, 0.218909, -0.960925, 0.896558, -0.439107, 0.0580343, -17.5626, -27.8321, 20.8255 ), Transform( -0.409245, 0.278371, -0.868923, 0.169416, 0.958946, 0.22742, 0.896558, -0.0541388, -0.439604, -9.26851, -31.9248, 25.3848 ), Transform( -0.409245, 0.278371, -0.868923, 0.169416, 0.958946, 0.22742, 0.896558, -0.0541388, -0.439604, -12.2168, -43.9158, 25.009 ), Transform( -0.409245, 0.278371, -0.868923, 0.169416, 0.958946, 0.22742, 0.896558, -0.0541388, -0.439604, -11.8355, -42.1324, 25.1779 ), Transform( -0.499335, 0.278371, -0.820471, 0.192641, 0.958946, 0.208113, 0.844721, -0.0541388, -0.532461, -12.9139, -49.0204, 23.7461 ) ]
 }
-tracks/7/type = "value"
-tracks/7/path = NodePath("floor2/bobble4:transform")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
+tracks/4/type = "value"
+tracks/4/path = NodePath("floor2/bobble4:transform")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
 "times": PoolRealArray( 0, 0.8, 1.2, 3, 3.3, 3.9, 7.6 ),
 "transitions": PoolRealArray( 1, 1, 2, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782e-08, 3.07983e-08, 0.96548, 0.260476, 3.2152, -3.159, -14.7864 ), Transform( 0.222407, -0.135584, 0.96548, 0.520524, 0.853847, 3.10587e-08, -0.824373, 0.502555, 0.260476, 6.22348, 6.68656, -25.9369 ), Transform( 0.222407, -0.135584, 0.96548, 0.520524, 0.853847, 3.10587e-08, -0.824373, 0.502555, 0.260476, 5.78893, 7.18091, -24.3262 ), Transform( 0.222407, -0.135584, 0.96548, 0.520524, 0.853847, 2.98023e-08, -0.824373, 0.502555, 0.260476, 4.81863, -8.67654, -23.3117 ), Transform( 0.222407, -0.135584, 0.96548, 0.0955091, 0.988549, 0.116822, -0.970265, 0.06623, 0.23281, 4.6527, -11.7854, -23.7962 ), Transform( 0.222407, -0.135584, 0.96548, 0.0955091, 0.988549, 0.116822, -0.970265, 0.06623, 0.23281, 4.6527, -19.6963, -32.6472 ), Transform( 0.222407, -0.135584, 0.96548, 0.0955091, 0.988549, 0.116822, -0.970265, 0.06623, 0.23281, 4.6527, -53.9085, -38.1733 ) ]
 }
-tracks/8/type = "value"
-tracks/8/path = NodePath("floor2/bobble5:transform")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/keys = {
+tracks/5/type = "value"
+tracks/5/path = NodePath("floor2/bobble5:transform")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
 "times": PoolRealArray( 0, 1.3, 3.9, 4, 4.3, 5.7, 14.4, 17.5, 18.1, 20, 20.3, 20.7 ),
 "transitions": PoolRealArray( 0.554785, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 ), Transform( -6.17706e-08, -0.963223, -0.268703, 0.797718, -0.162036, 0.580853, -0.603031, -0.214349, 0.76838, 3.2313, 26.8879, -14.782 ), Transform( -0.342359, 0.671247, 0.657433, 0.797718, -0.162036, 0.580853, 0.496424, 0.723306, -0.479991, 1.62044, -12.1121, -7.74551 ), Transform( 0.416617, 0.356527, 0.836253, 0.860212, -0.452152, -0.235784, 0.29405, 0.817586, -0.495063, 1.55848, -13.1158, -7.47488 ), Transform( 0.295954, 0.879297, 0.373158, 0.954266, -0.289461, -0.0747597, 0.0422784, 0.378217, -0.924751, 4.21477, -14.1195, -5.52269 ), Transform( 0.295954, 0.879297, 0.373158, 0.944133, -0.32858, 0.0254576, 0.144997, 0.344776, -0.927418, 4.21477, -17.8924, -5.52269 ), Transform( 0.155428, 0.91775, 0.365482, 0.977148, -0.197141, 0.0794833, 0.144997, 0.344776, -0.927418, 9.03046, -18.1374, -11.1088 ), Transform( -0.34642, 0.895686, 0.278818, 0.926806, 0.280848, 0.249309, 0.144997, 0.344776, -0.927418, 12.4989, -18.0193, -11.1088 ), Transform( -0.426617, 0.86654, 0.259048, 0.897779, 0.371058, 0.237295, 0.109504, 0.333801, -0.936261, 9.15633, -18.7384, -11.1206 ), Transform( -0.34642, 0.895686, 0.278818, 0.925635, 0.37463, -0.053415, -0.152297, 0.23958, -0.958857, 7.72328, -39.5401, -11.2069 ), Transform( 0.178936, 0.960825, 0.211651, 0.972002, -0.139341, -0.1892, -0.152297, 0.23958, -0.958857, 7.72328, -39.5759, -11.2069 ), Transform( 0.178936, 0.960825, 0.211651, 0.983847, -0.175886, -0.0333118, 0.00521958, 0.214193, -0.976777, 7.72328, -39.7249, -11.2069 ) ]
 }
-tracks/9/type = "value"
-tracks/9/path = NodePath("floor1/platform_square:transform")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -12.5586, 29.2052, 12.4948 ) ]
-}
-tracks/10/type = "value"
-tracks/10/path = NodePath("floor1/platform_square2:transform")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.5385, 8.07739 ) ]
-}
-tracks/11/type = "value"
-tracks/11/path = NodePath("floor2/platform_square:transform")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.853135, 0.521689, -2.28038e-08, 0, -4.37114e-08, -1, -0.521689, 0.853135, -3.72917e-08, 15.5787, 14.3106, -3.03116 ) ]
-}
-tracks/12/type = "value"
-tracks/12/path = NodePath("floor2/platform_square2:transform")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 14.7187, 16.513, -7.13037 ) ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("floor3/platform_square5:transform")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 13.6619, -39.4153, 4.78128 ) ]
-}
-tracks/14/type = "value"
-tracks/14/path = NodePath("floor3/platform_square6:transform")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 16.9924, -39.4153, 1.40131 ) ]
-}
-tracks/15/type = "value"
-tracks/15/path = NodePath("floor3/platform_square4:transform")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Transform( 0.942487, -0.334244, -1.46103e-08, 0, -4.37114e-08, 1, -0.334244, -0.942487, -4.11974e-08, 6.94491, -1.90343, -5.2659 ) ]
-}
-tracks/16/type = "animation"
-tracks/16/path = NodePath("AnimationPlayer")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/keys = {
+tracks/6/type = "animation"
+tracks/6/path = NodePath("AnimationPlayer")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
 "clips": PoolStringArray( "tower_113_fall" ),
 "times": PoolRealArray( 0 )
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("floor2/bug_pickup:transform")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.6, 1.4, 4, 41.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.28143, -3.37856, -19.4736 ), Transform( 0.99984, 0, -0.0178979, 0, 1, 0, 0.0178979, 0, 0.99984, 5.28423, -2.18351, -22.0203 ), Transform( 0.54675, -0.225356, -0.806399, 0.218041, 0.968191, -0.122736, 0.808408, -0.108722, 0.578495, 5.28481, -3.83014, -22.5727 ), Transform( 0.535283, -0.210153, -0.818113, 0.203184, 0.972152, -0.116781, 0.819871, -0.103717, 0.563075, 5.29716, -15.7235, -16.2445 ), Transform( 0.329504, 0, -0.944154, 0, 1, 0, 0.944154, 0, 0.329504, 5.47476, -22.5821, -21.6664 ) ]
 }
 
 [sub_resource type="OccluderShapePolygon" id=7]
@@ -564,58 +385,61 @@ radius = 0.589667
 
 [node name="chunk113" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
+lighting_preview = true
 
 [node name="door_bit_lower2-kine" parent="tower" index="0"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9707, -77.3291, -17.3971 )
+transform = Transform( -0.652736, -0.711719, 0.259599, -0.567217, 0.231976, -0.790223, 0.502196, -0.663056, -0.555118, 3.66242, -114.254, -15.0377 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/door_bit_lower2-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="door_bit_lower3-kine" parent="tower" index="1"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.364, -77.3317, -20.6262 )
+transform = Transform( 0.605683, 0.388374, 0.694488, -0.278135, -0.714404, 0.642081, 0.745513, -0.582058, -0.324682, -5.91348, -113.535, -15.6908 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/door_bit_lower3-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="door_bit_lower4-kine" parent="tower" index="2"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.5935, -77.3431, -12.4846 )
+transform = Transform( -0.311661, 0.866811, 0.389237, -0.470649, -0.496684, 0.729242, 0.825443, 0.0440817, 0.562761, 24.646, -123.705, -0.794741 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/door_bit_lower4-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="entry1-kine" parent="tower" index="3"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.4517, -50.1265, -8.72556 )
+transform = Transform( 0.542619, -0.478392, 0.690439, -0.559335, 0.407446, 0.721895, -0.626665, -0.7779, -0.0464936, 54.8772, -133.508, 32.7496 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/entry1-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="entry2-kine" parent="tower" index="4"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 12.9812, -50.1555, -6.29556 )
+transform = Transform( -0.44855, 0.700112, 0.555559, 0.606735, -0.217895, 0.764457, 0.656259, 0.679975, -0.327045, 71.4992, -134.007, 28.512 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/entry2-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="entry3-kine" parent="tower" index="5"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 19.5166, -50.1282, -4.54523 )
+transform = Transform( 0.902135, -0.114441, -0.416, 0.422758, 0.0418614, 0.905275, -0.0861867, -0.992548, 0.0861457, 27.0307, -114.146, -6.17537 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/entry3-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="entry4-kine" parent="tower" index="6"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 14.0339, -50.17, -2.51259 )
+transform = Transform( 0.0626616, 0.799385, 0.597542, 0.746585, 0.359787, -0.559611, -0.662332, 0.481182, -0.574264, 47.2988, -134.492, 38.1245 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/entry4-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="shrine-kine" parent="tower" index="7"]
+transform = Transform( 0.86404, 0.479088, -0.154627, -0.503389, 0.825744, -0.254453, 0.00577676, 0.297695, 0.954644, 4.96491, -88.02, 8.66134 )
 collision_layer = 257
+motion/sync_to_physics = true
 
 [node name="pole-kine" parent="tower/shrine-kine" index="0"]
 collision_layer = 257
@@ -669,96 +493,98 @@ material/0 = ExtResource( 21 )
 material/0 = ExtResource( 21 )
 
 [node name="shrine_arm-kine007" parent="tower" index="8"]
+transform = Transform( 0.523562, -0.837075, 0.158704, -0.328647, -0.370284, -0.868839, 0.786049, 0.402734, -0.468969, 17.5064, -134.678, 53.3378 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/shrine_arm-kine007" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="table-kine" parent="tower" index="9"]
+transform = Transform( -0.123224, -0.116385, -0.985531, 0.0925016, 0.987428, -0.128175, 0.988058, -0.106957, -0.110909, 35.0457, -124.812, -30.1692 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/table-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine" parent="tower" index="10"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 21.6848, 34.7457, -6.73672 )
+transform = Transform( -0.931353, 0.0544533, -0.360023, 0.204334, -0.740227, -0.640555, -0.30138, -0.670148, 0.678286, 101.607, -310.725, 114.159 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine001" parent="tower" index="11"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -29.5242, 34.6596, 8.28758 )
+transform = Transform( -0.171865, -0.0756903, 0.982208, 0.29551, 0.947167, 0.124698, -0.939753, 0.311683, -0.140417, -36.0481, -135.267, 82.7175 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine002" parent="tower" index="12"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -12.6583, 41.3621, -17.4963 )
+transform = Transform( 0.979657, 0.0585531, -0.191947, 0.0107186, 0.939855, 0.341406, 0.200393, -0.336518, 0.920108, -124.403, -164.307, -122.021 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine003" parent="tower" index="13"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -4.43835, 27.5945, 24.4002 )
+transform = Transform( -0.991446, -0.119473, 0.0525374, 0.0820404, -0.883565, -0.461066, 0.101505, -0.452812, 0.885809, 123.629, -400.259, 214.612 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine004" parent="tower" index="14"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -19.4097, 37.9778, -4.97771 )
+transform = Transform( -0.934379, -0.202524, -0.293119, -0.202019, 0.978848, -0.0323321, 0.293467, 0.0290053, -0.955529, -55.0184, -144.511, -58.8793 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine004" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine005" parent="tower" index="15"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 7.86107, 32.2182, 5.65393 )
+transform = Transform( -0.938393, -0.146894, 0.312796, 0.00404418, -0.909764, -0.415107, 0.345547, -0.388268, 0.85431, 113.499, -395.036, 224.387 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine006" parent="tower" index="16"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 2.38776, 38.9501, -14.3214 )
+transform = Transform( 0.678122, -0.385158, 0.625943, -0.0937695, 0.799379, 0.593464, -0.728943, -0.461135, 0.505961, -18.2692, -134.124, -44.0636 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine006" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine007" parent="tower" index="17"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -7.45403, 36.5592, -3.86404 )
+transform = Transform( 0.65347, 0.747123, -0.121588, -0.111334, -0.0640157, -0.991719, -0.74872, 0.661596, 0.041348, 21.1266, -107.411, 0.312572 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine007" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine008" parent="tower" index="18"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -1.79802, 30.3368, 14.6121 )
+transform = Transform( 0.710989, -0.254754, 0.655435, -0.156151, -0.965997, -0.206078, 0.685647, 0.0441722, -0.726593, 148.66, -397.506, 250.144 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine008" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine009" parent="tower" index="19"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.1357, 33.0861, 9.45501 )
+transform = Transform( -0.152213, -0.568575, 0.808427, -0.670507, -0.541534, -0.507111, 0.726121, -0.619245, -0.298805, 82.7627, -381.08, 199.299 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine009" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine010" parent="tower" index="20"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -24.1615, 35.7033, 3.55022 )
+transform = Transform( -0.203708, 0.116682, 0.972054, -0.215983, 0.963055, -0.160864, -0.954911, -0.242716, -0.17098, 141.338, -392.527, 219.803 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine010" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower-roof_upper-kine011" parent="tower" index="21"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -21.8992, 31.6998, 15.8017 )
+transform = Transform( -0.867131, -0.449568, -0.214413, 0.462981, -0.568782, -0.679806, 0.183665, -0.688749, 0.70135, 73.5163, -369.721, 196.372 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower-roof_upper-kine011" index="0"]
@@ -772,112 +598,112 @@ material/1 = ExtResource( 1 )
 collision_layer = 257
 
 [node name="tower_floor_upper1-kine001" parent="tower" index="23"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -0.691132, -50.1292, -0.717201 )
+transform = Transform( -0.579228, 0.308919, -0.754363, -0.276038, 0.796407, 0.538089, 0.767006, 0.519909, -0.376027, 91.3616, -394.268, 209.268 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine002" parent="tower" index="24"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 9.54501, -50.1373, -8.11697 )
+transform = Transform( -0.799902, -0.0609427, 0.597028, -0.0818022, 0.996618, -0.00786752, -0.59453, -0.0551315, -0.802181, 66.9678, -121.409, -21.9119 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine003" parent="tower" index="25"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 16.6583, -50.1421, 5.67476 )
+transform = Transform( 0.347056, -0.121502, -0.92994, 0.267671, -0.937495, 0.222385, -0.898835, -0.326098, -0.292841, 67.6162, -132.065, 26.0655 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine004" parent="tower" index="26"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 20.4201, -50.1278, -13.5885 )
+transform = Transform( -0.796935, 0.0483457, -0.602128, -0.0546475, -0.998475, -0.0078413, -0.601588, 0.0266558, 0.798361, 53.9519, -122.697, -33.3242 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine004" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine005" parent="tower" index="27"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 6.12681, -50.143, -16.0175 )
+transform = Transform( -0.81896, 0.116385, -0.561924, -0.156336, -0.987428, 0.0233326, -0.552144, 0.106957, 0.826859, 11.5976, -127.604, -30.4375 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine006" parent="tower" index="28"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -6.69136, -50.0737, -21.6212 )
+transform = Transform( 0.247041, 0.310709, 0.91784, -0.111799, -0.931734, 0.345504, 0.962534, -0.187967, -0.19544, -10.6707, -128.947, -35.0657 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine006" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine007" parent="tower" index="29"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -8.51978, -50.1259, -14.9961 )
+transform = Transform( 0.695644, -0.295689, 0.654712, 0.342418, 0.937652, 0.0596481, -0.63153, 0.182691, 0.753521, -18.7835, -130.472, -34.0422 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine007" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine008" parent="tower" index="30"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -19.0531, -50.1426, 0.637915 )
+transform = Transform( 0.913114, -0.00419414, 0.407683, -0.00197092, 0.99989, 0.014701, -0.407699, -0.0142272, 0.913005, -15.5929, -110.121, -1.48908 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine008" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine009" parent="tower" index="31"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -9.72334, -50.1398, 12.6089 )
+transform = Transform( 0.726034, 0.448423, 0.521336, -0.653139, 0.686865, 0.318788, -0.215136, -0.571956, 0.79157, -6.47432, -107.191, 17.2918 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine009" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine010" parent="tower" index="32"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -3.06139, -50.1134, 19.6668 )
+transform = Transform( 0.909144, 0.278658, 0.309526, 0.041968, 0.678115, -0.733757, -0.414362, 0.680081, 0.60481, 94.8134, -381.063, 192.579 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine010" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine011" parent="tower" index="33"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 2.18026, -50.1363, -9.55191 )
+transform = Transform( -0.875711, -8.80726e-08, -0.482836, -8.74228e-08, 1, -2.38498e-08, 0.482836, 2.13254e-08, -0.875711, 6.59431, -113.777, -7.87291 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine011" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_floor_upper1-kine012" parent="tower" index="34"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 8.99568, -50.1301, 4.31888 )
+transform = Transform( 0.794546, 0.15384, -0.587392, -0.287599, 0.947327, -0.140917, 0.534774, 0.280898, 0.79694, 100.768, -395.179, 267.255 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_floor_upper1-kine012" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_inner_lower-kine005" parent="tower" index="35"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -5.75687, -84.1642, -21.3144 )
+transform = Transform( 0.188062, -0.974216, -0.124642, 0.552514, 1.80006e-05, 0.833503, -0.81201, -0.225616, 0.538272, -4.19531, -113.878, -20.6754 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_inner_lower-kine006" parent="tower" index="36"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 0.475975, -85.0514, -7.44242 )
+transform = Transform( 0.529284, -0.821337, -0.212753, 0.467888, 0.0733756, 0.880737, -0.707771, -0.565704, 0.42313, 12.464, -112.579, 3.64749 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine006" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_inner_lower-kine009" parent="tower" index="37"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -13.7565, -83.7011, -9.39041 )
+transform = Transform( 0.604585, 0.692199, -0.394129, -0.556608, 0.0131828, -0.830671, -0.569794, 0.721587, 0.393253, -16.647, -111.141, -6.10857 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine009" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_inner_lower-kine010" parent="tower" index="38"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -19.9349, -80.0611, 9.94095 )
+transform = Transform( 0.846076, 0.00363437, 0.533049, -0.00938639, 0.999923, 0.00808087, -0.532979, -0.0118404, 0.846046, -21.2996, -113.851, 10.7021 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine010" index="0"]
@@ -885,63 +711,63 @@ material/0 = ExtResource( 21 )
 material/1 = ExtResource( 1 )
 
 [node name="tower_inner_lower-kine011" parent="tower" index="39"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -20.0568, -78.9456, 9.68023 )
+transform = Transform( 0.945806, 0.00529177, 0.324689, -0.0103016, 0.999853, 0.0137127, -0.324568, -0.0163144, 0.945722, -19.0356, -112.721, 7.06837 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine011" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_inner_lower-kine013" parent="tower" index="40"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.3735, -88.9112, -2.48713 )
+transform = Transform( 0.735035, 0.479868, -0.479009, -0.545978, -2.38419e-07, -0.837799, -0.402034, 0.87734, 0.261997, -21.3198, -113.952, -0.18248 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine013" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_inner_lower-kine014" parent="tower" index="41"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.3736, -90.762, -14.3885 )
+transform = Transform( 0.808291, -0.243715, -0.535974, 0.552638, 5.96046e-08, 0.833422, -0.203117, -0.969847, 0.134686, -10.3196, -113.88, -13.1523 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine014" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_inner_lower-kine015" parent="tower" index="42"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -5.75385, -90.9377, -21.3054 )
+transform = Transform( -0.135023, 0.986877, 0.0885598, 0.548694, 4.88758e-05, 0.836023, 0.825048, 0.161474, -0.5415, -3.27077, -113.004, -19.9412 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_inner_lower-kine015" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_lower_inner-kine" parent="tower" index="43"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9233, -84.033, 19.6693 )
+transform = Transform( 0.466615, -0.732626, 0.49551, 0.722096, -0.00795317, -0.691747, 0.510733, 0.680585, 0.525315, -14.1768, -122.462, 32.165 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_lower_inner-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_lower_inner-kine001" parent="tower" index="44"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 13.0741, -85.6756, -18.4468 )
+transform = Transform( 0.675958, -0.187563, 0.712671, 0.675865, -0.227692, -0.700973, 0.293746, 0.955498, -0.027143, 10.5388, -123.753, -29.8155 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_lower_inner-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_lower_inner-kine002" parent="tower" index="45"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.1522, -82.3887, -8.49313 )
+transform = Transform( 0.606678, 0.656564, -0.44818, -0.600312, 0.00880253, -0.799717, -0.52112, 0.754219, 0.399484, -12.5836, -111.898, -4.60155 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_lower_inner-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_lower_inner-kine003" parent="tower" index="46"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.7005, -87.4541, 9.41281 )
+transform = Transform( 0.681586, 0.577106, -0.449876, -0.267232, -0.376024, -0.887239, -0.681196, 0.724951, -0.102072, 34.451, -128.075, 25.4802 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_lower_inner-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_platform1-kine" parent="tower" index="47"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -1.428, -92.2169, 1.75392 )
+transform = Transform( 0.864162, -0.0396906, 0.501646, 0.0681571, 0.99693, -0.0385332, -0.498577, 0.0674897, 0.864214, -0.444397, -113.384, 3.88305 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_platform1-kine" index="0"]
@@ -949,7 +775,7 @@ material/0 = ExtResource( 21 )
 material/1 = ExtResource( 1 )
 
 [node name="tower_platform2-kine" parent="tower" index="48"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -2.64944, -92.4736, -7.2305 )
+transform = Transform( 0.962103, -0.0746609, -0.262266, 0.0668968, 0.99702, -0.0384219, 0.264353, 0.0194211, 0.96423, -4.62396, -113.384, -7.22713 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_platform2-kine" index="0"]
@@ -957,364 +783,364 @@ material/0 = ExtResource( 21 )
 material/1 = ExtResource( 1 )
 
 [node name="tower_roof_lower-kine" parent="tower" index="49"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -10.7058, -77.3327, 12.9304 )
+transform = Transform( 0.878316, -0.194892, 0.436553, -0.385126, -0.829471, 0.404544, 0.283266, -0.523445, -0.803595, 100.7, -388.599, 201.437 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_roof_lower-kine001" parent="tower" index="50"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -16.5752, -77.2688, -17.5649 )
+transform = Transform( 0.754535, -0.359247, -0.549198, 0.588443, -0.000129819, 0.808539, -0.290537, -0.933242, 0.211299, -12.018, -113.745, -17.9943 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_roof_lower-kine002" parent="tower" index="51"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 20.9657, -77.3515, -6.84184 )
+transform = Transform( 0.737101, -0.0954297, 0.669011, 0.0494786, 0.994943, 0.0874074, -0.673969, -0.0313264, 0.738095, 43.8252, -121.174, -31.5594 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_roof_lower-kine003" parent="tower" index="52"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 12.6776, -77.2442, -16.6227 )
+transform = Transform( 0.75646, 0.141137, 0.638631, 0.269352, -0.957018, -0.107548, 0.596002, 0.253372, -0.761961, 10.6001, -133.709, -57.9842 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_roof_lower-kine004" parent="tower" index="53"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 0.578941, -77.3379, -12.7138 )
+transform = Transform( 0.93125, -0.26243, 0.252791, 0.280731, 0.95901, -0.0385996, -0.232299, 0.106912, 0.966751, 3.51926, -126.646, -34.2698 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine004" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_roof_lower-kine005" parent="tower" index="54"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -0.734016, -77.333, 0.361219 )
+transform = Transform( -0.997404, -0.0718836, -0.00423419, 0.0699341, -0.952989, -0.294824, 0.0171579, -0.294355, 0.955542, 51.4079, -128.854, 26.563 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_roof_lower-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_gem_band-kine" parent="tower" index="55"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -17.4743, -39.9568, 20.4167 )
+transform = Transform( 0.302578, 0.376696, 0.875526, -0.951857, 0.166778, 0.257202, -0.049132, -0.9112, 0.409024, -23.9414, -128.571, 54.9824 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_gem_band-kine" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_upper_gem_band-kine001" parent="tower" index="56"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 9.17406, -28.8938, -20.8305 )
+transform = Transform( -0.833128, 0.138685, -0.535409, 0.547084, 0.0644976, -0.834589, -0.0812123, -0.988234, -0.129607, -32.8176, -161.556, -167.17 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_gem_band-kine001" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_upper_gem_band-kine002" parent="tower" index="57"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 19.8607, -40.0935, 9.8239 )
+transform = Transform( 0.874251, -0.397913, -0.278121, 0.343847, 0.103099, 0.933349, -0.342718, -0.911612, 0.226955, 182.579, -400.902, 196.641 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_gem_band-kine002" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_upper_gem_band-kine003" parent="tower" index="58"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -24.6392, -29.723, -8.55525 )
+transform = Transform( 0.46407, -0.616941, -0.635628, 0.534157, -0.377522, 0.756408, -0.706622, -0.690552, 0.154347, -65.8396, -146.223, -54.105 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_gem_band-kine003" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="tower_upper_outer-kine" parent="tower" index="59"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 21.4421, 29.7667, 9.80577 )
+transform = Transform( 0.914251, -0.380222, -0.139915, 0.162878, 0.0287274, 0.986228, -0.370966, -0.924449, 0.0881937, 193.283, -402.009, 240.145 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine001" parent="tower" index="60"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -26.2424, 39.4758, -8.23399 )
+transform = Transform( 0.274434, 0.367782, 0.888494, -0.588377, 0.795045, -0.147365, -0.760591, -0.482327, 0.434582, -132.649, -160.19, -90.576 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine002" parent="tower" index="61"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 15.3969, 39.477, -20.3929 )
+transform = Transform( 0.761651, -0.31435, 0.566632, 0.353879, 0.934318, 0.0426575, -0.542824, 0.168029, 0.822866, 29.2612, -131.667, -61.8214 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine003" parent="tower" index="62"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 14.744, 4.88463, -20.6884 )
+transform = Transform( 0.83815, 0.065156, 0.541534, -0.5032, -0.290727, 0.813798, 0.210462, -0.954585, -0.210886, 28.8363, -147.023, -120.92 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine004" parent="tower" index="63"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 22.1411, -5.16833, 9.35184 )
+transform = Transform( 0.912275, -0.125324, -0.389934, 0.404729, 0.129771, 0.905182, -0.0628389, -0.983592, 0.169109, 139.043, -397.454, 225.95 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine004" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine005" parent="tower" index="64"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -26.0729, 4.93761, -8.76481 )
+transform = Transform( 0.445876, -0.721267, -0.530065, 0.564283, -0.23319, 0.791964, -0.694823, -0.652224, 0.303025, -106.276, -155.16, -75.1728 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine006" parent="tower" index="65"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.6758, -5.11537, 21.2755 )
+transform = Transform( -0.299833, 0.925557, -0.23118, -0.872555, -0.168095, 0.458686, 0.385679, 0.339246, 0.858, 110.342, -392.898, 235.469 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine006" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_upper_outer-kine007" parent="tower" index="66"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.1355, 29.7194, 21.3743 )
+transform = Transform( 0.258011, -0.223416, 0.939955, -0.729167, 0.593235, 0.341156, -0.633834, -0.773406, -0.00984633, 82.1486, -392.54, 217.952 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_upper_outer-kine007" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine" parent="tower" index="67"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.0927, -63.5346, 9.96143 )
+transform = Transform( 0.864919, 0.282713, -0.414715, -0.383321, -0.161322, -0.909418, -0.324007, 0.945541, -0.0311611, 135.417, -395.01, 252.385 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine001" parent="tower" index="68"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.3022, -63.5346, -8.22092 )
+transform = Transform( 0.456707, -0.703733, -0.544223, 0.495016, -0.307267, 0.81274, -0.739174, -0.640583, 0.208028, -53.349, -136.554, -30.7911 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine002" parent="tower" index="69"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 10.8088, -63.5346, -18.9643 )
+transform = Transform( 0.830775, 0.218012, 0.512137, -0.450543, -0.276892, 0.84873, 0.32684, -0.935843, -0.13181, 1.75969, -153.972, -133.224 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine002" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine003" parent="tower" index="70"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -16.6203, -63.5346, 19.2322 )
+transform = Transform( 0.543112, -0.769257, 0.33656, 0.532216, 0.0053618, -0.846592, 0.649442, 0.638917, 0.412323, -43.9514, -140.355, 104.016 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine003" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine004" parent="tower" index="71"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 7.09903, -6.29083, 21.5781 )
+transform = Transform( -0.924478, 0.0364134, 0.379493, -0.373376, 0.114618, -0.920572, -0.0770181, -0.992742, -0.0923662, 159.887, -392.655, 209.985 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine004" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine005" parent="tower" index="72"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -17.3818, 20.8706, -18.0364 )
+transform = Transform( -0.500968, -0.652678, 0.568368, -0.582237, -0.231729, -0.779295, 0.640336, -0.721328, -0.263925, -92.2127, -159.358, -111.844 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine005" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine006" parent="tower" index="73"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 33.0023, 17.0449, -13.7897 )
+transform = Transform( 0.242456, -0.968605, 0.0549505, -0.584852, -0.100736, 0.80486, -0.774056, -0.227281, -0.590914, 16.4411, -126.083, -51.2358 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine006" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine007" parent="tower" index="74"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -13.2055, 21.418, 21.3013 )
+transform = Transform( -0.359055, 0.879454, -0.312474, -0.860996, -0.182895, 0.474589, 0.36023, 0.439442, 0.822876, 114.424, -396.465, 257.408 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine007" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine008" parent="tower" index="75"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -24.1221, -8.60561, -6.86178 )
+transform = Transform( -0.874417, -0.173928, 0.452928, 0.442056, 0.0991293, 0.891493, -0.199954, 0.979756, -0.00979447, -139.035, -160.859, -86.1696 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine008" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine009" parent="tower" index="76"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -30.506, 23.5, 3.72212 )
+transform = Transform( -0.583595, 0.465338, 0.665491, -0.796615, -0.169073, -0.580361, -0.157548, -0.868835, 0.469365, -40.7176, -131.812, -19.8811 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine009" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine010" parent="tower" index="77"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.999, -36.4618, -20.3289 )
+transform = Transform( 0.240438, 0.968826, 0.059715, -0.740464, 0.222847, -0.634076, -0.627616, 0.108239, 0.770962, -13.6325, -133.63, -40.5024 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine010" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine011" parent="tower" index="78"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -23.9832, 26.8214, -7.09197 )
+transform = Transform( 0.666082, 0.701629, -0.253084, -0.546747, 0.228489, -0.805519, -0.507348, 0.674915, 0.535806, -73.5813, -155.448, -81.9752 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine011" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine012" parent="tower" index="79"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.6185, -12.6115, -15.9861 )
+transform = Transform( 0.706681, -0.102069, -0.700131, 0.660909, -0.258038, 0.70471, -0.252589, -0.960728, -0.114892, -31.6159, -139.745, -54.3182 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine012" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine013" parent="tower" index="80"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -30.2154, -1.89185, 3.24029 )
+transform = Transform( 0.560814, 0.558013, -0.611644, 0.783766, -0.119721, 0.609408, 0.266831, -0.82115, -0.504493, -50.1801, -123.451, 15.0419 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine013" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine014" parent="tower" index="81"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.5848, -35.7687, 18.0417 )
+transform = Transform( -0.453755, -0.721629, -0.522836, -0.690239, -0.0864763, 0.718396, -0.563628, 0.686858, -0.458857, 100.335, -390.546, 240.071 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine014" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine015" parent="tower" index="82"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -17.9799, -8.65884, 18.4082 )
+transform = Transform( -0.0287422, -0.665364, 0.745965, -0.586963, 0.615296, 0.526198, -0.809103, -0.42273, -0.408229, 74.9299, -384.359, 220.884 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine015" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine016" parent="tower" index="83"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -14.9783, 8.51785, 20.227 )
+transform = Transform( 0.0228858, 0.434331, 0.900463, -0.98672, 0.154694, -0.0495372, -0.160812, -0.88737, 0.432103, 70.1053, -374.676, 205.457 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine016" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine017" parent="tower" index="84"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 17.4847, -36.1261, 10.6038 )
+transform = Transform( -0.729023, -0.585107, 0.355212, 0.505165, -0.10974, 0.856017, -0.461881, 0.803497, 0.375579, 141.38, -394.126, 249.46 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine017" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine018" parent="tower" index="85"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -24.2608, -36.7936, -6.63176 )
+transform = Transform( 0.622787, -0.422101, -0.658762, 0.637101, -0.215127, 0.740151, -0.454135, -0.880654, 0.134943, -119.421, -159.228, -93.5085 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine018" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine019" parent="tower" index="86"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -30.0415, -33.3505, 2.95199 )
+transform = Transform( -0.334372, -0.942409, 0.00778544, 0.300026, -0.0986127, 0.94882, -0.893409, 0.319594, 0.315721, -107.832, -143.1, -15.1942 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine019" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine020" parent="tower" index="87"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 32.4368, -11.553, -5.19604 )
+transform = Transform( 0.297524, -0.924987, -0.236386, 0.408907, -0.100276, 0.90705, -0.862714, -0.366529, 0.348399, 36.2894, -123.35, -40.5667 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine020" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine021" parent="tower" index="88"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 22.7524, 17.6423, 5.03728 )
+transform = Transform( 0.907528, 0.160024, -0.388311, 0.391337, 0.0134664, 0.920149, 0.152476, -0.987021, -0.0504024, 55.0988, -118.98, -32.4323 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine021" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine022" parent="tower" index="89"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -9.34073, 26.5674, -23.6637 )
+transform = Transform( 0.431757, -0.895895, 0.104682, -0.629153, -0.215961, 0.746678, -0.646337, -0.388244, -0.656898, -93.2591, -160.571, -122.745 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine022" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine023" parent="tower" index="90"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 33.0023, -32.992, -13.7897 )
+transform = Transform( 0.787023, 0.352209, 0.506502, -0.546552, 0.0172653, 0.837247, 0.286141, -0.935762, 0.206088, 50.1669, -123.736, -49.3311 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine023" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine024" parent="tower" index="91"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -9.34072, -35.0697, -23.6637 )
+transform = Transform( -0.86179, -0.36594, -0.351292, 0.463554, -0.286889, -0.838339, 0.206, -0.885315, 0.416871, -49.5694, -151.045, -86.8442 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine024" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine025" parent="tower" index="92"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.6609, 25.3477, -17.1345 )
+transform = Transform( 0.0859073, -0.995228, -0.0462704, -0.659769, -0.0916276, 0.745861, -0.746542, -0.0335471, -0.664493, 20.5243, -126.974, -43.6615 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine025" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine026" parent="tower" index="93"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 4.68253, -28.1226, -20.3944 )
+transform = Transform( 0.208615, 0.977435, 0.0331665, -0.546327, 0.0883412, 0.8329, 0.811176, -0.191876, 0.552429, 34.9744, -123.131, -48.2982 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine026" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine027" parent="tower" index="94"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 4.18452, 24.9967, -20.5106 )
+transform = Transform( 0.0698627, 0.995859, -0.0581684, -0.498019, 0.0853431, 0.862957, 0.864348, -0.0313196, 0.501919, 28.4633, -127.24, -47.263 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine027" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_lower-kine028" parent="tower" index="95"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 18.2636, -34.2177, -17.2271 )
+transform = Transform( 0.390657, -0.90225, 0.182571, -0.62928, -0.116995, 0.768322, -0.671858, -0.415039, -0.613473, 4.81638, -127.974, -46.4061 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_lower-kine028" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_mid1-kine" parent="tower" index="96"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -26.0738, -62.2245, -8.76517 )
+transform = Transform( 0.697937, -0.0613542, -0.713526, 0.696094, -0.176072, 0.696026, -0.168336, -0.982464, -0.0801789, -91.1873, -154.533, -76.8902 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_mid1-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_mid2-kine" parent="tower" index="97"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 26.9969, -67.6475, 4.24529 )
+transform = Transform( -0.917527, -0.329916, 0.222037, -0.264253, 0.0885676, -0.960378, 0.297178, -0.939847, -0.168444, 196.36, -399.503, 202.694 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_mid2-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_mid2-kine001" parent="tower" index="98"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 7.44905, -85.8708, 24.8077 )
+transform = Transform( 0.538362, -0.823778, 0.17764, 0.413495, 0.441898, 0.796083, -0.734294, -0.355128, 0.57853, 81.2766, -393.263, 229.385 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_mid2-kine001" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_mid3-kine" parent="tower" index="99"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 14.7446, -62.2245, -20.6892 )
+transform = Transform( 0.852501, -0.0358603, 0.521495, -0.506662, -0.302111, 0.807479, 0.128593, -0.952598, -0.275719, 9.60045, -143.009, -96.6663 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_mid3-kine" index="0"]
 material/0 = ExtResource( 21 )
 
 [node name="tower_wall_mid4-kine" parent="tower" index="100"]
-transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -18.6765, -72.2245, 21.2763 )
+transform = Transform( 0.30924, -0.863092, 0.399302, 0.666448, -0.102843, -0.738425, 0.678394, 0.494464, 0.543403, -65.0249, -127.174, 62.7993 )
 collision_layer = 257
 
 [node name="mesh" parent="tower/tower_wall_mid4-kine" index="0"]
@@ -1406,9 +1232,16 @@ interior_ambient_color = Color( 0.192157, 0.247059, 0.223529, 1 )
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
 shape = SubResource( 1 )
 
-[node name="tower_lighting" type="Spatial" parent="." index="11"]
+[node name="flag_check" type="Area" parent="." index="11"]
+collision_layer = 128
+collision_mask = 128
+
+[node name="CollisionShape" type="CollisionShape" parent="flag_check" index="0"]
+transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
+shape = SubResource( 1 )
+
+[node name="tower_lighting" type="Spatial" parent="." index="12" groups=["113_delete"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.6161, 96.9976, 29.1848 )
-script = ExtResource( 26 )
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="tower_lighting" index="0"]
 transform = Transform( 0.780215, 0, -0.625511, 0, 1, 0, 0.625511, 0, 0.780215, 11.2524, -39.5592, 0.302601 )
@@ -1567,51 +1400,66 @@ transform = Transform( 0.966676, 8.9407e-08, -0.256004, 0.240763, -0.339889, 0.9
 light_color = Color( 0.819608, 1, 0.945098, 1 )
 spot_range = 26.5693
 
-[node name="floor1" type="MultiMeshSystem" parent="." index="12"]
+[node name="floor1" type="MultiMeshSystem" parent="." index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.7459, 46.4986, 28.3168 )
 
-[node name="Area" type="Area" parent="floor1" index="0"]
+[node name="bug_pickup4" parent="floor1" index="0" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9732, 14.5872, -6.06466 )
+
+[node name="bug_pickup" parent="floor1" index="1" instance=ExtResource( 35 )]
+transform = Transform( -0.834561, 0, -0.550915, 0, 1, 0, 0.550915, 0, -0.834561, 2.29974, 22.39, -8.93955 )
+
+[node name="bug_pickup2" parent="floor1" index="2" instance=ExtResource( 35 )]
+transform = Transform( -0.882215, 0, 0.470847, 0, 1, 0, -0.470847, 0, -0.882215, -0.44899, 22.8433, -7.71124 )
+
+[node name="bug_pickup3" parent="floor1" index="3" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.595345, 22.3847, -7.24774 )
+
+[node name="bug_pickup5" parent="floor1" index="4" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6888, 33.6268, 12.2443 )
+
+[node name="reset_tutorial" type="Area" parent="floor1" index="5" groups=["113_delete"]]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 13 )
 input_actions = [ "reset" ]
 text = "(Hold) Reset to Checkpoint"
 
-[node name="CollisionShape" type="CollisionShape" parent="floor1/Area" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="floor1/reset_tutorial" index="0"]
 transform = Transform( 0.627138, 0, 0.778908, 0, 1, 0, -0.778908, 0, 0.627138, 1.28133, -0.72522, 3.82753 )
 shape = SubResource( 2 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="floor1/Area" index="1"]
+[node name="CollisionShape2" type="CollisionShape" parent="floor1/reset_tutorial" index="1"]
 transform = Transform( 0.705848, 0, 0.708364, 0, 1, 0, -0.708364, 0, 0.705848, 17.8242, -0.72522, 2.72995 )
 shape = SubResource( 3 )
 
-[node name="CollisionShape4" type="CollisionShape" parent="floor1/Area" index="2"]
+[node name="CollisionShape4" type="CollisionShape" parent="floor1/reset_tutorial" index="2"]
 transform = Transform( 0.558734, 0, 0.829347, 0, 1, 0, -0.829347, 0, 0.558734, -15.553, -0.72522, -6.13107 )
 shape = SubResource( 3 )
 
-[node name="CollisionShape5" type="CollisionShape" parent="floor1/Area" index="3"]
+[node name="CollisionShape5" type="CollisionShape" parent="floor1/reset_tutorial" index="3"]
 transform = Transform( -0.829347, 0, 0.558734, 0, 1, 0, -0.558734, 0, -0.829347, -10.3938, -0.72522, 13.0505 )
 shape = SubResource( 3 )
 
-[node name="CollisionShape3" type="CollisionShape" parent="floor1/Area" index="4"]
+[node name="CollisionShape3" type="CollisionShape" parent="floor1/reset_tutorial" index="4"]
 transform = Transform( 0.969637, 0, -0.244549, 0, 1, 0, 0.244549, 0, 0.969637, 14.398, -0.414131, -12.5235 )
 shape = SubResource( 4 )
 
-[node name="CollisionShape6" type="CollisionShape" parent="floor1/Area" index="5"]
+[node name="CollisionShape6" type="CollisionShape" parent="floor1/reset_tutorial" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 37.3047, 0, -12.5695 )
 shape = SubResource( 5 )
 
-[node name="fountainA_large" parent="floor1" index="1" instance=ExtResource( 10 )]
+[node name="fountainA_large" parent="floor1" index="6" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.0326, 13.5533, -6.6221 )
 
-[node name="CSGBox" type="CSGBox" parent="floor1" index="2"]
+[node name="CSGBox" type="CSGBox" parent="floor1" index="7"]
 transform = Transform( 0.972098, 0, -0.234575, 0, 1, 0, 0.234575, 0, 0.972098, 24.7646, 12.4709, -10.1017 )
 use_collision = true
 width = 14.8336
 depth = 15.269
 material = ExtResource( 21 )
 
-[node name="CSGBox2" type="CSGBox" parent="floor1" index="3"]
+[node name="CSGBox2" type="CSGBox" parent="floor1" index="8"]
 transform = Transform( 0.972098, 0, -0.234575, 0, 1, 0, 0.234575, 0, 0.972098, 12.3932, 6.35506, 7.33324 )
 use_collision = true
 width = 2.67013
@@ -1619,50 +1467,50 @@ height = 16.5974
 depth = 3.03672
 material = ExtResource( 21 )
 
-[node name="bobble" parent="floor1" index="4" instance=ExtResource( 14 )]
+[node name="bobble" parent="floor1" index="9" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1811, -0.165054, -11.1552 )
 
-[node name="bobble2" parent="floor1" index="5" instance=ExtResource( 14 )]
+[node name="bobble2" parent="floor1" index="10" instance=ExtResource( 14 )]
 transform = Transform( -0.537556, 0, 0.843228, 0, 1, 0, -0.843228, 0, -0.537556, -5.89093, -0.165054, -3.82374 )
 
-[node name="bobble3" parent="floor1" index="6" instance=ExtResource( 14 )]
+[node name="bobble3" parent="floor1" index="11" instance=ExtResource( 14 )]
 transform = Transform( 0.0637589, 0, 0.997965, 0, 1, 0, -0.997965, 0, 0.0637589, 9.0949, 1.86016, -11.267 )
 
-[node name="falling_platform" parent="floor1" index="7" instance=ExtResource( 15 )]
+[node name="falling_platform" parent="floor1" index="12" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5998, 13.4709, 1.42488 )
 delay = 0.4
 
-[node name="falling_platform2" parent="floor1" index="8" instance=ExtResource( 15 )]
+[node name="falling_platform2" parent="floor1" index="13" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45306, 16.4655, 6.52404 )
 delay = 0.4
 
-[node name="falling_platform3" parent="floor1" index="9" instance=ExtResource( 15 )]
+[node name="falling_platform3" parent="floor1" index="14" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.76582, 19.1984, 1.75318 )
 delay = 0.4
 
-[node name="falling_platform4" parent="floor1" index="10" instance=ExtResource( 15 )]
+[node name="falling_platform4" parent="floor1" index="15" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.8724, 29.4646, 1.57242 )
 delay = 0.4
 
-[node name="falling_platform5" parent="floor1" index="11" instance=ExtResource( 15 )]
+[node name="falling_platform5" parent="floor1" index="16" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.1229, 28.046, -3.75261 )
 delay = 0.4
 
-[node name="falling_platform6" parent="floor1" index="12" instance=ExtResource( 15 )]
+[node name="falling_platform6" parent="floor1" index="17" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5469, 29.0097, -10.4431 )
 delay = 0.4
 
-[node name="falling_platform7" parent="floor1" index="13" instance=ExtResource( 15 )]
+[node name="falling_platform7" parent="floor1" index="18" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4489, 30.9774, -17.644 )
 delay = 0.8
 
-[node name="bobble4" parent="floor1" index="14" instance=ExtResource( 14 )]
+[node name="bobble4" parent="floor1" index="19" instance=ExtResource( 14 )]
 transform = Transform( -0.640936, -0.767595, 3.35526e-08, 0, -4.37114e-08, -1, 0.767595, -0.640936, 2.80162e-08, 1.84922, 24.7033, -2.77272 )
 
-[node name="fountainA" parent="floor1" index="15" instance=ExtResource( 19 )]
+[node name="fountainA" parent="floor1" index="20" groups=["113_delete"] instance=ExtResource( 19 )]
 transform = Transform( -0.640936, 0, -0.767595, 0, 1, 0, 0.767595, 0, -0.640936, -0.0969772, 21.9674, -0.151287 )
 
-[node name="wall_jump_tutorial" type="Area" parent="floor1" index="16"]
+[node name="wall_jump_tutorial" type="Area" parent="floor1" index="21"]
 transform = Transform( 0.785687, 0, -0.618624, 0, 1, 0, 0.618624, 0, 0.785687, -12.1966, 26.6893, 11.2969 )
 collision_layer = 0
 collision_mask = 2
@@ -1675,7 +1523,7 @@ removal_stat = "capacitor_113"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.84162 )
 shape = SubResource( 6 )
 
-[node name="wall_jump_tutorial2" type="Area" parent="floor1" index="17"]
+[node name="wall_jump_tutorial2" type="Area" parent="floor1" index="22"]
 transform = Transform( 0.898104, 0, -0.439782, 0, 1, 0, 0.439782, 0, 0.898104, -10.6236, 33.7055, -15.3833 )
 collision_layer = 0
 collision_mask = 2
@@ -1688,19 +1536,60 @@ removal_stat = "capacitor_113"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.71824, -1.84162 )
 shape = SubResource( 6 )
 
-[node name="platform_square" parent="floor1" index="18" instance=ExtResource( 23 )]
+[node name="platform_square" parent="floor1" index="23" instance=ExtResource( 23 )]
 transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -12.5586, 29.2052, 12.4948 )
 
-[node name="platform_square2" parent="floor1" index="19" instance=ExtResource( 23 )]
+[node name="platform_square2" parent="floor1" index="24" instance=ExtResource( 23 )]
 transform = Transform( 0.768826, 0, -0.639457, 0, 1, 0, 0.639457, 0, 0.768826, -23.5136, 31.5385, 8.07739 )
 
-[node name="floor2" type="MultiMeshSystem" parent="." index="13"]
+[node name="pickups_tower_only" type="MultiMeshSystem" parent="floor1" index="25" groups=["113_tower_only"]]
+
+[node name="gem_pickup" parent="floor1/pickups_tower_only" index="0" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6579, 30.1387, 12.7468 )
+
+[node name="gem_pickup2" parent="floor1/pickups_tower_only" index="1" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5072, 24.5741, 15.6392 )
+
+[node name="gem_pickup13" parent="floor1/pickups_tower_only" index="2" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8629, 28.2435, 16.4377 )
+
+[node name="gem_pickup3" parent="floor1/pickups_tower_only" index="3" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71724, 28.4886, -3.3003 )
+
+[node name="gem_pickup4" parent="floor1/pickups_tower_only" index="4" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.0153, 15.1468, 7.67134 )
+
+[node name="gem_pickup5" parent="floor1/pickups_tower_only" index="5" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5468, 14.2546, 1.43667 )
+
+[node name="gem_pickup6" parent="floor1/pickups_tower_only" index="6" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.43762, 17.2496, 6.54779 )
+
+[node name="gem_pickup7" parent="floor1/pickups_tower_only" index="7" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.73469, 19.9823, 1.74171 )
+
+[node name="gem_pickup8" parent="floor1/pickups_tower_only" index="8" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.4374, 34.0482, 10.6446 )
+
+[node name="gem_pickup9" parent="floor1/pickups_tower_only" index="9" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1868, 32.4723, 8.68893 )
+
+[node name="gem_pickup10" parent="floor1/pickups_tower_only" index="10" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.858, 32.2168, -5.4654 )
+
+[node name="gem_pickup11" parent="floor1/pickups_tower_only" index="11" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2569, 32.278, -15.5785 )
+
+[node name="gem_pickup12" parent="floor1/pickups_tower_only" index="12" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.18819, 34.8304, -17.0901 )
+
+[node name="floor2" type="MultiMeshSystem" parent="." index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 78.3545, 87.4238, 30.4353 )
 
-[node name="fountainA_large" parent="floor2" index="0" instance=ExtResource( 10 )]
+[node name="fountainA_large" parent="floor2" index="0" groups=["113_delete"] instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.06136, -4.12044, -18.4566 )
 
-[node name="CSGCylinder" type="CSGCylinder" parent="floor2" index="1"]
+[node name="CSGCylinder" type="CSGCylinder" parent="floor2" index="1" groups=["113_delete"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3867, 0.42408, -19.4947 )
 use_collision = true
 radius = 12.355
@@ -1721,7 +1610,21 @@ height = 4.0
 depth = 9.23474
 material = ExtResource( 21 )
 
-[node name="CSGBox" type="CSGBox" parent="floor2" index="2"]
+[node name="CSGBox2" type="CSGBox" parent="floor2/CSGCylinder" index="2"]
+transform = Transform( 0.856224, 0, -0.516604, 0, 1, 0, 0.516604, 0, 0.856224, -9.19073, 0, -3.37417 )
+operation = 2
+width = 5.53398
+height = 17.0581
+depth = 35.3939
+
+[node name="CSGBox3" type="CSGBox" parent="floor2/CSGCylinder" index="3"]
+transform = Transform( 0.256562, 0, 0.966528, 0, 1, 0, -0.966528, 0, 0.256562, -0.94706, 0, -11.227 )
+operation = 2
+width = 5.53398
+height = 17.0581
+depth = 35.3939
+
+[node name="CSGBox" type="CSGBox" parent="floor2" index="2" groups=["113_delete"]]
 transform = Transform( -0.985005, 0, -0.172527, 0, 1, 0, 0.172527, 0, -0.985005, -3.49026, 0, -2.12446 )
 use_collision = true
 height = 9.40651
@@ -1761,32 +1664,9 @@ material = ExtResource( 21 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.62376, 1.04236, -17.5539 )
 radius = 4.13373
 height = 10.1374
+material = ExtResource( 21 )
 
-[node name="crawly" parent="floor2" index="3" instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.86575, 3.38087, -3.19563 )
-reset_on_player_death = true
-
-[node name="crawly2" parent="floor2" index="4" instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.80759, 3.495, -3.61983 )
-reset_on_player_death = true
-
-[node name="crawly6" parent="floor2" index="5" instance=ExtResource( 24 )]
-transform = Transform( 0.331166, 0, 0.943572, 0, 1, 0, -0.943572, 0, 0.331166, 7.20331, -4.1132, -9.42399 )
-reset_on_player_death = true
-
-[node name="crawly3" parent="floor2" index="6" instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.73737, -1.08591, 5.86178 )
-reset_on_player_death = true
-
-[node name="crawly4" parent="floor2" index="7" instance=ExtResource( 24 )]
-transform = Transform( 0.282357, 0, 0.959309, 0, 1, 0, -0.959309, 0, 0.282357, -20.1218, -4.12045, -2.28086 )
-reset_on_player_death = true
-
-[node name="crawly5" parent="floor2" index="8" instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65391, 4.80527, 2.26766 )
-reset_on_player_death = true
-
-[node name="CSGBox2" type="CSGBox" parent="floor2" index="9"]
+[node name="CSGBox2" type="CSGBox" parent="floor2" index="3" groups=["113_delete"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.52212, 7.35639, -1.38322 )
 use_collision = true
 depth = 47.6487
@@ -1801,14 +1681,39 @@ material = ExtResource( 21 )
 [node name="CSGCylinder" type="CSGCylinder" parent="floor2/CSGBox2" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.68176, 0 )
 height = 15.1902
+material = ExtResource( 21 )
 
-[node name="platform_square" parent="floor2" index="10" instance=ExtResource( 23 )]
+[node name="crawly" parent="floor2" index="4" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.86575, 3.38087, -3.19563 )
+reset_on_player_death = true
+
+[node name="crawly2" parent="floor2" index="5" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.80759, 3.495, -3.61983 )
+reset_on_player_death = true
+
+[node name="crawly6" parent="floor2" index="6" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 0.331166, 0, 0.943572, 0, 1, 0, -0.943572, 0, 0.331166, 7.20331, -4.1132, -9.42399 )
+reset_on_player_death = true
+
+[node name="crawly3" parent="floor2" index="7" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.73737, -1.08591, 5.86178 )
+reset_on_player_death = true
+
+[node name="crawly4" parent="floor2" index="8" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 0.282357, 0, 0.959309, 0, 1, 0, -0.959309, 0, 0.282357, -20.1218, -4.12045, -2.28086 )
+reset_on_player_death = true
+
+[node name="crawly5" parent="floor2" index="9" groups=["113_tower_only"] instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65391, 4.80527, 2.26766 )
+reset_on_player_death = true
+
+[node name="platform_square" parent="floor2" index="10" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.853135, 0.521689, -2.28038e-08, 0, -4.37114e-08, -1, -0.521689, 0.853135, -3.72917e-08, 15.5787, 14.3106, -3.03116 )
 
-[node name="platform_square2" parent="floor2" index="11" instance=ExtResource( 23 )]
+[node name="platform_square2" parent="floor2" index="11" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 14.7187, 16.513, -7.13037 )
 
-[node name="ascrap1" parent="floor2" index="12" instance=ExtResource( 25 )]
+[node name="ascrap1" parent="floor2" index="12" groups=["113_delete"] instance=ExtResource( 25 )]
 transform = Transform( 0.36942, 0, -0.929263, 0, 1, 0, 0.929263, 0, 0.36942, -8.4993, -4.1205, -11.7547 )
 
 [node name="bobble" parent="floor2" index="13" instance=ExtResource( 14 )]
@@ -1826,16 +1731,60 @@ transform = Transform( -5.36564e-08, -0.260476, 0.96548, 1, -4.37114e-08, 4.3782
 [node name="bobble5" parent="floor2" index="17" instance=ExtResource( 14 )]
 transform = Transform( -6.17706e-08, -0.963223, -0.268703, 1, -4.37114e-08, -7.31917e-08, 5.87546e-08, -0.268703, 0.963223, 3.2313, -1.14809, -14.782 )
 
-[node name="floor3" type="MultiMeshSystem" parent="." index="14"]
+[node name="bug_pickup" parent="floor2" index="18" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.28143, -3.37856, -19.4736 )
+
+[node name="pickups_delete" type="MultiMeshSystem" parent="floor2" index="19" groups=["113_delete"]]
+
+[node name="gem_pickup" parent="floor2/pickups_delete" index="0" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1171, 0.47197, -9.25585 )
+
+[node name="gem_pickup2" parent="floor2/pickups_delete" index="1" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.3428, 10.9271, -3.12971 )
+
+[node name="gem_pickup3" parent="floor2/pickups_delete" index="2" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.10539, 10.9271, -1.4379 )
+
+[node name="gem_pickup4" parent="floor2/pickups_delete" index="3" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.25954, 8.35639, 5.1137 )
+
+[node name="gem_pickup5" parent="floor2/pickups_delete" index="4" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.39394, 8.3564, -9.79214 )
+
+[node name="gem_pickup6" parent="floor2/pickups_delete" index="5" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7427, -0.934433, 2.40595 )
+
+[node name="gem_pickup7" parent="floor2/pickups_delete" index="6" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.92987, -0.934433, 3.59429 )
+
+[node name="gem_pickup8" parent="floor2/pickups_delete" index="7" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.37759, 4.70325, 5.99016 )
+
+[node name="gem_pickup9" parent="floor2/pickups_delete" index="8" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.9676, -0.934441, 5.34294 )
+
+[node name="gem_pickup10" parent="floor2/pickups_delete" index="9" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3638, -0.934433, 5.38691 )
+
+[node name="gem_pickup11" parent="floor2/pickups_delete" index="10" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.2244, -0.934441, 3.98541 )
+
+[node name="gem_pickup12" parent="floor2/pickups_delete" index="11" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.710678, 6.11106, 13.4185 )
+
+[node name="gem_pickup13" parent="floor2/pickups_delete" index="12" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60412, 6.11105, 15.8881 )
+
+[node name="floor3" type="MultiMeshSystem" parent="." index="15"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.7457, 149.931, 28.1692 )
 
-[node name="platform_square5" parent="floor3" index="0" instance=ExtResource( 23 )]
+[node name="platform_square5" parent="floor3" index="0" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 13.6619, -39.4153, 4.78128 )
 
-[node name="platform_square6" parent="floor3" index="1" instance=ExtResource( 23 )]
+[node name="platform_square6" parent="floor3" index="1" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.753603, 0, -0.65733, 0, 1, 0, 0.65733, 0, 0.753603, 16.9924, -39.4153, 1.40131 )
 
-[node name="platform_square" parent="floor3" index="2" instance=ExtResource( 23 )]
+[node name="platform_square" parent="floor3" index="2" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.80356, 0, -0.595224, 0, 1, 0, 0.595224, 0, 0.80356, 3.62709, -39.5141, 10.236 )
 motion/sync_to_physics = true
 script = ExtResource( 28 )
@@ -1852,11 +1801,11 @@ light_energy = 0.579
 omni_range = 4.03381
 script = ExtResource( 22 )
 
-[node name="dswitch_a" parent="floor3" index="3" instance=ExtResource( 29 )]
+[node name="dswitch_a" parent="floor3" index="3" groups=["113_delete"] instance=ExtResource( 29 )]
 transform = Transform( 0.650866, 0, 0.759193, 0, 1, 0, -0.759193, 0, 0.650866, 8.33631, -39.8298, 13.4057 )
 reset_upon_death = true
 
-[node name="fountainA_large" parent="floor3" index="4" instance=ExtResource( 10 )]
+[node name="fountainA_large" parent="floor3" index="4" groups=["113_delete"] instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62538, -39.6744, -2.6897 )
 
 [node name="CSGCylinder" type="CSGCylinder" parent="floor3/fountainA_large" index="5"]
@@ -1865,7 +1814,7 @@ use_collision = true
 radius = 3.4391
 material = ExtResource( 21 )
 
-[node name="CSGBox" type="CSGBox" parent="floor3" index="5"]
+[node name="CSGBox" type="CSGBox" parent="floor3" index="5" groups=["113_delete"]]
 transform = Transform( 0.777219, 0, -0.62923, 0, 1, 0, 0.62923, 0, 0.777219, -0.975433, -32.8632, 10.5412 )
 use_collision = true
 collision_layer = 257
@@ -1873,14 +1822,14 @@ width = 20.6103
 height = 14.9184
 material = ExtResource( 21 )
 
-[node name="fountainA" parent="floor3" index="6" instance=ExtResource( 19 )]
+[node name="fountainA" parent="floor3" index="6" groups=["113_delete"] instance=ExtResource( 19 )]
 transform = Transform( -0.614635, 0, -0.788812, 0, 1, 0, 0.788812, 0, -0.614635, -0.745697, -25.4244, 10.8308 )
 
-[node name="falling_platform" parent="floor3" index="7" instance=ExtResource( 15 )]
+[node name="falling_platform" parent="floor3" index="7" groups=["113_delete"] instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8457, -24.4033, 17.5067 )
 delay = 0.5
 
-[node name="platform_square2" parent="floor3" index="8" instance=ExtResource( 23 )]
+[node name="platform_square2" parent="floor3" index="8" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.75503, 0, -0.655691, 0, 1, 0, 0.655691, 0, 0.75503, 11.1143, -24.0913, 24.9087 )
 motion/sync_to_physics = true
 script = ExtResource( 28 )
@@ -1897,11 +1846,11 @@ light_color = Color( 0.682353, 1, 0.94902, 1 )
 omni_range = 3.10797
 script = ExtResource( 22 )
 
-[node name="dswitch_a2" parent="floor3" index="9" instance=ExtResource( 29 )]
+[node name="dswitch_a2" parent="floor3" index="9" groups=["113_delete"] instance=ExtResource( 29 )]
 transform = Transform( 0.603873, 0, 0.79708, 0, 1, 0, -0.79708, 0, 0.603873, 5.76041, -25.404, 16.7917 )
 reset_upon_death = true
 
-[node name="CSGBox2" type="CSGBox" parent="floor3" index="10"]
+[node name="CSGBox2" type="CSGBox" parent="floor3" index="10" groups=["113_delete"]]
 transform = Transform( 0.971907, 0, -0.235365, 0, 1, 0, 0.235365, 0, 0.971907, 14.9392, -8.19257, -20.0737 )
 use_collision = true
 width = 9.91284
@@ -1909,7 +1858,7 @@ height = 1.39368
 depth = 2.43734
 material = ExtResource( 21 )
 
-[node name="CSGBox3" type="CSGBox" parent="floor3" index="11"]
+[node name="CSGBox3" type="CSGBox" parent="floor3" index="11" groups=["113_delete"]]
 transform = Transform( -0.235365, 0, -0.971907, 0, 1, 0, 0.971907, 0, -0.235365, 10.4163, -8.19257, -17.2764 )
 use_collision = true
 width = 9.91284
@@ -1917,7 +1866,7 @@ height = 1.39368
 depth = 2.43734
 material = ExtResource( 21 )
 
-[node name="platform_square3" parent="floor3" index="12" instance=ExtResource( 23 )]
+[node name="platform_square3" parent="floor3" index="12" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.965563, 0, -0.260169, 0, 1, 0, 0.260169, 0, 0.965563, 7.68893, -2.09839, -20.72 )
 motion/sync_to_physics = true
 script = ExtResource( 28 )
@@ -1934,21 +1883,21 @@ playback_process_mode = 0
 anims/Activate = SubResource( 266 )
 anims/RESET = SubResource( 267 )
 
-[node name="dswitch_a3" parent="floor3" index="13" instance=ExtResource( 29 )]
+[node name="dswitch_a3" parent="floor3" index="13" groups=["113_delete"] instance=ExtResource( 29 )]
 transform = Transform( 0.970198, 0, -0.242311, 0, 1, 0, 0.242311, 0, 0.970198, 9.21134, -7.49573, -16.0746 )
 reset_upon_death = true
 
-[node name="falling_platform2" parent="floor3" index="14" instance=ExtResource( 15 )]
+[node name="falling_platform2" parent="floor3" index="14" groups=["113_delete"] instance=ExtResource( 15 )]
 transform = Transform( 0.975884, 0, -0.218289, 0, 1, 0, 0.218289, 0, 0.975884, 8.37944, -5.23625, -10.0692 )
 delay = 0.6
 
-[node name="fountainA2" parent="floor3" index="15" instance=ExtResource( 19 )]
+[node name="fountainA2" parent="floor3" index="15" groups=["113_delete"] instance=ExtResource( 19 )]
 transform = Transform( -0.28729, 0, -0.957844, 0, 1, 0, 0.957844, 0, -0.28729, 10.9278, -7.49573, -21.2649 )
 
-[node name="platform_square4" parent="floor3" index="16" instance=ExtResource( 23 )]
+[node name="platform_square4" parent="floor3" index="16" groups=["113_delete"] instance=ExtResource( 23 )]
 transform = Transform( 0.942487, -0.334244, -1.46103e-08, 0, -4.37114e-08, 1, -0.334244, -0.942487, -4.11974e-08, 6.94491, -1.90343, -5.2659 )
 
-[node name="get_capacitor" type="Area" parent="floor3" index="17"]
+[node name="get_capacitor" type="Area" parent="floor3" index="17" groups=["113_delete"]]
 transform = Transform( -0.889847, 0, 0.456258, 0, 1, 0, -0.456258, 0, -0.889847, 9.21545, 24.4708, -1.89956 )
 collision_layer = 0
 collision_mask = 2
@@ -1971,12 +1920,110 @@ transform = Transform( 0.96871, 0, -0.248196, 0, 1, 0, 0.248196, 0, 0.96871, 0.6
 transform = Transform( 0.96871, 0, -0.248196, 0, 1, 0, 0.248196, 0, 0.96871, 0.504257, 0.503433, -0.782265 )
 shape = SubResource( 261 )
 
+[node name="pickups_delete" type="MultiMeshSystem" parent="floor3" index="18" groups=["113_delete"]]
+
+[node name="gem_pickup14" parent="floor3/pickups_delete" index="0" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.3124, -48.0615, -1.35776 )
+
+[node name="gem_pickup15" parent="floor3/pickups_delete" index="1" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 27.1207, -44.8685, -4.41767 )
+
+[node name="gem_pickup16" parent="floor3/pickups_delete" index="2" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5971, -39.7839, -0.858002 )
+
+[node name="gem_pickup17" parent="floor3/pickups_delete" index="3" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.0585, -34.9445, 3.50154 )
+
+[node name="gem_pickup" parent="floor3/pickups_delete" index="4" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.73255, -34.2157, -2.80457 )
+
+[node name="gem_pickup2" parent="floor3/pickups_delete" index="5" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.92455, -34.2157, -3.49664 )
+
+[node name="gem_pickup3" parent="floor3/pickups_delete" index="6" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.27218, -25.404, 4.66243 )
+
+[node name="gem_pickup4" parent="floor3/pickups_delete" index="7" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.50296, -25.404, 16.6287 )
+
+[node name="gem_pickup5" parent="floor3/pickups_delete" index="8" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.1392, 31.8215, 5.34291 )
+
+[node name="gem_pickup6" parent="floor3/pickups_delete" index="9" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5644, 31.8165, -7.84248 )
+
+[node name="gem_pickup7" parent="floor3/pickups_delete" index="10" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8749, 31.8143, -14.6896 )
+
+[node name="gem_pickup8" parent="floor3/pickups_delete" index="11" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.14922, 31.8142, -14.5864 )
+
+[node name="gem_pickup9" parent="floor3/pickups_delete" index="12" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.77069, 31.8145, -8.0018 )
+
+[node name="gem_pickup10" parent="floor3/pickups_delete" index="13" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.03799, 31.8146, 1.92733 )
+
+[node name="gem_pickup11" parent="floor3/pickups_delete" index="14" instance=ExtResource( 26 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79655, 31.8195, 8.63273 )
+
+[node name="lower_post_collapse" type="MultiMeshSystem" parent="." index="16" groups=["113_fallen_only"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 207.943, -240.828, 251.352 )
+
+[node name="bug_pickup" parent="lower_post_collapse" index="0" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.788, 1.62601, 18.156 )
+
+[node name="bug_pickup2" parent="lower_post_collapse" index="1" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.608, 4.799, 16.121 )
+
+[node name="bug_pickup3" parent="lower_post_collapse" index="2" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.641, 0.703003, 28.04 )
+
+[node name="bug_pickup4" parent="lower_post_collapse" index="3" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42299, -0.328003, -2.875 )
+
+[node name="bug_pickup5" parent="lower_post_collapse" index="4" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.91936, -2.57922, 15.3025 )
+
+[node name="bug_pickup6" parent="lower_post_collapse" index="5" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.1851, 6.52278, 28.7508 )
+
+[node name="bug_pickup7" parent="lower_post_collapse" index="6" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.1566, 4.40366, -3.50722 )
+
+[node name="bug_pickup8" parent="lower_post_collapse" index="7" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.9099, 0.87674, -18.431 )
+
+[node name="crawly" parent="lower_post_collapse" index="8" instance=ExtResource( 24 )]
+transform = Transform( 0.0986235, 0, -0.995125, 0, 1, 0, 0.995125, 0, 0.0986235, 72.903, -7.7408, -13.8786 )
+
+[node name="crawly2" parent="lower_post_collapse" index="9" instance=ExtResource( 24 )]
+transform = Transform( -0.10122, 0, 0.994864, 0, 1, 0, -0.994864, 0, -0.10122, 36.3159, -8.12668, 8.56297 )
+
+[node name="crawly3" parent="lower_post_collapse" index="10" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.1068, 7.12523, -23.4901 )
+
+[node name="crawly4" parent="lower_post_collapse" index="11" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.5505, -0.181458, 11.7686 )
+
+[node name="crawly5" parent="lower_post_collapse" index="12" instance=ExtResource( 24 )]
+transform = Transform( -0.819448, 0, 0.573154, 0, 1, 0, -0.573154, 0, -0.819448, -18.7045, -4.22734, 16.4808 )
+drops_coat = true
+health = 80
+
+[node name="crawly6" parent="lower_post_collapse" index="13" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71.2605, 17.0999, 6.6609 )
+
+[node name="bug_pickup9" parent="lower_post_collapse" index="14" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -68.2372, 15.6747, 7.21428 )
+
+[node name="player_new_checkpoint" type="Position3D" parent="." index="17"]
+transform = Transform( 0.226392, 0, -0.974036, 0, 1, 0, 0.974036, 0, 0.226392, 138.944, 57.2097, -0.575882 )
+
 [connection signal="insta_toggled" from="floor3/dswitch_a" to="floor3/platform_square" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="floor3/dswitch_a" to="floor3/platform_square" method="_on_toggled"]
 [connection signal="insta_toggled" from="floor3/dswitch_a2" to="floor3/platform_square2" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="floor3/dswitch_a2" to="floor3/platform_square2" method="_on_toggled"]
 [connection signal="insta_toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="floor3/dswitch_a3" to="floor3/platform_square3" method="_on_toggled"]
-[connection signal="deactivated" from="floor3/get_capacitor/power" to="environment" method="delete"]
 [connection signal="deactivated" from="floor3/get_capacitor/power" to="floor3/get_capacitor" method="set_enabled" binds= [ false ]]
-[connection signal="toggled" from="floor3/get_capacitor/power" to="tower_lighting" method="toggle"]

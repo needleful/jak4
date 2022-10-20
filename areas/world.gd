@@ -5,7 +5,6 @@ var air_tutorial := false
 # Distance from the bounding box edge
 const MIN_DIST_LOAD := 300
 const MIN_DIST_MUST_LOAD := 30
-const MIN_SQDIST_UPDATE := 10
 
 const UNLOAD_TIME := 10.0
 
@@ -20,8 +19,14 @@ var chunk_unload_waitlist : Dictionary = {}
 var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
 
+const CHUNK_SQDIST_UPDATE := 17
+const VIS_SQDIST_UPDATE := 23
+const ENEMIES_SQDIST_UPDATE := 9
+
 onready var player: PlayerBody = $player
-onready var player_last_position: Vector3 = player.global_transform.origin
+onready var chunk_last_position: Vector3 = player.global_transform.origin
+onready var vis_last_position :Vector3 = player.global_transform.origin
+onready var enemies_last_position :Vector3 = player.global_transform.origin
 
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
@@ -79,13 +84,18 @@ func _process(delta):
 		sun.visible = sun_enabled
 	var player_new_position = player.global_transform.origin
 	apply_fog(player_new_position.y)
-	if (player_last_position - player_new_position).length_squared() >= MIN_SQDIST_UPDATE:
-		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
-		detect_enemies(delta)
+	if (chunk_last_position - player_new_position).length_squared() >= CHUNK_SQDIST_UPDATE:
 		update_active_chunks(player_new_position)
-		player_last_position = player_new_position
-		if player_last_position.y < -8000:
+		chunk_last_position = player_new_position
+		if chunk_last_position.y < -8000:
 			player.fall_to_death()
+	if (enemies_last_position - player_new_position).length_squared() >= ENEMIES_SQDIST_UPDATE:
+		enemies_last_position = player_new_position
+		detect_enemies(delta)
+	if (vis_last_position - player_new_position).length_squared() >= VIS_SQDIST_UPDATE:
+		vis_last_position = player_new_position
+		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
+	
 
 func load_everything():
 	for c in chunks.values():
@@ -133,8 +143,8 @@ func _on_load_complete():
 	$loading.hide()
 
 func compare_distances(a: Spatial, b: Spatial):
-	var dist_a = (player_last_position - a.global_transform.origin).length_squared()
-	var dist_b = (player_last_position - b.global_transform.origin).length_squared()
+	var dist_a = (chunk_last_position - a.global_transform.origin).length_squared()
+	var dist_b = (chunk_last_position - b.global_transform.origin).length_squared()
 	return dist_a < dist_b
 
 func detect_enemies(_delta):

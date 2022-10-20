@@ -105,11 +105,10 @@ func _ready():
 	while p:
 		if p is MeshInstance and p.name.begins_with("chunk"):
 			source_chunk = p
-			set_process(true)
 			break
 		p = p.get_parent()
 	if !source_chunk:
-		set_process(false)
+		remove_from_group("enemy")
 
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)
@@ -123,6 +122,8 @@ func set_active(_active: bool):
 	pass
 
 func process_player_distance(pos: Vector3) -> float:
+	if !is_inside_tree() or !is_instance_valid(source_chunk):
+		return INF
 	var lensq := (pos - global_transform.origin).length_squared()
 	var within_activation := lensq <= square_distance_activation
 	if within_activation != in_range:
