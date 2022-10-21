@@ -17,8 +17,9 @@ export(bool) var gold_gives_coat := true
 export(Coat.Rarity) var min_rarity := Coat.Rarity.Uncommon
 export(Coat.Rarity) var max_rarity := Coat.Rarity.Rare
 export(String) var friendly_id := ""
-export(bool) var allow_hover_scooter := false
-export(Array, String) var required_items := []  
+export(bool) var hover_scooter := false
+export(Array, String) var required_items := []
+export(Array, NodePath) var checkpoints := []
 
 const DANGER_TIME := 10.0
 const DANGER_COLOR := Color.gold
@@ -29,6 +30,9 @@ onready var race_start: Spatial = $race_start
 onready var race_end: Area = $race_end
 onready var timer: Timer = $Timer
 
+var remaining_points := []
+var next_point : Area
+
 const race_overlay: PackedScene = preload("res://ui/games/race_overlay.tscn")
 const coat_scene : PackedScene = preload("res://items/coat_pickup.tscn")
 
@@ -38,7 +42,6 @@ var overlay : Node
 
 func _ready():
 	var _x = timer.connect("timeout", self, "_on_timeout")
-	_x = race_end.connect("body_entered", self, "_on_race_end")
 	set_process(false)
 
 func _process(_delta):
@@ -60,9 +63,17 @@ func _process(_delta):
 
 func start_race():
 	player = Global.get_player()
+	if hover_scooter and Global.count("hover_scooter"):
+		player.call_deferred("set_state", player.State.Hover)
+	else:
+		player.can_use_hover_scooter = false
 	var res = player.game_ui.start_game("Time")
 	if !res:
 		return
+	remaining_points = []
+	for point in checkpoints:
+		if has_node(point):
+			remaining_points.append(get_node(point))
 
 	Global.save_checkpoint(race_start.global_transform.origin)
 	player.teleport_to(race_start.global_transform)
@@ -74,14 +85,26 @@ func start_race():
 	if Global.has_stat(get_stat() + "/best"):
 		var best: float = Global.stat(get_stat() + "/best")
 		overlay.set_best(best)
-		
-	player.game_ui.add_target(race_end)
+	
+	connect_next_point(null)
 	var _x = player.game_ui.connect("cancelled", self, "_on_timeout")
 	player.game_ui.set_overlay(overlay)
 	
 	active = true
 	set_process(true)
 	timer.start(bronze_seconds)
+
+func connect_next_point(_body):
+	if next_point:
+		print("Passed ", next_point.name)
+		player.game_ui.remove_target(next_point)
+	if remaining_points.empty():
+		player.game_ui.add_target(race_end)
+		var _x = race_end.connect("body_entered", self, "_on_race_end", [], CONNECT_ONESHOT)
+	else:
+		next_point = remaining_points.pop_front()
+		player.game_ui.add_target(next_point)
+		var _x = next_point.connect("body_entered", self, "connect_next_point", [], CONNECT_ONESHOT)
 
 func _on_timeout():
 	if active:
@@ -92,6 +115,7 @@ func _on_timeout():
 		_end()
 
 func _end():
+	player.can_use_hover_scooter = true
 	print("game ended")
 	player.game_ui.disconnect("cancelled", self, "_on_timeout")
 	active = false

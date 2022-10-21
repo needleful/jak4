@@ -7,6 +7,7 @@ signal load_start
 var _thread := Thread.new()
 var _active_mutex := Mutex.new()
 var _load_mutex := Mutex.new()
+var first_complete := Semaphore.new()
 var _nodes := {}
 var _active := {}
 var _lowres := {}
@@ -22,6 +23,7 @@ func start_loading(chunks: Array):
 
 func _load_everything(chunks: Array):
 	call_deferred("_start_loading")
+	var first_loaded = false
 	for chunk in chunks:
 		var name:String = chunk.name
 		var hires_file :String = PATH_CONTENT % name
@@ -30,7 +32,9 @@ func _load_everything(chunks: Array):
 			_set_loaded(_loaded_content, name, content)
 			if is_active(name):
 				call_deferred("_add_content", name, content)
-
+		if !first_loaded:
+			first_loaded = true
+			first_complete.post()
 		var lowres_file: String = PATH_LOWRES % name
 		if ResourceLoader.exists(lowres_file):
 			var content = load(lowres_file)

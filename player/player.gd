@@ -273,6 +273,7 @@ var ground_normal:Vector3 = Vector3.UP
 var best_floor_dot: float
 var best_floor : Node
 var dash_charges := 0
+var can_use_hover_scooter := true
 
 var current_coat: Coat
 # Camera settings
@@ -1428,7 +1429,9 @@ func takes_damage():
 		or state == State.DiveWindup)
 
 func should_hover() -> bool:
-	return pressed("hover_toggle") and Global.count("hover_scooter")
+	return ( can_use_hover_scooter 
+		and pressed("hover_toggle") 
+		and Global.count("hover_scooter"))
 
 func can_climb() -> bool:
 	return total_stamina() > MIN_CLIMB_STAMINA and holding("mv_crouch")
@@ -1728,7 +1731,8 @@ func celebrate(id: String, item: Spatial, local := Transform()):
 	set_state(State.GetItem)
 	if held_item:
 		held_item.transform = local
-	$ui/gameing/item_get.show_get(id)
+	if id and id != "":
+		$ui/gameing/item_get.show_get(id)
 
 func get_item(item: ItemPickup):
 	if item.item_id == "capacitor" or item.item_id in UPGRADE_ITEMS:

@@ -145,6 +145,7 @@ func start_loading_chunks():
 	var sorted_chunks := chunks.values()
 	sorted_chunks.sort_custom(self, "compare_distances")
 	chunk_loader.start_loading(sorted_chunks)
+	chunk_loader.first_complete.wait()
 
 func _on_load_started():
 	$loading.show()

@@ -6,6 +6,7 @@ export(float) var gun_cooldown := 1.5
 
 const time_damaged := 2.0
 var state_timer := 0.0
+const MIN_DOT_DAMAGE := 0.2
 
 var cooldown: PoolRealArray = [0.0, 0.0, 0.0, 0.0]
 
@@ -52,9 +53,12 @@ func _physics_process(delta):
 				set_state(AI.Dead)
 
 func take_damage(damage, dir, source):
-	if source and source != self:
+	print("damaged!")
+	if (source and source != self) or dir.y < MIN_DOT_DAMAGE:
+		print("not!")
 		return
 	else:
+		print("damage dir: ", dir)
 		if last_attacker:
 			target = last_attacker
 		.take_damage(damage, dir, source)
