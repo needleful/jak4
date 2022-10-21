@@ -1,4 +1,5 @@
 extends Spatial
+class_name GameRace
 
 enum Award {
 	Bronze = 1,
@@ -16,6 +17,8 @@ export(bool) var gold_gives_coat := true
 export(Coat.Rarity) var min_rarity := Coat.Rarity.Uncommon
 export(Coat.Rarity) var max_rarity := Coat.Rarity.Rare
 export(String) var friendly_id := ""
+export(bool) var allow_hover_scooter := false
+export(Array, String) var required_items := []  
 
 const DANGER_TIME := 10.0
 const DANGER_COLOR := Color.gold
@@ -149,3 +152,9 @@ func get_stat():
 		return friendly_id 
 	else:
 		return str(get_path())
+
+func has_required_items():
+	for c in required_items:
+		if !Global.count(c):
+			return false
+	return true

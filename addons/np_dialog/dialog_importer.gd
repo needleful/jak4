@@ -14,12 +14,13 @@ var r_speaker := RegEx.new()
 
 var f_query := "Global.stat('%s')"
 var f_add := "Global.add_stat('%s')"
+var f_not := "!Global.stat('%s')"
 
 func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
 	r_label.compile("^\\s*:(\\w+)")
-	r_expression.compile("[#+?]?\\{([^\\}]+)\\}")
+	r_expression.compile("[#+!?]?\\{([^\\}]+)\\}")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
 	r_speaker.compile("^\\s*\\[\\s*(\\w+)\\s*\\]\\s*")
@@ -206,6 +207,8 @@ func extract_expressions(line: String) -> Dictionary:
 			print("query: ", ex)
 		elif s.begins_with("+"):
 			ex = f_add % ex
+		elif s.begins_with("!"):
+			ex = f_not % ex
 		dict.conditions.append(ex)
 	return dict
 

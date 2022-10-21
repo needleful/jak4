@@ -64,6 +64,17 @@ func _exit_tree():
 	chunk_loader.quit()
 		
 func _ready():
+	if false:
+		print("Random races")
+		for i in range (10):
+			print("\t", int(rand_range(0, 144)))
+		print("Random jump game")
+		for i in range (15):
+			print("\t", int(rand_range(0, 144)))
+		print("Riley")
+		for i in range (10):
+			print("\t", int(rand_range(0, 144)))
+	
 	chunk_loader = ChunkLoader.new()
 	print("Readying world...")
 	var _x = chunk_loader.connect("load_start", self, "_on_load_started")

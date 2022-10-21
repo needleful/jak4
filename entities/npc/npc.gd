@@ -8,6 +8,7 @@ export(String) var friendly_id := ""
 export(Mesh) var accessory: Mesh
 export(bool) var sitting := false
 export(String) var custom_entry := ""
+export(bool) var no_dialog_trigger := false
 onready var anim := $lil_man/AnimationPlayer
 
 var last_animation := ""
@@ -23,7 +24,7 @@ func _ready():
 		anim.play("Idle-loop")
 	$lil_man.scale = Vector3(model_scale, model_scale, model_scale)
 	anim.seek(rand_range(0, anim.current_animation_length))
-	if !dialog:
+	if !dialog or no_dialog_trigger:
 		$dialog.queue_free()
 
 func _on_dialog_body_entered(body):

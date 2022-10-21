@@ -109,31 +109,15 @@
 
 :main_loop
 > {skip()} (Ask about mum)
-	> ?{mum/network}{!Global.stat("mum/discussed/network")} What's it like traveling between the different machines?
+	> !{}
+	> ?{mum/war} What was your experience in the war?
+	> ?{mum/network}!{mum/discussed/network} What's it like traveling between the different machines?
 		Not really like anything, I would say.
 		?{mum/time/asked}
 			I blink and then you
 > {skip()} (Discuss events)
-	> {Global.count('wep_pistol')}{!Global.stat("mum/discussed/pistol")} I found a pistol when I first activated the Medium.
-		+{mum/discussed/pistol}
-		Those are quality weapons. Vaeler Officers used them in the war.
-		?{mum/pistol}
-			I used one myself, for a while. There was a battle near that train station, Muzna Cross. We took the whole stockpile of munitions 
-	> {Global.count('wep_wave_shot')}{!Global.stat("mum/discussed/wave_shot")} I found a curious bubble-shooting weapon.
-		+{mum/discussed/wave_shot}
-	> {Global.count('wep_grav_gun')}{!Global.stat('mum/discussed/grav_gun')} I found a gravity-distorting cannon.
-		+{mum/discussed/grav_gun}
-	> {Global.count('wep_time_gun')}{!Global.stat('mum/discussed/time_gun')} I can slow down time with this gadget I found!
-		+{mum/discussed/time_gun}
-	> (Back)
-		{goto("main_loop")}
-> {skip()} (Discuss people)
-	> What do you think of Balter?
-	> Do you remember Orsdatd?
-	> (Back)
-		{goto("main_loop")}
-> {skip()} (Discuss places)
-	> ?{house_107}{!Global.stat('mum/discussed/house_107')} I found the most curious house on a cliff!
+	> ?{house_107}!{mum/discussed/house_107} I found the most curious house on a cliff!
+		+{mum/discussed/house_107}
 		Where was it?
 		?{gods_tongue}
 			[You] It was on a precarious little spire of rock just south of God's Tongue. There are some plateaus up the mountain.
@@ -141,6 +125,15 @@
 			[You] What's the nearby mountain called? It was just south of that, on a most precarious little spire of rock.
 			God's Tongue? That mountain?
 			[You] Is that what it's called? I thought it looked more like a rabbit on the map.
+	> (Back)
+		{goto("main_loop")}
+> {skip()} (Discuss people)
+	> ?{mum/balter}What do you think of Balter?
+	> ?{mum/orstad} !{mum/discussed/orstad} Do you remember Orstad?
+		+{mum/discussed/orstad}
+		Orstad... hm, I knew a few.
+		[You] He said he knew you before the war.
+		I probably saw him before. Girls weren't supposed to mingle with the boys until we were older.
 	> (Back)
 		{goto("main_loop")}
 > I'll see you later, mum.

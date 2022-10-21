@@ -1726,7 +1726,8 @@ func _on_prompt_timer_timeout():
 func celebrate(id: String, item: Spatial, local := Transform()):
 	held_item = item
 	set_state(State.GetItem)
-	held_item.transform = local
+	if held_item:
+		held_item.transform = local
 	$ui/gameing/item_get.show_get(id)
 
 func get_item(item: ItemPickup):
