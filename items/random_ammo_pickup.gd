@@ -15,3 +15,6 @@ func generate():
 	var a = AmmoSpawner.get_random_ammo()
 	if a:
 		add_child(a)
+		a.global_transform = global_transform
+		a.show()
+		

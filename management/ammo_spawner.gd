@@ -25,7 +25,8 @@ func get_random_ammo():
 	var best_desire := -INF
 	for a in WEIGHTS.keys():
 		if Global.count("wep_"+a):
-			var desire = WEIGHTS[a]*(0.5*randf() + 1.0 - Global.count(a)/MAX[a])
+			var n:float = (MAX[a] - Global.count(a))/MAX[a]
+			var desire = WEIGHTS[a]*(n + randf()*0.5)
 			if desire >= best_desire:
 				best_wep = a
 				best_desire = desire
@@ -34,3 +35,5 @@ func get_random_ammo():
 		var ammo = tscn.instance() as ItemPickup
 		ammo.quantity = COUNTS[best_wep]
 		return ammo
+	else:
+		return null

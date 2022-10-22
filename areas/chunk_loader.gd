@@ -34,7 +34,7 @@ func _load_everything(chunks: Array):
 				call_deferred("_add_content", name, content)
 		if !first_loaded:
 			first_loaded = true
-			first_complete.post()
+			var _x = first_complete.post()
 		var lowres_file: String = PATH_LOWRES % name
 		if ResourceLoader.exists(lowres_file):
 			var content = load(lowres_file)

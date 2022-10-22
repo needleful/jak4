@@ -66,13 +66,13 @@ func _exit_tree():
 func _ready():
 	if false:
 		print("Random races")
-		for i in range (10):
+		for _i in range (10):
 			print("\t", int(rand_range(0, 144)))
 		print("Random jump game")
-		for i in range (15):
+		for _i in range (15):
 			print("\t", int(rand_range(0, 144)))
 		print("Riley")
-		for i in range (10):
+		for _i in range (10):
 			print("\t", int(rand_range(0, 144)))
 	
 	chunk_loader = ChunkLoader.new()
@@ -145,7 +145,7 @@ func start_loading_chunks():
 	var sorted_chunks := chunks.values()
 	sorted_chunks.sort_custom(self, "compare_distances")
 	chunk_loader.start_loading(sorted_chunks)
-	chunk_loader.first_complete.wait()
+	var _x = chunk_loader.first_complete.wait()
 
 func _on_load_started():
 	$loading.show()

@@ -41,7 +41,11 @@ var player: PlayerBody
 var overlay : Node
 
 func _ready():
-	var _x = timer.connect("timeout", self, "_on_timeout")
+	if !timer:
+		timer = Timer.new()
+		add_child(timer)
+	timer.one_shot = true
+	var _x = timer.connect("timeout", self, "_fail")
 	set_process(false)
 
 func _process(_delta):
@@ -87,7 +91,7 @@ func start_race():
 		overlay.set_best(best)
 	
 	connect_next_point(null)
-	var _x = player.game_ui.connect("cancelled", self, "_on_timeout")
+	var _x = player.game_ui.connect("cancelled", self, "_fail")
 	player.game_ui.set_overlay(overlay)
 	
 	active = true
@@ -106,8 +110,9 @@ func connect_next_point(_body):
 		player.game_ui.add_target(next_point)
 		var _x = next_point.connect("body_entered", self, "connect_next_point", [], CONNECT_ONESHOT)
 
-func _on_timeout():
+func _fail():
 	if active:
+		Global.add_stat(get_stat() + "/failed")
 		player.game_ui.fail_game()
 		overlay.color_bronze(EXPIRED_COLOR)
 		overlay.color_silver(EXPIRED_COLOR)
@@ -127,6 +132,7 @@ func _on_race_end(body):
 	if !active or body != player:
 		return
 
+	Global.add_stat(get_stat() + "/won")
 	var last_award: int = Global.stat(get_stat() + "/award")
 	var best_time: float = Global.stat(get_stat() + "/best")
 	var race_time = bronze_seconds - timer.time_left
@@ -179,6 +185,10 @@ func get_stat():
 
 func has_required_items():
 	for c in required_items:
-		if !Global.count(c):
+		var stats = c.split("*")
+		var count := 1
+		if stats.size() > 1:
+			count = int(stats[1])
+		if !Global.count(stats[0]) >= count:
 			return false
 	return true

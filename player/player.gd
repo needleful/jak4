@@ -1048,19 +1048,22 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			anim.play("show")
 		show_specific_item(item)
 	elif item in WEAPONS:
-		gun.add_weapon(item)
-		gun.show_weapon()
-		show_ammo()
-		if !startup:
-			match item:
-				"wep_pistol":
-					show_prompt(["wep_1"], tr("Pistol"))
-				"wep_wave_shot":
-					show_prompt(["wep_2"], tr("Bubble Shot"))
-				"wep_grav_gun":
-					show_prompt(["wep_3"], tr("Gravity Cannon"))
-				"wep_time_gun":
-					show_prompt(["wep_4"], tr("Time Gun"))
+		if count > 0:
+			gun.add_weapon(item)
+			gun.show_weapon()
+			show_ammo()
+			if !startup:
+				match item:
+					"wep_pistol":
+						show_prompt(["wep_1"], tr("Pistol"))
+					"wep_wave_shot":
+						show_prompt(["wep_2"], tr("Bubble Shot"))
+					"wep_grav_gun":
+						show_prompt(["wep_3"], tr("Gravity Cannon"))
+					"wep_time_gun":
+						show_prompt(["wep_4"], tr("Time Gun"))
+		else:
+			gun.remove_weapon(item)
 	elif current_weapon == item:
 		$ui/gameing/weapon/ammo/ammo_label.text = str(count)
 		if current_weapon and !$ui/gameing/weapon.visible:

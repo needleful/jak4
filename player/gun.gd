@@ -217,6 +217,21 @@ func add_weapon(id):
 	call_deferred("disable")
 	var _x = Global.add_stat("weapon")
 
+func remove_weapon(id):
+	# TODO: laser and IK doesn't change
+	if id in enabled_wep and enabled_wep[id]:
+		enabled_wep[id] = false
+		if current_weapon == weapons[id]:
+			var new_wep = null
+			for k in enabled_wep.keys():
+				if enabled_wep[k]:
+					new_wep = weapons[k]
+					break
+			if new_wep:
+				set_current_weapon(new_wep)
+			else:
+				set_state(State.NoWeapon)
+
 func show_weapon():
 	call_deferred("set_state", State.Free, true)
 
