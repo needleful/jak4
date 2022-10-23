@@ -93,7 +93,8 @@ func start_race():
 		overlay.set_best(best)
 	
 	connect_next_point(null)
-	var _x = player.game_ui.connect("cancelled", self, "_fail")
+	if !player.game_ui.is_connected("cancelled", self, "_fail"):
+		var _x = player.game_ui.connect("cancelled", self, "_fail")
 	player.game_ui.set_overlay(overlay)
 	
 	active = true

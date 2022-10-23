@@ -1649,12 +1649,12 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	cam_rig.start_dialog()
 	lock()
 
-func _on_dialog_exited(state := PlayerBody.State.Fall):
+func _on_dialog_exited(p_state := PlayerBody.State.Fall):
 	Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
 	unlock()
-	set_state(state)
+	set_state(p_state)
 
 func _on_dialog_event(id: String, _source: Node):
 	match id:
