@@ -1042,7 +1042,11 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		l_count.text = str(count)
 		if change != 0:
 			var added: Label = get_node("ui/gameing/inventory/"+item+"_added")
-			added.text = "+ "+str(change) if change > 0 else "- "+str(abs(change))
+			var c = change
+			if added.is_visible_in_tree():
+				var old_added = int(added.text)
+				c = change + old_added
+			added.text = "+ "+str(c) if c > 0 else "- "+str(abs(c))
 			var anim = added.get_node("AnimationPlayer")
 			anim.stop()
 			anim.play("show")

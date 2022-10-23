@@ -44,6 +44,7 @@ onready var fog_defaults := {
 }
 
 var env_override := false
+var shaders_ready := false
 
 var time := 0.0
 var TIME_READY := 0.5
@@ -91,8 +92,9 @@ func _ready():
 
 func _process(delta):
 	time += delta
-	if time > TIME_READY and sun.visible != sun_enabled:
+	if !shaders_ready and time > TIME_READY:
 		sun.visible = sun_enabled
+		shaders_ready = true
 	var player_new_position = player.global_transform.origin
 	apply_fog(player_new_position.y)
 	if (chunk_last_position - player_new_position).length_squared() >= CHUNK_SQDIST_UPDATE:

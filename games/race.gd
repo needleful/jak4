@@ -28,7 +28,7 @@ const WON_COLOR := Color.aquamarine
 
 onready var race_start: Spatial = $race_start
 onready var race_end: Area = $race_end
-onready var timer: Timer = $Timer
+onready var timer: Timer
 
 var remaining_points := []
 var next_point : Area
@@ -41,7 +41,9 @@ var player: PlayerBody
 var overlay : Node
 
 func _ready():
-	if !timer:
+	if has_node("Timer"):
+		timer = $Timer
+	else:
 		timer = Timer.new()
 		add_child(timer)
 	timer.one_shot = true
@@ -112,7 +114,7 @@ func connect_next_point(_body):
 
 func _fail():
 	if active:
-		Global.add_stat(get_stat() + "/failed")
+		var _x = Global.add_stat(get_stat() + "/failed")
 		player.game_ui.fail_game()
 		overlay.color_bronze(EXPIRED_COLOR)
 		overlay.color_silver(EXPIRED_COLOR)
@@ -132,7 +134,7 @@ func _on_race_end(body):
 	if !active or body != player:
 		return
 
-	Global.add_stat(get_stat() + "/won")
+	var _x = Global.add_stat(get_stat() + "/won")
 	var last_award: int = Global.stat(get_stat() + "/award")
 	var best_time: float = Global.stat(get_stat() + "/best")
 	var race_time = bronze_seconds - timer.time_left
@@ -162,13 +164,13 @@ func _on_race_end(body):
 	Global.set_stat(get_stat() +"/award", award)
 	
 	if award >= Award.Bronze and last_award < Award.Bronze:
-		var _x = Global.add_item("bug", bronze_reward)
+		_x = Global.add_item("bug", bronze_reward)
 		_x = Global.add_item("bronze_medal")
 	if award >= Award.Silver and last_award < Award.Silver:
-		var _x = Global.add_item("bug", silver_reward)
+		_x = Global.add_item("bug", silver_reward)
 		_x = Global.add_item("silver_medal")
 	if award >= Award.Gold and last_award < Award.Gold:
-		var _x = Global.add_item("bug", gold_reward)
+		_x = Global.add_item("bug", gold_reward)
 		_x = Global.add_item("gold_medal")
 		if gold_gives_coat:
 			var c = coat_scene.instance()
