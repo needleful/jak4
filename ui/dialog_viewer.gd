@@ -1,6 +1,6 @@
 extends Control
 
-signal exited
+signal exited(state)
 signal event(id)
 signal event_with_source(id, source)
 
@@ -418,10 +418,10 @@ func skip():
 func noskip():
 	return RESULT_NOSKIP
 
-func exit():
+func exit(state := PlayerBody.State.Fall):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
-	emit_signal("exited")
+	emit_signal("exited", state)
 	set_process_input(false)
 	return RESULT_END
 

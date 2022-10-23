@@ -16,6 +16,7 @@ export(int) var gold_reward := 10
 export(bool) var gold_gives_coat := true
 export(Coat.Rarity) var min_rarity := Coat.Rarity.Uncommon
 export(Coat.Rarity) var max_rarity := Coat.Rarity.Rare
+export(bool) var cross_chunk := false
 export(String) var friendly_id := ""
 export(bool) var hover_scooter := false
 export(Array, String) var required_items := []
@@ -41,6 +42,8 @@ var player: PlayerBody
 var overlay : Node
 
 func _ready():
+	if hover_scooter and !"hover_scooter" in required_items:
+		required_items.append("hover_scooter")
 	if has_node("Timer"):
 		timer = $Timer
 	else:
@@ -69,10 +72,7 @@ func _process(_delta):
 
 func start_race():
 	player = Global.get_player()
-	if hover_scooter and Global.count("hover_scooter"):
-		player.call_deferred("set_state", player.State.Hover)
-	else:
-		player.can_use_hover_scooter = false
+	player.can_use_hover_scooter = hover_scooter
 	var res = player.game_ui.start_game("Time")
 	if !res:
 		return

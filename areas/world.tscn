@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -8,8 +8,12 @@
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=6]
 [ext_resource path="res://areas/default_sun.gd" type="Script" id=7]
 [ext_resource path="res://material/env/terrain_main.material" type="Material" id=8]
+[ext_resource path="res://games/race.gd" type="Script" id=10]
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=11]
 [ext_resource path="res://audio/env/amb_wind.ogg" type="AudioStream" id=12]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=14]
+[ext_resource path="res://dialog/side_content/race/race_generic.dialog" type="Resource" id=15]
 [ext_resource path="res://dialog/border.dialog" type="Resource" id=17]
 [ext_resource path="res://audio/wind_controller.gd" type="Script" id=18]
 [ext_resource path="res://entities/one_time/tutorial_prompt.gd" type="Script" id=19]
@@ -63,6 +67,9 @@ size = 108
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
+
+[sub_resource type="SphereShape" id=16]
+radius = 3.55563
 
 [sub_resource type="BoxShape" id=5]
 extents = Vector3( 14, 1279.37, 3174 )
@@ -1442,7 +1449,36 @@ script = ExtResource( 1 )
 wait_time = 3.0
 one_shot = true
 
-[node name="border" type="Area" parent="." index="212"]
+[node name="race_106" type="Spatial" parent="." index="212"]
+transform = Transform( 0.31814, 0, 0.948044, 0, 1, 0, -0.948044, 0, 0.31814, 1215.29, 525.107, -2122.41 )
+script = ExtResource( 10 )
+bronze_seconds = 180.0
+silver_seconds = 90.0
+gold_seconds = 48.0
+min_rarity = 2
+max_rarity = 4
+hover_scooter = true
+
+[node name="race_start" type="Spatial" parent="race_106" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -2.14331, 0.415039, 1.7088 )
+
+[node name="npc_race" parent="race_106" index="1" instance=ExtResource( 13 )]
+transform = Transform( 0.706276, 0, 0.707937, 0, 1, 0, -0.707937, 0, 0.706276, 0, -0.0160522, 0 )
+dialog = ExtResource( 15 )
+visual_name = "Elite Racer"
+
+[node name="race_end" type="Area" parent="race_106" index="2"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -84.3188, -333.984, 1760.6 )
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="race_106/race_end" index="0"]
+shape = SubResource( 16 )
+
+[node name="flag" parent="race_106/race_end" index="1" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.872406, 0 )
+
+[node name="border" type="Area" parent="." index="213"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -1468,10 +1504,10 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="player" parent="." index="213" instance=ExtResource( 5 )]
+[node name="player" parent="." index="214" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.45, 746 )
 
-[node name="audio_wind" type="AudioStreamPlayer" parent="." index="214" groups=["distance_activated"]]
+[node name="audio_wind" type="AudioStreamPlayer" parent="." index="215" groups=["distance_activated"]]
 pause_mode = 2
 stream = ExtResource( 12 )
 volume_db = -80.0
@@ -1479,39 +1515,39 @@ autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="mapcam" type="Camera" parent="." index="215"]
+[node name="mapcam" type="Camera" parent="." index="216"]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="216"]
+[node name="StaticBody" type="StaticBody" parent="." index="217"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="217"]
+[node name="StaticBody2" type="StaticBody" parent="." index="218"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8707, 0, 0 )
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="218"]
+[node name="StaticBody3" type="StaticBody" parent="." index="219"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="219"]
+[node name="StaticBody4" type="StaticBody" parent="." index="220"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 7 )
 
-[node name="Area" type="Area" parent="." index="220"]
+[node name="Area" type="Area" parent="." index="221"]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource( 19 )
@@ -1519,7 +1555,7 @@ script = ExtResource( 19 )
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 shape = SubResource( 14 )
 
-[node name="loading" type="Label" parent="." index="221"]
+[node name="loading" type="Label" parent="." index="222"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
