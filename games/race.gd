@@ -72,6 +72,9 @@ func _process(_delta):
 
 func start_race():
 	player = Global.get_player()
+	Global.save_checkpoint(race_start.global_transform.origin)
+	player.respawn()
+	
 	player.can_use_hover_scooter = hover_scooter
 	var res = player.game_ui.start_game("Time")
 	if !res:
@@ -81,9 +84,6 @@ func start_race():
 		if has_node(point):
 			remaining_points.append(get_node(point))
 
-	Global.save_checkpoint(race_start.global_transform.origin)
-	player.teleport_to(race_start.global_transform)
-	
 	overlay = race_overlay.instance()
 	overlay.gold = gold_seconds
 	overlay.silver = silver_seconds

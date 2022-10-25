@@ -1,4 +1,4 @@
-extends MeshInstance
+extends Spatial
 
 export(float, 0, 3) var min_scale := 0.8
 export(float, 0, 3) var max_scale := 1.2

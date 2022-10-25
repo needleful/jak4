@@ -16,7 +16,6 @@ const TIME_FLINCH := 0.75
 var state_timer := 0.0
 var quit_timer := 0.0
 var orb_timer := 0.0
-onready var awareness = $awareness
 
 func _init():
 	can_fly = true

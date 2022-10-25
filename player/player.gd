@@ -23,7 +23,7 @@ const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
 const MIN_DOT_CLIMB_MOVEMENT := -0.7
 const MIN_DOT_CLIMB_AIR := 0.1
-const MIN_DOT_LEDGE := 0.2
+const MIN_DOT_LEDGE := 0.1
 const MIN_DOT_CEILING := -0.7
 
 const ROLL_MAX_VELOCITY_V := 4.0
@@ -677,8 +677,8 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
-			elif after(TIME_LEDGE_LEAVE, intent_dot < 0 or empty(ledge_area)):
-				next_state = State.LedgeFall
+			#elif after(TIME_LEDGE_LEAVE, intent_dot < 0 or empty(ledge_area)):
+			#	next_state = State.LedgeFall
 		State.LedgeFall:
 			if can_air_spin and pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -1449,38 +1449,26 @@ func can_ledge_grab() -> bool:
 	if ledgeCastCeiling.is_colliding():
 		return false
 	
-	var left:bool = (
-		ledgeCastLeft.is_colliding()
-		and ledgeCastLeft.get_collision_normal().y > MIN_DOT_LEDGE)
-	
-	var right:bool = (
-		ledgeCastRight.is_colliding()
-		and ledgeCastRight.get_collision_normal().y > MIN_DOT_LEDGE)
-	var center:bool = (
-		ledgeCastCenter.is_colliding()
-		and ledgeCastCenter.get_collision_normal().y > MIN_DOT_LEDGE)
+	var left:bool = check_cast(ledgeCastLeft)
+	var right:bool = check_cast(ledgeCastRight)
+	var center:bool = check_cast(ledgeCastCenter)
 	# debug
 	if true:
-		if !ledgeCastCenter.is_colliding():
-			$jackie/debug_center.material_override.albedo_color = Color.red
-		elif ledgeCastCenter.get_collision_normal().y <= MIN_DOT_LEDGE:
-			$jackie/debug_center.material_override.albedo_color = Color.orange
-		else:
-			$jackie/debug_center.material_override.albedo_color = Color.green
-		if !ledgeCastLeft.is_colliding():
-			$jackie/debug_left.material_override.albedo_color = Color.red
-		elif ledgeCastLeft.get_collision_normal().y <= MIN_DOT_LEDGE:
-			$jackie/debug_left.material_override.albedo_color = Color.orange
-		else:
-			$jackie/debug_left.material_override.albedo_color = Color.green
-		if !ledgeCastRight.is_colliding():
-			$jackie/debug_right.material_override.albedo_color = Color.red
-		elif ledgeCastRight.get_collision_normal().y <= MIN_DOT_LEDGE:
-			$jackie/debug_right.material_override.albedo_color = Color.orange
-		else:
-			$jackie/debug_right.material_override.albedo_color = Color.green
-	
-	return center or (left or right)
+		debug_cast(ledgeCastCenter, $jackie/debug_center)
+		debug_cast(ledgeCastLeft, $jackie/debug_left)
+		debug_cast(ledgeCastRight, $jackie/debug_right)
+	return center or left or right
+
+func check_cast(cast: RayCast):
+	return cast.is_colliding() and cast.get_collision_normal().y >= MIN_DOT_LEDGE
+
+func debug_cast(cast: RayCast, mesh: MeshInstance):
+	if !cast.is_colliding():
+		mesh.material_override.albedo_color = Color.red
+	elif cast.get_collision_normal().y < MIN_DOT_LEDGE:
+		mesh.material_override.albedo_color = Color.orange
+	else:
+		mesh.material_override.albedo_color = Color.green
 
 func snap_to_ledge(ledgeCast):
 	var change = ledgeCast.get_collision_point() - ledgeRef.global_transform.origin
@@ -1634,6 +1622,9 @@ func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $jackie/flag_ref.global_transform)
 	Global.save_checkpoint(global_transform.origin)
+
+func can_save():
+	return !game_ui.in_game
 
 func can_talk():
 	return state == State.Ground

@@ -27,6 +27,7 @@ const TIME_MIN_IDLE := 0.15
 var damaged_speed := 0.5
 var gravity_stun_speed := 0.5
 var square_distance_activation := 2400.0
+onready var awareness := $awareness
 
 enum AI {
 	Idle,
@@ -109,6 +110,10 @@ func _ready():
 		p = p.get_parent()
 	if !source_chunk:
 		remove_from_group("enemy")
+	if has_node("custom_awareness"):
+		awareness = $custom_awareness as Area
+		if !awareness:
+			print_debug("ERROR: Area expected for ", $custom_awareness.get_path())
 
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)

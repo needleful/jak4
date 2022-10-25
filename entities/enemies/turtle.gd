@@ -20,7 +20,7 @@ func _physics_process(delta):
 	match ai:
 		AI.Idle:
 			if state_timer > TIME_MIN_IDLE:
-				for b in $awareness.get_overlapping_bodies():
+				for b in awareness.get_overlapping_bodies():
 					if b.is_in_group("player"):
 						target = b
 						set_state(AI.Chasing)

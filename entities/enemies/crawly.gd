@@ -38,14 +38,8 @@ var ground_normal := Vector3.UP
 
 onready var anim := $AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
-onready var awareness := $awareness
 onready var ref_target = $ref_target
 
-func _ready():
-	if has_node("custom_awareness"):
-		awareness = $custom_awareness as Area
-		if !awareness:
-			print_debug("ERROR: Area expected for ", $custom_awareness.get_path())
 
 func _physics_process(delta):
 	state_timer += delta

@@ -4,7 +4,6 @@ export(float) var run_speed = 6.5
 export(float) var turn_speed_radians = 40.0
 export(float) var acceleration := 60.0
 
-onready var awareness := $awareness
 onready var anim := $AnimationTree
 onready var playback:AnimationNodeStateMachinePlayback = anim["parameters/StateMachine/playback"]
 onready var chopper_hitbox:Area = $Armature/Skeleton/chopper/Area
@@ -20,7 +19,7 @@ func _physics_process(delta):
 	match ai:
 		AI.Idle:
 			if state_timer > TIME_MIN_IDLE:
-				for b in $awareness.get_overlapping_bodies():
+				for b in awareness.get_overlapping_bodies():
 					if b.is_in_group("player"):
 						target = b
 						set_state(AI.Chasing)

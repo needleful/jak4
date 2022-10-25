@@ -35,13 +35,13 @@ var grounded := true
 onready var laser := $laser
 onready var laser_geo := $laser/geomentry
 onready var aim_cast := $laser/aim_cast
-onready var awareness := $awareness
 onready var groundArea := $ground_area
 onready var clawHitbox := $claw_hitbox
 onready var anim:AnimationNodeStateMachinePlayback = $AnimationTree["parameters/StateMachine/playback"]
 onready var anim_tree := $AnimationTree
 
 func _ready():
+	reset_aim()
 	aim_cast.add_excluded_object(self.get_rid())
 
 func _physics_process(delta):
@@ -53,7 +53,7 @@ func _physics_process(delta):
 	match ai:
 		AI.Idle:
 			if state_timer > TIME_MIN_IDLE:
-				for b in $awareness.get_overlapping_bodies():
+				for b in awareness.get_overlapping_bodies():
 					if b.is_in_group("player"):
 						target = b
 						set_state(AI.Chasing)
@@ -137,6 +137,10 @@ func _physics_process(delta):
 		AI.Dead:
 			pass
 	aim_cast.update()
+
+func reset_aim():
+	laser.rotation_degrees = Vector3.ZERO
+	anim_tree["parameters/StateMachine/Aim/blend_position"] = Vector2.ZERO
 
 func aim(delta: float, speed: float):
 	if target:
