@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://_glb/chunks/chunk034.glb" type="PackedScene" id=1]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
+[ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/control/gravity_platform.gd" type="Script" id=4]
+[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=5]
+[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=6]
+[ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/env/ancient/target_flower.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=10]
+
+[node name="chunk034" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="gravity_platform-kine" parent="gravity_challenge1" index="0"]
+script = ExtResource( 4 )
+max_rotation_speed = Vector3( 0, 0, 0 )
+
+[node name="mesh" parent="gravity_challenge1/gravity_platform-kine" index="0"]
+material/0 = ExtResource( 6 )
+material/1 = ExtResource( 5 )
+
+[node name="platform1" parent="gravity_challenge1" index="1"]
+material/0 = ExtResource( 6 )
+
+[node name="zone_outside" type="MultiMeshSystem" parent="." index="1"]
+transform = Transform( 0.984032, 0, 0.177992, 0, 1, 0, -0.177992, 0, 0.984032, -136.434, 1336.98, -238.514 )
+
+[node name="random_ammo_pickup" parent="zone_outside" index="0" instance=ExtResource( 7 )]
+transform = Transform( 0.984032, 0, -0.177992, 0, 1, 0, 0.177992, 0, 0.984032, 2.29862, -3.9762, 7.17201 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="random_ammo_pickup2" parent="zone_outside" index="1" instance=ExtResource( 7 )]
+transform = Transform( 0.984032, 0, -0.177992, 0, 1, 0, 0.177992, 0, 0.984032, 1.7149, -3.9762, 7.68527 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="random_ammo_pickup3" parent="zone_outside" index="2" instance=ExtResource( 7 )]
+transform = Transform( 0.984032, 0, -0.177992, 0, 1, 0, 0.177992, 0, 0.984032, 1.2319, -3.9762, 8.19136 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="fountainA_large" parent="zone_outside" index="3" instance=ExtResource( 3 )]
+transform = Transform( 0.984032, 0, -0.177992, 0, 1, 0, 0.177992, 0, 0.984032, 1.87244, -4.05005, 2.42969 )
+
+[node name="fountainA_large2" parent="zone_outside" index="4" instance=ExtResource( 3 )]
+transform = Transform( 0.984032, 0, -0.177992, 0, 1, 0, 0.177992, 0, 0.984032, 5.45366, 78.4799, 6.20901 )
+
+[node name="target_flower" parent="." index="2" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -85.3741, 1442.6, -244.577 )
+
+[node name="target_flower4" parent="." index="3" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.6219, 1477.98, -227.328 )
+open = false
+
+[node name="target_flower2" parent="." index="4" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -107.092, 1421.49, -220.258 )
+
+[node name="crawly" parent="." index="5" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -85.2631, 1443.3, -244.54 )
+reset_on_player_death = true
+
+[node name="rock_kinematic" parent="." index="7" instance=ExtResource( 10 )]
+transform = Transform( 0.282735, -0.710317, -0.644601, 0.957728, 0.17186, 0.230699, -0.053088, -0.682579, 0.728881, -67.8671, 1530.55, -217.819 )

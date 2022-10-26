@@ -33,7 +33,8 @@ func _physics_process(delta):
 				var _col = move_and_collide(velocity*delta)
 			else:
 				global_translate(velocity*delta)
-			global_rotate(axis, delta*rotate_speed)
+			if rotate_speed != 0:
+				global_rotate(axis, delta*rotate_speed)
 			grav_time += delta
 			if grav_time > Global.gravity_stun_time:
 				state = State.Falling
