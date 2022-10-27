@@ -23,7 +23,7 @@ var speed = 1.0 setget set_speed
 func _init():
 	charge_fire = true
 	infinite_ammo = false
-	time_firing = 0.2
+	time_firing = 0.3
 	locks_on = false
 
 func _ready():
@@ -46,7 +46,7 @@ func can_charge():
 	return time_since_fired > time_firing
 
 func charge():
-	if Global.count("wave_shot") <= 0:
+	if !can_charge() or Global.count("wave_shot") <= 0:
 		return
 	$ChargeSound.play()
 	$AnimationPlayer.stop()

@@ -14,7 +14,7 @@ enum State {
 
 var state = State.Inactive
 var grav_time := 0.0
-var velocity := Vector3.ZERO
+var velocity := 0.0
 var axis := Vector3.ZERO
 var rotate_speed := 0.0
 onready var original_y = global_transform.origin.y
@@ -27,23 +27,23 @@ func _physics_process(delta):
 	match state:
 		State.GravityStunned:
 			velocity *= clamp(1.0 - delta, 0.1, 0.995)
-			velocity += Vector3.UP*delta*Global.gravity_stun_velocity
-			var col = move_and_collide(velocity*delta, true, true, true)
+			velocity += delta*Global.gravity_stun_velocity
+			var col = move_and_collide(Vector3.UP*velocity*delta, true, true, true)
 			if col and !col.collider.is_in_group("push"):
-				var _col = move_and_collide(velocity*delta)
+				var _col = move_and_collide(Vector3.UP*velocity*delta)
 			else:
-				global_translate(velocity*delta)
+				global_translate(Vector3.UP*velocity*delta)
 			if rotate_speed != 0:
 				global_rotate(axis, delta*rotate_speed)
 			grav_time += delta
 			if grav_time > Global.gravity_stun_time:
 				state = State.Falling
 		State.Falling:
-			velocity += Vector3.DOWN*9.8*delta
-			global_translate(velocity*delta)
+			velocity -= 9.8*delta
+			global_translate(Vector3.UP*velocity*delta)
 			if global_transform.origin.y < original_y:
 				set_physics_process(false)
-				velocity = Vector3.ZERO
+				velocity = 0
 	
 func gravity_stun(_damage):
 	var angular_speed: Vector3 = max_rotation_speed*Vector3(randf(),randf(),randf())
@@ -53,10 +53,11 @@ func gravity_stun(_damage):
 	state = State.GravityStunned
 	grav_time = 0.0
 	set_physics_process(true)
-	velocity = Vector3.UP*initial_velocity
+	velocity = initial_velocity
 
-func take_damage(damage, dir, _source: Node):
-	velocity += damage*dir*damage_speed
+func take_damage(_damage, _dir, _source: Node):
+	pass
+	#velocity += damage*damage_speed
 
 func _on_damage_area_body_entered(body):
 	if state != State.Falling or body in damaged_bodies or !body.has_method("take_damage"):
