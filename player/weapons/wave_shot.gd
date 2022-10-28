@@ -86,6 +86,7 @@ func fire():
 func stow():
 	$ChargeSound.stop()
 	$AnimationPlayer.stop()
+	$Particles.emitting = false
 	charging = false
 	.stow()
 

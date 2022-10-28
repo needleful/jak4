@@ -11,22 +11,21 @@
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=9]
 [ext_resource path="res://material/weapons/wave_shot_albedo.png" type="Texture" id=10]
 
-[sub_resource type="Curve" id=10]
-_data = [ Vector2( 0, 0 ), 0.0, 4.44787, 0, 0, Vector2( 1, 0 ), -3.76331, 0.0, 0, 0 ]
+[sub_resource type="Curve" id=25]
+_data = [ Vector2( 0, 0.157955 ), 0.0, 4.31042, 0, 0, Vector2( 1, 0.0943182 ), -3.46266, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=11]
+[sub_resource type="CurveTexture" id=26]
 width = 64
-curve = SubResource( 10 )
+curve = SubResource( 25 )
 
-[sub_resource type="ParticlesMaterial" id=7]
-spread = 90.0
-flatness = 1.0
-gravity = Vector3( 0, 0.2, 0 )
-initial_velocity = 0.5
+[sub_resource type="ParticlesMaterial" id=27]
+gravity = Vector3( 0, 1, 0 )
+initial_velocity = 0.1
 initial_velocity_random = 1.0
-scale = 0.04
-scale_random = 0.05
-scale_curve = SubResource( 11 )
+radial_accel = -1.0
+tangential_accel = 1.0
+scale = 0.05
+scale_curve = SubResource( 26 )
 
 [sub_resource type="ShaderMaterial" id=12]
 resource_local_to_scene = true
@@ -36,8 +35,8 @@ shader_param/main_texture = ExtResource( 4 )
 
 [sub_resource type="SphereMesh" id=15]
 material = SubResource( 12 )
-radial_segments = 32
-rings = 16
+radial_segments = 12
+rings = 6
 
 [sub_resource type="ShaderMaterial" id=24]
 shader = ExtResource( 9 )
@@ -157,8 +156,9 @@ script = ExtResource( 3 )
 [node name="Particles" type="Particles" parent="." index="0"]
 transform = Transform( 0.0469147, 0, 0.998899, 0, 1, 0, -0.998899, 0, 0.0469147, 0.000493288, 0.104658, 0.036413 )
 emitting = false
+lifetime = 0.6
 local_coords = false
-process_material = SubResource( 7 )
+process_material = SubResource( 27 )
 draw_pass_1 = SubResource( 15 )
 
 [node name="wave_shot" parent="Armature/Skeleton" index="0"]

@@ -3,6 +3,7 @@ extends KinematicBody
 export(float) var initial_velocity = 10.0
 export(float) var damage_speed := 0.1
 export(float) var damage_on_hit := 10.0
+export(bool) var elevator := false
 export(Vector3) var max_rotation_speed := Vector3(0.3, 0.3, 0.3)
 
 enum State {
@@ -29,6 +30,8 @@ func _physics_process(delta):
 			velocity *= clamp(1.0 - delta, 0.1, 0.995)
 			velocity += delta*Global.gravity_stun_velocity
 			var col = move_and_collide(Vector3.UP*velocity*delta, true, true, true)
+			if col and !elevator:
+				velocity *= 0.9
 			if col and !col.collider.is_in_group("push"):
 				var _col = move_and_collide(Vector3.UP*velocity*delta)
 			else:

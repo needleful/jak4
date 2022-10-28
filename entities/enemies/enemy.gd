@@ -222,7 +222,6 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 		return
 	
 	if shielded:
-		
 		var true_dir:Vector3
 		if source is Spatial:
 			true_dir = (global_transform.origin - source.global_transform.origin).normalized()
@@ -232,6 +231,9 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 		if d < min_dot_shielded_damage:
 			# TODO: shield blocking state here?
 			return
+	if ai == AI.Idle:
+		# stealth attack: double damage
+		damage *= 2
 	health -= damage
 	
 	var dead := health <= 0

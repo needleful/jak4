@@ -24,6 +24,7 @@ const MIN_DOT_CLIMB := -0.2
 const MIN_DOT_CLIMB_MOVEMENT := -0.7
 const MIN_DOT_CLIMB_AIR := 0.1
 const MIN_DOT_LEDGE := 0.2
+const MIN_DOT_LEDGE_SLIDE := 0.7
 const MIN_DOT_CEILING := -0.7
 
 const ROLL_MAX_VELOCITY_V := 4.0
@@ -494,7 +495,7 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB):
 				next_state = State.Fall
-			elif can_ledge_grab():
+			elif can_ledge_grab(MIN_DOT_LEDGE_SLIDE):
 				next_state = State.LedgeHang
 		State.Dash:
 			if pressed("combat_lunge"):
@@ -894,10 +895,10 @@ func _physics_process(delta):
 			mesh.blend_run_animation((velocity - av)/SPEED_CROUCH)
 			rotate_to_velocity(desired_velocity)
 		State.Climb:
-			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
+			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
-			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, best_normal)
-			mesh.blend_climb_animation((velocity - av)/SPEED_CLIMB, best_normal)
+			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, ground_normal)
+			mesh.blend_climb_animation(desired_velocity, best_normal)
 			rotate_mesh(-best_normal)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
@@ -985,7 +986,7 @@ func _physics_process(delta):
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
-
+	$ui/gameing/debug/stats/a4.text = "Gr: " + str(ground_normal)
 	if after(TIME_ITEM_CHOOSE,
 		equipment_inventory.size() > 1 and holding("choose_item"),
 		TIMERS_MAX
@@ -1229,11 +1230,6 @@ func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, acc
 	]
 	var gravity = GRAVITY
 	if ground_normal != Vector3.ZERO:
-		$ui/gameing/debug/stats/a4.text = "Gr: (%f, %f, %f)" % [
-			ground_normal.x,
-			ground_normal.y,
-			ground_normal.z
-		]
 		var axis = Vector3.UP.cross(ground_normal).normalized()
 		var angle = Vector3.UP.angle_to(ground_normal)
 		if axis.is_normalized():
@@ -1301,7 +1297,7 @@ func accel_climb(delta: float, desired_velocity: Vector3, applied_ground: Vector
 	$debug_climb/mesh/dog.transform.origin.y = desired_velocity.length()/10
 	desired_velocity += applied_ground
 	velocity = velocity.move_toward(desired_velocity, ACCEL_CLIMB) + delta*gravity
-	velocity = move(velocity)
+	velocity = move(velocity - wall_normal)
 
 func accel_air(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel: float, gravity := GRAVITY):
 	var hvel := Vector3(velocity.x, 0, velocity.z).move_toward(desired_velocity + applied_ground, accel*delta)
@@ -1451,32 +1447,35 @@ func can_climb() -> bool:
 		and (!best_floor or !best_floor.is_in_group("dont_stand"))
 	)
 
-func can_ledge_grab() -> bool:
+func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	if crouch_head.get_overlapping_bodies().size() > 0:
 		return false
 	if ledgeCastCeiling.is_colliding():
 		return false
 	
-	var left:bool = check_cast(ledgeCastLeft)
-	var right:bool = check_cast(ledgeCastRight)
-	var center:bool = check_cast(ledgeCastCenter)
+	var left:bool = check_cast(ledgeCastLeft, min_dot)
+	var right:bool = check_cast(ledgeCastRight, min_dot)
+	var center:bool = check_cast(ledgeCastCenter, min_dot)
 	# debug
 	if true:
-		debug_cast(ledgeCastCenter, $jackie/debug_center)
-		debug_cast(ledgeCastLeft, $jackie/debug_left)
-		debug_cast(ledgeCastRight, $jackie/debug_right)
+		debug_cast(ledgeCastCenter, min_dot, $jackie/debug_center)
+		debug_cast(ledgeCastLeft, min_dot, $jackie/debug_left)
+		debug_cast(ledgeCastRight, min_dot, $jackie/debug_right)
 	return center or left or right
 
-func check_cast(cast: RayCast):
-	return cast.is_colliding() and cast.get_collision_normal().y >= MIN_DOT_LEDGE
+func check_cast(cast: RayCast, min_dot: float):
+	return cast.is_colliding() and cast.get_collision_normal().y >= min_dot
 
-func debug_cast(cast: RayCast, meshi: MeshInstance):
+func debug_cast(cast: RayCast, min_dot: float, meshi: MeshInstance):
 	if !cast.is_colliding():
 		meshi.material_override.albedo_color = Color.red
-	elif cast.get_collision_normal().y < MIN_DOT_LEDGE:
+	elif cast.get_collision_normal().y < min_dot:
 		meshi.material_override.albedo_color = Color.orange
 	else:
 		meshi.material_override.albedo_color = Color.green
+
+func is_sitting():
+	return state == State.Sitting
 
 func snap_to_ledge(ledgeCast):
 	var change = ledgeCast.get_collision_point() - ledgeRef.global_transform.origin

@@ -10,5 +10,4 @@ func fire() -> bool:
 	return false
 
 func stow():
-	if is_inside_tree():
-		get_parent().remove_child(self)
+	hide()

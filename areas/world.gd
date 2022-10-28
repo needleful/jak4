@@ -238,8 +238,10 @@ func get_wind_audio():
 func set_sun_enabled(enabled:bool):
 	sun_enabled = enabled
 	if time < TIME_READY:
-		sun.visible = enabled
+		sun.visible = !enabled
+		sun.light_energy = 1.0 if sun.visible else 0.0
 		return
+		
 	sun_tween.remove_all()
 	sun_tween.interpolate_property(sun, "light_energy",
 		sun.light_energy,

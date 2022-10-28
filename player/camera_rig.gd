@@ -19,6 +19,8 @@ const H_DIFF_BOUND := 2.5
 const LEDGE_GRAB_RAISE := 1.0
 var raise := 0.0
 
+const SIT_DROP := 0.75
+
 const SPRING_DEFAULT := 2.5
 const SPRING_AIM := 1.5
 const SPRING_DIALOG := 1.5
@@ -67,6 +69,8 @@ func _physics_process(delta):
 	
 	if player.should_raise_camera():
 		raise = lerp(raise, LEDGE_GRAB_RAISE, 0.05)
+	elif player.is_sitting():
+		raise = lerp(raise, -SIT_DROP, 0.05)
 	else:
 		raise = lerp(raise, 0.0, 0.05)
 	target.y += raise

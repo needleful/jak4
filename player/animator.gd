@@ -104,8 +104,6 @@ func blend_run_animation(movement: Vector3):
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
-	if velocity.length_squared() < 0.05:
-		velocity = Vector3.ZERO
 	var l = velocity.length()
 	anim["parameters/WholeBody/Climb/blend_position"] = Vector2(0,l)
 
