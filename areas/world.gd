@@ -239,7 +239,7 @@ func set_sun_enabled(enabled:bool):
 	sun_enabled = enabled
 	if time < TIME_READY:
 		sun.visible = !enabled
-		sun.light_energy = 1.0 if sun.visible else 0.0
+		sun.light_energy = 1.0 if !enabled else 0.0
 		return
 		
 	sun_tween.remove_all()
@@ -253,6 +253,8 @@ func set_sun_enabled(enabled:bool):
 		sun_tween.interpolate_callback(sun, 
 			FOG_TWEEN_TIME, "hide")
 	elif enabled:
+		if !sun.visible:
+			sun.light_energy = 0
 		sun.show()
 	sun_tween.start()
 

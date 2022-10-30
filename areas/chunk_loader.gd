@@ -107,7 +107,7 @@ func queue_unload(chunk: Spatial):
 	set_active(chunk.name, false)
 	if chunk.has_node("dynamic_content"):
 		print("Queuing %s to free" % chunk.name)
-		chunk.get_node("dynamic_content").queue_free()
+		chunk.get_node("dynamic_content").call_deferred("free")
 	if !chunk.has_node("lowres"):
 		var c = _get_content(_lowres, chunk.name)
 		if c is Node:

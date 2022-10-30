@@ -682,8 +682,13 @@ func _physics_process(delta):
 				next_state = State.Ground
 			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
-			elif after(TIME_LEDGE_LEAVE, intent_dot < 0) or after(TIME_LEDGE_LEAVE, empty(ledge_area), 1):
+			elif after(TIME_LEDGE_LEAVE, intent_dot < 0):
+				print("Exited the ledge")
 				next_state = State.LedgeFall
+			elif after(TIME_LEDGE_LEAVE, empty(ledge_area), 1):
+				print("No ledge!")
+				next_state = State.LedgeFall
+				
 		State.LedgeFall:
 			if can_air_spin and pressed("combat_spin"):
 				next_state = State.AirSpinKick
