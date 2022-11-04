@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=2]
+[gd_scene load_steps=83 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -30,6 +30,7 @@
 [ext_resource path="res://ui/icons/item_flag.png" type="Texture" id=28]
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
 [ext_resource path="res://ui/equipment.gd" type="Script" id=30]
+[ext_resource path="res://ui/save_load.tscn" type="PackedScene" id=31]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -756,6 +757,12 @@ collision_layer = 10
 moving_platform_exclude_mask = 65536
 script = ExtResource( 1 )
 flag = ExtResource( 11 )
+
+[node name="water_cast" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+enabled = true
+cast_to = Vector3( 0, -2, 0 )
+collision_mask = 8192
 
 [node name="jackie" parent="." instance=ExtResource( 3 )]
 time_scale_response = true
@@ -1648,7 +1655,6 @@ rect_min_size = Vector2( 500, 0 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1678,6 +1684,9 @@ visible = false
 time_scale_response = false
 visible = false
 margin_top = 32.0
+
+[node name="Save & Load" parent="ui/status_menu/tabs" instance=ExtResource( 31 )]
+visible = false
 
 [node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
 time_scale_response = false
@@ -1718,8 +1727,8 @@ alignment = 2
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 174.0
-margin_right = 302.0
+margin_left = 110.0
+margin_right = 238.0
 margin_bottom = 128.0
 action = "ui_page_up"
 

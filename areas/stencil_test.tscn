@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="Shader" id=8]
+code = "shader_type spatial;
+
+
+varying vec3 world_position;
+
+void vertex() {
+	world_position = (WORLD_MATRIX * vec4(VERTEX,1)).xyz;
+}
+
+void fragment() {
+	if(world_position.y < 0.0) {
+		discard;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 8 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type spatial;
+render_mode unshaded, cull_disabled, depth_test_disable;
+
+stencil front {
+	test always;
+	pass decr_wrap;
+}
+stencil back {
+	test always;
+	pass incr_wrap;
+}
+
+varying vec3 world_position;
+
+void vertex() {
+	world_position = (WORLD_MATRIX * vec4(VERTEX,1)).xyz;
+}
+
+void fragment() {
+	if(world_position.y < 0.0) {
+		discard;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+render_priority = -1
+shader = SubResource( 4 )
+
+[sub_resource type="Shader" id=6]
+code = "shader_type spatial;
+render_mode diffuse_toon, depth_draw_alpha_prepass;
+
+stencil {
+	value 0;
+	test less;
+}
+
+uniform vec4 albedo : hint_color;
+uniform float specular;
+
+void fragment() {
+	ALBEDO = albedo.rgb;
+	SPECULAR = specular;
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/albedo = Color( 0.521569, 0.25098, 0.25098, 1 )
+shader_param/specular = null
+
+[node name="stencil_test" type="Spatial"]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.533215, 0, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 3 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="MeshInstance"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 5 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="MeshInstance"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 7 )

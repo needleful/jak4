@@ -1,4 +1,5 @@
 extends KinematicBody
+class_name GravityPlatform
 
 export(float) var initial_velocity = 10.0
 export(float) var damage_speed := 0.1
@@ -30,7 +31,7 @@ func _physics_process(delta):
 			velocity *= clamp(1.0 - delta, 0.1, 0.995)
 			velocity += delta*Global.gravity_stun_velocity
 			var col = move_and_collide(Vector3.UP*velocity*delta, true, true, true)
-			if col and !elevator:
+			if col and !elevator and !col.collider.is_in_group("push_always"):
 				velocity *= 0.9
 			if col and !col.collider.is_in_group("push"):
 				var _col = move_and_collide(Vector3.UP*velocity*delta)

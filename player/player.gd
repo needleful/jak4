@@ -18,6 +18,8 @@ const SPEED_BONK := 5.0
 const SPEED_DASH := 15.0
 const SPEED_DASH_V := 2.0
 
+const SPEED_WADE := 4.0
+
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
@@ -43,6 +45,7 @@ const JUMP_VEL_ROLL_FORWARD := 16.5
 const JUMP_VEL_HIGH := 15.0
 const JUMP_VEL_WALL := 5.0
 const JUMP_VEL_WALL_V := 8.0
+const JUMP_VEL_WATER := 5.0
 
 const MIN_SPEED_ROLL := 3.0
 
@@ -59,6 +62,7 @@ const ACCEL_SLIDE := 10.0
 const ACCEL_ROLL := 0.5
 const ACCEL_ROLL_AIR := 10.0
 const ACCEL_ROLL_WAVE_JUMP := 50.0
+const ACCEL_WADING := 15.0
 # Decelerate against velocity
 const DECEL_AGAINST := 45.0
 # Decelerate with velocity
@@ -73,6 +77,8 @@ const ACCEL_STEER_ROLL := 2.5
 const ACCEL_DIVE_WINDUP := 75.0
 
 const ACCEL_GRAVITY_STUN := 17.0
+
+const WATER_GRAVITY := 0.6
 
 const STAMINA_DRAIN_HANG := 0.0
 const STAMINA_DRAIN_CLIMB := 25.0
@@ -109,6 +115,7 @@ const TIME_DIVE_UPPERCUT := 0.1
 const TIME_DIVE_HIGHJUMP := 0.1
 
 const SPEED_LUNGE := 25.0
+const VEL_REDUCTION_WATER := 0.78
 
 const VEL_AIR_SPIN := 3.0
 const VEL_UPPERCUT := 10.0
@@ -119,6 +126,7 @@ const GRAVITY_BOOST_DIVE := 0.5
 
 const STEER_KICK := 5.0
 const DECEL_KICK := 75.0
+const DECEL_FACTOR_WATER := 1.2
 
 const DAMGE_DIVE_START := 15
 const DAMAGE_DIVE_END := 25
@@ -266,7 +274,10 @@ enum State {
 	Dash,
 	HighJump,
 	WallCling,
-	WallJump
+	WallJump,
+	Wading,
+	WadingJump,
+	WadingFall
 }
 
 var state: int = State.Fall
@@ -285,6 +296,11 @@ var invert_y := false
 var current_weapon : String
 
 const INFINITE_INERTIA := false
+
+const DEPTH_WATER_WADE := 0.5
+const DEPTH_WATER_DRY := 0.3
+const DEPTH_WATER_DROWN := 1.8
+var water_depth := 0.0
 
 # Nodes
 onready var cam_rig := $camera_rig
@@ -319,6 +335,8 @@ onready var stamina_bar := $ui/gameing/stats/stamina/base
 onready var armor_bar := $ui/gameing/stats/health/extra
 onready var energy_bar := $ui/gameing/stats/stamina/extra
 onready var equipment := $ui/gameing/equipment
+
+onready var water_cast := $water_cast
 
 onready var ui := $ui
 onready var game_ui := $ui/gameing/custom_game
@@ -452,6 +470,18 @@ func _physics_process(delta):
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f [of %d]" % [best_floor_dot, get_slide_count()]
 	$ui/gameing/debug/stats/a9.text = str(slide_dots)
 	
+	if water_cast.is_colliding():
+		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
+		if water_depth > DEPTH_WATER_DROWN and !is_dead():
+			fall_to_death()
+		elif water_depth > DEPTH_WATER_WADE:
+			$ui/gameing/debug/stats/a8.text = "Wading"
+		else:
+			$ui/gameing/debug/stats/a8.text = "Splashing"
+	else:
+		$ui/gameing/debug/stats/a8.text = "Dry"
+		water_depth = 0
+	
 	var next_state = State.None
 	match state:
 		State.Ground:
@@ -473,6 +503,8 @@ func _physics_process(delta):
 				next_state = State.SpinKick
 			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
+			elif water_depth > DEPTH_WATER_WADE:
+				next_state = State.Wading
 			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1) or (
 				best_floor and best_floor.is_in_group("dont_stand")
 			):
@@ -491,6 +523,8 @@ func _physics_process(delta):
 				next_state = State.SlideLungeKick
 			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
 				next_state = State.Climb
+			elif water_depth > DEPTH_WATER_WADE:
+				next_state = State.WadingFall
 			elif best_floor_dot > MIN_DOT_GROUND and !best_floor.is_in_group("dont_stand"):
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB):
@@ -541,16 +575,18 @@ func _physics_process(delta):
 				next_state = State.UppercutWindup
 			elif best_floor and best_floor.is_in_group("dont_stand"):
 				next_state = State.Fall
-			elif !holding("mv_crouch") and empty(crouch_head):
-				next_state = State.Ground
-			elif after(TIME_COYOTE, empty(ground_area)):
-				next_state = State.Fall
 			elif (best_floor_dot < MIN_DOT_GROUND
 				and best_floor_dot > MIN_DOT_CLIMB
 				and desired_velocity.dot(best_normal) < MIN_DOT_CLIMB_MOVEMENT
 				and can_climb()
 			):
 				next_state = State.Climb
+			elif water_depth > DEPTH_WATER_WADE:
+				next_state = State.Wading
+			elif !holding("mv_crouch") and empty(crouch_head):
+				next_state = State.Ground
+			elif after(TIME_COYOTE, empty(ground_area)):
+				next_state = State.Fall
 			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
 				if best_floor_dot > MIN_DOT_CLIMB and can_climb():
 					next_state = State.Climb
@@ -587,7 +623,7 @@ func _physics_process(delta):
 				next_state = State.WallJump
 			elif after(TIME_STOP_CLIMB) and best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Crouch
-			elif after(TIME_STOP_CLIMB) and empty(climb_area):
+			elif empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB:
 				$ui/gameing/debug/stats/a6.text = "!!!"
 				next_state = State.Fall
 			elif total_stamina() <= 0 or !holding("mv_crouch"):
@@ -671,6 +707,8 @@ func _physics_process(delta):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
+			elif water_depth > DEPTH_WATER_WADE:
+				next_state = State.WadingFall
 		State.LedgeHang:
 			drain_stamina(STAMINA_DRAIN_HANG*delta)
 			var intent_dot = mesh.global_transform.basis.z.dot(desired_velocity)
@@ -824,6 +862,27 @@ func _physics_process(delta):
 				next_state = State.Fall
 			elif desired_velocity.length() > 0.05:
 				next_state = State.Ground
+		State.Wading:
+			if pressed("mv_jump"):
+				next_state = State.WadingJump
+			elif released("combat_lunge"):
+				next_state = State.LungeKick
+			elif pressed("combat_spin"):
+				next_state = State.SpinKick
+			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot >= MIN_DOT_CLIMB and can_climb():
+				next_state = State.Climb
+			elif water_depth < DEPTH_WATER_DRY:
+				next_state = State.Ground
+			elif after(TIME_COYOTE, empty(ground_area)):
+				next_state = State.WadingFall
+		State.WadingJump:
+			if after(TIME_BASE_JUMP):
+				next_state = State.WadingFall
+		State.WadingFall:
+			if best_floor_dot > MIN_DOT_GROUND:
+				next_state = State.Wading
+			elif water_depth < DEPTH_WATER_DRY:
+				next_state = State.Fall
 		State.WallCling:
 			drain_stamina(
 				(STAMINA_DRAIN_MIN)
@@ -980,6 +1039,15 @@ func _physics_process(delta):
 				hover_cast.cast_to = -hover_normal
 			accel_hover(delta, desired_velocity*SPEED_HOVER*hover_speed_factor, grounded)
 			rotate_to_velocity(desired_velocity)
+		State.Wading:
+			accel(delta, desired_velocity*SPEED_WADE, av, ACCEL_WADING)
+			mesh.blend_run_animation((velocity - av)/SPEED_WADE)
+			rotate_to_velocity(desired_velocity)
+		State.WadingJump:
+			accel_low_gravity(delta, desired_velocity*SPEED_WADE, av, WATER_GRAVITY)
+			rotate_to_velocity(desired_velocity)
+		State.WadingFall:
+			accel_low_gravity(delta, desired_velocity*SPEED_WADE, av, WATER_GRAVITY)
 		State.WaveJumpRoll:
 			accel_air(delta, desired_velocity * SPEED_ROLL, av, ACCEL_ROLL_WAVE_JUMP)
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
@@ -1351,6 +1419,8 @@ func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector
 	velocity = move(velocity + delta*GRAVITY)
 
 func accel_lunge(delta: float, applied_ground: Vector3, decel := DECEL_KICK):
+	if water_depth > DEPTH_WATER_WADE:
+		decel *= DECEL_FACTOR_WATER
 	var v2 := move(velocity + GRAVITY*delta, true)
 	velocity = v2.move_toward(applied_ground, decel*delta)
 	velocity.y = v2.y
@@ -1860,7 +1930,7 @@ func set_state(next_state: int):
 			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
 			mesh.ground_transition("Walk")
-		State.Fall, State.LedgeFall, State.WaveJump:
+		State.Fall, State.LedgeFall, State.WadingFall, State.WaveJump:
 			mesh.transition_to("Fall")
 		State.BaseJump:
 			start_jump(JUMP_VEL_BASE)
@@ -1945,6 +2015,8 @@ func set_state(next_state: int):
 			damaged_objects = []
 			var dir = get_visual_forward()
 			velocity = dir*SPEED_LUNGE
+			if water_depth > DEPTH_WATER_WADE:
+				velocity *= VEL_REDUCTION_WATER
 			mesh.play_lunge_kick(max_damage)
 			can_slide_lunge = false
 			gun.lock()
@@ -2012,6 +2084,16 @@ func set_state(next_state: int):
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
 			mesh.force_play("Dash")
+		State.Wading:
+			can_air_spin = true
+			can_slide_lunge = true
+			can_wall_cling = true
+			dash_charges = Global.count("dash_charge")
+			stamina_recharges = true
+			mesh.ground_transition("Wading")
+		State.WadingJump:
+			start_jump(5.0)
+			mesh.play_jump()
 		State.WallCling:
 			can_wall_cling = false
 			stamina_recharges = false

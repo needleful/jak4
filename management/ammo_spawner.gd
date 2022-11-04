@@ -17,7 +17,7 @@ var MAX := {
 const COUNTS := {
 	"pistol": 10,
 	"wave_shot":7,
-	"grav_gun": 5
+	"grav_gun": 2
 }
 
 func get_random_ammo():

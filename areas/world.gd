@@ -3,7 +3,7 @@ extends Spatial
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 300
+const MIN_DIST_LOAD := 200
 const MIN_DIST_MUST_LOAD := 30
 
 const UNLOAD_TIME := 10.0
@@ -55,6 +55,12 @@ const FOG_MAX_HEIGHT := 3500
 onready var FOG_DISTANCE_MIN = fog_defaults.end
 onready var FOG_DISTANCE_MAX = fog_defaults.end*2.0
 
+const DIST_HIRES := 750.0
+const DIST_LOWRES := 1250.0
+
+var terrain_hires := {}
+var terrain_lowres := {}
+
 var chunk_loader: ChunkLoader
 
 func _enter_tree():
@@ -82,13 +88,23 @@ func _ready():
 	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
 	
 	for c in get_children():
-		if c.name.begins_with("chunk"):
+		if c.name.begins_with("chunk_lowres"):
+			var name_convert = c.name.replace("chunk_lowres", "chunk").replace("000", "")
+			terrain_lowres[name_convert] = c.mesh
+			c.queue_free()
+		elif c.name.begins_with("chunk"):
+			terrain_hires[c.name] = c.mesh
 			chunks[c.name] = c
+	print("Collected meshes")
 	#load_everything()
 	# Briefly render the opposite light
 	sun.visible = !sun_enabled
-	update_active_chunks(player.global_transform.origin)
+	chunk_last_position = player.global_transform.origin
+	update_active_chunks(chunk_last_position)
 	start_loading_chunks()
+	
+	vis_last_position = player.global_transform.origin
+	update_terrain_lod(vis_last_position)
 
 func _process(delta):
 	time += delta
@@ -108,7 +124,22 @@ func _process(delta):
 	if (vis_last_position - player_new_position).length_squared() >= VIS_SQDIST_UPDATE:
 		vis_last_position = player_new_position
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
-	
+		update_terrain_lod(vis_last_position)
+
+func update_terrain_lod(pos: Vector3):
+	pos.y = 0
+	for c in chunks.values():
+		if !(c.name in terrain_lowres and c.name in terrain_hires):
+			continue
+		var d = (c.global_transform.origin - pos).length_squared()
+		if d > DIST_LOWRES*DIST_LOWRES:
+			if c.mesh != terrain_lowres[c.name]:
+				print("Lowres: ", c.name)
+				c.mesh = terrain_lowres[c.name]
+		elif d < DIST_HIRES*DIST_HIRES:
+			if c.mesh != terrain_hires[c.name]:
+				print("Hires: ", c.name)
+				c.mesh = terrain_hires[c.name]
 
 func load_everything():
 	for c in chunks.values():
@@ -185,6 +216,8 @@ func detect_enemies(_delta):
 		show_combat_tutorial()
 
 func update_active_chunks(position: Vector3):
+	var active_box = $debug/box/active_chunks
+	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
 		var local : Vector3 = position - ch.global_transform.origin
 		var hlocal : Vector3 = local
@@ -195,6 +228,7 @@ func update_active_chunks(position: Vector3):
 		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
 			if !chunk_loader.is_active(ch.name):
 				chunk_loader.queue_load(ch)
+			active_box.text += "\n\t" + ch.name
 		elif chunk_loader.is_active(ch.name):
 			chunk_loader.queue_unload(ch)
 

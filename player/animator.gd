@@ -99,9 +99,12 @@ func blend_run_animation(movement: Vector3):
 	var speed: float = Vector2(movement.x, movement.z).length()
 	if speed < 0.01:
 		speed = 0
+	var a = anim["parameters/WholeBody/Walk/blend_position"]
+	speed = lerp(a, speed, 0.3)
 	anim["parameters/WholeBody/Walk/blend_position"] = speed
 	anim["parameters/WholeBody/Crouch/blend_position"] = speed
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
+	anim["parameters/WholeBody/Wading/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, _wall_normal: Vector3):
 	var l = velocity.length()
@@ -127,6 +130,8 @@ func show_coat(coat: Coat):
 	$Armature/Skeleton/coat.material_override = mat
 
 func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
+	if soundType.begins_with("step") and player.velocity.length_squared() < 0.002:
+		return
 	if !audio.has_node(bodyPart):
 		print_debug("No audio player for ", bodyPart)
 		return
