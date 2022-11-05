@@ -30,13 +30,16 @@ func _physics_process(delta):
 		State.GravityStunned:
 			velocity *= clamp(1.0 - delta, 0.1, 0.995)
 			velocity += delta*Global.gravity_stun_velocity
-			var col = move_and_collide(Vector3.UP*velocity*delta, true, true, true)
+			var old_origin := global_transform.origin
+			var desired_movement:Vector3 = Vector3.UP*velocity*delta
+			
+			var col = move_and_collide(desired_movement)
+			var real_movement := global_transform.origin - old_origin
+			
 			if col and !elevator and !col.collider.is_in_group("push_always"):
 				velocity *= 0.9
-			if col and !col.collider.is_in_group("push"):
-				var _col = move_and_collide(Vector3.UP*velocity*delta)
-			else:
-				global_translate(Vector3.UP*velocity*delta)
+			if col and col.collider.is_in_group("push"):
+				global_translate(desired_movement - real_movement)
 			if rotate_speed != 0:
 				global_rotate(axis, delta*rotate_speed)
 			grav_time += delta
