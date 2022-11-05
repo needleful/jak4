@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords, cull_disabled;
+render_mode world_vertex_coords, cull_back, depth_test_disable;
 
 uniform vec4 surface_albedo : hint_color;
 uniform vec4 deep_albedo : hint_color;
@@ -17,37 +17,43 @@ void vertex() {
 }
 
 void fragment() {
-	vec3 ref_normal = NORMAL;
-	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
-	float ref_amount = 1.0;
 	
 	float depth = texture(DEPTH_TEXTURE, SCREEN_UV).r;
-	vec4 color = texture(SCREEN_TEXTURE, ref_ofs);
-	
-	vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-	vec4 wpos = CAMERA_MATRIX*upos;
-	vec3 pixel_position = wpos.xyz / wpos.w;
-	
-	float diffy = pos.y - pixel_position.y;
-	vec2 foam_sample_offset = 0.5*vec2(sin(TIME*0.05 + 0.2+pos.x + 0.1*pos.z), cos(TIME*0.02 + 0.16*pos.x));
-	float foam_factor = texture(foam_noise, pos.xz*foam_noise_scale + foam_sample_offset).r;
-	foam_factor *= texture(foam_noise, pos.xz*foam_noise_scale2).r;
-	
-	if(diffy >= 0.0 && diffy < foam_distance*foam_factor) {
-		ALBEDO = foam_color.rgb;
-		ROUGHNESS = 0.4;
-		METALLIC = 0.;
-		EMISSION = vec3(0.0);
+	if (depth <= FRAGCOORD.z) {
+		ALBEDO = vec3(0, 0, 0);
+		EMISSION = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
 	}
 	else {
-		float amount = clamp(diffy/max_depth, 0, 1);
-		EMISSION = mix(color * surface_albedo, deep_albedo, amount).rgb;
+		vec3 ref_normal = NORMAL;
+		vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
+		float ref_amount = 1.0;
+		vec4 color = texture(SCREEN_TEXTURE, ref_ofs);
+	
+		vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+		vec4 wpos = CAMERA_MATRIX*upos;
+		vec3 pixel_position = wpos.xyz / wpos.w;
 		
-		ALBEDO = vec3(0);
-		SPECULAR = 1.0;
-		METALLIC = 1.0;
-		ROUGHNESS = 0.0;
-		TRANSMISSION = EMISSION;
+		float diffy = pos.y - pixel_position.y;
+		vec2 foam_sample_offset = 0.5*vec2(sin(TIME*0.05 + 0.2+pos.x + 0.1*pos.z), cos(TIME*0.02 + 0.16*pos.x));
+		float foam_factor = texture(foam_noise, pos.xz*foam_noise_scale + foam_sample_offset).r;
+		foam_factor *= texture(foam_noise, pos.xz*foam_noise_scale2).r;
+		
+		if(diffy >= 0.0 && diffy < foam_distance*foam_factor) {
+			ALBEDO = foam_color.rgb;
+			ROUGHNESS = 0.4;
+			METALLIC = 0.;
+			EMISSION = vec3(0.0);
+		}
+		else {
+			float amount = clamp(diffy/max_depth, 0, 1);
+			EMISSION = mix(color * surface_albedo, deep_albedo, amount).rgb;
+			
+			ALBEDO = vec3(0);
+			SPECULAR = 1.0;
+			METALLIC = 1.0;
+			ROUGHNESS = 0.0;
+			TRANSMISSION = EMISSION;
+		}
 	}
 }
 

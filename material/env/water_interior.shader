@@ -1,11 +1,6 @@
 shader_type spatial;
 render_mode world_vertex_coords, cull_disabled, depth_test_disable;
 
-stencil front {
-	value 0;
-	test greater;
-}
-
 uniform vec4 surface_albedo : hint_color;
 uniform vec4 deep_albedo : hint_color;
 uniform float max_depth : hint_range(0.1, 10.0);

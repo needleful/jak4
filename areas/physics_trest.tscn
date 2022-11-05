@@ -1,31 +1,19 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://material/env/terrain_main.material" type="Material" id=1]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://_glb/test/physics_trest.glb" type="PackedScene" id=3]
 [ext_resource path="res://areas/physics_trest.gd" type="Script" id=4]
+[ext_resource path="res://material/env/ancient/gem_transparent.tres" type="Material" id=5]
 [ext_resource path="res://material/env/water.shader" type="Shader" id=6]
 [ext_resource path="res://material/env/wave_noise.png" type="Texture" id=7]
 [ext_resource path="res://material/env/water_interior.shader" type="Shader" id=8]
-[ext_resource path="res://material/stencil_front_incr.shader" type="Shader" id=9]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 5, 1, 5 )
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 10, 2, 10 )
-
-[sub_resource type="ShaderMaterial" id=8]
-render_priority = 1
-shader = ExtResource( 8 )
-shader_param/surface_albedo = Color( 0.509804, 0.239216, 0.239216, 1 )
-shader_param/deep_albedo = null
-shader_param/max_depth = null
-shader_param/refraction = 0.0
-
-[sub_resource type="ShaderMaterial" id=7]
-next_pass = SubResource( 8 )
-shader = ExtResource( 9 )
 
 [sub_resource type="ShaderMaterial" id=5]
 render_priority = 1
@@ -35,13 +23,9 @@ shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
 shader_param/max_depth = 0.884
 shader_param/refraction = 0.004
 
-[sub_resource type="ShaderMaterial" id=6]
-next_pass = SubResource( 5 )
-shader = ExtResource( 9 )
-
 [sub_resource type="ShaderMaterial" id=3]
 render_priority = 2
-next_pass = SubResource( 6 )
+next_pass = SubResource( 5 )
 shader = ExtResource( 6 )
 shader_param/surface_albedo = Color( 0.568627, 0.788235, 0.635294, 1 )
 shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
@@ -75,21 +59,8 @@ shadow_enabled = true
 [node name="player" parent="." index="4" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.50924, 0, 6.07629 )
 
-[node name="StaticBody" type="StaticBody" parent="." index="5"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.29383, 0, 5.68822 )
-collision_layer = 8192
-collision_mask = 8192
-
-[node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="StaticBody/CollisionShape" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00992405, 0 )
-mesh = SubResource( 2 )
-material/0 = SubResource( 7 )
-
-[node name="StaticBody2" type="StaticBody" parent="." index="6"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5129, -1.90735e-06, -0.0601521 )
+[node name="StaticBody2" type="StaticBody" parent="." index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.16721, -1.90735e-06, -3.91963 )
 collision_layer = 8192
 collision_mask = 8192
 
@@ -97,6 +68,9 @@ collision_mask = 8192
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody2/CollisionShape" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.05639, 0, -4.23539 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
+
+[node name="CSGSphere" type="CSGSphere" parent="." index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.58281, 2.8221, 1.19993 )
+material = ExtResource( 5 )
