@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk_grav_gun.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=2]
@@ -18,6 +18,9 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=17]
 [ext_resource path="res://entities/control/dswitch_a.tscn" type="PackedScene" id=18]
+[ext_resource path="res://entities/env/ancient/balance.tscn" type="PackedScene" id=19]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=20]
+[ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=21]
 
 [sub_resource type="Animation" id=2]
 resource_name = "Activate"
@@ -56,6 +59,20 @@ shader_param/albedo = Color( 0.819608, 0.627451, 0.784314, 1 )
 shader_param/refraction = 0.004
 shader_param/brightness = null
 
+[sub_resource type="CylinderShape" id=4]
+height = 78.2177
+radius = 26.3015
+
+[sub_resource type="CylinderShape" id=5]
+height = 70.6353
+radius = 75.8688
+
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 8.84251, 6.82392, 9.43458 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 31.6578, 12.8005, 22.733 )
+
 [node name="chunk_grav_gun" instance=ExtResource( 1 )]
 
 [node name="building" parent="." index="0"]
@@ -77,6 +94,7 @@ material/0 = ExtResource( 4 )
 material/1 = ExtResource( 2 )
 
 [node name="blocker-kine" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.779271, 16.1371, 8.09124 )
 collision_layer = 257
 script = ExtResource( 17 )
 
@@ -96,8 +114,20 @@ collision_layer = 257
 [node name="door1-kine" parent="." index="5"]
 collision_layer = 257
 
+[node name="mesh" parent="door1-kine" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
 [node name="door1-kine001" parent="." index="6"]
 collision_layer = 257
+
+[node name="mesh" parent="door1-kine001" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="door1-kine002" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
 
 [node name="ascrap1" parent="." index="8" instance=ExtResource( 5 )]
 transform = Transform( 0.0316852, 0, -0.999498, 0, 1, 0, 0.999498, 0, 0.0316852, 63.4204, 1.81331, 2.3265 )
@@ -191,9 +221,15 @@ transform = Transform( 0.330727, 0, 0.943727, 0, 1, 0, -0.943727, 0, 0.330727, 3
 [node name="crawly3" parent="." index="34" instance=ExtResource( 12 )]
 transform = Transform( 0.330727, 0, 0.943727, 0, 1, 0, -0.943727, 0, 0.330727, 39.9736, -4.76837e-07, -9.54765 )
 
+[node name="mesh" parent="door1-kine003" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
 [node name="OmniLight" type="OmniLight" parent="." index="36"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.2429, 15.6369, 2.87669 )
-omni_range = 18.9716
+light_color = Color( 0.854902, 1, 0.921569, 1 )
+light_energy = 0.5
+omni_range = 14.4329
 
 [node name="fountainA" parent="." index="37" instance=ExtResource( 11 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 60.7736, 2.1558, 16.9759 )
@@ -221,13 +257,13 @@ transform = Transform( -4.75284e-09, -0.108732, -0.994071, 1, -4.37114e-08, 0, -
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.7834, 1.61046, -52.4251 )
 
 [node name="grav_gun_pickup6" parent="." index="45" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.83534, 0, -45.2473 )
+transform = Transform( 0.769715, 0, 0.638388, 0, 1, 0, -0.638388, 0, 0.769715, -14.1854, 0, -46.1389 )
 
 [node name="grav_gun_pickup7" parent="." index="46" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.79325, 2.38419e-07, -49.5913 )
+transform = Transform( 0.769715, 0, 0.638388, 0, 1, 0, -0.638388, 0, 0.769715, -28.2184, 2.38419e-07, -40.1438 )
 
 [node name="grav_gun_pickup8" parent="." index="47" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.95884, -2.38419e-07, -47.1255 )
+transform = Transform( 0.769715, 0, 0.638388, 0, 1, 0, -0.638388, 0, 0.769715, -17.5985, -2.38419e-07, -45.7482 )
 
 [node name="grav_gun_pickup9" parent="." index="48" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.1186, 6.9649, -39.7176 )
@@ -247,6 +283,14 @@ respawn_on_player_death = true
 transform = Transform( -0.213696, 0, 0.9769, 0, 1, 0, -0.9769, 0, -0.213696, 6.26048, 19.5306, 25.8151 )
 persistent = true
 
+[node name="mesh" parent="door1-kine004" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="door1-kine005" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
 [node name="fountainA_large2" parent="." index="55" instance=ExtResource( 14 )]
 transform = Transform( 0.950107, 0, 0.311925, 0, 1, 0, -0.311925, 0, 0.950107, -22.8742, 19.5306, 28.449 )
 
@@ -258,6 +302,212 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.113, 19.5306, 26.5056 )
 
 [node name="grav_gun_pickup14" parent="." index="58" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5193, 19.5306, 19.4472 )
+
+[node name="mesh" parent="door1-kine006" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="door1-kine007" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="balance" parent="." index="61" instance=ExtResource( 19 )]
+transform = Transform( 0.923166, 0, -0.384403, 0, 1, 0, 0.384403, 0, 0.923166, -38.3333, 29.674, -15.6651 )
+
+[node name="balance_room" parent="." index="62"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="StaticBody" parent="balance_room" index="0"]
+collision_layer = 257
+
+[node name="mesh" parent="door1-kine008" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="door1-kine009" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="OmniLight2" type="OmniLight" parent="." index="65"]
+transform = Transform( 0.883079, 0, -0.469224, 0, 1, 0, 0.469224, 0, 0.883079, -29.719, 39.332, -13.4413 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="66"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15128, 33.2187, 0 )
+max_distance = 16384.0
+extents = Vector3( 94.6982, 42.357, 77.6603 )
+origin_offset = Vector3( 0, 2.23517e-10, 0 )
+interior_enable = true
+interior_ambient_color = Color( 0.235294, 0.360784, 0.533333, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="67"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 85.5987, 10.4606, 0 )
+extents = Vector3( 20.9008, 9.92596, 5.85692 )
+origin_offset = Vector3( 5.19531, -1.83984, 0 )
+
+[node name="env" type="Area" parent="." index="68"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+wind_reduction_db = 80.0
+custom_fog = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+show_sun = false
+
+[node name="CollisionShape" type="CollisionShape" parent="env" index="0"]
+transform = Transform( 1, 0, 0, 0, -1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 31.1051, 1.35965e-06 )
+shape = SubResource( 4 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="env" index="1"]
+transform = Transform( 1, 0, 0, 0, -1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 31.1051, 1.35965e-06 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="env" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.8658, 10.8631, 0 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="env" index="3"]
+transform = Transform( 0.912808, 0, -0.40839, 0, 1, 0, 0.40839, 0, 0.912808, -77.1018, 39.3054, -28.4546 )
+shape = SubResource( 7 )
+
+[node name="SpotLight" type="SpotLight" parent="." index="69"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.867397, 2.99798, -7.00468 )
+light_color = Color( 0.678431, 1, 0.866667, 1 )
+script = ExtResource( 21 )
+
+[node name="SpotLight5" type="SpotLight" parent="." index="70"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 13.8206, 0.0985037, -22.0944 )
+light_color = Color( 0.678431, 1, 0.866667, 1 )
+script = ExtResource( 21 )
+
+[node name="SpotLight2" type="SpotLight" parent="." index="71"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.867397, 2.99798, 6.69902 )
+light_color = Color( 0.678431, 1, 0.866667, 1 )
+script = ExtResource( 21 )
+
+[node name="SpotLight3" type="SpotLight" parent="." index="72"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.867398, 66.2621, 0.843625 )
+light_color = Color( 0.678431, 0.933333, 1, 1 )
+spot_range = 37.1482
+spot_angle = 43.986
+script = ExtResource( 21 )
+distance = 100.0
+
+[node name="SpotLight4" type="SpotLight" parent="." index="73"]
+transform = Transform( 1, 0, 0, 0, 0.1453, 0.989388, 0, -0.989388, 0.1453, 0.867398, 34.5962, 7.2137 )
+light_color = Color( 0.678431, 0.933333, 1, 1 )
+spot_range = 45.0256
+spot_angle = 37.0641
+script = ExtResource( 21 )
+distance = 100.0
+
+[node name="OmniLight3" type="OmniLight" parent="." index="74"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.9853, 25.1971, -61.8119 )
+light_color = Color( 0.8, 0.466667, 0.839216, 1 )
+light_energy = 0.5
+omni_range = 44.4478
+script = ExtResource( 21 )
+distance = 75.0
+
+[node name="OmniLight4" type="OmniLight" parent="." index="75"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54.5237, 42.5926, -13.4399 )
+light_color = Color( 0.470588, 0.839216, 0.466667, 1 )
+light_energy = 0.5
+omni_range = 44.4478
+script = ExtResource( 21 )
+distance = 75.0
+
+[node name="OmniLight5" type="OmniLight" parent="." index="76"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.272, 25.361, 39.2879 )
+light_color = Color( 0.811765, 0.839216, 0.466667, 1 )
+light_energy = 0.5
+omni_range = 44.4478
+script = ExtResource( 21 )
+distance = 75.0
+
+[node name="OmniLight6" type="OmniLight" parent="." index="77"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 48.9474, 25.361, 9.24599 )
+light_color = Color( 0.839216, 0.47451, 0.466667, 1 )
+light_energy = 0.5
+omni_range = 44.4478
+script = ExtResource( 21 )
+distance = 75.0
+
+[node name="OmniLight7" type="OmniLight" parent="." index="78"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1148, 25.3609, -48.7508 )
+light_color = Color( 0.466667, 0.576471, 0.839216, 1 )
+light_energy = 0.5
+omni_range = 44.4478
+script = ExtResource( 21 )
+distance = 75.0
+
+[node name="window2" parent="." index="79"]
+material/0 = SubResource( 1 )
+
+[node name="mesh" parent="door1-kine010" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="door1-kine011" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="hallway" parent="." index="82"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="enemies_zone" type="Spatial" parent="." index="85"]
+transform = Transform( 0.911891, 0, -0.410433, 0, 1, 0, 0.410433, 0, 0.911891, -71.3675, 31.7025, -29.6084 )
+
+[node name="bobble18" parent="enemies_zone" index="0" instance=ExtResource( 6 )]
+transform = Transform( 0.76127, 0, -0.648435, 0, 1, 0, 0.648435, 0, 0.76127, 5.04298, -0.84339, 4.04263 )
+
+[node name="crawly4" parent="enemies_zone" index="1" instance=ExtResource( 12 )]
+transform = Transform( -0.42843, 0, 0.903575, 0, 1, 0, -0.903575, 0, -0.42843, -2.50578, -1.40172, 5.01827 )
+shielded = true
+cloaked = true
+
+[node name="crawly5" parent="enemies_zone" index="2" instance=ExtResource( 12 )]
+transform = Transform( 0.296111, 0, 0.955154, 0, 1, 0, -0.955154, 0, 0.296111, -3.26922, -1.40172, -1.26004 )
+shielded = true
+cloaked = true
+
+[node name="crawly6" parent="enemies_zone" index="3" instance=ExtResource( 12 )]
+transform = Transform( -0.0908351, 0, 0.995866, 0, 1, 0, -0.995866, 0, -0.0908351, -5.08294, -1.40172, 1.57286 )
+shielded = true
+cloaked = true
+
+[node name="crawly7" parent="enemies_zone" index="4" instance=ExtResource( 12 )]
+transform = Transform( 0.364757, 0, 0.931103, 0, 1, 0, -0.931103, 0, 0.364757, -1.25333, -1.40172, -4.5373 )
+shielded = true
+cloaked = true
+
+[node name="crawly8" parent="enemies_zone" index="5" instance=ExtResource( 12 )]
+transform = Transform( -0.41932, 0, 0.907839, 0, 1, 0, -0.907839, 0, -0.41932, 0.992989, -1.40172, 1.53602 )
+shielded = true
+cloaked = true
+
+[node name="crawly9" parent="enemies_zone" index="6" instance=ExtResource( 12 )]
+transform = Transform( 0.462568, 0, 0.886584, 0, 1, 0, -0.886584, 0, 0.462568, 3.0424, -1.40172, -3.17636 )
+shielded = true
+cloaked = true
+
+[node name="OmniLight" type="OmniLight" parent="enemies_zone" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6157, 3.79307, -0.0717506 )
+light_color = Color( 1, 0.137255, 0.521569, 1 )
+omni_range = 8.86293
+script = ExtResource( 21 )
+
+[node name="OmniLight2" type="OmniLight" parent="enemies_zone" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.48483, 3.79307, -0.399935 )
+light_color = Color( 1, 0.137255, 0.521569, 1 )
+omni_range = 8.86293
+script = ExtResource( 21 )
+
+[node name="OmniLight3" type="OmniLight" parent="enemies_zone" index="9"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90687, 3.79307, -0.49695 )
+light_color = Color( 1, 0.137255, 0.521569, 1 )
+omni_range = 13.7498
+script = ExtResource( 21 )
 
 [connection signal="insta_toggled" from="dswitch_a" to="blocker-kine" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="dswitch_a" to="blocker-kine" method="_on_toggled"]
