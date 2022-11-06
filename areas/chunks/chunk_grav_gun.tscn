@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk_grav_gun.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=2]
@@ -21,12 +21,20 @@
 [ext_resource path="res://entities/env/ancient/balance.tscn" type="PackedScene" id=19]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=20]
 [ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=21]
-[ext_resource path="res://entities/control/enemies_zone.gd" type="Script" id=22]
+[ext_resource path="res://entities/enemies/enemies_zone.gd" type="Script" id=22]
 [ext_resource path="res://entities/env/ancient/fan.tscn" type="PackedScene" id=23]
 [ext_resource path="res://material/env/transparent.shader" type="Shader" id=24]
 [ext_resource path="res://material/env/metal/grate1.png" type="Texture" id=25]
 [ext_resource path="res://tutorial_prompt.gd" type="Script" id=26]
 [ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=27]
+[ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=28]
+[ext_resource path="res://entities/enemies/turtle.tscn" type="PackedScene" id=29]
+[ext_resource path="res://material/env/ancient/gem.material" type="Material" id=30]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=31]
+[ext_resource path="res://dialog/side_content/get_capacitor.dialog" type="Resource" id=32]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=33]
+[ext_resource path="res://items/mesh/capacitor.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/control/power_thing.gd" type="Script" id=36]
 
 [sub_resource type="Animation" id=2]
 resource_name = "Activate"
@@ -112,7 +120,7 @@ radius = 75.8688
 extents = Vector3( 8.84251, 6.82392, 9.43458 )
 
 [sub_resource type="BoxShape" id=7]
-extents = Vector3( 31.6578, 12.8005, 22.733 )
+extents = Vector3( 31.6578, 36.2841, 56.3111 )
 
 [sub_resource type="Animation" id=15]
 resource_name = "Activate"
@@ -319,6 +327,12 @@ tracks/6/keys = {
 "values": [ Color( 1, 0.137255, 0.521569, 1 ) ]
 }
 
+[sub_resource type="BoxShape" id=266]
+extents = Vector3( 5.778, 2.38655, 8.50049 )
+
+[sub_resource type="BoxShape" id=267]
+extents = Vector3( 5.778, 2.38655, 7.06303 )
+
 [sub_resource type="ShaderMaterial" id=12]
 shader = ExtResource( 24 )
 shader_param/subsurface_scattering = -1.0
@@ -329,6 +343,322 @@ shader_param/main_texture = ExtResource( 25 )
 
 [sub_resource type="BoxShape" id=14]
 extents = Vector3( 9.56953, 1.80962, 7.18601 )
+
+[sub_resource type="Animation" id=264]
+resource_name = "Activate"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -29.8873, 3.22712, 0.141475 ), Vector3( -29.8873, 7.96842, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door1-kine021:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -29.8873, 3.22712, 0.141475 ), Vector3( -29.8873, -0.259461, 0.141475 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../door1-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 28.528, 2.74219, 0.347964 ), Vector3( 28.528, 8.30699, 0.347964 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../door1-kine001:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 28.528, 2.74219, 0.347964 ), Vector3( 28.528, -0.784211, 0.347964 ) ]
+}
+
+[sub_resource type="Animation" id=265]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -29.8873, 3.22712, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door1-kine021:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -29.8873, 3.22712, 0.141475 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../door1-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 28.528, 2.74219, 0.347964 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../door1-kine001:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 28.528, 2.74219, 0.347964 ) ]
+}
+
+[sub_resource type="Animation" id=262]
+resource_name = "Activate"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -27.0404, 60.4191, 0.141475 ), Vector3( -27.0404, 65.1418, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door1-kine039:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -27.0404, 60.4191, 0.141475 ), Vector3( -27.0404, 56.7397, 0.141475 ) ]
+}
+
+[sub_resource type="Animation" id=263]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -27.0404, 60.4191, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door1-kine039:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -27.0404, 60.4191, 0.141475 ) ]
+}
+
+[sub_resource type="BoxShape" id=18]
+extents = Vector3( 32.67, 7.25875, 16.4284 )
+
+[sub_resource type="Animation" id=17]
+resource_name = "Activate"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../door1-kine022:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -93.9663, 43.9565, 0.141475 ), Vector3( -93.9663, 49.4925, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../door1-kine023:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -93.9663, 43.9565, 0.141475 ), Vector3( -93.9663, 39.7041, 0.141475 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../OmniLight:light_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.9 ),
+"transitions": PoolRealArray( 6.72717, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ), Color( 0, 0.505882, 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../OmniLight2:light_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1.3 ),
+"transitions": PoolRealArray( 2.63902, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ), Color( 0, 0.505882, 1, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("../OmniLight3:light_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1.1 ),
+"transitions": PoolRealArray( 10.1965, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ), Color( 0, 0.505882, 1, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("../OmniLight4:light_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1.6 ),
+"transitions": PoolRealArray( 6.06287, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ), Color( 0, 0.505882, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=20]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../door1-kine022:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -93.9663, 43.9565, 0.141475 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../door1-kine023:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -93.9663, 43.9565, 0.141475 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../OmniLight:light_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../OmniLight2:light_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("../OmniLight3:light_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("../OmniLight4:light_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0.329412, 1 ) ]
+}
+
+[sub_resource type="BoxShape" id=19]
+extents = Vector3( 16.3031, 6.77768, 18.712 )
+
+[sub_resource type="SphereShape" id=261]
+radius = 0.589667
 
 [node name="chunk_grav_gun" instance=ExtResource( 1 )]
 
@@ -632,10 +962,10 @@ material/1 = ExtResource( 2 )
 transform = Transform( 0.883079, 0, -0.469224, 0, 1, 0, 0.469224, 0, 0.883079, -29.719, 39.332, -13.4413 )
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." index="66"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15128, 33.2187, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6003, 33.2187, 0 )
 max_distance = 16384.0
-extents = Vector3( 94.6982, 42.357, 77.6603 )
-origin_offset = Vector3( 0, 2.23517e-10, 0 )
+extents = Vector3( 96.5526, 42.357, 77.6603 )
+origin_offset = Vector3( 10.0703, 2.23517e-10, 0 )
 interior_enable = true
 interior_ambient_color = Color( 0.235294, 0.360784, 0.533333, 1 )
 
@@ -650,7 +980,9 @@ collision_mask = 2
 script = ExtResource( 20 )
 wind_reduction_db = 80.0
 custom_fog = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+fog_start = 0.0
 show_sun = false
+override_music = true
 
 [node name="CollisionShape" type="CollisionShape" parent="env" index="0"]
 transform = Transform( 1, 0, 0, 0, -1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 31.1051, 1.35965e-06 )
@@ -669,7 +1001,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.8658, 10.8631, 0 )
 shape = SubResource( 6 )
 
 [node name="CollisionShape4" type="CollisionShape" parent="env" index="4"]
-transform = Transform( 0.912808, 0, -0.40839, 0, 1, 0, 0.40839, 0, 0.912808, -77.1018, 39.3054, -28.4546 )
+transform = Transform( 0.999668, 0, 0.0257766, 0, 1, 0, -0.0257766, 0, 0.999668, -71.5885, 32.513, -2.9976 )
 shape = SubResource( 7 )
 
 [node name="SpotLight" type="SpotLight" parent="." index="69"]
@@ -813,45 +1145,93 @@ transform = Transform( -0.42843, 0, 0.903575, 0, 1, 0, -0.903575, 0, -0.42843, -
 reset_on_player_death = true
 cloaked = true
 
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly4" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly4/custom_awareness" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.130594, 1.63816, 5.318 )
+shape = SubResource( 266 )
+
 [node name="crawly5" parent="enemies_zone" index="3" instance=ExtResource( 12 )]
 transform = Transform( 0.296111, 0, 0.955154, 0, 1, 0, -0.955154, 0, 0.296111, -3.26922, -1.40172, -1.26004 )
 reset_on_player_death = true
 cloaked = true
+
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly5" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly5/custom_awareness" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.130594, 1.63816, 5.318 )
+shape = SubResource( 266 )
 
 [node name="crawly6" parent="enemies_zone" index="4" instance=ExtResource( 12 )]
 transform = Transform( -0.0908351, 0, 0.995866, 0, 1, 0, -0.995866, 0, -0.0908351, -5.08294, -1.40172, 1.57286 )
 reset_on_player_death = true
 cloaked = true
 
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly6" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly6/custom_awareness" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.130594, 1.63816, 5.318 )
+shape = SubResource( 266 )
+
 [node name="crawly7" parent="enemies_zone" index="5" instance=ExtResource( 12 )]
 transform = Transform( 0.364757, 0, 0.931103, 0, 1, 0, -0.931103, 0, 0.364757, -1.25333, -1.40172, -4.5373 )
 reset_on_player_death = true
 cloaked = true
+
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly7" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly7/custom_awareness" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.130594, 1.63816, 5.318 )
+shape = SubResource( 266 )
 
 [node name="crawly8" parent="enemies_zone" index="6" instance=ExtResource( 12 )]
 transform = Transform( -0.41932, 0, 0.907839, 0, 1, 0, -0.907839, 0, -0.41932, 0.992989, -1.40172, 1.53602 )
 reset_on_player_death = true
 cloaked = true
 
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly8" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly8/custom_awareness" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0.130594, 1.63816, 5.318 )
+shape = SubResource( 266 )
+
 [node name="crawly9" parent="enemies_zone" index="7" instance=ExtResource( 12 )]
 transform = Transform( 0.462568, 0, 0.886584, 0, 1, 0, -0.886584, 0, 0.462568, 3.0424, -1.40172, -3.17636 )
 reset_on_player_death = true
 cloaked = true
 
+[node name="custom_awareness" type="Area" parent="enemies_zone/crawly9" index="12"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="enemies_zone/crawly9/custom_awareness" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105919, 1.63816, 4.23034 )
+shape = SubResource( 267 )
+
 [node name="OmniLight" type="OmniLight" parent="enemies_zone" index="8"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6157, 3.79307, -0.0717506 )
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -6.16116, 2.77777, 0.623848 )
 light_color = Color( 1, 0.137255, 0.521569, 1 )
 omni_range = 8.86293
 script = ExtResource( 21 )
 
 [node name="OmniLight2" type="OmniLight" parent="enemies_zone" index="9"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.48483, 3.79307, -0.399935 )
+transform = Transform( 1, 0, -8.9407e-08, 0, 1, 0, 8.9407e-08, 0, 1, 11.3658, 2.58772, 0.485439 )
 light_color = Color( 1, 0.137255, 0.521569, 1 )
 omni_range = 8.86293
 script = ExtResource( 21 )
 
 [node name="OmniLight3" type="OmniLight" parent="enemies_zone" index="10"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90687, 3.79307, -0.49695 )
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 1.90688, 2.35129, -0.49695 )
 light_color = Color( 1, 0.137255, 0.521569, 1 )
 omni_range = 13.7498
 script = ExtResource( 21 )
@@ -1084,6 +1464,27 @@ collision_layer = 257
 [node name="mesh" parent="stop2-kine" index="0"]
 material/0 = ExtResource( 4 )
 
+[node name="door1-kine020" parent="." index="129"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8873, 3.22712, 0.141475 )
+collision_layer = 257
+script = ExtResource( 17 )
+
+[node name="mesh" parent="door1-kine020" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="door1-kine020" index="2"]
+anims/Activate = SubResource( 264 )
+anims/RESET = SubResource( 265 )
+
+[node name="door1-kine021" parent="." index="130"]
+transform = Transform( 1, 0, 0, 0, -1, 3.25841e-07, 0, -3.25841e-07, -1, -29.8873, 3.22712, 0.141475 )
+collision_layer = 257
+
+[node name="mesh" parent="door1-kine021" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
 [node name="fountainA_large5" parent="." index="131" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.546, 56.8778, 0.0120546 )
 
@@ -1122,6 +1523,312 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51248, 0, -2.28287 )
 generate_on_ready = true
 regenerate_on_death = true
 
+[node name="door1-kine022" parent="." index="132"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -93.9663, 43.9565, 0.141475 )
+collision_layer = 257
+
+[node name="mesh" parent="door1-kine022" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="door1-kine023" parent="." index="133"]
+transform = Transform( 1, 0, 0, 0, -1, 3.25841e-07, 0, -3.25841e-07, -1, -93.9663, 43.9565, 0.141475 )
+collision_layer = 257
+
+[node name="mesh" parent="door1-kine023" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="exit" parent="." index="134"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine024" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine025" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine026" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine027" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine028" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine029" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine030" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine031" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine032" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine033" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine034" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine035" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine036" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="mesh" parent="exit/door1-kine037" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="vents" parent="." index="135"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="StaticBody" parent="vents" index="0"]
+collision_layer = 257
+
+[node name="weird-thing" parent="." index="136"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="door1-kine038" parent="." index="137"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.0404, 60.4191, 0.141475 )
+collision_layer = 257
+script = ExtResource( 17 )
+
+[node name="mesh" parent="door1-kine038" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="door1-kine038" index="2"]
+anims/Activate = SubResource( 262 )
+anims/RESET = SubResource( 263 )
+
+[node name="door1-kine039" parent="." index="138"]
+transform = Transform( 1, 0, 0, 0, -1, 3.25841e-07, 0, -3.25841e-07, -1, -27.0404, 60.4191, 0.141475 )
+collision_layer = 257
+
+[node name="mesh" parent="door1-kine039" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="pipes" parent="." index="139"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 2 )
+
+[node name="large_thing-kine" parent="." index="140"]
+script = ExtResource( 13 )
+max_rotation_speed = Vector3( 0.1, 0.3, 0.1 )
+
+[node name="mesh" parent="large_thing-kine" index="0"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 30 )
+
+[node name="shrine" parent="." index="141"]
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 30 )
+
+[node name="final_enemy_zone" type="Spatial" parent="." index="142"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -62.6148, 49.1227, 0 )
+script = ExtResource( 22 )
+
+[node name="turtle" parent="final_enemy_zone" index="0" instance=ExtResource( 29 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.42794, -8.88591, -0.215819 )
+respawns = false
+reset_on_player_death = true
+
+[node name="custom_awareness" type="Area" parent="final_enemy_zone/turtle" index="17"]
+
+[node name="CollisionShape" type="CollisionShape" parent="final_enemy_zone/turtle/custom_awareness" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0293, 7.8856, 0 )
+shape = SubResource( 18 )
+
+[node name="door_control" type="Node" parent="final_enemy_zone" index="1"]
+script = ExtResource( 17 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="final_enemy_zone/door_control" index="0"]
+anims/Activate = SubResource( 17 )
+anims/RESET = SubResource( 20 )
+
+[node name="OmniLight" type="OmniLight" parent="final_enemy_zone" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.521423, 10.583, 15.2511 )
+light_color = Color( 1, 0, 0.329412, 1 )
+omni_range = 39.5572
+script = ExtResource( 21 )
+distance = 50.0
+
+[node name="OmniLight2" type="OmniLight" parent="final_enemy_zone" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20882, 10.583, -26.9466 )
+light_color = Color( 1, 0, 0.329412, 1 )
+omni_range = 39.5572
+script = ExtResource( 21 )
+distance = 50.0
+
+[node name="OmniLight3" type="OmniLight" parent="final_enemy_zone" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.6436, 10.583, -14.0651 )
+light_color = Color( 1, 0, 0.329412, 1 )
+omni_range = 12.766
+script = ExtResource( 21 )
+distance = 50.0
+
+[node name="OmniLight4" type="OmniLight" parent="final_enemy_zone" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.6436, 10.583, 10.9719 )
+light_color = Color( 1, 0, 0.329412, 1 )
+omni_range = 12.766
+script = ExtResource( 21 )
+distance = 50.0
+
+[node name="crawly4" parent="final_enemy_zone" index="6" instance=ExtResource( 12 )]
+transform = Transform( -0.431681, 0, 0.902026, 0, 1, 0, -0.902026, 0, -0.431681, 17.0245, -1.3994, 10.2428 )
+respawns = false
+reset_on_player_death = true
+cloaked = true
+
+[node name="crawly8" parent="final_enemy_zone" index="7" instance=ExtResource( 12 )]
+transform = Transform( 0.0254326, 0, -0.999677, 0, 1, 0, 0.999677, 0, 0.0254326, 18.6928, -8.88815, -0.401638 )
+respawns = false
+reset_on_player_death = true
+cloaked = true
+
+[node name="crawly5" parent="final_enemy_zone" index="8" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0682, -1.3994, -8.37168 )
+respawns = false
+reset_on_player_death = true
+cloaked = true
+
+[node name="crawly6" parent="final_enemy_zone" index="9" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96943, -1.3994, -21.4045 )
+respawns = false
+reset_on_player_death = true
+shielded = true
+
+[node name="crawly7" parent="final_enemy_zone" index="10" instance=ExtResource( 12 )]
+transform = Transform( -0.955885, 0, -0.293743, 0, 1, 0, 0.293743, 0, -0.955885, 2.48098, -1.3994, 22.476 )
+respawns = false
+reset_on_player_death = true
+shielded = true
+
+[node name="crawly9" parent="final_enemy_zone" index="11" instance=ExtResource( 12 )]
+transform = Transform( -0.955885, 0, -0.293743, 0, 1, 0, 0.293743, 0, -0.955885, -2.62855, -8.5742, 22.476 )
+respawns = false
+reset_on_player_death = true
+shielded = true
+
+[node name="crawly10" parent="final_enemy_zone" index="12" instance=ExtResource( 12 )]
+transform = Transform( -0.710137, 0, -0.704064, 0, 1, 0, 0.704064, 0, -0.710137, -5.32441, -8.5742, 25.4465 )
+respawns = false
+reset_on_player_death = true
+shielded = true
+
+[node name="random_ammo_pickup" parent="final_enemy_zone" index="13" instance=ExtResource( 27 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2712, 8.90865, -7.02342 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="random_ammo_pickup2" parent="final_enemy_zone" index="14" instance=ExtResource( 27 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.15253, 8.91251, -6.37254 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="random_ammo_pickup3" parent="final_enemy_zone" index="15" instance=ExtResource( 27 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.58982, 8.88814, 0.507092 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="deathgnat" parent="final_enemy_zone" index="16" instance=ExtResource( 28 )]
+transform = Transform( 0.719268, 0, -0.694733, 0, 1, 0, 0.694733, 0, 0.719268, 15.3523, 4.52658, -11.4581 )
+respawns = false
+reset_on_player_death = true
+
+[node name="custom_awareness" type="Area" parent="final_enemy_zone/deathgnat" index="8"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="final_enemy_zone/deathgnat/custom_awareness" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32325, 0, 10.0934 )
+shape = SubResource( 19 )
+
+[node name="deathgnat2" parent="final_enemy_zone" index="17" instance=ExtResource( 28 )]
+transform = Transform( -0.939755, 0, -0.341848, 0, 1, 0, 0.341848, 0, -0.939755, 14.0374, 5.73594, 8.19648 )
+respawns = false
+reset_on_player_death = true
+
+[node name="custom_awareness" type="Area" parent="final_enemy_zone/deathgnat2" index="8"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="final_enemy_zone/deathgnat2/custom_awareness" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32325, 0, 10.0934 )
+shape = SubResource( 19 )
+
+[node name="get_capacitor" type="Area" parent="final_enemy_zone" index="18"]
+transform = Transform( -0.991071, 0, -0.133331, 0, 1, 0, 0.133331, 0, -0.991071, -37.9934, -6.61597, 0.209778 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 33 )
+dialog_sequence = ExtResource( 32 )
+main_speaker = NodePath("power")
+
+[node name="power" type="Spatial" parent="final_enemy_zone/get_capacitor" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47418, 1.14517, -0.00568962 )
+script = ExtResource( 36 )
+active = true
+
+[node name="capacitor" parent="final_enemy_zone/get_capacitor/power" index="0" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.41967, 0 )
+
+[node name="OmniLight" type="OmniLight" parent="final_enemy_zone/get_capacitor/power/capacitor" index="1"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, 0, 0, 1, 0, 0.00363159, 0 )
+light_color = Color( 0.611765, 0.890196, 1, 1 )
+light_energy = 2.0
+script = ExtResource( 21 )
+
+[node name="dialog_circle" parent="final_enemy_zone/get_capacitor" index="1" instance=ExtResource( 31 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.342262, -2.21444, -0.0460453 )
+
+[node name="CollisionShape" type="CollisionShape" parent="final_enemy_zone/get_capacitor" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.342262, -2.11868, -0.0460453 )
+shape = SubResource( 261 )
+
+[node name="dswitch_a4" parent="." index="143" instance=ExtResource( 18 )]
+transform = Transform( 0.961825, 0, -0.273666, 0, 1, 0, 0.273666, 0, 0.961825, -21.2834, 56.8778, -5.75844 )
+reset_upon_death = true
+
+[node name="OmniLight" type="OmniLight" parent="dswitch_a4" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.738703, 0.219189, 0.136183 )
+light_color = Color( 0.431373, 1, 0.988235, 1 )
+omni_range = 3.564
+script = ExtResource( 21 )
+
+[node name="dswitch_a5" parent="." index="144" instance=ExtResource( 18 )]
+transform = Transform( 0.0216656, 0, 0.999765, 0, 1, 0, -0.999765, 0, 0.0216656, -33.5671, 0.0308553, 4.97914 )
+persistent = true
+
+[node name="OmniLight" type="OmniLight" parent="dswitch_a5" index="4"]
+transform = Transform( 1, 0, -1.67638e-08, 0, 1, 0, 1.49012e-08, 0, 1, -0.738704, 0.219189, 0.136185 )
+light_color = Color( 0.431373, 1, 0.988235, 1 )
+omni_range = 3.564
+script = ExtResource( 21 )
+
 [connection signal="insta_toggled" from="dswitch_a" to="blocker-kine" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="dswitch_a" to="blocker-kine" method="_on_toggled"]
 [connection signal="cleared" from="enemies_zone" to="enemies_zone/door_control" method="_on_activated"]
@@ -1129,3 +1836,8 @@ regenerate_on_death = true
 [connection signal="toggled" from="dswitch_a2" to="blocker-kine001" method="_on_toggled"]
 [connection signal="insta_toggled" from="dswitch_a3" to="blocker-kine002" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="dswitch_a3" to="blocker-kine002" method="_on_toggled" binds= [ false ]]
+[connection signal="cleared" from="final_enemy_zone" to="final_enemy_zone/door_control" method="_on_activated"]
+[connection signal="insta_toggled" from="dswitch_a4" to="door1-kine038" method="_on_toggled" binds= [ true ]]
+[connection signal="toggled" from="dswitch_a4" to="door1-kine038" method="_on_toggled"]
+[connection signal="insta_toggled" from="dswitch_a5" to="door1-kine020" method="_on_toggled" binds= [ true ]]
+[connection signal="toggled" from="dswitch_a5" to="door1-kine020" method="_on_toggled"]

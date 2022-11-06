@@ -78,9 +78,7 @@ func add_power(amount:= 1, instant := false):
 				anim.seek(0)
 		emit_signal("opened")
 		emit_signal("toggled", true)
-		print("opening ", name)
 	elif !should_open and open:
-		print("deactivating")
 		if anim.has_animation("Deactivate"):
 			anim.play("Deactivate")
 			if instant:
@@ -91,5 +89,4 @@ func add_power(amount:= 1, instant := false):
 				anim.seek(0)
 		emit_signal("closed")
 		emit_signal("toggled", false)
-		print("closing ", name)
 	open = should_open

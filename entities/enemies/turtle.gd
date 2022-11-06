@@ -53,12 +53,9 @@ func _physics_process(delta):
 				set_state(AI.Dead)
 
 func take_damage(damage, dir, source):
-	print("damaged!")
 	if (source and source != self) or dir.y < MIN_DOT_DAMAGE:
-		print("not!")
 		return
 	else:
-		print("damage dir: ", dir)
 		if last_attacker:
 			target = last_attacker
 		.take_damage(damage, dir, source)

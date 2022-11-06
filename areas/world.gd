@@ -32,8 +32,8 @@ var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
 
 onready var env := $WorldEnvironment
-onready var env_tween := $env_tween
-onready var sun_tween := $sun_tween
+onready var env_tween: Tween = $env_tween
+onready var sun_tween: Tween = $sun_tween
 onready var sun := $DirectionalLight
 var sun_enabled := true
 
@@ -71,6 +71,7 @@ func _exit_tree():
 	chunk_loader.quit()
 		
 func _ready():
+	env_tween.start()
 	if false:
 		print("Random races")
 		for _i in range (10):
@@ -110,6 +111,7 @@ func _process(delta):
 	time += delta
 	if !shaders_ready and time > TIME_READY:
 		sun.visible = sun_enabled
+		sun.light_energy = 1.0 if sun_enabled else 0.0
 		shaders_ready = true
 	var player_new_position = player.global_transform.origin
 	apply_fog(player_new_position.y)
@@ -134,11 +136,9 @@ func update_terrain_lod(pos: Vector3):
 		var d = (c.global_transform.origin - pos).length_squared()
 		if d > DIST_LOWRES*DIST_LOWRES:
 			if c.mesh != terrain_lowres[c.name]:
-				print("Lowres: ", c.name)
 				c.mesh = terrain_lowres[c.name]
 		elif d < DIST_HIRES*DIST_HIRES:
 			if c.mesh != terrain_hires[c.name]:
-				print("Hires: ", c.name)
 				c.mesh = terrain_hires[c.name]
 
 func load_everything():
@@ -272,8 +272,8 @@ func get_wind_audio():
 func set_sun_enabled(enabled:bool):
 	sun_enabled = enabled
 	if time < TIME_READY:
-		sun.visible = !enabled
 		sun.light_energy = 1.0 if !enabled else 0.0
+		sun.visible = !enabled
 		return
 		
 	sun_tween.remove_all()
@@ -293,10 +293,11 @@ func set_sun_enabled(enabled:bool):
 	sun_tween.start()
 
 func set_fog_override(fog: Color, begin: float, end:float):
+	env_tween.stop_all()
 	env_override = true
 	if time < TIME_READY:
 		env.environment.fog_color = fog
-		env.environment.fog_depth_begin = begin
+	#	env.environment.fog_depth_begin = begin
 		env.environment.fog_depth_end = end
 		return
 	env_tween.remove_all()
@@ -304,10 +305,10 @@ func set_fog_override(fog: Color, begin: float, end:float):
 		env.environment.fog_color, fog,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_begin",
-		env.environment.fog_depth_begin, begin,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	#env_tween.interpolate_property(env.environment, "fog_depth_begin",
+	#	env.environment.fog_depth_begin, begin,
+	#	FOG_TWEEN_TIME,
+	#	Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	env_tween.interpolate_property(env.environment, "fog_depth_end",
 		env.environment.fog_depth_end, end,
 		FOG_TWEEN_TIME,
@@ -316,17 +317,18 @@ func set_fog_override(fog: Color, begin: float, end:float):
 
 func clear_fog_override():
 	env_override = false
+	env_tween.stop_all()
 	env_tween.remove_all()
 	env_tween.interpolate_property(env.environment, "fog_color",
 		env.environment.fog_color, fog_defaults.color,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_begin",
-		env.environment.fog_depth_begin, fog_defaults.begin,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	env_tween.interpolate_property(env.environment, "fog_depth_end",
 		env.environment.fog_depth_end, fog_defaults.end,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	#env_tween.interpolate_property(env.environment, "fog_depth_begin",
+	#	env.environment.fog_depth_begin, fog_defaults.begin,
+	#	FOG_TWEEN_TIME,
+	#	Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	env_tween.start()

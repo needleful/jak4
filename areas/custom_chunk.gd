@@ -1,6 +1,6 @@
 extends MeshInstance
 
-onready var real_aabb = .get_aabb().grow(100.0)
+onready var real_aabb = .get_aabb().grow(50.0)
 
 func _ready():
 	if !Engine.editor_hint:
