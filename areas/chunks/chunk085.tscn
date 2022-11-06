@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=2]
@@ -46,6 +46,9 @@
 [ext_resource path="res://entities/env/plants/grass1.tscn" type="PackedScene" id=44]
 [ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=45]
 [ext_resource path="res://areas/sub_chunks/085_mine.tscn" type="PackedScene" id=46]
+[ext_resource path="res://material/env/wave_noise.png" type="Texture" id=47]
+[ext_resource path="res://material/env/water.shader" type="Shader" id=48]
+[ext_resource path="res://material/env/water_interior.shader" type="Shader" id=49]
 
 [sub_resource type="OccluderShapePolygon" id=3]
 polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
@@ -65,7 +68,47 @@ extents = Vector3( 56.7201, 32.7214, 37.0466 )
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 167.911, 46.1379, 99.4488 )
 
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 20, 1, 10 )
+
+[sub_resource type="CubeMesh" id=11]
+size = Vector3( 40, 2, 20 )
+
+[sub_resource type="ShaderMaterial" id=12]
+render_priority = 1
+shader = ExtResource( 49 )
+shader_param/surface_albedo = Color( 0.309804, 0.478431, 0.360784, 1 )
+shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
+shader_param/max_depth = 0.884
+
+[sub_resource type="Shader" id=13]
+code = "shader_type spatial;
+render_mode unshaded, depth_test_disable, cull_back, blend_mul;
+
+stencil front {
+	test always;
+	pass incr;
+}"
+
 [sub_resource type="ShaderMaterial" id=6]
+next_pass = SubResource( 12 )
+shader = SubResource( 13 )
+
+[sub_resource type="ShaderMaterial" id=14]
+render_priority = 1
+next_pass = SubResource( 6 )
+shader = ExtResource( 48 )
+shader_param/surface_albedo = Color( 0.568627, 0.788235, 0.635294, 1 )
+shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
+shader_param/max_depth = 0.884
+shader_param/foam_color = Color( 0.52549, 0.52549, 0.52549, 1 )
+shader_param/refraction = 0.004
+shader_param/foam_distance = 0.166
+shader_param/foam_noise_scale = 1.028
+shader_param/foam_noise_scale2 = 0.2
+shader_param/foam_noise = ExtResource( 47 )
+
+[sub_resource type="ShaderMaterial" id=15]
 resource_local_to_scene = true
 shader = ExtResource( 38 )
 shader_param/max_depth = 20.0
@@ -158,13 +201,13 @@ transform = Transform( 1, 0, 0, 0, 0.998388, 0.056755, 0, -0.056755, 0.998388, -
 transform = Transform( 1, 0, 0, 0, 0.675476, -0.737382, 0, 0.737382, 0.675476, -8.25243, -39.8639, 35.4446 )
 
 [node name="rock2" parent="zone_canyon" instance=ExtResource( 6 )]
-transform = Transform( -0.615589, 0, 0.788067, -0.609912, 0.633267, -0.476425, -0.499057, -0.773933, -0.389832, 49.3906, -41.1799, -0.775936 )
+transform = Transform( -0.615589, 0, 0.788067, -0.609912, 0.633267, -0.476425, -0.499057, -0.773933, -0.389832, 31.9062, -41.1799, -0.249268 )
 
 [node name="rock_collapsible" parent="zone_canyon" instance=ExtResource( 8 )]
 transform = Transform( -0.15624, 0, 0.987719, 0, 1, 0, -0.987719, 0, -0.15624, 94.0976, -25.5809, 26.4307 )
 
 [node name="rock_kinematic" parent="zone_canyon" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.3256, -38.4689, -6.53493 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.3256, -38.9507, -6.53493 )
 
 [node name="rock3" parent="zone_canyon" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 120.274, -35.2729, -22.7118 )
@@ -253,28 +296,28 @@ transform = Transform( 0.0184106, 0, -0.99983, 0, 1, 0, 0.99983, 0, 0.0184106, -
 reset_on_player_death = true
 
 [node name="basin" parent="zone_canyon" instance=ExtResource( 23 )]
-transform = Transform( -0.0652321, 0.78225, -0.61954, 0.0282806, -0.619164, -0.784753, -0.997469, -0.068712, 0.0182669, 30.0936, -37.7579, 1.06116 )
+transform = Transform( -0.0652321, 0.78225, -0.61954, 0.0282806, -0.619164, -0.784753, -0.997469, -0.068712, 0.0182669, 12.6092, -37.7579, 1.58783 )
 
 [node name="gem_big" parent="zone_canyon" instance=ExtResource( 24 )]
-transform = Transform( -0.000504411, -0.999625, 0.0273933, 0.0184036, -0.0273979, -0.999455, 0.99983, 0, 0.0184106, 36.9666, -39.5469, 8.81836 )
+transform = Transform( -0.000504411, -0.999625, 0.0273933, 0.0184036, -0.0273979, -0.999455, 0.99983, 0, 0.0184106, 19.4822, -39.5469, 9.34503 )
 
 [node name="gem_pickup7" parent="zone_canyon" instance=ExtResource( 20 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 34.6436, -39.5389, 7.24416 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.1592, -39.5389, 7.77083 )
 quantity = 3
 
 [node name="gem_pickup8" parent="zone_canyon" instance=ExtResource( 20 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4936, -39.5389, 11.2293 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.0092, -39.5389, 11.756 )
 quantity = 3
 
 [node name="gem_pickup9" parent="zone_canyon" instance=ExtResource( 20 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.2436, -39.5389, 10.0101 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.7592, -39.5389, 10.5368 )
 quantity = 3
 
 [node name="bug_pickup" parent="zone_canyon" instance=ExtResource( 19 )]
-transform = Transform( -0.018065, 0, 0.999837, 0, 1, 0, -0.999837, 0, -0.018065, 34.0326, -36.2579, 6.74017 )
+transform = Transform( -0.018065, 0, 0.999837, 0, 1, 0, -0.999837, 0, -0.018065, 16.5482, -36.2579, 7.26684 )
 
 [node name="bug_pickup2" parent="zone_canyon" instance=ExtResource( 19 )]
-transform = Transform( 0.99996, 0, 0.00893974, 0, 1, 0, -0.00893974, 0, 0.99996, 33.2086, -37.3209, 0.0237656 )
+transform = Transform( 0.99996, 0, 0.00893974, 0, 1, 0, -0.00893974, 0, 0.99996, 15.7242, -37.3209, 0.550434 )
 
 [node name="drill2" parent="zone_canyon" instance=ExtResource( 25 )]
 transform = Transform( -0.154513, 0.481186, 0.862894, -0.952117, -0.305733, 0, 0.263815, -0.821576, 0.505385, 7.86957, -38.0109, -19.2604 )
@@ -323,22 +366,22 @@ reset_on_player_death = true
 cloaked = true
 
 [node name="deathgnat4" parent="zone_canyon" instance=ExtResource( 21 )]
-transform = Transform( 0.0817445, 0, -0.996653, 0, 1, 0, 0.996653, 0, 0.0817445, 46.9226, -23.5269, -0.664635 )
+transform = Transform( 0.0817445, 0, -0.996653, 0, 1, 0, 0.996653, 0, 0.0817445, 29.4382, -23.5269, -0.137966 )
 reset_on_player_death = true
 cloaked = true
 
 [node name="deathgnat5" parent="zone_canyon" instance=ExtResource( 21 )]
-transform = Transform( 0.0817445, 0, -0.996653, 0, 1, 0, 0.996653, 0, 0.0817445, 47.2186, -21.4579, 3.51656 )
+transform = Transform( 0.0817445, 0, -0.996653, 0, 1, 0, 0.996653, 0, 0.0817445, 29.7342, -21.4579, 4.04323 )
 reset_on_player_death = true
 shielded = true
 
 [node name="crawly10" parent="zone_canyon" instance=ExtResource( 22 )]
-transform = Transform( 0.559901, 0, -0.82856, 0, 1, 0, 0.82856, 0, 0.559901, 40.3866, -38.6659, -20.1245 )
+transform = Transform( 0.559901, 0, -0.82856, 0, 1, 0, 0.82856, 0, 0.559901, 22.9022, -38.6659, -19.5978 )
 reset_on_player_death = true
 mesh_node = NodePath("../crawly/Armature/Skeleton/crawly")
 
 [node name="crawly9" parent="zone_canyon" instance=ExtResource( 22 )]
-transform = Transform( -0.0882575, 0, -0.996098, 0, 1, 0, 0.996098, 0, -0.0882575, 51.1956, -38.5689, -16.442 )
+transform = Transform( -0.0882575, 0, -0.996098, 0, 1, 0, 0.996098, 0, -0.0882575, 33.7112, -38.5689, -15.9153 )
 reset_on_player_death = true
 cloaked = true
 
@@ -610,6 +653,26 @@ transform = Transform( -2.46629, 0.00835018, 0.441027, 0.0183157, 1.16034, 3.652
 [node name="grass15" parent="zone_canyon" instance=ExtResource( 44 )]
 transform = Transform( -1.53016, -0.0753054, -1.64036, -0.0288707, 0.99578, -0.204422, 1.64883, -0.0524493, -1.52587, 122.733, -6.37103, -64.7794 )
 
+[node name="water" type="StaticBody" parent="zone_canyon"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.9933, -40.9307, 0.619732 )
+collision_layer = 8192
+collision_mask = 8192
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="zone_canyon/water"]
+shape = SubResource( 10 )
+
+[node name="MeshInstance" type="MeshInstance" parent="zone_canyon/water/CollisionShape"]
+mesh = SubResource( 11 )
+material/0 = SubResource( 14 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="zone_canyon"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.6827, -21.6839, 0 )
+extents = Vector3( 51.816, 25.4915, 39.0171 )
+origin_offset = Vector3( 0.611328, -13.5083, 0 )
+
 [node name="zone_cliff" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 281.984, 471.714, 55.069 )
 
@@ -759,7 +822,7 @@ distance = 300.0
 
 [node name="death_plane" parent="zone_cave2" instance=ExtResource( 37 )]
 transform = Transform( 74.0136, 0, 0, 0, -3.23524e-06, 1, 0, -74.0136, -4.37114e-08, 3.8251, -23.7478, -0.0701904 )
-material/0 = SubResource( 6 )
+material/0 = SubResource( 15 )
 
 [node name="rock_kinematic" parent="zone_cave2" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65686, 1.53332, 37.2202 )

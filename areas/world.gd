@@ -71,7 +71,7 @@ func _exit_tree():
 	chunk_loader.quit()
 		
 func _ready():
-	env_tween.start()
+	var _x = env_tween.start()
 	if false:
 		print("Random races")
 		for _i in range (10):
@@ -85,7 +85,7 @@ func _ready():
 	
 	chunk_loader = ChunkLoader.new()
 	print("Readying world...")
-	var _x = chunk_loader.connect("load_start", self, "_on_load_started")
+	_x = chunk_loader.connect("load_start", self, "_on_load_started")
 	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
 	
 	for c in get_children():
@@ -276,59 +276,59 @@ func set_sun_enabled(enabled:bool):
 		sun.visible = !enabled
 		return
 		
-	sun_tween.remove_all()
-	sun_tween.interpolate_property(sun, "light_energy",
+	var _x = sun_tween.remove_all()
+	_x = sun_tween.interpolate_property(sun, "light_energy",
 		sun.light_energy,
 		1.0 if enabled else 0.0,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	
 	if !enabled and sun.visible:
-		sun_tween.interpolate_callback(sun, 
+		_x = sun_tween.interpolate_callback(sun, 
 			FOG_TWEEN_TIME, "hide")
 	elif enabled:
 		if !sun.visible:
 			sun.light_energy = 0
 		sun.show()
-	sun_tween.start()
+	_x = sun_tween.start()
 
 func set_fog_override(fog: Color, begin: float, end:float):
-	env_tween.stop_all()
+	var _x = env_tween.stop_all()
 	env_override = true
 	if time < TIME_READY:
 		env.environment.fog_color = fog
 		env.environment.fog_depth_begin = begin
 		env.environment.fog_depth_end = end
 		return
-	env_tween.remove_all()
-	env_tween.interpolate_property(env.environment, "fog_color",
+	_x = env_tween.remove_all()
+	_x = env_tween.interpolate_property(env.environment, "fog_color",
 		env.environment.fog_color, fog,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+	_x = env_tween.interpolate_property(env.environment, "fog_depth_begin",
 		env.environment.fog_depth_begin, begin,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_end",
+	_x = env_tween.interpolate_property(env.environment, "fog_depth_end",
 		env.environment.fog_depth_end, end,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.start()
+	_x = env_tween.start()
 
 func clear_fog_override():
 	env_override = false
-	env_tween.stop_all()
-	env_tween.remove_all()
-	env_tween.interpolate_property(env.environment, "fog_color",
+	var _x = env_tween.stop_all()
+	_x = env_tween.remove_all()
+	_x = env_tween.interpolate_property(env.environment, "fog_color",
 		env.environment.fog_color, fog_defaults.color,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_end",
+	_x = env_tween.interpolate_property(env.environment, "fog_depth_end",
 		env.environment.fog_depth_end, fog_defaults.end,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+	_x = env_tween.interpolate_property(env.environment, "fog_depth_begin",
 		env.environment.fog_depth_begin, fog_defaults.begin,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	env_tween.start()
+	_x = env_tween.start()

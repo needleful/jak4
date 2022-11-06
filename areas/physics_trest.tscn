@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://material/env/terrain_main.material" type="Material" id=1]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=2]
@@ -21,11 +21,23 @@ shader = ExtResource( 8 )
 shader_param/surface_albedo = Color( 0.309804, 0.478431, 0.360784, 1 )
 shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
 shader_param/max_depth = 0.884
-shader_param/refraction = 0.004
+
+[sub_resource type="Shader" id=4]
+code = "shader_type spatial;
+render_mode unshaded, depth_test_disable, blend_mul;
+
+stencil front {
+	test always;
+	pass incr;
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+next_pass = SubResource( 5 )
+shader = SubResource( 4 )
 
 [sub_resource type="ShaderMaterial" id=3]
-render_priority = 2
-next_pass = SubResource( 5 )
+render_priority = 1
+next_pass = SubResource( 6 )
 shader = ExtResource( 6 )
 shader_param/surface_albedo = Color( 0.568627, 0.788235, 0.635294, 1 )
 shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
@@ -59,15 +71,15 @@ shadow_enabled = true
 [node name="player" parent="." index="4" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.50924, 0, 6.07629 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="5"]
+[node name="water" type="StaticBody" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.16721, -1.90735e-06, -3.91963 )
 collision_layer = 8192
 collision_mask = 8192
 
-[node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="water" index="0"]
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="StaticBody2/CollisionShape" index="0"]
+[node name="MeshInstance" type="MeshInstance" parent="water/CollisionShape" index="0"]
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 

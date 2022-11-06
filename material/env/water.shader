@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords, cull_back, depth_test_disable;
+render_mode world_vertex_coords, cull_back;
 
 uniform vec4 surface_albedo : hint_color;
 uniform vec4 deep_albedo : hint_color;
