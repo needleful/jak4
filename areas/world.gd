@@ -236,7 +236,7 @@ func update_active_chunks(position: Vector3):
 func apply_fog(height: float):
 	var factor := clamp((height - FOG_MIN_HEIGHT)/(FOG_MAX_HEIGHT - FOG_MIN_HEIGHT), 0, 1)
 	fog_defaults.end = lerp(FOG_DISTANCE_MIN, FOG_DISTANCE_MAX, factor)
-	if !env_override:
+	if !env_override and !env_tween.is_active():
 		env.environment.fog_depth_end = fog_defaults.end
 
 func show_combat_tutorial():
@@ -297,7 +297,7 @@ func set_fog_override(fog: Color, begin: float, end:float):
 	env_override = true
 	if time < TIME_READY:
 		env.environment.fog_color = fog
-	#	env.environment.fog_depth_begin = begin
+		env.environment.fog_depth_begin = begin
 		env.environment.fog_depth_end = end
 		return
 	env_tween.remove_all()
@@ -305,10 +305,10 @@ func set_fog_override(fog: Color, begin: float, end:float):
 		env.environment.fog_color, fog,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	#env_tween.interpolate_property(env.environment, "fog_depth_begin",
-	#	env.environment.fog_depth_begin, begin,
-	#	FOG_TWEEN_TIME,
-	#	Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+		env.environment.fog_depth_begin, begin,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	env_tween.interpolate_property(env.environment, "fog_depth_end",
 		env.environment.fog_depth_end, end,
 		FOG_TWEEN_TIME,
@@ -327,8 +327,8 @@ func clear_fog_override():
 		env.environment.fog_depth_end, fog_defaults.end,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	#env_tween.interpolate_property(env.environment, "fog_depth_begin",
-	#	env.environment.fog_depth_begin, fog_defaults.begin,
-	#	FOG_TWEEN_TIME,
-	#	Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	env_tween.interpolate_property(env.environment, "fog_depth_begin",
+		env.environment.fog_depth_begin, fog_defaults.begin,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	env_tween.start()
