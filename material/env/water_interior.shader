@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords, cull_front, depth_test_disable, blend_mul;
+render_mode world_vertex_coords, cull_front, depth_test_disable, unshaded, blend_mul;
 
 stencil {
 	value 0;
