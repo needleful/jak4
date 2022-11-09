@@ -3,6 +3,7 @@ extends Spatial
 signal activated
 signal toggled(on)
 signal insta_toggled(on)
+signal arg_toggled(on, instant)
 
 export(bool) var on := false
 export(float) var time_deactivate := 0.0
@@ -50,6 +51,8 @@ func set_on(switch_on, force := false, auto := false):
 		emit_signal("insta_toggled", switch_on)
 	elif switch_on != on:
 		emit_signal("toggled", switch_on)
+	
+	emit_signal("arg_toggled", switch_on, force)
 		
 	on = switch_on
 	if persistent and !force:

@@ -15,9 +15,15 @@ export(bool) var deactivate_upon_death := false
 var open_stat := ""
 
 var power := 0
-onready var anim = $AnimationPlayer
+var anim
 
 func _ready():
+	if has_node("AnimationPlayer"):
+		anim = $AnimationPlayer
+	elif has_method("play") and has_method("play_backwards") and has_method("advance"):
+		anim = self
+	else:
+		print_debug("Door %s has no animation node!" % get_path())
 	if !is_in_group("dynamic"):
 		add_to_group("dynamic")
 	if generate_stat:

@@ -49,10 +49,14 @@ func _physics_process(delta):
 			velocity -= 9.8*delta
 			global_translate(Vector3.UP*velocity*delta)
 			if global_transform.origin.y < original_y:
+				if is_in_group("dynamic"):
+					remove_from_group("dynamic")
 				set_physics_process(false)
 				velocity = 0
 	
 func gravity_stun(_damage):
+	if !is_in_group("dynamic"):
+		add_to_group("dynamic")
 	var angular_speed: Vector3 = max_rotation_speed*Vector3(randf(),randf(),randf())
 	axis = angular_speed.normalized()
 	rotate_speed = angular_speed.length()
