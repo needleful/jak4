@@ -356,7 +356,11 @@ func resume():
 		get_next()
 
 func get_talked_stat():
-	return "talked" + speaker_stat()
+	var s: String = speaker_stat()
+	if s.begins_with("/"):
+		return "talked" + s
+	else:
+		return "talked/" + s
 
 func ui_settings_apply():
 	for f in fonts.values():

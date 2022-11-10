@@ -34,19 +34,27 @@ const TWEEN_TIME_AIM_RESET := 0.6
 const TWEEN_TIME_DIALOG := 2.0
 const TWEEN_TIME_WARDROBE := 1.5
 
+const TWEEN_TIME_FOV := 0.2
+onready var fov_normal:float = camera.fov
+const FOV_ZOOMED := 10.0
+
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
+var zoomed_sns_factor := 0.3
 
 var cv := CORRECTION_VELOCITY
 var hv := H_CORRECTION
 var aiming := false
 var locked := false
+var zoomed := false
+var fov_tween := Tween.new()
 
 onready var cam_basis = camera.transform.basis
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	add_child(fov_tween)
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -120,6 +128,9 @@ func _process(delta):
 	analog_aim *= analog_sns
 	
 	var aim : Vector2 = delta*60*player.sensitivity*(mouse_aim + analog_aim)
+	if zoomed:
+		aim *= zoomed_sns_factor
+
 	if player.invert_x:
 		aim.x *= -1
 	if player.invert_y:
@@ -161,13 +172,28 @@ func start_wardrobe():
 func end_wardrobe():
 	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)
 
+func toggle_zoom():
+	set_zoom(!zoomed)
+
+func set_zoom(p_zoom):
+	print("zoom: ", p_zoom)
+	zoomed = p_zoom
+	var desired_fov : float = FOV_ZOOMED if zoomed else fov_normal
+	var _x = fov_tween.remove_all()
+	_x = fov_tween.interpolate_property(
+		camera, "fov",
+		camera.fov, desired_fov,
+		TWEEN_TIME_FOV,
+		Tween.TRANS_CUBIC, Tween.EASE_OUT)
+	_x = fov_tween.start()
+
 func tween_to(angle: Vector3, distance: float, time: float):
-		tween.remove_all()
-		tween.interpolate_property(spring, "rotation_degrees",
+		var _x = tween.remove_all()
+		_x = tween.interpolate_property(spring, "rotation_degrees",
 			spring.rotation_degrees, angle,
 			time,
 			Tween.TRANS_CUBIC, Tween.EASE_OUT)
-		tween.interpolate_property(spring, "spring_length",
+		_x = tween.interpolate_property(spring, "spring_length",
 			spring.spring_length, distance,
 			time,
 			Tween.TRANS_CUBIC, Tween.EASE_OUT)
@@ -175,4 +201,4 @@ func tween_to(angle: Vector3, distance: float, time: float):
 		#	camera.rotation_degrees, -angle,
 		#	time,
 		#	Tween.TRANS_CUBIC, Tween.EASE_OUT)
-		tween.start()
+		_x = tween.start()

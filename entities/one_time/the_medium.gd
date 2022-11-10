@@ -8,6 +8,7 @@ onready var dialog_collision := $dialog_zone/CollisionShape
 var active := false
 
 func activate_scanner():
+	print("Scanning...")
 	if active:
 		return
 	var a = Global.add_stat("medium/activated")
@@ -24,4 +25,4 @@ func _on_entrance_body_entered(_b):
 	active = false
 	dialog_collision.disabled = false
 	var _x = Global.add_stat("medium/deactivated")
-	mom_door.add_power(-1)
+	mom_door.clear_power()

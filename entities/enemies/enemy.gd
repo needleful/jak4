@@ -55,6 +55,8 @@ var can_fly := false
 
 var source_chunk : MeshInstance
 var nomad := false
+#TODO: debug nomad behavior
+var debug_nomad:bool = nomad
 
 var min_dot_shielded_damage := -0.5
 var last_attacker: Node
@@ -137,13 +139,14 @@ func process_player_distance(pos: Vector3) -> float:
 		#	queue_free()
 		set_active(in_range and ai != AI.Dead)
 	# TODO: fix nomad logic for custom chunks
-	if !nomad:
+	if !debug_nomad:
 		var aabb := source_chunk.get_aabb().grow(10)
 		var point := global_transform.origin
 		point.y = aabb.position.y + 1 # disregard vertical position
 		if !aabb.has_point(point - source_chunk.global_transform.origin):
 			print("Going nomad: ", get_path())
-			nomad = true
+			debug_nomad = true
+			#nomad = true
 	#		var gt = global_transform
 	#		var groups = get_groups()
 	#		var scene = get_tree().current_scene

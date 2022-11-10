@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://material/env/ancient/gem.material" type="Material" id=1]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=2]
@@ -45,8 +45,13 @@ graph_offset = Vector2( -141.626, 7.35602 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 
-[sub_resource type="SphereShape" id=11]
-radius = 0.801029
+[sub_resource type="CylinderShape" id=13]
+height = 0.651208
+radius = 1.59766
+
+[sub_resource type="CylinderShape" id=14]
+height = 1.45185
+radius = 0.437309
 
 [sub_resource type="CylinderShape" id=12]
 height = 0.288325
@@ -84,8 +89,12 @@ collision_mask = 0
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="hitbox" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.184779, 0 )
-shape = SubResource( 11 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.341426, 0 )
+shape = SubResource( 13 )
+
+[node name="CollisionShape" type="CollisionShape" parent="hitbox/CollisionShape" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.580174, 0 )
+shape = SubResource( 14 )
 
 [node name="body_open" type="KinematicBody" parent="." index="6" groups=["dynamic"]]
 

@@ -11,6 +11,9 @@ export(String) var tracked_stat = ""
 export(bool) var generate_stat = false
 export(bool) var open := false
 export(bool) var deactivate_upon_death := false
+export(bool) var randomize_speed := false
+export(float, 0.1, 4.0) var min_speed := 0.8
+export(float, 0.1, 4.0) var max_speed := 1.2
 
 var open_stat := ""
 
@@ -24,6 +27,8 @@ func _ready():
 		anim = self
 	else:
 		print_debug("Door %s has no animation node!" % get_path())
+	if anim and randomize_speed:
+		anim.playback_speed = rand_range(min_speed, max_speed)
 	if !is_in_group("dynamic"):
 		add_to_group("dynamic")
 	if generate_stat:
