@@ -9,13 +9,6 @@ const MIN_DIST_MUST_LOAD := 30
 const UNLOAD_TIME := 10.0
 
 var chunks: Dictionary
-
-var loading : Spatial
-var load_thread := Thread.new()
-var load_queue: Array = []
-var loaded_chunks: Dictionary = {}
-
-var chunk_unload_waitlist : Dictionary = {}
 var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
 
@@ -178,7 +171,7 @@ func start_loading_chunks():
 	var sorted_chunks := chunks.values()
 	sorted_chunks.sort_custom(self, "compare_distances")
 	chunk_loader.start_loading(sorted_chunks)
-	var _x = chunk_loader.first_complete.wait()
+	#var _x = chunk_loader.first_complete.wait()
 
 func _on_load_started():
 	$loading.show()
