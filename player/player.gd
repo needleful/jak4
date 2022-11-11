@@ -355,6 +355,14 @@ var applied_ground_velocity := Vector3.ZERO
 
 const TIMERS_MAX := 2
 
+const INPUT_EPSILON := 0.1
+var input_buffer := {
+	"mv_jump":INF,
+	"mv_crouch":INF,
+	"combat_lunge":INF,
+	"combat_spin":INF,
+}
+
 const VISIBLE_ITEMS := [
 	"bug",
 	"capacitor",
@@ -429,11 +437,14 @@ func _input(event):
 			equip_previous()
 		elif event.is_action_pressed("ui_down"):
 			equip_next()
-	
-	if event.is_action_pressed("combat_spin"):
-		$ui/gameing/debug/stats/a1.text = "Spin!!"
+	if !get_tree().paused:
+		for e in input_buffer.keys():
+			if event.is_action_pressed(e):
+				input_buffer[e] = 0.0
 
 func _physics_process(delta):
+	for e in input_buffer.keys():
+		input_buffer[e] += delta
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
 	for i in range(timers.size()):
@@ -1083,7 +1094,12 @@ func after(time: float, condition := true, id := 0):
 	return timers[id] >= time
 
 func pressed(action:String):
-	return Input.is_action_just_pressed(action) and !ui.recently_paused()
+	if action in input_buffer:
+		var res = input_buffer[action] < INPUT_EPSILON
+		input_buffer[action] = INF
+		return res
+	else:
+		return Input.is_action_just_pressed(action) and !ui.recently_paused()
 
 func released(action:String):
 	return Input.is_action_just_released(action) and !ui.recently_paused()
@@ -1116,12 +1132,15 @@ func is_crouching():
 
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
+		if !startup and !Global.stat("tutorial/items"):
+			Global.add_stat("tutorial/items")
+			show_prompt(["show_inventory"], "Show Inventory")
 		var l_count: Label = get_node("ui/gameing/inventory/"+item+"_count")
 		l_count.text = str(count)
 		if change != 0:
 			var added: Label = get_node("ui/gameing/inventory/"+item+"_added")
 			var c = change
-			if added.is_visible_in_tree():
+			if added.modulate.a > 0.01:
 				var old_added = int(added.text)
 				c = change + old_added
 			added.text = "+ "+str(c) if c > 0 else "- "+str(abs(c))
@@ -1885,7 +1904,8 @@ func track_weapon(weapon: String):
 		ammo_ui.hide()
 
 func show_ammo():
-	$ui/gameing/weapon.show()
+	if current_weapon and current_weapon != "":
+		$ui/gameing/weapon.show()
 
 func hide_ammo():
 	$ui/gameing/weapon.hide()
@@ -2095,6 +2115,7 @@ func set_state(next_state: int):
 			start_jump(5.0)
 			mesh.play_jump()
 		State.WallCling:
+			can_air_spin = true
 			can_wall_cling = false
 			stamina_recharges = false
 			$crouching_col.disabled = false

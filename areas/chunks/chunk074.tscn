@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk074.glb" type="PackedScene" id=1]
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=2]
@@ -18,6 +18,8 @@
 [ext_resource path="res://entities/env/copper/pail.tscn" type="PackedScene" id=16]
 [ext_resource path="res://entities/env/copper/crate1.tscn" type="PackedScene" id=17]
 [ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=18]
+[ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=19]
+[ext_resource path="res://tutorial_prompt.gd" type="Script" id=20]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 13 )
@@ -29,6 +31,9 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 12 )
 shader_param/ground = ExtResource( 10 )
 shader_param/ceiling = ExtResource( 10 )
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 34.6099, 2.54438, 34.9133 )
 
 [node name="chunk074" instance=ExtResource( 1 )]
 script = ExtResource( 11 )
@@ -95,15 +100,19 @@ friendly_name = "wave_shot_palace_074"
 
 [node name="wave_shot_pickup" parent="area_weapon_encounter/table2" index="2" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0519638, 0.510895, -1.21809 )
+respawn_on_player_death = false
 
 [node name="wave_shot_pickup2" parent="area_weapon_encounter/table2" index="3" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.052002, 0.511292, -0.863594 )
+respawn_on_player_death = false
 
 [node name="wave_shot_pickup3" parent="area_weapon_encounter/table2" index="4" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0424118, 0.511322, 0.536713 )
+respawn_on_player_death = false
 
 [node name="wave_shot_pickup4" parent="area_weapon_encounter/table2" index="5" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.205795, 0.511292, 1.10822 )
+respawn_on_player_death = false
 
 [node name="bug_pickup4" parent="area_weapon_encounter" index="7" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2228, 26.367, 0.803345 )
@@ -147,6 +156,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450287, 0.009552, 0.0179596
 [node name="random_ammo_pickup3" parent="area_weapon_encounter/crate1" index="5" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450287, 0.0259094, 0.584137 )
 
+[node name="light_wall" parent="area_weapon_encounter" index="18" instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 1.11112, 2.21902, -0.0079422 )
+
+[node name="light_wall2" parent="area_weapon_encounter" index="19" instance=ExtResource( 19 )]
+transform = Transform( -0.0181119, -0.966289, 0.256821, 0.999824, -0.0187404, 0, 0.00481293, 0.256776, 0.966459, -28.7034, 4.36127, 4.39098 )
+
+[node name="light_wall3" parent="area_weapon_encounter" index="20" instance=ExtResource( 19 )]
+transform = Transform( -4.19834e-08, -0.960468, -0.278392, 1, -4.37114e-08, 0, -1.21689e-08, -0.278392, 0.960468, -28.6264, 4.56726, -3.79681 )
+
 [node name="area_buildings1" type="MultiMeshSystem" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5205, 428.219, 0.163052 )
 
@@ -176,3 +194,23 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61089, 0.75, 1.54237 )
 
 [node name="bug_pickup2" parent="copper_fountain" index="6" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44921, 0.75, -1.52815 )
+
+[node name="bug_pickup2" parent="." index="10" instance=ExtResource( 8 )]
+transform = Transform( -0.812619, 0, -0.582796, 0, 1, 0, 0.582796, 0, -0.812619, -77.5159, 425.732, 129.391 )
+
+[node name="bug_pickup3" parent="." index="11" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 99.2642, 483.052, 51.069 )
+
+[node name="bug_pickup4" parent="." index="12" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 99.2236, 483.052, 54.0412 )
+
+[node name="reset_tutorial" type="Area" parent="." index="13"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100.4, 416.478, 13.9229 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+input_actions = [ "reset" ]
+text = "(Hold) Reset to Checkpoint"
+
+[node name="CollisionShape" type="CollisionShape" parent="reset_tutorial" index="0"]
+shape = SubResource( 2 )

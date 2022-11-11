@@ -41,6 +41,8 @@ var active := false
 var player: PlayerBody
 var overlay : Node
 
+var at_end := false
+
 func _ready():
 	if hover_scooter and !"hover_scooter" in required_items:
 		required_items.append("hover_scooter")
@@ -69,8 +71,12 @@ func _process(_delta):
 	
 	if running_time + DANGER_TIME > bronze_seconds:
 		overlay.color_bronze(DANGER_COLOR)
+	
+	if active and at_end and player.is_grounded():
+		win()
 
 func start_race():
+	at_end = false
 	player = Global.get_player()
 	Global.save_checkpoint(race_start.global_transform.origin)
 	player.respawn()
@@ -134,7 +140,9 @@ func _end():
 func _on_race_end(body):
 	if !active or body != player:
 		return
+	at_end = true
 
+func win():
 	var _x = Global.add_stat(get_stat() + "/won")
 	var last_award: int = Global.stat(get_stat() + "/award")
 	var best_time: float = Global.stat(get_stat() + "/best")
