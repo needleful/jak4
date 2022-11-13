@@ -66,12 +66,14 @@ var contact_count := 0
 var starting_position: Transform
 var starting_health: int
 var starting_collision_layer : int
+var skip_alert := true
 
 func _init():
 	contact_monitor = true
 	contacts_reported = 4
 
 func _ready():
+	set_physics_process(false)
 	if reset_on_player_death:
 		var p = Global.get_player() as PlayerBody
 		if !p.is_connected("died", self, "_on_player_died"):
@@ -101,7 +103,6 @@ func _ready():
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
 		queue_free()
-		set_physics_process(false)
 		return
 	set_shielded(shielded)
 	var p = get_parent()
@@ -116,6 +117,17 @@ func _ready():
 		awareness = $custom_awareness as Area
 		if !awareness:
 			print_debug("ERROR: Area expected for ", $custom_awareness.get_path())
+	if awareness and !awareness.is_connected("body_entered", self, "_on_awareness_entered"):
+		var _x = awareness.connect("body_entered", self, "_on_awareness_entered")
+
+func _on_awareness_entered(body):
+	if (ai == AI.Idle or !is_physics_processing()) and body.is_in_group("player"):
+		aggro_to(body)
+		if skip_alert:
+			set_state(AI.Chasing)
+		else:
+			set_state(AI.Alerted)
+		set_physics_process(true)
 
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)

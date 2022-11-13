@@ -40,6 +40,8 @@ onready var anim := $AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
 onready var ref_target = $ref_target
 
+func _init():
+	skip_alert = false
 
 func _physics_process(delta):
 	state_timer += delta
@@ -48,11 +50,7 @@ func _physics_process(delta):
 	var next = ai
 	match ai:
 		AI.Idle:
-			if state_timer > TIME_MIN_IDLE:
-				for b in awareness.get_overlapping_bodies():
-					if b.is_in_group("player"):
-						aggro_to(b)
-						next = AI.Alerted
+			set_physics_process(false)
 		AI.Alerted:
 			if state_timer > alert_time:
 				next = AI.Chasing

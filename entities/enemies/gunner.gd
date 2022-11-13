@@ -52,12 +52,7 @@ func _physics_process(delta):
 	
 	match ai:
 		AI.Idle:
-			if state_timer > TIME_MIN_IDLE:
-				for b in awareness.get_overlapping_bodies():
-					if b.is_in_group("player"):
-						target = b
-						set_state(AI.Chasing)
-			walk(0, 100)
+			set_physics_process(false)
 		AI.Chasing:
 			shot_timer += delta
 			if no_target():

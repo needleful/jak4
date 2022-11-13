@@ -25,3 +25,4 @@ func add_mass(m):
 		balance.mass_one += m
 	else:
 		balance.mass_two += m
+	balance.activate()

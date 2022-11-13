@@ -157,6 +157,9 @@ const HOVER_EXTRA_GRAVITY := 1.0
 var hover_normal := Vector3.UP
 var hover_speed_factor := 1.0
 const HOVER_SPEED_BOOST := 0.5
+
+const DEPTH_CRUSH := 0.4
+
 # Broad things
 
 var velocity := Vector3.ZERO
@@ -467,10 +470,13 @@ func _physics_process(delta):
 	var best_normal := Vector3.ZERO
 	var slide_dots := []
 	best_floor = null
+	var max_depth := 0.0
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
 		var normal := col.normal
 		var dot := normal.dot(Vector3.UP)
+		if col.collision_depth > max_depth:
+			max_depth = col.collision_depth
 		slide_dots.append(dot)
 		if dot > best_floor_dot:
 			best_floor_dot = dot
@@ -479,7 +485,10 @@ func _physics_process(delta):
 	if best_floor_dot > MIN_DOT_GROUND:
 		ground_normal = best_normal
 	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f [of %d]" % [best_floor_dot, get_slide_count()]
-	$ui/gameing/debug/stats/a9.text = str(slide_dots)
+	$ui/gameing/debug/stats/a9.text = "Depth: " + str(max_depth)
+	
+	if max_depth > DEPTH_CRUSH:
+		crushing_death()
 	
 	if water_cast.is_colliding():
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
@@ -1663,6 +1672,7 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 		set_state(State.Damaged)
 	return false
 
+# TODO: a short animation, then respawn
 func die():
 	print("Dead!")
 	set_state(State.Dead)
@@ -1672,6 +1682,10 @@ func die():
 
 func fall_to_death():
 	set_state(State.FallingDeath)
+
+func crushing_death():
+	# TODO: custom death animation
+	die()
 
 func respawn():
 	if game_ui.in_game:

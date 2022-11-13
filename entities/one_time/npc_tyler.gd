@@ -6,7 +6,7 @@ onready var last_position := global_transform.origin
 onready var player :PlayerBody = get_tree().current_scene.get_node("player")
 const ROTATE_SPEED := 10.0
 var look_at_player := false
-var chase := true
+var chase := false
 var in_tutorial := false
 
 func _ready():
@@ -68,6 +68,7 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	chase = true
 	$dialog.queue_free()
 	Music.play_music(music)
 	in_tutorial = true

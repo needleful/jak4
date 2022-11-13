@@ -19,12 +19,7 @@ func _physics_process(delta):
 	state_timer += delta
 	match ai:
 		AI.Idle:
-			if state_timer > TIME_MIN_IDLE:
-				for b in awareness.get_overlapping_bodies():
-					if b.is_in_group("player"):
-						target = b
-						set_state(AI.Chasing)
-			walk(0, 100)
+			set_physics_process(false)
 		AI.Chasing:
 			for i in range(cooldown.size()):
 				cooldown[i] -= delta
@@ -38,11 +33,9 @@ func _physics_process(delta):
 				if a.overlaps_body(target) and cooldown[i] <= 0:
 					fire_orb(gun.global_transform.origin, orb_speed, orb_seeking)
 					cooldown[i] = gun_cooldown
-			walk(0, 100)
 		AI.Damaged:
 			if state_timer > time_damaged:
 				set_state(AI.Chasing)
-			walk(0, 10)
 		AI.GravityStun:
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:

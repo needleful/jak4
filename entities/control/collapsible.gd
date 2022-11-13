@@ -12,7 +12,7 @@ func _ready():
 	if !is_in_group("dynamic"):
 		add_to_group("dynamic")
 	var _x = Global.get_player().connect("died", self, "reset")
-	
+	set_physics_process(false)
 
 func _physics_process(delta):
 	if !falling:

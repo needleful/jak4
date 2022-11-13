@@ -11,6 +11,16 @@ export(float) var spring := 90.0
 var velocity := Vector2.ZERO
 var pos := Vector2.ZERO
 
+var active := false
+
+func _ready():
+	set_physics_process(false)
+	var _x = area.connect("body_entered", self, "_check")
+	_x = area.connect("body_exited", self, "_check")
+
+func _check():
+	set_physics_process((!area.get_overlapping_bodies().empty() or velocity.length_squared() >= 0.001) and active)
+
 func _physics_process(delta):
 	var press := Vector2.ZERO
 	var bodies: Array = area.get_overlapping_bodies()
@@ -23,6 +33,8 @@ func _physics_process(delta):
 				l = radius
 			press += d2.normalized()*(1 - l/radius)
 		press = press_accel*press/bodies.size()
+	elif velocity.length_squared() < 0.001:
+		_check()
 	
 	velocity += (press - spring*pos - damp*velocity)*delta
 	
@@ -33,8 +45,7 @@ func _physics_process(delta):
 	anim["parameters/blend_position"] = pos
 
 func process_player_distance(p_pos: Vector3):
-	if (p_pos - global_transform.origin).length_squared() <= 25:
-		set_physics_process(true)
-	else:
-		set_physics_process(false)
+	active = (p_pos - global_transform.origin).length_squared() <= 64
+	if !active:
 		velocity = Vector2.ZERO
+	_check()

@@ -47,6 +47,7 @@ func _ready():
 	if has_node("bug/AnimationPlayer"):
 		sub_anim = $bug/AnimationPlayer
 		sub_anim.seek(rand_range(0, sub_anim.current_animation_length))
+	set_physics_process(gravity)
 
 func _physics_process(delta):
 	if gravity:
@@ -61,6 +62,8 @@ func _physics_process(delta):
 		var col = move_and_collide(delta*Vector3.UP*fall_velocity)
 		if col:
 			fall_velocity = 0.0
+	else:
+		set_physics_process(false)
 
 func _on_area_body_entered(body):
 	var _x = Global.add_item(item_id, quantity)
@@ -81,6 +84,7 @@ func gravity_stun(_damage):
 	gravity_stun_time = Global.gravity_stun_time
 	fall_velocity = 3
 	emit_signal("gravity_stun", true)
+	set_physics_process(true)
 
 func process_player_distance(origin: Vector3):
 	var gr2 = Global.render_distance*Global.render_distance

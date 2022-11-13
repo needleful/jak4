@@ -3,6 +3,14 @@ extends Area
 export(float) var velocity := 2.0
 const FORCE_ON_BODIES := 4.0
 
+func _ready():
+	set_physics_process(false)
+	var _x = connect("body_entered", self, "_check")
+	_x = connect("body_exited", self, "_check")
+
+func _check(_b):
+	set_physics_process(!get_overlapping_bodies().empty())
+
 func _physics_process(_delta):
 	var dir = global_transform.basis.y
 	for b in get_overlapping_bodies():
