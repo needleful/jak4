@@ -100,6 +100,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	advance()
 
 func clear():
+	last_speaker = ""
 	is_exiting = false
 	discussed = {}
 	otherwise = false
@@ -502,6 +503,15 @@ func game_stat(sub_stat):
 	if !main_speaker.get_parent().has_method("get_stat"):
 		return ""
 	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+
+func task_exists(id):
+	return Global.task_exists(id)
+
+func task_is_active(id):
+	return Global.task_is_active(id)
+
+func task_is_complete(id):
+	return Global.task_is_complete(id)
 
 func has_game_stat(sub_stat) -> bool:
 	if !main_speaker:

@@ -56,6 +56,18 @@ var terrain_lowres := {}
 
 var chunk_loader: ChunkLoader
 
+func _input(event):
+	if event.is_action_pressed("debug_map_view"):
+		if $mapcam.current:
+			player.show()
+			player.cam_rig.camera.current = true
+			env_override = false
+		else:
+			player.hide()
+			$mapcam.current = true
+			env_override = true
+			env.environment.fog_depth_end *= 3
+
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
 		Global.load_sync(false)

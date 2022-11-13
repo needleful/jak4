@@ -199,6 +199,11 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="StyleBoxEmpty" id=65]
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.745098 )
+
 [sub_resource type="Animation" id=9]
 length = 0.001
 tracks/0/type = "value"
@@ -715,11 +720,6 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="StyleBoxEmpty" id=65]
-
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0, 0, 0, 0.745098 )
-
 [sub_resource type="SphereShape" id=66]
 radius = 0.3
 
@@ -995,6 +995,100 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 5 )
 script = ExtResource( 17 )
+
+[node name="status_menu" type="Control" parent="ui"]
+pause_mode = 2
+time_scale_response = false
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 7 )
+
+[node name="tabs" type="TabContainer" parent="ui/status_menu"]
+time_scale_response = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 65 )
+custom_styles/tabs_panel = SubResource( 5 )
+
+[node name="Options" parent="ui/status_menu/tabs" instance=ExtResource( 9 )]
+time_scale_response = false
+margin_top = 32.0
+
+[node name="Map" parent="ui/status_menu/tabs" instance=ExtResource( 16 )]
+time_scale_response = false
+visible = false
+show_behind_parent = true
+margin_top = 32.0
+
+[node name="Journal" parent="ui/status_menu/tabs" instance=ExtResource( 21 )]
+time_scale_response = false
+visible = false
+
+[node name="Inventory" parent="ui/status_menu/tabs" instance=ExtResource( 23 )]
+time_scale_response = false
+visible = false
+margin_top = 32.0
+
+[node name="Save & Load" parent="ui/status_menu/tabs" instance=ExtResource( 31 )]
+visible = false
+
+[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
+time_scale_response = false
+margin_left = 15.0
+margin_right = 357.0
+margin_bottom = 128.0
+
+[node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
+time_scale_response = false
+margin_top = 53.0
+margin_right = 104.0
+margin_bottom = 75.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "<< Previous"
+
+[node name="input_prompt" parent="ui/status_menu/PromptLeft" instance=ExtResource( 8 )]
+time_scale_response = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 108.0
+margin_right = 236.0
+margin_bottom = 128.0
+action = "ui_page_down"
+
+[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
+time_scale_response = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -326.0
+margin_right = -15.0
+margin_bottom = 128.0
+alignment = 2
+
+[node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
+time_scale_response = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 110.0
+margin_right = 238.0
+margin_bottom = 128.0
+action = "ui_page_up"
+
+[node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
+time_scale_response = false
+margin_left = 242.0
+margin_top = 53.0
+margin_right = 311.0
+margin_bottom = 75.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "Next >>"
+align = 2
 
 [node name="gameing" type="Control" parent="ui"]
 time_scale_response = false
@@ -1651,100 +1745,6 @@ time_scale_response = false
 visible = false
 anchor_left = 0.572
 rect_min_size = Vector2( 500, 0 )
-
-[node name="status_menu" type="Control" parent="ui"]
-pause_mode = 2
-time_scale_response = false
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 7 )
-
-[node name="tabs" type="TabContainer" parent="ui/status_menu"]
-time_scale_response = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_styles/panel = SubResource( 65 )
-custom_styles/tabs_panel = SubResource( 5 )
-
-[node name="Options" parent="ui/status_menu/tabs" instance=ExtResource( 9 )]
-time_scale_response = false
-margin_top = 32.0
-
-[node name="Map" parent="ui/status_menu/tabs" instance=ExtResource( 16 )]
-time_scale_response = false
-visible = false
-show_behind_parent = true
-margin_top = 32.0
-
-[node name="Journal" parent="ui/status_menu/tabs" instance=ExtResource( 21 )]
-time_scale_response = false
-visible = false
-
-[node name="Inventory" parent="ui/status_menu/tabs" instance=ExtResource( 23 )]
-time_scale_response = false
-visible = false
-margin_top = 32.0
-
-[node name="Save & Load" parent="ui/status_menu/tabs" instance=ExtResource( 31 )]
-visible = false
-
-[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
-time_scale_response = false
-margin_left = 15.0
-margin_right = 357.0
-margin_bottom = 128.0
-
-[node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
-time_scale_response = false
-margin_top = 53.0
-margin_right = 104.0
-margin_bottom = 75.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 1
-text = "<< Previous"
-
-[node name="input_prompt" parent="ui/status_menu/PromptLeft" instance=ExtResource( 8 )]
-time_scale_response = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 108.0
-margin_right = 236.0
-margin_bottom = 128.0
-action = "ui_page_down"
-
-[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
-time_scale_response = false
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -326.0
-margin_right = -15.0
-margin_bottom = 128.0
-alignment = 2
-
-[node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
-time_scale_response = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 110.0
-margin_right = 238.0
-margin_bottom = 128.0
-action = "ui_page_up"
-
-[node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
-time_scale_response = false
-margin_left = 242.0
-margin_top = 53.0
-margin_right = 311.0
-margin_bottom = 75.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_offset_y = 1
-custom_constants/shadow_as_outline = 1
-text = "Next >>"
-align = 2
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false

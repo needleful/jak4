@@ -6,21 +6,17 @@
 		Eey! Klerdena sur!
 		[You]  Uh, apologies.  That's "thank you" in Yaqazi, correct? I forgot how to say "you're welcome".
 		Wait, you're a Vaeler? Wow! Well, thanks again! You really saved me there!
-		{remember("She was quite grateful when I helped her off that scrap pile.")}
 		[You] I did?
 		Yeah, I was pinned down by those deathgnats, but you took them out no problem! I'm Riley, by the way.
 		[You] Jackie. It was no trouble. One of them had a lovely coat.
-		You're some kind of hunter?
-		[You] Oh no, nothing like that. I was looking for capacitors to activate the Medium in the nearby village. Have you seen any?
-		{subtopic("capacitor")}
+		{subtopic("saved_126")}
 		{goto("shop_126")}
 	{otherwise if Global.stat("riley/126/reward")}
 		Thanks again! I'm heading out of here soon.
 		{goto("shop_126")}
 	{otherwise}
 		Thanks for the help! I'm Riley, by the way.
-		[You] Jackie. Say, is there a capacitor up here? I was told they were up in these towers.
-		{subtopic("capacitor")}
+		{subtopic("saved_126")}
 		{goto("shop_126")}
 {otherwise if talked > 0}
 	Seriously, I could use some help with those deathgnats.
@@ -29,7 +25,7 @@
 {otherwise}
 	Ey! Jutre! Khur ine siram tes?
 	[You] I'm sorry?
-	You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it! {remember("I found this strange girl stranded at the top of a scrap pile. How did she get here?")}
+	You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it! 
 	> {skip()} (Accept Challenge) Uh, I'll see what I can do.
 		[You]  Uh, I'll see what I can do.
 		{main_speaker.track_enemies()}
@@ -38,21 +34,31 @@
 		Uh... don't take too long please!
 {exit()}
 
-:capacitor
-Uh, I don't really know about electronics. What do they look like?
-[You] They're these cylinders of white metal, about as long as my forearm and twice as thick.
-Oh, they're Hasyr? Have you checked the tower nearby?
-[You] I imagine it'd be a likely place.
-I'll just say: if there's anything plugged in, you really shouldn't remove it.
-[You] Oh, why not?
-+{riley/capacitor}
-{Global.task_note("activate_the_medium", "Riley says the nearby structures could have capacitors, but I shouldn't remove them if they're plugged in.")}
-The Hasyr structures have these active repair systems that keep them working. If you turn stuff off, they could collapse.
-[You] ...
-{back()}
+:saved_126
+{remember("I rescued a strange girl stranded at the top of a scrap pile.")}
+{Global.note_task("the_tree_tower", "That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.")}
+{Global.task_note_person("the_tree_tower", "Riley", "Riley is scavenging supplies for the expedition to the tower.")}
+{!Global.map_marked("tree_tower")}
+	{Global.mark_map("tree_tower", "A former battleground, now filled with dangerous Spectres.")}
+{Global.task_note_place("the_tree_tower", "tree_tower", "It requires 12 capacitors to open the tower's entrance. Riley wants inside.")}
+{Global.mark_map("tree_tower", "There's a back entrance under the roots of the tree")}
+So what brought you out here? Are some kind of hunter?
+[You] Oh no, nothing of the sort. I'm just exploring. What brought you up here?
+I've been searching for anything valuable to sell, but people have been recycling the ruins for like a thousand years, so I have to go to dangerous places like this for anything good.
+[You] Are you saving up for something?
+Yeah. You see the tower with the giant tree?
+[You] Naturally. It dominates the horizon.
+It's called the Tree Tower. I want to get inside.
+I found an entrance at the base of the tree that punches through the tower's outer wall, but it only got me to some kind of electrical closet, and I couldn't go any further. But there were twelve slots for capacitors. I think if I got a bunch and plugged them in, the front entrance would open.
+[You] That's quite intriguing. So you're trying to find these capacitors?
+And get some supplies to survive that trip again. The Tree Tower was the bloodiest battlefield of the Vaeler war, so it's filled with specters. I had to climb down the plateau to get out alive last time.
+[You] Well, that sound quite thrilling! If I see any more of these capacitors, I could help you get inside, if you like.
+You would? It's pretty dangerous...
+[You] I'll be the judge of that! I'm something of a thrill-seeker.
+Alright! If you can get 12 capacitors and you're willing to get there, I'll meet you at the base of the tree. I'll get some supplies together and we'll explore it together! 
 {exit()}
 
-:shop_126
+:shop_generic
 > Say, could I buy some supplies off you?
 	Sure, I have some spare gear.
 	{shop()}
@@ -64,42 +70,19 @@ The Hasyr structures have these active repair systems that keep them working. If
 {exit()}
 
 :_entry111
++{riley/111/talked}
 {main_speaker.saved}
 	{Global.stat("riley/111/reward")}
 		Thanks again.
 		[You] Do you need any help getting down?
-		{Global.stat("capacitor_113") and !Global.stat("riley/apology")}
-			No.
-		{otherwise}
-			Thanks, but no. The deathgnats are really the only specters that worry me. I can just jump around the others, but those bullets are too much for me!
-	{otherwise if !Global.stat("capacitor_113") or Global.stat("riley/apology")}
+		Thanks, but no. The deathgnats are really the only specters that worry me. I can just jump around the others, but those bullets are too much for me!
+	{otherwise}
 		Phew! You really saved me there, Jackie!
 		{talked == 0} I was pinned down before you took out those deathgnats!
 		{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Here's some of the loot I got before it hit the fan. I can take it from here.
-		> Say, could I buy some supplies off you?
-			Sure, I have some spare gear.
-			{shop()}
-			{exiting()} Okay, see you around.
-			{exit()}
-		> Okay, see you.
-			{exit()}
-	{otherwise}
-		... Thanks, Jackie.
-		{talked == 0} I was pinned down before you took out those deathgnats.
-		> No problem.
-			{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 17)} {Global.add_item("gem", 45)} Here's some of the loot I got. I'll see myself down.
-			{exit()}
-		> I wanted to apologize for knocking down the tower...
-			{subtopic("apology")}
-			{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Oh, and here's some of the loot I got. I can take it from here.
-			See you around, Jackie.
-			{exit()}
+		{goto("shop_generic")}
 {otherwise}
-	{talked > 0}
-		[You] Are you good?
-		Good. How's the deathgnat situation?
-		[You] In progress.
-	{otherwise if !Global.stat("capacitor_113") or Global.stat("riley/apology")}
+	{Global.stat("riley/111/talked") > 1}
 		Hey again, Jackie!
 		[You] Hey. Are you okay?
 		Uh, been better. I tried to get some salvage while the specters were dormant, but that went about as well as it looks.
@@ -110,145 +93,66 @@ The Hasyr structures have these active repair systems that keep them working. If
 		> I'll scope out the area and be back soon, alright?
 			Alright...
 	{otherwise}
-		[You] Riley, are you okay?
-		I've been better. There's four deathgnats keeping me stuck here.
-		> I can take them out if you need help.
-			... Yeah, honestly. I can't get them on my own.
-			[You] Okay, stay here and I'll get them.
-			{main_speaker.track_enemies()}
-		> I'll be back later.
-			...
+		[You] Are you good?
+		Good. How's the deathgnat situation?
+		[You] In progress.
 {exit()}
 
 :_entry113
-
-{!Global.stat("riley/apology") and Global.stat("capacitor_113")}
-	?{riley/capacitor}
-		{Global.add_stat("riley/113/argue") == 1}
-			Oh my God! I told you not to take that capacitor! {remember("Riley's angry at me for taking the capacitor from the tower. Honestly I think she's overreacting.")}
-			[You] How was I supposed to know the whole tower would explode?
-			Because I told you it would!
-			[You] No you didn't! You said it might collapse! Not that the whole thing would pop like a balloon the second I unplugged the capacitor!
-			What, would it falling on that village a week from now be fine?
-			[You] Oh, whatever. It didn't fall on the village, so I don't see the issue.
-			It's blocking the whole valley! There's specters crawling everywhere! And what happens when it shifts again? It could crush the wall!
-			[You] I don't know! They move or something!
-			Ugh.
++{riley/113/talked}
+?{capacitor_113}
+	!{riley/113/capacitor}
+		+{riley/113/capacitor}
+		{riley/113/warned}
+			.... Uh-oh.
+			[You] Should we tell someone?
+			Didn't you ask around town about the tower? They probably already know it was you.
+			[You] Am I going to be arrested?
+			Aren't you rich or something?
+			[You] I'm not! We're just... well-off, is all. This was your idea, by the way. I'll be sure to mention that to the jury.
+			Uh, well, on the bright side, it doesn't look like it fell ON the village, so I don't think anybody was hurt.
+			[You] Well, we can hope they feel the same.
 		{otherwise}
-			I'm not in a talky mood right now. We'll probably see each other again. But seriously, if someone tells you something is a bad idea, listen to them.
-	{otherwise}
-		{Global.add_stat("riley/113/argue") == 1}
-			{talked == 0}
-				Ine kes?! Nurane kuloron ine?
-				[You] W-what?
-				What? A Vaeler? Nevermind, I'm asking about what you did to collapse the tower!
-			{otherwise}
-				What did you do?!
-			[You] What do you mean?
-			The entire tower collapsed! Did you shut down the power or something?!
+			JACKIE!!! Somebody blew up the tower!
+			[You] Oh, uh... That might have been me.
+			Really???
+			[You] I found this capacitor at the top. The moment I removed it, the entire building exploded.
+			Holy crap! I thought these things were indestructible? 
 			?{armstrong/asked_tower}
-				[You] I... uh, assumed it would take longer.
-				You KNEW this would happen?
-			{otherwise}
-				{!task_exists("activate_the_medium")}
-					[You] I just took this curious thing! I didn't know it was important!
-				{otherwise}
-					[You] ... I don't see how that would have caused the tower to fall apart.
-				Vaelers...
-				These buildings are ancient. They have some sort of self-repair system. If you break the electrical system, they fall apart. Did you seriously think nothing would happen if you took it out?
-			You could have crushed that entire village in the valley!
-			[You] Well, it didn't fall on the village, so I don't see the issue.
-			It's blocking half of the valley! And what happens when it shifts again? It could crush the wall, or block the whole path.
-			[You] I don't know! They move or something!
-			Ugh.
-		{otherwise}
-			I'm not in the mood to talk with you right now.
-	{exit()}
-
-?{riley/apology} {!Global.stat("riley/113/apologize")}
-	+{riley/113/apologize}
-	Well, it's not the end of the world. The tower was damaged when it fell, and Armstrong thinks we can bust it open and tear down the whole thing.
-	[You] Really? Wow!
-	Yeah, we might end up turning a pretty big profit on the scrap, so long as there aren't too many specters inside. At the very least we can get it moved out of the valley bit by bit.
-	Did you need anything?
-	+{riley/113/talked}
-
-// Never saved Riley up at the thing
-{otherwise if !Global.stat("riley/113/talked") and !Global.stat("riley/126/reward")}
-	// But they did talk to her
-	?{riley/126/talked}
-		+{riley/not_saved}
-		[You] Oh, I thought you were stranded on top of the scrap tower over there?
-		I managed to get down on my own. I never caught your name by the by.
-		[You] Oh, I'm Jackie. Sorry. I meant to help, but those creatures are rather difficult to hit.
-		Riley. Don't worry about it. I'll try again later. I couldn't get a good look if there was a capacitor up there.
+				[You] I had heard it might collapse if I took the capacitor, but I hadn't any idea it would be so immediate.
+				You KNEW this would happen???
+				[You] No! It was... speculation from someone is all.
+				Jeez... We could have just found a different tower or something.
+				[You] Well, it's done now.
 	{otherwise}
-		{format("italic")}N'seit mi!
-		> {skip()} N'seit mi.
-			+{language/nseit_mi}
-			[You] nset me.
-			// Your accent is interesting. Where are you from?
-			{format("italic")} Yuukirha inere uko ghimres. Pol tu ine?
-			[You] Uh... I don't know.
-		> Uh, hello.
-		Whoa, a Vaeler! I didn't know you guys ever came out here! Seems too sunny for you.
-		[You] Uh, I manage.
-		I'm Riley, by the way.
-		[You] Jackie.... So what is this place?
-		+{hasyr}It's a tower built by the Hasyr.  There's all sorts of structures like it. They're MILLIONS of years old!
-		[You] Really? That stretches belief.
-		Yeah! They've been carbon dated and everything. The metal goes back to like two million years ago.
-		{Global.task_exists("activate_the_medium")}
-			[You] So I've been looking for ancient capacitors. Would there be one in the tower.
-			Oh. Uh. Yeah, most of the structures have capacitors. But you shouldn't take them.
-			[You] Why not?
-			+{riley/capacitor}
-			{Global.note_task("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it or the tower would collapse. I'm not sure I see what the harm of that is if it's been abandoned for centuries.")}
-			They're so old that they're on the brink of collapse. They have active, like, self-repair systems that keep them running. If the power gets interrupted, like by taking out capacitors, they can completely fall apart.
-			[You] ...
-		{otherwise}
-			[You] What's inside them? Anything interesting?
-			Well, yeah. They can be pretty cool, as long as you can fight off specters.
-	+{riley/113/talked}
-	{exit()}
-
-{otherwise if Global.add_stat("riley/113/talked") == 1}
-	[You] Hi Riley.
-	Hi again, uh...
-	[You] Jackie.
-	Right! Hi Jackie. Thanks for the help back with those deathgnats.
-	[You] So this is the tower you were talking about? With the capacitor?
-	Right. You shouldn't take it.
-	[You] ... Well, where else would I get a capacitor?
-	+{riley/capacitor}
-	{Global.note_task("activate_the_medium", "Riley says there's a capacitor at the top of the white tower, but that I shouldn't take it or the tower would collapse. I'm not sure I see what the harm of that is if it's been abandoned for centuries.")}
-	I'm not sure. But seriously. These things are so old they're on the brink of collapse. They have active, like, self-repair systems that keep them running. If the power gets interrupted, like by taking out capacitors, they can completely fall apart.
-	[You] ...
-{otherwise if !Global.stat("capacitor_113") and !Global.stat("riley/113/days_collapse")}
-	+{riley/capacitor}
-	[You] Do you really think this thing would collapse if I took the capacitor?
-	+{riley/113/days_collapse} Yeah. They're not as strong as they look. But they have these automatic repair machines keeping them running. Without power, it might only last a few days.
-	[You] ...
+		So uh... How's it going? Get arrested by anybody?
+		[You] Not yet.
+		{goto("shop_generic")}
+{otherwise if Global.stat("riley/113/talked") == 1}
+	[You] Oh, hello again Riley!
+	Hey! Pretty cool tower, right? These were made by the Hasyr literally MILLIONS of years ago!
+	[You] That stretches belief.
+	Believe it! But they're almost impossible to get inside of, so there's probably capacitors and other good stuff inside.
+	I spotted a tiny hole in the side of this tower, just big enough for somebody to crawl through. So now I'm gonna get a 
+	?{armstrong/asked_tower}
+		[You] I asked an acquaintance Armstrong about it, actually.
+		Really? What'd he say?
+		[You] Well, that there is probably a capacitor inside. But he was worried the tower would collapse if we took it.
+		He is? Why?
+		[You] Some sort of self-repair system. Apparently it's all that's keeping it together.
+		I've never heard of that before. But these things are almost completely indestructible! I don't see how taking a capacitor would cause so much damage.
+		[You] Hm... Well, I can look inside if you want. Maybe I can see if there's any damage.
+	{otherwise}
+		[You] I could look inside.
+	Really? It's pretty dangerous...
+	[You] I'm sure it's fine.
+	+{task_note_place("the_tree_tower", "village_tower", "Riley told me a way inside: there's a hole in the band of purple gems on the first level.")} 
+	Okay... If you look at the tower, there's those purple bands of gemstone. There's a hole in the bottom one on the southeast side. You can get to it from the top of this copper palace if you jump.
+	[You] Got it. I'll look for a hole in the crystal.
 {otherwise}
-	Hey again Jackie. Did you need anything?
-> {Global.stat("capacitor_113") and !Global.stat("riley/apology")} I wanted to apologize...
-	{subtopic("apology")}
-	{exit()}
-> Say, could I buy some supplies off you?
-	Sure, I have some spare gear.
-	{shop()}
-	{exiting()} Okay, see you around.
-	{exit()}
-> Okay, see you.
-	{exit()}
-{exit()}
+	Good luck inside the tower. Did you need anything?
+	{goto("generic_shop")}
 
-:apology
-[You] I should have listened to you. I could have found some other way to power up the Medium. I'm sorry for nearly destroying the village.
-Well... It's not like anyone got hurt. And you've helped me out plenty.
-{Global.add_stat("riley/apology")} I'm not one to hold a grudge, so let's just consider it a lesson learned.
-[You] Thanks, Riley. {remember("I can see why Riley was as angry as she was about the tower. I'm glad she forgives me, at least.")}
-{back()}
 {exit()}
 
 :_exit
@@ -261,7 +165,6 @@ Well... It's not like anyone got hurt. And you've helped me out plenty.
 
 {main_speaker.needs_saving()} Uh, a little busy right now? A little pinned-down-by-gunfire right now?
 	[You] Okay, I'll get the deathgnats first.
-{otherwise if Global.stat("capacitor_113") and !Global.stat("riley/apology")} Uh, maybe some other time.
 {otherwise if traded_coats()} Again? Did you regret the trade?
 	[You] Well, I'm just quite picky with coats.
 	I suppose we can.

@@ -1133,7 +1133,7 @@ func is_crouching():
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
 		if !startup and !Global.stat("tutorial/items"):
-			Global.add_stat("tutorial/items")
+			var _x = Global.add_stat("tutorial/items")
 			show_prompt(["show_inventory"], "Show Inventory")
 		var l_count: Label = get_node("ui/gameing/inventory/"+item+"_count")
 		l_count.text = str(count)
@@ -1774,6 +1774,7 @@ func lock():
 
 func unlock():
 	set_process_input(true)
+	set_state(State.Ground)
 	$unlock_timer.start()
 	$ui/gameing/stats.show()
 

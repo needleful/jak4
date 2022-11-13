@@ -1,9 +1,9 @@
 extends Control
 
 enum Mode {
+	Paused,
 	Gameing,
 	Dialog,
-	Paused,
 	DebugConsole,
 	Custom
 }
