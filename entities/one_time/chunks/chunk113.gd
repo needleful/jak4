@@ -7,7 +7,11 @@ onready var anim2 := $secondary_animation
 
 var save_path := "res://entities/one_time/chunks/tower_113_fall.anim"
 
+func _enter_tree():
+	hide()
+
 func _ready():
+	call_deferred("show")
 	print("113 ready")
 	if Engine.editor_hint:
 		# Generate the animation data
@@ -44,6 +48,8 @@ func fall(instant := false):
 	if instant:
 		get_tree().call_group("113_tower_only", "queue_free")
 		anim2.seek(anim2.current_animation_length)
+		anim2.advance(0)
+		anim2.stop()
 	else:
 		Global.disconnect("stat_changed", self, "_on_stat_changed")
 	get_tree().call_group("113_delete", "queue_free")

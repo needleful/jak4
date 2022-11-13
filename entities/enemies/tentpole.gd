@@ -42,7 +42,7 @@ func _physics_process(delta):
 			look_at_target(turn_speed_radians)
 			walk(0, acceleration)
 		AI.Dead:
-			walk(0, acceleration)
+			set_physics_process(false)
 		AI.GravityStun:
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:

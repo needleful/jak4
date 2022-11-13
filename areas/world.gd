@@ -48,8 +48,8 @@ const FOG_MAX_HEIGHT := 3500
 onready var FOG_DISTANCE_MIN = fog_defaults.end
 onready var FOG_DISTANCE_MAX = fog_defaults.end*2.0
 
-const DIST_HIRES := 750.0
-const DIST_LOWRES := 1250.0
+const DIST_HIRES := 1500.0
+const DIST_LOWRES := 2000.0
 
 var terrain_hires := {}
 var terrain_lowres := {}

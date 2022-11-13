@@ -225,6 +225,7 @@ func die():
 	if !respawns:
 		Global.mark_picked(get_path())
 	emit_signal("died", id, get_path())
+	set_physics_process(false)
 
 func drop_item(item: ItemPickup):
 	item.persistent = false
@@ -265,6 +266,7 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 			set_state(AI.Damaged)
 
 func gravity_stun(dam):
+	set_physics_process(true)
 	health -= dam
 	var dead := health <= 0
 	apply_central_impulse(mass*dam*Vector3.UP*gravity_stun_speed)

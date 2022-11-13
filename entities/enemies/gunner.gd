@@ -130,7 +130,7 @@ func _physics_process(delta):
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Dead)
 		AI.Dead:
-			pass
+			set_physics_process(false)
 	aim_cast.update()
 
 func reset_aim():

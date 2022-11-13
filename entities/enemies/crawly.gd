@@ -43,6 +43,9 @@ onready var ref_target = $ref_target
 func _init():
 	skip_alert = false
 
+func _ready():
+	anim.play("Idle-loop")
+
 func _physics_process(delta):
 	state_timer += delta
 	if cooldown_timer > 0:
@@ -100,6 +103,7 @@ func _physics_process(delta):
 		AI.Damaged:
 			look_at_target(turn_speed_radians, 1.0)
 		AI.Dead:
+			set_physics_process(false)
 			pass
 		AI.Idle:
 			walk(0, acceleration)

@@ -158,6 +158,7 @@ var hover_normal := Vector3.UP
 var hover_speed_factor := 1.0
 const HOVER_SPEED_BOOST := 0.5
 
+const DEPTH_CROUCH := 0.1
 const DEPTH_CRUSH := 0.4
 
 # Broad things
@@ -515,6 +516,8 @@ func _physics_process(delta):
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
+			elif max_depth > DEPTH_CROUCH:
+				next_state = State.Crouch
 			elif !empty(crouch_head) and $standing_col.disabled:
 				next_state = State.Crouch
 			elif released("combat_lunge"):
@@ -929,6 +932,8 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
+			elif best_floor_dot >= MIN_DOT_CLIMB_AIR:
+				next_state = State.Climb
 			elif ( total_stamina() <= 0 
 				or after(MAX_TIME_WALL_CLING)
 				or !on_wall

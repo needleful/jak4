@@ -11,6 +11,7 @@ func process_player_distance(origin: Vector3):
 	var vis = sq_dist < sq_distance_visible
 	if visible != vis:
 		visible = vis
+		set_process(visible)
 	return INF
 
 func _process(_delta):

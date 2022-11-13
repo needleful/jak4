@@ -44,6 +44,8 @@ func _physics_process(delta):
 			stunned_move(delta)
 			if state_timer > Global.gravity_stun_time:
 				set_state(AI.Dead)
+		AI.Dead:
+			set_physics_process(false)
 
 func take_damage(damage, dir, source):
 	if (source and source != self) or dir.y < MIN_DOT_DAMAGE:
