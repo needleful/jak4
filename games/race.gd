@@ -72,7 +72,9 @@ func _process(_delta):
 	if running_time + DANGER_TIME > bronze_seconds:
 		overlay.color_bronze(DANGER_COLOR)
 	
-	if active and at_end and player.is_grounded():
+	if active and at_end and (
+		player.is_grounded() or player.is_hovering()
+	):
 		win()
 
 func start_race():

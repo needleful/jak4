@@ -28,6 +28,7 @@ const SPRING_WARDROBE := 1.0
 const ANGLE_DEFAULT := Vector3(-15, 0, 0)
 const ANGLE_AIM := Vector3(-10, -20, 0)
 const ANGLE_DIALOG := Vector3(-10, 20, 0)
+const ANGLE_WARDROBE := Vector3(-10, -15, 0)
 
 const TWEEN_TIME_AIM := 0.4
 const TWEEN_TIME_AIM_RESET := 0.6
@@ -167,7 +168,7 @@ func end_dialog():
 	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)
 
 func start_wardrobe():
-	tween_to(ANGLE_AIM, SPRING_WARDROBE, TWEEN_TIME_WARDROBE)
+	tween_to(ANGLE_WARDROBE, SPRING_WARDROBE, TWEEN_TIME_WARDROBE)
 
 func end_wardrobe():
 	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)

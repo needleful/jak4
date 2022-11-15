@@ -1522,6 +1522,9 @@ func is_grounded():
 		or state == State.Roll
 		or state == State.Crouch)
 
+func is_hovering():
+	return state == State.Hover
+
 func can_flinch():
 	return !( state == State.DiveWindup
 		or state == State.DiveStart
