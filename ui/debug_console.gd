@@ -3,6 +3,8 @@ extends Control
 onready var line_edit := $ScrollContainer/VBoxContainer/LineEdit
 onready var logs := $ScrollContainer/VBoxContainer/logs
 
+var show_stats := false setget set_show_stats
+
 var history := []
 var index := 0
 
@@ -78,3 +80,7 @@ func teleport(location):
 			return "No chunk: " + chunk_name
 	else:
 		return "Not yet supported"
+
+func set_show_stats(val: bool):
+	show_stats = val
+	Global.get_player().debug.visible = show_stats

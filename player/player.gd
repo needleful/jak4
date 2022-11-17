@@ -397,6 +397,8 @@ const WEAPONS := [
 	"wep_time_gun"
 ]
 
+onready var debug = $ui/gameing/debug
+
 func _ready():
 	if Global.valid_game_state:
 		global_transform.origin = Global.game_state.checkpoint_position
