@@ -121,7 +121,7 @@ func _ready():
 		var _x = awareness.connect("body_entered", self, "_on_awareness_entered")
 
 func _on_awareness_entered(body):
-	if (ai == AI.Idle or !is_physics_processing()) and body.is_in_group("player"):
+	if !is_dead() and (ai == AI.Idle or !is_physics_processing()) and body.is_in_group("player"):
 		aggro_to(body)
 		if skip_alert:
 			set_state(AI.Chasing)
