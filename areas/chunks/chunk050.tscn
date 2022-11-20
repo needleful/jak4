@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://entities/env/train_set/20m-1v-slant_to_slant.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -14,6 +14,8 @@
 [ext_resource path="res://material/env/stone/gravel1.png" type="Texture" id=12]
 [ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=13]
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=14]
+[ext_resource path="res://entities/env/train_set/bridge_slant_straight.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/train_set/bridge_level_bend15.tscn" type="PackedScene" id=16]
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 14 )
@@ -68,6 +70,8 @@ __meta__ = {
 
 [node name="20m-1v-slant_to_straight" parent="rail" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -1, 0 )
+
+[node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_straight" instance=ExtResource( 15 )]
 
 [node name="20m-1v-straight_to_straight" parent="rail" instance=ExtResource( 7 )]
 transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 59.9, -1.00299, 0.00500107 )
@@ -162,5 +166,12 @@ transform = Transform( -0.944246, 0, -0.329239, 0, 1, 0, 0.329239, 0, -0.944246,
 [node name="20m-1v-straight_to_straight" parent="rail/20m-1v-straight_to_slant2" instance=ExtResource( 7 )]
 transform = Transform( -0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 60.2222, 0.0332851, -10.5967 )
 
+[node name="bridge_slant_straight" parent="rail/20m-1v-straight_to_slant2/20m-1v-straight_to_straight" instance=ExtResource( 15 )]
+transform = Transform( 0.999974, 0.00714226, 0, -0.00714226, 0.999974, 0, 0, 0, 1, 0, 0, 0 )
+
 [node name="straight_to_16" parent="rail/20m-1v-straight_to_slant2" instance=ExtResource( 10 )]
 transform = Transform( 0.954761, 0, 0.297375, 0, 1, 0, -0.297375, 0, 0.954761, 60.1908, 0.0309696, -10.5841 )
+
+[node name="bridge_level_bend15" parent="rail/20m-1v-straight_to_slant2/straight_to_16" instance=ExtResource( 16 )]
+
+[node name="bridge_slant_straight" parent="rail" instance=ExtResource( 15 )]
