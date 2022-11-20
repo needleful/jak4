@@ -49,6 +49,7 @@
 [ext_resource path="res://material/env/wave_noise.png" type="Texture" id=47]
 [ext_resource path="res://material/env/water.shader" type="Shader" id=48]
 [ext_resource path="res://material/env/water_interior.shader" type="Shader" id=49]
+[ext_resource path="res://material/stencil_front_incr.shader" type="Shader" id=50]
 
 [sub_resource type="OccluderShapePolygon" id=3]
 polygon_points = PoolVector2Array( 299.872, -348.413, 185.207, 25.06, -160.296, 25.8972, -324.138, -346.563, 257.417, 13.5788, -216.089, -0.0483093 )
@@ -77,22 +78,13 @@ size = Vector3( 40, 2, 20 )
 [sub_resource type="ShaderMaterial" id=12]
 render_priority = 1
 shader = ExtResource( 49 )
-shader_param/surface_albedo = Color( 0.309804, 0.478431, 0.360784, 1 )
-shader_param/deep_albedo = Color( 0.152941, 0.196078, 0.160784, 1 )
-shader_param/max_depth = 0.884
-
-[sub_resource type="Shader" id=13]
-code = "shader_type spatial;
-render_mode unshaded, depth_test_disable, cull_back, blend_mul;
-
-stencil front {
-	test always;
-	pass incr;
-}"
+shader_param/surface_albedo = Color( 0.286275, 0.513726, 0.34902, 1 )
+shader_param/deep_albedo = Color( 0.0196078, 0.168627, 0.0784314, 1 )
+shader_param/max_depth = 19.43
 
 [sub_resource type="ShaderMaterial" id=6]
 next_pass = SubResource( 12 )
-shader = SubResource( 13 )
+shader = ExtResource( 50 )
 
 [sub_resource type="ShaderMaterial" id=14]
 render_priority = 1
