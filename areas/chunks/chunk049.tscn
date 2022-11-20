@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -10,15 +10,20 @@
 [ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=8]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=9]
 [ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=10]
+[ext_resource path="res://entities/env/train_set/straight_to_15.tscn" type="PackedScene" id=11]
 [ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=12]
 [ext_resource path="res://material/env/vaeler/faux_marble.png" type="Texture" id=13]
 [ext_resource path="res://material/env/vaeler/roof_tiles.png" type="Texture" id=14]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=15]
-[ext_resource path="res://material/env/vaeler/decayed_wood.png" type="Texture" id=16]
 [ext_resource path="res://entities/env/plants/juniper_small.tscn" type="PackedScene" id=17]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=18]
 [ext_resource path="res://dialog/side_content/letter_delivery/natia.dialog" type="Resource" id=19]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=20]
+[ext_resource path="res://entities/env/train_set/20m_straight.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/env/train_set/straight_to_45.tscn" type="PackedScene" id=22]
+[ext_resource path="res://entities/env/train_set/20m-1v-straight_to_slant.tscn" type="PackedScene" id=23]
+[ext_resource path="res://entities/env/train_set/20m-1v-slant_to_slant.tscn" type="PackedScene" id=24]
+[ext_resource path="res://entities/env/train_set/20m-1v-straight_to_straight.tscn" type="PackedScene" id=25]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -99,30 +104,8 @@ shader_param/wall = ExtResource( 13 )
 shader_param/ground = ExtResource( 10 )
 shader_param/ceiling = ExtResource( 10 )
 
-[sub_resource type="ShaderMaterial" id=10]
-shader = ExtResource( 15 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/main_texture = ExtResource( 16 )
-
-[sub_resource type="ShaderMaterial" id=9]
-shader = ExtResource( 7 )
-shader_param/wall_scale = 0.125
-shader_param/ground_scale = 0.125
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity_ground = 5.769
-shader_param/specularity_wall = 1.0
-shader_param/specularity_ceiling = 1.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 4 )
-shader_param/ground = ExtResource( 8 )
-shader_param/ceiling = ExtResource( 4 )
-
 [node name="chunk049" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-lighting_preview = true
 
 [node name="muzna_cross" parent="." index="0"]
 material/0 = SubResource( 3 )
@@ -132,68 +115,141 @@ material/3 = SubResource( 4 )
 material/4 = SubResource( 2 )
 material/5 = SubResource( 7 )
 
-[node name="static_collision" parent="muzna_cross" index="0"]
-collision_layer = 257
-
 [node name="boarding_docks" parent="." index="1"]
 material/0 = SubResource( 1 )
-
-[node name="static_collision" parent="boarding_docks" index="0"]
-collision_layer = 257
 
 [node name="train_shelter" parent="." index="2"]
 material/0 = SubResource( 2 )
 
-[node name="static_collision" parent="train_shelter" index="0"]
-collision_layer = 257
-
 [node name="windows" parent="." index="3"]
 material/0 = SubResource( 8 )
 
-[node name="tracks" parent="." index="4"]
-use_in_baked_light = false
-generate_lightmap = false
-material/0 = SubResource( 10 )
-material/1 = SubResource( 9 )
-
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="5"]
-transform = Transform( 0.605019, 0, -0.796211, 0, 1, 0, 0.796211, 0, 0.605019, 56.7096, 14.6167, 71.6393 )
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="4"]
+transform = Transform( 0.700576, 0, -0.713578, 0, 1, 0, 0.713578, 0, 0.700576, 56.1058, 14.6167, 72.2169 )
 max_distance = 16384.0
 extents = Vector3( 9.96179, 4.74854, 6.92097 )
 origin_offset = Vector3( 0, -0.34375, 0 )
 interior_enable = true
-interior_ambient_color = Color( 0.0862745, 0.0862745, 0.0862745, 1 )
+interior_ambient_color = Color( 0.172549, 0.2, 0.235294, 1 )
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="6"]
-transform = Transform( 0.569464, -0.2233, -0.791106, 0.358286, 0.933595, -0.00561321, 0.739826, -0.280245, 0.611654, 61.063, 10.5736, 77.4504 )
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="." index="5"]
+transform = Transform( 0.658098, -0.256814, -0.707781, 0.358286, 0.933595, -0.00561372, 0.662223, -0.249894, 0.70641, 61.3348, 10.5736, 77.1885 )
 intensity = 0.1
 max_distance = 16384.0
 extents = Vector3( 3.88984, 3.7859, 1.60752 )
 
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="." index="7"]
-transform = Transform( 0.605019, 0, -0.796211, 0, 1, 0, 0.796211, 0, 0.605019, 56.7096, 20.2755, 71.6393 )
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="." index="6"]
+transform = Transform( 0.706222, -0.0108907, -0.707907, -0.00478495, 0.999785, -0.0201547, 0.707975, 0.017621, 0.706018, 56.4816, 20.2755, 71.9419 )
 intensity = 0.63
 max_distance = 16384.0
 extents = Vector3( 10.0476, 3.90006, 4.78005 )
 
-[node name="fountain" parent="." index="8" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.8506, 11.6049, 101.718 )
+[node name="fountain" parent="." index="7" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.8506, 11.6049, 99.118 )
 
-[node name="juniper_small" parent="." index="9" instance=ExtResource( 17 )]
+[node name="juniper_small" parent="." index="8" instance=ExtResource( 17 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 61.7524, 12.2767, 91.8713 )
 
-[node name="juniper_small2" parent="." index="10" instance=ExtResource( 17 )]
+[node name="juniper_small2" parent="." index="9" instance=ExtResource( 17 )]
 transform = Transform( -0.520051, 0, -0.734539, 0, 0.9, 0, 0.734539, 0, -0.520051, 61.012, 12.3403, 91.4617 )
 
-[node name="npc" parent="." index="11" instance=ExtResource( 18 )]
+[node name="npc" parent="." index="10" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 75.8045, 33.1857, 99.3442 )
 
-[node name="mother_activated" type="Spatial" parent="." index="12"]
+[node name="mother_activated" type="Spatial" parent="." index="11"]
 transform = Transform( 0.690771, 0, 0.723074, 0, 1, 0, -0.723074, 0, 0.690771, 80.9499, 12.5603, 94.5916 )
 script = ExtResource( 20 )
 condition = "!Global.stat(\"mother/activated\")"
 
 [node name="npc_natia" parent="mother_activated" index="0" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.726303, 0, -0.832153 )
 dialog = ExtResource( 19 )
 visual_name = "Natia"
 friendly_id = "natia"
+
+[node name="rail" parent="." index="12" instance=ExtResource( 21 )]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 88.8548, 12.2555, 90.8556 )
+
+[node name="20m_straight6" parent="rail" index="1" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 0, -3.8147e-06 )
+
+[node name="20m_straight7" parent="rail" index="2" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -3.8147e-06 )
+
+[node name="20m_straight8" parent="rail" index="3" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -3.8147e-06 )
+
+[node name="20m_straight9" parent="rail" index="4" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0 )
+
+[node name="straight_to_15" parent="rail" index="5" instance=ExtResource( 11 )]
+transform = Transform( -1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, -99.9995, 0, -0.0001297 )
+
+[node name="straight_to_16" parent="rail/straight_to_15" index="1" instance=ExtResource( 11 )]
+transform = Transform( 0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 21.5057, -0.0155249, 3.51116 )
+
+[node name="20m_straight" parent="rail/straight_to_15/straight_to_16" index="1" instance=ExtResource( 21 )]
+transform = Transform( 0.947175, 0.0009873, -0.320715, 0.00067869, 0.999987, 0.00508279, 0.320716, -0.00503196, 0.947162, 21.5227, 0.000627518, 3.50997 )
+
+[node name="20m-1v-straight_to_straight" parent="rail/straight_to_15/straight_to_16" index="2" instance=ExtResource( 25 )]
+transform = Transform( 0.947175, 0.0009873, -0.320715, 0.00067869, 0.999987, 0.00508279, 0.320716, -0.00503196, 0.947162, 40.4662, 0.0142021, 9.92429 )
+
+[node name="20m-1v-straight_to_straight2" parent="rail" index="6" instance=ExtResource( 25 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 99.959, -0.00329971, 0.00198078 )
+
+[node name="20m_straight3" parent="rail/20m-1v-straight_to_straight2" index="1" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9578, -1.0019, 0.00390911 )
+
+[node name="20m_straight4" parent="rail/20m-1v-straight_to_straight2" index="2" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.9578, -1.0019, 0.00390911 )
+
+[node name="20m-1v-straight_to_straight" parent="rail" index="7" instance=ExtResource( 25 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 159.892, -1.0061, 0.00396061 )
+
+[node name="straight_to_45" parent="rail/20m-1v-straight_to_straight" index="1" instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9415, -1.00245, -0.0324707 )
+
+[node name="20m-1v-straight_to_straight" parent="rail/20m-1v-straight_to_straight" index="2" instance=ExtResource( 25 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 40.4465, -1, 10.4652 )
+
+[node name="20m_straight" parent="rail/20m-1v-straight_to_straight" index="3" instance=ExtResource( 21 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 54.5886, -2, 24.6073 )
+
+[node name="20m_straight2" parent="rail/20m-1v-straight_to_straight" index="4" instance=ExtResource( 21 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 68.7308, -2, 38.7495 )
+
+[node name="20m_straight3" parent="rail/20m-1v-straight_to_straight" index="5" instance=ExtResource( 21 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 68.7308, -2, 38.7495 )
+
+[node name="20m-1v-straight_to_slant" parent="rail" index="8" instance=ExtResource( 23 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 242.764, -3.00827, 52.885 )
+
+[node name="20m-1v-slant_to_slant" parent="rail/20m-1v-straight_to_slant" index="1" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -1, 7.62939e-06 )
+
+[node name="20m-1v-slant_to_slant2" parent="rail/20m-1v-straight_to_slant" index="2" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, -2, 1.90735e-05 )
+
+[node name="20m-1v-slant_to_slant3" parent="rail/20m-1v-straight_to_slant" index="3" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60, -3, 2.28882e-05 )
+
+[node name="20m-1v-slant_to_slant4" parent="rail/20m-1v-straight_to_slant" index="4" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, -4, 2.28882e-05 )
+
+[node name="20m-1v-slant_to_slant5" parent="rail" index="9" instance=ExtResource( 24 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 313.475, -8.00827, 123.596 )
+
+[node name="20m_straight11" parent="rail" index="10" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -99.9995, 0, -0.0001297 )
+
+[node name="20m_straight6" parent="rail/20m_straight11" index="1" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 0, -3.8147e-06 )
+
+[node name="20m_straight7" parent="rail/20m_straight11" index="2" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -3.8147e-06 )
+
+[node name="20m_straight8" parent="rail/20m_straight11" index="3" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -3.8147e-06 )
+
+[node name="20m_straight9" parent="rail/20m_straight11" index="4" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0 )

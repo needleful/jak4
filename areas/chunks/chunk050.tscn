@@ -1,0 +1,118 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://entities/env/train_set/20m-1v-slant_to_slant.tscn" type="PackedScene" id=1]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
+[ext_resource path="res://entities/env/train_set/20m-1v-slant_to_straight.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/env/train_set/20m-1v-straight_to_slant.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/env/train_set/20m_straight.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/env/train_set/straight_to_45.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/env/train_set/20m-1v-straight_to_straight.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/env/train_set/45_up1.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/env/train_set/20m-2v-slant_to_double.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/train_set/straight_to_15.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/train_set/20m-2v-double_to_slant.tscn" type="PackedScene" id=11]
+
+[node name="chunk050" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="20m-1v-slant_to_slant" parent="." instance=ExtResource( 1 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -45.4101, 3.24723, 261.8 )
+
+[node name="20m-1v-slant_to_straight" parent="20m-1v-slant_to_slant" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -1, 0 )
+
+[node name="20m-1v-straight_to_straight" parent="." instance=ExtResource( 7 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -45.4051, 2.24424, 201.9 )
+
+[node name="20m-1v-straight_to_slant" parent="20m-1v-straight_to_straight" instance=ExtResource( 4 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -50.1834, 2, 35.3341 )
+
+[node name="20m-1v-slant_to_straight" parent="20m-1v-straight_to_straight" instance=ExtResource( 3 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -36.0412, 1, 21.192 )
+
+[node name="straight_to_45" parent="20m-1v-straight_to_straight" instance=ExtResource( 6 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -21.9203, 0, 7.07107 )
+
+[node name="straight_to_46" parent="20m-1v-straight_to_straight" instance=ExtResource( 6 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -50.1806, 2, 35.3313 )
+
+[node name="20m_straight" parent="." instance=ExtResource( 5 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -87.8056, 4.24117, 129.8 )
+
+[node name="20m-1v-slant_to_straight" parent="20m_straight" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 40, 1, 0 )
+
+[node name="20m-1v-slant_to_slant" parent="20m_straight" instance=ExtResource( 1 )]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 60, 2, -1.52588e-05 )
+
+[node name="20m-1v-straight_to_slant" parent="20m_straight" instance=ExtResource( 4 )]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 79.9931, 2.98309, 2.28882e-05 )
+
+[node name="20m_straight" parent="20m_straight" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.9887, 2.98393, 0.00025177 )
+
+[node name="20m-1v-straight_to_straight" parent="20m_straight" instance=ExtResource( 7 )]
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 119.989, 3.98393, 0.00025177 )
+
+[node name="20m_straight2" parent="20m_straight" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 119.985, 3.98407, 0 )
+
+[node name="straight_to_45" parent="." instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -87.8038, 8.22355, -10.182 )
+
+[node name="20m_straight" parent="straight_to_45" instance=ExtResource( 5 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 20.5041, 0, 10.5069 )
+
+[node name="20m_straight2" parent="straight_to_45" instance=ExtResource( 5 )]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 34.6463, 0, 24.649 )
+
+[node name="20m-1v-straight_to_straight" parent="straight_to_45" instance=ExtResource( 7 )]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 62.8598, 1, 52.8626 )
+
+[node name="20m_straight2" parent="." instance=ExtResource( 5 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -34.9634, 9.22297, -73.0249 )
+
+[node name="20m_straight3" parent="20m_straight2" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 7.62939e-06 )
+
+[node name="20m_straight4" parent="20m_straight2" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 7.62939e-06 )
+
+[node name="20m_straight5" parent="20m_straight2" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 1.52588e-05 )
+
+[node name="20m_straight6" parent="20m_straight2" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 0, 1.52588e-05 )
+
+[node name="20m-1v-slant_to_straight" parent="20m_straight2" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 120, 1, 6.10352e-05 )
+
+[node name="20m-1v-straight_to_slant" parent="20m_straight2/20m-1v-slant_to_straight" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0.968907, 7.62939e-06 )
+
+[node name="45_up1" parent="." instance=ExtResource( 8 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 64.0217, 11.1919, -172.009 )
+
+[node name="20m-1v-slant_to_straight" parent="45_up1" instance=ExtResource( 3 )]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 34.5648, 2, 24.5736 )
+
+[node name="20m-2v-double_to_slant" parent="45_up1" instance=ExtResource( 11 )]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 48.6362, 4, 38.645 )
+
+[node name="20m-2v-slant_to_double" parent="45_up1" instance=ExtResource( 9 )]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 62.7783, 6, 52.7872 )
+
+[node name="20m-1v-straight_to_slant" parent="45_up1/20m-2v-slant_to_double" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, 0 )
+
+[node name="20m-1v-straight_to_slant2" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, 1, 165.739, 18.1919, -179.073 )
+
+[node name="straight_to_15" parent="20m-1v-straight_to_slant2" instance=ExtResource( 10 )]
+transform = Transform( -0.944246, 0, -0.329239, 0, 1, 0, 0.329239, 0, -0.944246, 41.4485, -0.96903, -3.75844 )
+
+[node name="20m-1v-straight_to_straight" parent="20m-1v-straight_to_slant2" instance=ExtResource( 7 )]
+transform = Transform( -0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 60.2222, 0.0332851, -10.5967 )
+
+[node name="straight_to_16" parent="20m-1v-straight_to_slant2" instance=ExtResource( 10 )]
+transform = Transform( 0.954761, 0, 0.297375, 0, 1, 0, -0.297375, 0, 0.954761, 60.1908, 0.0309696, -10.5841 )
