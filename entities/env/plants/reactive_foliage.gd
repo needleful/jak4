@@ -18,7 +18,7 @@ func _ready():
 	var _x = area.connect("body_entered", self, "_check")
 	_x = area.connect("body_exited", self, "_check")
 
-func _check():
+func _check(_body = null):
 	set_physics_process((!area.get_overlapping_bodies().empty() or velocity.length_squared() >= 0.001) and active)
 
 func _physics_process(delta):
