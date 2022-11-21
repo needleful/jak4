@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=2]
+[gd_scene load_steps=118 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/junkyard.tscn" type="PackedScene" id=2]
@@ -89,6 +89,7 @@
 [ext_resource path="res://entities/env/train_set/bridge_slant_straight.tscn" type="PackedScene" id=87]
 [ext_resource path="res://entities/env/train_set/bridge_slant_bend45.tscn" type="PackedScene" id=88]
 [ext_resource path="res://entities/env/train_set/bridge_level_bend15.tscn" type="PackedScene" id=89]
+[ext_resource path="res://entities/env/train_set/column-10m.tscn" type="PackedScene" id=90]
 
 [sub_resource type="ShaderMaterial" id=25]
 shader = ExtResource( 59 )
@@ -1346,10 +1347,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.0001, -3, 0.000106812 )
 
 [node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_slant4" index="1" instance=ExtResource( 87 )]
 
+[node name="column-10m" parent="rail/20m-1v-slant_to_slant4/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, -11, 0 )
+
 [node name="20m-1v-slant_to_slant5" parent="rail" index="3" instance=ExtResource( 78 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80.0001, -4, 0.000137329 )
 
 [node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_slant5" index="1" instance=ExtResource( 87 )]
+
+[node name="column-10m" parent="rail/20m-1v-slant_to_slant5/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, -11, 0 )
 
 [node name="20m-1v-slant_to_slant" parent="rail" index="5" instance=ExtResource( 78 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, -5, 0.000106812 )
@@ -1359,7 +1366,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -1, 6.10352e-05 )
 
 [node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_slant/20m-1v-slant_to_straight" index="1" instance=ExtResource( 87 )]
 
+[node name="column-10m" parent="rail/20m-1v-slant_to_slant/20m-1v-slant_to_straight/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, -11, 0 )
+
 [node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_slant" index="2" instance=ExtResource( 87 )]
+
+[node name="column-10m" parent="rail/20m-1v-slant_to_slant/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, -11, 0 )
 
 [node name="45_up1" parent="rail" index="6" instance=ExtResource( 80 )]
 transform = Transform( -0.679265, 0, -0.733894, 0, 1, 0, 0.733894, 0, -0.679265, 161.495, -7.99408, -7.91202 )
@@ -1372,10 +1385,16 @@ transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0
 
 [node name="bridge_slant_straight" parent="rail/45_up1/straight_to_15/20m-1v-straight_to_slant" index="1" instance=ExtResource( 87 )]
 
+[node name="column-10m" parent="rail/45_up1/straight_to_15/20m-1v-straight_to_slant/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0 )
+
 [node name="20m-1v-slant_to_slant" parent="rail/45_up1/straight_to_15" index="2" instance=ExtResource( 78 )]
 transform = Transform( -1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -20, -1, 7.62939e-06 )
 
 [node name="bridge_slant_straight" parent="rail/45_up1/straight_to_15/20m-1v-slant_to_slant" index="1" instance=ExtResource( 87 )]
+
+[node name="column-10m" parent="rail/45_up1/straight_to_15/20m-1v-slant_to_slant/bridge_slant_straight" index="1" instance=ExtResource( 90 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0 )
 
 [node name="20m-1v-slant_to_straight" parent="rail/45_up1/straight_to_15" index="3" instance=ExtResource( 79 )]
 transform = Transform( -1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -40, -2, 3.8147e-05 )
@@ -1385,7 +1404,16 @@ transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 20, -1, 0
 
 [node name="bridge_level_bend15" parent="rail/45_up1/straight_to_15" index="4" instance=ExtResource( 89 )]
 
+[node name="column-10m" parent="rail/45_up1/straight_to_15/bridge_level_bend15" index="1" instance=ExtResource( 90 )]
+transform = Transform( 0.933649, 0, -0.358188, 0, 1, 0, 0.358188, 0, 0.933649, 20.1481, -11, 2.75923 )
+
 [node name="bridge_slant_bend45" parent="rail/45_up1" index="2" instance=ExtResource( 88 )]
+
+[node name="column-10m" parent="rail/45_up1/bridge_slant_bend45" index="1" instance=ExtResource( 90 )]
+transform = Transform( 0.706328, 0, -0.707885, 0, 1, 0, 0.707885, 0, 0.706328, 19.3751, -10.1734, 8.134 )
+
+[node name="column-10m2" parent="rail/45_up1/bridge_slant_bend45" index="2" instance=ExtResource( 90 )]
+transform = Transform( 0.918292, 0, -0.395903, 0, 1, 0, 0.395903, 0, 0.918292, 9.02724, -10.9538, 0.680084 )
 
 [node name="20m_straight" parent="rail" index="7" instance=ExtResource( 83 )]
 transform = Transform( 0.654409, 0, 0.756141, 0, 1, 0, -0.756141, 0, 0.654409, 207.666, -10.9565, -100.276 )

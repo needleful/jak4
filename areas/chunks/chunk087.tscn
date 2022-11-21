@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://entities/env/ancient/target_flower.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/plateau/basin.dialog" type="Resource" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://entities/env/train_set/bridge_level_straight.tscn" type="PackedScene" id=35]
 [ext_resource path="res://entities/env/train_set/bridge_level_bend15.tscn" type="PackedScene" id=36]
 [ext_resource path="res://entities/env/train_set/bridge_slant_straight.tscn" type="PackedScene" id=37]
+[ext_resource path="res://entities/env/train_set/column-10m.tscn" type="PackedScene" id=38]
 
 [sub_resource type="Animation" id=6]
 length = 6.0
@@ -326,26 +327,47 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9167, -1.98735, 0 )
 
 [node name="bridge_double_straight" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double/20m-2v-double_to_slant" instance=ExtResource( 34 )]
 
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double/20m-2v-double_to_slant/bridge_double_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
+
 [node name="bridge_double_straight" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double" instance=ExtResource( 34 )]
 
 [node name="bridge_double_straight2" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double/bridge_double_straight" instance=ExtResource( 34 )]
+
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double/bridge_double_straight/bridge_double_straight2" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
 
 [node name="20m-2v-slant_to_double2" parent="rail/20m-1v-straight_to_slant" instance=ExtResource( 29 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 59.8252, -4.98193, -7.62939e-06 )
 
 [node name="bridge_double_straight" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double2" instance=ExtResource( 34 )]
 
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/20m-2v-slant_to_double2" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
+
 [node name="20m-1v-slant_to_straight" parent="rail/20m-1v-straight_to_slant" instance=ExtResource( 28 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.6604, -6.9613, 1.90735e-05 )
 
 [node name="bridge_slant_straight" parent="rail/20m-1v-straight_to_slant/20m-1v-slant_to_straight" instance=ExtResource( 37 )]
+
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/20m-1v-slant_to_straight/bridge_slant_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
 
 [node name="20m_straight" parent="rail/20m-1v-straight_to_slant" instance=ExtResource( 25 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 99.6219, -7.96035, 7.62939e-06 )
 
 [node name="bridge_level_straight" parent="rail/20m-1v-straight_to_slant/20m_straight" instance=ExtResource( 35 )]
 
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/20m_straight/bridge_level_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
+
+[node name="column-10m2" parent="rail/20m-1v-straight_to_slant/20m_straight/bridge_level_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 18, -11, 0 )
+
 [node name="bridge_slant_straight" parent="rail/20m-1v-straight_to_slant" instance=ExtResource( 37 )]
+
+[node name="column-10m" parent="rail/20m-1v-straight_to_slant/bridge_slant_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0, -11, 0 )
 
 [node name="20m-1v-slant_to_straight2" parent="rail" instance=ExtResource( 28 )]
 transform = Transform( -0.937655, 0, 0.347567, 0, 1, 0, -0.347567, 0, -0.937655, 232.494, -7.9599, 51.8852 )
@@ -355,10 +377,16 @@ transform = Transform( 1, 0, 7.45058e-08, 0, 1, 0, -7.45058e-08, 0, 1, -19.8909,
 
 [node name="bridge_double_straight" parent="rail/20m-1v-slant_to_straight2/20m-2v-double_to_slant2" instance=ExtResource( 34 )]
 
+[node name="column-10m" parent="rail/20m-1v-slant_to_straight2/20m-2v-double_to_slant2/bridge_double_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0 )
+
 [node name="20m-2v-double_to_slant" parent="rail/20m-1v-slant_to_straight2" instance=ExtResource( 27 )]
 transform = Transform( 0.999999, 0, 7.45058e-08, 0, 1, 0, -7.45058e-08, 0, 0.999999, -39.8101, 4, 0.00596619 )
 
 [node name="bridge_double_straight" parent="rail/20m-1v-slant_to_straight2/20m-2v-double_to_slant" instance=ExtResource( 34 )]
+
+[node name="column-10m" parent="rail/20m-1v-slant_to_straight2/20m-2v-double_to_slant/bridge_double_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0 )
 
 [node name="20m-2v-slant_to_double" parent="rail/20m-1v-slant_to_straight2" instance=ExtResource( 29 )]
 transform = Transform( 0.999999, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, 0.999999, -59.8099, 6, 0.00594711 )
@@ -366,6 +394,9 @@ transform = Transform( 0.999999, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, 0.99999
 [node name="bridge_double_straight" parent="rail/20m-1v-slant_to_straight2/20m-2v-slant_to_double" instance=ExtResource( 34 )]
 
 [node name="bridge_slant_straight" parent="rail/20m-1v-slant_to_straight2" instance=ExtResource( 37 )]
+
+[node name="column-10m" parent="rail/20m-1v-slant_to_straight2/bridge_slant_straight" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0 )
 
 [node name="20m-2v-double_to_slant3" parent="rail" instance=ExtResource( 27 )]
 transform = Transform( -0.939891, -0.00134067, 0.341469, -0.0014264, 0.999999, 0, -0.341468, -0.000487073, -0.939892, 307.327, 0.051355, 79.4936 )
