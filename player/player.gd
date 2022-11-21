@@ -1781,12 +1781,14 @@ func _on_dialog_event(id: String, _source: Node):
 			cam_rig.end_dialog()
 			lock()
 
-func wardrobe_lock():
-	lock()
+func wardrobe_lock(paused):
+	if !paused:
+		lock()
 	cam_rig.start_wardrobe()
 
-func wardrobe_unlock():
-	unlock()
+func wardrobe_unlock(paused):
+	if !paused:
+		unlock()
 	cam_rig.end_wardrobe()
 
 func lock():

@@ -4,6 +4,8 @@ signal exited
 
 var player: PlayerBody
 
+export(bool) var pause_menu := false
+
 var coats_by_rarity := {}
 var viewing_rarity = Coat.Rarity.Common
 var viewing_index := 0
@@ -11,6 +13,9 @@ var viewing_index := 0
 const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
 var old_coat: Coat
+
+func _ready():
+	set_process_input(false)
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
@@ -53,11 +58,14 @@ func set_active(active):
 	if active and !player:
 		enter(Global.get_player())
 	elif !active and player:
-		player.wardrobe_unlock()
+		player.cam_rig.pause_mode = PAUSE_MODE_STOP
+		player.wardrobe_unlock(pause_menu)
 		player = null
 	set_process_input(active)
 
 func enter(p: PlayerBody):
+	if pause_menu:
+		p.cam_rig.pause_mode = PAUSE_MODE_PROCESS
 	coats_by_rarity = {}
 	player = p
 	old_coat = player.current_coat
@@ -67,12 +75,14 @@ func enter(p: PlayerBody):
 		coats_by_rarity[c.rarity].append(c)
 	viewing_rarity = old_coat.rarity
 	viewing_index = coats_by_rarity[viewing_rarity].find(old_coat)
-	player.wardrobe_lock()
+	player.wardrobe_lock(pause_menu)
 	view()
 
 func exit():
 	if player:
-		player.wardrobe_unlock()
+		player.cam_rig.pause_mode = PAUSE_MODE_STOP
+		if !pause_menu:
+			player.wardrobe_unlock(pause_menu)
 	player = null
 	emit_signal("exited")
 

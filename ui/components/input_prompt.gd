@@ -1,6 +1,7 @@
 extends Control
 
 export(String) var action setget set_action
+export(bool) var small := false
 
 var default_size = rect_size
 
@@ -42,8 +43,11 @@ func show_image(image: Texture):
 	$key_prompt.hide()
 	$texture.show()
 	$texture.texture = image
-	rect_size = image.get_size()
-	$texture.rect_min_size = image.get_size()
+	var s = image.get_size()
+	if small:
+		s /= 3
+	rect_size = s
+	$texture.rect_min_size = s
 
 func show_text(text):
 	$texture.hide()

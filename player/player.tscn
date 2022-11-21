@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=84 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -31,6 +31,7 @@
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
 [ext_resource path="res://ui/equipment.gd" type="Script" id=30]
 [ext_resource path="res://ui/save_load.tscn" type="PackedScene" id=31]
+[ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=32]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -999,7 +1000,6 @@ script = ExtResource( 17 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1030,6 +1030,11 @@ time_scale_response = false
 visible = false
 margin_top = 32.0
 
+[node name="Wardrobe" parent="ui/status_menu/tabs" instance=ExtResource( 32 )]
+pause_mode = 2
+visible = false
+pause_menu = true
+
 [node name="Save & Load" parent="ui/status_menu/tabs" instance=ExtResource( 31 )]
 visible = false
 
@@ -1037,13 +1042,13 @@ visible = false
 time_scale_response = false
 margin_left = 15.0
 margin_right = 357.0
-margin_bottom = 128.0
+margin_bottom = 64.0
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
 time_scale_response = false
-margin_top = 53.0
+margin_top = 21.0
 margin_right = 104.0
-margin_bottom = 75.0
+margin_bottom = 43.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
@@ -1055,9 +1060,10 @@ time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 108.0
-margin_right = 236.0
-margin_bottom = 128.0
+margin_right = 108.0
+margin_bottom = 64.0
 action = "ui_page_down"
+small = true
 
 [node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
 time_scale_response = false
@@ -1065,24 +1071,25 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -326.0
 margin_right = -15.0
-margin_bottom = 128.0
+margin_bottom = 64.0
 alignment = 2
 
 [node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 110.0
+margin_left = 238.0
 margin_right = 238.0
-margin_bottom = 128.0
+margin_bottom = 64.0
 action = "ui_page_up"
+small = true
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
 time_scale_response = false
 margin_left = 242.0
-margin_top = 53.0
+margin_top = 21.0
 margin_right = 311.0
-margin_bottom = 75.0
+margin_bottom = 43.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
