@@ -37,3 +37,6 @@ func safe_set_tab(tab):
 	c = tabs.get_current_tab_control()
 	if c.has_method("set_active"):
 		c.set_active(true)
+
+func _on_wardrobe_exited():
+	get_parent().unpause()

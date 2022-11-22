@@ -3,6 +3,7 @@ extends Spatial
 class_name Chunk
 
 export(bool) var lighting_preview := false
+var exits := []
 
 func _ready():
 	if Engine.editor_hint:
@@ -54,3 +55,8 @@ func _ready():
 				$BakedLightmap.add_child(light)
 				light.global_transform.basis = basis
 		world_node.free()
+
+func find_exit_to(place: String):
+	for e in exits:
+		if e.destinations.contains(place):
+			return e

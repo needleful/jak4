@@ -3,8 +3,8 @@ extends Spatial
 export(bool) var open := true
 #export(float) var toggle_time := 0.0
 
-export(NodePath) var body_opened := NodePath("body_open")
-export(NodePath) var body_closed := NodePath("closed-kine")
+var body_opened := NodePath("body_open")
+var body_closed := NodePath("closed-kine")
 
 onready var opened := get_node(body_opened)
 onready var closed := get_node(body_closed)

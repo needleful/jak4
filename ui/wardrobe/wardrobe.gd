@@ -18,10 +18,13 @@ func _ready():
 	set_process_input(false)
 
 func _input(event):
+	if !visible or !player:
+		set_process_input(false)
+		return
 	if event.is_action_pressed("ui_accept"):
 		Global.save_checkpoint(player.global_transform.origin)
 		exit()
-	elif event.is_action_pressed("ui_cancel"):
+	elif !pause_menu and event.is_action_pressed("ui_cancel"):
 		Global.save_checkpoint(player.global_transform.origin)
 		player.set_current_coat(old_coat)
 		exit()
@@ -81,8 +84,7 @@ func enter(p: PlayerBody):
 func exit():
 	if player:
 		player.cam_rig.pause_mode = PAUSE_MODE_STOP
-		if !pause_menu:
-			player.wardrobe_unlock(pause_menu)
+		player.wardrobe_unlock(pause_menu)
 	player = null
 	emit_signal("exited")
 

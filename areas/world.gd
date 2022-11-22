@@ -1,5 +1,8 @@
 extends Spatial
 
+signal activated(chunk)
+signal deactivated(chunk)
+
 var air_tutorial := false
 
 # Distance from the bounding box edge
@@ -233,9 +236,11 @@ func update_active_chunks(position: Vector3):
 		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
 			if !chunk_loader.is_active(ch.name):
 				chunk_loader.queue_load(ch)
+				emit_signal("activated", ch)
 			active_box.text += "\n\t" + ch.name
 		elif chunk_loader.is_active(ch.name):
 			chunk_loader.queue_unload(ch)
+			emit_signal("deactivated", ch)
 
 
 func apply_fog(height: float):
@@ -337,3 +342,9 @@ func clear_fog_override():
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	_x = env_tween.start()
+
+func is_active(chunk_name):
+	return chunk_loader.is_active(chunk_name)
+
+func get_dynamic_content(chunk_name):
+	return get_node(chunk_name).get_node("dynamic_content")

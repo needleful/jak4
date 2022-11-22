@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk052.glb" type="PackedScene" id=2]
@@ -29,6 +29,7 @@
 [ext_resource path="res://games/race.gd" type="Script" id=27]
 [ext_resource path="res://dialog/side_content/race/race_052.dialog" type="Resource" id=28]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=29]
+[ext_resource path="res://entities/navigation/nav_point.gd" type="Script" id=30]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 6 )
@@ -291,3 +292,23 @@ shape = SubResource( 8 )
 
 [node name="flag" parent="race/race_end" index="1" instance=ExtResource( 26 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10639, 0 )
+
+[node name="path_manor" type="Position3D" parent="." index="24"]
+transform = Transform( -0.450179, 0, -0.892938, 0, 1, 0, 0.892938, 0, -0.450179, 128.534, -109.444, 153.446 )
+script = ExtResource( 30 )
+next = NodePath("outer_fence")
+
+[node name="outer_fence" type="Position3D" parent="path_manor" index="0"]
+transform = Transform( 0.527416, 0, 0.849607, 0, 1, 0, -0.849607, 0, 0.527416, 88.9766, -21.1443, 148.107 )
+script = ExtResource( 30 )
+next = NodePath("../entry")
+
+[node name="entry" type="Position3D" parent="path_manor" index="1"]
+transform = Transform( -0.845171, 0, 0.534496, 0, 1, 0, -0.534496, 0, -0.845171, 103.419, -19.1241, 157.072 )
+script = ExtResource( 30 )
+next = NodePath("../front_door")
+
+[node name="front_door" type="Position3D" parent="path_manor" index="2"]
+transform = Transform( -0.977005, 0, 0.213215, 0, 1, 0, -0.213215, 0, -0.977005, 113.778, -16.413, 134.728 )
+script = ExtResource( 30 )
+action = 2

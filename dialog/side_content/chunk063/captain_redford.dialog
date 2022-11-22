@@ -1,0 +1,108 @@
+{talked == 0}
+	// At the blockade
+	I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
+	> You can talk?
+	> King August IX died fifteen years ago...
+
+	What? Little boy, what are you doing here?
+	[You] "Little boy"? I'm a 27-year-old woman!
+	My God, did these savages take you captive and shave your head? Are you held hostage?
+	[You] How dare you!
+	{remember("I met the most rude creature, calling itself \"Captain Redford\". I had no idea these beasts could talk, and I wish they didn't!")}
+	[You] Short hair is fashionable! It's sporty and comfortable! You will not insult me again, creature!
+	Fashion? Well, if one wishes not to be insulted, perhaps one should not make oneself so easy to insult.
+	[You] I will not tolerate such abuse from a skull with legs! State your business or I shall deal with you like the other spectres, talking or not!
+	You speak nonsense, girl. I stated my business. I am capturing this locomotive to aid in the war effort. The question is, what is a woman such as yourself doing in the middle of a battlefield?
+	[You] What war? Do you mean the Vaeler-Yaqaz War? But it's been over for forty years...
+	What do you mean "over"?
+	[You] We lost. The Yaqazi dispelled us from the region decades ago. And they've been awfully smug about it, quite frankly.
+	Impossible! I saw my company just two days ago! Speaking of which, we must find them. They're likely uneasy without my leadership.
+	You shall accompany me to our fortifications at the Ember Crest Manor. With reinforcements, we can hold this station with ease.
+	And once we get there, you shall be sent home to Vaeland. This abominable desert is no place for a lady, even a short-haired one.
+{otherwise}
+	Young lady. As I have said, we must part for the Ember Crest Manor at once!
+> Fine. I will humor your delusions and go to this manor with you.
+	It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
+	{Global.note_task("captain_redford", 'A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort.')}
+	{Global.task_note_place("captain_redford", "ember_crest_manor", "I am to accompany Captain Redford to this manor.")}
+	{Global.task_note_person("captain_redford", "captain_redford", "He's demanded I accompany him to the manor. I will humor him, and keep my eyes peeled for signs of a trap.")}
+	{main_speaker.travel_to('ember_crest_manor', "../path_ember_crest")}
+> No. Stay on that train forever for all I care.
+	What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
+	... Get back here!
+{exit()}
+
+:_coat
+* He doesn't have anything you could wear.
+{back()}
+
+// The Ember Crest Manor is in chunk 52. The Captain will walk there slightly faster than the player's run speed, stopping if you lollygag.  He can keep up if the player rolls or uses the scooter.
+There's something wrong here.
+[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
+The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
+[You] You don't have hands.
+Stop it. Stop with this nonsense. Just... take the key and open the door.
+* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
+
+//  In the manor
+Right, where in the blazes IS everyone?
+[You] They're gone! I've been telling you! And you haven't explained how you became a spectre!
+I've told you who I am plenty of times! I'm Captain Nathaniel Redford of the Sixth Cavalry! Recognized by His Grace, King August IX, December 8th, 1251.
+[You] It's 1302...
+Wait! Do you feel that?
+[You] What?
+Air... There's a nasty draft in here.
+[You] Oh, come on! The windows are broken out!
+No, no... it's moving somewhere else...
+
+// He goes to the cabinet
+Air is going behind this cabinet. A secret passage? Help me push it out of the way.
+* You both try pushing the cabinet. It's locked in place by some mechanism.
+[You] Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
+
+// I think the puzzle should be simple here. It requires the player to know a bit of trivia about the world, possibly the name August IX, or to rotate a map of the world to face north.
+* You touch the aged map.
+* For some reason, the whole frame rotates freely on the wall.
+> (Rotate clockwise)
+	// It plays an animation here
+	* You rotate the map clockwise.
+> (Rotate anticlockwise)
+	// animation
+	* You rotate the map anticlockwise.
+> Captain Redford! This map rotates on an axis! What should I do with it?
+	// He comes over and stares at the map
+	Hm? Most intriguing... it may very well be a mechanism for the door.
+	Have you tried flipping it right-side-up?
+	> I'll try and see what happens.
+	> Could you do it?
+		Good heavens, how did you survive out here without knowing your directions?
+		{upside-down} It's upside-down.
+		{90-anticlockwise} Rotate it anticlockwise
+		{90-clockwise} Rotate it clockwise.
+		The Great Plateau is in the southwest corner, and the mountain, God's Tongue, in the northeast.
+
+{exit()}
+
+:opened
+* The map clicks into place, and you here a louder click behind you.
+That must be the cabinet! Let's try it again!
+It's curious the secret code was merely straightening the map. Perhaps it was to confuse the natives, since they draw their maps with East at the top.
+> (Leave)
+
+// Once solved
+* The cabinet glides effortlessly to the side, revealing a new passage.
+Excellent work, uh, I never caught your name.
+[You] Jackie.
+Short for Jacqueline, I presume?
+[You] Yes.
+Well Jacqueline, it appears we're in a puzzle-box. A devious labyrinth of unknown purpose. They're more common in this region than I'd prefer.
+We must find my men. They may've been trapped in this evil place.
+[You] Alright, "Captain". If I humor you and help you "find" your "men", will you agree to stop harassing those workers at the train?
+I promise no such thing.
+[You] Ugh. Well, I'm curious what's at the end of this all the same...
+
+// Perhaps more puzzles. I think The Captain can tell you the solution, but chooses not to
+I believe I understand what's happening here. But I don't want to deprive you the joy of a good puzzle.
+> Fair enough, I'll solve it on my own.
+> Give me a hint.
+> I hate puzzles. Tell me what to do.

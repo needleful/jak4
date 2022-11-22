@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=2]
+[gd_scene load_steps=120 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/junkyard.tscn" type="PackedScene" id=2]
@@ -91,6 +91,7 @@
 [ext_resource path="res://entities/env/train_set/bridge_level_bend15.tscn" type="PackedScene" id=89]
 [ext_resource path="res://entities/env/train_set/column-10m.tscn" type="PackedScene" id=90]
 [ext_resource path="res://entities/env/train_set/cargo_cart.tscn" type="PackedScene" id=91]
+[ext_resource path="res://dialog/side_content/chunk063/train_quest_intro.dialog" type="Resource" id=92]
 
 [sub_resource type="ShaderMaterial" id=25]
 shader = ExtResource( 59 )
@@ -1209,8 +1210,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 138.343, 101.545, 204.384 )
 
 [node name="target_flower5" parent="zone_cliff" index="0" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -138.343, -101.545, -204.384 )
-body_opened = NodePath("../target_flower/body_open")
-body_closed = NodePath("../target_flower/closed-kine")
 
 [node name="random_ammo_pickup" parent="zone_cliff" index="1" instance=ExtResource( 73 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.2885, 33.7512, 2.1879 )
@@ -1507,53 +1506,61 @@ material = SubResource( 9 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00276184, 0.015275, 0.00106812 )
 curve = SubResource( 43 )
 
-[node name="cargo_cart" parent="zone_train" index="1" instance=ExtResource( 91 )]
-transform = Transform( 0.998796, 0.0490634, -2.98023e-08, -0.0490634, 0.998796, 1.10889e-16, -2.98023e-08, 0, 1, 7.58737, 0.77787, -3.05176e-05 )
+[node name="cargo_cart2" parent="zone_train" index="1" instance=ExtResource( 91 )]
+transform = Transform( -0.998796, 0.0490634, -1.50996e-07, 0.0490634, 0.998796, -1.69014e-09, 1.50731e-07, -9.09648e-09, -1, 19.8844, 0.173805, -1.52588e-05 )
 
-[node name="cargo_cart2" parent="zone_train/cargo_cart" index="3" instance=ExtResource( 91 )]
-transform = Transform( 1, -5.58794e-09, 2.98023e-08, -1.86265e-09, 1, -1.86265e-09, -2.98023e-08, -3.72529e-09, 1, 12.3119, -9.53674e-07, 1.52588e-05 )
+[node name="cargo_cart3" parent="zone_train/cargo_cart2" index="3" instance=ExtResource( 91 )]
+transform = Transform( 0.999931, 0.0117265, 0, -0.0117265, 0.999931, 3.72529e-09, 0, -3.72529e-09, 1, -12.289, -0.0599918, 0 )
 
-[node name="cargo_cart3" parent="zone_train/cargo_cart" index="4" instance=ExtResource( 91 )]
-transform = Transform( 0.999931, -0.0117265, 2.98023e-08, 0.0117265, 0.999931, -1.86265e-09, -5.96046e-08, -1.86265e-09, 1, 24.6009, -0.0599937, 3.05176e-05 )
+[node name="cargo_cart4" parent="zone_train/cargo_cart2" index="4" instance=ExtResource( 91 )]
+transform = Transform( 0.999974, -0.00713612, 2.08616e-07, 0.00713616, 0.999975, 1.86265e-09, -2.38419e-07, -1.86265e-09, 1, -24.5635, -0.0987034, 0 )
 
-[node name="cargo_cart4" parent="zone_train/cargo_cart" index="5" instance=ExtResource( 91 )]
-transform = Transform( 0.999974, 0.00713615, 1.78814e-07, -0.00713613, 0.999975, 3.72529e-09, -2.08616e-07, -5.58794e-09, 1, 36.8754, -0.0987043, 3.05176e-05 )
+[node name="cargo_cart5" parent="zone_train/cargo_cart2" index="5" instance=ExtResource( 91 )]
+transform = Transform( 0.999947, 0.0102043, 2.08616e-07, -0.0102043, 0.999948, -3.72529e-09, -2.38419e-07, 0, 1, -37.073, -0.108541, -3.05176e-05 )
 
-[node name="cargo_cart5" parent="zone_train/cargo_cart" index="6" instance=ExtResource( 91 )]
-transform = Transform( 0.999947, -0.0102043, 1.78814e-07, 0.0102043, 0.999948, 1.86265e-09, -2.08616e-07, -1.86265e-09, 1, 49.3848, -0.108545, 3.05176e-05 )
+[node name="cargo_cart6" parent="zone_train/cargo_cart2" index="6" instance=ExtResource( 91 )]
+transform = Transform( 0.999993, 0.00356909, 4.47035e-07, -0.00356915, 0.999994, -3.72529e-09, -4.47035e-07, 3.72529e-09, 1, -49.2336, -0.0657072, -3.05176e-05 )
 
-[node name="cargo_cart6" parent="zone_train/cargo_cart" index="7" instance=ExtResource( 91 )]
-transform = Transform( 0.999993, -0.0035691, 3.27826e-07, 0.00356911, 0.999994, 3.72529e-09, -3.57628e-07, -5.58794e-09, 1, 61.5455, -0.065712, 3.05176e-05 )
+[node name="cargo_cart7" parent="zone_train/cargo_cart2" index="7" instance=ExtResource( 91 )]
+transform = Transform( 0.999993, 0.00356909, 4.47035e-07, -0.00356905, 0.999994, -3.72529e-09, -4.47035e-07, 3.72529e-09, 1, -61.4054, -0.0581789, -1.52588e-05 )
 
-[node name="cargo_cart7" parent="zone_train/cargo_cart" index="8" instance=ExtResource( 91 )]
-transform = Transform( 0.999993, -0.0035691, 3.27826e-07, 0.0035691, 0.999994, 1.86265e-09, -3.57628e-07, -5.58794e-09, 1, 73.7172, -0.0581884, 1.52588e-05 )
+[node name="cargo_cart8" parent="zone_train/cargo_cart2" index="8" instance=ExtResource( 91 )]
+transform = Transform( 0.999986, -0.00513253, 2.08616e-07, 0.00513258, 0.999987, 9.31323e-09, -2.38419e-07, -9.31323e-09, 1, -73.6388, -0.091917, -3.05176e-05 )
 
-[node name="cargo_cart8" parent="zone_train/cargo_cart" index="9" instance=ExtResource( 91 )]
-transform = Transform( 0.999986, 0.00513255, 3.57628e-07, -0.00513254, 0.999987, 1.86265e-09, -3.57628e-07, -5.58794e-09, 1, 85.9506, -0.0919189, 3.05176e-05 )
+[node name="cargo_cart9" parent="zone_train/cargo_cart2" index="9" instance=ExtResource( 91 )]
+transform = Transform( 0.999986, -0.00513253, 2.08616e-07, 0.00513258, 0.999987, 3.72529e-09, -2.38419e-07, -3.72529e-09, 1, -85.8746, -0.154743, 0 )
 
-[node name="cargo_cart9" parent="zone_train/cargo_cart" index="10" instance=ExtResource( 91 )]
-transform = Transform( 0.999986, 0.00513255, 3.57628e-07, -0.00513254, 0.999987, 1.86265e-09, -3.27826e-07, -5.58794e-09, 1, 98.1869, -0.154723, 1.52588e-05 )
+[node name="cargo_cart10" parent="zone_train/cargo_cart2" index="10" instance=ExtResource( 91 )]
+transform = Transform( 0.999986, -0.00513253, 2.08616e-07, 0.00513258, 0.999987, 3.72529e-09, -2.38419e-07, -3.72529e-09, 1, -98.2667, -0.218294, -3.05176e-05 )
 
-[node name="cargo_cart10" parent="zone_train/cargo_cart" index="11" instance=ExtResource( 91 )]
-transform = Transform( 0.999986, 0.00513255, 3.57628e-07, -0.00513254, 0.999987, 1.86265e-09, -3.27826e-07, -5.58794e-09, 1, 110.578, -0.218322, 3.05176e-05 )
+[node name="cargo_cart11" parent="zone_train/cargo_cart2" index="11" instance=ExtResource( 91 )]
+transform = Transform( 0.999986, -0.00513253, 2.08616e-07, 0.00513258, 0.999987, 3.72529e-09, -2.38419e-07, -3.72529e-09, 1, -110.505, -0.281121, -3.05176e-05 )
 
-[node name="cargo_cart11" parent="zone_train/cargo_cart" index="12" instance=ExtResource( 91 )]
-transform = Transform( 0.999986, 0.00513255, 3.57628e-07, -0.00513254, 0.999987, 1.86265e-09, -3.27826e-07, -5.58794e-09, 1, 122.817, -0.281142, 3.05176e-05 )
+[node name="cargo_cart12" parent="zone_train/cargo_cart2" index="12" instance=ExtResource( 91 )]
+transform = Transform( 0.999076, 0.0060968, 0.0424963, -0.00611163, 0.999981, 0.000218108, -0.0424941, -0.000477631, 0.999096, -122.658, -0.133576, 0.150009 )
 
-[node name="cargo_cart12" parent="zone_train/cargo_cart" index="13" instance=ExtResource( 91 )]
-transform = Transform( 0.999076, -0.00609683, 0.0424962, 0.0061116, 0.999981, -0.000218105, -0.0424941, 0.000477627, 0.999096, 134.97, -0.133569, -0.150009 )
+[node name="cargo_cart13" parent="zone_train/cargo_cart2" index="13" instance=ExtResource( 91 )]
+transform = Transform( 0.903721, -0.00962587, 0.42801, 0.0114598, 0.999933, -0.0017085, -0.427965, 0.00644894, 0.903771, -134.597, -0.2444, 2.5603 )
 
-[node name="cargo_cart13" parent="zone_train/cargo_cart" index="14" instance=ExtResource( 91 )]
-transform = Transform( 0.903721, 0.00962587, 0.42801, -0.0114598, 0.999933, 0.00170851, -0.427965, -0.00644894, 0.903771, 146.909, -0.244378, -2.5603 )
+[node name="cargo_cart14" parent="zone_train/cargo_cart2" index="14" instance=ExtResource( 91 )]
+transform = Transform( 0.650947, 0.0559124, 0.757059, -0.0425057, 0.998404, -0.0371887, -0.757929, -0.00797139, 0.652285, -143.673, -0.163246, 10.1269 )
 
-[node name="cargo_cart14" parent="zone_train/cargo_cart" index="15" instance=ExtResource( 91 )]
-transform = Transform( 0.650947, -0.0559124, 0.757059, 0.0425056, 0.998404, 0.0371887, -0.757929, 0.00797138, 0.652285, 155.984, -0.163276, -10.1269 )
+[node name="cargo_cart15" parent="zone_train/cargo_cart2" index="15" instance=ExtResource( 91 )]
+transform = Transform( 0.443565, 0.0559124, 0.894494, -0.0319915, 0.998404, -0.0465432, -0.895668, -0.00797134, 0.444646, -150.468, 0.333378, 20.2166 )
 
-[node name="cargo_cart15" parent="zone_train/cargo_cart" index="16" instance=ExtResource( 91 )]
-transform = Transform( 0.443565, -0.0559124, 0.894495, 0.0319915, 0.998404, 0.0465432, -0.895668, 0.00797138, 0.444646, 162.78, 0.333357, -20.2166 )
+[node name="cargo_cart16" parent="zone_train/cargo_cart2" index="16" instance=ExtResource( 91 )]
+transform = Transform( 0.3774, 0.0403883, 0.925167, 0.0104247, 0.9988, -0.0478551, -0.925988, 0.0277053, 0.376527, -155.401, 0.475876, 31.474 )
 
-[node name="cargo_cart16" parent="zone_train/cargo_cart" index="17" instance=ExtResource( 91 )]
-transform = Transform( 0.3774, -0.0403883, 0.925167, -0.0104247, 0.9988, 0.0478552, -0.925988, -0.0277053, 0.376527, 167.713, 0.47586, -31.474 )
+[node name="cargo_cart2" parent="zone_train/cargo_cart2" index="17" instance=ExtResource( 91 )]
+transform = Transform( 1, 0, 0, 3.72529e-09, 1, 5.58794e-09, -2.98023e-08, -5.58794e-09, 1, 12.3119, 2.86102e-06, 3.05176e-05 )
+
+[node name="npc_conductor" parent="zone_train" index="2" instance=ExtResource( 22 )]
+transform = Transform( 0.796241, 0, 0.604981, 0, 1, 0, -0.604981, 0, 0.796241, 176.633, -8.89959, -39.7659 )
+dialog = ExtResource( 92 )
+visual_name = "Conductor"
+
+[node name="npc2" parent="zone_train" index="3" instance=ExtResource( 22 )]
+transform = Transform( -0.131732, 0, -0.991286, 0, 1, 0, 0.991286, 0, -0.131732, 178.497, -8.90964, -39.2156 )
 
 [node name="rock1" parent="." index="17" instance=ExtResource( 7 )]
 transform = Transform( 0.841297, -0.530904, 0.101788, -0.167433, -0.434952, -0.88475, 0.51399, 0.727295, -0.454814, -226.996, 7.8892, 102.816 )

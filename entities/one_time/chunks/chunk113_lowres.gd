@@ -9,5 +9,5 @@ func _ready():
 	else:
 		$tower.show()
 		$inner.show()
-		$rubble.show()
+		$rubble.hide()
 

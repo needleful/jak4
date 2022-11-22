@@ -187,6 +187,12 @@ func set_zoom(p_zoom):
 		TWEEN_TIME_FOV,
 		Tween.TRANS_CUBIC, Tween.EASE_OUT)
 	_x = fov_tween.start()
+	
+	if zoomed and !aiming:
+		tween_to(ANGLE_AIM, SPRING_AIM, TWEEN_TIME_FOV)
+	elif !zoomed and !aiming:
+		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_FOV)
+	player.visible = !zoomed
 
 func tween_to(angle: Vector3, distance: float, time: float):
 		var _x = tween.remove_all()
