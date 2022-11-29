@@ -27,4 +27,4 @@ func set_enabled(e):
 		if c is CollisionShape:
 			c.disabled = !enabled
 		elif c is DialogCircle:
-			c.visible = enabled
+			c.enabled = enabled

@@ -192,3 +192,7 @@ func set_state(new_ai, force := false):
 			gravity_scale = 0
 		AI.Attacking:
 			apply_central_impulse(global_transform.basis.z*lunge_impules*mass)
+
+func _reset():
+	._ready()
+	_ready()

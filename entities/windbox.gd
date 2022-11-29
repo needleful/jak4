@@ -1,6 +1,7 @@
 extends Area
 
 export(float) var velocity := 2.0
+export(bool) var active := true setget set_active
 const FORCE_ON_BODIES := 4.0
 
 func _ready():
@@ -8,8 +9,12 @@ func _ready():
 	var _x = connect("body_entered", self, "_check")
 	_x = connect("body_exited", self, "_check")
 
-func _check(_b):
-	set_physics_process(!get_overlapping_bodies().empty())
+func _check(_b = null):
+	set_physics_process(active and !get_overlapping_bodies().empty())
+
+func set_active(a):
+	active = a
+	_check()
 
 func _physics_process(_delta):
 	var dir = global_transform.basis.y

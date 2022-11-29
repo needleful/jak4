@@ -746,10 +746,8 @@ func _physics_process(delta):
 			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
 				next_state = State.LedgeFall
 			elif after(TIME_LEDGE_LEAVE, intent_dot < 0):
-				print("Exited the ledge")
 				next_state = State.LedgeFall
 			elif after(TIME_LEDGE_LEAVE, empty(ledge_area), 1):
-				print("No ledge!")
 				next_state = State.LedgeFall
 				
 		State.LedgeFall:
@@ -1093,7 +1091,7 @@ func _physics_process(delta):
 	):
 		choosing_item = true
 		equipment.open()
-	elif choosing_item:
+	elif choosing_item and !holding("choose_item"):
 		choosing_item = false
 		equipment.close()
 
@@ -1250,7 +1248,10 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 							equipped_item.equip()
 							update_equipment()
 				if !startup and equipment_inventory.size() > old_item_count:
-					show_prompt(["use_item"], tr("Use Item"))
+					if equipment_inventory.size() == 1:
+						show_prompt(["use_item"], tr("Use Item"))
+					else:
+						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
 
 func debug_show_inventory():
 	var state_viewer: Control = $ui/gameing/debug/game_state
@@ -1684,7 +1685,6 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 
 # TODO: a short animation, then respawn
 func die():
-	print("Dead!")
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
 	# TODO : Animation here

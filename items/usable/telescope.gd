@@ -2,7 +2,7 @@ extends Usable
 
 func _init():
 	._init()
-	icon = preload("res://ui/icons/item_light.png")
+	icon = preload("res://icon.png")
 
 func use():
 	player.cam_rig.toggle_zoom()

@@ -10,6 +10,8 @@ enum MetaState {
 	Follow,
 	# Travelling somewhere
 	TravelTo,
+	# Travelling, but waiting for the player
+	TravelWaiting,
 	# Observing an object from a specific position
 	ObservePoint,
 	# Play a contextual animation
@@ -20,10 +22,17 @@ var velocity := Vector3.ZERO
 var meta_state = MetaState.Idle
 var target : Spatial
 var entry_next: NodePath
+var player: PlayerBody
+
+export(float) var player_distance_while_travelling := 14.0 setget set_pdwt
+export(float) var travel_resume := 90.0
+var pdwt_sq : float
 
 onready var dialog:DialogTrigger = $dialog_zone
 
 func _ready():
+	set_pdwt(player_distance_while_travelling)
+	player = Global.get_player()
 	set_mstate(MetaState.Idle)
 
 func _physics_process(delta):
@@ -32,17 +41,39 @@ func _physics_process(delta):
 			if !target:
 				set_mstate(MetaState.Idle)
 				return
+			
 			var pos = target.global_transform.origin
+			var ppos = pos - player.global_transform.origin
 			var dir = pos - global_transform.origin
-			$nav_pointer/final.global_transform = $nav_pointer/final.global_transform.looking_at(pos, Vector3.UP)
-			dir.y = 0
-			if dir.length() < 0.2:
-				get_next_point()
+			var pdist = player.global_transform.origin - global_transform.origin
+			
+			if pdist.length_squared() > pdwt_sq and ppos.length_squared() > dir.length_squared() + travel_resume:
+				set_mstate(MetaState.TravelWaiting)
 			else:
-				var vy = velocity.y
-				velocity = dir.normalized()*9
-				velocity.y = vy
+				$nav_pointer/final.global_transform = $nav_pointer/final.global_transform.looking_at(pos, Vector3.UP)
+				dir.y = 0
+				if dir.length() < 0.2:
+					get_next_point()
+				else:
+					var vy = velocity.y
+					velocity = dir.normalized()*9
+					velocity.y = vy
+		MetaState.TravelWaiting:
+			velocity.x = 0
+			velocity.z = 0
+			
+			var pos = target.global_transform.origin
+			var ppos = pos - player.global_transform.origin
+			var dir = pos - global_transform.origin
+			var pdist = player.global_transform.origin - global_transform.origin
+			
+			if pdist.length_squared() < pdwt_sq - travel_resume or ppos.length_squared() < dir.length_squared() - travel_resume:
+				set_mstate(MetaState.TravelTo)
 	velocity = move_and_slide(velocity + Vector3.DOWN*24*delta)
+
+func set_pdwt(pdwt):
+	player_distance_while_travelling = pdwt
+	pdwt_sq = pdwt*pdwt
 
 func get_next_point():
 	if target and "action" in target and "next" in target:
@@ -92,3 +123,4 @@ func travel_to(place:String, custom_exit := ""):
 func set_mstate(new_mstate):
 	meta_state = new_mstate
 	set_physics_process(meta_state != MetaState.Idle)
+	$dialog_zone.enabled = meta_state == MetaState.Idle

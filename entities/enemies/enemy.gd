@@ -54,9 +54,6 @@ var coat: Coat = null
 var can_fly := false
 
 var source_chunk : MeshInstance
-var nomad := false
-#TODO: debug nomad behavior
-var debug_nomad:bool = nomad
 
 var min_dot_shielded_damage := -0.5
 var last_attacker: Node
@@ -82,11 +79,11 @@ func _ready():
 			starting_health = health
 			starting_collision_layer = collision_layer
 		else:
+			global_transform = starting_position
+			health = starting_health
 			collision_layer = starting_collision_layer
 			linear_velocity = Vector3.ZERO
 			angular_velocity = Vector3.ZERO
-			health = starting_health
-			global_transform = starting_position
 			var state := PhysicsServer.body_get_direct_state(get_rid())
 			state.transform = starting_position
 			target = null
@@ -106,10 +103,9 @@ func _ready():
 		return
 	set_shielded(shielded)
 	var p = get_parent()
-	while p:
+	while !source_chunk and p:
 		if p is MeshInstance and p.name.begins_with("chunk"):
 			source_chunk = p
-			break
 		p = p.get_parent()
 	if !source_chunk:
 		remove_from_group("enemy")
@@ -147,27 +143,7 @@ func process_player_distance(pos: Vector3) -> float:
 	var within_activation := lensq <= square_distance_activation
 	if within_activation != in_range:
 		in_range = within_activation
-		#if nomad and !in_range and ai != AI.Chasing:
-		#	queue_free()
 		set_active(in_range and ai != AI.Dead)
-	# TODO: fix nomad logic for custom chunks
-	if !debug_nomad:
-		var aabb := source_chunk.get_aabb().grow(10)
-		var point := global_transform.origin
-		point.y = aabb.position.y + 1 # disregard vertical position
-		if !aabb.has_point(point - source_chunk.global_transform.origin):
-			print("Going nomad: ", get_path())
-			debug_nomad = true
-			#nomad = true
-	#		var gt = global_transform
-	#		var groups = get_groups()
-	#		var scene = get_tree().current_scene
-	#		get_parent().remove_child(self)
-	#		for g in groups:
-	#			add_to_group(g)
-	#		scene.add_child(self)
-	#		global_transform = gt
-	#		set_process(false)
 	return lensq
 
 func damage_direction(hitbox: Area, dir: Vector3, damage := -1.0):
@@ -308,7 +284,6 @@ func stunned_move(delta: float):
 func fall_down(_delta: float):
 	pass
 
-# Implemented by subclasses
 func set_state(_ai: int, _force := false):
 	pass
 
@@ -346,10 +321,7 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 func _on_player_died():
 	if ai == AI.Dead and !respawns:
 		return
-	#if nomad:
-	#	queue_free()
-	#	return
-	var p = get_parent()
-	p.remove_child(self)
-	request_ready()
-	p.add_child(self)
+	_reset()
+
+func _reset():
+	_ready()

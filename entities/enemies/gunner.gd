@@ -227,3 +227,7 @@ func set_state(new_ai, _force := false):
 			anim.travel("GravityStun")
 		AI.GravityStunDead:
 			gravity_scale = 0
+
+func _reset():
+	._ready()
+	_ready()

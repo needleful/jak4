@@ -13,7 +13,6 @@ func _init():
 	player = Global.get_player()
 
 func can_use() -> bool:
-	player.update_equipment()
 	return ammo == "" or Global.count(ammo) > 0
 
 func use():

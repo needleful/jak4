@@ -170,3 +170,7 @@ func set_state(new_state, force:=false):
 			pass
 		_:
 			$AnimationPlayer.play("Idle-loop")
+
+func _reset():
+	._ready()
+	_ready()

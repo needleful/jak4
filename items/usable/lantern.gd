@@ -7,6 +7,8 @@ func use():
 	player.lantern.light_enabled = !player.lantern.light_enabled
 
 func equip():
+	if !player.lantern.visible:
+		player.lantern.light_enabled = false
 	player.lantern.visible = true
 
 func unequip():

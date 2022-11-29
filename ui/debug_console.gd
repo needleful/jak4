@@ -84,3 +84,6 @@ func teleport(location):
 func set_show_stats(val: bool):
 	show_stats = val
 	Global.get_player().debug.visible = show_stats
+
+func save():
+	Global.save_checkpoint(Global.get_player().global_transform.origin)

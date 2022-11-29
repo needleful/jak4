@@ -66,3 +66,6 @@ func set_state(new_ai, _force := false):
 		AI.GravityStun, AI.GravityStunDead:
 			gravity_scale = 0
 
+func _reset():
+	._ready()
+	_ready()

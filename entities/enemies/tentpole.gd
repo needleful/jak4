@@ -14,6 +14,9 @@ const TIME_DAMAGED := 0.8
 var quit_timer := 0.0
 var state_timer := 0.0
 
+func _ready():
+	mode = MODE_STATIC
+
 func _physics_process(delta):
 	state_timer += delta
 	match ai:
@@ -65,6 +68,8 @@ func set_state(new_ai, _force := false):
 	ai = new_ai
 	state_timer = 0
 	gravity_scale = 1
+	if ai != AI.Idle and mode != MODE_RIGID:
+		mode = MODE_RIGID
 	match ai:
 		AI.Idle:
 			chopper_hitbox.active = false
@@ -97,3 +102,7 @@ func set_state(new_ai, _force := false):
 			gravity_scale = 0
 		AI.GravityStunDead:
 			gravity_scale = 0
+
+func _reset():
+	._ready()
+	_ready()

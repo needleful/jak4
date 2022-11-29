@@ -38,7 +38,7 @@ func set_active(a):
 	active = a
 	hurtbox.active = active
 	particles.emitting = active
-	windbox.set_physics_process(active)
+	windbox.active = active
 	
 	for c in get_children():
 		if c is Light:
