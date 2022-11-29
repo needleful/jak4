@@ -1,48 +1,51 @@
-{talked == 0}
-	// At the blockade
-	I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
-	> You can talk?
-	> King August IX died fifteen years ago...
+{main_speaker.at("front_door")}
+	// The Ember Crest Manor is in chunk 52. The Captain will walk there slightly faster than the player's run speed, stopping if you lollygag.  He can keep up if the player rolls or uses the scooter.
+	There's something wrong here.
+	[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
+	The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
+	[You] You don't have hands.
+	Stop it. Stop with this nonsense. Just... take the key and open the door.
+	* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
+	{Global.add_item("manor_key")}
 
-	What? Little boy, what are you doing here?
-	[You] "Little boy"? I'm a 27-year-old woman!
-	My God, did these savages take you captive and shave your head? Are you held hostage?
-	[You] How dare you!
-	{remember("I met the most rude creature, calling itself \"Captain Redford\". I had no idea these beasts could talk, and I wish they didn't!")}
-	[You] Short hair is fashionable! It's sporty and comfortable! You will not insult me again, creature!
-	Fashion? Well, if one wishes not to be insulted, perhaps one should not make oneself so easy to insult.
-	[You] I will not tolerate such abuse from a skull with legs! State your business or I shall deal with you like the other spectres, talking or not!
-	You speak nonsense, girl. I stated my business. I am capturing this locomotive to aid in the war effort. The question is, what is a woman such as yourself doing in the middle of a battlefield?
-	[You] What war? Do you mean the Vaeler-Yaqaz War? But it's been over for forty years...
-	What do you mean "over"?
-	[You] We lost. The Yaqazi dispelled us from the region decades ago. And they've been awfully smug about it, quite frankly.
-	Impossible! I saw my company just two days ago! Speaking of which, we must find them. They're likely uneasy without my leadership.
-	You shall accompany me to our fortifications at the Ember Crest Manor. With reinforcements, we can hold this station with ease.
-	And once we get there, you shall be sent home to Vaeland. This abominable desert is no place for a lady, even a short-haired one.
 {otherwise}
-	Young lady. As I have said, we must part for the Ember Crest Manor at once!
-> Fine. I will humor your delusions and go to this manor with you.
-	It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
-	{Global.note_task("captain_redford", 'A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort.')}
-	{Global.task_note_place("captain_redford", "ember_crest_manor", "I am to accompany Captain Redford to this manor.")}
-	{Global.task_note_person("captain_redford", "captain_redford", "He's demanded I accompany him to the manor. I will humor him, and keep my eyes peeled for signs of a trap.")}
-	{main_speaker.travel_to('ember_crest_manor', "../path_ember_crest")}
-> No. Stay on that train forever for all I care.
-	What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
-	... Get back here!
+	{talked == 0}
+		// At the blockade
+		I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
+		> You can talk?
+		> King August IX died fifteen years ago...
+
+		What? Little boy, what are you doing here?
+		[You] "Little boy"? I'm a 27-year-old woman!
+		My God, did these savages take you captive and shave your head? Are you held hostage?
+		[You] How dare you!
+		{remember("I met the most rude creature, calling itself \"Captain Redford\". I had no idea these beasts could talk, and I wish they didn't!")}
+		[You] Short hair is fashionable! It's sporty and comfortable! You will not insult me again, creature!
+		Fashion? Well, if one wishes not to be insulted, perhaps one should not make oneself so easy to insult.
+		[You] I will not tolerate such abuse from a skull with legs! State your business or I shall deal with you like the other spectres, talking or not!
+		You speak nonsense, girl. I stated my business. I am capturing this locomotive to aid in the war effort. The question is, what is a woman such as yourself doing in the middle of a battlefield?
+		[You] What war? Do you mean the Vaeler-Yaqaz War? But it's been over for forty years...
+		What do you mean "over"?
+		[You] We lost. The Yaqazi dispelled us from the region decades ago. And they've been awfully smug about it, quite frankly.
+		Impossible! I saw my company just two days ago! Speaking of which, we must find them. They're likely uneasy without my leadership.
+		You shall accompany me to our fortifications at the Ember Crest Manor. With reinforcements, we can hold this station with ease.
+		And once we get there, you shall be sent home to Vaeland. This abominable desert is no place for a lady, even a short-haired one.
+	{otherwise}
+		Young lady. As I have said, we must part for the Ember Crest Manor at once!
+	> Fine. I will humor your delusions and go to this manor with you.
+		It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
+		{Global.note_task("captain_redford", 'A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort.')}
+		{Global.task_note_place("captain_redford", "ember_crest_manor", "I am to accompany Captain Redford to this manor.")}
+		{Global.task_note_person("captain_redford", "captain_redford", "He's demanded I accompany him to the manor. I will humor him, and keep my eyes peeled for signs of a trap.")}
+		{main_speaker.travel_to('ember_crest_manor', "../path_ember_crest")}
+	> No. Stay on that train forever for all I care.
+		What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
+		... Get back here!
 {exit()}
 
 :_coat
 * He doesn't have anything you could wear.
 {back()}
-
-// The Ember Crest Manor is in chunk 52. The Captain will walk there slightly faster than the player's run speed, stopping if you lollygag.  He can keep up if the player rolls or uses the scooter.
-There's something wrong here.
-[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
-The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
-[You] You don't have hands.
-Stop it. Stop with this nonsense. Just... take the key and open the door.
-* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
 
 //  In the manor
 Right, where in the blazes IS everyone?

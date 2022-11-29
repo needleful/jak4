@@ -23,7 +23,9 @@ var meta_state = MetaState.Idle
 var target : Spatial
 var entry_next: NodePath
 var player: PlayerBody
+var location := ""
 
+export(String) var friendly_id := ""
 export(float) var player_distance_while_travelling := 14.0 setget set_pdwt
 export(float) var travel_resume := 90.0
 var pdwt_sq : float
@@ -75,8 +77,12 @@ func set_pdwt(pdwt):
 	player_distance_while_travelling = pdwt
 	pdwt_sq = pdwt*pdwt
 
+func at(place):
+	return location == place
+
 func get_next_point():
 	if target and "action" in target and "next" in target:
+		location = target.name
 		if target.action == NavPoint.Action.Jump:
 			velocity += target.global_transform.basis.z*5 + Vector3.UP*5
 		if target.chunk_entry:
