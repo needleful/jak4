@@ -987,7 +987,7 @@ func _physics_process(delta):
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, ground_normal)
-			mesh.blend_climb_animation(desired_velocity, best_normal)
+			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
 			rotate_mesh(-best_normal)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
