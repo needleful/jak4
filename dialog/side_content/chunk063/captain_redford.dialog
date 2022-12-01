@@ -1,13 +1,19 @@
 {main_speaker.at("front_door")}
-	// The Ember Crest Manor is in chunk 52. The Captain will walk there slightly faster than the player's run speed, stopping if you lollygag.  He can keep up if the player rolls or uses the scooter.
-	There's something wrong here.
-	[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
-	The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
-	[You] You don't have hands.
-	Stop it. Stop with this nonsense. Just... take the key and open the door.
-	* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
-	{Global.add_item("manor_key")}
-
+	{!Global.count("manor_key")}
+		There's something wrong here.
+		[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
+		The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
+		[You] You don't have hands.
+		Stop it. Stop with this nonsense. Just... take the key and open the door.
+		* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
+		{Global.add_item("manor_key")}
+	{otherwise if !Global.stat("chunk052/front_door/open")}
+		Well... Are you going to open it?
+		[You] I unlocked it, but it's still stuck.
+		It can probably be kicked open now.
+	{otherwise}
+		Marvelous! Now to find my men...
+		{main_speaker.travel_to("", "../zone_estate/path_entry")}
 {otherwise}
 	{talked == 0}
 		// At the blockade

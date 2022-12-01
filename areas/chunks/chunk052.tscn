@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk052.glb" type="PackedScene" id=2]
@@ -32,42 +32,8 @@
 [ext_resource path="res://entities/navigation/nav_point.gd" type="Script" id=30]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=31]
 [ext_resource path="res://entities/control/locked_button.gd" type="Script" id=32]
-
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 6 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/main_texture = ExtResource( 5 )
-
-[sub_resource type="ShaderMaterial" id=5]
-shader = ExtResource( 10 )
-shader_param/uv_scale = 1.0
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity = 1.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 11 )
-shader_param/ground = ExtResource( 11 )
-shader_param/ceiling = ExtResource( 11 )
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 6 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/main_texture = ExtResource( 8 )
-
-[sub_resource type="ShaderMaterial" id=6]
-shader = ExtResource( 10 )
-shader_param/uv_scale = 1.0
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity = 1.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 7 )
-shader_param/ground = ExtResource( 7 )
-shader_param/ceiling = ExtResource( 7 )
+[ext_resource path="res://entities/npc/captain_redford.tscn" type="PackedScene" id=33]
+[ext_resource path="res://entities/one_time/chunks/chunk052_manor.gd" type="Script" id=34]
 
 [sub_resource type="Animation" id=11]
 resource_name = "Activate"
@@ -150,6 +116,42 @@ tracks/1/keys = {
 "values": [ Vector3( 0, 88.3722, 0 ), Vector3( 0, -159.085, 0 ) ]
 }
 
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 6 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 11 )
+shader_param/ground = ExtResource( 11 )
+shader_param/ceiling = ExtResource( 11 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 6 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 7 )
+shader_param/ground = ExtResource( 7 )
+shader_param/ceiling = ExtResource( 7 )
+
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
 shader_param/subsurface_scattering = -1.0
@@ -167,44 +169,48 @@ radius = 3.2984
 [node name="chunk052" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
 
-[node name="wall" parent="." index="0"]
+[node name="interaction" type="Node" parent="." index="0"]
+script = ExtResource( 34 )
+
+[node name="front_door" type="AnimationPlayer" parent="interaction" index="0"]
+root_node = NodePath("../../estate")
+anims/Activate = SubResource( 11 )
+anims/RESET = SubResource( 10 )
+anims/open_outward = SubResource( 12 )
+script = ExtResource( 31 )
+
+[node name="wall" parent="." index="1"]
 material/0 = ExtResource( 3 )
 
 [node name="StaticBody" parent="wall" index="0"]
 collision_layer = 261
 
-[node name="fencepost" parent="." index="1"]
+[node name="fencepost" parent="." index="2"]
 material/0 = ExtResource( 3 )
 
 [node name="StaticBody" parent="fencepost" index="0"]
 collision_layer = 261
 
-[node name="fencepost001" parent="." index="2"]
+[node name="fencepost001" parent="." index="3"]
 material/0 = ExtResource( 3 )
 
 [node name="StaticBody" parent="fencepost001" index="0"]
 collision_layer = 261
 
-[node name="estate" parent="." index="3"]
+[node name="estate" parent="." index="4"]
 material/0 = SubResource( 1 )
 material/1 = ExtResource( 3 )
 material/2 = SubResource( 5 )
 material/3 = SubResource( 2 )
 material/4 = SubResource( 6 )
 
-[node name="front_door" type="AnimationPlayer" parent="estate" index="0"]
-anims/Activate = SubResource( 11 )
-anims/RESET = SubResource( 10 )
-anims/open_outward = SubResource( 12 )
-script = ExtResource( 31 )
-
-[node name="door1-kine" parent="estate" index="1"]
+[node name="door1-kine" parent="estate" index="0"]
 transform = Transform( -0.0145137, 0, 0.999895, 0, 1, 0, -0.999895, 0, -0.0145137, -10.4047, 0.377571, 1.56055 )
 collision_layer = 261
 script = ExtResource( 32 )
 key = "manor_key"
 
-[node name="door2-kine" parent="estate" index="2"]
+[node name="door2-kine" parent="estate" index="1"]
 transform = Transform( 0.0284067, 0, 0.999596, 0, 1, 0, -0.999596, 0, 0.0284067, -10.4303, 0.377571, 4.0376 )
 collision_layer = 261
 script = ExtResource( 32 )
@@ -216,34 +222,34 @@ collision_layer = 261
 [node name="StaticBody" parent="estate/interior" index="0"]
 collision_layer = 261
 
-[node name="StaticBody" parent="estate" index="5"]
+[node name="StaticBody" parent="estate" index="4"]
 collision_layer = 261
 
-[node name="column" parent="." index="4"]
+[node name="column" parent="." index="5"]
 material/0 = SubResource( 4 )
 
 [node name="StaticBody" parent="column" index="0"]
 collision_layer = 261
 
-[node name="column2" parent="." index="5"]
+[node name="column2" parent="." index="6"]
 material/0 = SubResource( 4 )
 
 [node name="StaticBody" parent="column2" index="0"]
 collision_layer = 261
 
-[node name="column3" parent="." index="6"]
+[node name="column3" parent="." index="7"]
 material/0 = SubResource( 4 )
 
 [node name="StaticBody" parent="column3" index="0"]
 collision_layer = 261
 
-[node name="column4" parent="." index="7"]
+[node name="column4" parent="." index="8"]
 material/0 = SubResource( 4 )
 
 [node name="StaticBody" parent="column4" index="0"]
 collision_layer = 261
 
-[node name="zone_estate" type="MultiMeshSystem" parent="." index="8"]
+[node name="zone_estate" type="MultiMeshSystem" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -34, -121, 197 )
 
 [node name="juniper_small" parent="zone_estate" index="0" instance=ExtResource( 12 )]
@@ -335,47 +341,57 @@ collision_mask = 6
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 0, 81.2602 )
 shape = SubResource( 9 )
 
-[node name="hut" parent="." index="9" instance=ExtResource( 23 )]
+[node name="path_entry" type="Position3D" parent="zone_estate" index="25"]
+transform = Transform( 0.811764, 0, 0.583985, 0, 1, 0, -0.583985, 0, 0.811764, -3.53257, -5.02628, 0.263062 )
+script = ExtResource( 30 )
+next = NodePath("bookshelf")
+
+[node name="bookshelf" type="Position3D" parent="zone_estate/path_entry" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.90971, 0, 2.45183 )
+script = ExtResource( 30 )
+action = 2
+
+[node name="hut" parent="." index="10" instance=ExtResource( 23 )]
 transform = Transform( -0.94834, 0, -0.317257, 0, 1, 0, 0.317257, 0, -0.94834, 57.9793, -116.869, 182.523 )
 
 [node name="v_rifle" parent="hut" index="1" instance=ExtResource( 24 )]
 transform = Transform( -0.0854076, 0.942566, -0.322915, 0.973165, 0.148422, 0.175842, 0.213671, -0.299231, -0.929949, -0.865757, 1.37192, 1.41258 )
 
-[node name="garden_empty" parent="." index="10" instance=ExtResource( 25 )]
+[node name="garden_empty" parent="." index="11" instance=ExtResource( 25 )]
 transform = Transform( 0.98676, -0.162186, 0, 0.162186, 0.98676, 0, 0, 0, 1, 61.0821, -115.856, 168.228 )
 
-[node name="garden_empty2" parent="." index="11" instance=ExtResource( 25 )]
+[node name="garden_empty2" parent="." index="12" instance=ExtResource( 25 )]
 transform = Transform( -0.706392, 0.0289788, 0.707228, -0.0746633, 0.990537, -0.115163, -0.703872, -0.134154, -0.697543, -43.8226, -123.192, 221.287 )
 
-[node name="garden_empty3" parent="." index="12" instance=ExtResource( 25 )]
+[node name="garden_empty3" parent="." index="13" instance=ExtResource( 25 )]
 transform = Transform( -0.416031, 0.0391911, -0.908505, 0.0937871, 0.995592, 0, 0.904501, -0.085206, -0.417873, -34.1867, -123.281, 219.725 )
 
-[node name="rock1" parent="." index="13" instance=ExtResource( 22 )]
+[node name="rock1" parent="." index="14" instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 0, 0, 0.222377, -0.974961, 0, 0.974961, 0.222377, 23.6852, -117.154, 222.829 )
 
-[node name="ruin1" parent="." index="14" instance=ExtResource( 21 )]
+[node name="ruin1" parent="." index="15" instance=ExtResource( 21 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 80.9392, -113.708, 175.272 )
 
-[node name="ruin2" parent="." index="15" instance=ExtResource( 21 )]
+[node name="ruin2" parent="." index="16" instance=ExtResource( 21 )]
 transform = Transform( -0.997308, 0, -0.0733329, 0, 1, 0, 0.0733329, 0, -0.997308, 85.7103, -109.85, 195.626 )
 
-[node name="ruin3" parent="." index="16" instance=ExtResource( 21 )]
+[node name="ruin3" parent="." index="17" instance=ExtResource( 21 )]
 transform = Transform( -0.577748, 0, -0.816215, 0, 1, 0, 0.816215, 0, -0.577748, 104.983, -112.225, 163.059 )
 
-[node name="hut2" parent="." index="17" instance=ExtResource( 23 )]
+[node name="hut2" parent="." index="18" instance=ExtResource( 23 )]
 transform = Transform( -0.270403, 0, -0.962747, 0, 1, 0, 0.962747, 0, -0.270403, 127.828, -99.3008, 196.74 )
 
-[node name="crawly" parent="." index="18" instance=ExtResource( 19 )]
+[node name="crawly" parent="." index="19" instance=ExtResource( 19 )]
 transform = Transform( 0.373318, 0, -0.927703, 0, 1, 0, 0.927703, 0, 0.373318, 120.28, -98.072, 198.534 )
 reset_on_player_death = true
 
-[node name="crawly2" parent="." index="19" instance=ExtResource( 19 )]
+[node name="crawly2" parent="." index="20" instance=ExtResource( 19 )]
 transform = Transform( 0.766293, 0, 0.642491, 0, 1, 0, -0.642491, 0, 0.766293, 87.0583, -106.496, 196.068 )
 
-[node name="rock2" parent="." index="20" instance=ExtResource( 22 )]
+[node name="rock2" parent="." index="21" instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 148.593, -86.0253, 223.484 )
 
-[node name="race" type="Spatial" parent="." index="21"]
+[node name="race" type="Spatial" parent="." index="22"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 147.882, -78.6913, 222.645 )
 script = ExtResource( 27 )
 bronze_seconds = 120.0
@@ -414,7 +430,7 @@ shape = SubResource( 8 )
 [node name="flag" parent="race/race_end" index="1" instance=ExtResource( 26 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10639, 0 )
 
-[node name="path_manor" type="Position3D" parent="." index="22"]
+[node name="path_manor" type="Position3D" parent="." index="23"]
 transform = Transform( -0.450179, 0, -0.892938, 0, 1, 0, 0.892938, 0, -0.450179, 128.534, -109.444, 153.446 )
 script = ExtResource( 30 )
 next = NodePath("outer_fence")
@@ -434,5 +450,9 @@ transform = Transform( -0.977005, 0, 0.213215, 0, 1, 0, -0.213215, 0, -0.977005,
 script = ExtResource( 30 )
 action = 2
 
-[connection signal="toggled" from="estate/door1-kine" to="estate/front_door" method="_on_toggled"]
-[connection signal="toggled" from="estate/door2-kine" to="estate/front_door" method="_on_toggled"]
+[node name="captain_redford" parent="." index="25" instance=ExtResource( 33 )]
+transform = Transform( -0.511294, 0, 0.859406, 0, 1, 0, -0.859406, 0, -0.511294, -41.7783, -125.961, 194.699 )
+
+[connection signal="opened" from="interaction/front_door" to="interaction" method="_on_front_door_opened"]
+[connection signal="toggled" from="estate/door1-kine" to="interaction/front_door" method="_on_toggled"]
+[connection signal="toggled" from="estate/door2-kine" to="interaction/front_door" method="_on_toggled"]

@@ -28,14 +28,35 @@ var location := ""
 export(String) var friendly_id := ""
 export(float) var player_distance_while_travelling := 14.0 setget set_pdwt
 export(float) var travel_resume := 90.0
+export(bool) var default_location := false
 var pdwt_sq : float
 
 onready var dialog:DialogTrigger = $dialog_zone
 
 func _ready():
+	var chunk = get_chunk()
+	var sc = stat("chunk")
+	if !(sc is String):
+		sc = ""
+	if !(default_location and sc == "") and sc != chunk:
+		print("%s:%s doesn't exist: current is %s" % [friendly_id, chunk, sc])
+		queue_free()
+		return
+
 	set_pdwt(player_distance_while_travelling)
 	player = Global.get_player()
 	set_mstate(MetaState.Idle)
+	if has_stat("location"):
+		var loc = stat("location")
+		if has_node(loc):
+			var l = get_node(loc)
+			location = l.name
+			if l is Spatial:
+				global_transform.origin = l.global_transform.origin
+			else:
+				print_debug("Not spatial: ", l.get_path())
+		else:
+			print_debug("Doesn't exist: ", loc)
 
 func _physics_process(delta):
 	match meta_state:
@@ -83,6 +104,7 @@ func at(place):
 func get_next_point():
 	if target and "action" in target and "next" in target:
 		location = target.name
+		set_stat("location", target.get_path())
 		if target.action == NavPoint.Action.Jump:
 			velocity += target.global_transform.basis.z*5 + Vector3.UP*5
 		if target.chunk_entry:
@@ -115,6 +137,7 @@ func _on_chunk_activated(chunk):
 		assert(d.has_node(entry_next))
 		target = d.get_node(entry_next)
 		entry_next = ""
+		set_stat("chunk", chunk.name)
 		
 		if world.is_connected("activated", self, "_on_chunk_activated"):
 			world.disconnect("activated", self, "_on_chunk_activated")
@@ -130,3 +153,20 @@ func set_mstate(new_mstate):
 	meta_state = new_mstate
 	set_physics_process(meta_state != MetaState.Idle)
 	$dialog_zone.enabled = meta_state == MetaState.Idle
+
+func set_stat(stat: String, value):
+	return Global.set_stat(friendly_id + "/" + stat, value)
+
+func stat(stat: String):
+	return Global.stat(friendly_id + "/" + stat)
+
+func has_stat(stat: String):
+	return Global.has_stat(friendly_id + "/" + stat)
+
+func get_chunk() -> String:
+	var p = get_parent()
+	while p and !(p is Chunk):
+		p = p.get_parent()
+	if p is Chunk:
+		p = p.get_parent()
+	return p.name if p else ""
