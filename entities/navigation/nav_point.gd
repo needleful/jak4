@@ -1,6 +1,8 @@
 extends Spatial
 class_name NavPoint
 
+signal entered
+
 enum Action {
 	None,
 	Jump,

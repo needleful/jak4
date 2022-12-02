@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk052.glb" type="PackedScene" id=2]
@@ -34,6 +34,11 @@
 [ext_resource path="res://entities/control/locked_button.gd" type="Script" id=32]
 [ext_resource path="res://entities/npc/captain_redford.tscn" type="PackedScene" id=33]
 [ext_resource path="res://entities/one_time/chunks/chunk052_manor.gd" type="Script" id=34]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=36]
+[ext_resource path="res://entities/env/manor/map.png" type="Texture" id=37]
+[ext_resource path="res://dialog/side_content/chunk052/rotating_map.dialog" type="Resource" id=38]
+[ext_resource path="res://entities/one_time/chunks/chunk052_rotating_map.gd" type="Script" id=39]
 
 [sub_resource type="Animation" id=11]
 resource_name = "Activate"
@@ -47,7 +52,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 90.8316, 0 ), Vector3( 0, 214, 0 ) ]
+"values": [ Vector3( 0, -89.8127, 0 ), Vector3( 0, 26.7757, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("door2-kine:rotation_degrees")
@@ -74,7 +79,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector3( 0, 90.8316, 0 ) ]
+"values": [ Vector3( 0, -89.8127, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("door2-kine:rotation_degrees")
@@ -152,6 +157,17 @@ shader_param/wall = ExtResource( 7 )
 shader_param/ground = ExtResource( 7 )
 shader_param/ceiling = ExtResource( 7 )
 
+[sub_resource type="ShaderMaterial" id=20]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 11 )
+shader_param/ground = ExtResource( 11 )
+shader_param/ceiling = ExtResource( 11 )
+
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
 shader_param/subsurface_scattering = -1.0
@@ -162,6 +178,51 @@ shader_param/main_texture = ExtResource( 9 )
 [sub_resource type="CapsuleShape" id=9]
 radius = 41.5901
 height = 88.7438
+
+[sub_resource type="CubeMesh" id=13]
+size = Vector3( 1, 2.4, 1 )
+
+[sub_resource type="BoxShape" id=14]
+extents = Vector3( 0.5, 1.2, 0.5 )
+
+[sub_resource type="Animation" id=15]
+resource_name = "Activate"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -4.10157, -4.9531, 7.04248 ), Vector3( -4.71874, -4.9531, 7.78838 ) ]
+}
+
+[sub_resource type="Animation" id=16]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -4.10157, -4.9531, 7.04248 ) ]
+}
+
+[sub_resource type="QuadMesh" id=17]
+
+[sub_resource type="SpatialMaterial" id=18]
+albedo_texture = ExtResource( 37 )
+
+[sub_resource type="SphereShape" id=19]
+radius = 0.718802
 
 [sub_resource type="SphereShape" id=8]
 radius = 3.2984
@@ -205,7 +266,7 @@ material/3 = SubResource( 2 )
 material/4 = SubResource( 6 )
 
 [node name="door1-kine" parent="estate" index="0"]
-transform = Transform( -0.0145137, 0, 0.999895, 0, 1, 0, -0.999895, 0, -0.0145137, -10.4047, 0.377571, 1.56055 )
+transform = Transform( 0.00326927, 0, -0.999995, 0, 1, 0, 0.999995, 0, 0.00326927, -10.4047, 0.377571, 1.56055 )
 collision_layer = 261
 script = ExtResource( 32 )
 key = "manor_key"
@@ -216,13 +277,22 @@ collision_layer = 261
 script = ExtResource( 32 )
 key = "manor_key"
 
+[node name="mesh" parent="estate/door2-kine001" index="0"]
+material/0 = SubResource( 20 )
+
+[node name="mesh" parent="estate/door3-kine001" index="0"]
+material/0 = SubResource( 20 )
+
+[node name="mesh" parent="estate/door3-kine002" index="0"]
+material/0 = SubResource( 20 )
+
 [node name="StaticBody" parent="estate/doorframe" index="0"]
 collision_layer = 261
 
 [node name="StaticBody" parent="estate/interior" index="0"]
 collision_layer = 261
 
-[node name="StaticBody" parent="estate" index="4"]
+[node name="StaticBody" parent="estate" index="7"]
 collision_layer = 261
 
 [node name="column" parent="." index="5"]
@@ -341,15 +411,132 @@ collision_mask = 6
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05176e-05, 0, 81.2602 )
 shape = SubResource( 9 )
 
-[node name="path_entry" type="Position3D" parent="zone_estate" index="25"]
+[node name="path_entry" type="Position3D" parent="zone_estate" index="23"]
 transform = Transform( 0.811764, 0, 0.583985, 0, 1, 0, -0.583985, 0, 0.811764, -3.53257, -5.02628, 0.263062 )
 script = ExtResource( 30 )
-next = NodePath("bookshelf")
+next = NodePath("entry")
 
-[node name="bookshelf" type="Position3D" parent="zone_estate/path_entry" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.90971, 0, 2.45183 )
+[node name="entry" type="Position3D" parent="zone_estate/path_entry" index="0"]
+transform = Transform( 0.0175848, 0, -0.999845, 0, 1, 0, 0.999845, 0, 0.0175848, 3.09222, 0, 0.09198 )
 script = ExtResource( 30 )
 action = 2
+
+[node name="shelf_view" type="Position3D" parent="zone_estate" index="24"]
+transform = Transform( 0.811764, 0, 0.583985, 0, 1, 0, -0.583985, 0, 0.811764, -5.27195, -5.02628, 5.63014 )
+script = ExtResource( 30 )
+action = 2
+
+[node name="path_passage" type="Position3D" parent="zone_estate" index="25"]
+transform = Transform( 0.609709, 0, 0.792625, 0, 1, 0, -0.792625, 0, 0.609709, -3.22303, -5.02628, 7.81757 )
+script = ExtResource( 30 )
+next = NodePath("path_passage2")
+
+[node name="path_passage2" type="Position3D" parent="zone_estate/path_passage" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05626, 0, 0 )
+script = ExtResource( 30 )
+next = NodePath("../path_passage3")
+
+[node name="path_passage3" type="Position3D" parent="zone_estate/path_passage" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24603, 0, 11.4663 )
+script = ExtResource( 30 )
+next = NodePath("../path_passage4")
+
+[node name="path_passage4" type="Position3D" parent="zone_estate/path_passage" index="2"]
+transform = Transform( -0.00841081, 0, 0.999965, 0, 1, 0, -0.999965, 0, -0.00841081, 3.93063, 0, 11.9922 )
+script = ExtResource( 30 )
+next = NodePath("../kitchen")
+
+[node name="kitchen" type="Position3D" parent="zone_estate/path_passage" index="3"]
+transform = Transform( -0.988561, 0, 0.150819, 0, 1, 0, -0.150819, 0, -0.988561, 6.1705, 0, 11.5165 )
+script = ExtResource( 30 )
+action = 2
+
+[node name="bookshelf" type="KinematicBody" parent="zone_estate" index="26"]
+transform = Transform( 0.63749, 0, 0.770458, 0, 1, 0, -0.770458, 0, 0.63749, -4.10157, -4.9531, 7.04248 )
+script = ExtResource( 31 )
+__meta__ = {
+"_edit_group_": true
+}
+tracked_stat = "manor052/passage"
+
+[node name="MeshInstance" type="MeshInstance" parent="zone_estate/bookshelf" index="0"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 1.20912, 0 )
+mesh = SubResource( 13 )
+
+[node name="CollisionShape" type="CollisionShape" parent="zone_estate/bookshelf" index="1"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 1.20912, 0 )
+shape = SubResource( 14 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="zone_estate/bookshelf" index="2"]
+anims/Activate = SubResource( 15 )
+anims/RESET = SubResource( 16 )
+
+[node name="rotating_map" type="MeshInstance" parent="zone_estate" index="27"]
+transform = Transform( -8.69686e-08, 1.98657, 0.231394, -2, -8.74228e-08, -1.14856e-09, 8.97373e-09, -0.231394, 1.98657, -1.22702, -2.955, -3.93988 )
+mesh = SubResource( 17 )
+material/0 = SubResource( 18 )
+script = ExtResource( 39 )
+
+[node name="rotating_map_dialog" type="Area" parent="zone_estate" index="28"]
+transform = Transform( 0.993285, 6.64424e-11, 0.115697, 0, 1, -5.74279e-10, -0.115697, 5.70422e-10, 0.993285, -1.1532, -5.02519, -3.30618 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 36 )
+dialog_sequence = ExtResource( 38 )
+main_speaker = NodePath("../rotating_map")
+friendly_id = "052/map"
+enabled = false
+
+[node name="dialog_circle" parent="zone_estate/rotating_map_dialog" index="0" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90735e-06, 3.8147e-06, 0.400818 )
+
+[node name="CollisionShape" type="CollisionShape" parent="zone_estate/rotating_map_dialog" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.90735e-06, 0, 0.464119 )
+shape = SubResource( 19 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="zone_estate" index="31"]
+transform = Transform( 0.784466, 0, -0.620172, 0, 1, 0, 0.620172, 0, 0.784466, 1.71844, -3.4962, 7.10962 )
+extents = Vector3( 9.64883, 1.99122, 5.18852 )
+interior_enable = true
+interior_ambient_color = Color( 0.286275, 0.376471, 0.490196, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="zone_estate" index="32"]
+transform = Transform( 0.784466, 0, -0.620172, 0, 1, 0, 0.620172, 0, 0.784466, -4.16833, -3.4962, 2.4413 )
+extents = Vector3( 3.51792, 1.99122, 5.18852 )
+interior_enable = true
+interior_ambient_color = Color( 0.286275, 0.376471, 0.490196, 1 )
+
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="zone_estate" index="33"]
+transform = Transform( 0.784466, 0, -0.620172, 0, 1, 0, 0.620172, 0, 0.784466, -3.4397, -2.77837, -0.0976105 )
+extents = Vector3( 3.51655, 3.68244, 2.56559 )
+origin_offset = Vector3( -0.560547, -0.429199, 0 )
+interior_ambient_color = Color( 0.286275, 0.376471, 0.490196, 1 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="zone_estate" index="34"]
+transform = Transform( 0.116173, 0, -0.993229, 0, 1, 0, 0.993229, 0, 0.116173, 3.94852, -3.4962, -1.03792 )
+extents = Vector3( 3.51792, 1.99122, 7.264 )
+interior_enable = true
+interior_ambient_color = Color( 0.286275, 0.376471, 0.490196, 1 )
+
+[node name="SpotLight" type="SpotLight" parent="zone_estate" index="35"]
+transform = Transform( -0.78963, 0.143304, -0.596615, 0.051626, 0.984413, 0.168124, 0.611408, 0.101955, -0.78472, -5.10551, -2.22023, -1.81747 )
+light_color = Color( 0.686275, 0.909804, 0.976471, 1 )
+spot_range = 7.64257
+spot_angle = 70.8495
+
+[node name="OmniLight" type="OmniLight" parent="zone_estate" index="36"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.56603, -1.68523, 10.8754 )
+light_color = Color( 0.933333, 0.992157, 0.839216, 1 )
+light_energy = 0.597
+omni_range = 4.41137
+omni_attenuation = 0.707107
+
+[node name="SpotLight2" type="SpotLight" parent="zone_estate" index="37"]
+transform = Transform( -0.674562, 0.420311, -0.606881, -0.666798, 0.00585525, 0.745215, 0.316776, 0.907361, 0.276313, -6.54382, 0.730896, 5.11311 )
+light_color = Color( 0.686275, 0.909804, 0.976471, 1 )
+light_energy = 0.497
+spot_range = 10.0501
+spot_angle = 50.4718
 
 [node name="hut" parent="." index="10" instance=ExtResource( 23 )]
 transform = Transform( -0.94834, 0, -0.317257, 0, 1, 0, 0.317257, 0, -0.94834, 57.9793, -116.869, 182.523 )
@@ -450,9 +637,11 @@ transform = Transform( -0.977005, 0, 0.213215, 0, 1, 0, -0.213215, 0, -0.977005,
 script = ExtResource( 30 )
 action = 2
 
-[node name="captain_redford" parent="." index="25" instance=ExtResource( 33 )]
+[node name="captain_redford" parent="." index="24" instance=ExtResource( 33 )]
 transform = Transform( -0.511294, 0, 0.859406, 0, 1, 0, -0.859406, 0, -0.511294, -41.7783, -125.961, 194.699 )
 
 [connection signal="opened" from="interaction/front_door" to="interaction" method="_on_front_door_opened"]
 [connection signal="toggled" from="estate/door1-kine" to="interaction/front_door" method="_on_toggled"]
 [connection signal="toggled" from="estate/door2-kine" to="interaction/front_door" method="_on_toggled"]
+[connection signal="completed" from="zone_estate/rotating_map" to="interaction" method="_on_rotating_map_completed"]
+[connection signal="npc_event" from="captain_redford" to="interaction" method="_on_captain_redford_npc_event"]

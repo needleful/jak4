@@ -351,6 +351,9 @@ func add_stat(tag: String, amount := 1) -> int:
 	var value =  game_state.stats[tag]
 	emit_signal("stat_changed", tag, value)
 	return value
+
+func remove_stat(tag: String) -> bool:
+	return game_state.stats.erase(tag)
 	
 func temp_stat(index: String):
 	if index in stats_temp:

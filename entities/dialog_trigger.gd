@@ -13,6 +13,7 @@ func _ready():
 	var _x = connect("body_entered", self, "_on_body_entered")
 	if main_speaker:
 		speaker = get_node(main_speaker)
+	set_enabled(enabled)
 
 func _on_body_entered(body):
 	if !(body is PlayerBody):

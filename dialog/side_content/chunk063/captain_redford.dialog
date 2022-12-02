@@ -1,20 +1,4 @@
-{main_speaker.at("front_door")}
-	{!Global.count("manor_key")}
-		There's something wrong here.
-		[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
-		The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
-		[You] You don't have hands.
-		Stop it. Stop with this nonsense. Just... take the key and open the door.
-		* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
-		{Global.add_item("manor_key")}
-	{otherwise if !Global.stat("chunk052/front_door/open")}
-		Well... Are you going to open it?
-		[You] I unlocked it, but it's still stuck.
-		It can probably be kicked open now.
-	{otherwise}
-		Marvelous! Now to find my men...
-		{main_speaker.travel_to("", "../zone_estate/path_entry")}
-{otherwise}
+!{captain_redford/start}
 	{talked == 0}
 		// At the blockade
 		I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
@@ -39,6 +23,7 @@
 	{otherwise}
 		Young lady. As I have said, we must part for the Ember Crest Manor at once!
 	> Fine. I will humor your delusions and go to this manor with you.
+		+{captain_redford/start}
 		It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
 		{Global.note_task("captain_redford", 'A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort.')}
 		{Global.task_note_place("captain_redford", "ember_crest_manor", "I am to accompany Captain Redford to this manor.")}
@@ -47,68 +32,76 @@
 	> No. Stay on that train forever for all I care.
 		What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
 		... Get back here!
+{otherwise if main_speaker.at("front_door")}
+	{!Global.count("manor_key")}
+		There's something wrong here.
+		[You] Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
+		The... survivors must have taken refuge inside! Quickly! I've got the key, but... my hands are... rather stiff.
+		[You] You don't have hands.
+		Stop it. Stop with this nonsense. Just... take the key and open the door.
+		* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
+		{Global.add_item("manor_key")}
+	{otherwise if !Global.stat("chunk052/front_door/open")}
+		Well... Are you going to open it?
+		[You] I unlocked it, but it's still stuck.
+		It can probably be kicked open now.
+	{otherwise}
+		Marvelous! Now to find my men...
+		{main_speaker.travel_to("", "../zone_estate/path_entry")}
+{otherwise if main_speaker.at("entry")}
+	Right, where in the blazes IS everyone?
+	[You] They're gone! I've been telling you! And you haven't explained how you became a spectre!
+	I've told you who I am plenty of times! I'm Captain Nathaniel Redford of the Sixth Cavalry! Recognized by His Grace, King August IX, December 8th, 1251.
+	[You] It's 1302...
+	Wait! Do you feel that?
+	[You] What?
+	Air... There's a nasty draft in here.
+	[You] Oh, come on! The windows are broken out!
+	No, no... it's moving somewhere else...
+	{main_speaker.travel_to("", "../zone_estate/shelf_view")}
+{otherwise if Global.has_stat("manor052/investigation1")}
+	?{manor052/passage/open} 
+		So it was a passage!
+		Excellent work, uh, I never caught your name.
+		[You] Jackie.
+		Short for Jacqueline, I presume?
+		[You] Yes.
+		Well Jacqueline, it appears we're in a puzzle-box. A devious labyrinth of unknown purpose. They're more common in this region than I'd prefer.
+		We must find my men. They may've been trapped in this evil place.
+		[You] Alright, "Captain". If I humor you and help you "find" your "men", will you agree to stop harassing those workers at the train?
+		I promise no such thing.
+		[You] Ugh. Well, I'm curious what's at the end of this all the same...
+		{Global.remove_stat("manor052/investigation1")}
+		{main_speaker.emit_signal("npc_event", "investigation1_complete")}
+		{main_speaker.travel_to("", "../zone_estate/path_passage")}
+	{otherwise}
+		There must be a lock or something...
+{otherwise if main_speaker.at("shelf_view")}
+	?{manor052/passage/open}
+		Alright, let's go in.
+		{main_speaker.travel_to("", "../zone_estate/path_passage")}
+	{otherwise} 
+		Air is going behind this shelf. A secret passage? Help me push it out of the way.
+		* You both try pushing the shelf. It's locked in place by some mechanism.
+		[You] Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
+		{main_speaker.emit_signal("npc_event", "investigation1")}
+		{Global.add_stat("manor052/investigation1")}
+{otherwise if main_speaker.at("kitchen")}
+	Well uh, it appears we have access to more of the house now.
+	I suppose we'll need to investigate more of this house.
+{otherwise}
+	[ERROR]: Captain Redford has no words for the current situation.
 {exit()}
 
 :_coat
 * He doesn't have anything you could wear.
 {back()}
 
-//  In the manor
-Right, where in the blazes IS everyone?
-[You] They're gone! I've been telling you! And you haven't explained how you became a spectre!
-I've told you who I am plenty of times! I'm Captain Nathaniel Redford of the Sixth Cavalry! Recognized by His Grace, King August IX, December 8th, 1251.
-[You] It's 1302...
-Wait! Do you feel that?
-[You] What?
-Air... There's a nasty draft in here.
-[You] Oh, come on! The windows are broken out!
-No, no... it's moving somewhere else...
-
-// He goes to the cabinet
-Air is going behind this cabinet. A secret passage? Help me push it out of the way.
-* You both try pushing the cabinet. It's locked in place by some mechanism.
-[You] Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
-
-// I think the puzzle should be simple here. It requires the player to know a bit of trivia about the world, possibly the name August IX, or to rotate a map of the world to face north.
-* You touch the aged map.
-* For some reason, the whole frame rotates freely on the wall.
-> (Rotate clockwise)
-	// It plays an animation here
-	* You rotate the map clockwise.
-> (Rotate anticlockwise)
-	// animation
-	* You rotate the map anticlockwise.
-> Captain Redford! This map rotates on an axis! What should I do with it?
-	// He comes over and stares at the map
-	Hm? Most intriguing... it may very well be a mechanism for the door.
-	Have you tried flipping it right-side-up?
-	> I'll try and see what happens.
-	> Could you do it?
-		Good heavens, how did you survive out here without knowing your directions?
-		{upside-down} It's upside-down.
-		{90-anticlockwise} Rotate it anticlockwise
-		{90-clockwise} Rotate it clockwise.
-		The Great Plateau is in the southwest corner, and the mountain, God's Tongue, in the northeast.
-
-{exit()}
-
 :opened
 * The map clicks into place, and you here a louder click behind you.
 That must be the cabinet! Let's try it again!
 It's curious the secret code was merely straightening the map. Perhaps it was to confuse the natives, since they draw their maps with East at the top.
 > (Leave)
-
-// Once solved
-* The cabinet glides effortlessly to the side, revealing a new passage.
-Excellent work, uh, I never caught your name.
-[You] Jackie.
-Short for Jacqueline, I presume?
-[You] Yes.
-Well Jacqueline, it appears we're in a puzzle-box. A devious labyrinth of unknown purpose. They're more common in this region than I'd prefer.
-We must find my men. They may've been trapped in this evil place.
-[You] Alright, "Captain". If I humor you and help you "find" your "men", will you agree to stop harassing those workers at the train?
-I promise no such thing.
-[You] Ugh. Well, I'm curious what's at the end of this all the same...
 
 // Perhaps more puzzles. I think The Captain can tell you the solution, but chooses not to
 I believe I understand what's happening here. But I don't want to deprive you the joy of a good puzzle.
