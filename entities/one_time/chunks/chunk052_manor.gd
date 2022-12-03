@@ -8,7 +8,7 @@ func _ready():
 		_on_stat_changed("investigation1", 1)
 
 func _on_front_door_opened():
-	Global.add_stat("chunk052/front_door/open")
+	var _x = Global.add_stat("chunk052/front_door/open")
 
 func _on_stat_changed(stat_name, value):
 	if !value:

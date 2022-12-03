@@ -1000,6 +1000,7 @@ script = ExtResource( 17 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1099,6 +1100,7 @@ align = 2
 
 [node name="gameing" type="Control" parent="ui"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1753,12 +1755,73 @@ time_scale_response = false
 anims/RESET = SubResource( 76 )
 anims/show_and_fade = SubResource( 75 )
 
-[node name="dialog_viewer" parent="ui" instance=ExtResource( 4 )]
+[node name="dialog" type="Control" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="viewer" parent="ui/dialog" instance=ExtResource( 4 )]
 pause_mode = 1
 time_scale_response = false
-visible = false
-anchor_left = 0.572
+anchor_left = 0.625
 rect_min_size = Vector2( 500, 0 )
+
+[node name="VBoxContainer" type="GridContainer" parent="ui/dialog"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 28.0
+margin_top = -233.0
+margin_right = 593.0
+margin_bottom = -21.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 15
+columns = 2
+
+[node name="input_prompt" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 83.0
+margin_bottom = 64.0
+action = "ui_accept"
+small = true
+
+[node name="Label" type="Label" parent="ui/dialog/VBoxContainer"]
+margin_left = 98.0
+margin_top = 21.0
+margin_right = 203.0
+margin_bottom = 43.0
+text = "Continue"
+
+[node name="input_prompt2" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 74.0
+margin_right = 83.0
+margin_bottom = 138.0
+action = "ui_cancel"
+small = true
+
+[node name="Label2" type="Label" parent="ui/dialog/VBoxContainer"]
+margin_left = 98.0
+margin_top = 95.0
+margin_right = 203.0
+margin_bottom = 117.0
+text = "Exit"
+
+[node name="prompt_trade" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 148.0
+margin_right = 83.0
+margin_bottom = 212.0
+action = "dialog_coat"
+small = true
+
+[node name="label_trade" type="Label" parent="ui/dialog/VBoxContainer"]
+margin_left = 98.0
+margin_top = 169.0
+margin_right = 203.0
+margin_bottom = 191.0
+text = "Trade Coats"
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false

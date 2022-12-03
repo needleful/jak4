@@ -12,7 +12,7 @@ var mode:int = Mode.Gameing setget set_mode
 var mode_before_pause:int = Mode.Gameing
 
 onready var game := $gameing
-onready var dialog := $dialog_viewer
+onready var dialog := $dialog/viewer
 onready var status := $status_menu
 var custom_ui : Control
 var loaded_ui : PackedScene

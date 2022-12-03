@@ -6,7 +6,7 @@ signal event_with_source(id, source)
 
 var shopping := false setget set_shopping
 
-onready var player: PlayerBody = get_parent().get_parent()
+onready var player: PlayerBody = Global.get_player()
 var main_speaker: Node
 var source_node: Node
 var last_speaker: String
@@ -318,7 +318,6 @@ func check_condition(cond: String):
 	return result
 
 func end():
-	hide()
 	set_process(false)
 	set_process_input(false)
 	Global.can_pause = true
@@ -344,12 +343,10 @@ func fast_exit():
 
 func pause():
 	print("Pausing dialog...")
-	hide()
 	set_process_input(false)
 	set_process(false)
 
 func resume():
-	show()
 	set_process_input(true)
 	set_process(true)
 	if advance_on_resume:

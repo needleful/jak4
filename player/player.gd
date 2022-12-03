@@ -427,8 +427,8 @@ func _ready():
 		
 	set_state(State.Ground)
 	var _x = Global.connect("item_changed", self, "on_item_changed")
-	_x = $ui/dialog_viewer.connect("exited", self, "_on_dialog_exited")
-	_x = $ui/dialog_viewer.connect("event_with_source", self, "_on_dialog_event")
+	_x = $ui/dialog/viewer.connect("exited", self, "_on_dialog_exited")
+	_x = $ui/dialog/viewer.connect("event_with_source", self, "_on_dialog_event")
 	update_inventory(true)
 	health = max_health
 	stamina = max_stamina
@@ -1795,13 +1795,12 @@ func can_talk():
 	return state == State.Ground
 
 func get_dialog_viewer() -> Node:
-	return $ui/dialog_viewer
+	return $ui/dialog/viewer
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	if game_ui.in_game:
 		return
 	ui.start_dialog(source, sequence, speaker, starting_label)
-	# TODO: replace with a tween
 	cam_rig.start_dialog()
 	lock()
 

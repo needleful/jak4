@@ -28,22 +28,22 @@ func is_complete():
 func set_angle(a):
 	if proper_angle == 0:
 		return
-	tween.stop_all()
-	tween.interpolate_property(
+	var _x = tween.stop_all()
+	_x = tween.interpolate_property(
 		self, "rotation_degrees:z", 
 		proper_angle, a,
 		1.2, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	proper_angle = a % 360
 	Global.set_stat("052/rotating_map", proper_angle)
 	if proper_angle == 0:
-		tween.interpolate_callback(self, 1.0, "emit_signal", "completed")
-	tween.start()
+		_x = tween.interpolate_callback(self, 1.0, "emit_signal", "completed")
+	_x = tween.start()
 
 func is_upside_down():
-	proper_angle == 180
+	return proper_angle == 180
 
 func should_be_clockwise():
-	proper_angle == 90
+	return proper_angle == 90
 
 func should_be_anticlockwise():
-	proper_angle == 270
+	return proper_angle == 270

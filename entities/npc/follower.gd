@@ -1,7 +1,7 @@
 extends KinematicBody
 class_name FollowerNPC
 
-signal npc_event(event_type)
+#signal npc_event(event_type)
 
 enum MetaState {
 	# Not doing anything

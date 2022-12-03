@@ -172,7 +172,7 @@ func start_dialog():
 
 func end_dialog():
 	if close_cam:
-		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_AIM)
+		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_DIALOG)
 	else:
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)
 
