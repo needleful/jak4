@@ -32,6 +32,9 @@
 	> No. Stay on that train forever for all I care.
 		What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
 		... Get back here!
+{otherwise if main_speaker.get_chunk() == "chunk063"}
+	Right, let's continue!
+	{main_speaker.continue_travel("../path_ember_crest")}
 {otherwise if main_speaker.at("front_door")}
 	{!Global.count("manor_key")}
 		There's something wrong here.
@@ -84,7 +87,6 @@
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
 		[You] Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
-		{main_speaker.emit_signal("npc_event", "investigation1")}
 		{Global.add_stat("manor052/investigation1")}
 {otherwise if main_speaker.at("kitchen")}
 	Well uh, it appears we have access to more of the house now.

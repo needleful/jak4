@@ -15,6 +15,7 @@ export(String) var friendly_name = ""
 export(bool) var from_kill := false
 export(AudioStream) var custom_sound
 export(bool) var emit_signal_at_ready := false
+export(bool) var celebrate := false
 
 const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50

@@ -117,6 +117,8 @@ func _ready():
 		var _x = awareness.connect("body_entered", self, "_on_awareness_entered")
 
 func _on_awareness_entered(body):
+	if "do_not_disturb" in body and body.do_not_disturb:
+		return
 	if !is_dead() and (ai == AI.Idle or !is_physics_processing()) and body.is_in_group("player"):
 		aggro_to(body)
 		if skip_alert:
@@ -295,7 +297,13 @@ func aggro_to(node: Spatial):
 		target = node
 
 func no_target():
-	return !is_instance_valid(target) or (target.has_method("is_dead") and target.is_dead())
+	return ( 
+		!is_instance_valid(target) or (
+			target.has_method("is_dead") and target.is_dead())
+		or (
+			"do_not_disturb" in target and target.do_not_disturb
+		)
+	)
 
 func is_dead():
 	return ai == AI.Dead or ai == AI.GravityStunDead

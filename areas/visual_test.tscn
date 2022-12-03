@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 
@@ -63,6 +63,12 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Vector3( -3.7199, 5.08561, -18.3453 ), Vector3( -3.7199, 0.768478, -18.3453 ), Vector3( -3.7199, 0.768478, -18.3453 ) ]
 }
+
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 5, 25, 5 )
+
+[sub_resource type="CubeMesh" id=6]
+size = Vector3( 10, 50, 10 )
 
 [node name="Spatial" type="Spatial"]
 
@@ -142,3 +148,103 @@ autoplay = "crush"
 playback_process_mode = 0
 anims/RESET = SubResource( 3 )
 anims/crush = SubResource( 4 )
+
+[node name="StaticBody" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 26, -8 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody2" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 21, -19 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody2"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody2/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody3" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 16, -19 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody3"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody3/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody4" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 11, -19 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody4"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody4/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody5" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 6, -7 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody5"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody5/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody6" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 1, 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody6"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody6/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody7" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35, -4, 17 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody7"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody7/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody8" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26, -9, 28 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody8"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody8/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody9" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -14, 28 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody9"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody9/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="StaticBody10" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -19, 28 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody10"]
+shape = SubResource( 5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="StaticBody10/CollisionShape"]
+mesh = SubResource( 6 )
+
+[node name="OmniLight4" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 58, 0 )
+light_color = Color( 1, 0.635294, 0.635294, 1 )
+omni_range = 50.0
+
+[node name="OmniLight5" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 27, 22 )
+light_color = Color( 0.635294, 0.811765, 1, 1 )
+omni_range = 50.0

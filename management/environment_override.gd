@@ -8,6 +8,8 @@ export(bool) var show_sun := true
 export(bool) var override_music := false
 export(AudioStream) var default_music
 export(AudioStream) var combat_music
+export(bool) var no_combat := false
+export(bool) var close_cam := false
 
 var wind : WindController
 var scene: Node
@@ -30,6 +32,11 @@ func _on_body_entered(_body):
 	for c in get_children():
 		if c is ReflectionProbe:
 			c.show()
+	var p = Global.get_player()
+	if no_combat:
+		p.do_not_disturb = true
+	if close_cam:
+		p.cam_rig.set_close_cam(true)
 
 func _on_body_exited(_body):
 	wind.apply_volume(0)
@@ -41,3 +48,8 @@ func _on_body_exited(_body):
 	for c in get_children():
 		if c is ReflectionProbe:
 			c.hide()
+	var p = Global.get_player()
+	if no_combat:
+		p.do_not_disturb = false
+	if close_cam:
+		p.cam_rig.set_close_cam(false)

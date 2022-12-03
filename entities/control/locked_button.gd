@@ -12,10 +12,13 @@ func _ready():
 
 func take_damage(_d, _dir, source):
 	if player_only and !(source is PlayerBody):
+		print("Not player: ", source)
 		return
 	elif !Global.count(key):
+		print("No key: ", key)
 		return
 	else:
 		if persistent:
 			Global.set_stat(get_path(), true)
+		print("Opening..")
 		emit_signal("toggled", true, false)

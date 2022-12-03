@@ -23,7 +23,7 @@ func _init():
 	r_expression.compile("[#+!?]?\\{([^\\}]+)\\}")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
-	r_speaker.compile("^\\s*\\[\\s*(\\w+)\\s*\\]\\s*")
+	r_speaker.compile("^\\s*\\[([^\\]]+)]\\s*")
 
 func get_importer_name():
 	return "np.dialog"
@@ -158,7 +158,7 @@ func parse_text(text: String, src_path = "<local>"):
 			and wd.parent in seq.dialog
 			and seq.dialog[wd.parent].speaker != ""
 		):
-			wd.speaker = seq.dialog[wd.parent].speaker
+			wd.speaker = seq.dialog[wd.parent].speaker.strip_edges()
 			
 		current_dialog = line_number
 		current_level += level_change

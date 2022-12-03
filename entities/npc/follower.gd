@@ -172,3 +172,11 @@ func get_chunk() -> String:
 	if p is Chunk:
 		p = p.get_parent()
 	return p.name if p else ""
+
+func continue_travel(starting_node: String):
+	if has_node(location):
+		target = get_node(location)
+	elif has_node(starting_node):
+		target = get_node(starting_node)
+	dialog.enabled = false
+	set_mstate(MetaState.TravelTo)

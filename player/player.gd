@@ -164,6 +164,7 @@ const DEPTH_CRUSH := 0.4
 # Broad things
 
 var velocity := Vector3.ZERO
+var falling_velocity := Vector3.ZERO
 
 const DEFAULT_MAX_HEALTH := 50
 const HEALTH_UP_BOOST := 0.5
@@ -228,6 +229,15 @@ const TIME_TO_SIT := 2.5
 const TIME_TO_DASH := 0.05
 const TIME_DASH := 0.5
 
+const FALL_DIST_DEATH = 50.0
+const FALL_DIST_HIGH = 30.0
+const FALL_DIST_MIN = 15.0
+const FALL_VEL_DEATH = 0.0
+const FALL_VEL_HIGH = 0.0
+const FALL_VEL_MIN = 0.0
+const FALL_DAM_HIGH = 25
+const FALL_DAM_MIN = 8
+
 # Ledge being held onto
 var ledge: Spatial
 # Position of player relative to ledge at start of ledge grab
@@ -238,6 +248,8 @@ var ledge_last_transform : Transform
 onready var equipment_inventory := {}
 
 onready var equipped_item : Usable
+# enemies don't attack you
+var do_not_disturb := true
 
 enum State {
 	None,
@@ -357,6 +369,8 @@ var equipment_path_f := "res://items/usable/%s.gd"
 var timers := PoolRealArray()
 var applied_ground_velocity := Vector3.ZERO
 
+var last_ground_origin := Vector3.ZERO
+
 const TIMERS_MAX := 2
 
 const INPUT_EPSILON := 0.1
@@ -421,6 +435,7 @@ func _ready():
 	update_health()
 	gun.camera = cam_rig.camera
 	equip(0)
+	last_ground_origin = global_transform.origin
 
 func _input(event):
 	if can_talk() and event.is_action_pressed("dialog_coat") and !empty(coat_zone):
@@ -951,8 +966,12 @@ func _physics_process(delta):
 		applied_ground_velocity *= (1 - DECEL_APPLIED_GROUND)
 		av = Engine.time_scale*applied_ground_velocity
 	
+	if global_transform.origin.y > last_ground_origin.y:
+		last_ground_origin = global_transform.origin
+	
 	match state:
 		State.Ground:
+			last_ground_origin = global_transform.origin
 			accel(delta, desired_velocity*SPEED_RUN, av)
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
@@ -960,6 +979,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
+			last_ground_origin = global_transform.origin
 			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
@@ -967,6 +987,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL_START)
 			rotate_to_velocity(desired_velocity)
 		State.Roll:
+			last_ground_origin = global_transform.origin
 			accel(delta, desired_velocity * SPEED_ROLL, av, ACCEL, ACCEL_STEER_ROLL, 0.0)
 			rotate_to_velocity(desired_velocity)
 		State.RollJump:
@@ -980,10 +1001,12 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_ROLL)
 			rotate_to_velocity(desired_velocity)
 		State.Crouch:
+			last_ground_origin = global_transform.origin
 			accel(delta, desired_velocity*SPEED_CROUCH, av)
 			mesh.blend_run_animation((velocity - av)/SPEED_CROUCH)
 			rotate_to_velocity(desired_velocity)
 		State.Climb:
+			last_ground_origin = global_transform.origin
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, ground_normal)
@@ -993,6 +1016,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
 		State.LedgeHang:
+			last_ground_origin = global_transform.origin
 			if ledge.global_transform != ledge_last_transform:
 				var new_transform := ledge.global_transform
 				var old_position := ledge_last_transform*ledge_local_position
@@ -1005,6 +1029,7 @@ func _physics_process(delta):
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
+			last_ground_origin = global_transform.origin
 			if after(TIME_LUNGE_PARTICLES):
 				mesh.stop_particles()
 			if (after(TIME_LUNGE_COMBO)
@@ -1017,6 +1042,7 @@ func _physics_process(delta):
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
+			last_ground_origin = global_transform.origin
 			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN, av)
@@ -1041,12 +1067,14 @@ func _physics_process(delta):
 			damage_point(dive_start_hitbox, DAMGE_DIVE_START, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.DiveEnd:
+			last_ground_origin = global_transform.origin
 			if !gun.in_combo() and damaged_objects.size() > 0:
 				gun.start_combo()
 			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.Locked, State.PlaceFlag, State.GetItem, State.Sitting:
+			last_ground_origin = global_transform.origin
 			desired_velocity = Vector3.ZERO
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 		State.FallingDeath:
@@ -1057,6 +1085,7 @@ func _physics_process(delta):
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL_GRAVITY_STUN, Vector3.UP*Global.gravity_stun_velocity)
 			rotate_to_velocity(desired_velocity)
 		State.Hover:
+			last_ground_origin = global_transform.origin
 			var grounded:bool = hover_area.get_overlapping_bodies().size() > 0
 			$ui/gameing/debug/stats/a8.text = str(grounded)
 			if hover_floor_finder.is_colliding():
@@ -1065,6 +1094,7 @@ func _physics_process(delta):
 			accel_hover(delta, desired_velocity*SPEED_HOVER*hover_speed_factor, grounded)
 			rotate_to_velocity(desired_velocity)
 		State.Wading:
+			last_ground_origin = global_transform.origin
 			accel(delta, desired_velocity*SPEED_WADE, av, ACCEL_WADING)
 			mesh.blend_run_animation((velocity - av)/SPEED_WADE)
 			rotate_to_velocity(desired_velocity)
@@ -1078,6 +1108,7 @@ func _physics_process(delta):
 			damage_point(roll_hitbox, DAMAGE_ROLL_JUMP, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.WallCling:
+			last_ground_origin = global_transform.origin
 			if best_normal != Vector3.ZERO:
 				ground_normal = best_normal
 			var hvel := velocity.move_toward(av, ACCEL_CLIMB)
@@ -1096,6 +1127,7 @@ func _physics_process(delta):
 		equipment.close()
 
 func _process(_delta):
+	$ui/gameing/debug/stats/a10.text = "Do Not Disturb" if do_not_disturb else ""
 	update_stamina()
 	$ui/gameing/debug/stats/a7.text = str(timers)
 
@@ -1656,6 +1688,14 @@ func move(p_vel: Vector3, grounded := false) -> Vector3:
 	else:
 		return move_and_slide(p_vel, Vector3.UP, false, 4, 900, INFINITE_INERTIA)
 
+func compute_fall_damage(distance):
+	if distance.y > FALL_DIST_DEATH and -velocity.y > FALL_VEL_DEATH:
+		var _x = take_damage(max_health*2, Vector3.UP, self)
+	elif distance.y > FALL_DIST_HIGH and -velocity.y > FALL_VEL_HIGH:
+		var _x = take_damage(FALL_DAM_HIGH, Vector3.UP, self)
+	elif distance.y > FALL_DIST_MIN and -velocity.y > FALL_VEL_MIN:
+		var _x = take_damage(FALL_DAM_MIN, Vector3.UP, self)
+
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, _source) -> bool:
 	if !takes_damage():
@@ -1862,7 +1902,7 @@ func celebrate(id: String, item: Spatial, local := Transform()):
 		$ui/gameing/item_get.show_get(id)
 
 func get_item(item: ItemPickup):
-	if item.item_id == "capacitor" or item.item_id in UPGRADE_ITEMS:
+	if item.item_id == "capacitor" or item.item_id in UPGRADE_ITEMS or item.celebrate:
 		if item.has_node("preview"):
 			var preview = item.get_node("preview")
 			var t = preview.transform
@@ -1971,6 +2011,9 @@ func set_state(next_state: int):
 	# Entry effects
 	match next_state:
 		State.Ground:
+			#var fall_distance:Vector3 = last_ground_origin - global_transform.origin
+			#compute_fall_damage(fall_distance)
+			last_ground_origin = global_transform.origin
 			can_air_spin = true
 			can_slide_lunge = true
 			can_wall_cling = true

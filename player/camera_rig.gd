@@ -25,15 +25,18 @@ const SPRING_DEFAULT := 2.5
 const SPRING_AIM := 1.5
 const SPRING_DIALOG := 1.5
 const SPRING_WARDROBE := 1.0
+const SPRING_CLOSE := 1.0
 const ANGLE_DEFAULT := Vector3(-15, 0, 0)
 const ANGLE_AIM := Vector3(-10, -20, 0)
 const ANGLE_DIALOG := Vector3(-10, 20, 0)
 const ANGLE_WARDROBE := Vector3(-10, -15, 0)
+const ANGLE_CLOSE := Vector3(-10, -30, 0)
 
 const TWEEN_TIME_AIM := 0.4
 const TWEEN_TIME_AIM_RESET := 0.6
 const TWEEN_TIME_DIALOG := 2.0
 const TWEEN_TIME_WARDROBE := 1.5
+const TWEEN_TIME_CLOSE := 2.0
 
 const TWEEN_TIME_FOV := 0.2
 onready var fov_normal:float = camera.fov
@@ -50,6 +53,7 @@ var aiming := false
 var locked := false
 var zoomed := false
 var fov_tween := Tween.new()
+var close_cam := false
 
 onready var cam_basis = camera.transform.basis
 
@@ -156,7 +160,9 @@ func set_aiming(aim: bool):
 	if aiming == aim:
 		return
 	aiming = aim
-	if aiming:
+	if close_cam:
+		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_AIM_RESET)
+	elif aiming:
 		tween_to(ANGLE_AIM, SPRING_AIM, TWEEN_TIME_AIM)
 	else:
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_AIM_RESET)
@@ -165,13 +171,28 @@ func start_dialog():
 	tween_to(ANGLE_DIALOG, SPRING_DIALOG, TWEEN_TIME_DIALOG)
 
 func end_dialog():
-	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)
+	if close_cam:
+		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_AIM)
+	else:
+		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_DIALOG)
 
 func start_wardrobe():
 	tween_to(ANGLE_WARDROBE, SPRING_WARDROBE, TWEEN_TIME_WARDROBE)
 
 func end_wardrobe():
-	tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)
+	if close_cam:
+		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_WARDROBE)
+	else:
+		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)
+
+func set_close_cam(c):
+	close_cam = c
+	if close_cam:
+		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_CLOSE)
+	elif aiming:
+		tween_to(ANGLE_AIM, SPRING_AIM, TWEEN_TIME_CLOSE)
+	else:
+		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_CLOSE)
 
 func toggle_zoom():
 	set_zoom(!zoomed)
