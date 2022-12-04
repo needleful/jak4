@@ -30,7 +30,7 @@ const ANGLE_DEFAULT := Vector3(-15, 0, 0)
 const ANGLE_AIM := Vector3(-10, -20, 0)
 const ANGLE_DIALOG := Vector3(-10, 20, 0)
 const ANGLE_WARDROBE := Vector3(-10, -15, 0)
-const ANGLE_CLOSE := Vector3(-10, -30, 0)
+const ANGLE_CLOSE := Vector3(-20, -20, 0)
 
 const TWEEN_TIME_AIM := 0.4
 const TWEEN_TIME_AIM_RESET := 0.6
