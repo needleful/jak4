@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=189 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=196 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=110]
 animation = "AimF"
@@ -81,32 +81,65 @@ filters = [ "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Arm
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "BaseJump"
 
-[sub_resource type="AnimationNodeAnimation" id=203]
+[sub_resource type="AnimationNodeAnimation" id=271]
 animation = "ClimbSlopeIdle-loop"
 
-[sub_resource type="AnimationNodeAnimation" id=204]
+[sub_resource type="AnimationNodeAnimation" id=272]
 animation = "ClimbSlopeUp-loop"
 
-[sub_resource type="AnimationNodeAnimation" id=205]
-animation = "ClimbSlopeRight-loop"
-
-[sub_resource type="AnimationNodeAnimation" id=206]
+[sub_resource type="AnimationNodeAnimation" id=273]
 animation = "ClimbSlopeDown-loop"
 
-[sub_resource type="AnimationNodeAnimation" id=207]
+[sub_resource type="AnimationNodeAnimation" id=274]
 animation = "ClimbSlopeLeft-loop"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=175]
-blend_point_0/node = SubResource( 203 )
+[sub_resource type="AnimationNodeAnimation" id=275]
+animation = "ClimbSlopeRight-loop"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=276]
+blend_point_0/node = SubResource( 271 )
 blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 204 )
+blend_point_1/node = SubResource( 272 )
 blend_point_1/pos = Vector2( 0, 1 )
-blend_point_2/node = SubResource( 205 )
-blend_point_2/pos = Vector2( 1, 0 )
-blend_point_3/node = SubResource( 206 )
-blend_point_3/pos = Vector2( 0, -1 )
-blend_point_4/node = SubResource( 207 )
-blend_point_4/pos = Vector2( -1, 0 )
+blend_point_2/node = SubResource( 273 )
+blend_point_2/pos = Vector2( 0, -0.9 )
+blend_point_3/node = SubResource( 274 )
+blend_point_3/pos = Vector2( -1, 0 )
+blend_point_4/node = SubResource( 275 )
+blend_point_4/pos = Vector2( 1, 0 )
+
+[sub_resource type="AnimationNodeAnimation" id=277]
+animation = "ClimbOverhangIdle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=278]
+animation = "ClimbOverhangDown-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=279]
+animation = "ClimbOverhangUp-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=280]
+animation = "ClimbOverhangLeft-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=281]
+animation = "ClimbOverhangRight-loop"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=282]
+blend_point_0/node = SubResource( 277 )
+blend_point_0/pos = Vector2( 0, 0 )
+blend_point_1/node = SubResource( 278 )
+blend_point_1/pos = Vector2( 0, -0.9 )
+blend_point_2/node = SubResource( 279 )
+blend_point_2/pos = Vector2( 0, 1 )
+blend_point_3/node = SubResource( 280 )
+blend_point_3/pos = Vector2( -1, 0 )
+blend_point_4/node = SubResource( 281 )
+blend_point_4/pos = Vector2( 1, 0 )
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=175]
+blend_point_0/node = SubResource( 276 )
+blend_point_0/pos = 0.7
+blend_point_1/node = SubResource( 282 )
+blend_point_1/pos = -0.2
 
 [sub_resource type="AnimationNodeAnimation" id=193]
 animation = "Crouch-loop"
@@ -661,7 +694,7 @@ start_node = "Walk"
 graph_offset = Vector2( 23, -164 )
 
 [resource]
-graph_offset = Vector2( -592, -106 )
+graph_offset = Vector2( -596, -121 )
 nodes/Aim/node = SubResource( 115 )
 nodes/Aim/position = Vector2( -540, 160 )
 nodes/Animation/node = SubResource( 125 )
@@ -677,4 +710,4 @@ nodes/GunHold/position = Vector2( 160, -40 )
 nodes/WholeBody/node = SubResource( 6 )
 nodes/WholeBody/position = Vector2( -340, -80 )
 nodes/output/position = Vector2( 380, 40 )
-node_connections = [ "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation", "output", 0, "GunHold", "Gun", 0, "WholeBody", "Gun", 1, "Fire" ]
+node_connections = [ "output", 0, "GunHold", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation" ]

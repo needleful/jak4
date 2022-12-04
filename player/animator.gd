@@ -107,13 +107,17 @@ func blend_run_animation(movement: Vector3):
 	anim["parameters/WholeBody/Wading/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
-	var b :Vector2 = anim["parameters/WholeBody/Climb/blend_position"]
+	var b :Vector2 = anim["parameters/WholeBody/Climb/0/blend_position"]
 	var right := -global_transform.basis.x.dot(velocity)
 	var up := 0.0
 	if wall_normal.y != 0:
 		up = velocity.y
-	anim["parameters/WholeBody/Climb/blend_position"] = lerp(b, Vector2(right, up), 0.1)
-
+	b =  lerp(b, Vector2(right, up), 0.1)
+	anim["parameters/WholeBody/Climb/0/blend_position"] = b
+	anim["parameters/WholeBody/Climb/1/blend_position"] = b
+	
+	var slope: float = anim["parameters/WholeBody/Climb/blend_position"]
+	anim["parameters/WholeBody/Climb/blend_position"] = lerp(wall_normal.y, slope, 0.1)
 func force_play(state):
 	body.start(state)
 
