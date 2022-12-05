@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -18,7 +18,6 @@
 [ext_resource path="res://areas/custom_chunk.gd" type="Script" id=16]
 [ext_resource path="res://dialog/border.dialog" type="Resource" id=17]
 [ext_resource path="res://audio/wind_controller.gd" type="Script" id=18]
-[ext_resource path="res://tutorial_prompt.gd" type="Script" id=19]
 [ext_resource path="res://areas/skybox.gd" type="Script" id=20]
 [ext_resource path="res://material/env/skybox.material" type="Material" id=21]
 
@@ -384,8 +383,8 @@ tracks/9/keys = {
 }
 
 [sub_resource type="ProceduralSky" id=2]
+radiance_size = 0
 sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
-sky_horizon_color = Color( 1.8, 1.9, 2, 1 )
 sky_curve = 0.0998612
 ground_bottom_color = Color( 0.215686, 0.25098, 0.321569, 1 )
 ground_horizon_color = Color( 1.2, 1.2, 1.2, 1 )
@@ -393,10 +392,14 @@ ground_curve = 0.226274
 sun_color = Color( 5.2, 2.33, 0.05, 1 )
 sun_latitude = 49.55
 sun_longitude = 69.09
+texture_size = 0
 
 [sub_resource type="Environment" id=3]
+background_mode = 1
 background_sky = SubResource( 2 )
+background_color = Color( 0.223529, 0.427451, 0.564706, 1 )
 ambient_light_color = Color( 0.27451, 0.294118, 0.388235, 1 )
+ambient_light_sky_contribution = 0.0
 fog_enabled = true
 fog_color = Color( 1, 1.5, 2.5, 1 )
 fog_depth_end = 12000.0
@@ -428,8 +431,6 @@ extents = Vector3( 95, 299, 803 )
 
 [sub_resource type="BoxShape" id=7]
 extents = Vector3( 4096, 2000, 100 )
-
-[sub_resource type="BoxShape" id=14]
 
 [sub_resource type="DynamicFont" id=15]
 outline_size = 2
@@ -2313,11 +2314,11 @@ visible = false
 visible = false
 
 [node name="sun" type="DirectionalLight" parent="." index="402"]
-transform = Transform( -0.748045, -0.372398, 0.549316, 0.29632, 0.553209, 0.778559, -0.59382, 0.745171, -0.303477, 0, 0, 0 )
+transform = Transform( -0.748045, -0.372398, 0.549316, 0.29632, 0.553209, 0.778559, -0.59382, 0.74517, -0.303477, 0, 0, 0 )
 light_color = Color( 1, 0.968627, 0.878431, 1 )
 shadow_enabled = true
-directional_shadow_split_1 = 0.005
-directional_shadow_split_2 = 0.05
+directional_shadow_split_1 = 0.01
+directional_shadow_split_2 = 0.1
 directional_shadow_normal_bias = 0.1
 directional_shadow_max_distance = 1500.0
 script = ExtResource( 7 )
@@ -2336,6 +2337,7 @@ anims/day_night_normal = SubResource( 79 )
 environment = SubResource( 3 )
 
 [node name="skybox" type="MeshInstance" parent="." index="406"]
+layers = 4
 mesh = SubResource( 77 )
 material/0 = ExtResource( 21 )
 script = ExtResource( 20 )
@@ -2512,15 +2514,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 7 )
 
-[node name="Area" type="Area" parent="." index="422"]
-collision_layer = 0
-collision_mask = 0
-script = ExtResource( 19 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
-shape = SubResource( 14 )
-
-[node name="loading" type="Label" parent="." index="423"]
+[node name="loading" type="Label" parent="." index="422"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5

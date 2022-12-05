@@ -27,6 +27,8 @@ onready var enemies_last_position :Vector3 = player.global_transform.origin
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
 
+
+
 onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween
@@ -38,6 +40,12 @@ var sun_enabled := true
 var env_override := false
 var shaders_ready := false
 
+onready var env_defaults := {
+	"end": env.environment.fog_depth_end,
+	"begin":env.environment.fog_depth_begin,
+	"color":env.environment.fog_color,
+	"indirect_light":indirect.light_color
+}
 var time := 0.0
 var TIME_READY := 0.5
 
