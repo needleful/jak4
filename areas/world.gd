@@ -30,14 +30,10 @@ var MIN_DIST_SQ_ENEMIES := 2000.0
 onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween
-onready var sun := $DirectionalLight
+onready var sun := $sun
+onready var indirect := $indirect_light
+onready var indirect_tween := $indirect_tween
 var sun_enabled := true
-
-onready var fog_defaults := {
-	"color":env.environment.fog_color,
-	"begin":env.environment.fog_depth_begin,
-	"end":env.environment.fog_depth_end
-}
 
 var env_override := false
 var shaders_ready := false
@@ -48,8 +44,8 @@ var TIME_READY := 0.5
 const FOG_TWEEN_TIME := 2.5
 const FOG_MIN_HEIGHT := 1000
 const FOG_MAX_HEIGHT := 3500
-onready var FOG_DISTANCE_MIN = fog_defaults.end
-onready var FOG_DISTANCE_MAX = fog_defaults.end*2.0
+onready var FOG_DISTANCE_MIN = env_defaults.end
+onready var FOG_DISTANCE_MAX = env_defaults.end*2.0
 
 const DIST_HIRES := 1500.0
 const DIST_LOWRES := 2000.0
@@ -122,7 +118,7 @@ func _process(delta):
 		sun.light_energy = 1.0 if sun_enabled else 0.0
 		shaders_ready = true
 	var player_new_position = player.global_transform.origin
-	apply_fog(player_new_position.y)
+	#apply_fog(player_new_position.y)
 	if (chunk_last_position - player_new_position).length_squared() >= CHUNK_SQDIST_UPDATE:
 		update_active_chunks(player_new_position)
 		chunk_last_position = player_new_position
@@ -245,9 +241,9 @@ func update_active_chunks(position: Vector3):
 
 func apply_fog(height: float):
 	var factor := clamp((height - FOG_MIN_HEIGHT)/(FOG_MAX_HEIGHT - FOG_MIN_HEIGHT), 0, 1)
-	fog_defaults.end = lerp(FOG_DISTANCE_MIN, FOG_DISTANCE_MAX, factor)
+	env_defaults.end = lerp(FOG_DISTANCE_MIN, FOG_DISTANCE_MAX, factor)
 	if !env_override and !env_tween.is_active():
-		env.environment.fog_depth_end = fog_defaults.end
+		env.environment.fog_depth_end = env_defaults.end
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
@@ -302,6 +298,22 @@ func set_sun_enabled(enabled:bool):
 		sun.show()
 	_x = sun_tween.start()
 
+func indirect_light_override(light: Color):
+	var _x = indirect_tween.stop_all()
+	env_override = true
+	if time < TIME_READY:
+		indirect.light_color = light
+		return
+	_x = indirect_tween.remove_all()
+	_x = indirect_tween.interpolate_property(indirect, "light_color",
+		indirect.light_color, light,
+		FOG_TWEEN_TIME, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	_x = indirect_tween.start()
+
+func clear_indirect_light():
+	indirect_light_override(env_defaults.indirect_light)
+	env_override = false
+
 func set_fog_override(fog: Color, begin: float, end:float):
 	var _x = env_tween.stop_all()
 	env_override = true
@@ -326,22 +338,8 @@ func set_fog_override(fog: Color, begin: float, end:float):
 	_x = env_tween.start()
 
 func clear_fog_override():
+	set_fog_override(env_defaults.color, env_defaults.begin, env_defaults.end)
 	env_override = false
-	var _x = env_tween.stop_all()
-	_x = env_tween.remove_all()
-	_x = env_tween.interpolate_property(env.environment, "fog_color",
-		env.environment.fog_color, fog_defaults.color,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	_x = env_tween.interpolate_property(env.environment, "fog_depth_end",
-		env.environment.fog_depth_end, fog_defaults.end,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	_x = env_tween.interpolate_property(env.environment, "fog_depth_begin",
-		env.environment.fog_depth_begin, fog_defaults.begin,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	_x = env_tween.start()
 
 func is_active(chunk_name):
 	return chunk_loader.is_active(chunk_name)

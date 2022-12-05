@@ -249,7 +249,7 @@ onready var equipment_inventory := {}
 
 onready var equipped_item : Usable
 # enemies don't attack you
-var do_not_disturb := true
+var do_not_disturb := false
 
 enum State {
 	None,

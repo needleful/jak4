@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -19,6 +19,8 @@
 [ext_resource path="res://dialog/border.dialog" type="Resource" id=17]
 [ext_resource path="res://audio/wind_controller.gd" type="Script" id=18]
 [ext_resource path="res://tutorial_prompt.gd" type="Script" id=19]
+[ext_resource path="res://areas/skybox.gd" type="Script" id=20]
+[ext_resource path="res://material/env/skybox.material" type="Material" id=21]
 
 [sub_resource type="OccluderShapePolygon" id=12]
 polygon_points = PoolVector2Array( 1410.04, -495.734, -234.006, 40.7117, -319.745, -602.753, 1048.05, 125.556 )
@@ -44,6 +46,343 @@ polygon_points = PoolVector2Array( 121.144, -11.2629, 101.676, 47.7825, -41.3552
 [sub_resource type="OccluderShapePolygon" id=18]
 polygon_points = PoolVector2Array( 121.144, -11.2629, -1.49634, -12.3922, -237.15, 292.567, -57.6782, -2.72974, 364.978, 403.251 )
 
+[sub_resource type="Gradient" id=80]
+offsets = PoolRealArray( 0.623529, 0.815686 )
+colors = PoolColorArray( 1, 1, 2.89, 1, 0, 0.57, 1.73, 1 )
+
+[sub_resource type="GradientTexture" id=81]
+gradient = SubResource( 80 )
+width = 32
+
+[sub_resource type="Gradient" id=82]
+offsets = PoolRealArray( 0.25098, 0.85098 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.08, 0, 1.16, 1 )
+
+[sub_resource type="GradientTexture" id=83]
+gradient = SubResource( 82 )
+width = 32
+
+[sub_resource type="Animation" id=78]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("sun:light_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0.968627, 0.878431, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sun:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -51.1288, 118.919, 28.1752 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("indirect_light:light_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.380392, 0.556863, 0.784314, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("WorldEnvironment:environment:fog_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1.5, 2.5, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("skybox:material/0:shader_param/gradient:gradient:colors")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ PoolColorArray( 1, 1, 2.89, 1, 0, 0.57, 1.73, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("sun:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("skybox:material/0:shader_param/blend")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("skybox:material/0:shader_param/gradient")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ SubResource( 81 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("skybox:material/0:shader_param/gradient2")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ SubResource( 83 ) ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("sun:transform")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("WorldEnvironment:environment:fog_depth_end")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 12000.0 ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("WorldEnvironment:environment:ambient_light_color")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.27451, 0.294118, 0.388235, 1 ) ]
+}
+
+[sub_resource type="Gradient" id=84]
+offsets = PoolRealArray( 0.207843, 0.709804, 1 )
+colors = PoolColorArray( 0.910156, 0.634843, 0.312866, 1, 0.174204, 0.106855, 0.357638, 1, 0.123188, 0, 0.366699, 1 )
+
+[sub_resource type="GradientTexture" id=85]
+gradient = SubResource( 84 )
+width = 32
+
+[sub_resource type="Gradient" id=88]
+offsets = PoolRealArray( 9.55105e-39, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=89]
+gradient = SubResource( 88 )
+width = 32
+
+[sub_resource type="Gradient" id=90]
+offsets = PoolRealArray( 0.0618557, 0.243986, 0.649485 )
+colors = PoolColorArray( 0, 0, 0, 1, 1, 0.955994, 0.597656, 1, 0.191406, 0.130096, 0.186137, 1 )
+
+[sub_resource type="GradientTexture" id=91]
+gradient = SubResource( 90 )
+width = 32
+
+[sub_resource type="Gradient" id=86]
+offsets = PoolRealArray( 0.290196, 1 )
+colors = PoolColorArray( 0.0306931, 0.147374, 0.218262, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=87]
+gradient = SubResource( 86 )
+width = 32
+
+[sub_resource type="Gradient" id=94]
+offsets = PoolRealArray( 0.182131, 0.367698, 0.821306 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.51796, 0.597265, 0.605469, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=95]
+gradient = SubResource( 94 )
+width = 32
+
+[sub_resource type="Gradient" id=92]
+offsets = PoolRealArray( 0.0721649, 0.360825, 0.986254 )
+colors = PoolColorArray( 0, 0, 0, 1, 1, 0.959564, 0.902344, 1, 1, 0.587952, 0.386719, 1 )
+
+[sub_resource type="GradientTexture" id=93]
+gradient = SubResource( 92 )
+width = 32
+
+[sub_resource type="Animation" id=79]
+resource_name = "day_night_normal"
+length = 600.0
+loop = true
+step = 5.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("sun:light_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 135, 180, 215, 240, 460, 480, 510, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.968627, 0.878431, 1 ), Color( 1, 0.968627, 0.878431, 1 ), Color( 1, 0.458824, 0.223529, 1 ), Color( 0.564706, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.376471, 0, 0, 1 ), Color( 1, 0.662745, 0.392157, 1 ), Color( 1, 0.968627, 0.878431, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("indirect_light:light_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 190, 255, 460, 490, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.117647, 0.203922, 0.317647, 1 ), Color( 0.117647, 0.203922, 0.317647, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.239216, 0.294118, 0.211765, 1 ), Color( 0.117647, 0.203922, 0.317647, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("WorldEnvironment:environment:fog_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 140, 200, 240, 425, 475, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1.5, 2.5, 1 ), Color( 1, 1.5, 2.5, 1 ), Color( 0.352941, 0.352941, 0.352941, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.352941, 0.352941, 0.352941, 1 ), Color( 1, 1.5, 2.5, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("sun:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 240, 455 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("skybox:material/0:shader_param/blend")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 75, 105, 155, 200, 275, 390, 460, 490, 530, 565 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("skybox:material/0:shader_param/gradient")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 105, 200, 390, 460, 530 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ SubResource( 81 ), SubResource( 85 ), SubResource( 89 ), SubResource( 89 ), SubResource( 91 ), SubResource( 81 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("skybox:material/0:shader_param/gradient2")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 155, 390, 490 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ SubResource( 83 ), SubResource( 87 ), SubResource( 95 ), SubResource( 93 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("sun:transform")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 220, 320, 435, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.926126, -0.0371819, 0.375378, -0.374517, -0.209446, 0.903255, 0.0450366, -0.977113, -0.207899, 0, 0, 0 ), Transform( 0.926126, -0.0371819, 0.375378, -0.0450366, 0.977113, 0.207898, -0.374517, -0.209446, 0.903255, 0, 0, 0 ), Transform( 0.926126, -0.0371819, 0.375378, 0.374517, 0.209446, -0.903255, -0.0450366, 0.977113, 0.207898, 0, 0, 0 ), Transform( 0.926126, -0.0371818, 0.375378, 0.0253742, -0.986736, -0.160341, 0.37636, 0.158021, -0.912898, 0, 0, 0 ), Transform( 0.926126, -0.0371819, 0.375378, -0.374517, -0.209446, 0.903255, 0.0450366, -0.977113, -0.207899, 0, 0, 0 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("WorldEnvironment:environment:fog_depth_end")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 145, 240, 395, 425, 490, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 12000.0, 12000.0, 260.9, 20.0, 35.3, 3741.0, 12000.0 ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("WorldEnvironment:environment:ambient_light_color")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 135, 190, 240, 290, 470, 505, 600 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.27451, 0.294118, 0.388235, 1 ), Color( 0.172549, 0.219608, 0.454902, 1 ), Color( 0.14902, 0.0509804, 0.309804, 1 ), Color( 0.215686, 0.25098, 0.298039, 1 ), Color( 0.105882, 0.14902, 0.192157, 1 ), Color( 0.105882, 0.14902, 0.192157, 1 ), Color( 0.14902, 0.239216, 0.447059, 1 ), Color( 0.27451, 0.294118, 0.388235, 1 ) ]
+}
+
 [sub_resource type="ProceduralSky" id=2]
 sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
 sky_horizon_color = Color( 1.8, 1.9, 2, 1 )
@@ -56,10 +395,8 @@ sun_latitude = 49.55
 sun_longitude = 69.09
 
 [sub_resource type="Environment" id=3]
-background_mode = 2
 background_sky = SubResource( 2 )
-ambient_light_color = Color( 0.0470588, 0, 0.47451, 1 )
-ambient_light_sky_contribution = 0.25
+ambient_light_color = Color( 0.27451, 0.294118, 0.388235, 1 )
 fog_enabled = true
 fog_color = Color( 1, 1.5, 2.5, 1 )
 fog_depth_end = 12000.0
@@ -69,6 +406,10 @@ auto_exposure_scale = 1.0
 auto_exposure_min_luma = 0.0
 glow_enabled = true
 glow_strength = 0.82
+
+[sub_resource type="SphereMesh" id=77]
+radial_segments = 24
+rings = 24
 
 [sub_resource type="DynamicFont" id=4]
 size = 108
@@ -1383,9 +1724,597 @@ shape = SubResource( 17 )
 transform = Transform( -4.28408e-08, -0.999891, 0.0147817, 0, 0.0147817, 0.999891, -1, 4.28408e-08, -6.1118e-10, 118.969, -10.9479, -0.000488281 )
 shape = SubResource( 18 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="." index="206"]
-transform = Transform( -0.748045, -0.372398, 0.549316, 0.29632, 0.553209, 0.778558, -0.59382, 0.74517, -0.303476, 0, 0, 0 )
-light_color = Color( 1, 0.988235, 0.878431, 1 )
+[node name="chunk_lowres000" parent="." index="206"]
+visible = false
+
+[node name="chunk_lowres001" parent="." index="207"]
+visible = false
+
+[node name="chunk_lowres002" parent="." index="208"]
+visible = false
+
+[node name="chunk_lowres003" parent="." index="209"]
+visible = false
+
+[node name="chunk_lowres004" parent="." index="210"]
+visible = false
+
+[node name="chunk_lowres005" parent="." index="211"]
+visible = false
+
+[node name="chunk_lowres006" parent="." index="212"]
+visible = false
+
+[node name="chunk_lowres007" parent="." index="213"]
+visible = false
+
+[node name="chunk_lowres008" parent="." index="214"]
+visible = false
+
+[node name="chunk_lowres009" parent="." index="215"]
+visible = false
+
+[node name="chunk_lowres010" parent="." index="216"]
+visible = false
+
+[node name="chunk_lowres011" parent="." index="217"]
+visible = false
+
+[node name="chunk_lowres012" parent="." index="218"]
+visible = false
+
+[node name="chunk_lowres013" parent="." index="219"]
+visible = false
+
+[node name="chunk_lowres014" parent="." index="220"]
+visible = false
+
+[node name="chunk_lowres015" parent="." index="221"]
+visible = false
+
+[node name="chunk_lowres016" parent="." index="222"]
+visible = false
+
+[node name="chunk_lowres017" parent="." index="223"]
+visible = false
+
+[node name="chunk_lowres018" parent="." index="224"]
+visible = false
+
+[node name="chunk_lowres019" parent="." index="225"]
+visible = false
+
+[node name="chunk_lowres020" parent="." index="226"]
+visible = false
+
+[node name="chunk_lowres021" parent="." index="227"]
+visible = false
+
+[node name="chunk_lowres022" parent="." index="228"]
+visible = false
+
+[node name="chunk_lowres023" parent="." index="229"]
+visible = false
+
+[node name="chunk_lowres024" parent="." index="230"]
+visible = false
+
+[node name="chunk_lowres025" parent="." index="231"]
+visible = false
+
+[node name="chunk_lowres026" parent="." index="232"]
+visible = false
+
+[node name="chunk_lowres027" parent="." index="233"]
+visible = false
+
+[node name="chunk_lowres028" parent="." index="234"]
+visible = false
+
+[node name="chunk_lowres029" parent="." index="235"]
+visible = false
+
+[node name="chunk_lowres030" parent="." index="236"]
+visible = false
+
+[node name="chunk_lowres031" parent="." index="237"]
+visible = false
+
+[node name="chunk_lowres032" parent="." index="238"]
+visible = false
+
+[node name="chunk_lowres033" parent="." index="239"]
+visible = false
+
+[node name="chunk_lowres034" parent="." index="240"]
+visible = false
+
+[node name="chunk_lowres035" parent="." index="241"]
+visible = false
+
+[node name="chunk_lowres036" parent="." index="242"]
+visible = false
+
+[node name="chunk_lowres037" parent="." index="243"]
+visible = false
+
+[node name="chunk_lowres038" parent="." index="244"]
+visible = false
+
+[node name="chunk_lowres039" parent="." index="245"]
+visible = false
+
+[node name="chunk_lowres040" parent="." index="246"]
+visible = false
+
+[node name="chunk_lowres041" parent="." index="247"]
+visible = false
+
+[node name="chunk_lowres042" parent="." index="248"]
+visible = false
+
+[node name="chunk_lowres043" parent="." index="249"]
+visible = false
+
+[node name="chunk_lowres044" parent="." index="250"]
+visible = false
+
+[node name="chunk_lowres045" parent="." index="251"]
+visible = false
+
+[node name="chunk_lowres046" parent="." index="252"]
+visible = false
+
+[node name="chunk_lowres047" parent="." index="253"]
+visible = false
+
+[node name="chunk_lowres048" parent="." index="254"]
+visible = false
+
+[node name="chunk_lowres049" parent="." index="255"]
+visible = false
+
+[node name="chunk_lowres050" parent="." index="256"]
+visible = false
+
+[node name="chunk_lowres051" parent="." index="257"]
+visible = false
+
+[node name="chunk_lowres052" parent="." index="258"]
+visible = false
+
+[node name="chunk_lowres053" parent="." index="259"]
+visible = false
+
+[node name="chunk_lowres054" parent="." index="260"]
+visible = false
+
+[node name="chunk_lowres055" parent="." index="261"]
+visible = false
+
+[node name="chunk_lowres056" parent="." index="262"]
+visible = false
+
+[node name="chunk_lowres057" parent="." index="263"]
+visible = false
+
+[node name="chunk_lowres058" parent="." index="264"]
+visible = false
+
+[node name="chunk_lowres059" parent="." index="265"]
+visible = false
+
+[node name="chunk_lowres060" parent="." index="266"]
+visible = false
+
+[node name="chunk_lowres061" parent="." index="267"]
+visible = false
+
+[node name="chunk_lowres062" parent="." index="268"]
+visible = false
+
+[node name="chunk_lowres063" parent="." index="269"]
+visible = false
+
+[node name="chunk_lowres064" parent="." index="270"]
+visible = false
+
+[node name="chunk_lowres065" parent="." index="271"]
+visible = false
+
+[node name="chunk_lowres066" parent="." index="272"]
+visible = false
+
+[node name="chunk_lowres067" parent="." index="273"]
+visible = false
+
+[node name="chunk_lowres068" parent="." index="274"]
+visible = false
+
+[node name="chunk_lowres069" parent="." index="275"]
+visible = false
+
+[node name="chunk_lowres070" parent="." index="276"]
+visible = false
+
+[node name="chunk_lowres071" parent="." index="277"]
+visible = false
+
+[node name="chunk_lowres072" parent="." index="278"]
+visible = false
+
+[node name="chunk_lowres073" parent="." index="279"]
+visible = false
+
+[node name="chunk_lowres074" parent="." index="280"]
+visible = false
+
+[node name="chunk_lowres075" parent="." index="281"]
+visible = false
+
+[node name="chunk_lowres076" parent="." index="282"]
+visible = false
+
+[node name="chunk_lowres077" parent="." index="283"]
+visible = false
+
+[node name="chunk_lowres078" parent="." index="284"]
+visible = false
+
+[node name="chunk_lowres079" parent="." index="285"]
+visible = false
+
+[node name="chunk_lowres080" parent="." index="286"]
+visible = false
+
+[node name="chunk_lowres081" parent="." index="287"]
+visible = false
+
+[node name="chunk_lowres082" parent="." index="288"]
+visible = false
+
+[node name="chunk_lowres083" parent="." index="289"]
+visible = false
+
+[node name="chunk_lowres084" parent="." index="290"]
+visible = false
+
+[node name="chunk_lowres085" parent="." index="291"]
+visible = false
+
+[node name="chunk_lowres086" parent="." index="292"]
+visible = false
+
+[node name="chunk_lowres087" parent="." index="293"]
+visible = false
+
+[node name="chunk_lowres088" parent="." index="294"]
+visible = false
+
+[node name="chunk_lowres089" parent="." index="295"]
+visible = false
+
+[node name="chunk_lowres090" parent="." index="296"]
+visible = false
+
+[node name="chunk_lowres091" parent="." index="297"]
+visible = false
+
+[node name="chunk_lowres092" parent="." index="298"]
+visible = false
+
+[node name="chunk_lowres093" parent="." index="299"]
+visible = false
+
+[node name="chunk_lowres094" parent="." index="300"]
+visible = false
+
+[node name="chunk_lowres095" parent="." index="301"]
+visible = false
+
+[node name="chunk_lowres096" parent="." index="302"]
+visible = false
+
+[node name="chunk_lowres097" parent="." index="303"]
+visible = false
+
+[node name="chunk_lowres098" parent="." index="304"]
+visible = false
+
+[node name="chunk_lowres099" parent="." index="305"]
+visible = false
+
+[node name="chunk_lowres100" parent="." index="306"]
+visible = false
+
+[node name="chunk_lowres101" parent="." index="307"]
+visible = false
+
+[node name="chunk_lowres102" parent="." index="308"]
+visible = false
+
+[node name="chunk_lowres103" parent="." index="309"]
+visible = false
+
+[node name="chunk_lowres104" parent="." index="310"]
+visible = false
+
+[node name="chunk_lowres105" parent="." index="311"]
+visible = false
+
+[node name="chunk_lowres106" parent="." index="312"]
+visible = false
+
+[node name="chunk_lowres107" parent="." index="313"]
+visible = false
+
+[node name="chunk_lowres108" parent="." index="314"]
+visible = false
+
+[node name="chunk_lowres109" parent="." index="315"]
+visible = false
+
+[node name="chunk_lowres110" parent="." index="316"]
+visible = false
+
+[node name="chunk_lowres111" parent="." index="317"]
+visible = false
+
+[node name="chunk_lowres112" parent="." index="318"]
+visible = false
+
+[node name="chunk_lowres113" parent="." index="319"]
+visible = false
+
+[node name="chunk_lowres114" parent="." index="320"]
+visible = false
+
+[node name="chunk_lowres115" parent="." index="321"]
+visible = false
+
+[node name="chunk_lowres116" parent="." index="322"]
+visible = false
+
+[node name="chunk_lowres117" parent="." index="323"]
+visible = false
+
+[node name="chunk_lowres118" parent="." index="324"]
+visible = false
+
+[node name="chunk_lowres119" parent="." index="325"]
+visible = false
+
+[node name="chunk_lowres120" parent="." index="326"]
+visible = false
+
+[node name="chunk_lowres121" parent="." index="327"]
+visible = false
+
+[node name="chunk_lowres122" parent="." index="328"]
+visible = false
+
+[node name="chunk_lowres123" parent="." index="329"]
+visible = false
+
+[node name="chunk_lowres124" parent="." index="330"]
+visible = false
+
+[node name="chunk_lowres125" parent="." index="331"]
+visible = false
+
+[node name="chunk_lowres126" parent="." index="332"]
+visible = false
+
+[node name="chunk_lowres127" parent="." index="333"]
+visible = false
+
+[node name="chunk_lowres128" parent="." index="334"]
+visible = false
+
+[node name="chunk_lowres129" parent="." index="335"]
+visible = false
+
+[node name="chunk_lowres130" parent="." index="336"]
+visible = false
+
+[node name="chunk_lowres131" parent="." index="337"]
+visible = false
+
+[node name="chunk_lowres132" parent="." index="338"]
+visible = false
+
+[node name="chunk_lowres133" parent="." index="339"]
+visible = false
+
+[node name="chunk_lowres134" parent="." index="340"]
+visible = false
+
+[node name="chunk_lowres135" parent="." index="341"]
+visible = false
+
+[node name="chunk_lowres136" parent="." index="342"]
+visible = false
+
+[node name="chunk_lowres137" parent="." index="343"]
+visible = false
+
+[node name="chunk_lowres138" parent="." index="344"]
+visible = false
+
+[node name="chunk_lowres139" parent="." index="345"]
+visible = false
+
+[node name="chunk_lowres140" parent="." index="346"]
+visible = false
+
+[node name="chunk_lowres141" parent="." index="347"]
+visible = false
+
+[node name="chunk_lowres142" parent="." index="348"]
+visible = false
+
+[node name="chunk_lowres143" parent="." index="349"]
+visible = false
+
+[node name="chunk_lowres_outer001" parent="." index="350"]
+visible = false
+
+[node name="chunk_lowres_outer002" parent="." index="351"]
+visible = false
+
+[node name="chunk_lowres_outer003" parent="." index="352"]
+visible = false
+
+[node name="chunk_lowres_outer004" parent="." index="353"]
+visible = false
+
+[node name="chunk_lowres_outer005" parent="." index="354"]
+visible = false
+
+[node name="chunk_lowres_outer006" parent="." index="355"]
+visible = false
+
+[node name="chunk_lowres_outer007" parent="." index="356"]
+visible = false
+
+[node name="chunk_lowres_outer008" parent="." index="357"]
+visible = false
+
+[node name="chunk_lowres_outer009" parent="." index="358"]
+visible = false
+
+[node name="chunk_lowres_outer010" parent="." index="359"]
+visible = false
+
+[node name="chunk_lowres_outer011" parent="." index="360"]
+visible = false
+
+[node name="chunk_lowres_outer012" parent="." index="361"]
+visible = false
+
+[node name="chunk_lowres_outer013" parent="." index="362"]
+visible = false
+
+[node name="chunk_lowres_outer014" parent="." index="363"]
+visible = false
+
+[node name="chunk_lowres_outer015" parent="." index="364"]
+visible = false
+
+[node name="chunk_lowres_outer016" parent="." index="365"]
+visible = false
+
+[node name="chunk_lowres_outer017" parent="." index="366"]
+visible = false
+
+[node name="chunk_lowres_outer018" parent="." index="367"]
+visible = false
+
+[node name="chunk_lowres_outer019" parent="." index="368"]
+visible = false
+
+[node name="chunk_lowres_outer020" parent="." index="369"]
+visible = false
+
+[node name="chunk_lowres_outer021" parent="." index="370"]
+visible = false
+
+[node name="chunk_lowres_outer022" parent="." index="371"]
+visible = false
+
+[node name="chunk_lowres_outer023" parent="." index="372"]
+visible = false
+
+[node name="chunk_lowres_outer024" parent="." index="373"]
+visible = false
+
+[node name="chunk_lowres_outer025" parent="." index="374"]
+visible = false
+
+[node name="chunk_lowres_outer026" parent="." index="375"]
+visible = false
+
+[node name="chunk_lowres_outer027" parent="." index="376"]
+visible = false
+
+[node name="chunk_lowres_outer028" parent="." index="377"]
+visible = false
+
+[node name="chunk_lowres_outer029" parent="." index="378"]
+visible = false
+
+[node name="chunk_lowres_outer030" parent="." index="379"]
+visible = false
+
+[node name="chunk_lowres_outer031" parent="." index="380"]
+visible = false
+
+[node name="chunk_lowres_outer032" parent="." index="381"]
+visible = false
+
+[node name="chunk_lowres_outer033" parent="." index="382"]
+visible = false
+
+[node name="chunk_lowres_outer034" parent="." index="383"]
+visible = false
+
+[node name="chunk_lowres_outer035" parent="." index="384"]
+visible = false
+
+[node name="chunk_lowres_outer036" parent="." index="385"]
+visible = false
+
+[node name="chunk_lowres_outer037" parent="." index="386"]
+visible = false
+
+[node name="chunk_lowres_outer038" parent="." index="387"]
+visible = false
+
+[node name="chunk_lowres_outer039" parent="." index="388"]
+visible = false
+
+[node name="chunk_lowres_outer040" parent="." index="389"]
+visible = false
+
+[node name="chunk_lowres_outer041" parent="." index="390"]
+visible = false
+
+[node name="chunk_lowres_outer042" parent="." index="391"]
+visible = false
+
+[node name="chunk_lowres_outer043" parent="." index="392"]
+visible = false
+
+[node name="chunk_lowres_outer044" parent="." index="393"]
+visible = false
+
+[node name="chunk_lowres_outer045" parent="." index="394"]
+visible = false
+
+[node name="chunk_lowres_outer046" parent="." index="395"]
+visible = false
+
+[node name="chunk_lowres_outer047" parent="." index="396"]
+visible = false
+
+[node name="chunk_lowres_outer048" parent="." index="397"]
+visible = false
+
+[node name="chunk_lowres_outer049" parent="." index="398"]
+visible = false
+
+[node name="chunk_lowres_outer050" parent="." index="399"]
+visible = false
+
+[node name="chunk_lowres_outer051" parent="." index="400"]
+visible = false
+
+[node name="chunk_lowres_outer052" parent="." index="401"]
+visible = false
+
+[node name="sun" type="DirectionalLight" parent="." index="402"]
+transform = Transform( -0.748045, -0.372398, 0.549316, 0.29632, 0.553209, 0.778559, -0.59382, 0.745171, -0.303477, 0, 0, 0 )
+light_color = Color( 1, 0.968627, 0.878431, 1 )
 shadow_enabled = true
 directional_shadow_split_1 = 0.005
 directional_shadow_split_2 = 0.05
@@ -1393,14 +2322,31 @@ directional_shadow_normal_bias = 0.1
 directional_shadow_max_distance = 1500.0
 script = ExtResource( 7 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="207"]
+[node name="indirect_light" type="DirectionalLight" parent="." index="403"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+light_color = Color( 0.380392, 0.556863, 0.784314, 1 )
+
+[node name="day_night" type="AnimationPlayer" parent="." index="404"]
+autoplay = "day_night_normal"
+playback_speed = 0.1
+anims/RESET = SubResource( 78 )
+anims/day_night_normal = SubResource( 79 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="405"]
 environment = SubResource( 3 )
 
-[node name="env_tween" type="Tween" parent="." index="208"]
+[node name="skybox" type="MeshInstance" parent="." index="406"]
+mesh = SubResource( 77 )
+material/0 = ExtResource( 21 )
+script = ExtResource( 20 )
 
-[node name="sun_tween" type="Tween" parent="." index="209"]
+[node name="env_tween" type="Tween" parent="." index="407"]
 
-[node name="debug" type="Panel" parent="." index="210"]
+[node name="sun_tween" type="Tween" parent="." index="408"]
+
+[node name="indirect_tween" type="Tween" parent="." index="409"]
+
+[node name="debug" type="Panel" parent="." index="410"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -1453,7 +2399,7 @@ margin_right = 574.0
 margin_bottom = 178.0
 autowrap = true
 
-[node name="Label" type="Label" parent="." index="211"]
+[node name="Label" type="Label" parent="." index="411"]
 pause_mode = 2
 visible = false
 anchor_right = 1.0
@@ -1464,11 +2410,11 @@ align = 1
 valign = 1
 script = ExtResource( 1 )
 
-[node name="tutorial_swap" type="Timer" parent="." index="212"]
+[node name="tutorial_swap" type="Timer" parent="." index="412"]
 wait_time = 3.0
 one_shot = true
 
-[node name="race_106" type="Spatial" parent="." index="213"]
+[node name="race_106" type="Spatial" parent="." index="413"]
 transform = Transform( 0.31814, 0, 0.948044, 0, 1, 0, -0.948044, 0, 0.31814, 1215.29, 525.107, -2122.41 )
 script = ExtResource( 10 )
 bronze_seconds = 180.0
@@ -1497,7 +2443,7 @@ shape = SubResource( 16 )
 [node name="flag" parent="race_106/race_end" index="1" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.872406, 0 )
 
-[node name="border" type="Area" parent="." index="214"]
+[node name="border" type="Area" parent="." index="414"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -1523,10 +2469,10 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="player" parent="." index="215" instance=ExtResource( 5 )]
+[node name="player" parent="." index="415" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.45, 746 )
 
-[node name="audio_wind" type="AudioStreamPlayer" parent="." index="216" groups=["distance_activated"]]
+[node name="audio_wind" type="AudioStreamPlayer" parent="." index="416" groups=["distance_activated"]]
 pause_mode = 2
 stream = ExtResource( 12 )
 volume_db = -80.0
@@ -1534,39 +2480,39 @@ autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="mapcam" type="Camera" parent="." index="217"]
+[node name="mapcam" type="Camera" parent="." index="417"]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="218"]
+[node name="StaticBody" type="StaticBody" parent="." index="418"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="219"]
+[node name="StaticBody2" type="StaticBody" parent="." index="419"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8707, 0, 0 )
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="220"]
+[node name="StaticBody3" type="StaticBody" parent="." index="420"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="221"]
+[node name="StaticBody4" type="StaticBody" parent="." index="421"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 7 )
 
-[node name="Area" type="Area" parent="." index="222"]
+[node name="Area" type="Area" parent="." index="422"]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource( 19 )
@@ -1574,7 +2520,7 @@ script = ExtResource( 19 )
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 shape = SubResource( 14 )
 
-[node name="loading" type="Label" parent="." index="223"]
+[node name="loading" type="Label" parent="." index="423"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1586,593 +2532,5 @@ margin_right = 51.5
 margin_bottom = 7.0
 custom_fonts/font = SubResource( 15 )
 text = "Loading World..."
-
-[node name="chunk_lowres000" parent="." index="224"]
-visible = false
-
-[node name="chunk_lowres001" parent="." index="225"]
-visible = false
-
-[node name="chunk_lowres002" parent="." index="226"]
-visible = false
-
-[node name="chunk_lowres003" parent="." index="227"]
-visible = false
-
-[node name="chunk_lowres004" parent="." index="228"]
-visible = false
-
-[node name="chunk_lowres005" parent="." index="229"]
-visible = false
-
-[node name="chunk_lowres006" parent="." index="230"]
-visible = false
-
-[node name="chunk_lowres007" parent="." index="231"]
-visible = false
-
-[node name="chunk_lowres008" parent="." index="232"]
-visible = false
-
-[node name="chunk_lowres009" parent="." index="233"]
-visible = false
-
-[node name="chunk_lowres010" parent="." index="234"]
-visible = false
-
-[node name="chunk_lowres011" parent="." index="235"]
-visible = false
-
-[node name="chunk_lowres012" parent="." index="236"]
-visible = false
-
-[node name="chunk_lowres013" parent="." index="237"]
-visible = false
-
-[node name="chunk_lowres014" parent="." index="238"]
-visible = false
-
-[node name="chunk_lowres015" parent="." index="239"]
-visible = false
-
-[node name="chunk_lowres016" parent="." index="240"]
-visible = false
-
-[node name="chunk_lowres017" parent="." index="241"]
-visible = false
-
-[node name="chunk_lowres018" parent="." index="242"]
-visible = false
-
-[node name="chunk_lowres019" parent="." index="243"]
-visible = false
-
-[node name="chunk_lowres020" parent="." index="244"]
-visible = false
-
-[node name="chunk_lowres021" parent="." index="245"]
-visible = false
-
-[node name="chunk_lowres022" parent="." index="246"]
-visible = false
-
-[node name="chunk_lowres023" parent="." index="247"]
-visible = false
-
-[node name="chunk_lowres024" parent="." index="248"]
-visible = false
-
-[node name="chunk_lowres025" parent="." index="249"]
-visible = false
-
-[node name="chunk_lowres026" parent="." index="250"]
-visible = false
-
-[node name="chunk_lowres027" parent="." index="251"]
-visible = false
-
-[node name="chunk_lowres028" parent="." index="252"]
-visible = false
-
-[node name="chunk_lowres029" parent="." index="253"]
-visible = false
-
-[node name="chunk_lowres030" parent="." index="254"]
-visible = false
-
-[node name="chunk_lowres031" parent="." index="255"]
-visible = false
-
-[node name="chunk_lowres032" parent="." index="256"]
-visible = false
-
-[node name="chunk_lowres033" parent="." index="257"]
-visible = false
-
-[node name="chunk_lowres034" parent="." index="258"]
-visible = false
-
-[node name="chunk_lowres035" parent="." index="259"]
-visible = false
-
-[node name="chunk_lowres036" parent="." index="260"]
-visible = false
-
-[node name="chunk_lowres037" parent="." index="261"]
-visible = false
-
-[node name="chunk_lowres038" parent="." index="262"]
-visible = false
-
-[node name="chunk_lowres039" parent="." index="263"]
-visible = false
-
-[node name="chunk_lowres040" parent="." index="264"]
-visible = false
-
-[node name="chunk_lowres041" parent="." index="265"]
-visible = false
-
-[node name="chunk_lowres042" parent="." index="266"]
-visible = false
-
-[node name="chunk_lowres043" parent="." index="267"]
-visible = false
-
-[node name="chunk_lowres044" parent="." index="268"]
-visible = false
-
-[node name="chunk_lowres045" parent="." index="269"]
-visible = false
-
-[node name="chunk_lowres046" parent="." index="270"]
-visible = false
-
-[node name="chunk_lowres047" parent="." index="271"]
-visible = false
-
-[node name="chunk_lowres048" parent="." index="272"]
-visible = false
-
-[node name="chunk_lowres049" parent="." index="273"]
-visible = false
-
-[node name="chunk_lowres050" parent="." index="274"]
-visible = false
-
-[node name="chunk_lowres051" parent="." index="275"]
-visible = false
-
-[node name="chunk_lowres052" parent="." index="276"]
-visible = false
-
-[node name="chunk_lowres053" parent="." index="277"]
-visible = false
-
-[node name="chunk_lowres054" parent="." index="278"]
-visible = false
-
-[node name="chunk_lowres055" parent="." index="279"]
-visible = false
-
-[node name="chunk_lowres056" parent="." index="280"]
-visible = false
-
-[node name="chunk_lowres057" parent="." index="281"]
-visible = false
-
-[node name="chunk_lowres058" parent="." index="282"]
-visible = false
-
-[node name="chunk_lowres059" parent="." index="283"]
-visible = false
-
-[node name="chunk_lowres060" parent="." index="284"]
-visible = false
-
-[node name="chunk_lowres061" parent="." index="285"]
-visible = false
-
-[node name="chunk_lowres062" parent="." index="286"]
-visible = false
-
-[node name="chunk_lowres063" parent="." index="287"]
-visible = false
-
-[node name="chunk_lowres064" parent="." index="288"]
-visible = false
-
-[node name="chunk_lowres065" parent="." index="289"]
-visible = false
-
-[node name="chunk_lowres066" parent="." index="290"]
-visible = false
-
-[node name="chunk_lowres067" parent="." index="291"]
-visible = false
-
-[node name="chunk_lowres068" parent="." index="292"]
-visible = false
-
-[node name="chunk_lowres069" parent="." index="293"]
-visible = false
-
-[node name="chunk_lowres070" parent="." index="294"]
-visible = false
-
-[node name="chunk_lowres071" parent="." index="295"]
-visible = false
-
-[node name="chunk_lowres072" parent="." index="296"]
-visible = false
-
-[node name="chunk_lowres073" parent="." index="297"]
-visible = false
-
-[node name="chunk_lowres074" parent="." index="298"]
-visible = false
-
-[node name="chunk_lowres075" parent="." index="299"]
-visible = false
-
-[node name="chunk_lowres076" parent="." index="300"]
-visible = false
-
-[node name="chunk_lowres077" parent="." index="301"]
-visible = false
-
-[node name="chunk_lowres078" parent="." index="302"]
-visible = false
-
-[node name="chunk_lowres079" parent="." index="303"]
-visible = false
-
-[node name="chunk_lowres080" parent="." index="304"]
-visible = false
-
-[node name="chunk_lowres081" parent="." index="305"]
-visible = false
-
-[node name="chunk_lowres082" parent="." index="306"]
-visible = false
-
-[node name="chunk_lowres083" parent="." index="307"]
-visible = false
-
-[node name="chunk_lowres084" parent="." index="308"]
-visible = false
-
-[node name="chunk_lowres085" parent="." index="309"]
-visible = false
-
-[node name="chunk_lowres086" parent="." index="310"]
-visible = false
-
-[node name="chunk_lowres087" parent="." index="311"]
-visible = false
-
-[node name="chunk_lowres088" parent="." index="312"]
-visible = false
-
-[node name="chunk_lowres089" parent="." index="313"]
-visible = false
-
-[node name="chunk_lowres090" parent="." index="314"]
-visible = false
-
-[node name="chunk_lowres091" parent="." index="315"]
-visible = false
-
-[node name="chunk_lowres092" parent="." index="316"]
-visible = false
-
-[node name="chunk_lowres093" parent="." index="317"]
-visible = false
-
-[node name="chunk_lowres094" parent="." index="318"]
-visible = false
-
-[node name="chunk_lowres095" parent="." index="319"]
-visible = false
-
-[node name="chunk_lowres096" parent="." index="320"]
-visible = false
-
-[node name="chunk_lowres097" parent="." index="321"]
-visible = false
-
-[node name="chunk_lowres098" parent="." index="322"]
-visible = false
-
-[node name="chunk_lowres099" parent="." index="323"]
-visible = false
-
-[node name="chunk_lowres100" parent="." index="324"]
-visible = false
-
-[node name="chunk_lowres101" parent="." index="325"]
-visible = false
-
-[node name="chunk_lowres102" parent="." index="326"]
-visible = false
-
-[node name="chunk_lowres103" parent="." index="327"]
-visible = false
-
-[node name="chunk_lowres104" parent="." index="328"]
-visible = false
-
-[node name="chunk_lowres105" parent="." index="329"]
-visible = false
-
-[node name="chunk_lowres106" parent="." index="330"]
-visible = false
-
-[node name="chunk_lowres107" parent="." index="331"]
-visible = false
-
-[node name="chunk_lowres108" parent="." index="332"]
-visible = false
-
-[node name="chunk_lowres109" parent="." index="333"]
-visible = false
-
-[node name="chunk_lowres110" parent="." index="334"]
-visible = false
-
-[node name="chunk_lowres111" parent="." index="335"]
-visible = false
-
-[node name="chunk_lowres112" parent="." index="336"]
-visible = false
-
-[node name="chunk_lowres113" parent="." index="337"]
-visible = false
-
-[node name="chunk_lowres114" parent="." index="338"]
-visible = false
-
-[node name="chunk_lowres115" parent="." index="339"]
-visible = false
-
-[node name="chunk_lowres116" parent="." index="340"]
-visible = false
-
-[node name="chunk_lowres117" parent="." index="341"]
-visible = false
-
-[node name="chunk_lowres118" parent="." index="342"]
-visible = false
-
-[node name="chunk_lowres119" parent="." index="343"]
-visible = false
-
-[node name="chunk_lowres120" parent="." index="344"]
-visible = false
-
-[node name="chunk_lowres121" parent="." index="345"]
-visible = false
-
-[node name="chunk_lowres122" parent="." index="346"]
-visible = false
-
-[node name="chunk_lowres123" parent="." index="347"]
-visible = false
-
-[node name="chunk_lowres124" parent="." index="348"]
-visible = false
-
-[node name="chunk_lowres125" parent="." index="349"]
-visible = false
-
-[node name="chunk_lowres126" parent="." index="350"]
-visible = false
-
-[node name="chunk_lowres127" parent="." index="351"]
-visible = false
-
-[node name="chunk_lowres128" parent="." index="352"]
-visible = false
-
-[node name="chunk_lowres129" parent="." index="353"]
-visible = false
-
-[node name="chunk_lowres130" parent="." index="354"]
-visible = false
-
-[node name="chunk_lowres131" parent="." index="355"]
-visible = false
-
-[node name="chunk_lowres132" parent="." index="356"]
-visible = false
-
-[node name="chunk_lowres133" parent="." index="357"]
-visible = false
-
-[node name="chunk_lowres134" parent="." index="358"]
-visible = false
-
-[node name="chunk_lowres135" parent="." index="359"]
-visible = false
-
-[node name="chunk_lowres136" parent="." index="360"]
-visible = false
-
-[node name="chunk_lowres137" parent="." index="361"]
-visible = false
-
-[node name="chunk_lowres138" parent="." index="362"]
-visible = false
-
-[node name="chunk_lowres139" parent="." index="363"]
-visible = false
-
-[node name="chunk_lowres140" parent="." index="364"]
-visible = false
-
-[node name="chunk_lowres141" parent="." index="365"]
-visible = false
-
-[node name="chunk_lowres142" parent="." index="366"]
-visible = false
-
-[node name="chunk_lowres143" parent="." index="367"]
-visible = false
-
-[node name="chunk_lowres_outer001" parent="." index="368"]
-visible = false
-
-[node name="chunk_lowres_outer002" parent="." index="369"]
-visible = false
-
-[node name="chunk_lowres_outer003" parent="." index="370"]
-visible = false
-
-[node name="chunk_lowres_outer004" parent="." index="371"]
-visible = false
-
-[node name="chunk_lowres_outer005" parent="." index="372"]
-visible = false
-
-[node name="chunk_lowres_outer006" parent="." index="373"]
-visible = false
-
-[node name="chunk_lowres_outer007" parent="." index="374"]
-visible = false
-
-[node name="chunk_lowres_outer008" parent="." index="375"]
-visible = false
-
-[node name="chunk_lowres_outer009" parent="." index="376"]
-visible = false
-
-[node name="chunk_lowres_outer010" parent="." index="377"]
-visible = false
-
-[node name="chunk_lowres_outer011" parent="." index="378"]
-visible = false
-
-[node name="chunk_lowres_outer012" parent="." index="379"]
-visible = false
-
-[node name="chunk_lowres_outer013" parent="." index="380"]
-visible = false
-
-[node name="chunk_lowres_outer014" parent="." index="381"]
-visible = false
-
-[node name="chunk_lowres_outer015" parent="." index="382"]
-visible = false
-
-[node name="chunk_lowres_outer016" parent="." index="383"]
-visible = false
-
-[node name="chunk_lowres_outer017" parent="." index="384"]
-visible = false
-
-[node name="chunk_lowres_outer018" parent="." index="385"]
-visible = false
-
-[node name="chunk_lowres_outer019" parent="." index="386"]
-visible = false
-
-[node name="chunk_lowres_outer020" parent="." index="387"]
-visible = false
-
-[node name="chunk_lowres_outer021" parent="." index="388"]
-visible = false
-
-[node name="chunk_lowres_outer022" parent="." index="389"]
-visible = false
-
-[node name="chunk_lowres_outer023" parent="." index="390"]
-visible = false
-
-[node name="chunk_lowres_outer024" parent="." index="391"]
-visible = false
-
-[node name="chunk_lowres_outer025" parent="." index="392"]
-visible = false
-
-[node name="chunk_lowres_outer026" parent="." index="393"]
-visible = false
-
-[node name="chunk_lowres_outer027" parent="." index="394"]
-visible = false
-
-[node name="chunk_lowres_outer028" parent="." index="395"]
-visible = false
-
-[node name="chunk_lowres_outer029" parent="." index="396"]
-visible = false
-
-[node name="chunk_lowres_outer030" parent="." index="397"]
-visible = false
-
-[node name="chunk_lowres_outer031" parent="." index="398"]
-visible = false
-
-[node name="chunk_lowres_outer032" parent="." index="399"]
-visible = false
-
-[node name="chunk_lowres_outer033" parent="." index="400"]
-visible = false
-
-[node name="chunk_lowres_outer034" parent="." index="401"]
-visible = false
-
-[node name="chunk_lowres_outer035" parent="." index="402"]
-visible = false
-
-[node name="chunk_lowres_outer036" parent="." index="403"]
-visible = false
-
-[node name="chunk_lowres_outer037" parent="." index="404"]
-visible = false
-
-[node name="chunk_lowres_outer038" parent="." index="405"]
-visible = false
-
-[node name="chunk_lowres_outer039" parent="." index="406"]
-visible = false
-
-[node name="chunk_lowres_outer040" parent="." index="407"]
-visible = false
-
-[node name="chunk_lowres_outer041" parent="." index="408"]
-visible = false
-
-[node name="chunk_lowres_outer042" parent="." index="409"]
-visible = false
-
-[node name="chunk_lowres_outer043" parent="." index="410"]
-visible = false
-
-[node name="chunk_lowres_outer044" parent="." index="411"]
-visible = false
-
-[node name="chunk_lowres_outer045" parent="." index="412"]
-visible = false
-
-[node name="chunk_lowres_outer046" parent="." index="413"]
-visible = false
-
-[node name="chunk_lowres_outer047" parent="." index="414"]
-visible = false
-
-[node name="chunk_lowres_outer048" parent="." index="415"]
-visible = false
-
-[node name="chunk_lowres_outer049" parent="." index="416"]
-visible = false
-
-[node name="chunk_lowres_outer050" parent="." index="417"]
-visible = false
-
-[node name="chunk_lowres_outer051" parent="." index="418"]
-visible = false
-
-[node name="chunk_lowres_outer052" parent="." index="419"]
-visible = false
 
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

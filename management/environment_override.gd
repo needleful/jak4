@@ -4,6 +4,7 @@ export(float, 0, 80) var wind_reduction_db := 10.0
 export(Color) var custom_fog := Color.black
 export(float, 0, 100) var fog_start := 10.0
 export(float, 0, 2000) var fog_end := 200.0
+export(Color) var indirect_light := Color.white
 export(bool) var show_sun := true
 export(bool) var override_music := false
 export(AudioStream) var default_music
@@ -23,9 +24,11 @@ func _ready():
 
 func _on_body_entered(_body):
 	wind.apply_volume(-wind_reduction_db)
+	scene = get_tree().current_scene
 	if custom_fog != Color.black:
-		scene = get_tree().current_scene
 		scene.set_fog_override(custom_fog, fog_start, fog_end)
+	if indirect_light != Color.white:
+		scene.indirect_light_override(indirect_light)
 	if override_music:
 		Music.set_music(default_music, combat_music)
 	scene.set_sun_enabled(show_sun)
@@ -42,6 +45,8 @@ func _on_body_exited(_body):
 	wind.apply_volume(0)
 	if custom_fog != Color.black:
 		scene.clear_fog_override()
+	if indirect_light != Color.white:
+		scene.clear_indirect_light()
 	if override_music:
 		Music.reset()
 	scene.set_sun_enabled(true)
