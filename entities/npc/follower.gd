@@ -31,6 +31,7 @@ export(String) var friendly_id := ""
 export(float) var player_distance_while_travelling := 14.0 setget set_pdwt
 export(float) var travel_resume := 90.0
 export(bool) var default_location := false
+var turn_speed := 15.0
 var pdwt_sq : float
 
 onready var dialog:DialogTrigger = $dialog_zone
@@ -83,6 +84,15 @@ func _physics_process(delta):
 					var vy = velocity.y
 					velocity = dir.normalized()*9
 					velocity.y = vy
+				if target and target.action != NavPoint.Action.None:
+					var look_dir := target.global_transform.basis.z
+					look_dir.y = 0
+					var angle := global_transform.basis.z.angle_to(look_dir)
+					if angle > 0.01:
+						var axis := global_transform.basis.z.cross(look_dir).normalized()
+						if axis.is_normalized():
+							var turn = sign(angle)*min(turn_speed*delta, abs(angle))
+							global_rotate(axis, turn)
 		MetaState.TravelWaiting:
 			velocity.x = 0
 			velocity.z = 0
@@ -109,6 +119,10 @@ func get_next_point():
 		set_stat("location", target.get_path())
 		if target.action == NavPoint.Action.Jump:
 			velocity += target.global_transform.basis.z*5 + Vector3.UP*5
+		elif target.action == NavPoint.Action.OpenDoor:
+			for c in $door_hitbox.get_overlapping_bodies():
+				if c.has_method("take_damage"):
+					c.take_damage(0, global_transform.basis.z, self)
 		if target.chunk_entry:
 			var t = target.chunk_entry.split(":")
 			assert(t.size() == 2)

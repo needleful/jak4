@@ -1698,7 +1698,7 @@ func compute_fall_damage(distance):
 
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, _source) -> bool:
-	if !takes_damage():
+	if !takes_damage() or damage == 0:
 		return false
 	
 	mesh.start_damage_particle(direction)

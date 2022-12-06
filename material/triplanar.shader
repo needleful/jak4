@@ -41,7 +41,7 @@ void fragment() {
 		+ specularity_ground*max(y_pow, 0.0)
 		+ specularity_ceiling*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
-	ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
+	//ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
 }
 
 void light()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://entities/npc/follower.gd" type="Script" id=1]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=2]
@@ -1215,6 +1215,9 @@ size = Vector3( 0.2, 0.3, 0.2 )
 [sub_resource type="SpatialMaterial" id=21]
 albedo_color = Color( 1, 0, 0, 1 )
 
+[sub_resource type="BoxShape" id=23]
+extents = Vector3( 0.260328, 0.165212, 0.506649 )
+
 [node name="captain_redford" type="KinematicBody"]
 collision_layer = 65540
 script = ExtResource( 1 )
@@ -1346,7 +1349,6 @@ bus = "SFX_Enemy"
 [node name="VisibilityEnabler" type="VisibilityEnabler" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58432, 0 )
 aabb = AABB( -1.20784, -0.784991, -1.33699, 2.41568, 1.56998, 2.67397 )
-children_only = false
 
 [node name="ref_target" type="Position3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.645996, 0 )
@@ -1400,6 +1402,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.128551, 0 )
 
 [node name="nav_pointer" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.83651, 0 )
+visible = false
 
 [node name="local" type="MeshInstance" parent="nav_pointer"]
 mesh = SubResource( 19 )
@@ -1419,3 +1422,11 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -
 mesh = SubResource( 20 )
 skeleton = NodePath("../../..")
 material/0 = SubResource( 21 )
+
+[node name="door_hitbox" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.474359, 0.373602 )
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="door_hitbox"]
+shape = SubResource( 23 )

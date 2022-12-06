@@ -3,7 +3,7 @@ extends KinematicBody
 signal toggled(on, instant)
 
 export(String) var key := "" 
-export(bool) var player_only := true
+export(bool) var player_only := false
 export(bool) var persistent := true
 
 func _ready():

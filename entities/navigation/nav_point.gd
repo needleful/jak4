@@ -6,7 +6,8 @@ signal entered
 enum Action {
 	None,
 	Jump,
-	Look
+	Look,
+	OpenDoor
 }
 
 export(NodePath) var next

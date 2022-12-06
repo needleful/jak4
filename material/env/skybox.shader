@@ -9,6 +9,7 @@ varying float dir;
 void vertex() {
 	dir = NORMAL.y*0.5 + 0.5;
 	VERTEX = (MODELVIEW_MATRIX*vec4(VERTEX, 0.0)).xyz;
+	NORMAL = (MODELVIEW_MATRIX*vec4(NORMAL, 0.0)).xyz;
 }
 
 void fragment() {

@@ -12,7 +12,17 @@ void fragment() {
 	vec3 ref_normal = NORMAL;
 	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
 	float ref_amount = 1.0;
-	EMISSION = texture(SCREEN_TEXTURE, ref_ofs).rgb * ALBEDO;
+	vec3 e = texture(SCREEN_TEXTURE, ref_ofs).rgb * ALBEDO;
+	if (isnan(e.r)) {
+		e = vec3(2, 0, 0);
+	}
+	if (isnan(e.g)) {
+		e = vec3(0, 2, 0);
+	}
+	if (isnan(e.b)) {
+		e = vec3(0, 0, 2);
+	} 
+	//EMISSION = e;
 	TRANSMISSION = EMISSION;
 	ALBEDO *= brightness;
 }
