@@ -26,8 +26,8 @@ void fragment() {
 	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
 	float ref_amount = 1.0;
 	
-	float depth = texture(DEPTH_TEXTURE, SCREEN_UV).r;
-	vec4 color = texture(SCREEN_TEXTURE, ref_ofs);
+	float depth = textureLod(DEPTH_TEXTURE, SCREEN_UV, 0).r;
+	vec4 color = textureLod(SCREEN_TEXTURE, ref_ofs, 0);
 	
 	vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
 	vec4 wpos = CAMERA_MATRIX*upos;

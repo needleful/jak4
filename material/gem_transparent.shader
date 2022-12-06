@@ -1,4 +1,5 @@
 shader_type spatial;
+//render_mode unshaded;
 
 uniform vec4 albedo : hint_color;
 uniform float refraction : hint_range(-5,5);
@@ -9,20 +10,10 @@ void fragment() {
 	SPECULAR = 1.0;
 	METALLIC = 1.0;
 	ROUGHNESS = 0.0;
-	vec3 ref_normal = NORMAL;
-	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
+	vec2 ref_normal = NORMAL.xy;
+	vec2 ref_ofs = SCREEN_UV - ref_normal * refraction;
 	float ref_amount = 1.0;
-	vec3 e = texture(SCREEN_TEXTURE, ref_ofs).rgb * ALBEDO;
-	if (isnan(e.r)) {
-		e = vec3(2, 0, 0);
-	}
-	if (isnan(e.g)) {
-		e = vec3(0, 2, 0);
-	}
-	if (isnan(e.b)) {
-		e = vec3(0, 0, 2);
-	} 
-	//EMISSION = e;
+	EMISSION= textureLod(SCREEN_TEXTURE, ref_ofs, 0).rgb * ALBEDO;
 	TRANSMISSION = EMISSION;
 	ALBEDO *= brightness;
 }

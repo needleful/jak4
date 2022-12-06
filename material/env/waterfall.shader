@@ -22,7 +22,7 @@ void fragment() {
 	vec3 ref_normal = normalize(NORMAL + NORMALMAP);
 	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
 	float ref_amount = 1.0;
-	EMISSION = texture(SCREEN_TEXTURE, ref_ofs).rgb * ALBEDO;
+	EMISSION = textureLod(SCREEN_TEXTURE, ref_ofs, 0).rgb * ALBEDO;
 	TRANSMISSION = EMISSION;
 	ALBEDO *= brightness;
 }
