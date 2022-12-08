@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -44,6 +44,8 @@ polygon_points = PoolVector2Array( 121.144, -11.2629, 101.676, 47.7825, -41.3552
 
 [sub_resource type="OccluderShapePolygon" id=18]
 polygon_points = PoolVector2Array( 121.144, -11.2629, -1.49634, -12.3922, -237.15, 292.567, -57.6782, -2.72974, 364.978, 403.251 )
+
+[sub_resource type="CubeMesh" id=96]
 
 [sub_resource type="SphereMesh" id=77]
 radial_segments = 24
@@ -996,6 +998,10 @@ material/0 = ExtResource( 8 )
 
 [node name="StaticBody" parent="chunk085" index="0"]
 collision_layer = 257
+
+[node name="MeshInstance" type="MeshInstance" parent="chunk085" index="1"]
+transform = Transform( 2.41943, 0, 0, 0, 2.48186, -0.0624118, 0, 0.0624118, 2.48186, 148.04, 388.305, 4.83276 )
+mesh = SubResource( 96 )
 
 [node name="chunk086" parent="." index="93"]
 material/0 = ExtResource( 8 )
@@ -2320,6 +2326,7 @@ shadow_bias = 0.02
 directional_shadow_split_1 = 0.01
 directional_shadow_split_2 = 0.1
 directional_shadow_normal_bias = 1.0
+directional_shadow_depth_range = 1
 directional_shadow_max_distance = 1500.0
 script = ExtResource( 7 )
 
