@@ -118,6 +118,9 @@ func _ready():
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
+	if Global.valid_game_state:
+		if Global.has_stat("clock_time"):
+			set_time(Global.stat("clock_time"))
 
 func _process(delta):
 	time += delta
@@ -139,6 +142,9 @@ func _process(delta):
 		vis_last_position = player_new_position
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
 		update_terrain_lod(vis_last_position)
+
+func prepare_save():
+	Global.set_stat("clock_time", get_time())
 
 func update_terrain_lod(pos: Vector3):
 	pos.y = 0
@@ -354,3 +360,30 @@ func is_active(chunk_name):
 
 func get_dynamic_content(chunk_name):
 	return get_node(chunk_name).get_node("dynamic_content")
+
+## Day/night cycle
+
+# Hours with decimals
+func get_time():
+	# Seconds of animation (600 for 24-hour day)
+	var hours_per_second := 1.0/25.0
+	# Offset in the animation to midnight
+	var midnight_offset := 330.0
+	var sec_time:float = $day_night.current_animation_position
+	var hour := hours_per_second * (sec_time - midnight_offset)
+	while hour < 0.0:
+		hour += 24.0
+	while hour > 24.0:
+		hour -= 24.0
+	return hour
+
+func set_time(hour: float):
+	var seconds_per_hour := 25.0
+	var midnight_offset := 330.0
+	var animation_length := 600.0
+	var seconds := seconds_per_hour*hour + midnight_offset
+	while seconds > animation_length:
+		seconds -= animation_length
+	while seconds < 0.0:
+		seconds += animation_length
+	$day_night.seek(seconds)

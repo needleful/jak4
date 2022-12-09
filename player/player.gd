@@ -1127,7 +1127,9 @@ func _physics_process(delta):
 		equipment.close()
 
 func _process(_delta):
-	$ui/gameing/debug/stats/a10.text = "Do Not Disturb" if do_not_disturb else ""
+	var scn = get_tree().current_scene
+	if scn.has_method("get_time"):
+		$ui/gameing/debug/stats/a10.text = "Time: " + str(scn.get_time())
 	update_stamina()
 	$ui/gameing/debug/stats/a7.text = str(timers)
 
