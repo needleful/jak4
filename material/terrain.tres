@@ -11,10 +11,13 @@ uniform sampler2D ceiling: hint_albedo;
 uniform float uv_scale = 0.125;
 uniform float uv_scale_black = 0.17;
 uniform float power = 5.0;
-uniform float softness = 0.5;
+uniform float softness: hint_range(0.0, 1.0, 0.1) = 0.5;
 uniform float specularity_ground: hint_range(1, 32) = 1.0;
 uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
+uniform float light_bias : hint_range(-1, 1) = 0.0;
+uniform float normal_offset : hint_range(-15.0, 15.0, 0.1) = 0.0;
+uniform float shadow_normal_parallel : hint_range(1, 100, 0.5) = 10.0;
 
 varying vec3 position;
 varying vec3 normal;
@@ -26,7 +29,8 @@ void vertex() {
 }
 
 void fragment() {
-	
+	SHADOW_NORMAL_OFFSET = normal_offset;
+	SHADOW_NORMAL_PARALLEL = shadow_normal_parallel;
 	vec3 n = normalize(normal);
 	vec4 color_x = texture(wall, position.zy*uv_scale);
 	vec4 color_z = texture(wall, position.xy*uv_scale);
@@ -61,7 +65,7 @@ void light()
 	}
 	else {
 		float spec = specularity/32.0;
-		float light = smoothstep(0, softness, dot(NORMAL, LIGHT));
+		float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
 		DIFFUSE_LIGHT += 0.4*(1.0-spec) * light * LIGHT_COLOR * ATTENUATION * ALBEDO;
 		
 		// Specular

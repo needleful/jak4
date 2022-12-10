@@ -386,4 +386,7 @@ func set_time(hour: float):
 		seconds -= animation_length
 	while seconds < 0.0:
 		seconds += animation_length
-	$day_night.seek(seconds)
+	$day_night.stop()
+	$day_night.play("day_night_normal")
+	$day_night.advance(seconds/$day_night.playback_speed)
+	sun.update_rotation()

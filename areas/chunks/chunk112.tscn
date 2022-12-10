@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=2]
+[gd_scene load_steps=99 format=2]
 
 [ext_resource path="res://entities/one_time/chunks/chunk112.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -22,7 +22,6 @@
 [ext_resource path="res://tutorial_prompt.gd" type="Script" id=20]
 [ext_resource path="res://entities/env/vaeler/cannon_fresh.tscn" type="PackedScene" id=21]
 [ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=22]
-[ext_resource path="res://material/gem_transparent.shader" type="Shader" id=23]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=27]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=28]
 [ext_resource path="res://dialog/intro/fountain.dialog" type="Resource" id=29]
@@ -527,16 +526,6 @@ _data = {
 "points": PoolVector3Array( -0.0838547, -0.000427246, -0.0209808, 0.0838547, 0.000427246, 0.0209808, 0.0769806, -0.0140228, -0.0220032, -0.22747, -0.0157471, -0.17543, 0.22747, 0.0157471, 0.17543, 0.477402, -0.0808563, 0.181808, -0.169876, 0.00765991, -0.406509, 0.169876, -0.00765991, 0.406509, 1.01693, -0.0773315, 1.06708, -0.668465, -0.0182037, -0.0806885, 0.668465, 0.0182037, 0.0806885, 1.45148, -0.0857391, 2.05721, -0.0533371, -0.0791931, 0.395264, 0.0533371, 0.0791931, -0.395264, 1.7019, 0.00886536, 1.59796 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0 )
 }
-
-[sub_resource type="SphereMesh" id=253]
-
-[sub_resource type="ShaderMaterial" id=254]
-shader = ExtResource( 23 )
-shader_param/albedo = Color( 0.592157, 1, 0.592157, 1 )
-shader_param/refraction = 0.63
-shader_param/brightness = null
-
-[sub_resource type="CubeMesh" id=255]
 
 [node name="chunk112" instance=ExtResource( 7 )]
 script = ExtResource( 1 )
@@ -1837,16 +1826,6 @@ transform = Transform( 1, 0, 0, 0, -0.99999, -0.00451769, 0, 0.00451769, -0.9999
 
 [node name="water_pot4" parent="." index="34" instance=ExtResource( 39 )]
 transform = Transform( 0.379905, 0.0246146, -0.924698, 0.0604864, -0.998168, -0.0017199, -0.923046, -0.0552782, -0.380698, 123.464, -216.756, -67.7098 )
-
-[node name="MeshInstance9" type="MeshInstance" parent="." index="35"]
-transform = Transform( 3.11433, 0, 0, 0, 3.12379, 0, 0, 0, 3.11433, 222.663, -228.607, 26.4069 )
-mesh = SubResource( 253 )
-material/0 = SubResource( 254 )
-
-[node name="MeshInstance10" type="MeshInstance" parent="." index="36"]
-transform = Transform( 2.05493, 0, -0.907727, 0, 2.42278, 0, 0.907726, 0, 2.05493, 222.802, -228.194, 16.1647 )
-mesh = SubResource( 255 )
-material/0 = SubResource( 254 )
 
 [connection signal="body_entered" from="npc_tutorial_tyler/tutorial_area" to="npc_tutorial_tyler/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="npc_tutorial_tyler/tutorial_area/tutorial_anim" to="npc_tutorial_tyler/tutorial_area" method="_on_AnimationPlayer_animation_finished"]

@@ -12,6 +12,7 @@ uniform float specularity_ground: hint_range(1, 32) = 1.0;
 uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
 uniform float light_bias: hint_range(-1.0, 1.0) = 0.0;
+uniform float shadow_normal_offset : hint_range(-5.0, 5.0, 0.1) = 0.2;
 
 varying vec3 position;
 varying vec3 normal;
@@ -23,6 +24,7 @@ void vertex() {
 }
 
 void fragment() {
+	SHADOW_NORMAL_OFFSET = shadow_normal_offset;
 	vec3 n = normalize(normal);
 	vec4 color_x = texture(wall, position.zy*wall_scale);
 	vec4 color_z = texture(wall, position.xy*wall_scale);

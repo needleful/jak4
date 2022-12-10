@@ -61,7 +61,7 @@ width = 32
 
 [sub_resource type="Gradient" id=82]
 offsets = PoolRealArray( 0.25098, 0.85098 )
-colors = PoolColorArray( 1, 1, 1, 1, 0.08, 0, 1.16, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.443835, 0.428101, 0.65625, 1 )
 
 [sub_resource type="GradientTexture" id=83]
 gradient = SubResource( 82 )
@@ -82,7 +82,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 0.968627, 0.878431, 1 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("sun:rotation_degrees")
+tracks/1/path = NodePath("indirect_light:light_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -91,10 +91,10 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector3( -51.1288, 118.919, 28.1752 ) ]
+"values": [ Color( 0.380392, 0.556863, 0.784314, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("indirect_light:light_color")
+tracks/2/path = NodePath("WorldEnvironment:environment:fog_color")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -103,10 +103,10 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 0.380392, 0.556863, 0.784314, 1 ) ]
+"values": [ Color( 1, 1.5, 2.5, 1 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("WorldEnvironment:environment:fog_color")
+tracks/3/path = NodePath("sun:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -115,10 +115,10 @@ tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 1, 1.5, 2.5, 1 ) ]
+"values": [ true ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("skybox:material/0:shader_param/gradient:gradient:colors")
+tracks/4/path = NodePath("skybox:material/0:shader_param/blend")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -127,10 +127,10 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ PoolColorArray( 1, 1, 2.89, 1, 0, 0.57, 1.73, 1 ) ]
+"values": [ 0.0 ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("sun:visible")
+tracks/5/path = NodePath("skybox:material/0:shader_param/gradient")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -139,10 +139,10 @@ tracks/5/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ true ]
+"values": [ SubResource( 81 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("skybox:material/0:shader_param/blend")
+tracks/6/path = NodePath("skybox:material/0:shader_param/gradient2")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -151,10 +151,10 @@ tracks/6/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 0.0 ]
+"values": [ SubResource( 83 ) ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("skybox:material/0:shader_param/gradient")
+tracks/7/path = NodePath("sun_true_rotation:transform")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -163,10 +163,10 @@ tracks/7/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ SubResource( 81 ) ]
+"values": [ Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 ) ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("skybox:material/0:shader_param/gradient2")
+tracks/8/path = NodePath("WorldEnvironment:environment:fog_depth_end")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -175,10 +175,10 @@ tracks/8/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ SubResource( 83 ) ]
+"values": [ 12000.0 ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("sun:transform")
+tracks/9/path = NodePath("WorldEnvironment:environment:ambient_light_color")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
@@ -187,10 +187,10 @@ tracks/9/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 ) ]
+"values": [ Color( 0.27451, 0.294118, 0.388235, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("WorldEnvironment:environment:fog_depth_end")
+tracks/10/path = NodePath("sun/Timer:wait_time")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
@@ -199,10 +199,10 @@ tracks/10/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 12000.0 ]
+"values": [ 7.0 ]
 }
 tracks/11/type = "value"
-tracks/11/path = NodePath("WorldEnvironment:environment:ambient_light_color")
+tracks/11/path = NodePath("WorldEnvironment:environment:background_color")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -211,15 +211,15 @@ tracks/11/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Color( 0.27451, 0.294118, 0.388235, 1 ) ]
+"values": [ Color( 0.286275, 0.223529, 0.54902, 1 ) ]
 }
 
-[sub_resource type="Gradient" id=96]
-offsets = PoolRealArray( 0, 0.408935, 0.742268, 1 )
-colors = PoolColorArray( 0, 0, 0, 1, 1, 0.242188, 0.242188, 1, 0.237509, 0.169648, 0.324687, 1, 0.205739, 0.166626, 0.328125, 1 )
+[sub_resource type="Gradient" id=100]
+offsets = PoolRealArray( 0.168627, 0.508591, 0.670103, 0.914089 )
+colors = PoolColorArray( 0.296211, 0.238037, 0.3125, 1, 0.365878, 0.222855, 0.496094, 1, 0.867188, 0.76395, 0.586029, 1, 0.849587, 0.838257, 0.851562, 1 )
 
-[sub_resource type="GradientTexture" id=97]
-gradient = SubResource( 96 )
+[sub_resource type="GradientTexture" id=101]
+gradient = SubResource( 100 )
 width = 32
 
 [sub_resource type="Gradient" id=88]
@@ -247,8 +247,8 @@ gradient = SubResource( 86 )
 width = 32
 
 [sub_resource type="Gradient" id=98]
-offsets = PoolRealArray( 0, 0.250859, 0.381443, 0.601375 )
-colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1, 0.1875, 0.171679, 0.129639, 1, 0, 0, 0, 1 )
+offsets = PoolRealArray( 0, 0.250859, 0.391753, 0.597938, 0.814433 )
+colors = PoolColorArray( 0, 0, 0, 1, 0, 0, 0, 1, 0.96875, 0.898979, 0.522217, 1, 0.661328, 0.335222, 0.278791, 1, 0.335938, 0.110229, 0.22132, 1 )
 
 [sub_resource type="GradientTexture" id=99]
 gradient = SubResource( 98 )
@@ -274,7 +274,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 160, 205, 240, 265, 395, 425, 475, 600 ),
+"times": PoolRealArray( 0, 160, 205, 240, 265, 420, 450, 500, 600 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 0.968627, 0.878431, 1 ), Color( 1, 0.968627, 0.878431, 1 ), Color( 1, 0.458824, 0.223529, 1 ), Color( 0.564706, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.376471, 0, 0, 1 ), Color( 1, 0.662745, 0.392157, 1 ), Color( 1, 0.968627, 0.878431, 1 ) ]
@@ -286,7 +286,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 215, 280, 425, 455, 600 ),
+"times": PoolRealArray( 0, 215, 280, 450, 480, 600 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 0.164706, 0.270588, 0.360784, 1 ), Color( 0.12549, 0.113725, 0.294118, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.239216, 0.294118, 0.211765, 1 ), Color( 0.164706, 0.270588, 0.360784, 1 ) ]
@@ -298,7 +298,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 80, 170, 220, 240, 265, 390, 440, 505, 600 ),
+"times": PoolRealArray( 0, 80, 170, 220, 240, 265, 415, 465, 530, 600 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1.5, 2.5, 1 ), Color( 1, 1.5, 2.5, 1 ), Color( 1, 1.38431, 2.03922, 1 ), Color( 0.694118, 0.494118, 0.764706, 1 ), Color( 0.352941, 0.352941, 0.352941, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.352941, 0.352941, 0.352941, 1 ), Color( 1, 0.764706, 0.764706, 1 ), Color( 1, 1.5, 2.5, 1 ) ]
@@ -310,7 +310,7 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 265, 395 ),
+"times": PoolRealArray( 0, 265, 420 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
 "values": [ true, false, true ]
@@ -322,7 +322,7 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 70, 200, 225, 260, 300, 355, 425, 455, 495, 575 ),
+"times": PoolRealArray( 0, 70, 200, 225, 260, 300, 390, 440, 480, 520, 575 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0 ]
@@ -334,10 +334,10 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 200, 260, 355, 425, 495 ),
+"times": PoolRealArray( 0, 200, 260, 390, 440, 520 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ SubResource( 81 ), SubResource( 97 ), SubResource( 89 ), SubResource( 89 ), SubResource( 91 ), SubResource( 81 ) ]
+"values": [ SubResource( 81 ), SubResource( 101 ), SubResource( 89 ), SubResource( 89 ), SubResource( 91 ), SubResource( 81 ) ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("skybox:material/0:shader_param/gradient2")
@@ -346,13 +346,13 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 225, 355, 455 ),
+"times": PoolRealArray( 0, 225, 390, 480 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ SubResource( 83 ), SubResource( 87 ), SubResource( 99 ), SubResource( 93 ) ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sun:transform")
+tracks/7/path = NodePath("sun_true_rotation:transform")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -370,7 +370,7 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0, 170, 265, 360, 390, 455, 600 ),
+"times": PoolRealArray( 0, 170, 265, 360, 415, 480, 600 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ 12000.0, 12000.0, 260.9, 20.0, 35.3, 3741.0, 12000.0 ]
@@ -382,10 +382,34 @@ tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 55, 160, 240, 265, 315, 435, 470, 600 ),
+"times": PoolRealArray( 0, 55, 160, 240, 265, 315, 460, 495, 600 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 0.27451, 0.294118, 0.388235, 1 ), Color( 0.211765, 0.227451, 0.313726, 1 ), Color( 0.172549, 0.219608, 0.454902, 1 ), Color( 0.14902, 0.0509804, 0.309804, 1 ), Color( 0.215686, 0.25098, 0.298039, 1 ), Color( 0.105882, 0.14902, 0.192157, 1 ), Color( 0.105882, 0.14902, 0.192157, 1 ), Color( 0.14902, 0.239216, 0.447059, 1 ), Color( 0.27451, 0.294118, 0.388235, 1 ) ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("sun/Timer:wait_time")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 100, 135, 245, 285, 385, 410, 510, 550 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 7.0, 7.0, 0.01, 0.01, 28.529, 19.9857, 0.01, 0.01, 7.0 ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("WorldEnvironment:environment:background_color")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 0, 215, 275, 325, 385, 410 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.639216, 0.694118, 0.945098, 1 ), Color( 0.45098, 0.352941, 0.564706, 1 ), Color( 0.156863, 0.223529, 0.27451, 1 ), Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 1 ), Color( 0.321569, 0.227451, 0.333333, 1 ) ]
 }
 
 [sub_resource type="ProceduralSky" id=2]
@@ -2315,49 +2339,56 @@ visible = false
 [node name="chunk_lowres_outer052" parent="." index="403"]
 visible = false
 
-[node name="sun" type="DirectionalLight" parent="." index="404"]
-transform = Transform( -0.748045, -0.372398, 0.549316, 0.29632, 0.553209, 0.778559, -0.593821, 0.74517, -0.303477, 0, 0, 0 )
+[node name="sun_true_rotation" type="Spatial" parent="." index="404"]
+transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
+
+[node name="skybox_sun" parent="sun_true_rotation" index="0" instance=ExtResource( 19 )]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.229608, 0.888723, -0.478454 )
+script = ExtResource( 22 )
+
+[node name="sun" type="DirectionalLight" parent="." index="405"]
+transform = Transform( 0.926126, -0.037182, 0.375378, -0.371464, 0.0832136, 0.924711, -0.0656192, -0.995838, 0.0632544, 0, 0, 0 )
 light_color = Color( 1, 0.968627, 0.878431, 1 )
 shadow_enabled = true
 shadow_bias = 0.05
 directional_shadow_split_1 = 0.01
 directional_shadow_split_2 = 0.1
-directional_shadow_normal_bias = 1.0
-directional_shadow_depth_range = 1
+directional_shadow_normal_bias = 2.0
+directional_shadow_bias_split_scale = 0.0
 directional_shadow_max_distance = 1500.0
 script = ExtResource( 7 )
 
-[node name="skybox_sun" parent="sun" index="0" instance=ExtResource( 19 )]
-transform = Transform( 2, -8.54491e-07, -1.30208e-06, 8.54492e-07, 2, 5.2897e-07, 1.30208e-06, -5.28971e-07, 2, 0.0871253, 1.02519, -0.113406 )
-script = ExtResource( 22 )
+[node name="Timer" type="Timer" parent="sun" index="0"]
+wait_time = 7.0
+autostart = true
 
-[node name="indirect_light" type="DirectionalLight" parent="." index="405"]
+[node name="indirect_light" type="DirectionalLight" parent="." index="406"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 light_color = Color( 0.380392, 0.556863, 0.784314, 1 )
 
-[node name="skybox" type="MeshInstance" parent="." index="406"]
+[node name="skybox" type="MeshInstance" parent="." index="407"]
 transform = Transform( 200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0 )
 layers = 4
 mesh = SubResource( 77 )
 material/0 = ExtResource( 21 )
 script = ExtResource( 20 )
 
-[node name="day_night" type="AnimationPlayer" parent="." index="407"]
+[node name="day_night" type="AnimationPlayer" parent="." index="408"]
 autoplay = "day_night_normal"
 playback_speed = 0.1
 anims/RESET = SubResource( 78 )
 anims/day_night_normal = SubResource( 79 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="408"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="409"]
 environment = SubResource( 3 )
 
-[node name="env_tween" type="Tween" parent="." index="409"]
+[node name="env_tween" type="Tween" parent="." index="410"]
 
-[node name="sun_tween" type="Tween" parent="." index="410"]
+[node name="sun_tween" type="Tween" parent="." index="411"]
 
-[node name="indirect_tween" type="Tween" parent="." index="411"]
+[node name="indirect_tween" type="Tween" parent="." index="412"]
 
-[node name="debug" type="Panel" parent="." index="412"]
+[node name="debug" type="Panel" parent="." index="413"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -2410,7 +2441,7 @@ margin_right = 574.0
 margin_bottom = 178.0
 autowrap = true
 
-[node name="Label" type="Label" parent="." index="413"]
+[node name="Label" type="Label" parent="." index="414"]
 pause_mode = 2
 visible = false
 anchor_right = 1.0
@@ -2421,11 +2452,11 @@ align = 1
 valign = 1
 script = ExtResource( 1 )
 
-[node name="tutorial_swap" type="Timer" parent="." index="414"]
+[node name="tutorial_swap" type="Timer" parent="." index="415"]
 wait_time = 3.0
 one_shot = true
 
-[node name="race_106" type="Spatial" parent="." index="415"]
+[node name="race_106" type="Spatial" parent="." index="416"]
 transform = Transform( 0.31814, 0, 0.948044, 0, 1, 0, -0.948044, 0, 0.31814, 1215.29, 525.107, -2122.41 )
 script = ExtResource( 10 )
 bronze_seconds = 180.0
@@ -2454,7 +2485,7 @@ shape = SubResource( 16 )
 [node name="flag" parent="race_106/race_end" index="1" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.872406, 0 )
 
-[node name="border" type="Area" parent="." index="416"]
+[node name="border" type="Area" parent="." index="417"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -2480,10 +2511,10 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="player" parent="." index="417" instance=ExtResource( 5 )]
+[node name="player" parent="." index="418" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.39, 746 )
 
-[node name="audio_wind" type="AudioStreamPlayer" parent="." index="418" groups=["distance_activated"]]
+[node name="audio_wind" type="AudioStreamPlayer" parent="." index="419" groups=["distance_activated"]]
 pause_mode = 2
 stream = ExtResource( 12 )
 volume_db = -80.0
@@ -2491,39 +2522,39 @@ autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="mapcam" type="Camera" parent="." index="419"]
+[node name="mapcam" type="Camera" parent="." index="420"]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="420"]
+[node name="StaticBody" type="StaticBody" parent="." index="421"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="421"]
+[node name="StaticBody2" type="StaticBody" parent="." index="422"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8707, 0, 0 )
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="422"]
+[node name="StaticBody3" type="StaticBody" parent="." index="423"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="423"]
+[node name="StaticBody4" type="StaticBody" parent="." index="424"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 7 )
 
-[node name="loading" type="Label" parent="." index="424"]
+[node name="loading" type="Label" parent="." index="425"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -2536,4 +2567,5 @@ margin_bottom = 7.0
 custom_fonts/font = SubResource( 15 )
 text = "Loading World..."
 
+[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

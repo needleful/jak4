@@ -9,6 +9,9 @@ var d_distance := directional_shadow_max_distance
 
 const orthogonal_shadow_distance = 30.0
 
+func _enter_tree():
+	update_rotation()
+
 func set_distance(d):
 	distance = d
 	directional_shadow_split_1 = lerp(0.1, d_split1, clamp(distance, 0, 1))
@@ -25,3 +28,7 @@ func set_quality(q):
 
 func apply_distance():
 	directional_shadow_max_distance = (d_distance*distance if high_quality else orthogonal_shadow_distance)
+
+
+func update_rotation():
+	global_rotation = $"../sun_true_rotation".global_rotation
