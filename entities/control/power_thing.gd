@@ -3,7 +3,7 @@ extends Spatial
 signal activated
 signal deactivated
 
-signal toggled(active)
+signal toggled(active, instant)
 
 export(bool) var active := false
 var anim: AnimationPlayer
@@ -36,7 +36,7 @@ func activate(auto: bool = false):
 	if !auto:
 		Global.set_stat(stat(), active)
 	emit_signal("activated")
-	emit_signal("toggled", active)
+	emit_signal("toggled", active, auto)
 
 func deactivate(auto := false):
 	active = false
