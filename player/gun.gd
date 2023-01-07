@@ -160,6 +160,7 @@ func _process(delta):
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if score < best_score:
+				# new target
 				var cast_end: Vector3
 				if g.has_method("get_target_ref"):
 					cast_end = g.get_target_ref()

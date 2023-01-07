@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/train_set/20m-1v-straight_to_slant.tscn" type="PackedScene" id=2]
@@ -23,6 +23,8 @@
 [ext_resource path="res://entities/env/train_set/cargo_cart.tscn" type="PackedScene" id=21]
 [ext_resource path="res://entities/npc/captain_redford.tscn" type="PackedScene" id=22]
 [ext_resource path="res://entities/navigation/nav_point.gd" type="Script" id=23]
+[ext_resource path="res://material/env/transparent.shader" type="Shader" id=24]
+[ext_resource path="res://material/env/vaeler/imperial_flag.png" type="Texture" id=25]
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 12 )
@@ -34,6 +36,7 @@ shader_param/specularity_ground = 1.0
 shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
 shader_param/wall = ExtResource( 13 )
 shader_param/ground = ExtResource( 14 )
 shader_param/ceiling = ExtResource( 13 )
@@ -43,6 +46,14 @@ _data = {
 "points": PoolVector3Array( 1.53054, -0.883766, 0.18396, 0, 0, 0, 4.02091, -2.64391, 18.3563, 0, 0, 0, 0, 0, 0, 1.67163, -0.227884, 8.40301, -3.6, 0.3, 10.1, 3.6, -0.3, -10.1, 5.03952, 0.146852, -23.1205, 0, 0, 0, 0, 0, 0, 13.7682, 0.323934, -47.4034, 0, 0, 0, 0, 0, 0, 16.1464, 1.14685, -54.1952, 0, 0, 0, 0, 0, 0, 23.4829, 1.14685, -71.7502, 0, 0, 0, 0, 0, 0, 36.1328, 1.14685, -86.344, 0, 0, 0, 0, 0, 0, 47.5532, 1.081, -94.2133, -2.93851, 0.107942, 2.10428, 2.93851, -0.107942, -2.10428, 61.6294, 0.147491, -103.892, 0, 0, 0, 0, 0, 0, 69.4112, -6.14346, -112.669 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
 }
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 24 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 0.865
+shader_param/specularity = 1.0
+shader_param/alpha_clip = 0.75
+shader_param/main_texture = ExtResource( 25 )
 
 [node name="chunk063" type="Spatial" groups=["navmesh"]]
 script = ExtResource( 1 )
@@ -331,3 +342,7 @@ next = NodePath("../exit")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -132.676, -66.2379, 378.155 )
 script = ExtResource( 23 )
 chunk_entry = "chunk052:path_manor"
+
+[node name="flag2" parent="." instance=ExtResource( 20 )]
+transform = Transform( 0.577155, -0.204698, -0.790563, 0.21227, 0.972403, -0.0968119, 0.788564, -0.111938, 0.604679, -45.2076, 34.4026, 188.202 )
+flag_material = SubResource( 11 )

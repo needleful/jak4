@@ -1,6 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://entities/visual/flag.gd" type="Script" id=1]
+[ext_resource path="res://material/env/transparent.shader" type="Shader" id=2]
+[ext_resource path="res://material/env/vaeler/modern_flag.png" type="Texture" id=3]
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 2 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 0.865
+shader_param/specularity = 1.0
+shader_param/alpha_clip = 0.75
+shader_param/main_texture = ExtResource( 3 )
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 0.05, 2, 0.05 )
@@ -22,6 +32,7 @@ params_cull_mode = 2
 collision_layer = 128
 collision_mask = 0
 script = ExtResource( 1 )
+flag_material = SubResource( 6 )
 
 [node name="pole" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
@@ -31,7 +42,7 @@ __meta__ = {
 }
 
 [node name="SoftBody" type="SoftBody" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.483382, 0.69981, 0 )
+transform = Transform( -1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08, -0.496571, 0.69981, 0 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
 collision_layer = 0
@@ -41,28 +52,28 @@ linear_stiffness = 0.68
 areaAngular_stiffness = 0.63
 volume_stiffness = 0.62
 drag_coefficient = 0.01
-pinned_points = [ 42, 35, 28, 21, 14, 7, 0 ]
-attachments/0/point_index = 42
+pinned_points = [ 48, 41, 34, 27, 20, 13, 6 ]
+attachments/0/point_index = 48
 attachments/0/spatial_attachment_path = NodePath("../pole")
-attachments/0/offset = Vector3( 0.016618, 0.99981, 1.31134e-08 )
-attachments/1/point_index = 35
+attachments/0/offset = Vector3( 0.00342926, 0.99981, -5.68248e-08 )
+attachments/1/point_index = 41
 attachments/1/spatial_attachment_path = NodePath("../pole")
-attachments/1/offset = Vector3( 0.016618, 0.89981, 8.74228e-09 )
-attachments/2/point_index = 28
+attachments/1/offset = Vector3( 0.00342926, 0.89981, -5.24537e-08 )
+attachments/2/point_index = 34
 attachments/2/spatial_attachment_path = NodePath("../pole")
-attachments/2/offset = Vector3( 0.016618, 0.79981, 4.37114e-09 )
-attachments/3/point_index = 21
+attachments/2/offset = Vector3( 0.00342926, 0.79981, -4.80825e-08 )
+attachments/3/point_index = 27
 attachments/3/spatial_attachment_path = NodePath("../pole")
-attachments/3/offset = Vector3( 0.016618, 0.69981, 1.08558e-16 )
-attachments/4/point_index = 14
+attachments/3/offset = Vector3( 0.00342926, 0.69981, -4.37114e-08 )
+attachments/4/point_index = 20
 attachments/4/spatial_attachment_path = NodePath("../pole")
-attachments/4/offset = Vector3( 0.016618, 0.59981, -4.37114e-09 )
-attachments/5/point_index = 7
+attachments/4/offset = Vector3( 0.00342926, 0.59981, -3.93402e-08 )
+attachments/5/point_index = 13
 attachments/5/spatial_attachment_path = NodePath("../pole")
-attachments/5/offset = Vector3( 0.016618, 0.49981, -8.74228e-09 )
-attachments/6/point_index = 0
+attachments/5/offset = Vector3( 0.00342926, 0.49981, -3.49691e-08 )
+attachments/6/point_index = 6
 attachments/6/spatial_attachment_path = NodePath("../pole")
-attachments/6/offset = Vector3( 0.016618, 0.39981, -1.31134e-08 )
+attachments/6/offset = Vector3( 0.00342926, 0.39981, -3.0598e-08 )
 __meta__ = {
 "_edit_group_": true
 }

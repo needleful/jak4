@@ -11,6 +11,7 @@ func _ready():
 func process_player_distance(player_origin):
 	var l = (player_origin - global_transform.origin).length_squared()
 	var enabled = l <= 100
+	visible = l <= 10000
 	if !enabled:
 		if queued_pause:
 			$SoftBody.physics_enabled = false
