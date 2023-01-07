@@ -318,7 +318,11 @@ func set_shielded(val):
 		get_shield().visible = shielded
 
 func fire_orb(position: Vector3, orb_speed: float, seeking: float):
-	var orb = projectile.instance()
+	var orb
+	if ObjectPool.has("orb"):
+		orb = ObjectPool.get("orb")
+	else:
+		orb = projectile.instance()
 	get_tree().current_scene.add_child(orb)
 	orb.source = self
 	orb.damage = attack_damage

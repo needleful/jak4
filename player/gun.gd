@@ -15,6 +15,7 @@ enum State {
 	Free,
 	Locked,
 	AimLocked,
+	HiddenLocked,
 	Firing,
 	DelayedFire,
 	Charging,
@@ -83,6 +84,8 @@ func _input(event):
 		if !visible:
 			time_since_fired = 0
 			enable()
+		if !aim_toggle and !can_aim():
+			return
 		aim_toggle = !aim_toggle
 	elif player.choosing_item:
 		return
@@ -233,6 +236,9 @@ func remove_weapon(id):
 			else:
 				set_state(State.NoWeapon)
 
+func can_aim():
+	return state != State.Locked and state != State.AimLocked and state != State.HiddenLocked
+
 func show_weapon():
 	call_deferred("set_state", State.Free, true)
 
@@ -282,7 +288,8 @@ func can_fire():
 		) or ( 
 			state != State.Firing
 			and state != State.NoWeapon
-			and state != State.Locked)
+			and state != State.Locked
+			and state != State.HiddenLocked)
 
 func start_combo():
 	if current_weapon:
@@ -306,7 +313,9 @@ func in_combo():
 		or state == State.ComboReadyHidden)
 
 func lock():
-	if visible:
+	if state == State.Hidden:
+		set_state(State.HiddenLocked)
+	elif current_weapon:
 		set_state(State.Locked)
 
 func aim_lock():
@@ -316,13 +325,17 @@ func aim_lock():
 func unlock():
 	if visible:
 		set_state(State.Free)
+	elif current_weapon:
+		set_state(State.Hidden)
 
 func enable():
 	if current_weapon:
 		set_state(State.Free)
 
 func disable():
-	if current_weapon:
+	if state == State.Locked:
+		set_state(State.HiddenLocked)
+	elif current_weapon:
 		set_state(State.Hidden)
 
 func charging() -> bool:
@@ -344,7 +357,7 @@ func swap_to(id: String):
 	set_state(State.Free, true)
 
 func set_state(new_state, force := false):
-	#$debug/list/d1.text = 'State: '+State.keys()[new_state]
+	$debug/list/d1.text = 'State: '+State.keys()[new_state]
 	if !force and new_state == state:
 		return
 	state_timer = 0.0
@@ -365,14 +378,13 @@ func set_state(new_state, force := false):
 			holder.blend_gun(0.0)
 			holder.hold_gun(0.0)
 			gun_ik.stop()
-		State.Hidden, State.ComboReadyHidden:
+		State.Hidden, State.HiddenLocked, State.ComboReadyHidden:
 			if !charging():
 				set_process(false)
 				visible = false
 				holder.hold_gun(0.0)
 			holder.blend_gun(0.0)
 			gun_ik.stop()
-			aim_toggle = false
 		State.Free, State.ComboReady:
 			visible = true
 			holder.hold_gun(1.0)

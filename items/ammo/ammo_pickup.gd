@@ -8,7 +8,7 @@ func _init():
 func _on_area_body_entered(body):
 	if !visible:
 		return
-	if Global.count(item_id) >= AmmoSpawner.MAX[item_id]:
+	if Global.count(item_id) >= AmmoSpawner.max_ammo(item_id):
 		return
 	if respawn_on_player_death:
 		var _x = Global.add_item(item_id, quantity)
@@ -25,7 +25,7 @@ func _on_area_body_entered(body):
 	else:
 		._on_area_body_entered(body)
 	var total = Global.count(item_id)
-	var max_ammo = AmmoSpawner.MAX[item_id]
+	var max_ammo = AmmoSpawner.max_ammo(item_id)
 	if total > max_ammo:
 		var _x = Global.remove_item(item_id, total - max_ammo)
 

@@ -21,6 +21,7 @@ func _ready():
 		hitbox = $hitbox
 
 func fire(p_target: Spatial, p_offset := Vector3.ZERO):
+	timer = 0.0
 	var p = Global.get_player() as PlayerBody
 	if !p.is_connected("died", self, "_on_player_died"):
 		p.connect("died", self, "_on_player_died")
@@ -31,6 +32,7 @@ func fire(p_target: Spatial, p_offset := Vector3.ZERO):
 			target.global_transform.origin + offset
 			 - global_transform.origin).normalized()
 		velocity = speed*direction
+	set_physics_process(true)
 
 func _physics_process(delta):
 	timer += delta
@@ -46,10 +48,10 @@ func _physics_process(delta):
 		
 	global_translate(velocity*delta)
 	if timer > TOTAL_TIME:
-		queue_free()
+		_remove()
 
 func take_damage(_damage, _dir, _source: Node):
-	queue_free()
+	_remove()
 
 func gravity_stun(_damage):
 	velocity *= 0.25
@@ -63,14 +65,18 @@ func dir_damage(body):
 	body.take_damage(damage, dir, source)
 
 func _on_deletion_timer_timeout():
-	queue_free()
+	_remove()
 
 func _on_projectile_body_entered(body):
 	if body == hitbox:
 		return
 	if timer > INACTIVE_TIME:
 		dir_damage(body)
-		queue_free()
+		_remove()
 
 func _on_player_died():
-	queue_free()
+	_remove()
+
+func _remove():
+	set_physics_process(false)
+	ObjectPool.put("orb", self)
