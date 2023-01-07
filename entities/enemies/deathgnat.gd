@@ -2,7 +2,7 @@ extends EnemyBody
 class_name DeathGnat
 
 export(float) var speed := 5.0
-export(float) var acceleration := 30.0
+export(float) var acceleration := 1.0
 export(float) var turn_speed = 100.0
 export(float) var orb_cooldown := 2.0
 export(float) var orb_speed := 5.0
@@ -99,10 +99,13 @@ func fly():
 		desired_position = target.global_transform.origin + Vector3.UP*desired_height
 		if target is PlayerBody:
 			desired_velocity = target.velocity
+			if desired_velocity.length_squared() > speed*speed:
+				desired_velocity = desired_velocity.normalized()*speed
 		elif target is RigidBody:
 			desired_velocity = target.linear_velocity
 	var dir := desired_position - global_transform.origin
 	var l = Vector2(dir.x, dir.z).length_squared()
+	dir = dir.normalized()
 	if l < exit_radius*exit_radius:
 		dir.x = -dir.x
 		dir.z = -dir.z
@@ -110,14 +113,11 @@ func fly():
 		dir.x = 0
 		dir.z = 0
 	
-	var movement:Vector3 = dir + (desired_velocity - linear_velocity)
+	desired_velocity += speed*dir
 	
-	if movement.length_squared() > speed*speed:
-		movement = movement.normalized()*speed
+	var force := acceleration*(desired_velocity - linear_velocity)
 	
-	var force := (movement - linear_velocity)
-	
-	add_central_force(force*mass*acceleration)
+	add_central_force(force*mass)
 
 func play_damage_sfx():
 	# TODO
@@ -145,7 +145,6 @@ func set_state(new_state, force:=false):
 		AI.Idle:
 			target = null
 		AI.Chasing:
-			print("GOTCHA!!!")
 			$AnimationPlayer.play("Idle-loop")
 			quit_timer = 0
 			orb_timer = orb_cooldown

@@ -23,25 +23,40 @@ func set_active(a: bool):
 		line_edit.text = ""
 
 func _on_text_entered(new_text):
-	line_edit.text = ""
-	var ex = Expression.new()
-	var label := Label.new()
-	label.autowrap = true
-	logs.add_child(label)
-	var res = ex.parse(new_text, ["Global"])
-	if res != OK:
-		label.text = ex.get_error_text()
 	history.append(new_text)
 	index = history.size()
+	line_edit.text = ""
+	var ex = Expression.new()
+	var res = ex.parse(new_text, ["Global"])
+	if res != OK:
+		echo(ex.get_error_text())
+		return
 	var output = ex.execute([Global], self)
 	if ex.has_execute_failed():
-		label.text = ex.get_error_text() + str(output)
+		echo(ex.get_error_text() + str(output))
 	else:
-		label.text = str(output)
+		echo(str(output))
 
 func clear():
 	for l in logs.get_children():
 		l.queue_free()
+
+func rapid_start():
+	for c in AmmoSpawner.MAX.keys():
+		var wep = "wep_"+c
+		echo("Got "+wep)
+		var _x = Global.add_item(wep)
+		_x = Global.add_item(c, AmmoSpawner.MAX[c])
+	var _x = Global.add_item("wep_time_gun")
+	_x = Global.add_item("hover_scooter")
+	_x = Global.add_item("lantern")
+	_x = Global.add_item("flag", 10)
+
+func echo(text):
+	var label := Label.new()
+	label.autowrap = true
+	logs.add_child(label)
+	label.text = text
 
 func view_history(offset):
 	if history.size() == 0:

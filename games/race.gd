@@ -73,7 +73,8 @@ func _process(_delta):
 		overlay.color_bronze(DANGER_COLOR)
 	
 	if active and at_end and (
-		player.is_grounded() or player.is_hovering()
+		(player.is_grounded() or player.is_hovering())
+		and player in race_end.get_overlapping_bodies()
 	):
 		win()
 

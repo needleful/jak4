@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -199,6 +199,11 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
+
+[sub_resource type="OpenSimplexNoise" id=78]
+
+[sub_resource type="NoiseTexture" id=77]
+noise = SubResource( 78 )
 
 [sub_resource type="StyleBoxEmpty" id=65]
 
@@ -768,10 +773,6 @@ collision_mask = 8192
 [node name="jackie" parent="." instance=ExtResource( 3 )]
 time_scale_response = true
 
-[node name="OmniLight" type="OmniLight" parent="jackie"]
-transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, -0.507964, 1.7089, 0.306433 )
-light_energy = 0.5
-
 [node name="flag_ref" type="Spatial" parent="jackie"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23645, 0.947519, 0.346891 )
@@ -1009,6 +1010,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
 
+[node name="TextureRect" type="TextureRect" parent="ui/status_menu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 77 )
+expand = true
+stretch_mode = 1
+flip_v = true
+
 [node name="tabs" type="TabContainer" parent="ui/status_menu"]
 time_scale_response = false
 anchor_right = 1.0
@@ -1065,7 +1074,7 @@ time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 108.0
-margin_right = 108.0
+margin_right = 191.0
 margin_bottom = 64.0
 action = "ui_page_down"
 small = true
@@ -1083,7 +1092,7 @@ alignment = 2
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 238.0
+margin_left = 155.0
 margin_right = 238.0
 margin_bottom = 64.0
 action = "ui_page_up"
@@ -1104,7 +1113,6 @@ align = 2
 
 [node name="gameing" type="Control" parent="ui"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1740,8 +1748,8 @@ visible = false
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = 121.0
-margin_bottom = 155.0
+margin_top = -90.0
+margin_bottom = -42.0
 script = ExtResource( 10 )
 
 [node name="Label" type="Label" parent="ui/gameing/item_get"]
@@ -1760,6 +1768,7 @@ anims/RESET = SubResource( 76 )
 anims/show_and_fade = SubResource( 75 )
 
 [node name="dialog" type="Control" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 

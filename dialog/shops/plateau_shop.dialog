@@ -40,8 +40,6 @@
 			Ha! Don't worry, they're not a uh, preserved species or something. You'll do some good turning them into coats!
 			Especially if you save one for me! Haha!
 		{otherwise} Ah, something secretive, I suppose!
-
-		{Global.add_stat("plateau_shop/secret")}	
 		Well, if you ever feel comfortable talking about it, I'd love to hear it! Call it a uh, anthromology study.
 		The people who journey out here are odd characters.
 		[You] Am I an odd character?
@@ -85,15 +83,16 @@
 		{goto("shop_replies")}
 	> {skip()}(Back)
 		{goto("shop_replies")}
-> {Global.stat("mum/info/orstad")} I was wondering if we could talk about my mum again?
+> ?{mum/info/orstad} I was wondering if we could talk about my mum again?
 	Of course!
 	{subtopic("mum")}
-> {Global.stat("plateau_shop/mum")} So. About my mum.
+> ?{plateau_shop/mum} So. About my mum.
 	{subtopic("mum")}
-> {otherwise if Global.stat("plateau_shop/secret")} So. I'm ready to talk about why I'm here.
+> {otherwise} Do you remember when you asked why I came here?
 	Oh? You sound grim.
 	[You] It's, uh...  It is.
-		{Global.add_stat("plateau_shop/mum")} I'm here to talk with the Medium. To see my mum again.
+		+{plateau_shop/mum} I'm here to talk with the Medium. To see my mum again.
+	{mention("mum")}
 	Oh. I'm sorry for your loss.  Do you want to talk about it?
 	> I would.
 		That's good. I have a few questions.

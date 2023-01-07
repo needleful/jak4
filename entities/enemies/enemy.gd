@@ -241,6 +241,7 @@ func take_damage(damage: int, dir: Vector3, source: Node):
 		last_attacker = source
 		play_damage_sfx()
 		if ai != AI.GravityStun:
+			set_active(true)
 			set_state(AI.Damaged)
 
 func gravity_stun(dam):

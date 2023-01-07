@@ -4,6 +4,7 @@ signal pause_toggled(paused)
 
 var level := 0
 onready var ui := get_parent().get_parent().get_parent()
+var show_background = true
 
 const save_path = "user://settings.cfg"
 
@@ -22,6 +23,7 @@ func _input(event):
 			set_level(level - 1)
 
 func set_active(active):
+	Global.get_player().set_camera_render(!active)
 	if active:
 		load_settings()
 		set_level(0)

@@ -4,7 +4,7 @@ onready var player: PlayerBody = get_parent()
 onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 onready var spring : SpringArm = $yaw/pitch/SpringArm
-onready var camera := $yaw/pitch/Camera
+onready var camera:Camera = $yaw/pitch/Camera
 onready var tween := $cam_tween
 
 const MIN_CAMERA_DIFF := -1.0

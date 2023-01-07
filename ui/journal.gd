@@ -11,6 +11,7 @@ onready var notes := $panel/hbox/notes
 onready var task_notes := $panel/hbox/notes/notes/list
 
 const image_path := "res://ui/notes/%s/%s.png"
+var show_background := true
 
 var starting_item : Node
 var temp_notes := []
@@ -23,6 +24,7 @@ enum NoteType {
 }
 
 func set_active(active):
+	Global.get_player().set_camera_render(!active)
 	if active:
 		notes.hide()
 		starting_item = null

@@ -2,8 +2,10 @@ extends Control
 
 onready var scroll_area := $scrollable_map
 onready var reticle := $reticle
+onready var panel := $reticle/panel
 
 var active := false
+var show_background := true
 
 var snap_timer := 0.0
 var snap_direction := Vector2.ZERO
@@ -11,6 +13,8 @@ var zoom_scale := 1.0
 
 var last_moved_dir := Vector2.ZERO
 var highlighted_point = null
+var min_pos : Vector2
+var max_pos : Vector2
 
 func _ready():
 	set_active(false)
@@ -35,9 +39,8 @@ func _process(delta: float):
 		zoom_scale = new_zoom
 		scroll_area.scale = Vector2(zoom_scale, zoom_scale)
 		scroll_area.translate(rel_pos - zoom_change*rel_pos)
+		update_zoom()
 	# Movement
-	var max_pos :Vector2 = OS.window_size/2 + zoom_scale*scroll_area.texture.get_size()/2
-	var min_pos:Vector2 = -zoom_scale*scroll_area.texture.get_size()/2 + OS.window_size/2
 	var movement = Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
 	if movement != Vector2.ZERO:
 		last_moved_dir = movement
@@ -64,19 +67,19 @@ func _process(delta: float):
 			best_dist = dist
 			snap_direction = dir
 			snap_timer = 1.0
-	if !highlighted_point:
-		reticle.get_node("panel").hide()
+	if !highlighted_point and panel.visible:
+		panel.hide()
 	elif highlighted_point != old_point:
-		reticle.get_node("panel").show()
-		reticle.get_node("panel/vbox/Label").text = highlighted_point.visual_name
-		var head = reticle.get_node("panel/vbox/headline")
+		panel.show()
+		panel.get_node("vbox/Label").text = highlighted_point.visual_name
+		var head = panel.get_node("vbox/headline")
 		
 		if highlighted_point.headline != "":
 			head.text = highlighted_point.headline
 			head.show()
 		else:
 			head.hide()
-		var note_box:Container = reticle.get_node("panel/vbox/Notes")
+		var note_box:Container = panel.get_node("vbox/Notes")
 		for c in note_box.get_children():
 			c.queue_free()
 		for n in highlighted_point.notes:
@@ -86,7 +89,12 @@ func _process(delta: float):
 			l.text = n
 			note_box.add_child(l)
 
+func update_zoom():
+	max_pos = OS.window_size/2 + zoom_scale*scroll_area.texture.get_size()/2
+	min_pos = -zoom_scale*scroll_area.texture.get_size()/2 + OS.window_size/2
+
 func set_active(a):
+	Global.get_player().set_camera_render(!a)
 	reticle.global_position = OS.window_size/2
 	zoom_scale = 1
 	scroll_area.scale = Vector2(1, 1)
@@ -94,6 +102,7 @@ func set_active(a):
 	visible = active
 	set_process(active)
 	if active:
+		update_zoom()
 		for g in scroll_area.get_children():
 			var t = Global.task_notes_by_place(g.name)
 			var n = Global.get_notes("places", g.name)

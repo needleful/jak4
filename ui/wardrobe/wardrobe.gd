@@ -9,6 +9,7 @@ export(bool) var pause_menu := false
 var coats_by_rarity := {}
 var viewing_rarity = Coat.Rarity.Common
 var viewing_index := 0
+var show_background := false
 
 const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
@@ -64,6 +65,8 @@ func set_active(active):
 		player.cam_rig.pause_mode = PAUSE_MODE_STOP
 		player.wardrobe_unlock(pause_menu)
 		player = null
+	if player:
+		player.set_camera_render(true)
 	set_process_input(active)
 
 func enter(p: PlayerBody):

@@ -13,6 +13,7 @@ onready var sub_items := $viewport_window/Panel/MarginContainer/item/sub_items
 export(Resource) var player_description
 
 var preview_path := "res://ui/items/%s.tres"
+var show_background := true
 
 const MIN_ZOOM := 0.1
 const MAX_ZOOM := 10.0
@@ -33,6 +34,7 @@ func _ready():
 	set_process(false)
 
 func set_active(active):
+	Global.get_player().set_camera_render(!active)
 	if active:
 		viewport.size = view_window.rect_size
 		clear(items_list)

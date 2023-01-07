@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://_glb/enemies/tentpole.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/enemies/hitbox.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=6]
 [ext_resource path="res://material/env/copper/copper_corroded1.png" type="Texture" id=7]
 [ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=8]
+
+[sub_resource type="PhysicsMaterial" id=35]
 
 [sub_resource type="ShaderMaterial" id=28]
 shader = ExtResource( 5 )
@@ -69,7 +71,7 @@ nodes/Chop/position = Vector2( 440, 140 )
 nodes/Damaged/node = SubResource( 9 )
 nodes/Damaged/position = Vector2( 200, 80 )
 nodes/output/position = Vector2( 660, 180 )
-node_connections = [ "output", 0, "Chop", "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
+node_connections = [ "Damaged", 0, "Animation", "Damaged", 1, "Animation 3", "output", 0, "Chop", "Chop", 0, "Damaged", "Chop", 1, "Animation 2" ]
 
 [sub_resource type="AnimationNodeAnimation" id=17]
 animation = "Damaged"
@@ -143,6 +145,7 @@ radius = 8.97288
 [node name="tentpole" groups=["dynamic", "enemy", "push"] instance=ExtResource( 1 )]
 collision_layer = 65553
 mass = 180.0
+physics_material_override = SubResource( 35 )
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 script = ExtResource( 3 )
@@ -150,12 +153,16 @@ id = "tentpole"
 mesh_node = NodePath("Armature/Skeleton/tentpole")
 health = 50
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [ NodePath("head") ]
+bones/3/bound_children = [ NodePath("chopper") ]
+
 [node name="tentpole" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 8 )
 material/1 = SubResource( 28 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( 0.999696, 0.024516, 0.0024926, -0.0245502, 0.99959, 0.0147204, -0.00213069, -0.0147771, 0.999889, -0.0326702, 0.820951, -0.00314823 )
+transform = Transform( 0.999874, 0.00637416, 0.0145393, -0.00625917, 0.999949, -0.00794141, -0.0145891, 0.00784941, 0.999863, 0.0610221, 0.831822, -0.0202712 )
 bone_name = "Body.001"
 
 [node name="hurtbox" type="KinematicBody" parent="Armature/Skeleton/head" index="0" groups=["dynamic", "push", "target"]]
@@ -169,7 +176,7 @@ source_path = NodePath("../../../..")
 shape = SubResource( 3 )
 
 [node name="chopper" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.0342198, 0.988787, -0.145359, -0.922539, -0.0246874, -0.385113, -0.384384, 0.147278, 0.91135, 0.0820008, 1.75529, -0.0476486 )
+transform = Transform( -0.0255087, 0.993548, 0.110501, -0.854502, 0.0356967, -0.518219, -0.51882, -0.107643, 0.848079, 0.158336, 1.76887, -0.0447037 )
 bone_name = "Chopper"
 
 [node name="Area" type="Area" parent="Armature/Skeleton/chopper" index="0"]

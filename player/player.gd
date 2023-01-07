@@ -1612,7 +1612,10 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	return center or left or right
 
 func check_cast(cast: RayCast, min_dot: float):
-	return cast.is_colliding() and cast.get_collision_normal().y >= min_dot
+	return (
+		cast.is_colliding()
+		and cast.get_collision_normal().y >= min_dot
+		and !cast.get_collider().is_in_group("enemy"))
 
 func debug_cast(cast: RayCast, min_dot: float, meshi: MeshInstance):
 	if !cast.is_colliding():
@@ -1634,6 +1637,14 @@ func should_slow_follow():
 
 func get_visual_forward():
 	return mesh.global_transform.basis.z
+
+func set_camera_render(render):
+	if !cam_rig:
+		return
+	if render:
+		cam_rig.camera.cull_mask = (1 << 21) - 1
+	else:
+		cam_rig.camera.cull_mask = 0
 
 func rotate_to_velocity(input_dir: Vector3):
 	var vis_vel = lerp(

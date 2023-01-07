@@ -60,6 +60,15 @@ func set_mode(m):
 	if should_pause and !get_tree().paused:
 		mode_before_pause = mode
 	get_tree().paused = should_pause
+	if should_pause:
+		hide()
+		get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
+		yield(VisualServer, "frame_post_draw")
+		var screen = get_viewport().get_texture().get_data()
+		var stex = ImageTexture.new()
+		stex.create_from_image(screen)
+		$status_menu/TextureRect.texture = stex
+		show()
 	
 	mode = m
 	var i = 0

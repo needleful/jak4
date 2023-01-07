@@ -329,7 +329,8 @@ func trade_coats():
 	var coat_item: DialogItem = sequence.get("_coat")
 	if coat_item:
 		mention("_coat")
-		return subtopic("_coat")
+		current_item = coat_item
+		advance()
 	else:
 		insert_label("[You cannot trade coats with this person]", "narration")
 
