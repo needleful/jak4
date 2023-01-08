@@ -23,7 +23,6 @@ func _input(event):
 			set_level(level - 1)
 
 func set_active(active):
-	Global.get_player().set_camera_render(!active)
 	if active:
 		load_settings()
 		set_level(0)

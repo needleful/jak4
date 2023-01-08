@@ -60,7 +60,23 @@ func set_mode(m):
 	if should_pause and !get_tree().paused:
 		mode_before_pause = mode
 	get_tree().paused = should_pause
-	if should_pause:
+	
+	mode = m
+	var i = 0
+	for c in get_children():
+		if !(c is Control):
+			continue
+		if c.has_method("set_active"):
+			if i == mode:
+				c.show()
+				c.set_active(true)
+			else:
+				c.set_active(false)
+				c.hide()
+		else:
+			c.visible = i == mode
+		i += 1
+	if m == Mode.Paused:
 		hide()
 		get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
 		yield(VisualServer, "frame_post_draw")
@@ -69,16 +85,9 @@ func set_mode(m):
 		stex.create_from_image(screen)
 		$status_menu/TextureRect.texture = stex
 		show()
-	
-	mode = m
-	var i = 0
-	for c in get_children():
-		if !(c is Control):
-			continue
-		c.visible = i == mode
-		if c.has_method("set_active"):
-			c.set_active(c.visible)
-		i += 1
+		Global.get_player().set_camera_render(false)
+	else:
+		Global.get_player().set_camera_render(true)
 
 func show_status() -> bool:
 	set_mode(Mode.Paused)
