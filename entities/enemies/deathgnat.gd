@@ -157,7 +157,6 @@ func set_state(new_state, force:=false):
 		AI.Damaged:
 			if speed == 0:
 				speed = 5.0
-				acceleration = 25.0
 			gravity_scale = 1
 			if last_attacker:
 				aggro_to(last_attacker)

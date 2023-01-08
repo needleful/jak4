@@ -143,6 +143,9 @@ func _process(delta):
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
 		update_terrain_lod(vis_last_position)
 
+func get_sun():
+	return sun
+
 func prepare_save():
 	Global.set_stat("clock_time", get_time())
 

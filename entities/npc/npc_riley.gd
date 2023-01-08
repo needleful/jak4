@@ -46,6 +46,7 @@ func _on_target_died(_id, path):
 	
 func track_enemies():
 	var player = Global.get_player()
+	Global.save_checkpoint(player.global_transform.origin)
 	player.game_ui.start_game(game_label)
 	player.game_ui.value = enemies.size()
 	for e in enemies:

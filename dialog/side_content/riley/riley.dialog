@@ -25,9 +25,22 @@
 {otherwise}
 	Ey! Jutre! Khur ine siram tes?
 	[You] I'm sorry?
-	You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it! 
+	You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it!
 	> {skip()} (Accept Challenge) Uh, I'll see what I can do.
 		[You]  Uh, I'll see what I can do.
+		Thank you! Do you need my pistol?
+		{Global.count("wep_pistol")}
+			{Global.count("pistol") < 5}
+				[You] I have a pistol, but I don't have enough bullets to take care of them.
+				{Global.add_item("pistol", 12)} Here's the bullets I have! I'm a terrible shot...
+			{otherwise}
+				[You] I've got it taken care of.
+		{otherwise}
+			[You] I suppose I would.
+			{Global.add_item("wep_pistol")}
+			{Global.add_item("pistol", 12)}
+			* She hands you an old handgun.
+			I was never good with it, anyway.
 		{main_speaker.track_enemies()}
 	> {skip()} (Decline) I'm going to scope out the area first.
 		[You] I'm going to scope out the area first.
@@ -133,7 +146,8 @@ Alright! If you can get 12 capacitors and you're willing to get there, I'll meet
 	Hey! Pretty cool tower, right? These were made by the Hasyr literally MILLIONS of years ago!
 	[You] That stretches belief.
 	Believe it! But they're almost impossible to get inside of, so there's probably capacitors and other good stuff inside.
-	I spotted a tiny hole in the side of this tower, just big enough for somebody to crawl through. So now I'm gonna get a 
+	I spotted a tiny hole in the side of this tower, just big enough for somebody to crawl through.
+	The problem is, I still can't get to it! I can climb to the roof of this palace, but the gap to get onto the tower is too big for me!
 	?{armstrong/asked_tower}
 		[You] I asked an acquaintance Armstrong about it, actually.
 		Really? What'd he say?
@@ -143,12 +157,13 @@ Alright! If you can get 12 capacitors and you're willing to get there, I'll meet
 		I've never heard of that before. But these things are almost completely indestructible! I don't see how taking a capacitor would cause so much damage.
 		[You] Hm... Well, I can look inside if you want. Maybe I can see if there's any damage.
 	{otherwise}
-		[You] I could look inside.
-	Really? It's pretty dangerous...
+		[You] I could try.
+	Really? It could be dangerous inside.
 	[You] I'm sure it's fine.
 	+{task_note_place("the_tree_tower", "village_tower", "Riley told me a way inside: there's a hole in the band of purple gems on the first level.")} 
-	Okay... If you look at the tower, there's those purple bands of gemstone. There's a hole in the bottom one on the southeast side. You can get to it from the top of this copper palace if you jump.
-	[You] Got it. I'll look for a hole in the crystal.
+	Okay... If you look at the tower, there's those purple bands of gemstone. There's a hole in the bottom one on the southeast side.
+	I put a piece of scrap metal on the roof, but I can't jump far enough to grab the ledge of the tower.
+	[You] Got it. I'll get to the roof, jump on the tower, and look for a hole in the crystal.
 {otherwise}
 	Good luck inside the tower. Did you need anything?
 	{goto("generic_shop")}

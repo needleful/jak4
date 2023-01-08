@@ -59,18 +59,10 @@ func set_far_render(far):
 
 func set_shadow_disable(d):
 	disable_shadows = d
-	if is_inside_tree() and get_tree().current_scene.has_node("DirectionalLight"):
-		 get_tree().current_scene.get_node("DirectionalLight").shadow_enabled = !disable_shadows
-	if disable_shadows:
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_0_subdiv"] = 0
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_1_subdiv"] = 0
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_2_subdiv"] = 0
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_3_subdiv"] = 0
-	else:
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_0_subdiv"] = 1
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_1_subdiv"] = 1
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_2_subdiv"] = 2
-		ProjectSettings["rendering/quality/shadow_atlas/quadrant_3_subdiv"] = 3
+	if get_tree().current_scene.has_method("get_sun"):
+		var s = get_tree().current_scene.get_sun()
+		if s:
+			s.shadow_enabled = !disable_shadows
 
 func set_anti_alias(a):
 	anti_aliasing = a

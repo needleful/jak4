@@ -60,16 +60,20 @@ render_mode unshaded, cull_disabled, blend_add;
 
 uniform sampler2D main_texture;
 uniform vec4 color : hint_color;
+uniform float depth_barrier : hint_range(0.01, 1.0) = 0.1;
 
 void fragment() {
+	float d = textureLod(DEPTH_TEXTURE, SCREEN_UV, 0.0).r;
+	float depth_diff = 1.0 - abs(clamp((d - FRAGCOORD.z)/depth_barrier, -1.0, 1.0));
 	ALBEDO = texture(main_texture, UV).rgb*color.rgb;
-	ALPHA = pow(1.0 - NORMAL.z, 2)*color.a;
+	ALPHA = 0.6*(pow(1.0 - NORMAL.z, 2) + 0.6*pow(depth_diff, 3.0))*color.a;
 }"
 
 [sub_resource type="ShaderMaterial" id=21]
 resource_local_to_scene = true
 shader = SubResource( 9 )
 shader_param/color = Color( 1, 1, 1, 1 )
+shader_param/depth_barrier = 0.1
 shader_param/main_texture = ExtResource( 4 )
 
 [sub_resource type="Animation" id=22]
@@ -190,12 +194,12 @@ anims/fire = SubResource( 23 )
 
 [node name="ChargeSound" type="AudioStreamPlayer" parent="." index="4"]
 stream = ExtResource( 1 )
-volume_db = -5.0
+volume_db = -8.0
 bus = "SFX_Player"
 
 [node name="FireSound" type="AudioStreamPlayer" parent="." index="5"]
 stream = ExtResource( 7 )
-volume_db = -5.0
+volume_db = -8.0
 bus = "SFX_Player"
 
 [connection signal="remove" from="bubble" to="." method="_on_bubble_remove"]

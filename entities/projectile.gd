@@ -15,6 +15,7 @@ const TOTAL_TIME := 6.0
 
 var timer := 0.0
 var hitbox : Node
+var disabled := false
 
 func _ready():
 	if has_node("hitbox"):
@@ -22,6 +23,7 @@ func _ready():
 
 func fire(p_target: Spatial, p_offset := Vector3.ZERO):
 	timer = 0.0
+	disabled = false
 	var p = Global.get_player() as PlayerBody
 	if !p.is_connected("died", self, "_on_player_died"):
 		p.connect("died", self, "_on_player_died")
@@ -78,5 +80,8 @@ func _on_player_died():
 	_remove()
 
 func _remove():
+	if disabled:
+		return
+	disabled = true
 	set_physics_process(false)
-	ObjectPool.put("orb", self)
+	ObjectPool.call_deferred("put", "orb", self)

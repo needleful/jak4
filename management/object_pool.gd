@@ -16,4 +16,4 @@ func put(type:String, node:Node):
 		pools[type] = []
 	pools[type].push_back(node)
 	if node.is_inside_tree():
-		node.get_parent().call_deferred("remove_child", node)
+		node.get_parent().remove_child(node)
