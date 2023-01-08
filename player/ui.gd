@@ -86,6 +86,7 @@ func set_mode(m):
 		$status_menu/TextureRect.texture = stex
 		show()
 		Global.get_player().set_camera_render(false)
+		get_child(Mode.Paused).set_active(true)
 	else:
 		Global.get_player().set_camera_render(true)
 

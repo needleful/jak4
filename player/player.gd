@@ -2008,7 +2008,6 @@ func set_state(next_state: int):
 	var head_blocked = crouch_head.get_overlapping_bodies().size() > 0
 	$crouching_col.disabled = !head_blocked
 	$standing_col.disabled = head_blocked
-	gun.unlock()
 	# Exit effects
 	match state: 
 		State.PlaceFlag:
@@ -2032,28 +2031,34 @@ func set_state(next_state: int):
 			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
 			mesh.ground_transition("Walk")
+			gun.unlock()
 		State.Fall, State.LedgeFall, State.WadingFall, State.WaveJump:
 			mesh.transition_to("Fall")
 		State.BaseJump:
 			start_jump(JUMP_VEL_BASE)
 			mesh.play_jump()
+			gun.unlock()
 		State.HighJump:
 			start_jump(JUMP_VEL_HIGH)
 			mesh.play_high_jump()
+			gun.lock()
 		State.WallJump:
 			can_wall_cling = true
 			emit_signal("jumped")
 			mesh.play_jump()
+			gun.unlock()
 		State.LedgeJump:
 			$crouching_col.disabled = true
 			$standing_col.disabled = true
 			start_jump(JUMP_VEL_LEDGE)
 			mesh.play_ledge_jump()
+			gun.unlock()
 		State.CrouchJump:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			start_jump(JUMP_VEL_CROUCH)
 			mesh.play_crouch_jump()
+			gun.unlock()
 		State.RollJump:
 			damaged_objects = []
 			$crouching_col.disabled = false
@@ -2065,12 +2070,14 @@ func set_state(next_state: int):
 			gun.lock()
 		State.Slide:
 			mesh.ground_transition("Slide")
+			gun.unlock()
 		State.Crouch:
 			stamina_recharges = true
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.ground_transition("Crouch")
 			can_air_spin = true
+			gun.unlock()
 		State.Climb:
 			stamina_recharges = false
 			$crouching_col.disabled = false
@@ -2113,6 +2120,7 @@ func set_state(next_state: int):
 			dir.y = 0.1
 			dir = dir.normalized()
 			velocity = speed_factor*dir*SPEED_BONK
+			gun.unlock()
 		State.LungeKick, State.SlideLungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
@@ -2148,9 +2156,11 @@ func set_state(next_state: int):
 			gun.lock()
 		State.DiveEnd:
 			mesh.play_dive_end(max_damage)
+			gun.aim_lock()
 		State.Damaged:
 			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)
 			mesh.force_play("Damaged")
+			gun.unlock()
 		State.Locked:
 			mesh.ground_transition("Walk")
 			velocity = Vector3.ZERO
@@ -2171,21 +2181,26 @@ func set_state(next_state: int):
 		State.FallingDeath:
 			mesh.transition_to("Fall")
 			cam_rig.lock_follow()
+			gun.unlock()
 		State.GravityStun:
 			velocity.y = 4
 			mesh.transition_to("Damaged")
+			gun.unlock()
 		State.Hover:
 			hover_cast.enabled = true
 			mesh.start_hover()
+			gun.unlock()
 		State.Sitting:
 			velocity = Vector3.ZERO
 			mesh.play_sit()
+			gun.unlock()
 		State.Dash:
 			can_wall_cling = true
 			dash_charges -= 1
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
 			mesh.force_play("Dash")
+			gun.unlock()
 		State.Wading:
 			can_air_spin = true
 			can_slide_lunge = true
@@ -2193,9 +2208,11 @@ func set_state(next_state: int):
 			dash_charges = Global.count("dash_charge")
 			stamina_recharges = true
 			mesh.ground_transition("Wading")
+			gun.unlock()
 		State.WadingJump:
 			start_jump(5.0)
 			mesh.play_jump()
+			gun.unlock()
 		State.WallCling:
 			can_air_spin = true
 			can_wall_cling = false
@@ -2204,5 +2221,6 @@ func set_state(next_state: int):
 			$standing_col.disabled = true
 			mesh.transition_to("WallCling")
 			velocity.y = 0
+			gun.lock()
 	state = next_state
 	$ui/gameing/debug/stats/a1.text = "State: %s" % State.keys()[state]
