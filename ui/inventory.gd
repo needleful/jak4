@@ -39,6 +39,10 @@ func _process(delta):
 func _ready():
 	set_process(false)
 
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_active(visible)
+
 func set_active(active):
 	Global.get_player().set_camera_render(!active)
 	if active:

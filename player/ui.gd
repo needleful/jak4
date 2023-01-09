@@ -57,38 +57,36 @@ func set_mode(m):
 		return
 	
 	var should_pause: bool = (m == Mode.Paused or m == Mode.DebugConsole)
+	if !should_pause:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if should_pause and !get_tree().paused:
 		mode_before_pause = mode
 	get_tree().paused = should_pause
 	
+	if m == Mode.Paused:
+		take_screen_shot()
+	else:
+		Global.get_player().set_camera_render(true)
+
 	mode = m
 	var i = 0
 	for c in get_children():
 		if !(c is Control):
 			continue
-		if c.has_method("set_active"):
-			if i == mode:
-				c.show()
-				c.set_active(true)
-			else:
-				c.set_active(false)
-				c.hide()
-		else:
-			c.visible = i == mode
+		c.visible = i == mode
 		i += 1
-	if m == Mode.Paused:
-		hide()
-		get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
-		yield(VisualServer, "frame_post_draw")
-		var screen = get_viewport().get_texture().get_data()
-		var stex = ImageTexture.new()
-		stex.create_from_image(screen)
-		$status_menu/TextureRect.texture = stex
-		show()
-		Global.get_player().set_camera_render(false)
-		get_child(Mode.Paused).set_active(true)
-	else:
-		Global.get_player().set_camera_render(true)
+
+func take_screen_shot():
+	Global.get_player().set_camera_render(true)
+	hide()
+	get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
+	yield(VisualServer, "frame_post_draw")
+	var screen = get_viewport().get_texture().get_data()
+	var stex = ImageTexture.new()
+	stex.create_from_image(screen)
+	$status_menu/TextureRect.texture = stex
+	show()
+	Global.get_player().set_camera_render(false)
 
 func show_status() -> bool:
 	set_mode(Mode.Paused)

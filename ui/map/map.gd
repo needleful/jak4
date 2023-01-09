@@ -93,6 +93,10 @@ func update_zoom():
 	max_pos = OS.window_size/2 + zoom_scale*scroll_area.texture.get_size()/2
 	min_pos = -zoom_scale*scroll_area.texture.get_size()/2 + OS.window_size/2
 
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_active(visible)
+
 func set_active(a):
 	Global.get_player().set_camera_render(!a)
 	reticle.global_position = OS.window_size/2

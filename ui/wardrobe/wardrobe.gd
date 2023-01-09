@@ -1,5 +1,6 @@
 extends Control
 
+signal active(active)
 signal exited
 
 var player: PlayerBody
@@ -58,6 +59,10 @@ func _input(event):
 			viewing_index = viewing_index % l
 			view()
 
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_active(visible)
+
 func set_active(active):
 	if active and !player:
 		enter(Global.get_player())
@@ -68,6 +73,7 @@ func set_active(active):
 	if player:
 		player.set_camera_render(true)
 	set_process_input(active)
+	emit_signal("active", active)
 
 func enter(p: PlayerBody):
 	if pause_menu:
