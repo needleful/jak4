@@ -10,10 +10,10 @@ const proper_name: Dictionary = {
 
 var stock := {}
 const default_tooltips := {
-	"health_up" : "Permanently increase health by 25% (linear).",
-	"stamina_up": "Pernanently increase stamina by 25% (linear).",
-	"stamina_recovery_up" : "Permanently increase stamina recovery speed by 20% (linear).",
-	"damage_up" : "Permanently increase melee damage by 15% (linear).",
+	"health_up" : "Permanently increase health by 25%.",
+	"stamina_up": "Pernanently increase stamina by 25%.",
+	"stamina_recovery_up" : "Permanently increase stamina recovery speed by 20%.",
+	"damage_up" : "Permanently increase melee damage by 15%.",
 	"bug" : "One deathgnat",
 	"flag": "A consumable checkpoint. You will respawn where the flag is placed until you reach a new checkpoint.",
 	"armor": "Temporarily increase health by 24%. Consumed before health.",

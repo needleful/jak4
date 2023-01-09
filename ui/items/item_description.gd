@@ -1,7 +1,14 @@
 extends Resource
 class_name ItemDescription
 
-export(Texture) var icon
+enum Category {
+	Firearm,
+	Equipment,
+	Sundries,
+}
+
+export(Category) var category
+export(Texture) var custom_icon
 export(PackedScene) var preview_3d
 export(String) var full_name
 export(String, MULTILINE) var description

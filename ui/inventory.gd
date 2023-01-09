@@ -1,19 +1,25 @@
 extends Control
 
 onready var viewport := $Viewport
-onready var view_window := $viewport_window
 onready var object_ref := $Viewport/object_ref
 onready var ref_cam_arm := $Viewport/SpringArm
 
-onready var items_list := $large_items/ScrollContainer/rows
-onready var item_name := $viewport_window/Panel/MarginContainer/item/name
-onready var item_desc := $viewport_window/Panel/MarginContainer/item/description
-onready var sub_items := $viewport_window/Panel/MarginContainer/item/sub_items
+onready var view_window := $box/viewport_window
+onready var items_list := $box/large_items/ScrollContainer/rows
+onready var item_name := $box/viewport_window/Panel/MarginContainer/item/name
+onready var item_desc := $box/viewport_window/Panel/MarginContainer/item/description
+onready var sub_items := $box/viewport_window/Panel/MarginContainer/item/sub_items
 
 export(Resource) var player_description
 
 var preview_path := "res://ui/items/%s.tres"
 var show_background := true
+
+const DEFAULT_ICONS := {
+	ItemDescription.Category.Equipment: preload("res://ui/items/icons/default_equipment.svg"),
+	ItemDescription.Category.Firearm: preload("res://ui/items/icons/default_firearm.svg"),
+	ItemDescription.Category.Sundries: preload("res://ui/items/icons/default_sundries.svg")
+}
 
 const MIN_ZOOM := 0.1
 const MAX_ZOOM := 10.0
@@ -52,44 +58,26 @@ func set_active(active):
 
 func view_items(items: Dictionary):
 	var button = Button.new()
-	button.rect_min_size = Vector2(100, 100)
-	button.icon_align = HALIGN_CENTER
-	
-	var row := HBoxContainer.new()
-	
-	var spacer_width := 15
-	var max_width:int = items_list.rect_size.x
-	var button_count := 0
-	var working_width := 0
-	while working_width - spacer_width < max_width:
-		button_count += 1
-		working_width += button.rect_min_size.x + spacer_width
-	var remainder:float = max_width - working_width
-	spacer_width += int(remainder/(button_count - 1))
-	row.add_constant_override("separation", spacer_width)
-	
-	
-	var working_row: HBoxContainer = row.duplicate()
-	
 	var player_button: Button = button.duplicate()
-	player_button.icon = player_description.icon
+	player_button.text = "You"
+	player_button.icon = player_description.custom_icon
 	var _y = player_button.connect("focus_entered", self, "_on_item_focused", [player_description])
-	working_row.add_child(player_button)
+	items_list.add_child(player_button)
 	
-	var in_row := 1
-	for k in items.keys():
-		var item: ItemDescription = items[k]
+	var sorted_items = items.values()
+	sorted_items.sort_custom(self, "sort_items")
+	
+	for item in sorted_items:
 		var b: Button = button.duplicate()
-		b.icon = item.icon
+		b.text = item.full_name
+		if item.custom_icon:
+			b.icon = item.custom_icon
+		else:
+			b.icon = DEFAULT_ICONS[item.category]
 		var _x = b.connect("focus_entered", self, "_on_item_focused", [item])
-		working_row.add_child(b)
-		in_row += 1
-		if in_row >= button_count:
-			items_list.add_child(working_row)
-			working_row = row.duplicate()
-	if working_row and working_row.get_child_count() > 0:
-		items_list.add_child(working_row)
-	player_button.call_deferred("grab_focus")
+		items_list.add_child(b)
+	
+	player_button.grab_focus()
 
 func _on_item_focused(item: ItemDescription):
 	clear(sub_items)
@@ -105,6 +93,14 @@ func _on_item_focused(item: ItemDescription):
 			l2.text = str(Global.count(i2))
 			sub_items.add_child(l1)
 			sub_items.add_child(l2)
+
+func sort_items(a: ItemDescription, b:ItemDescription):
+	if a.category < b.category:
+		return true
+	elif b.category < a.category:
+		return false
+	else:
+		return a.full_name < b.full_name
 
 func clear(node: Node):
 	for c in node.get_children():
