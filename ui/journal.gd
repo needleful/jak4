@@ -48,13 +48,6 @@ func get_image(category: String, subject: String) -> Texture:
 		var r = ResourceLoader.load(path) as Texture
 		if r:
 			return r
-	
-	var default_path: String= image_path % [category, "default"]
-	if ResourceLoader.exists(default_path):
-		var r = ResourceLoader.load(default_path) as Texture
-		if r:
-			return r
-	print_debug("No default image for notes category: ", category)
 	return null
 	
 func populate_list(type: int):
