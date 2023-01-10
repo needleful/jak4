@@ -28,7 +28,6 @@ func _notification(what):
 		set_active(visible)
 
 func set_active(active):
-	Global.get_player().set_camera_render(!active)
 	if active:
 		notes.hide()
 		starting_item = null

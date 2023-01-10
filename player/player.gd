@@ -1953,6 +1953,16 @@ func show_specific_item(item):
 	icon.show()
 	count.show()
 
+func disable():
+	set_process_input(false)
+	set_process(false)
+	set_physics_process(false)
+	cam_rig.set_process_input(false)
+	ui.set_process_input(false)
+	gun.set_process_input(false)
+	gun.set_process(false)
+	ui.hide()
+
 func _on_vis_timer_timeout():
 	$ui/gameing/inventory.hide()
 	if gun.state == Gun.State.Hidden:

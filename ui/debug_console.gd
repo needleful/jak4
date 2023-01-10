@@ -16,11 +16,12 @@ func _input(event):
 	elif event.is_action_pressed("ui_down"):
 		view_history(+1)
 
-func set_active(a: bool):
-	set_process_input(a)
-	if a:
-		line_edit.call_deferred("grab_focus")
-		line_edit.text = ""
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_process_input(visible)
+		if visible:
+			line_edit.call_deferred("grab_focus")
+			line_edit.text = ""
 
 func _on_text_entered(new_text):
 	history.append(new_text)

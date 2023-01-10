@@ -44,7 +44,6 @@ func _notification(what):
 		set_active(visible)
 
 func set_active(active):
-	Global.get_player().set_camera_render(!active)
 	if active:
 		viewport.size = view_window.rect_size
 		clear(items_list)

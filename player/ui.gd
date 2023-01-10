@@ -59,14 +59,17 @@ func set_mode(m):
 	var should_pause: bool = (m == Mode.Paused or m == Mode.DebugConsole)
 	if !should_pause:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	var toggled_pause := false
 	if should_pause and !get_tree().paused:
+		toggled_pause = true
 		mode_before_pause = mode
 	get_tree().paused = should_pause
 	
-	if m == Mode.Paused:
-		take_screen_shot()
-	else:
+	if m != Mode.Paused:
+		print("Rendering player camera")
 		Global.get_player().set_camera_render(true)
+	elif toggled_pause:
+		take_screen_shot()
 
 	mode = m
 	var i = 0

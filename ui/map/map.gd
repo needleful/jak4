@@ -98,7 +98,6 @@ func _notification(what):
 		set_active(visible)
 
 func set_active(a):
-	Global.get_player().set_camera_render(!a)
 	reticle.global_position = OS.window_size/2
 	zoom_scale = 1
 	scroll_area.scale = Vector2(1, 1)

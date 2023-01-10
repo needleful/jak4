@@ -1,7 +1,5 @@
 extends Control
 
-signal pause_toggled(paused)
-
 var level := 0
 onready var ui := get_parent().get_parent().get_parent()
 var show_background = true
@@ -16,7 +14,6 @@ func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		if level == 0:
 			ui.unpause()
-			get_tree().set_input_as_handled()
 		else:
 			set_level(level - 1)
 
@@ -30,11 +27,9 @@ func set_active(active):
 		set_level(0)
 	else:
 		save_settings()
-	emit_signal("pause_toggled", active)
 	set_process_input(active)
 
 func set_level(l: int):
-	print("level: ", l)
 	if l < 0:
 		l = 0
 	if l > 2:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -29,6 +29,12 @@
 [ext_resource path="res://entities/env/train_set/bridge_slant_straight.tscn" type="PackedScene" id=27]
 [ext_resource path="res://entities/env/train_set/column-10m.tscn" type="PackedScene" id=28]
 [ext_resource path="res://entities/env/train_set/20m-1v-slant_to_straight.tscn" type="PackedScene" id=29]
+[ext_resource path="res://entities/env/train_set/locomotive.tscn" type="PackedScene" id=30]
+[ext_resource path="res://entities/env/train_set/passenger_cart.tscn" type="PackedScene" id=31]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=32]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=33]
+[ext_resource path="res://entities/one_time/end_train.gd" type="Script" id=34]
+[ext_resource path="res://dialog/main/ending_train.dialog" type="Resource" id=35]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -136,6 +142,77 @@ _data = {
 _data = {
 "points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 9.70836, -2.87169, -148.43, 2.27019, -0.307899, -4.73932, -2.27019, 0.307899, 4.73932, 7.62447, -0.241027, -141.017, 0.690536, -0.197178, -7.47269, -0.690536, 0.197178, 7.47269, -0.738384, -0.0822792, -111.935, -0.340023, 0.0818214, -5.34735, 0.340023, -0.0818214, 5.34735, -0.598091, -0.213711, 119.125, 0.0179501, -0.20308, -3.98026, -0.0179501, 0.20308, 3.98026, -0.380657, -1.09037, 132.382, -0.0976124, -0.0757265, -4.30595, 0.0976124, 0.0757265, 4.30595, -1.01856, -2.24765, 181.363, 0, 0, 0, 0, 0, 0, -21.4962, -2.27494, 206.097, 0, 0, 0, 0, 0, 0, -25.6411, -5.08038, 211.473 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="SphereShape" id=12]
+
+[sub_resource type="Animation" id=13]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("fade:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "end_game"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("fade:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "go_to_credits"
+} ]
 }
 
 [node name="chunk049" instance=ExtResource( 1 )]
@@ -425,3 +502,68 @@ __meta__ = {
 
 [node name="Path" type="Path" parent="rail/rail_gravel2" index="0"]
 curve = SubResource( 11 )
+
+[node name="end_train" type="Spatial" parent="rail" index="14"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -57.2415, 0, -19.8133 )
+script = ExtResource( 34 )
+
+[node name="locomotive" parent="rail/end_train" index="0" instance=ExtResource( 30 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2906, 2.00405, -0.0332413 )
+
+[node name="passenger_cart" parent="rail/end_train/locomotive" index="3" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 14.9983, -0.842084, 0 )
+
+[node name="passenger_cart2" parent="rail/end_train/locomotive" index="4" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 27.1537, -0.782406, 0 )
+
+[node name="passenger_cart3" parent="rail/end_train/locomotive" index="5" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 39.2175, -0.782406, -7.62939e-06 )
+
+[node name="passenger_cart4" parent="rail/end_train/locomotive" index="6" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 51.5175, -0.782406, -1.52588e-05 )
+
+[node name="passenger_cart5" parent="rail/end_train/locomotive" index="7" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 63.6258, -0.782406, -3.8147e-05 )
+
+[node name="goodbye" type="Area" parent="rail/end_train" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.9091, 0.397475, 3.51949 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 32 )
+dialog_sequence = ExtResource( 35 )
+main_speaker = NodePath("..")
+
+[node name="dialog_circle" parent="rail/end_train/goodbye" index="0" instance=ExtResource( 33 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="rail/end_train/goodbye" index="1"]
+shape = SubResource( 12 )
+
+[node name="npc2" parent="rail/end_train" index="2" instance=ExtResource( 18 )]
+transform = Transform( 0.941054, 0, 0.338257, 0, 1, 0, -0.338257, 0, 0.941054, 32.0701, 0.304795, 3.54254 )
+visual_name = "Traveller"
+
+[node name="npc3" parent="rail/end_train" index="3" instance=ExtResource( 18 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 33.3183, 0.304793, 4.47469 )
+visual_name = "Traveller"
+
+[node name="npc4" parent="rail/end_train" index="4" instance=ExtResource( 18 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 44.7468, 0.304794, 3.75823 )
+visual_name = "Traveller"
+
+[node name="npc5" parent="rail/end_train" index="5" instance=ExtResource( 18 )]
+transform = Transform( 0.155258, 0, 0.987874, 0, 1, 0, -0.987874, 0, 0.155258, 56.4168, 0.660016, 7.27045 )
+visual_name = "Child"
+model_scale = 0.9
+sitting = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rail/end_train" index="6"]
+pause_mode = 2
+anims/RESET = SubResource( 13 )
+anims/end_game = SubResource( 14 )
+
+[node name="fade" type="ColorRect" parent="rail/end_train" index="7"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )

@@ -7,7 +7,6 @@ func _notification(what):
 		set_active(visible)
 
 func set_active(a):
-	Global.get_player().set_camera_render(!a)
 	if a:
 		$buttons/new_game.grab_focus()
 
