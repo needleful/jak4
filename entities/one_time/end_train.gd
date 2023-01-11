@@ -10,4 +10,4 @@ func end_game():
 	get_tree().paused = true
 
 func go_to_credits():
-	get_tree().change_scene("res://ui/credits_screen.tscn")
+	var _x = get_tree().change_scene("res://ui/credits_screen.tscn")

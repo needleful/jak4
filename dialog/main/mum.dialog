@@ -70,7 +70,12 @@
 		[You] Hi Mum.
 		Hello again, Jackie. Did you need something?
 		{goto("main_loop")}
-	{otherwise if !Global.stat("mum/network")}
+	{otherwise if !Global.stat("mum/end")}
+		[You] Hello again, mum.
+		Jackie...
+		[You] Is something wrong?
+		{main_speaker.end_game()}...
+		* There is something behind you
 
 {otherwise}
 	{talked == 0}

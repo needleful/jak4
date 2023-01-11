@@ -13,9 +13,6 @@ func set_active(a):
 	set_process_input(a)
 	if a:
 		safe_set_tab(tabs.current_tab)
-	if !a:
-		var c = tabs.get_current_tab_control()
-	set_process_input(a)
 
 func next():
 	var c = tabs.current_tab + 1

@@ -77,6 +77,7 @@ onready var audio := $audio
 
 onready var camera_rig := $"../camera_rig"
 onready var hover_board := $Armature/Skeleton/hover_board
+onready var aim_reference := $Armature/Skeleton/lumbar/body_reference
 
 var item_sound := 0
 var move_blend:= 0.0
@@ -300,9 +301,9 @@ func play_pickup_sound(item):
 func hold_gun(blend: float):
 	anim["parameters/GunHold/blend_amount"] = blend
 	if blend:
-		player.show_ammo()
+		player.ui.show_ammo()
 	else:
-		player.hide_ammo()
+		player.ui.hide_ammo()
 
 func weapons_locked():
 	return player.is_locked()
@@ -313,7 +314,20 @@ func track_weapon(weapon: String):
 func blend_gun(active: float):
 	anim["parameters/Gun/blend_amount"] = active*0.9
 
-func aim_gun(aim: Vector2, aiming: bool):
+func target_aim(target_dir: Vector3) -> Vector2:
+	var aim_basis:Basis = aim_reference.global_transform.basis
+	var y_cur: Vector3 = aim_basis.z
+	var y_tar: Vector3 = target_dir.slide(aim_basis.y)
+	var y_axis: Vector3 = y_cur.cross(y_tar).normalized()
+	var y_angle: float = y_cur.angle_to(y_tar)
+	
+	return Vector2(
+		-y_angle/(PI/2)*sign(aim_basis.y.dot(y_axis)),
+		target_dir.normalized().y
+	)
+
+func aim_gun(dir: Vector3, aiming: bool):
+	var aim = target_aim(dir)
 	anim["parameters/Aim/blend_position"] = aim
 	camera_rig.set_aiming(aiming)
 

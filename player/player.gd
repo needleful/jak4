@@ -5,6 +5,7 @@ signal jumped
 signal died
 
 const GRAVITY := Vector3.DOWN*24
+export(bool) var doppleganger := false
 
 # Movement
 const SPEED_WALK := 1.5
@@ -245,8 +246,6 @@ var ledge_local_position : Vector3
 # Global transform
 var ledge_last_transform : Transform
 
-onready var equipment_inventory := {}
-
 onready var equipped_item : Usable
 # enemies don't attack you
 var do_not_disturb := false
@@ -321,51 +320,43 @@ var water_depth := 0.0
 # Nodes
 onready var cam_rig := $camera_rig
 onready var cam_yaw := $camera_rig/yaw
-onready var mesh := $jackie
+onready var mesh := $body_mesh
 onready var crouch_head := $crouchHeadArea
 onready var intention := $intention
 
 onready var ground_area := $groundArea
 onready var climb_area := $climbArea
 
-onready var ledgeCastLeft := $jackie/leftHandCast
-onready var ledgeCastRight := $jackie/rightHandCast
-onready var ledgeCastCenter := $jackie/centerCast
-onready var ledgeCastCeiling := $jackie/ceilingCast
-onready var ledge_area := $jackie/ledge_area
-onready var ledgeRef := $jackie/reference
+onready var ledgeCastLeft := $body_mesh/leftHandCast
+onready var ledgeCastRight := $body_mesh/rightHandCast
+onready var ledgeCastCenter := $body_mesh/centerCast
+onready var ledgeCastCeiling := $body_mesh/ceilingCast
+onready var ledge_area := $body_mesh/ledge_area
+onready var ledgeRef := $body_mesh/reference
 
-onready var lunge_hitbox := $jackie/attack_lunge
-onready var spin_hitbox := $jackie/attack_spin
-onready var roll_hitbox := $jackie/attack_roll
-onready var uppercut_hitbox := $jackie/attack_uppercut
-onready var dive_start_hitbox := $jackie/attack_dive_start
-onready var dive_end_hitbox := $jackie/attack_dive_end
+onready var lunge_hitbox := $body_mesh/attack_lunge
+onready var spin_hitbox := $body_mesh/attack_spin
+onready var roll_hitbox := $body_mesh/attack_roll
+onready var uppercut_hitbox := $body_mesh/attack_uppercut
+onready var dive_start_hitbox := $body_mesh/attack_dive_start
+onready var dive_end_hitbox := $body_mesh/attack_dive_end
 
 onready var hover_floor_finder := $hover_floor_finder
 onready var hover_cast := $hover_cast
 onready var hover_area := $hover_area
-
-onready var health_bar := $ui/gameing/stats/health/base
-onready var stamina_bar := $ui/gameing/stats/stamina/base
-onready var armor_bar := $ui/gameing/stats/health/extra
-onready var energy_bar := $ui/gameing/stats/stamina/extra
-onready var equipment := $ui/gameing/equipment
 
 onready var water_cast := $water_cast
 
 onready var ui := $ui
 onready var game_ui := $ui/gameing/custom_game
 
-onready var coat_zone := $jackie/the_coat_zone
-onready var gun := $jackie/Armature/Skeleton/gun
-onready var lantern := $jackie/Armature/Skeleton/coat_tails/lantern
+onready var coat_zone := $body_mesh/the_coat_zone
+onready var gun := $body_mesh/Armature/Skeleton/gun
+onready var lantern := $body_mesh/Armature/Skeleton/coat_tails/lantern
 export(PackedScene) var flag : PackedScene
 
 var held_item
-var choosing_item := false
 const TIME_ITEM_CHOOSE := 0.25
-var equipment_path_f := "res://items/usable/%s.gd"
 var timers := PoolRealArray()
 var applied_ground_velocity := Vector3.ZERO
 
@@ -381,39 +372,14 @@ var input_buffer := {
 	"combat_spin":INF,
 }
 
-const VISIBLE_ITEMS := [
-	"bug",
-	"capacitor",
-	"gem",
-]
-
-const UPGRADE_ITEMS := [
-	"armor",
-	"damage_up",
-	"health_up",
-	"jump_height_up",
-	"move_speed_up",
-	"stamina_booster",
-	"stamina_up",
-	"hover_speed_up"
-]
-
-var AMMO := {
-	"pistol" : 100,
-	"wave_shot" : 70,
-	"grav_gun" : 40
-}
-
-const WEAPONS := [
-	"wep_pistol",
-	"wep_wave_shot",
-	"wep_grav_gun",
-	"wep_time_gun"
-]
-
 onready var debug = $ui/gameing/debug
 
 func _ready():
+	if doppleganger:
+		set_process_input(false)
+		set_process(false)
+		set_physics_process(false)
+		return
 	if Global.valid_game_state:
 		global_transform.origin = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
@@ -424,18 +390,12 @@ func _ready():
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
-		
 	set_state(State.Ground)
-	var _x = Global.connect("item_changed", self, "on_item_changed")
-	_x = $ui/dialog/viewer.connect("exited", self, "_on_dialog_exited")
-	_x = $ui/dialog/viewer.connect("event_with_source", self, "_on_dialog_event")
-	update_inventory(true)
 	health = max_health
 	stamina = max_stamina
-	update_health()
 	gun.camera = cam_rig.camera
-	equip(0)
 	last_ground_origin = global_transform.origin
+	ui.activate()
 
 func _input(event):
 	if can_talk() and event.is_action_pressed("dialog_coat") and !empty(coat_zone):
@@ -449,15 +409,15 @@ func _input(event):
 			if new_dist < current_dist:
 				best_trade = b
 		best_trade.start_coat_trade(self)
-	elif !choosing_item and event.is_action_released("use_item") and equipped_item and equipped_item.can_use():
+	elif !ui.choosing_item and event.is_action_released("use_item") and equipped_item and equipped_item.can_use():
 		equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
-		show_inventory()
-	elif choosing_item:
+		ui.show_inventory()
+	elif ui.choosing_item:
 		if event.is_action_pressed("ui_up"):
-			equip_previous()
+			ui.equip_previous()
 		elif event.is_action_pressed("ui_down"):
-			equip_next()
+			ui.equip_next()
 	if !get_tree().paused:
 		for e in input_buffer.keys():
 			if event.is_action_pressed(e):
@@ -1115,23 +1075,6 @@ func _physics_process(delta):
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
-	$ui/gameing/debug/stats/a4.text = "Gr: " + str(ground_normal)
-	if after(TIME_ITEM_CHOOSE,
-		equipment_inventory.size() > 1 and holding("choose_item"),
-		TIMERS_MAX
-	):
-		choosing_item = true
-		equipment.open()
-	elif choosing_item and !holding("choose_item"):
-		choosing_item = false
-		equipment.close()
-
-func _process(_delta):
-	var scn = get_tree().current_scene
-	if scn.has_method("get_time"):
-		$ui/gameing/debug/stats/a10.text = "Time: " + str(scn.get_time())
-	update_stamina()
-	$ui/gameing/debug/stats/a7.text = str(timers)
 
 func after(time: float, condition := true, id := 0):
 	if id >= timers.size():
@@ -1160,17 +1103,9 @@ func empty(area: Area):
 
 func prepare_save():
 	Global.game_state.current_coat = current_coat
-	$ui/gameing/saveStats/AnimationPlayer.play("save_start")
 
 func complete_save():
-	$ui/gameing/saveStats/AnimationPlayer.queue("save_complete")
-
-func update_inventory(startup:= false):
-	for item in Global.game_state.inventory.keys():
-		on_item_changed(item, 0, Global.count(item), startup)
-	for item in UPGRADE_ITEMS:
-		on_item_changed(item, 0, Global.count(item), startup)
-	$ui/gameing/weapon/ammo/ammo_label.text = str(Global.count(current_weapon))
+	pass
 
 func get_target_ref():
 	return global_transform.origin + (Vector3.UP*0.5 if is_crouching() else Vector3.UP*0.75)
@@ -1178,193 +1113,17 @@ func get_target_ref():
 func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
-func on_item_changed(item: String, change: int, count: int, startup := false):
-	if item in VISIBLE_ITEMS:
-		if !startup and !Global.stat("tutorial/items"):
-			var _x = Global.add_stat("tutorial/items")
-			show_prompt(["show_inventory"], "Show Inventory")
-		var l_count: Label = get_node("ui/gameing/inventory/"+item+"_count")
-		l_count.text = str(count)
-		if change != 0:
-			var added: Label = get_node("ui/gameing/inventory/"+item+"_added")
-			var c = change
-			if added.modulate.a > 0.01:
-				var old_added = int(added.text)
-				c = change + old_added
-			added.text = "+ "+str(c) if c > 0 else "- "+str(abs(c))
-			var anim = added.get_node("AnimationPlayer")
-			anim.stop()
-			anim.play("show")
-		show_specific_item(item)
-	elif item in WEAPONS:
-		if count > 0:
-			gun.add_weapon(item)
-			gun.show_weapon()
-			show_ammo()
-			if !startup:
-				match item:
-					"wep_pistol":
-						show_prompt(["wep_1"], tr("Pistol"))
-					"wep_wave_shot":
-						show_prompt(["wep_2"], tr("Bubble Shot"))
-					"wep_grav_gun":
-						show_prompt(["wep_3"], tr("Gravity Cannon"))
-					"wep_time_gun":
-						show_prompt(["wep_4"], tr("Time Gun"))
-		else:
-			gun.remove_weapon(item)
-	elif current_weapon == item:
-		$ui/gameing/weapon/ammo/ammo_label.text = str(count)
-		if current_weapon and !$ui/gameing/weapon.visible:
-			show_ammo()
-	else:
-		match item:
-			"health_up":
-				var health_up := count
-				var h_factor = (1.0 + HEALTH_UP_BOOST*health_up)
-				max_health = DEFAULT_MAX_HEALTH*h_factor
-				health_bar.max_value = max_health
-				health_bar.rect_min_size.x = HEALTH_BAR_DEFAULT_SIZE*h_factor
-			"stamina_up":
-				var stamina_up := count
-				var s_factor = (1.0 + STAMINA_UP_BOOST*stamina_up)
-				max_stamina = DEFAULT_MAX_STAMINA*s_factor
-				stamina_bar.max_value = max_stamina
-				stamina_bar.rect_min_size.x = STAMINA_BAR_DEFAULT_SIZE*s_factor
-				stamina_factor = (1 + STAMINA_RECOVERY_BOOST*count)
-			"jump_height_up":
-				jump_factor = (1 + JUMP_UP_BOOST*count)
-			"move_speed_up":
-				speed_factor = (1 + SPEED_UP_BOOST*count)
-			"move_speed_up":
-				stamina_drain_factor = (1 + SPEED_STAMINA_BOOST*count)
-			"damage_up":
-				var damage_up_count := count
-				damage_factor = (1 + DAMAGE_UP_BOOST*damage_up_count)
-				max_damage = damage_up_count >= MAX_DAMAGE_UP
-			"armor":
-				var new_armor:int = count
-				if new_armor > armor:
-					extra_health += (new_armor - armor)*ARMOR_BOOST
-				armor = new_armor
-				armor_bar.rect_min_size.x = ARMOR_BAR_DEFAULT_SIZE*armor
-				armor_bar.visible = armor > 0 and extra_health > 0
-				update_health()
-			"stamina_booster":
-				var new_energy := count
-				if new_energy > energy:
-					extra_stamina = new_energy*EXTRA_STAMINA_BOOST
-				energy = new_energy
-				energy_bar.visible = energy > 0
-			"hover_speed_up":
-				hover_speed_factor = 1.0 + HOVER_SPEED_BOOST*count
-			"hover_scooter":
-				if !startup:
-					show_prompt(["hover_toggle"], "Use hover-scooter")
-			_:
-				var old_item_count := equipment_inventory.size()
-				if ResourceLoader.exists(equipment_path_f % item):
-					if count <= 0 and item in equipment_inventory:
-						if equipment_inventory[item] == equipped_item:
-							if equipment_inventory.size() > 1:
-								equip_previous()
-							elif equipped_item:
-								equipped_item.unequip()
-								equipped_item = null
-						var _x = equipment_inventory.erase(item)
-					elif count > 0 and !(item in equipment_inventory):
-						var s: Script = ResourceLoader.load(equipment_path_f % item)
-						if s:
-							equipment_inventory[item] = s.new()
-							if equipped_item:
-								equipped_item.unequip()
-							equipped_item = equipment_inventory[item]
-							equipped_item.equip()
-							update_equipment()
-				if !startup and equipment_inventory.size() > old_item_count:
-					if equipment_inventory.size() == 1:
-						show_prompt(["use_item"], tr("Use Item"))
-					else:
-						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
-
-func debug_show_inventory():
-	var state_viewer: Control = $ui/gameing/debug/game_state
-	for c in state_viewer.get_children():
-		state_viewer.remove_child(c)
-	add_label(state_viewer, "Inventory:")
-	for i in Global.game_state.inventory:
-		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
-
 func play_animation(animation):
 	mesh.play_custom(animation)
 
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath
 
-func add_label(box: Control, text: String):
-	var l := Label.new()
-	l.text = text
-	box.add_child(l)
-
 func set_current_coat(coat: Coat, play_sound:= true):
 	current_coat = coat
 	mesh.show_coat(coat)
 	if play_sound:
 		mesh.play_pickup_sound("coat")
-
-func update_health():
-	health_bar.max_value = max_health
-	health_bar.value = health
-	health_bar.value = health
-	armor_bar.max_value = armor*ARMOR_BOOST
-	armor_bar.value = extra_health
-
-func update_stamina():
-	energy_bar.rect_min_size.x = extra_stamina*EXTRA_STAMINA_BAR_SIZE
-	stamina_bar.max_value = max_stamina
-	stamina_bar.value = stamina
-func equip_previous():
-	if equipment_inventory.size() == 1:
-		return update_equipment()
-	else:
-		var index = equipment_inventory.values().find(equipped_item)
-		equip(index - 1)
-
-func equip_next():
-	if equipment_inventory.size() == 1:
-		return update_equipment()
-	else:
-		var index = equipment_inventory.values().find(equipped_item)
-		equip(index + 1)
-
-func equip(index):
-	if equipment_inventory.size() == 0:
-		return
-	if equipped_item:
-		equipped_item.unequip()
-	var ln = equipment_inventory.size()
-	while index < 0:
-		index += ln
-	while index >= ln:
-		index -= ln
-	equipped_item = equipment_inventory.values()[index]
-	equipped_item.equip()
-	update_equipment()
-
-func update_equipment():
-	var values = equipment_inventory.values()
-	var index = values.find(equipped_item)
-	if index >= 0:
-		equipment.temp_show()
-		var prev_index = index - 1
-		var next_index = index + 1
-		var ln = values.size()
-		if prev_index < 0:
-			prev_index += ln
-		if next_index >= ln:
-			next_index -= ln
-		equipment.preview(values[index], values[prev_index], values[next_index])
-
 func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,
@@ -1606,9 +1365,9 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	var center:bool = check_cast(ledgeCastCenter, min_dot)
 	# debug
 	if true:
-		debug_cast(ledgeCastCenter, min_dot, $jackie/debug_center)
-		debug_cast(ledgeCastLeft, min_dot, $jackie/debug_left)
-		debug_cast(ledgeCastRight, min_dot, $jackie/debug_right)
+		debug_cast(ledgeCastCenter, min_dot, $body_mesh/debug_center)
+		debug_cast(ledgeCastLeft, min_dot, $body_mesh/debug_left)
+		debug_cast(ledgeCastRight, min_dot, $body_mesh/debug_right)
 	return center or left or right
 
 func check_cast(cast: RayCast, min_dot: float):
@@ -1727,7 +1486,7 @@ func take_damage(damage: int, direction: Vector3, _source) -> bool:
 		var _x = Global.add_item("armor", new_armor - armor)
 		armor = new_armor
 	health -= damage
-	update_health()
+	ui.update_health()
 	if health <= 0:
 		die()
 		return true
@@ -1761,7 +1520,7 @@ func respawn():
 	heal()
 	global_transform.origin = Global.game_state.checkpoint_position
 	TimeManagement.resume()
-	hide_prompt()
+	ui.hide_prompt()
 	emit_signal("died")
 
 func teleport_to(t: Transform):
@@ -1775,7 +1534,7 @@ func heal():
 	stamina = max_stamina
 	extra_stamina = energy*EXTRA_STAMINA_BOOST
 	extra_health = armor*ARMOR_BOOST
-	update_health()
+	ui.update_health()
 
 func drain_stamina(amount):
 	var diff = stamina - amount/stamina_drain_factor
@@ -1798,7 +1557,7 @@ func can_dash() -> bool:
 
 func place_flag():
 	var f = mesh.release_item()
-	Global.place_flag(f, $jackie/flag_ref.global_transform)
+	Global.place_flag(f, $body_mesh/flag_ref.global_transform)
 	Global.save_checkpoint(global_transform.origin)
 
 func can_save():
@@ -1879,32 +1638,6 @@ func gravity_stun(dam):
 	if !dead:
 		set_state(State.GravityStun)
 
-func show_prompt(actions: Array, text: String):
-	$ui/gameing/tutorial/prompt_timer.stop()
-	if actions.size() >= 1:
-		$ui/gameing/tutorial/input_prompt.show()
-		$ui/gameing/tutorial/input_prompt.action = actions[0]
-	else:
-		$ui/gameing/tutorial/input_prompt.hide()
-	if actions.size() >= 2:
-		$ui/gameing/tutorial/plus.show()
-		$ui/gameing/tutorial/input_prompt2.show()
-		$ui/gameing/tutorial/input_prompt2.action = actions[1]
-	else:
-		$ui/gameing/tutorial/plus.hide()
-		$ui/gameing/tutorial/input_prompt2.hide()
-
-	$ui/gameing/tutorial/Label.text = text
-	$ui/gameing/tutorial.show()
-	$ui/gameing/tutorial/prompt_timer.start()
-
-func hide_prompt():
-	$ui/gameing/tutorial.hide()
-	$ui/gameing/tutorial/prompt_timer.stop()
-
-func _on_prompt_timer_timeout():
-	$ui/gameing/tutorial.hide()
-
 func celebrate(id: String, item: Spatial, local := Transform()):
 	held_item = item
 	set_state(State.GetItem)
@@ -1914,7 +1647,7 @@ func celebrate(id: String, item: Spatial, local := Transform()):
 		$ui/gameing/item_get.show_get(id)
 
 func get_item(item: ItemPickup):
-	if item.item_id == "capacitor" or item.item_id in UPGRADE_ITEMS or item.celebrate:
+	if item.item_id == "capacitor" or item.item_id in ui.UPGRADE_ITEMS or item.celebrate:
 		if item.has_node("preview"):
 			var preview = item.get_node("preview")
 			var t = preview.transform
@@ -1927,32 +1660,6 @@ func get_item(item: ItemPickup):
 	else:
 		mesh.play_pickup_sound(item.item_id)
 
-func show_inventory():
-	for g in $ui/gameing/inventory.get_children():
-		if g is CanvasItem:
-			g.visible = true
-	$ui/gameing/inventory.show()
-	$ui/gameing/inventory/vis_timer.start()
-	show_ammo()
-	update_equipment()
-
-func show_specific_item(item):
-	if !$ui/gameing/inventory.visible:
-		for g in $ui/gameing/inventory.get_children():
-			if g is CanvasItem:
-				g.visible = false
-		$ui/gameing/inventory.show()
-	$ui/gameing/inventory/vis_timer.start()
-	var count = get_node("ui/gameing/inventory/"+item+"_count")
-	var icon = get_node("ui/gameing/inventory/"+item+"_icon")
-	var added = get_node("ui/gameing/inventory/"+item+"_added")
-	if !icon or !count or !added:
-		print_debug("BUG: no inventory for ", item)
-		return
-	added.show()
-	icon.show()
-	count.show()
-
 func disable():
 	set_process_input(false)
 	set_process(false)
@@ -1962,11 +1669,6 @@ func disable():
 	gun.set_process_input(false)
 	gun.set_process(false)
 	ui.hide()
-
-func _on_vis_timer_timeout():
-	$ui/gameing/inventory.hide()
-	if gun.state == Gun.State.Hidden:
-		hide_ammo()
 
 func track_weapon(weapon: String):
 	$ui/gameing/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
@@ -1992,17 +1694,9 @@ func track_weapon(weapon: String):
 	else:
 		ammo_ui.hide()
 
-func show_ammo():
-	if current_weapon and current_weapon != "":
-		$ui/gameing/weapon.show()
-
-func hide_ammo():
-	$ui/gameing/weapon.hide()
 
 func shake_camera():
 	pass
-	#if cam_rig.aiming:
-		#$camera_rig/cam_shake.play("shot_shake")
 
 func start_jump(vel:float):
 	can_wall_cling = true
@@ -2143,7 +1837,7 @@ func set_state(next_state: int):
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
-			$jackie/attack_spin/AnimationPlayer.play("spin")
+			$body_mesh/attack_spin/AnimationPlayer.play("spin")
 			mesh.play_spin_kick(max_damage)
 			can_air_spin = false
 			gun.aim_lock()

@@ -117,6 +117,20 @@ height = 0.3
 radius = 0.227975
 height = 0.345514
 
+[sub_resource type="SphereShape" id=66]
+radius = 0.3
+
+[sub_resource type="CapsuleShape" id=8]
+radius = 0.28584
+height = 0.269648
+
+[sub_resource type="CapsuleShape" id=71]
+radius = 0.340094
+height = 0.655353
+
+[sub_resource type="PrismMesh" id=12]
+size = Vector3( 0.2, 0.2, 0.2 )
+
 [sub_resource type="SphereShape" id=6]
 radius = 0.4
 
@@ -727,20 +741,6 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="SphereShape" id=66]
-radius = 0.3
-
-[sub_resource type="CapsuleShape" id=8]
-radius = 0.28584
-height = 0.269648
-
-[sub_resource type="CapsuleShape" id=71]
-radius = 0.340094
-height = 0.655353
-
-[sub_resource type="PrismMesh" id=12]
-size = Vector3( 0.2, 0.2, 0.2 )
-
 [sub_resource type="PrismMesh" id=58]
 size = Vector3( 0.2, 0.2, 0.1 )
 
@@ -771,163 +771,163 @@ enabled = true
 cast_to = Vector3( 0, -2, 0 )
 collision_mask = 8192
 
-[node name="jackie" parent="." instance=ExtResource( 3 )]
+[node name="body_mesh" parent="." instance=ExtResource( 3 )]
 time_scale_response = true
 
-[node name="flag_ref" type="Spatial" parent="jackie"]
+[node name="flag_ref" type="Spatial" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23645, 0.947519, 0.346891 )
 
-[node name="debug_center" type="MeshInstance" parent="jackie"]
+[node name="debug_center" type="MeshInstance" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72277, 0.522455 )
 visible = false
 material_override = SubResource( 44 )
 mesh = SubResource( 43 )
 
-[node name="debug_right" type="MeshInstance" parent="jackie"]
+[node name="debug_right" type="MeshInstance" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 1.68075, 0.364736 )
 visible = false
 material_override = SubResource( 45 )
 mesh = SubResource( 43 )
 
-[node name="debug_left" type="MeshInstance" parent="jackie"]
+[node name="debug_left" type="MeshInstance" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 1.67863, 0.390101 )
 visible = false
 material_override = SubResource( 46 )
 mesh = SubResource( 43 )
 
-[node name="ledge_area" type="Area" parent="jackie"]
+[node name="ledge_area" type="Area" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26954, 0.136381 )
 collision_layer = 0
 collision_mask = 17
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/ledge_area"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/ledge_area"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15776, 0.235825 )
 shape = SubResource( 74 )
 
-[node name="leftHandCast" type="RayCast" parent="jackie"]
+[node name="leftHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0.17, 1.65147, 0.398689 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
 
-[node name="rightHandCast" type="RayCast" parent="jackie"]
+[node name="rightHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, -0.17, 1.65147, 0.398689 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
 
-[node name="centerCast" type="RayCast" parent="jackie"]
+[node name="centerCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 3.01992e-07, 0, 1, 0, -3.01992e-07, 0, 1, 0, 1.70647, 0.536807 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 collision_mask = 17
 
-[node name="ceilingCast" type="RayCast" parent="jackie"]
+[node name="ceilingCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02713, 0.191433 )
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
 
-[node name="reference" type="Position3D" parent="jackie"]
+[node name="reference" type="Position3D" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.535343 )
 
-[node name="attack_lunge" type="Area" parent="jackie"]
+[node name="attack_lunge" type="Area" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42109e-14, 0.65977, 0.530665 )
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_lunge"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_lunge"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0254159, 0, -0.0763994 )
 shape = SubResource( 13 )
 
-[node name="attack_spin" type="Area" parent="jackie"]
+[node name="attack_spin" type="Area" parent="body_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_spin"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_spin"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.489956, 0.40164, 0 )
 shape = SubResource( 33 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="jackie/attack_spin"]
+[node name="CollisionShape2" type="CollisionShape" parent="body_mesh/attack_spin"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.325395, 0 )
 shape = SubResource( 15 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="jackie/attack_spin"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="body_mesh/attack_spin"]
 time_scale_response = false
 anims/RESET = SubResource( 34 )
 anims/spin = SubResource( 35 )
 
-[node name="attack_roll" type="Area" parent="jackie"]
+[node name="attack_roll" type="Area" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.43397, 0 )
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_roll"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_roll"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00123382, -0.0249694, -0.0953637 )
 shape = SubResource( 64 )
 
-[node name="attack_uppercut" type="Area" parent="jackie"]
+[node name="attack_uppercut" type="Area" parent="body_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_uppercut"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_uppercut"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.0808, 0.11483 )
 shape = SubResource( 21 )
 
-[node name="attack_dive_start" type="Area" parent="jackie"]
+[node name="attack_dive_start" type="Area" parent="body_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_dive_start"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_dive_start"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.347216, 0.265631 )
 shape = SubResource( 22 )
 
-[node name="attack_dive_end" type="Area" parent="jackie"]
+[node name="attack_dive_end" type="Area" parent="body_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 4
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/attack_dive_end"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_dive_end"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.198498, 0.0490749 )
 shape = SubResource( 23 )
 
-[node name="the_coat_zone" type="Area" parent="jackie"]
+[node name="the_coat_zone" type="Area" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0624051, 0 )
 visible = false
 collision_layer = 0
 collision_mask = 4096
 
-[node name="CollisionShape" type="CollisionShape" parent="jackie/the_coat_zone"]
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/the_coat_zone"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51068, 1.02734 )
 shape = SubResource( 41 )
@@ -946,6 +946,45 @@ shape = SubResource( 7 )
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.439699, -4.20637e-09 )
 shape = SubResource( 72 )
+
+[node name="groundArea" type="Area" parent="."]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299583, 0 )
+collision_layer = 10
+
+[node name="CollisionShape" type="CollisionShape" parent="groundArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0408306, 0 )
+shape = SubResource( 66 )
+
+[node name="crouchHeadArea" type="Area" parent="."]
+time_scale_response = false
+collision_layer = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.996834, 0 )
+shape = SubResource( 8 )
+
+[node name="climbArea" type="Area" parent="."]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
+collision_layer = 10
+
+[node name="CollisionShape" type="CollisionShape" parent="climbArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.163397, 7.14229e-09 )
+shape = SubResource( 71 )
+
+[node name="intention" type="Spatial" parent="."]
+time_scale_response = false
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="intention"]
+time_scale_response = false
+transform = Transform( -1, 1.50996e-07, -6.60024e-15, 0, -4.37114e-08, -1, -1.50996e-07, -1, 4.37114e-08, 1.32709e-07, 1, -0.431523 )
+visible = false
+mesh = SubResource( 12 )
 
 [node name="camera_rig" type="Node" parent="."]
 time_scale_response = false
@@ -995,7 +1034,7 @@ anims/RESET = SubResource( 30 )
 anims/fadein = SubResource( 31 )
 anims/fadeout = SubResource( 32 )
 
-[node name="ui" type="Control" parent="."]
+[node name="ui" type="Control" parent="." groups=["post_save_object", "pre_save_object"]]
 pause_mode = 2
 time_scale_response = false
 anchor_right = 1.0
@@ -1879,45 +1918,6 @@ time_scale_response = false
 wait_time = 0.1
 one_shot = true
 
-[node name="groundArea" type="Area" parent="."]
-time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299583, 0 )
-collision_layer = 10
-
-[node name="CollisionShape" type="CollisionShape" parent="groundArea"]
-time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0408306, 0 )
-shape = SubResource( 66 )
-
-[node name="crouchHeadArea" type="Area" parent="."]
-time_scale_response = false
-collision_layer = 2
-
-[node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
-time_scale_response = false
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.996834, 0 )
-shape = SubResource( 8 )
-
-[node name="climbArea" type="Area" parent="."]
-time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
-collision_layer = 10
-
-[node name="CollisionShape" type="CollisionShape" parent="climbArea"]
-time_scale_response = false
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.163397, 7.14229e-09 )
-shape = SubResource( 71 )
-
-[node name="intention" type="Spatial" parent="."]
-time_scale_response = false
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
-
-[node name="MeshInstance" type="MeshInstance" parent="intention"]
-time_scale_response = false
-transform = Transform( -1, 1.50996e-07, -6.60024e-15, 0, -4.37114e-08, -1, -1.50996e-07, -1, 4.37114e-08, 1.32709e-07, 1, -0.431523 )
-visible = false
-mesh = SubResource( 12 )
-
 [node name="unlock_timer" type="Timer" parent="."]
 time_scale_response = false
 wait_time = 0.1
@@ -1968,7 +1968,7 @@ shape = SubResource( 73 )
 [connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="." method="_on_prompt_timer_timeout"]
-[connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="." method="_on_vis_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
 [connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]

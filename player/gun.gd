@@ -87,7 +87,7 @@ func _input(event):
 		if !aim_toggle and !can_aim():
 			return
 		aim_toggle = !aim_toggle
-	elif player.choosing_item:
+	elif player.ui.choosing_item:
 		return
 	elif event.is_action_pressed("wep_1") and enabled_wep['wep_pistol']:
 		swap_to("wep_pistol")
@@ -192,20 +192,7 @@ func _process(delta):
 			target_dir = current_dir
 			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
 	# Aiming:
-	if locked_aim or !current_weapon.locks_on:
-		holder.aim_gun(Vector2.ZERO, aiming)
-	else:
-		var y_cur: Vector3 = holder.global_transform.basis.z
-		var y_tar: Vector3 = target_dir.slide(holder.global_transform.basis.y)
-		var y_axis: Vector3 = y_cur.cross(y_tar).normalized()
-		var y_angle: float = y_cur.angle_to(y_tar)
-		
-		var aim := Vector2(
-			-y_angle/(PI/2)*sign(holder.global_transform.basis.y.dot(y_axis)),
-			target_dir.normalized().y
-		)
-			
-		holder.aim_gun(aim, aiming)
+	holder.aim_gun(target_dir, aiming)
 	if laser.visible:
 		laser_cast.update()
 
