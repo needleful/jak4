@@ -1888,37 +1888,32 @@ script = ExtResource( 29 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ui/debug_console"]
 time_scale_response = false
-margin_right = 1479.0
-margin_bottom = 584.0
+margin_right = 2375.0
+margin_bottom = 1064.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ui/debug_console/ScrollContainer"]
 time_scale_response = false
-margin_right = 1479.0
-margin_bottom = 584.0
+margin_right = 2375.0
+margin_bottom = 1064.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="logs" type="VBoxContainer" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_right = 1479.0
-margin_bottom = 548.0
+margin_right = 2375.0
+margin_bottom = 1028.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LineEdit" type="LineEdit" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_top = 552.0
-margin_right = 1479.0
-margin_bottom = 584.0
+margin_top = 1032.0
+margin_right = 2375.0
+margin_bottom = 1064.0
 
 [node name="post_pause_timer" type="Timer" parent="ui"]
-time_scale_response = false
-wait_time = 0.1
-one_shot = true
-
-[node name="unlock_timer" type="Timer" parent="."]
 time_scale_response = false
 wait_time = 0.1
 one_shot = true
@@ -1971,5 +1966,6 @@ shape = SubResource( 73 )
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
 [connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
+[connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
+[connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
-[connection signal="timeout" from="unlock_timer" to="." method="_on_unlock_timer_timeout"]

@@ -1,7 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://entities/enemies/doppleganger/doppleganger_mesh.tscn" type="PackedScene" id=1]
-[ext_resource path="res://player/player.gd" type="Script" id=2]
+[ext_resource path="res://entities/enemies/doppleganger/doppleganger.gd" type="Script" id=2]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -84,6 +84,20 @@ height = 0.9
 [sub_resource type="CapsuleShape" id=7]
 radius = 0.3
 height = 0.3
+
+[sub_resource type="SphereShape" id=66]
+radius = 0.3
+
+[sub_resource type="CapsuleShape" id=8]
+radius = 0.28584
+height = 0.269648
+
+[sub_resource type="CapsuleShape" id=71]
+radius = 0.340094
+height = 0.655353
+
+[sub_resource type="PrismMesh" id=12]
+size = Vector3( 0.2, 0.2, 0.2 )
 
 [node name="doppleganger" type="KinematicBody"]
 script = ExtResource( 2 )
@@ -271,3 +285,42 @@ shape = SubResource( 2 )
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.450713, 0 )
 shape = SubResource( 7 )
+
+[node name="groundArea" type="Area" parent="."]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299583, 0 )
+collision_layer = 10
+
+[node name="CollisionShape" type="CollisionShape" parent="groundArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0408306, 0 )
+shape = SubResource( 66 )
+
+[node name="crouchHeadArea" type="Area" parent="."]
+time_scale_response = false
+collision_layer = 2
+
+[node name="CollisionShape" type="CollisionShape" parent="crouchHeadArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.996834, 0 )
+shape = SubResource( 8 )
+
+[node name="climbArea" type="Area" parent="."]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481154, 0 )
+collision_layer = 10
+
+[node name="CollisionShape" type="CollisionShape" parent="climbArea"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.163397, 7.14229e-09 )
+shape = SubResource( 71 )
+
+[node name="intention" type="Spatial" parent="."]
+time_scale_response = false
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="intention"]
+time_scale_response = false
+transform = Transform( -1, 1.50996e-07, -6.60024e-15, 0, -4.37114e-08, -1, -1.50996e-07, -1, 4.37114e-08, 1.32709e-07, 1, -0.431523 )
+visible = false
+mesh = SubResource( 12 )

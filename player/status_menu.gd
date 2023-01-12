@@ -4,10 +4,16 @@ onready var tabs: TabContainer = $tabs
 onready var ui = get_parent()
 
 func _input(event):
-	if visible and !Global.using_gamepad:
+	if !visible:
+		return
+	if !Global.using_gamepad:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	if visible and tabs.current_tab != 0 and event.is_action_pressed("ui_cancel"):
-		ui.unpause()
+	if event.is_action_pressed("ui_cancel"):
+		var t = tabs.get_current_tab_control()
+		if tabs.current_tab != 0 or t.level == 0:
+			ui.unpause()
+		else:
+			t.set_level(t.level - 1)
 
 func set_active(a):
 	set_process_input(a)

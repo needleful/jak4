@@ -1576,12 +1576,11 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	cam_rig.start_dialog()
 	lock()
 
-func _on_dialog_exited(p_state := PlayerBody.State.Fall):
+func _on_dialog_exited(new_state := State.Ground):
 	Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
-	unlock()
-	set_state(p_state)
+	unlock(new_state)
 
 func _on_dialog_event(id: String, _source: Node):
 	match id:
@@ -1609,17 +1608,13 @@ func lock():
 	$ui/gameing/inventory/vis_timer.stop()
 	$ui/gameing/inventory.hide()
 
-func unlock():
+func unlock(new_state := State.Ground):
 	set_process_input(true)
-	set_state(State.Ground)
-	$unlock_timer.start()
+	set_state(new_state)
 	$ui/gameing/stats.show()
 
 func is_locked() -> bool:
 	return state == State.Locked
-
-func _on_unlock_timer_timeout():
-	set_state(State.Ground)
 
 func is_roll_jumping():
 	return state == State.RollJump or state == State.RollFall or state == State.WaveJumpRoll
@@ -1694,6 +1689,11 @@ func track_weapon(weapon: String):
 	else:
 		ammo_ui.hide()
 
+func show_ammo():
+	ui.show_ammo()
+
+func hide_ammo():
+	ui.hide_ammo()
 
 func shake_camera():
 	pass

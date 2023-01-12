@@ -10,13 +10,6 @@ func _ready():
 	load_settings()
 	hide()
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		if level == 0:
-			ui.unpause()
-		else:
-			set_level(level - 1)
-
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		set_active(visible)
@@ -27,7 +20,6 @@ func set_active(active):
 		set_level(0)
 	else:
 		save_settings()
-	set_process_input(active)
 
 func set_level(l: int):
 	if l < 0:

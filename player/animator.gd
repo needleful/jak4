@@ -72,7 +72,7 @@ onready var custom_loop_node: AnimationNodeAnimation = anim_tree.get_node("Whole
 
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
-onready var player : PlayerBody = get_parent()
+onready var player = get_parent()
 onready var audio := $audio
 
 onready var camera_rig := $"../camera_rig"
@@ -90,7 +90,6 @@ func _input(event):
 
 func _ready():
 	hover_board.hide()
-	$Armature/Skeleton/gun.holder = self
 	var _x = TimeManagement.connect("time_scale_changed", self, "_on_time_scale_changed")
 
 func _on_time_scale_changed(_time_scale):
@@ -301,9 +300,9 @@ func play_pickup_sound(item):
 func hold_gun(blend: float):
 	anim["parameters/GunHold/blend_amount"] = blend
 	if blend:
-		player.ui.show_ammo()
+		player.show_ammo()
 	else:
-		player.ui.hide_ammo()
+		player.hide_ammo()
 
 func weapons_locked():
 	return player.is_locked()
@@ -358,7 +357,6 @@ func stop_hover():
 
 func play_fire():
 	anim["parameters/Fire/active"] = true
-	player.shake_camera()
 
 func hold_item(node: Spatial):
 	held_item = node

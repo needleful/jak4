@@ -6,6 +6,11 @@
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="doppleganger" instance=ExtResource( 1 )]
+sound_roll = null
+sound_roll_jump = null
+sound_lunge_kick = null
+sound_spin_kick = null
+sound_uppercut = null
 
 [node name="coat" parent="Armature/Skeleton" index="0"]
 material_override = ExtResource( 2 )
@@ -24,31 +29,38 @@ material_override = ExtResource( 2 )
 material_override = ExtResource( 2 )
 
 [node name="footLeft" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.04926, 0.0415522, -0.997921, -0.761508, -0.644943, -0.0644446, -0.64628, 0.763099, -0.000127306, 0.118736, 0.108814, -0.00271865 )
+transform = Transform( 0.0492826, 0.0419826, -0.997901, -0.76375, -0.642256, -0.064739, -0.643626, 0.765338, 0.000412502, 0.118656, 0.108842, -0.0023415 )
 
 [node name="footRight" parent="Armature/Skeleton" index="6"]
-transform = Transform( 0.0494437, -0.0417979, 0.997903, 0.762638, -0.643576, -0.0647433, 0.644931, 0.764239, 5.55757e-05, -0.118557, 0.10882, -0.00239712 )
+transform = Transform( 0.0496164, -0.0417041, 0.997898, 0.762863, -0.643303, -0.0648148, 0.644652, 0.764475, -0.000104135, -0.11862, 0.108851, -0.00283346 )
 
 [node name="chest" parent="Armature/Skeleton" index="7"]
-transform = Transform( 1, -9.49708e-06, -0.000146772, 3.18199e-05, 0.988238, 0.152922, 0.000143541, -0.152922, 0.988238, -0.00109612, 1.01887, -0.00285356 )
+transform = Transform( 1, 3.18099e-05, 0.000438795, -9.85068e-05, 0.988238, 0.152926, -0.00042883, -0.152926, 0.988238, -1.73451e-05, 1.01888, -0.0149323 )
+
+[node name="time_trail" parent="Armature/Skeleton/chest" index="0"]
+script = null
 
 [node name="head" parent="Armature/Skeleton" index="8"]
-transform = Transform( 0.999999, -0.00104405, -0.000733731, -0.000517919, 0.193468, -0.981106, 0.00116622, 0.981106, 0.193467, -0.00106205, 1.21091, -0.00176893 )
+transform = Transform( 0.999998, -0.00147072, -0.00150497, -0.00120301, 0.187225, -0.982316, 0.0017264, 0.982316, 0.187222, 6.63383e-05, 1.21081, -0.0132305 )
 
 [node name="gun" parent="Armature/Skeleton" index="9"]
-transform = Transform( 0.720942, -0.116358, 0.683157, -0.109844, -0.992528, -0.0531328, 0.684235, -0.036735, -0.728336, 0.210003, 0.702603, -2.41483e-05 )
+transform = Transform( 0.687258, -0.113179, 0.717544, -0.00291125, -0.988209, -0.153084, 0.726408, 0.103119, -0.679484, 0.211033, 0.705734, 0.0382665 )
+script = null
 
 [node name="handRight" parent="Armature/Skeleton" index="11"]
-transform = Transform( 0.710051, 0.0822811, -0.699326, 0.000697435, -0.993231, -0.116153, -0.70415, 0.0819865, -0.705302, -0.210326, 0.715725, 0.0209749 )
+transform = Transform( 0.688138, 0.0836482, -0.720742, -0.0477226, -0.985964, -0.159993, -0.724009, 0.144493, -0.674487, -0.209892, 0.716828, 0.0417606 )
 
 [node name="knee_left" parent="Armature/Skeleton" index="12"]
-transform = Transform( -0.0287858, 0.0550995, -0.998066, -0.0397897, -0.997751, -0.0539345, -0.998794, 0.03816, 0.0309136, 0.0855745, 0.809199, 0.0175856 )
+transform = Transform( -0.0247134, 0.054114, -0.998229, -0.0652736, -0.99649, -0.0524038, -0.997561, 0.0638628, 0.028159, 0.0866439, 0.809215, 0.00550094 )
 
 [node name="knee_right" parent="Armature/Skeleton" index="13"]
-transform = Transform( -0.0234592, -0.0516433, 0.998391, 0.0424519, -0.997816, -0.0506157, 0.998823, 0.0411962, 0.0255999, -0.0877686, 0.809226, 0.0175819 )
+transform = Transform( -0.0241042, -0.053944, 0.998254, 0.0645821, -0.996542, -0.0522917, 0.997621, 0.0632089, 0.0275042, -0.0866992, 0.80922, 0.00550697 )
 
 [node name="coat_tails" parent="Armature/Skeleton" index="14"]
-transform = Transform( -0.000200869, 0.000178015, -1, 0.000486106, -1, -0.000178088, -1, -0.000486076, 0.000200737, -0.00381434, 0.917751, 0.0275537 )
+transform = Transform( -0.000150061, -4.50796e-06, -1, 0.000504762, -1, 4.45762e-06, -1, -0.000504762, 0.000150023, -0.00273536, 0.917755, 0.0154756 )
+
+[node name="lumbar" parent="Armature/Skeleton" index="15"]
+transform = Transform( 1, 8.52599e-05, 0.000149114, -3.10599e-05, 0.943528, -0.331293, -0.000168941, 0.331293, 0.943528, -2.83762e-05, 0.840868, -0.0370051 )
 
 [node name="AnimationTree" parent="." index="2"]
 parameters/WholeBody/playback = SubResource( 1 )

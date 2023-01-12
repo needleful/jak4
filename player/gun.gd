@@ -54,6 +54,7 @@ var timer_cant_lock_on := 0.0
 const TIME_QUIT_LOCK_ON := 0.25
 
 var target: Node
+export(NodePath) var holder_path
 
 var weapons : Dictionary = {
 	"wep_pistol": load("res://player/weapons/pistol.tscn").instance(),
@@ -70,6 +71,8 @@ var enabled_wep : Dictionary = {
 }
 
 func _ready():
+	if has_node(holder_path):
+		holder = get_node(holder_path)
 	call_deferred("set_state", State.NoWeapon, true)
 
 func _input(event):

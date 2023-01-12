@@ -47,6 +47,8 @@ const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
 func _input(event):
+	if !visible:
+		return
 	if shopping:
 		if event.is_action_pressed("ui_cancel"):
 			set_shopping(false)
@@ -420,7 +422,7 @@ func skip():
 func noskip():
 	return RESULT_NOSKIP
 
-func exit(state := PlayerBody.State.Fall):
+func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)

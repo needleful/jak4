@@ -63,8 +63,6 @@ var choosing_item := false
 
 func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
-	_x = $dialog/viewer.connect("exited", player, "_on_dialog_exited")
-	_x = $dialog/viewer.connect("event_with_source", player, "_on_dialog_event")
 	set_mode(Mode.Gameing)
 	set_process_input(true)
 
@@ -351,6 +349,7 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	dialog.start(source, sequence, speaker, starting_label)
 
 func set_mode(m):
+	print_stack()
 	if m < 0 or m >= get_child_count():
 		print_debug("Bad mode! ", m)
 		return

@@ -9,5 +9,5 @@ func _notification(what):
 func set_active(a):
 	if !a:
 		last_focused = get_focus_owner()
-	elif last_focused:
+	elif is_instance_valid(last_focused):
 		last_focused.grab_focus()
