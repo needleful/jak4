@@ -5,12 +5,11 @@
 	[You] W-what? You already know my name?
 	Of course, love. I am the Medium, am I not? And you are looking to commune with your mother, correct?
 	> ...Yes.
-		{event("activate_scanner", false)} Then without further ado, enter the room on your left, and we may begin the communion.
+		{goto("mum_intro")}
 	> I would rather talk with you at the moment.
 		I'm terribly sorry, love. I am but a conduit, with nothing to discuss and no secrets to disclose. Would you like to commune today?
 		> So be it. I want to talk to my mum.
-			A most excellent choice, Jackie!
-			{event("activate_scanner", false)} Please enter the room to your left to begin the communion.
+			{goto("mum_intro")}
 		> I guess I'll be going, then.
 			Until next time, love.
 
@@ -22,12 +21,21 @@
 		{talked <= 5} As before, enter the room on your left to begin the communion.
 		{otherwise} I hope my service exceeds expectations.
 	> !{medium/personality}I'm still intrigued by you. I never knew the Mediums had personalities!
-		+{medium/personality} Like any good host, I provide my guests what they want and need, without their ever asking.
+		Like any good host, I provide my guests what they want and need, without their ever asking.
 		[You] Does that mean you create a different personality for every visitor?  Or don't have a personality at all if they don't wish for one?  How quickly do you scan a person's mind for such a thing to be possible?
 		I see the constellations of curiosity behind your brow! It may be frustrating, but I am here for communion, not conversation.
 		Would you like to commune today?
+		+{medium/personality} 
 		{goto("main_loop")}
 	> Not today, thanks.
 		Very well.
 		{Global.stat("mum/info") >= 5} Do take care, alright love? It's a dangerous world.
 		{otherwise} You are always welcome.
+
+{exit()}
+
+:mum_intro
+Before we enter, I know you understand this: because you have so few memories of your mother, the communion will be rather... limited.
+My talents are finite.
+[You] Of course.
+{event("activate_scanner", false)} Then without further ado, enter the room on your left, and we may begin the communion.

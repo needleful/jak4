@@ -66,7 +66,7 @@ var chunk_loader: ChunkLoader
 func _input(event):
 	if event.is_action_pressed("debug_map_view"):
 		if $mapcam.current:
-			player.show()
+			player.ui.show()
 			player.cam_rig.camera.current = true
 			env_override = false
 		else:
@@ -264,28 +264,28 @@ func apply_fog(height: float):
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
-	player.show_prompt(["combat_lunge"], "Lunge Kick")
+	player.ui.show_prompt(["combat_lunge"], "Lunge Kick")
 	air_tutorial = false
 	$tutorial_swap.start()
 
 func show_cloaked_combat_tutorial():
 	var _x = Global.add_stat("cloaked_combat_tutorial")
 	if Global.using_gamepad:
-		player.show_prompt(["combat_aim_toggle"], "Toggle aim")
+		player.ui.show_prompt(["combat_aim_toggle"], "Toggle aim")
 	else:
-		player.show_prompt(["combat_aim"], "Aim")
+		player.ui.show_prompt(["combat_aim"], "Aim")
 
 func show_air_combat_tutorial():
 	var _x = Global.add_stat("air_combat_tutorial")
-	player.show_prompt(["mv_crouch", "combat_lunge"], "Uppercut")
+	player.ui.show_prompt(["mv_crouch", "combat_lunge"], "Uppercut")
 	air_tutorial = true
 	$tutorial_swap.start()
 
 func _on_tutorial_swap_timeout():
 	if air_tutorial:
-		player.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick")
+		player.ui.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick")
 	else:
-		player.show_prompt(["combat_spin"], "Spin Kick")
+		player.ui.show_prompt(["combat_spin"], "Spin Kick")
 
 # Environment
 

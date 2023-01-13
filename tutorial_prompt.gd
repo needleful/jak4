@@ -14,7 +14,7 @@ func _ready():
 
 func _on_body_entered(body):
 	if body is PlayerBody:
-		body.show_prompt(input_actions, text)
+		body.ui.show_prompt(input_actions, text)
 
 func set_enabled(e: bool):
 	enabled = e
