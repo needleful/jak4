@@ -334,7 +334,7 @@ func trade_coats():
 		current_item = coat_item
 		advance()
 	else:
-		insert_label("[You cannot trade coats with this person]", "narration")
+		insert_label("[You cannot trade coats at this time]", "narration")
 
 func fast_exit():
 	if is_exiting:
