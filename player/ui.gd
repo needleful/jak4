@@ -349,7 +349,6 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	dialog.start(source, sequence, speaker, starting_label)
 
 func set_mode(m):
-	print_stack()
 	if m < 0 or m >= get_child_count():
 		print_debug("Bad mode! ", m)
 		return
@@ -364,7 +363,6 @@ func set_mode(m):
 	get_tree().paused = should_pause
 	
 	if m != Mode.Paused:
-		print("Rendering player camera")
 		Global.get_player().set_camera_render(true)
 	elif toggled_pause:
 		take_screen_shot()

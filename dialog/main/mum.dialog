@@ -112,11 +112,45 @@
 
 :main_loop
 > {skip()} (Ask about mum)
-	> ?{mum/war}!{mum/discussed/war} What was your experience in the war?
-	> ?{mum/network}!{mum/discussed/network} What's it like traveling between the different machines?
-		Not really like anything, I would say.
-		?{mum/time/asked}
-			I blink and then you
+	> ?{mum/info/war}!{mum/discussed/war} What was the war like?
+		// Balter's information contradicts this. It's implied Mum knew a few Vaelers in peacetime
+		I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
+		They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
+		// Again, Balter
+		The war was like a flood. I had no idea what the politics leading up to the invasion were like.
+		It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
+		We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
+		For several weeks, we just lived life like normal.
+		I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
+		I was still studying at school, and we would receive news about the war: a hundred Vaelers killed on their way up the plateau, twelve Yaqazi dead. Another village along their path razed, but beaten back for now.
+		The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
+		They fought their way up to the north village and turned it into their base of operations for the plateau.
+		...
+		// Why does the Medium tell us this?
+		When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
+		I remember thinking, "Maybe we can call sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
+		I don't think there was ever a way we could escape...
+		The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
+		{"mum/info/orstad"}
+			[You] How did you survive? Orstad said you were shot.
+			// TODO: who knows why Jackie's mum survived? Does anyone?
+			// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
+			I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
+			I don't think the soldiers were intending to kill me. I was just a young girl at the time.
+			// TODO: research life in cities taken over by invading forces
+			// Maybe somebody else saved Mum? Who would know?
+			It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
+			[You] I heard some people escaped the village. Do you know how?
+			They wouldn't have gotten down the safe route, if the Vaelers had anything to say about it.
+			They must have risked climbing down the cliffs.
+		{otherwise}
+			I assume those who escaped had to survive a climb down the cliffs.
+		They were so treacherous, those cliffs. The rock is so brittle, and so terribly high up...
+		// Mum DID take the cliffs down! Medium, you bastard! Don't discount her just because you're a BIGOT
+		If only I were so brave as to try such a thing...
+
+		+{mum/discussed/war}
+
 > {skip()} (Discuss events)
 	> ?{house_107}!{mum/discussed/house_107} I found the most curious house on a cliff!
 		+{mum/discussed/house_107}
@@ -130,12 +164,12 @@
 	> (Back)
 		{goto("main_loop")}
 > {skip()} (Discuss people)
-	> ?{mum/balter}What do you think of Balter?
-	> ?{mum/orstad} !{mum/discussed/orstad} Do you remember Orstad?
-		+{mum/discussed/orstad}
-		Orstad... hm, I knew a few.
-		[You] He said he knew you before the war.
+	> ?{mum/info/orstad} !{mum/discussed/orstad} Do you remember Orstad?
+		// You can probably find information indicating she knew him?
+		Orstad... hm, I knew a few Orstads...
+		[You] He said he knew you before the war, though he hadn't talked much with you.
 		I probably saw him before. Girls weren't supposed to mingle with the boys until we were older.
+		+{mum/discussed/orstad}
 	> (Back)
 		{goto("main_loop")}
 > I'll see you later, mum.
