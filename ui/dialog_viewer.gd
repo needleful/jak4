@@ -124,7 +124,6 @@ func get_next():
 		advance()
 
 func advance():
-	otherwise = false
 	if !current_item:
 		exit()
 		return
@@ -132,7 +131,9 @@ func advance():
 	var result := false
 	var noskip := false
 	var font_override := ""
+	otherwise = false
 	while !result:
+		var otherwise_used := false
 		if !current_item:
 			exit()
 			return
@@ -145,6 +146,10 @@ func advance():
 		font_override = ""
 		for c in cond:
 			var r = check_condition(c)
+			if r is Dictionary and "_otherwise" in r:
+				otherwise_used = true
+				r = r["_otherwise"]
+				print("otherwise: ", r)
 			if r is Dictionary:
 				if r == RESULT_END:
 					return
@@ -165,9 +170,13 @@ func advance():
 			current_item = sequence.failed_next(current_item)
 			if sequence.went_up:
 				otherwise = false
-		elif current_item.text == "" and !noskip:
-			current_item = sequence.canonical_next(current_item)
-			result = false
+			if !otherwise_used:
+				otherwise = true
+		else:
+			otherwise = false
+			if current_item.text == "" and !noskip:
+				current_item = sequence.canonical_next(current_item)
+				result = false
 	
 	if current_item.text != "":
 		match current_item.type:
@@ -180,19 +189,25 @@ func advance():
 
 func list_replies():
 	var reply: DialogItem = current_item
+	otherwise = false
 	while reply and reply.type == DialogItem.Type.REPLY:
 		var font_override := ""
 		skip_reply = false
 		var cond = reply.conditions
 		var result := true
+		var otherwise_used := false
 		for c in cond:
 			var r = check_condition(c)
+			if r is Dictionary and "_otherwise" in r:
+				r = r["_otherwise"]
+				otherwise_used = true
 			if !r:
 				result = false
 				break
 			elif r is Dictionary and "_format" in r:
 				font_override = r._format
 		if result:
+			otherwise = false
 			var b := Button.new()
 			b.clip_text = false
 			var l := Label.new()
@@ -214,6 +229,8 @@ func list_replies():
 			var r = reply
 			var s = skip_reply
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
+		elif !otherwise_used:
+			otherwise = true
 		reply = sequence.next(reply)
 	if replies.get_child_count() == 0:
 		print("\tNo replies.")
@@ -310,13 +327,17 @@ func evaluate(ex_text: String):
 
 func check_condition(cond: String):
 	var oif: RegExMatch = r_otherwise_if.search(cond)
+	
+	if cond == "otherwise":
+		return {"_otherwise": otherwise}
 	if oif:
 		if !otherwise:
-			return false
+			return {"_otherwise":false}
 		cond = cond.replace(oif.get_string(), "")
 	
 	var result = evaluate(cond)
-	otherwise = !result
+	if oif:
+		return {"_otherwise":result}
 	return result
 
 func end():
