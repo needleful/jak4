@@ -95,14 +95,13 @@ func update_zoom():
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_active(visible)
+		set_active(is_visible_in_tree())
 
 func set_active(a):
 	reticle.global_position = OS.window_size/2
 	zoom_scale = 1
 	scroll_area.scale = Vector2(1, 1)
 	active = a
-	visible = active
 	set_process(active)
 	if active:
 		update_zoom()

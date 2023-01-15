@@ -8,7 +8,7 @@ onready var dialog_collision := $dialog_zone/CollisionShape
 var active := false
 
 func activate_scanner():
-	print("Scanning...")
+	Global.save_checkpoint(Global.get_player().global_transform.origin)
 	if active:
 		return
 	var a = Global.add_stat("medium/activated")

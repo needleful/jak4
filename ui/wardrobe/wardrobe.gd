@@ -20,7 +20,7 @@ func _ready():
 	set_process_input(false)
 
 func _input(event):
-	if !visible or !player:
+	if !is_visible_in_tree() or !player:
 		set_process_input(false)
 		return
 	if event.is_action_pressed("ui_accept"):
@@ -61,7 +61,7 @@ func _input(event):
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_active(visible)
+		set_active(is_visible_in_tree())
 
 func set_active(active):
 	if active and !player:

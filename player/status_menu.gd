@@ -4,7 +4,7 @@ onready var tabs: TabContainer = $tabs
 onready var ui = get_parent()
 
 func _input(event):
-	if !visible:
+	if !is_visible_in_tree():
 		return
 	if !Global.using_gamepad:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -14,6 +14,7 @@ func _input(event):
 			ui.unpause()
 		else:
 			t.set_level(t.level - 1)
+		get_tree().set_input_as_handled()
 
 func set_active(a):
 	set_process_input(a)

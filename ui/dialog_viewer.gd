@@ -47,7 +47,7 @@ const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
 func _input(event):
-	if !visible:
+	if !is_visible_in_tree():
 		return
 	if shopping:
 		if event.is_action_pressed("ui_cancel"):

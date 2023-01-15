@@ -35,6 +35,20 @@
 	Hm? You are looking to buy them?
 	[You] A few, maybe.
 	Hm, we can make a deal, maybe.
+
+> How's business?
+	{task_is_complete("unblock_the_train")}
+		Much better, with your help unblocking the train.
+		I hope they get off their asses and start moving soon!
+	{otherwise}
+		Not so good today. The train is stuck. They said there was a problem on the tracks.
+	!{foreman/discussed/balter}
+		But also, I am having issues with Balter at the capital.
+		[You] Who's that?
+		// TODO: who is Balter within the Braalna government? Why is he interested in the foundry?
+		+{balter/info} +{balter/account/foreman} He's an auditor for the provincial government, up on Crab Hill. He has been very picky with our documents, constantly rejecting our forms for small errors.
+		{Global.mark_map("crab_hill", "Capital of the Braalna province.")}
+		Ah, it's just part of doing business. We'll reach an agreement soon enough.
 ?{foundry/capacitor} > I'd like to see what you're selling. 
 	{shop()}
 	{exiting()} I hope we can do business again.
@@ -51,7 +65,7 @@ Don't trip on your way down.
 	[You] Could we trade coats again?
 	For another 12 gems, sure.
 	> {Global.count("gem") < 12} I don't have that many.
-		Wow, it's barely pocket change. Do you have enough for food?
+		Wow, that's barely pocket change. Do you have enough for food?
 		[You] I... haven't thought about that....
 	> {otherwise} Sure, I can do that.
 		{Global.remove_item("gem", 12)}{swap_coats()} Thank you again!

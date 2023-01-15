@@ -4,7 +4,7 @@ var last_focused :Control
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_active(visible)
+		set_active(is_visible_in_tree())
 
 func set_active(a):
 	if !a:

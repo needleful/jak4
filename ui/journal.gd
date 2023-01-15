@@ -25,7 +25,7 @@ enum NoteType {
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_active(visible)
+		set_active(is_visible_in_tree())
 
 func set_active(active):
 	if active:

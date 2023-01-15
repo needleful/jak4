@@ -12,7 +12,7 @@ func _ready():
 			ambient_info[c.get_path()] = c.interior_ambient_color
 			reflection_info[c.get_path()] = c.intensity
 
-func toggle(lights_enabled):
+func toggle(lights_enabled, _instant := false):
 	visible = lights_enabled
 	for l in light_nodes:
 		process_item(get_node(l), lights_enabled)

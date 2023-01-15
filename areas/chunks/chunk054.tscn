@@ -1,4 +1,4 @@
-[gd_scene load_steps=125 format=2]
+[gd_scene load_steps=126 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=2]
@@ -70,6 +70,7 @@
 [ext_resource path="res://entities/visual/ascrap2.mesh" type="ArrayMesh" id=68]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=69]
 [ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=70]
+[ext_resource path="res://material/env/copper/copper_corroded.material" type="Material" id=71]
 
 [sub_resource type="ShaderMaterial" id=50]
 shader = ExtResource( 50 )
@@ -1664,6 +1665,9 @@ lighting_preview = true
 [node name="StaticBody" parent="city/capital" index="0"]
 collision_layer = 257
 
+[node name="ground" parent="city" index="2"]
+material/0 = ExtResource( 71 )
+
 [node name="StaticBody" parent="city/ground" index="0"]
 collision_layer = 257
 
@@ -2299,7 +2303,7 @@ transform = Transform( 0.932283, 0, 0.36173, 0, 1, 0, -0.36173, 0, 0.932283, 3.2
 transform = Transform( -0.218091, 0, -0.975928, 0, 1, 0, 0.975928, 0, -0.218091, -1.84613, 3.1635, -11.3699 )
 
 [node name="mum_network" type="Spatial" parent="area_main_encounter/room1" index="15"]
-transform = Transform( 0.999783, 0, -0.020767, 0, 1, 0, 0.020767, 0, 0.999783, -45.6493, 16.737, -32.0536 )
+transform = Transform( 0.999782, 0, -0.0207669, 0, 1, 0, 0.0207669, 0, 0.999782, -45.0015, 16.7603, -31.9255 )
 script = ExtResource( 55 )
 condition = "Global.stat(\"mum/info\") > 0"
 
@@ -2317,21 +2321,22 @@ light_energy = 0.2
 omni_range = 2.6728
 script = ExtResource( 60 )
 
-[node name="mom" type="Area" parent="area_main_encounter/room1/mum_network" index="2"]
+[node name="mum" parent="area_main_encounter/room1/mum_network" index="2" instance=ExtResource( 62 )]
+transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0, 0, 0 )
+
+[node name="mum_dialog" type="Area" parent="area_main_encounter/room1/mum_network/mum" index="1"]
+transform = Transform( -0.998922, 0, 0.046409, 0, 1, 0, -0.046409, 0, -0.998922, -0.0356445, 0, 0.766693 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 57 )
 dialog_sequence = ExtResource( 61 )
 custom_entry = "entry_network054"
-friendly_id = "mum"
+main_speaker = NodePath("..")
 
-[node name="dialog_circle" parent="area_main_encounter/room1/mum_network/mom" index="0" instance=ExtResource( 58 )]
+[node name="dialog_circle" parent="area_main_encounter/room1/mum_network/mum/mum_dialog" index="0" instance=ExtResource( 58 )]
 
-[node name="CollisionShape" type="CollisionShape" parent="area_main_encounter/room1/mum_network/mom" index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="area_main_encounter/room1/mum_network/mum/mum_dialog" index="1"]
 shape = SubResource( 251 )
-
-[node name="mum" parent="area_main_encounter/room1/mum_network/mom" index="2" instance=ExtResource( 62 )]
-transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, 0, 0, 0 )
 
 [node name="time_gun_shrine" type="Spatial" parent="area_main_encounter/room1" index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32.2826, 3.05696, -9.17498 )
@@ -3873,13 +3878,16 @@ enable_shadows = true
 
 [node name="reflection_cave" type="ReflectionProbe" parent="." index="13"]
 transform = Transform( 0.92388, 0, -0.382683, 0, 1, 0, 0.382683, 0, 0.92388, 110.297, -40.089, 96.0958 )
+intensity = 0.39
 max_distance = 16384.0
 extents = Vector3( 94.1659, 104.55, 41.5014 )
+origin_offset = Vector3( 8.80859, 0, 0 )
 enable_shadows = true
 interior_enable = true
 
 [node name="reflection_cave2" type="ReflectionProbe" parent="." index="14"]
 transform = Transform( 0.448827, -0.0667923, 0.891119, 0, 0.997203, 0.0747436, -0.893619, -0.0335469, 0.447571, 140.969, -56.253, 191.383 )
+intensity = 0.07
 max_distance = 16384.0
 extents = Vector3( 44.9372, 42.5147, 44.5421 )
 enable_shadows = true

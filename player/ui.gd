@@ -76,25 +76,34 @@ func _input(event):
 		Mode.Gameing, Mode.Dialog:
 			if event.is_action_pressed("pause"):
 				set_mode(Mode.Paused)
+				get_tree().set_input_as_handled()
 			elif event.is_action_pressed("debug_console"):
 				set_mode(Mode.DebugConsole)
+				get_tree().set_input_as_handled()
 		Mode.Paused:
 			if event.is_action_pressed("pause"):
 				var _x = unpause()
+				get_tree().set_input_as_handled()
 			elif event.is_action_pressed("ui_page_up"):
 				status.next()
+				get_tree().set_input_as_handled()
 			elif event.is_action_pressed("ui_page_down"):
 				status.prev()
+				get_tree().set_input_as_handled()
 			elif event.is_action_pressed("debug_console"):
 				set_mode(Mode.DebugConsole)
+				get_tree().set_input_as_handled()
 		Mode.Custom:
 			if event.is_action_pressed("pause"):
 				set_mode(Mode.Gameing)
+				get_tree().set_input_as_handled()
 			elif event.is_action_pressed("debug_console"):
 				set_mode(Mode.DebugConsole)
+				get_tree().set_input_as_handled()
 		Mode.DebugConsole:
 			if event.is_action_pressed("debug_console"):
 				var _x = unpause()
+				get_tree().set_input_as_handled()
 
 func _process(delta):
 	if mode == Mode.Gameing:

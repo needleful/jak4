@@ -12,13 +12,15 @@ func _ready():
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_active(visible)
+		set_active(is_visible_in_tree())
 
 func set_active(active):
 	if active:
+		print("Loading Settings")
 		load_settings()
 		set_level(0)
 	else:
+		print("Saving settings")
 		save_settings()
 
 func set_level(l: int):
@@ -78,6 +80,7 @@ func set_level(l: int):
 	level = l
 
 func save_settings():
+	print("Saving settings")
 	var file:ConfigFile = ConfigFile.new()
 	file = $foreground/audioOptions.save_to(file)
 	file = $foreground/controlOptions.save_to(file)

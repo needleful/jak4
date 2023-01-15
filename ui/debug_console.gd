@@ -18,8 +18,8 @@ func _input(event):
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_process_input(visible)
-		if visible:
+		set_process_input(is_visible_in_tree())
+		if is_visible_in_tree():
 			line_edit.call_deferred("grab_focus")
 			line_edit.text = ""
 
