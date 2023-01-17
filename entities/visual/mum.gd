@@ -33,4 +33,5 @@ func _on_epic_boss_killed():
 	Global.get_player().teleport_to(
 		get_tree().current_scene.get_node(
 			"endgame_teleport_marker").global_transform)
+	get_tree().current_scene.set_time(5.5)
 	queue_free()

@@ -16,11 +16,9 @@ func _notification(what):
 
 func set_active(active):
 	if active:
-		print("Loading Settings")
 		load_settings()
 		set_level(0)
 	else:
-		print("Saving settings")
 		save_settings()
 
 func set_level(l: int):
@@ -80,7 +78,6 @@ func set_level(l: int):
 	level = l
 
 func save_settings():
-	print("Saving settings")
 	var file:ConfigFile = ConfigFile.new()
 	file = $foreground/audioOptions.save_to(file)
 	file = $foreground/controlOptions.save_to(file)
@@ -94,7 +91,7 @@ func save_settings():
 func load_settings():
 	var f:File = File.new()
 	if !f.file_exists(save_path):
-		print("No settings file: ", save_path)
+		print_debug("No settings file: ", save_path)
 		return
 	var file:ConfigFile = ConfigFile.new()
 	var res = file.load(save_path)

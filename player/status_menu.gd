@@ -38,8 +38,7 @@ func _on_wardrobe_exited():
 	ui.unpause()
 
 func _on_Wardrobe_active(active):
-	# TODO: take a screen shot when transitioning back
 	$TextureRect.visible = !active
 	Global.get_player().set_camera_render(active or !get_tree().paused)
-	if !active:
+	if !active and get_tree().paused:
 		ui.take_screen_shot()

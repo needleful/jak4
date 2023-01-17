@@ -15,6 +15,7 @@ var show_background := false
 const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
 var old_coat: Coat
+var is_active := false
 
 func _ready():
 	set_process_input(false)
@@ -64,6 +65,9 @@ func _notification(what):
 		set_active(is_visible_in_tree())
 
 func set_active(active):
+	if is_active == active:
+		return
+	is_active = active
 	if active and !player:
 		enter(Global.get_player())
 	elif !active and player:
@@ -71,7 +75,7 @@ func set_active(active):
 		player.wardrobe_unlock(pause_menu)
 		player = null
 	if player:
-		player.set_camera_render(true)
+		player.call_deferred("set_camera_render", true)
 	set_process_input(active)
 	emit_signal("active", active)
 
