@@ -29,3 +29,9 @@ func set_enabled(e):
 			c.disabled = !enabled
 		elif c is DialogCircle:
 			c.enabled = enabled
+
+func deactivate():
+	set_enabled(false)
+
+func activate():
+	set_enabled(true)

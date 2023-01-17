@@ -1,6 +1,7 @@
 extends Spatial
 
 signal endgame
+signal endgame_completed
 
 export(Material) var hologram_material
 var mum_material: Material
@@ -23,4 +24,13 @@ func _on_stat_changed(stat, _val):
 		$Armature/Skeleton/mum_deatail.material_override = detail_material
 
 func end_game():
+	$mum_dialog.deactivate()
 	emit_signal("endgame")
+
+func _on_epic_boss_killed():
+	var _x = Global.add_stat("mum/end")
+	emit_signal("endgame_completed")
+	Global.get_player().teleport_to(
+		get_tree().current_scene.get_node(
+			"endgame_teleport_marker").global_transform)
+	queue_free()

@@ -26,3 +26,6 @@ func _on_entrance_body_entered(_b):
 	dialog_collision.disabled = false
 	var _x = Global.add_stat("medium/deactivated")
 	mom_door.clear_power()
+
+func _on_epic_boss_died(_id, _fullPath):
+	$epic_death_timer.start()

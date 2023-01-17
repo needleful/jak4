@@ -204,7 +204,6 @@ func extract_expressions(line: String) -> Dictionary:
 		dict.line = dict.line.replace(s, "")
 		if s.begins_with("?"):
 			ex = f_query % ex
-			print("query: ", ex)
 		elif s.begins_with("+"):
 			ex = f_add % ex
 		elif s.begins_with("!"):

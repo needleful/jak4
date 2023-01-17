@@ -1,8 +1,8 @@
 extends Spatial
 
 func _ready():
-	# TODO: condition for showing up
-	pass
+	if !Global.stat("mum/end"):
+		queue_free()
 
 func end_game():
 	$AnimationPlayer.play("end_game")
