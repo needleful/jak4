@@ -1720,6 +1720,7 @@ func set_state(next_state: int):
 			mesh.release_item()
 		State.Hover:
 			mesh.stop_hover()
+			collision_mask &= ~(1 << 13)
 		State.LungeKick, State.SlideLungeKick, State.DiveEnd:
 			gun.end_combo()
 
@@ -1891,6 +1892,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Damaged")
 			gun.unlock()
 		State.Hover:
+			collision_mask |= 1 << 13
 			hover_cast.enabled = true
 			mesh.start_hover()
 			gun.unlock()

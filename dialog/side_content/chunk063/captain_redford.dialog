@@ -87,7 +87,7 @@
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
 		[You] Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
-		{Global.add_stat("manor052/investigation1")}
+		+{manor052/investigation1}
 {otherwise if main_speaker.at("kitchen")}
 	!{manor052/investigation2}
 		+{manor052/investigation2}
@@ -106,11 +106,31 @@
 		+{manor052/investigation3}
 		Nothing here makes any sense.  Where are the sandbags? We boarded up the windows weeks ago!
 		[You] I've been telling you, you buffoon! The war ended! Whatever delusions you have are of a long-gone era.
-	{otherwise}
+		...
+		We just... Have to find the next part of the path.
+		[You] What path? What proof do we have there's a path? All we know is there was a servant's path behind the cabinet. What more are we looking for?
+		Trust me, Jacqueline. I've got... a feeling, I suppose. There is more here.
+	{otherwise}!{redford/discussed/denial}
 		It's clear the manor was renovated since I was last here...
-		But whoever was here is long gone now.
+		But whoever it was is long gone now.
 		[You] Have you been listening to a word I've said this entire time?
-		Of course.
+		* He makes a noise like a sigh, despite no evidence he has lungs.
+		Jacqueline, may I tell you a story?
+		We often receive mail at the front lines. Letters and gifts from loved ones, newspapers, et cetera.
+		One day, one of my soldiers received a letter informing him his wife and daughter had drowned in a boating accident.
+		He flew into a rage. He proclaimed the letter was a fake, designed to demoralize us.
+		He meticulously found grammatical and factual errors proving it was from the enemy. And after interrogating the delivery men, it was clear to him the letter was inserted with the rest of the mail during their stop at Muzna Cross.
+		He was so thorough in his investigation, so certain in his conclusions...
+		That you could almost believe him.
+		[You] What are you trying to say?
+		Well, have you heard of the seven stages of grief?
+		[You] It's five stages.
+		If you say so. But for some men, I believe there are only two stages:
+		Denial and death.
+		+{jackie/info/denial}
+		+{redford/discussed/denial}
+	{otherwise}
+		Let's open up the rest of this manor first.
 {otherwise}
 	[ERROR]: Captain Redford has no words for the current situation.
 {exit()}

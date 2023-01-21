@@ -95,7 +95,6 @@ func _ready():
 		if is_in_group("target"):
 			remove_from_group("target")
 		get_node(mesh_node).material_override = cloaked_material
-	call_deferred("set_state", AI.Idle, true)
 	if !respawns and Global.is_picked(get_path()):
 		ai = AI.Dead
 		emit_signal("died", id, get_path())
@@ -109,12 +108,15 @@ func _ready():
 		p = p.get_parent()
 	if !source_chunk:
 		remove_from_group("enemy")
+	set_state(AI.Idle)
 	if has_node("custom_awareness"):
 		awareness = $custom_awareness as Area
 		if !awareness:
 			print_debug("ERROR: Area expected for ", $custom_awareness.get_path())
 	if awareness and !awareness.is_connected("body_entered", self, "_on_awareness_entered"):
 		var _x = awareness.connect("body_entered", self, "_on_awareness_entered")
+	elif awareness:
+		retarget()
 
 func _on_awareness_entered(body):
 	if "do_not_disturb" in body and body.do_not_disturb:
@@ -126,6 +128,10 @@ func _on_awareness_entered(body):
 		else:
 			set_state(AI.Alerted)
 		set_physics_process(true)
+
+func retarget():
+	for b in awareness.get_overlapping_bodies():
+		_on_awareness_entered(b)
 
 func _integrate_forces(state):
 	best_floor_normal = Vector3(0, -INF, 0)

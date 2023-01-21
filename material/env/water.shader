@@ -22,7 +22,6 @@ void fragment() {
 	vec3 ref_normal = NORMAL;
 	vec2 ref_ofs = SCREEN_UV - ref_normal.xy * refraction;
 	float ref_amount = 1.0;
-	vec4 color = textureLod(SCREEN_TEXTURE, ref_ofs, 0);
 
 	vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
 	vec4 wpos = CAMERA_MATRIX*upos;
@@ -35,13 +34,15 @@ void fragment() {
 	
 	if(diffy >= 0.0 && diffy < foam_distance*foam_factor) {
 		ALBEDO = foam_color.rgb;
-		ROUGHNESS = 0.4;
+		ROUGHNESS = 1.0;
+		SPECULAR = 0.2;
 		METALLIC = 0.;
 		EMISSION = vec3(0.0);
 	}
 	else {
+		vec4 color = textureLod(SCREEN_TEXTURE, ref_ofs, 0);
 		float amount = clamp(diffy/max_depth, 0, 1);
-		EMISSION = mix(color * surface_albedo, deep_albedo, amount).rgb;
+		EMISSION = color.rgb * mix(surface_albedo, deep_albedo, amount).rgb;
 		
 		ALBEDO = vec3(0);
 		SPECULAR = 1.0;

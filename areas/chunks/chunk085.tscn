@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/plants/tree2.tscn" type="PackedScene" id=2]
@@ -36,16 +36,11 @@
 [ext_resource path="res://entities/env/stone/garden_empty.tscn" type="PackedScene" id=34]
 [ext_resource path="res://entities/env/stone/pillar.tscn" type="PackedScene" id=35]
 [ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=36]
-[ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=37]
-[ext_resource path="res://material/death_plane.shader" type="Shader" id=38]
-[ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=39]
 [ext_resource path="res://entities/env/copper/mine_shack_small.tscn" type="PackedScene" id=40]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=41]
 [ext_resource path="res://entities/enemies/tentpole.tscn" type="PackedScene" id=42]
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=43]
 [ext_resource path="res://entities/env/plants/grass1.tscn" type="PackedScene" id=44]
-[ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=45]
-[ext_resource path="res://areas/sub_chunks/085_mine.tscn" type="PackedScene" id=46]
 [ext_resource path="res://material/water_with_interior.tres" type="Material" id=47]
 
 [sub_resource type="OccluderShapePolygon" id=3]
@@ -71,15 +66,6 @@ extents = Vector3( 20, 1, 10 )
 
 [sub_resource type="CubeMesh" id=11]
 size = Vector3( 40, 2, 20 )
-
-[sub_resource type="ShaderMaterial" id=15]
-resource_local_to_scene = true
-shader = ExtResource( 38 )
-shader_param/max_depth = 20.0
-shader_param/depth_color = null
-
-[sub_resource type="Gradient" id=9]
-colors = PoolColorArray( 0.683594, 1, 0.985168, 1, 0.0546875, 1, 0, 1 )
 
 [node name="chunk085" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -747,14 +733,6 @@ transform = Transform( -0.984716, 0, -0.174167, 0, 1, 0, 0.174167, 0, -0.984716,
 [node name="zone_cave1" type="MultiMeshSystem" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 164.546, 356.597, 78.129 )
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="zone_cave1"]
-transform = Transform( 0.980039, -0.189268, 0.0608314, 0.182214, 0.977543, 0.10587, -0.079503, -0.0926721, 0.992518, 0, 0, -2.71359 )
-intensity = 0.05
-extents = Vector3( 170, 32.287, 32.6937 )
-origin_offset = Vector3( 0.355469, 0, 1.10156 )
-interior_enable = true
-interior_ambient_color = Color( 0.0705882, 0.0705882, 0.0745098, 1 )
-
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="zone_cave1"]
 transform = Transform( 0.923229, -0.0402709, 0.382133, 0.0372095, 0.999189, 0.0154014, -0.382444, 0, 0.923979, 137.479, 86.0844, -0.591194 )
 intensity = 0.28
@@ -765,50 +743,3 @@ interior_enable = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 135.809, 102.196, 21.5905 )
 extents = Vector3( 3.90549, 3.56122, 6.07052 )
 interior_ambient_color = Color( 0.447059, 0.243137, 0.243137, 1 )
-
-[node name="ReflectionProbe4" type="ReflectionProbe" parent="zone_cave1"]
-transform = Transform( 1, 0, 0, 0, 0.978264, 0.207361, 0, -0.207361, 0.978264, -41.8618, -259.874, 21.6911 )
-intensity = 0.06
-extents = Vector3( 368.76, 222.716, 128.127 )
-origin_offset = Vector3( -13.5752, 2.23517e-10, 0 )
-interior_enable = true
-
-[node name="zone_cave2" type="MultiMeshSystem" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106.084, 0, 160.086 )
-
-[node name="OmniLight" type="OmniLight" parent="zone_cave2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.41999, 8.92444 )
-light_color = Color( 0.67451, 0.898039, 0.694118, 1 )
-light_energy = 0.205
-omni_range = 45.8396
-script = ExtResource( 39 )
-distance = 300.0
-
-[node name="death_plane" parent="zone_cave2" instance=ExtResource( 37 )]
-transform = Transform( 74.0136, 0, 0, 0, -3.23524e-06, 1, 0, -74.0136, -4.37114e-08, 3.8251, -23.7478, -0.0701904 )
-material/0 = SubResource( 15 )
-
-[node name="rock_kinematic" parent="zone_cave2" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65686, 1.53332, 37.2202 )
-
-[node name="rock_collapsible" parent="zone_cave2" instance=ExtResource( 8 )]
-transform = Transform( 0.981756, 0, -0.190146, 0, 1, 0, 0.190146, 0, 0.981756, -10.9729, -2.62127, 16.5222 )
-
-[node name="rock_collapsible2" parent="zone_cave2" instance=ExtResource( 8 )]
-transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -10.7202, -2.62127, 14.7359 )
-
-[node name="rock_collapsible3" parent="zone_cave2" instance=ExtResource( 8 )]
-transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -9.33702, -3.37846, -16.5102 )
-
-[node name="stamina_up_pickup" parent="zone_cave2" instance=ExtResource( 14 )]
-transform = Transform( 1, 0, 0, 0, 0.208538, 0.978014, 0, -0.978014, 0.208538, 11.0286, 0.379293, 37.1352 )
-item_id = "stamina_up"
-
-[node name="preview" parent="zone_cave2/stamina_up_pickup" instance=ExtResource( 45 )]
-transform = Transform( 1, 5.96046e-08, 2.23517e-08, 5.96046e-08, 1, -4.47035e-08, 1.49012e-08, 1.49012e-08, 1, 0.0322037, -0.147136, 0.00802612 )
-palette = SubResource( 9 )
-
-[node name="wardrobe" parent="zone_cave2" instance=ExtResource( 32 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 158.539, -29.2608, -95.5757 )
-
-[node name="tunnel_085" parent="." instance=ExtResource( 46 )]

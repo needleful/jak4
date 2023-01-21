@@ -57,6 +57,7 @@ func _physics_process(delta):
 			shot_timer += delta
 			if no_target():
 				set_state(AI.Idle)
+				retarget()
 			else:
 				if !awareness.overlaps_body(target):
 					quit_timer += delta

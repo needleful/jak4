@@ -73,7 +73,7 @@ func take_damage(_damage, _dir, _source: Node):
 func _on_damage_area_body_entered(body):
 	if state != State.Falling or body in damaged_bodies or !body.has_method("take_damage"):
 		return
-	var dir = (body.global_transform.origin - global_transform.origin).normalized()
-	body.take_damage(damage_on_hit, dir, self)
-	take_damage(1, -dir, self)
+	#var dir = (body.global_transform.origin - global_transform.origin).normalized()
+	#body.take_damage(damage_on_hit, dir, self)
+	#take_damage(1, -dir, self)
 

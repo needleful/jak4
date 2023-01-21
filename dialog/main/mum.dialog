@@ -230,9 +230,46 @@
 		// TODO: expand
 	> {skip()} (Back)
 		{goto("main_loop")}
+> {skip()} (Discuss locations)
+	> ?{visited/large_cave_085}!{mum/discussed/large_cave_085} I found an enormous cavern with ancient structures under the plateau!
+		?{mum/info/caves}
+			Could you tell what it was for?
+			!{ancient/info/caves}
+				[You] I wasn't expecting that question.
+				Over the years, people have found many strange ruins in the caves. The mystery is always "why did they build such things"?
+				Sometimes it is easier to divine a purpose for it, but others are confusing.
+				+{ancient/info/caves}
+			?{visited/graveyard_085}
+				[You] Well, I found what I can only assume is a graveyard at the very end.
+					The rest of the structures appeared to be living quarters and associated infrastructure.
+					So I would assume it was a subterranean city or settlement of some sort.
+				You think they lived down there?
+				[You] I don't know... Perhaps they were ancient miners, or researchers?
+				They are always so strange... More questions than answers.
+				+{mum/discussed/graveyard_085}
+			{otherwise}
+				[You] It was quite a large structure with many pieces, but I couldn't quite tell you what it was for.
+				Well, such is the way of things. Those ancient societies are often opaque to us.
+		{otherwise}
+			You did? I've heard stories of such structures underground, but never saw one for myself.
+			Those caves are quite dangerous, you know..
+			[You] It can be a tricky climb, but not too much trouble.
+			I'm more worried about you getting lost down there than stuck. They can be quite the labyrinths...
+		+{mum/discussed/large_cave_085}
+	> ?{visited/graveyard_085}?{ancient/info/caves}?{mum/discussed/large_cave_085}!{mum/discussed/graveyard_085} Do you remember that massive cavern I saw? I explored some more and found what I believe is an ancient graveyard.
+		[You] The rest of the structures appeared to be living quarters and associated infrastructure.
+			So I would assume it was a subterranean city or settlement of some sort.
+		You think they lived down there?
+		[You] I don't know... Perhaps they were ancient miners, or researchers?
+		They are always so strange... More questions than answers.
+		+{mum/discussed/graveyard_085}
+	> {skip()} (Back)
+		{goto("main_loop")}
 > I'll see you later, mum.
 	Until next time, Jackie.
 	{track_conversation_time()}
+	{exit()}
+{goto("main_loop")}
 {exit()}
 
 :entry_network054
