@@ -31,8 +31,8 @@ func _load_everything(chunks: Array):
 		if ResourceLoader.exists(hires_file):
 			var content = load(hires_file)
 			_set_loaded(_loaded_content, name, content)
-			if is_active(name):
-				call_deferred("_add_content", name, content)
+			if is_loaded(name):
+				_add_content(name, content, false)
 		var lowres_file: String = PATH_LOWRES % name
 		if ResourceLoader.exists(lowres_file):
 			var content = load(lowres_file)
@@ -64,10 +64,10 @@ func _add_lowres(chunk: String, content: PackedScene):
 	var l = content.instance()
 	l.name = "lowres"
 	_set_loaded(_lowres, chunk, l)
-	if !is_active(chunk):
+	if !is_loaded(chunk):
 		_nodes[chunk].add_child(l)
 
-func _add_content(chunk: String, content: PackedScene):
+func _add_content(chunk: String, content: PackedScene, active: bool):
 	var c:Node = _nodes[chunk]
 	if c.has_node("dynamic_content"):
 		return
@@ -77,6 +77,7 @@ func _add_content(chunk: String, content: PackedScene):
 			c.remove_child(l)
 		var n = content.instance()
 		n.name = "dynamic_content"
+		n.set_active(active)
 		c.add_child(n)
 
 func is_alive():
@@ -90,7 +91,7 @@ func _get_content(dic:Dictionary, chunk: String):
 	#_load_mutex.unlock()
 	return res
 
-func queue_load(chunk: Spatial):
+func queue_load(chunk: Spatial, active: bool):
 	set_active(chunk.name, true)
 	if chunk.has_node("dynamic_content"):
 		return
@@ -102,6 +103,7 @@ func queue_load(chunk: Spatial):
 	if c is PackedScene:
 		var n:Node = c.instance()
 		n.name = "dynamic_content"
+		n.set_active(active)
 		chunk.add_child(n)
 	
 func queue_unload(chunk: Spatial):
@@ -115,7 +117,15 @@ func queue_unload(chunk: Spatial):
 			c.request_ready()
 			chunk.add_child(c)
 
-func is_active(name: String) -> bool:
+func activate(chunk: Spatial):
+	if chunk.has_node("dynamic_content"):
+		chunk.get_node("dynamic_content").set_active(true)
+
+func deactivate(chunk: Spatial):
+	if chunk.has_node("dynamic_content"):
+		chunk.get_node("dynamic_content").set_active(false)
+
+func is_loaded(name: String) -> bool:
 	var res: bool
 	#_active_mutex.lock()
 	res = name in _active and _active[name]

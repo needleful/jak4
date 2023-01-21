@@ -8,7 +8,8 @@ onready var anim2 := $secondary_animation
 var save_path := "res://entities/one_time/chunks/tower_113_fall.anim"
 
 func _enter_tree():
-	hide()
+	if !Engine.editor_hint:
+		hide()
 
 func _ready():
 	call_deferred("show")
@@ -32,7 +33,6 @@ func _ready():
 	if Global.stat(fall_stat):
 		fall(true)
 	else:
-		get_tree().call_group("113_fallen_only", "queue_free")
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
 		anim2.play("fall")
 		anim2.advance(0)

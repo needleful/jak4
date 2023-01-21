@@ -6,8 +6,10 @@ signal deactivated(chunk)
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const MIN_DIST_LOAD := 200
-const MIN_DIST_MUST_LOAD := 30
+const DIST_LOAD := 500
+const DIST_UNLOAD := 550
+const DIST_ACTIVATE := 150
+const DIST_DEACTIVATE := 175
 
 const UNLOAD_TIME := 10.0
 
@@ -118,6 +120,7 @@ func _ready():
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
+	update_active_chunks(vis_last_position)
 	if Global.valid_game_state:
 		if Global.has_stat("clock_time"):
 			set_time(Global.stat("clock_time"))
@@ -243,17 +246,24 @@ func update_active_chunks(position: Vector3):
 		var local : Vector3 = position - ch.global_transform.origin
 		var hlocal : Vector3 = local
 		hlocal.y = 0
-		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*MIN_DIST_LOAD)
-		var must_load_zone: AABB = ch.get_aabb().grow(MIN_DIST_MUST_LOAD)
-		# Reimplement load_sync and unloading over time
-		if load_zone.has_point(local) or must_load_zone.has_point(hlocal):
-			if !chunk_loader.is_active(ch.name):
-				chunk_loader.queue_load(ch)
+		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
+		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
+		var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
+		var deactivate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_DEACTIVATE)
+		
+		if load_zone.has_point(local):
+			if !chunk_loader.is_loaded(ch.name):
+				chunk_loader.queue_load(ch, activate_zone.has_point(local))
 				emit_signal("activated", ch)
 			active_box.text += "\n\t" + ch.name
-		elif chunk_loader.is_active(ch.name):
+		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch.name):
 			chunk_loader.queue_unload(ch)
 			emit_signal("deactivated", ch)
+		
+		if activate_zone.has_point(local):
+			chunk_loader.activate(ch)
+		elif !deactivate_zone.has_point(local):
+			chunk_loader.deactivate(ch)
 
 
 func apply_fog(height: float):
