@@ -315,34 +315,36 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 249, 12, 70 )
 [node name="rock3" parent="." instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 236, 8, 92 )
 
-[node name="flag" parent="." instance=ExtResource( 20 )]
+[node name="active_entities" type="Spatial" parent="."]
+
+[node name="flag" parent="active_entities" instance=ExtResource( 20 )]
 transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -41.3995, 35.2025, 189.223 )
 
-[node name="captain_redford" parent="." instance=ExtResource( 22 )]
-transform = Transform( -0.937355, 0, 0.348375, 0, 1, 0, -0.348375, 0, -0.937355, -45.338, 33.6217, 189.369 )
-default_location = true
-
-[node name="path_ember_crest" type="Position3D" parent="."]
+[node name="path_ember_crest" type="Position3D" parent="active_entities"]
 transform = Transform( -0.713369, 0, -0.700788, 0, 1, 0, 0.700788, 0, -0.713369, -45.0789, 33.6448, 186.988 )
 script = ExtResource( 23 )
 next = NodePath("point1")
 action = 1
 
-[node name="point1" type="Position3D" parent="path_ember_crest"]
+[node name="point1" type="Position3D" parent="active_entities/path_ember_crest"]
 transform = Transform( 0.896071, 0, -0.443911, 0, 1, 0, 0.443911, 0, 0.896071, -4.57764e-05, 2.99226, 98.8588 )
 script = ExtResource( 23 )
 next = NodePath("../point2")
 
-[node name="point2" type="Position3D" parent="path_ember_crest"]
+[node name="point2" type="Position3D" parent="active_entities/path_ember_crest"]
 transform = Transform( 0.896071, 0, -0.443911, 0, 1, 0, 0.443911, 0, 0.896071, -62.6818, -15.2446, 178.719 )
 script = ExtResource( 23 )
 next = NodePath("../exit")
 
-[node name="exit" type="Position3D" parent="path_ember_crest"]
+[node name="exit" type="Position3D" parent="active_entities/path_ember_crest"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -132.676, -66.2379, 378.155 )
 script = ExtResource( 23 )
 chunk_entry = "chunk052:path_manor"
 
-[node name="flag2" parent="." instance=ExtResource( 20 )]
+[node name="captain_redford" parent="active_entities" instance=ExtResource( 22 )]
+transform = Transform( -0.937355, 0, 0.348375, 0, 1, 0, -0.348375, 0, -0.937355, -45.338, 33.6217, 189.369 )
+default_location = true
+
+[node name="flag2" parent="active_entities" instance=ExtResource( 20 )]
 transform = Transform( 0.577155, -0.204698, -0.790563, 0.21227, 0.972403, -0.0968119, 0.788564, -0.111938, 0.604679, -45.2076, 34.4026, 188.202 )
 flag_material = SubResource( 11 )

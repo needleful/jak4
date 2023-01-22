@@ -108,7 +108,7 @@ func _ready():
 		p = p.get_parent()
 	if !source_chunk:
 		remove_from_group("enemy")
-	set_state(AI.Idle)
+	call_deferred("set_state", AI.Idle)
 	if has_node("custom_awareness"):
 		awareness = $custom_awareness as Area
 		if !awareness:

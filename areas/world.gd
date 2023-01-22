@@ -19,10 +19,12 @@ var lowres_chunks: Dictionary
 
 const CHUNK_SQDIST_UPDATE := 17
 const VIS_SQDIST_UPDATE := 23
+const ACTIVE_SQDIST_UPDATE := 19
 const ENEMIES_SQDIST_UPDATE := 9
 
 onready var player: PlayerBody = $player
 onready var chunk_last_position: Vector3 = player.global_transform.origin
+onready var active_last_position : Vector3 = player.global_transform.origin
 onready var vis_last_position :Vector3 = player.global_transform.origin
 onready var enemies_last_position :Vector3 = player.global_transform.origin
 
@@ -115,12 +117,13 @@ func _ready():
 	# Briefly render the opposite light
 	sun.visible = !sun_enabled
 	chunk_last_position = player.global_transform.origin
-	update_active_chunks(chunk_last_position)
+	active_last_position = player.global_transform.origin
 	start_loading_chunks()
+	load_nearby_chunks(player.global_transform.origin)
+	update_active_chunks(chunk_last_position)
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
-	update_active_chunks(vis_last_position)
 	if Global.valid_game_state:
 		if Global.has_stat("clock_time"):
 			set_time(Global.stat("clock_time"))
@@ -134,10 +137,13 @@ func _process(delta):
 	var player_new_position = player.global_transform.origin
 	#apply_fog(player_new_position.y)
 	if (chunk_last_position - player_new_position).length_squared() >= CHUNK_SQDIST_UPDATE:
-		update_active_chunks(player_new_position)
+		load_nearby_chunks(player_new_position)
 		chunk_last_position = player_new_position
 		if chunk_last_position.y < -8000:
 			player.fall_to_death()
+	if (active_last_position - player_new_position).length_squared() >= ACTIVE_SQDIST_UPDATE:
+		update_active_chunks(player_new_position)
+		active_last_position = player_new_position
 	if (enemies_last_position - player_new_position).length_squared() >= ENEMIES_SQDIST_UPDATE:
 		enemies_last_position = player_new_position
 		detect_enemies(delta)
@@ -164,38 +170,6 @@ func update_terrain_lod(pos: Vector3):
 		elif d < DIST_HIRES*DIST_HIRES:
 			if c.mesh != terrain_hires[c.name]:
 				c.mesh = terrain_hires[c.name]
-
-func load_everything():
-	for c in chunks.values():
-		var path = chunk_loader.PATH_CONTENT % c.name
-		if ResourceLoader.exists(path):
-			var scn = load(path).instance()
-			scn.name = "dynamic_content"
-			c.add_child(scn)
-
-func free_everything():
-	print("everything mus go!!!")
-	free_between(10, 80)
-
-func free_between(start, end):
-	var i = 0
-	for c in chunks.values():
-		i += 1
-		if i < start:
-			continue
-		elif i > end:
-			break
-		if c.has_node("dynamic_content"):
-			print(c.name)
-			c.get_node('dynamic_content').queue_free()
-
-func free_every_other(on_even : bool):
-	var even = on_even
-	for c in chunks.values():
-		if c.has_node("dynamic_content") and even:
-			print(c.name)
-			c.get_node('dynamic_content').queue_free()
-		even = !even
 
 func start_loading_chunks():
 	# Sort the chunks by distance from player
@@ -239,26 +213,28 @@ func detect_enemies(_delta):
 	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):
 		show_combat_tutorial()
 
+func load_nearby_chunks(position: Vector3):
+	for ch in chunks.values():
+		var local : Vector3 = position - ch.global_transform.origin
+		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
+		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
+		
+		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch.name):
+			chunk_loader.queue_load(ch, false)
+			emit_signal("activated", ch)
+		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch.name):
+			chunk_loader.queue_unload(ch)
+			emit_signal("deactivated", ch)
+
 func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
+		if !chunk_loader.is_loaded(ch.name):
+			continue
 		var local : Vector3 = position - ch.global_transform.origin
-		var hlocal : Vector3 = local
-		hlocal.y = 0
-		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
-		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
 		var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
 		var deactivate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_DEACTIVATE)
-		
-		if load_zone.has_point(local):
-			if !chunk_loader.is_loaded(ch.name):
-				chunk_loader.queue_load(ch, activate_zone.has_point(local))
-				emit_signal("activated", ch)
-			active_box.text += "\n\t" + ch.name
-		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch.name):
-			chunk_loader.queue_unload(ch)
-			emit_signal("deactivated", ch)
 		
 		if activate_zone.has_point(local):
 			chunk_loader.activate(ch)

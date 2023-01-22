@@ -100,8 +100,10 @@ material/0 = ExtResource( 9 )
 [node name="water" parent="mine" index="20"]
 material/0 = SubResource( 12 )
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="1"]
-transform = Transform( 0.980039, -0.189268, 0.0608314, 0.182214, 0.977543, 0.10587, -0.079503, -0.0926721, 0.992518, 164.546, 356.597, 75.4154 )
+[node name="active_entities" type="Spatial" parent="." index="2"]
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="0"]
+transform = Transform( 0.980039, -0.189268, 0.0608315, 0.182214, 0.977543, 0.10587, -0.079503, -0.0926721, 0.992518, 164.546, 356.597, 75.4154 )
 intensity = 0.06
 max_distance = 16384.0
 extents = Vector3( 170, 32.287, 32.6937 )
@@ -109,19 +111,19 @@ origin_offset = Vector3( 0.355469, 0, 1.10156 )
 interior_enable = true
 interior_ambient_color = Color( 0.0705882, 0.0705882, 0.0745098, 1 )
 
-[node name="zone_cave2" type="MultiMeshSystem" parent="." index="2"]
+[node name="zone_cave2" type="MultiMeshSystem" parent="active_entities" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106.084, 0, 160.086 )
 
-[node name="platform_square" parent="zone_cave2" index="0" instance=ExtResource( 20 )]
+[node name="platform_square" parent="active_entities/zone_cave2" index="0" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 233.084, -15, -94.086 )
 
-[node name="falling_platform3" parent="zone_cave2" index="1" instance=ExtResource( 19 )]
+[node name="falling_platform3" parent="active_entities/zone_cave2" index="1" instance=ExtResource( 19 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 228.084, -19, -94.086 )
 
-[node name="fountainA_large3" parent="zone_cave2" index="2" instance=ExtResource( 13 )]
+[node name="fountainA_large3" parent="active_entities/zone_cave2" index="2" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 218.8, -23, -95.086 )
 
-[node name="ReflectionProbe4" type="ReflectionProbe" parent="zone_cave2" index="3"]
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="active_entities/zone_cave2" index="3"]
 transform = Transform( 1, 0, 0, 0, 0.978265, 0.207361, 0, -0.207361, 0.978265, 228.768, 96.723, -60.2659 )
 intensity = 0.06
 max_distance = 16384.0
@@ -129,7 +131,7 @@ extents = Vector3( 368.76, 222.716, 128.127 )
 origin_offset = Vector3( 0.0507812, -93.3086, -54.3184 )
 interior_enable = true
 
-[node name="OmniLight" type="OmniLight" parent="zone_cave2" index="4"]
+[node name="OmniLight" type="OmniLight" parent="active_entities/zone_cave2" index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.41999, 8.92444 )
 light_color = Color( 0.67451, 0.898039, 0.694118, 1 )
 light_energy = 0.205
@@ -137,96 +139,96 @@ omni_range = 45.8396
 script = ExtResource( 11 )
 distance = 300.0
 
-[node name="death_plane" parent="zone_cave2" index="5" instance=ExtResource( 5 )]
+[node name="death_plane" parent="active_entities/zone_cave2" index="5" instance=ExtResource( 5 )]
 transform = Transform( 74.0136, 0, 0, 0, -3.23524e-06, 1, 0, -74.0136, -4.37114e-08, 3.8251, -23.7478, -0.0701904 )
 mesh = SubResource( 1 )
 material/0 = SubResource( 10 )
 
-[node name="rock_kinematic" parent="zone_cave2" index="6" instance=ExtResource( 6 )]
+[node name="rock_kinematic" parent="active_entities/zone_cave2" index="6" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65686, 1.53332, 37.2202 )
 
-[node name="rock_collapsible" parent="zone_cave2" index="7" instance=ExtResource( 8 )]
+[node name="rock_collapsible" parent="active_entities/zone_cave2" index="7" instance=ExtResource( 8 )]
 transform = Transform( 0.981756, 0, -0.190146, 0, 1, 0, 0.190146, 0, 0.981756, -10.9729, -2.62127, 16.5222 )
 
-[node name="rock_collapsible4" parent="zone_cave2" index="8" instance=ExtResource( 8 )]
+[node name="rock_collapsible4" parent="active_entities/zone_cave2" index="8" instance=ExtResource( 8 )]
 transform = Transform( 0.533179, 0, 0.846003, 0, 1, 0, -0.846003, 0, 0.533179, -4.37791, -2.90909, 29.9951 )
 
-[node name="rock_collapsible2" parent="zone_cave2" index="9" instance=ExtResource( 8 )]
+[node name="rock_collapsible2" parent="active_entities/zone_cave2" index="9" instance=ExtResource( 8 )]
 transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -10.7202, -2.62127, 14.7359 )
 
-[node name="rock_collapsible3" parent="zone_cave2" index="10" instance=ExtResource( 8 )]
+[node name="rock_collapsible3" parent="active_entities/zone_cave2" index="10" instance=ExtResource( 8 )]
 transform = Transform( 0.999986, 0, 0.00524011, 0, 1, 0, -0.00524011, 0, 0.999986, -9.33702, -3.37846, -16.5102 )
 
-[node name="stamina_up_pickup" parent="zone_cave2" index="11" instance=ExtResource( 16 )]
+[node name="stamina_up_pickup" parent="active_entities/zone_cave2" index="11" instance=ExtResource( 16 )]
 transform = Transform( 1, 0, 0, 0, 0.208538, 0.978014, 0, -0.978014, 0.208538, 11.0286, 0.379293, 37.1352 )
 item_id = "stamina_up"
 
-[node name="preview" parent="zone_cave2/stamina_up_pickup" index="4" instance=ExtResource( 7 )]
+[node name="preview" parent="active_entities/zone_cave2/stamina_up_pickup" index="4" instance=ExtResource( 7 )]
 transform = Transform( 1, 5.96046e-08, 2.23517e-08, 5.96046e-08, 1, -4.47035e-08, 1.49012e-08, 1.49012e-08, 1, 0.0322037, -0.147136, 0.00802612 )
 palette = SubResource( 9 )
 
-[node name="water_collision" type="StaticBody" parent="zone_cave2" index="12"]
+[node name="water_collision" type="StaticBody" parent="active_entities/zone_cave2" index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 213.252, -25.8339, -95.296 )
 collision_layer = 8448
 collision_mask = 0
 
-[node name="CollisionShape2" type="CollisionShape" parent="zone_cave2/water_collision" index="0"]
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/zone_cave2/water_collision" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00012207, 9.53674e-06, 1.52588e-05 )
 shape = SubResource( 17 )
 
-[node name="CollisionShape" type="CollisionShape" parent="zone_cave2/water_collision" index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_cave2/water_collision" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 170.622, 4.41721, -6.08727 )
 shape = SubResource( 18 )
 
-[node name="OmniLight2" type="OmniLight" parent="zone_cave2" index="13"]
+[node name="OmniLight2" type="OmniLight" parent="active_entities/zone_cave2" index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.7323, -8.38254, -74.1619 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 20.3953
 omni_attenuation = 1.8025
 
-[node name="OmniLight3" type="OmniLight" parent="zone_cave2" index="14"]
+[node name="OmniLight3" type="OmniLight" parent="active_entities/zone_cave2" index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 126.474, -9.89096, -95.5181 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 25.5357
 omni_attenuation = 1.8025
 
-[node name="OmniLight4" type="OmniLight" parent="zone_cave2" index="15"]
+[node name="OmniLight4" type="OmniLight" parent="active_entities/zone_cave2" index="15"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 183.936, -8.38254, -103.529 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 24.1449
 omni_attenuation = 1.8025
 
-[node name="OmniLight8" type="OmniLight" parent="zone_cave2" index="16"]
+[node name="OmniLight8" type="OmniLight" parent="active_entities/zone_cave2" index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 219.717, -8.38254, -88.408 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 20.3953
 omni_attenuation = 1.8025
 
-[node name="OmniLight9" type="OmniLight" parent="zone_cave2" index="17"]
+[node name="OmniLight9" type="OmniLight" parent="active_entities/zone_cave2" index="17"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 273.169, -8.38254, -103.509 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 27.2485
 omni_attenuation = 1.8025
 
-[node name="OmniLight5" type="OmniLight" parent="zone_cave2" index="18"]
+[node name="OmniLight5" type="OmniLight" parent="active_entities/zone_cave2" index="18"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 340.72, -13.9264, -104.768 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 35.3446
 omni_attenuation = 1.8025
 
-[node name="OmniLight6" type="OmniLight" parent="zone_cave2" index="19"]
+[node name="OmniLight6" type="OmniLight" parent="active_entities/zone_cave2" index="19"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 395.512, 2.65094, -104.768 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 35.3446
 omni_attenuation = 1.8025
 
-[node name="OmniLight7" type="OmniLight" parent="zone_cave2" index="20"]
+[node name="OmniLight7" type="OmniLight" parent="active_entities/zone_cave2" index="20"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 374.111, 2.65094, -104.768 )
 light_color = Color( 0.564706, 1, 0.827451, 1 )
 omni_range = 35.3446
 omni_attenuation = 1.8025
 
-[node name="deathgnat" parent="zone_cave2" index="21" instance=ExtResource( 14 )]
+[node name="deathgnat" parent="active_entities/zone_cave2" index="21" instance=ExtResource( 14 )]
 transform = Transform( -0.000580712, 0, -1, 0, 1, 0, 1, 0, -0.000580712, 400.767, -10.9639, -103.363 )
 respawns = false
 reset_on_player_death = true
@@ -238,86 +240,86 @@ health = 250
 speed = 0.0
 orb_cooldown = 0.5
 
-[node name="custom_awareness" type="Area" parent="zone_cave2/deathgnat" index="8"]
+[node name="custom_awareness" type="Area" parent="active_entities/zone_cave2/deathgnat" index="8"]
 collision_layer = 0
 collision_mask = 6
 
-[node name="CollisionShape" type="CollisionShape" parent="zone_cave2/deathgnat/custom_awareness" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_cave2/deathgnat/custom_awareness" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00728607, 0, 12.5431 )
 shape = SubResource( 19 )
 
-[node name="OmniLight" type="OmniLight" parent="zone_cave2/deathgnat" index="9"]
+[node name="OmniLight" type="OmniLight" parent="active_entities/zone_cave2/deathgnat" index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000259399, 0.000486374, -0.448639 )
 light_color = Color( 1, 0, 0, 1 )
 omni_range = 1.9922
 
-[node name="gunner" parent="zone_cave2" index="22" instance=ExtResource( 18 )]
+[node name="gunner" parent="active_entities/zone_cave2" index="22" instance=ExtResource( 18 )]
 transform = Transform( 0.681517, 0, -0.731802, 0, 1, 0, 0.731802, 0, 0.681517, 402.964, -18.1827, -114.248 )
 respawns = false
 reset_on_player_death = true
 
-[node name="gunner2" parent="zone_cave2" index="23" instance=ExtResource( 18 )]
+[node name="gunner2" parent="active_entities/zone_cave2" index="23" instance=ExtResource( 18 )]
 transform = Transform( -0.434704, 0, -0.900573, 0, 1, 0, 0.900573, 0, -0.434704, 403.48, -18.1827, -91.6573 )
 respawns = false
 reset_on_player_death = true
 
-[node name="crawly" parent="zone_cave2" index="24" instance=ExtResource( 17 )]
+[node name="crawly" parent="active_entities/zone_cave2" index="24" instance=ExtResource( 17 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 378.62, -20.0482, -105.533 )
 respawns = false
 reset_on_player_death = true
 
-[node name="crawly2" parent="zone_cave2" index="25" instance=ExtResource( 17 )]
+[node name="crawly2" parent="active_entities/zone_cave2" index="25" instance=ExtResource( 17 )]
 transform = Transform( 0.821456, 0, -0.570271, 0, 1, 0, 0.570271, 0, 0.821456, 390.924, -18.1827, -113.842 )
 respawns = false
 reset_on_player_death = true
 
-[node name="crawly3" parent="zone_cave2" index="26" instance=ExtResource( 17 )]
+[node name="crawly3" parent="active_entities/zone_cave2" index="26" instance=ExtResource( 17 )]
 transform = Transform( -0.657722, 0, -0.753261, 0, 1, 0, 0.753261, 0, -0.657722, 383.5, -18.1827, -91.9104 )
 respawns = false
 reset_on_player_death = true
 
-[node name="rock_kinematic2" parent="zone_cave2" index="27" instance=ExtResource( 6 )]
+[node name="rock_kinematic2" parent="active_entities/zone_cave2" index="27" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 0.912289, -0.409548, 0, 0.409548, 0.912289, 355.696, -23.3645, -114.649 )
 initial_velocity = 15.0
 
-[node name="bobble" parent="zone_cave2" index="28" instance=ExtResource( 12 )]
+[node name="bobble" parent="active_entities/zone_cave2" index="28" instance=ExtResource( 12 )]
 transform = Transform( 0.191735, 0.0368509, -0.980755, -0.00707041, 0.999321, 0.0361662, 0.981421, 0, 0.191865, 355.202, -22.5447, -104.051 )
 
-[node name="bobble2" parent="zone_cave2" index="29" instance=ExtResource( 12 )]
+[node name="bobble2" parent="active_entities/zone_cave2" index="29" instance=ExtResource( 12 )]
 transform = Transform( 0.799807, 0.0702963, -0.596127, -0.0563629, 0.997526, 0.0420094, 0.597605, 0, 0.80179, 357.737, -21.3901, -89.309 )
 
-[node name="fountainA_large2" parent="zone_cave2" index="30" instance=ExtResource( 13 )]
+[node name="fountainA_large2" parent="active_entities/zone_cave2" index="30" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.37393, 5.52416, -81.6223 )
 
-[node name="falling_platform" parent="zone_cave2" index="31" instance=ExtResource( 19 )]
+[node name="falling_platform" parent="active_entities/zone_cave2" index="31" instance=ExtResource( 19 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 140.656, -14.5261, -94.3604 )
 delay = 0.5
 
-[node name="falling_platform2" parent="zone_cave2" index="32" instance=ExtResource( 19 )]
+[node name="falling_platform2" parent="active_entities/zone_cave2" index="32" instance=ExtResource( 19 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 195.285, -24.3329, -83.905 )
 delay = 0.5
 
-[node name="fountainA_large" parent="zone_cave2" index="33" instance=ExtResource( 13 )]
+[node name="fountainA_large" parent="active_entities/zone_cave2" index="33" instance=ExtResource( 13 )]
 transform = Transform( 0.992353, 0, 0.123432, 0, 1, 0, -0.123432, 0, 0.992353, 123.231, -22.9204, -90.7266 )
 
-[node name="entry_graveyard" type="Area" parent="zone_cave2" index="34"]
+[node name="entry_graveyard" type="Area" parent="active_entities/zone_cave2" index="34"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 388.101, -19.8659, -102.675 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 21 )
 stat = "visited/graveyard_085"
 
-[node name="CollisionShape" type="CollisionShape" parent="zone_cave2/entry_graveyard" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_cave2/entry_graveyard" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.11829, 0, 0 )
 shape = SubResource( 21 )
 
-[node name="entry_large_cave" type="Area" parent="zone_cave2" index="35"]
+[node name="entry_large_cave" type="Area" parent="active_entities/zone_cave2" index="35"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 234, -5, -93 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 21 )
 stat = "visited/large_cave_085"
 
-[node name="CollisionShape" type="CollisionShape" parent="zone_cave2/entry_large_cave" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_cave2/entry_large_cave" index="0"]
 transform = Transform( -0.00775757, -0.999421, 0.0331315, 0.997158, -0.00524842, 0.0751594, -0.074942, 0.0336203, 0.996621, -9.06949, -3.44589, -4.66943 )
 shape = SubResource( 20 )
