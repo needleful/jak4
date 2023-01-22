@@ -345,7 +345,7 @@ func clear_fog_override():
 	env_override = false
 
 func is_active(chunk_name):
-	return chunk_loader.is_active(chunk_name)
+	return chunk_loader.is_loaded(chunk_name)
 
 func get_dynamic_content(chunk_name):
 	return get_node(chunk_name).get_node("dynamic_content")

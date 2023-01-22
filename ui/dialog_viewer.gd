@@ -149,7 +149,6 @@ func advance():
 			if r is Dictionary and "_otherwise" in r:
 				otherwise_used = true
 				r = r["_otherwise"]
-				print("otherwise: ", r)
 			if r is Dictionary:
 				if r == RESULT_END:
 					return
@@ -170,7 +169,7 @@ func advance():
 			current_item = sequence.failed_next(current_item)
 			if sequence.went_up:
 				otherwise = false
-			if !otherwise_used:
+			elif !otherwise_used:
 				otherwise = true
 		else:
 			otherwise = false

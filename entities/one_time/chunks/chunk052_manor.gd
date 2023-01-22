@@ -15,8 +15,8 @@ func _on_stat_changed(stat_name, value):
 		return
 	match stat_name:
 		"manor052/investigation1":
-			$"../zone_estate/rotating_map_dialog".enabled = true
+			$"../active_entities/zone_estate/rotating_map_dialog".enabled = true
 
 func _on_rotating_map_completed():
-	$"../zone_estate/bookshelf".add_power()
-	$"../zone_estate/rotating_map_dialog".enabled = false
+	$"../active_entities/zone_estate/bookshelf".add_power()
+	$"../active_entities/zone_estate/rotating_map_dialog".enabled = false

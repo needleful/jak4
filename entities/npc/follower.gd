@@ -42,7 +42,6 @@ func _ready():
 	if !(sc is String):
 		sc = ""
 	if !(default_location and sc == "") and sc != chunk:
-		print("%s:%s doesn't exist: current is %s" % [friendly_id, chunk, sc])
 		queue_free()
 		return
 
@@ -60,6 +59,17 @@ func _ready():
 				print_debug("Not spatial: ", l.get_path())
 		else:
 			print_debug("Doesn't exist: ", loc)
+	if get_parent().name == "active_entities":
+		call_deferred("extract")
+
+func extract():
+	# TODO: probably the opposite
+	var p = get_parent()
+	var gp = p.get_parent()
+	var t = global_transform
+	p.remove_child(self)
+	gp.add_child(self)
+	global_transform = t
 
 func _physics_process(delta):
 	match meta_state:
@@ -158,11 +168,14 @@ func _on_chunk_activated(chunk):
 		if world.is_connected("activated", self, "_on_chunk_activated"):
 			world.disconnect("activated", self, "_on_chunk_activated")
 	
-func travel_to(place:String, custom_exit := ""):
+func travel_to(_place:String, custom_exit := ""):
 	if has_node(custom_exit):
 		target = get_node(custom_exit)
+	else:
+		print_debug("NO NODE TO: ", custom_exit, " FROM ", get_path())
+		return
 	dialog.enabled = false
-	print("travelling to ", place)
+	print("travelling to ", target.get_path())
 	set_mstate(MetaState.TravelTo)
 
 func set_mstate(new_mstate):

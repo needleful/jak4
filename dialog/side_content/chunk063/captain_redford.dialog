@@ -50,7 +50,7 @@
 		It can probably be kicked open now.
 	{otherwise}
 		Marvelous! Now to find my men...
-		{main_speaker.travel_to("", "../zone_estate/path_entry")}
+		{main_speaker.travel_to("", "../path_entry")}
 {otherwise if main_speaker.at("entry")}
 	Right, where in the blazes IS everyone?
 	[You] They're gone! I've been telling you! And you haven't explained how you became a spectre!
@@ -61,7 +61,7 @@
 	Air... There's a nasty draft in here.
 	[You] Oh, come on! The windows are broken out!
 	No, no... it's moving somewhere else...
-	{main_speaker.travel_to("", "../zone_estate/shelf_view")}
+	{main_speaker.travel_to("", "../shelf_view")}
 {otherwise if Global.has_stat("manor052/investigation1")}
 	?{manor052/passage/open} 
 		So it was a passage!
@@ -76,13 +76,13 @@
 		[You] Ugh. Well, I'm curious what's at the end of this all the same...
 		{Global.remove_stat("manor052/investigation1")}
 		{main_speaker.emit_signal("npc_event", "investigation1_complete")}
-		{main_speaker.travel_to("", "../zone_estate/path_passage")}
+		{main_speaker.travel_to("", "../path_passage")}
 	{otherwise}
 		There must be a lock or something...
 {otherwise if main_speaker.at("shelf_view")}
 	?{manor052/passage/open}
 		Alright, let's go in.
-		{main_speaker.travel_to("", "../zone_estate/path_passage")}
+		{main_speaker.travel_to("", "../path_passage")}
 	{otherwise} 
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
@@ -90,17 +90,21 @@
 		+{manor052/investigation1}
 {otherwise if main_speaker.at("kitchen")}
 	!{manor052/investigation2}
-		+{manor052/investigation2}
 		Well done! It appears it was a secret passage to the kitchen! Perhaps for servants.
 		[You] It doesn't appear any soldiers have ever quartered here.
 			This is just a regular home.
 		No. We need to investigate further! Let's find the keys to the rest of the home.
+		+{manor052/investigation2}
+	{otherwise}
+		Did you find anything?
+		{!Global.count("manor_den_key")}
+			[You] Nothing yet.
+			Let's keep looking I'm sure there's a way into the rest of the house.
 	{Global.count("manor_den_key")}
-		{Global.remove_stat("manor052/investigation2")}
 		[You] I found this key in a lockbox.
-		Oh, excellent! That must be the key to more rooms in the house!
-		Wonderful! Let's go see what it unlocks!
-		{main_speaker.travel_to("", "../zone_estate/path_den")}
+		Oh, excellent! Let's go see what it unlocks!
+		{Global.remove_stat("manor052/investigation2")}
+		{main_speaker.travel_to("", "../path_den")}
 {otherwise if main_speaker.at("den")}
 	!{manor052/investigation3}
 		+{manor052/investigation3}

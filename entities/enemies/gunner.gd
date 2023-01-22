@@ -145,6 +145,7 @@ func aim(delta: float, speed: float):
 			target_pos = target.get_target_ref()
 		else:
 			target_pos = target.global_transform.origin
+		
 		var aim_dir: Vector3 = (target_pos - laser.global_transform.origin).normalized()
 		if aim_dir.is_normalized():
 			if aim_dir.dot(global_transform.basis.z) < 0:
