@@ -1,0 +1,180 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
+[ext_resource path="res://_glb/chunks/chunk057.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=3]
+[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=4]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=7]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=8]
+[ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/copper/crate1.tscn" type="PackedScene" id=11]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=12]
+[ext_resource path="res://ui/items/vis/mesh_pistol.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=14]
+[ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/furniture/incense.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=17]
+[ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=18]
+[ext_resource path="res://dialog/side_content/letter_delivery/natia_and_yomi.dialog" type="Resource" id=19]
+[ext_resource path="res://entities/env/electrical/wind_generator.tscn" type="PackedScene" id=20]
+[ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=21]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.532756
+
+[node name="chunk057" instance=ExtResource( 2 )]
+script = ExtResource( 1 )
+
+[node name="office" parent="." index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="hall1" parent="." index="1"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="door-kine" parent="." index="2"]
+collision_layer = 257
+
+[node name="mesh" parent="door-kine" index="0"]
+material/0 = ExtResource( 3 )
+
+[node name="door2-kine" parent="." index="3"]
+collision_layer = 257
+
+[node name="mesh" parent="door2-kine" index="0"]
+material/0 = ExtResource( 3 )
+
+[node name="window" parent="." index="4"]
+material/0 = ExtResource( 3 )
+
+[node name="balances" parent="." index="5"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="balances_window" parent="." index="6"]
+material/0 = ExtResource( 3 )
+
+[node name="exit" parent="." index="7"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="exit_door-kine" parent="exit" index="0"]
+collision_layer = 257
+
+[node name="mesh" parent="exit/exit_door-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="exit_door2-kine" parent="exit" index="1"]
+collision_layer = 257
+
+[node name="mesh" parent="exit/exit_door2-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 4 )
+
+[node name="hut" parent="." index="8" instance=ExtResource( 5 )]
+transform = Transform( 0.911899, 0, 0.410415, 0, 1, 0, -0.410415, 0, 0.911899, 54.2201, 1213.95, -6.19729 )
+
+[node name="hut_bath" parent="." index="9" instance=ExtResource( 6 )]
+transform = Transform( -0.478571, 0, 0.878049, 0, 1, 0, -0.878049, 0, -0.478571, 65.8056, 1212.3, -12.9151 )
+
+[node name="active_entities" type="Spatial" parent="." index="10"]
+
+[node name="natia_and_yomi" type="Spatial" parent="active_entities" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 51.8462, 1215.66, -10.2612 )
+script = ExtResource( 7 )
+condition = "Global.stat(\"natia/leaving\") and Global.stat(\"mother/activated\")"
+
+[node name="joined_dialog" type="Area" parent="active_entities/natia_and_yomi" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.80608, 2.37415, 3.23703 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 17 )
+dialog_sequence = ExtResource( 19 )
+friendly_id = "natia_and_yomi"
+
+[node name="dialog_circle" parent="active_entities/natia_and_yomi/joined_dialog" index="0" instance=ExtResource( 18 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/natia_and_yomi/joined_dialog" index="1"]
+shape = SubResource( 1 )
+
+[node name="npc_natia" parent="active_entities/natia_and_yomi" index="1" instance=ExtResource( 8 )]
+transform = Transform( 0.998717, 0, 0.0506394, 0, 1, 0, -0.0506394, 0, 0.998717, 1.69616, 2.37415, 2.39959 )
+
+[node name="npc_yomi" parent="active_entities/natia_and_yomi" index="2" instance=ExtResource( 8 )]
+transform = Transform( -0.982595, 0, 0.18576, 0, 1, 0, -0.18576, 0, -0.982595, 1.48785, 2.37451, 4.05549 )
+
+[node name="crate1" parent="active_entities/natia_and_yomi" index="3" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.10042, 2.42529, 3.25417 )
+
+[node name="random_ammo_pickup" parent="active_entities/natia_and_yomi/crate1" index="4" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00767517, 0.0341797, 0.326846 )
+
+[node name="random_ammo_pickup2" parent="active_entities/natia_and_yomi/crate1" index="5" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0258827, 0.0341797, -0.150106 )
+
+[node name="random_ammo_pickup3" parent="active_entities/natia_and_yomi/crate1" index="6" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0137825, 0.0341797, -0.641063 )
+
+[node name="crate2" parent="active_entities/natia_and_yomi" index="4" instance=ExtResource( 11 )]
+transform = Transform( 0.528239, 0, -0.849096, 0, 1, 0, 0.849096, 0, 0.528239, 4.75102, 2.42529, 5.94232 )
+
+[node name="random_ammo_pickup" parent="active_entities/natia_and_yomi/crate2" index="4" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00767517, 0.0341797, 0.326846 )
+
+[node name="random_ammo_pickup2" parent="active_entities/natia_and_yomi/crate2" index="5" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0258827, 0.0341797, -0.150106 )
+
+[node name="random_ammo_pickup3" parent="active_entities/natia_and_yomi/crate2" index="6" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0137825, 0.0341797, -0.641063 )
+
+[node name="wep_pistol_pickup" parent="active_entities/natia_and_yomi" index="5" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05802, 2.91431, 7.35262 )
+item_id = "wep_pistol"
+
+[node name="mesh_pistol" parent="active_entities/natia_and_yomi/wep_pistol_pickup" index="4" instance=ExtResource( 13 )]
+transform = Transform( -0.000152908, -0.0141655, -0.9999, -0.999942, 0.0107938, 0, 0.0107927, 0.999841, -0.0141663, -0.0921059, 0.019165, 0.0295451 )
+
+[node name="mesh_pistol" parent="active_entities/natia_and_yomi" index="6" instance=ExtResource( 13 )]
+transform = Transform( 0.0204782, 0.99979, 0, -0.99979, 0.0204782, 0, 0, 0, 1, 3.20426, 2.92932, 7.56908 )
+
+[node name="mesh_pistol5" parent="active_entities/natia_and_yomi" index="7" instance=ExtResource( 13 )]
+transform = Transform( 0.0199202, 0.972549, -0.231842, -0.99979, 0.0204782, 0, 0.00474771, 0.231793, 0.972753, 2.97906, 2.92932, 7.56908 )
+
+[node name="mesh_pistol6" parent="active_entities/natia_and_yomi" index="8" instance=ExtResource( 13 )]
+transform = Transform( -0.0197618, -0.964812, -0.262196, -0.99979, 0.0204782, 0, 0.00536931, 0.262141, -0.965015, 3.42781, 2.92932, 7.65635 )
+
+[node name="mesh_pistol2" parent="active_entities/natia_and_yomi" index="9" instance=ExtResource( 13 )]
+transform = Transform( 0.00122339, 0.0311131, -0.999515, -0.999228, 0.0392904, 0, 0.0392714, 0.998743, 0.0311372, 1.03913, 2.92871, 7.63273 )
+
+[node name="mesh_pistol3" parent="active_entities/natia_and_yomi" index="10" instance=ExtResource( 13 )]
+transform = Transform( 0.00472615, 0.167063, -0.985935, -0.9996, 0.0282784, 0, 0.0278806, 0.985541, 0.16713, 0.956726, 2.9303, 7.47744 )
+
+[node name="mesh_pistol4" parent="active_entities/natia_and_yomi" index="11" instance=ExtResource( 13 )]
+transform = Transform( 0.0831326, -0.996539, 0, 0.996539, 0.0831326, 0, 0, 0, 1, 0.540085, 2.93066, 7.28634 )
+
+[node name="light_wall" parent="active_entities" index="1" instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 0.23782, 0.971309, 0, -0.971309, 0.23782, 53.1347, 1220.3, -1.29004 )
+
+[node name="table2" parent="active_entities" index="2" instance=ExtResource( 10 )]
+transform = Transform( 0.076491, 0, 0.99707, 0, 1, 0, -0.99707, 0, 0.076491, 53.8311, 1218.06, -2.53046 )
+
+[node name="incense" parent="active_entities/table2" index="1" instance=ExtResource( 16 )]
+transform = Transform( 0.076491, 0, -0.99707, 0, 1, 0, 0.99707, 0, 0.076491, -0.0899506, 0.511353, -0.381489 )
+
+[node name="sitting_pillow" parent="active_entities" index="3" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 55.0056, 1218.04, -9.72525 )
+
+[node name="sitting_pillow2" parent="active_entities" index="4" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 53.4343, 1218.05, -9.52213 )
+
+[node name="bed_native" parent="active_entities" index="5" instance=ExtResource( 15 )]
+transform = Transform( 0.713268, 0, -0.700891, 0, 1, 0, 0.700891, 0, 0.713268, 52.3614, 1214.91, -8.59492 )
+
+[node name="wind_generator" parent="." index="11" instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5595, 1215.16, 7.63625 )
+move_scale = 1.66

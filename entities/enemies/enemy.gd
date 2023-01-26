@@ -85,7 +85,10 @@ func _ready():
 			linear_velocity = Vector3.ZERO
 			angular_velocity = Vector3.ZERO
 			var state := PhysicsServer.body_get_direct_state(get_rid())
-			state.transform = starting_position
+			if !state:
+				print("ERROR: no state for ", get_path())
+			else:
+				state.transform = starting_position
 			target = null
 	if drops_coat:
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)

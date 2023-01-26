@@ -1633,7 +1633,7 @@ func gravity_stun(dam):
 	if !dead:
 		set_state(State.GravityStun)
 
-func celebrate(id: String, item: Spatial, local := Transform()):
+func celebrate(id: String = "", item: Spatial = null, local := Transform()):
 	held_item = item
 	set_state(State.GetItem)
 	if held_item:

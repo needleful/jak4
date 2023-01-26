@@ -1,7 +1,7 @@
 extends Spatial
 
 export(bool) var active := true setget set_active
-export(float, 0.0, 1.0, 0.01) var move_scale := 1.0
+export(float, 0.0, 3.0, 0.01) var move_scale := 1.0
 
 onready var turbine := $generator/gen_motor
 onready var propellers := $generator/gen_motor/gen_propellers

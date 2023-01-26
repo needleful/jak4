@@ -574,7 +574,7 @@ material_override = ExtResource( 5 )
 [node name="static_collision" parent="palace" index="0"]
 collision_layer = 257
 
-[node name="zone_village_vis" type="Spatial" parent="." index="19"]
+[node name="zone_village_vis" type="Spatial" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 185.971, -218.367, -14.7952 )
 
 [node name="rock7" parent="zone_village_vis" index="0" instance=ExtResource( 22 )]
@@ -718,7 +718,7 @@ transform = Transform( -0.439641, 0, 0.898174, 0, 1, 0, -0.898174, 0, -0.439641,
 [node name="pail5" parent="zone_village_vis/hut_bath2" index="2" instance=ExtResource( 44 )]
 transform = Transform( -0.242387, 0, -0.970179, 0, 1, 0, 0.970179, 0, -0.242387, 1.58387, -0.293991, -2.29094 )
 
-[node name="zone_valley_vis" type="Spatial" parent="." index="20"]
+[node name="zone_valley_vis" type="Spatial" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 154.17, -239.567, -181.209 )
 
 [node name="pillar" parent="zone_valley_vis" index="0" instance=ExtResource( 14 )]
@@ -760,7 +760,7 @@ transform = Transform( 1, 2.14204e-08, 1.49012e-08, 7.45058e-09, 0.885788, -0.46
 [node name="rock2" parent="zone_valley_vis/rock3" index="2" instance=ExtResource( 15 )]
 transform = Transform( 1, 4.47035e-08, 7.45058e-09, 7.45058e-09, 1, 0, 0, 0, 1, 1.96449, 9.43985, 0.444672 )
 
-[node name="active_entities" type="Spatial" parent="." index="21"]
+[node name="active_entities" type="Spatial" parent="." index="7"]
 
 [node name="zone_valley" type="MultiMeshSystem" parent="active_entities" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 124.677, -258.748, -168.923 )
@@ -918,11 +918,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5734, -2.49982, 33.1836 )
 script = ExtResource( 27 )
 condition = "!Global.stat(\"mother/activated\")"
 
-[node name="npc_mother_spy" parent="active_entities/zone_valley/tower_exists2/enemies_gone/mother_zone" index="0" instance=ExtResource( 28 )]
+[node name="npc_yomi" parent="active_entities/zone_valley/tower_exists2/enemies_gone/mother_zone" index="0" instance=ExtResource( 28 )]
 transform = Transform( -0.78098, 0, -0.624556, 0, 1, 0, 0.624556, 0, -0.78098, 0.101379, 0.295822, 0.104073 )
 dialog = ExtResource( 78 )
 visual_name = "Mother"
-friendly_id = "mother_spy"
+friendly_id = "yomi"
 sitting = true
 
 [node name="npc2" parent="active_entities/zone_valley/tower_exists2/enemies_gone" index="3" instance=ExtResource( 28 )]
@@ -968,13 +968,13 @@ transform = Transform( -0.217564, 0.975336, -0.0372087, 0.961378, 0.220723, 0.16
 [node name="ruin2" parent="active_entities/zone_valley" index="34" instance=ExtResource( 17 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 88.8388, 57.3231, -15.3271 )
 
-[node name="cannon" parent="active_entities/zone_valley" index="36" instance=ExtResource( 23 )]
+[node name="cannon" parent="active_entities/zone_valley" index="35" instance=ExtResource( 23 )]
 transform = Transform( 0.119755, -0.342059, -0.932016, 0.562888, 0.796697, -0.22007, 0.817812, -0.498266, 0.28795, 99.298, 59.3417, -16.7159 )
 
-[node name="cannon_wheel" parent="active_entities/zone_valley" index="37" instance=ExtResource( 25 )]
+[node name="cannon_wheel" parent="active_entities/zone_valley" index="36" instance=ExtResource( 25 )]
 transform = Transform( 1, 0, 0, 0, 0.912801, -0.408405, 0, 0.408405, 0.912801, 100.635, 60.2826, -22.8124 )
 
-[node name="cannon_wheel2" parent="active_entities/zone_valley" index="38" instance=ExtResource( 25 )]
+[node name="cannon_wheel2" parent="active_entities/zone_valley" index="37" instance=ExtResource( 25 )]
 transform = Transform( 1, 0, 0, 0, 0.500794, 0.865566, 0, -0.865566, 0.500794, 99.8461, 59.7094, -11.9643 )
 
 [node name="zone_village" type="Spatial" parent="active_entities" index="1"]
@@ -1950,8 +1950,8 @@ reset_on_player_death = true
 transform = Transform( 0.602934, 0, 0.797791, 0, 1, 0, -0.797791, 0, 0.602934, -62.5902, -249.17, 129.113 )
 reset_on_player_death = true
 
-[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 [connection signal="body_entered" from="active_entities/npc_tutorial_tyler/tutorial_area" to="active_entities/npc_tutorial_tyler/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="active_entities/npc_tutorial_tyler/tutorial_area/tutorial_anim" to="active_entities/npc_tutorial_tyler/tutorial_area" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 
 [editable path="active_entities/zone_village/shop/stump_table/jar1/bug"]

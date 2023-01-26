@@ -23,7 +23,7 @@ func start_game():
 	if !res:
 		return
 	
-	Global.save_checkpoint(game_target.global_transform.origin)
+	Global.save_checkpoint(game_start.global_transform.origin)
 	active = true
 	game_target.show()
 	jumps = 0
@@ -56,7 +56,7 @@ func _on_cancelled():
 func _on_target_entered(body):
 	if body is PlayerBody:
 		body.game_ui.complete_game()
-		body.celebrate(null)
+		body.celebrate()
 		var complete_stat := get_stat() + "/completed"
 		if !Global.stat(complete_stat):
 			var _x = Global.add_stat(complete_stat)
