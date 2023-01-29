@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
+[ext_resource path="res://entities/env/stone/hive_hut_flat_roof.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/env/stone/garden_melon.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/env/stone/garden.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/env/stone/hive_hut_dome_roof.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/env/stone/hive_hut_single_flat.tscn" type="PackedScene" id=7]
+
+[node name="chunk028" type="Spatial"]
+script = ExtResource( 1 )
+lighting_preview = true
+
+[node name="zone_village" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50.9, 0, -208.5 )
+
+[node name="hive_hut_flat_roof" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( -0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, -4.89632, 0.234854, -4.37454 )
+
+[node name="hive_hut_flat_roof2" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 6.70367, 0.234854, -3.47453 )
+
+[node name="hive_hut_flat_roof3" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 7.50368, 0.234854, 8.12546 )
+
+[node name="hive_hut_flat_roof4" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 17.2037, 0.234854, 1.52544 )
+
+[node name="hive_hut_flat_roof5" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( 0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 16.2037, 0.234854, -9.97456 )
+
+[node name="hive_hut_flat_roof6" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 5.70368, 0.234854, -14.9746 )
+
+[node name="hive_hut_flat_roof7" parent="zone_village" instance=ExtResource( 2 )]
+transform = Transform( 0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -5.69633, 0.234854, -15.6746 )
+
+[node name="fountain" parent="zone_village" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.3, -0.5, 11 )
+
+[node name="garden" parent="zone_village" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.3, -0.1, -0.800003 )
+
+[node name="garden_melon" parent="zone_village" instance=ExtResource( 4 )]
+transform = Transform( -1, 0, 3.72529e-08, 0, 1, 0, -3.72529e-08, 0, -1, 7.49999, 8.3, 8.40001 )
+
+[node name="hive_hut_dome_roof" parent="zone_village" instance=ExtResource( 6 )]
+transform = Transform( -0.989673, 0, 0.143341, 0, 1, 0, -0.143341, 0, -0.989673, 4.5, 8.3, -10.2 )
+
+[node name="hive_hut_single_flat" parent="zone_village" instance=ExtResource( 7 )]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 17.152, 8.4, 1.53787 )
+
+[node name="hive_hut_single_flat2" parent="zone_village" instance=ExtResource( 7 )]
+transform = Transform( -0.258819, 0, 0.965925, 0, 1, 0, -0.965925, 0, -0.258819, 28.1, 0.199999, 6.69998 )
+
+[node name="hive_hut_single_flat3" parent="zone_village" instance=ExtResource( 7 )]
+transform = Transform( -0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 18.3, 0.199999, 13.4 )
+
+[node name="hive_hut_single_flat4" parent="zone_village" instance=ExtResource( 7 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 8.60002, 0.199999, 20.1 )
+
+[node name="garden" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23.2, 0, -221 )
+
+[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

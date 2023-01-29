@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk057.glb" type="PackedScene" id=2]
@@ -26,6 +26,7 @@
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=24]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=25]
 [ext_resource path="res://entities/env/stone/hut_test.tscn" type="PackedScene" id=26]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=27]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 4 )
@@ -55,56 +56,70 @@ points = PoolVector3Array( 36.2086, 11.4444, 36.2019, 36.2086, -11.4469, 36.2019
 [sub_resource type="SphereShape" id=1]
 radius = 0.532756
 
+[sub_resource type="CapsuleShape" id=5]
+radius = 66.2489
+height = 40.9099
+
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 39.3932, 34.2877, 56.9639 )
+
 [node name="chunk057" instance=ExtResource( 2 )]
 script = ExtResource( 1 )
+lighting_preview = true
 
-[node name="buildings" parent="town" index="0"]
+[node name="buildings-4" parent="town" index="0"]
+material/0 = ExtResource( 25 )
+
+[node name="buildings" parent="town" index="1"]
 material/0 = ExtResource( 25 )
 
 [node name="StaticBody" parent="town/buildings" index="0"]
 collision_layer = 257
 
-[node name="lake" parent="town" index="1"]
+[node name="buildings2" parent="town" index="2"]
+material/0 = ExtResource( 25 )
+
+[node name="buildings3" parent="town" index="3"]
+material/0 = ExtResource( 25 )
+
+[node name="lake" parent="town" index="4"]
 material/0 = SubResource( 2 )
 
-[node name="river" parent="town" index="2"]
+[node name="river" parent="town" index="5"]
 material/0 = SubResource( 3 )
 
 [node name="StaticBody" parent="town/river" index="0"]
 collision_layer = 8448
 collision_mask = 0
 
-[node name="river_rocks" parent="town" index="3"]
+[node name="river_rocks" parent="town" index="6"]
 material/0 = ExtResource( 24 )
 
 [node name="StaticBody" parent="town/river_rocks" index="0"]
 collision_layer = 257
 
-[node name="rock" parent="town" index="4"]
-material/0 = ExtResource( 24 )
-
-[node name="StaticBody" parent="town/rock" index="0"]
-collision_layer = 257
-
-[node name="rocks2" parent="town" index="5"]
+[node name="rocks2" parent="town" index="7"]
 material/0 = ExtResource( 24 )
 
 [node name="StaticBody" parent="town/rocks2" index="0"]
 collision_layer = 257
 
-[node name="rocks3" parent="town" index="6"]
+[node name="rocks3" parent="town" index="8"]
 material/0 = ExtResource( 24 )
 
 [node name="StaticBody" parent="town/rocks3" index="0"]
 collision_layer = 257
 
-[node name="rocks4" parent="town" index="7"]
+[node name="rocks4" parent="town" index="9"]
 material/0 = ExtResource( 24 )
 
 [node name="StaticBody" parent="town/rocks4" index="0"]
 collision_layer = 257
 
-[node name="wall1" parent="town" index="8"]
+[node name="temple" parent="town" index="10"]
+material/0 = ExtResource( 25 )
+
+[node name="wall1" parent="town" index="11"]
 material/0 = ExtResource( 25 )
 
 [node name="StaticBody" parent="town/wall1" index="0"]
@@ -220,12 +235,32 @@ transform = Transform( 0.713268, 0, -0.700891, 0, 1, 0, 0.700891, 0, 0.713268, 5
 [node name="npc" parent="active_entities" index="7" instance=ExtResource( 8 )]
 transform = Transform( -0.994901, 0, 0.100859, 0, 1, 0, -0.100859, 0, -0.994901, 80.5342, 1087.06, 214.333 )
 
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="8"]
+transform = Transform( 0.698215, 0, 0.715888, 0, 1, 0, -0.715888, 0, 0.698215, 34.3674, 1091.39, 93.2751 )
+extents = Vector3( 37.1262, 28.3027, 65.7064 )
+
+[node name="wind_reduction" type="Area" parent="active_entities" index="9"]
+transform = Transform( 0.641898, 0, 0.76679, 0, 1, 0, -0.76679, 0, 0.641898, 31.1376, 1102.08, 90.452 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 27 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/wind_reduction" index="0"]
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -2.69262, 0, -9.90397 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/wind_reduction" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32.5542, 0, -19.168 )
+shape = SubResource( 6 )
+
 [node name="wind_generator" parent="." index="4" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5595, 1215.16, 7.63625 )
 move_scale = 1.66
 
-[node name="hut_test" parent="." index="7" instance=ExtResource( 26 )]
+[node name="hut_test" parent="." index="5" instance=ExtResource( 26 )]
 transform = Transform( -0.0827407, 0, 0.996571, 0, 1, 0, -0.996571, 0, -0.0827407, 81.3463, 1087.06, 214.439 )
 
-[node name="hut2" parent="." index="8" instance=ExtResource( 5 )]
-transform = Transform( -0.995911, 0, 0.090344, 0, 1, 0, -0.090344, 0, -0.995911, 94.7063, 1087.16, 212.163 )
+[node name="hut2" parent="." index="6" instance=ExtResource( 5 )]
+transform = Transform( -0.995911, 0, 0.090344, 0, 1, 0, -0.090344, 0, -0.995911, 94.7063, 1086.34, 212.163 )
+
+[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
