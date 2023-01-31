@@ -26,7 +26,7 @@ const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
 const MIN_DOT_CLIMB_MOVEMENT := -0.7
 const MIN_DOT_CLIMB_AIR := 0.1
-const MIN_DOT_LEDGE := 0.2
+const MIN_DOT_LEDGE := 0.4
 const MIN_DOT_LEDGE_SLIDE := 0.7
 const MIN_DOT_CEILING := -0.7
 
@@ -331,6 +331,7 @@ onready var ledgeCastLeft := $body_mesh/leftHandCast
 onready var ledgeCastRight := $body_mesh/rightHandCast
 onready var ledgeCastCenter := $body_mesh/centerCast
 onready var ledgeCastCeiling := $body_mesh/ceilingCast
+onready var wallCheck := $body_mesh/wall_check
 onready var ledge_area := $body_mesh/ledge_area
 onready var ledgeRef := $body_mesh/reference
 
@@ -1363,12 +1364,28 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	var left:bool = check_cast(ledgeCastLeft, min_dot)
 	var right:bool = check_cast(ledgeCastRight, min_dot)
 	var center:bool = check_cast(ledgeCastCenter, min_dot)
+	var wall_cast_end: Vector3
 	# debug
 	if true:
 		debug_cast(ledgeCastCenter, min_dot, $body_mesh/debug_center)
 		debug_cast(ledgeCastLeft, min_dot, $body_mesh/debug_left)
 		debug_cast(ledgeCastRight, min_dot, $body_mesh/debug_right)
-	return center or left or right
+	
+	if center:
+		wall_cast_end = ledgeCastCenter.get_collision_point()
+	elif left:
+		wall_cast_end = ledgeCastLeft.get_collision_point()
+	elif right:
+		wall_cast_end = ledgeCastRight.get_collision_point()
+	else:
+		return false
+	
+	var s = get_world().space
+	s = PhysicsServer.space_get_direct_state(s)
+	var c = s.intersect_ray(wallCheck.global_transform.origin, wall_cast_end, [self], 1)
+	var no_wall = !c or c.normal.y > min_dot
+	
+	return no_wall and (center or left or right)
 
 func check_cast(cast: RayCast, min_dot: float):
 	return (
