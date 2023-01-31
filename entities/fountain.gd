@@ -1,6 +1,6 @@
 extends Spatial
 
-export(NodePath) var water := "circle"
+export(NodePath) var water := NodePath("circle")
 
 func _ready():
 	if has_node(water):
