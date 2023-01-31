@@ -1356,8 +1356,6 @@ func can_climb() -> bool:
 	)
 
 func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
-	if crouch_head.get_overlapping_bodies().size() > 0:
-		return false
 	if ledgeCastCeiling.is_colliding():
 		return false
 	
