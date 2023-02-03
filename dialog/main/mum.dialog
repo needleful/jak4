@@ -1,6 +1,30 @@
 {mention("main_area")}
 :_start
-?{mum/info}
+!{mum/info}
+	{talked == 0}
+		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")} {Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")} {Global.add_stat("mum/info_needed")}
+		* The thing in front of you is almost nothing at all.
+		* The outline of a dress. Her arched nose. The faint hum of her voice, whispering something less than words.
+		* That's all you can make out. Somehow this is more than you could recall.
+		* It's unmistakable.
+		[You] Hi... Mum.
+			I....
+		{player.anim_play("SitSad", "SittingSad-loop")} 
+		[You] ...
+			It works. It actually works. After all these years...
+			All there is now is to find people who knew you, or records, or... I don't know. Whatever I can find about you. The Medium will work with it.
+			...
+			I didn't expect to feel like this....
+		* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
+		* Soon, you may find what you're looking for.
+		{player.anim_exit("StandSad")} * You turn to leave.
+		{exit()}
+	{otherwise}
+		* The ghost of your mother lingers for a moment.
+		* You won't get anything more from her without learning more.
+		[You] I'll come back, okay mum?
+		* She murmurs incomprehensibly as you leave.
+{otherwise}
 	{Global.add_stat("mum/true_talked") == 1}
 		Excuse me, do I know you?
 		[You] Hi Mum... It's me, Jackie.
@@ -116,37 +140,7 @@
 				Jackie. Do you remember what I said? We need to talk inside the Medium. It's very important.
 				{exit()}
 
-{otherwise}
-	{talked == 0}
-		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")} {Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")} {Global.add_stat("mum/info_needed")}
-		* The thing in front of you is almost nothing at all.
-		* The outline of a dress. Her arched nose. That's all you can make out. Somehow this is more than you could recall.
-		* It's unmistakable.
-		[You] Hi mum.
-			I-.. I....
-		* You can't think of anything to say.
-		* Can she even hear you like this? Would talking to her mean anything?
-		[You] You lived around here.  Maybe I can find.. I don't know. Old friends? Your home?
-			The memory scanner can use those right? If I know more about you?
-		* What little you have gives you hope.
-		* Who knows what the machine will be able to show with more?
-		* You turn to leave.
-		{exit()}
-	{otherwise if talked < 3}
-		* The ghost of your mother lingers for a moment.
-		* You won't get anything more from her without learning more.
-		[You] I'll come back, okay mum?
-		* She murmurs incomprehensibly as you leave.
-	{otherwise}
-		* She still says nothing.
-		[You] I've been looking for anything to help. But I have no idea where to go...
-			{animation("sit")} I know you lived around here.
-			But I just... don't know what to look for.
-			Think... Where specifically did she live? I think it was...
-		The plateau?
-		{animation("stand")} * You're startled by the voice. It's not really your mother's, as far as you can tell, but she's right.
-		{animation("plateau")} * She lived up on the plateau. If anyone would remember her, they're most likely to be there.
-		[You] I should go.
+
 {track_conversation_time()}
 {exit()}
 
@@ -172,7 +166,7 @@
 			!{mum/account/balter}
 				...
 				When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
-				I remember thinking, "Maybe we can call sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
+				I remember thinking, "Maybe we can sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
 			I don't think there was ever a way we could escape...
 			The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
 			?{mum/account/orstad}
@@ -184,7 +178,6 @@
 				// TODO: research life in cities taken over by invading forces
 				// Maybe somebody else saved Mum? Who would know?
 				It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
-				[You] I heard some people escaped the village. Do you know how?
 			+{mum/discussed/plateau}
 		{otherwise}!{mum/info/plateau}!{mum/discussed/village}
 			Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
@@ -282,6 +275,10 @@
 		[You] I don't know... Perhaps they were ancient miners, or researchers?
 		They are always so strange... More questions than answers.
 		+{mum/discussed/graveyard_085}
+	> ?{visited/village_080}?{mum/discussed/village_080} Do you know anything about those curious little villages along the mountain river?
+		I've only visited them a few times, to be honest.
+		They barely speak Yaqazi
+
 	> {skip()} (Back)
 		{goto("main_loop")}
 > I'll see you later, mum.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/hut_curves_bug.tscn" type="PackedScene" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/stone/hut_curves_noodle.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/stone/fountain2.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/control/trigger_zone.gd" type="Script" id=7]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 59.4623, 17.0945, 26.4847 )
 
 [node name="chunk080" type="Spatial"]
 script = ExtResource( 1 )
@@ -72,3 +76,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.478273, 1.63605, -1.22362 )
 [node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities/zone_village2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.3662, 2.51825, -4.58818 )
 extents = Vector3( 14.0894, 5.23004, 11.2339 )
+
+[node name="visited_village_80" type="Area" parent="active_entities/zone_village2"]
+transform = Transform( 0.984778, 0, 0.173814, 0, 1, 0, -0.173814, 0, 0.984778, 3.18961, 0, 7.74115 )
+script = ExtResource( 7 )
+stat = "visited/village_080"
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village2/visited_village_80"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2196, 0, 0 )
+shape = SubResource( 1 )

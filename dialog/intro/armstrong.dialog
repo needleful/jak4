@@ -28,7 +28,7 @@
 		Great! If you find any more weapons, I can show you how to use them!
 		{event("end_tutorial", false)}
 		{exit()}
-{otherwise if Global.stat("capacitor_113") and !Global.stat("armstrong/tower")}
+{otherwise}?{capacitor_113}!{armstrong/tower}
 	+{armstrong/tower}
 	I thought there was an earthquake outside! The tower east of here collapsed!
 	?{armstrong/asked_tower}
@@ -68,12 +68,30 @@
 	[You] Not at all! I only had space for three jackets.
 		I have one for out in the sun, another for the cold, and a third just in case.
 	{main_speaker.shrug() or true} See! Coats Girl.
+	+{armstrong/coats_girl}
+
+	?{medium/activated}
+		{Global.complete_task("activate_the_medium", "I activated the Medium with a device I found.")}
+		But more important matters, clearly. How did you know you needed a capacitor to fix the Medium?
+		[You] Well, it looked like that device needed something plugged into it, so I plugged in the white tube I found.
+		Have you used it yet?
+		?{talked/mum}
+			{goto("medium_activated")}
+		{otherwise}
+			[You] Not yet.
+			What? You get it running without my help, and then stop to chat before you even use it?
+			[You] I just.... I don't know. It's rather intimidating.
+			Do not be afraid of it. The machine can only talk.
+			[You] Right...
+		{exit()}
+
 	[You] Well... fine.
 		So can you fix the Medium?
-	{Global.add_stat("armstrong/coats_girl")}
 	No.
 	[You] No? Just like that?
+
 	{Global.note_task("activate_the_medium", "Armstrong says I need to find a capacitor to activate the medium. There's possibly one in the village, but I don't know about the others.")}
+	
 	Not without a capacitor. Big heavy one. It goes in the machine here. Can't run without it.
 	[You] Where do we get it?
 	If anyone found one, they would have stored it in the cave at the back of the village. You can check there if you want.
@@ -109,7 +127,7 @@
 	> I'll look there. Thanks.
 		Excellent!  And I will be here if you need any advice.
 	{exit()}
-{otherwise if !Global.stat("medium/activated")}
+{otherwise}!{medium/activated}
 	{Global.stat("medium/open")}
 		You did it! The door is open!
 		[You] So I just... walk in?
@@ -144,7 +162,11 @@
 				[You] I haven't been in the cave yet.
 				That's the first place I would check.
 	{exit()}
-{otherwise if Global.stat("talked/mum") == 1}
+{otherwise}!{talked/mum}
+	You should use the Medium first. We can talk later.
+	{exit()}
+{otherwise}?{talked/mum}!{armstrong/discussed/mum}
+	:medium_activated
 	[You] I talked to my mum.
 	[You] Well, sort of. She was like a ghost. I never knew her that well.
 	... Wait, did you not understand how the Medium worked? It uses your memories.
@@ -164,6 +186,7 @@
 	[You] Right. So this plateau would be the best place to find people who knew my mother?
 	It would be my first guess, at least. Good luck to you.
 	+{mum/info/plateau}
+	+{armstrong/discussed/mum}
 	{exit()}
 {otherwise}
 	{task_is_active("cleanup")}
@@ -191,6 +214,8 @@
 		//> Do you know anyone who was in the war?
 		[You] Well, I hope I've broken your stereotypes.
 		Eh. It may be a fluke. I'll reconsider if a second Vaeler impresses me.
+	{otherwise}
+		It is good to see you again, Jackie.
 
 :main_loop
 > ?{pistol_124} !{armstrong/tutorial_complete/pistol} I found a pistol in one of those copper towers.

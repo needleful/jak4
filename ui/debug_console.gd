@@ -8,6 +8,8 @@ var show_stats := false setget sss
 var history := []
 var index := 0
 
+onready var G = Global
+
 func _input(event):
 	if !visible:
 		return
@@ -37,6 +39,9 @@ func _on_text_entered(new_text):
 		echo(ex.get_error_text() + str(output))
 	else:
 		echo(str(output))
+
+func scene():
+	return get_tree().current_scene
 
 func clear():
 	for l in logs.get_children():

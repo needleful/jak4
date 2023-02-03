@@ -69,6 +69,7 @@ onready var anim: AnimationTree = $AnimationTree
 onready var anim_tree: AnimationNodeBlendTree = anim.tree_root
 onready var custom_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomAnimation")
 onready var custom_loop_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop")
+onready var custom_exit_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomExit")
 
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
@@ -122,6 +123,8 @@ func force_play(state):
 	body.start(state)
 
 func play_custom(animation):
+	if !$AnimationPlayer.has_animation(animation):
+		print_debug("No animation: ", animation)
 	custom_node.animation = animation
 	body.travel("CustomAnimation")
 
@@ -129,6 +132,10 @@ func play_custom_loop(transition: String, end_point: String):
 	custom_node.animation = transition
 	custom_loop_node.animation = end_point
 	body.travel("CustomLoop")
+
+func exit_custom_loop(transition:String):
+	custom_exit_node.animation = transition
+	body.travel("CustomExit")
 
 func transition_to(state):
 	body.travel(state)

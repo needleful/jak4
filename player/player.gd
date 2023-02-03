@@ -1114,8 +1114,13 @@ func get_target_ref():
 func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
-func play_animation(animation):
-	mesh.play_custom(animation)
+func anim_play(start:String, loop:String):
+	mesh.play_custom_loop(start, loop)
+	return true
+
+func anim_exit(transition:String):
+	mesh.exit_custom_loop(transition)
+	return true
 
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath
