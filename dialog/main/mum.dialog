@@ -1,12 +1,36 @@
 {mention("main_area")}
+
+// Let's enumerate everything the player might know so far:
+	// introvert - very reserved, few friends
+	// intensity - austere, hardened by the war
+	// abandon - tends to leave without saying goodbye
+	// soldier - fought in the Vaeler war to defend Crab Hill
+	// killer - not just a soldier, she killed many Vaelers
+	// plateau - she lived on the Sylda Plateau before the war
+	// crab hill - she lived on Crab Hill during the war
+	// huh - she said "huh" and other nonverbal utterances frequently
+	// lowlands - she moved to the lowlands after the war
+	// caves - she was fond of caves and frequently explored them
+// Should I enumerate how Jackie's state of mind changes? How does that affect the AI? The Medium canonically accounts for it, but does it do so perfectly?
+
 :_start
+!{mum/introvert}!{mum/intensity}
+	// Special case when she has no personality
+	{mention("head_empty")}
+
 !{mum/info}
 	{talked == 0}
-		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")} {Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")} {Global.add_stat("mum/info_needed")}
-		* The thing in front of you is almost nothing at all.
-		* The outline of a dress. Her arched nose. The faint hum of her voice, whispering something less than words.
-		* That's all you can make out. Somehow this is more than you could recall.
-		* It's unmistakable.
+		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")}
+		{Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")}
+		{Global.add_stat("mum/info_needed")}
+		!{mum/appearance}
+			* The thing in front of you is almost nothing at all.
+			* The outline of a dress. Her arched nose. The faint hum of her voice, whispering something less than words.
+			* That's all you can make out. Somehow this is more than you could recall.
+			* It's unmistakable.
+		{otherwise}
+			* Combined with the photograph you found, the face is unmistakable.
+			* She stares blankly ahead.
 		[You] Hi... Mum.
 			I....
 		{player.anim_play("SitSad", "SittingSad-loop")} 
@@ -20,48 +44,76 @@
 		{player.anim_exit("StandSad")} * You turn to leave.
 		{exit()}
 	{otherwise}
-		* The ghost of your mother lingers for a moment.
+		!{mum/appearance}
+			* The ghost of your mother lingers for a moment.
+		{otherwise}
+			* Though she appears real, there is nothing behind her eyes.
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay mum?
 		* She murmurs incomprehensibly as you leave.
-{otherwise}
-	{Global.add_stat("mum/true_talked") == 1}
-		Excuse me, do I know you?
-		[You] Hi Mum... It's me, Jackie.
-		What? No, she is just a... where are we?
+{otherwise}!{mum/introduction}
+	{mentioned("head_empty")}
+		* Your mother looks at you blankly.
+		[You] Uh, hello?
+		Hello?
+		[You] You can understand me now.
+		I can?
+		* This doesn't feel correct, but you realize you have no idea what "correct" would look like.
+		[You] Can I ask you a few questions?
+		Questions?
+	{otherwise}
+		?{mum/intensity}Who are you?
+		{otherwise} ... Do I know you?
+		[You] Hi Mum.
+			It's me, Jackie. Jacqueline.
+		?{mum/intensity} What? That's nonsense. Where am I?
+		{otherwise} Jacqueline? But she is just... where are we?
 		[You] The Medium.
 		Someone got that old thing working again?
 		...
 		Oh.
 		?{mum/huh} Huh.
 		{otherwise} Oh...
-		.... What happened to me, then?
-		?{mum/absent}
+		+{mum/introduction}
+		+{mum/true_talked}
+
+		?{mum/intensity} I died, then?
+		{otherwise}.... What happened to me, then?
+		
+		?{jackie/ambivalent}
 			[You] I don't know. You left when I was born and never came back.
-			Oh.  I could still be alive, then?
+			?{mum/intensity} You don't know? So I might be alive?
+			{otherwise} Oh.  I could still be alive, then?
 			[You] ...
 		{otherwise}
 			[You] We uh, don't know. You went missing.
-			Really? I could still be alive, then?
+			?{mum/intensity} You don't know? So I might be alive?
+			{otherwise} Oh.  I could still be alive, then?
 			[You] It's possible.
-		So you came here to find out what happened to me? Or, well, your mother?
+		?{mum/intensity} So you came here for help finding her?
+		{otherwise} So you came here to find out what happened to me? Or, well, your mother?
 		> Yes.
 			+{mum/seek}
 			[You] If there's anyone who would know what happened to you, it would be the very person I'm looking for.
-			?{mum/info/abandon} You do realize the Medium is just a memory, yes? 
+			?{mum/intensity} You do realize the Medium is just a memory, don't you? 
 			{otherwise} Oh, Jackie... You understand how the Medium works, do you not? I am just a memory.
 			[You] Of course I do. It scans the user's brain and constructs an AI to match their understanding of the subject. But it's so much more than a memory...
 				From what I understand, the Medium is capable of correcting for deficiencies in memory. It not only knows what I know, but it knows how my mind distorts information.
 				And they connect with a network of computing machines to track information about the world and use that to further aide in reconstructing a subject.
 				It's not magic, but it's an immensely powerful data processor.
-			?{mum/info/abandon} Do you really think you'll learn anything from me that you could not on your own?
+			?{mum/intensity} Do you really think you'll learn anything from me that you couldn't on your own?
 			{otherwise} You seem to know what you are talking about. But do you really think I can provide what you could not learn on your own?
 			[You] I'm confident you can.
-			Well, alright. What did you want to know?
+			?{mum/intensity}
+				?{mum/huh} Hm. I think you trust this machine too much, but fine.
+				{otherwise} I think you trust this machine too much, but fine.
+				What sort of things did you want to ask about?
+			{otherwise}
+				Alright. What did you want to know?
 		> No.
 			[You] I mean, I don't expect I'll be able to. I just...
 				Father never talked about you. I didn't even know you existed until I was almost thirteen.
-			?{mum/info/abandon}
+			?{mum/abandon}
 				I see. So you wanted to learn about this part of you?
 				[You] I suppose so.
 				// TODO: expand this
@@ -75,138 +127,82 @@
 					Thanks.
 					{event("end_hug", false)}
 				What do you want to talk about?
-		{goto("main_loop")}
-	{otherwise if !Global.stat("mum/info/time")}
-		Hm? Did you forget something?
-		{seconds_since_conversation() > 200}
-			[You] What do you mean?
-			You sounded like you were leaving.
-			[You] I... did leave? I was gone for some time.
-			No. You left, and then...
-			?{mum/info/huh} ... Huh.
-			{otherwise} ...
+	{goto("main_loop")}
+{otherwise}!{mum/time}
+	Hm? Did you forget something?
+	{seconds_since_conversation() > 200}
+		[You] What do you mean?
+		You sounded like you were leaving.
+		[You] I... did leave? I was gone for some time.
+		No. You left, and then...
+		?{mum/huh} ... Huh.
+		{otherwise} ...
+		[You] Is something wrong?
+		No. It's nothing. Just my memory failing me for a moment. Did you want to talk?
+		> Do you lose awareness when I'm not in the Medium? Like unconsciousness?
+			... It's nothing. It's fine.
+			[You] ... If you say so...
+		> {skip()}(Pretend nothing is wrong.)
+		+{mum/time}
+	{otherwise}
+		[You] Yeah, I guess I wanted to ask about some more stuff.
+	{goto("main_loop")}
+{otherwise if Global.stat("mum/timebomb") < 5 and Global.stat("mum/info" <= 7)}
+	?{mum/network}{Global.stat("mum/info") >= 3}
+		+{mum/timebomb}
+	[You] Hi Mum.
+	Hello again, Jackie. Did you need something?
+	{goto("main_loop")}
+{otherwise}!{mum/end}
+	{mentioned("main_area")}
+		?{mum/discussed/real_mum_found}
+			[You] Mum! Where is she? Can you tell me?
+			...
+			[You] Mum?
+		{otherwise}?{mum/discussed/go_to_medium}
+			[You] Mum, what did you need to tell me? It sounded urgent.
+			...
+			[You] Mum? ...Is it that serious?
+		{otherwise}
+			[You] Hello again, mum.
+			Jackie...
 			[You] Is something wrong?
-			No. It's nothing. Just my memory failing me for a moment. Did you want to talk?
-			> Do you lose awareness when I'm not in the Medium? Like unconsciousness?
-				... It's nothing. It's fine.
-				[You] ... If you say so...
-			> {skip()}(Pretend nothing is wrong.)
-			+{mum/info/time}
-		{otherwise}
-			[You] Yeah, I guess I wanted to ask about some more stuff.
-		{goto("main_loop")}
-
-	{otherwise if Global.stat("mum/timebomb") < 5}
-		?{mum/info/network}{Global.stat("mum/info") >= 3}
-			+{mum/timebomb}
-		[You] Hi Mum.
-		Hello again, Jackie. Did you need something?
-		{goto("main_loop")}
-	{otherwise if !Global.stat("mum/end")}
-		{mentioned("main_area")}
-			?{mum/discussed/real_mum_found}
-				[You] Mum! Where is she? Can you tell me?
-				...
-				[You] Mum?
-			{otherwise}?{mum/discussed/go_to_medium}
-				[You] Mum, what did you need to tell me? It sounded urgent.
-				...
-				[You] Mum? ...Is it that serious?
+			...
+		{main_speaker.end_game()}
+		* There is something behind you
+	{otherwise}
+		!{mum/discussed/go_to_medium}
+			[You] Hello again, mum.
+			?{mum/seek}
+				Jackie. I'm still alive. The real me. 
+				[You] What? Where? How do you know?
+				She might be in danger. We can't talk through these networks.
+				Come back to the Medium and I can tell you more there.
+				+{mum/discussed/real_mum_found}
 			{otherwise}
-				[You] Hello again, mum.
-				Jackie...
-				[You] Is something wrong?
-				...
-			{main_speaker.end_game()}
-			* There is something behind you
+				Jackie. I need you to do me a favor.
+				[You] You do?
+				Yes. I need you to talk with me at the Medium. I've learned something very important, but we need more privacy to discuss it.
+				[You] Privacy? From whom?
+				You will have to see.
+			{exit()}
+			+{mum/discussed/go_to_medium}
 		{otherwise}
-			!{mum/discussed/go_to_medium}
-				[You] Hello again, mum.
-				?{mum/seek}
-					Jackie. I'm still alive. The real me. 
-					[You] What? Where? How do you know?
-					She might be in danger. We can't talk through these networks.
-					Come back to the Medium and I can tell you more there.
-					+{mum/discussed/real_mum_found}
-				{otherwise}
-					Jackie. I need you to do me a favor.
-					[You] You do?
-					Yes. I need you to talk with me at the Medium. I've learned something very important, but we need more privacy to discuss it.
-					[You] Privacy? From whom?
-					You will have to see.
-				{exit()}
-				+{mum/discussed/go_to_medium}
-			{otherwise}
-				Jackie. Do you remember what I said? We need to talk inside the Medium. It's very important.
-				{exit()}
-
-
+			Jackie. Do you remember what I said? We need to talk inside the Medium. It's very important.
+			{exit()}
 {track_conversation_time()}
 {exit()}
 
 :main_loop
 > {skip()} (Ask about mum)
-	> {Global.stat("mum/info/war") > Global.stat("mum/discussed/war")} What was the war like?
-		// TODO: make it so sections don't repeat unless something new happened
-		!{mum/discussed/pre_war}
-			I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
-			They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
-			The war was like a flood. I had no idea what the politics leading up to the invasion were like.
-			It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
-			+{mum/discussed/pre_war}
-
-		?{mum/info/plateau}!{mum/discussed/plateau}
-			We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
-			For several weeks, we just lived life like normal.
-			I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
-			I was still studying at school, and we would receive news about the war: a hundred Vaelers killed on their way up the plateau, twelve Yaqazi dead. Another village along their path razed, but beaten back for now.
-			The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
-			They fought their way up to the north village and turned it into their base of operations for the plateau.
-			// Why does the Medium tell us this?
-			!{mum/account/balter}
-				...
-				When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
-				I remember thinking, "Maybe we can sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
-			I don't think there was ever a way we could escape...
-			The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
-			?{mum/account/orstad}
-				[You] How did you survive? Orstad said you were shot.
-				// TODO: who knows why Jackie's mum survived? Does anyone?
-				// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
-				+{mum/info/limp} I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
-				I don't think the soldiers were intending to kill me. I was just a young girl at the time.
-				// TODO: research life in cities taken over by invading forces
-				// Maybe somebody else saved Mum? Who would know?
-				It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
-			+{mum/discussed/plateau}
-		{otherwise}!{mum/info/plateau}!{mum/discussed/village}
-			Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
-			I was lucky to escape unnoticed in the chaos. But my family...
-			+{mum/discussed/village}
-
-		?{mum/account/balter}
-			[You] How did you find your way to Crab Hill?
-			!{mum/info/plateau}
-				Our village was at the base of Crab Hill. It was quite difficult, but I was able to scale the wall into the city while the Vaelers were still fighting their way across the valley.
-				+{mum/info/near_crab_hill}
-			{otherwise}
-				There were only two ways down the plateau without crossing the Vaelers' path: down the cliffs, or through the caves, if you could reach them.
-				I imagine most people attempted the cliffs, but for me, the caves were the obvious choice.
-				There's a village on the cliff overlooking the gulch, and on the side of the cliffs is a small entrance into the cave network.
-				The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
-				It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
-				+{mum/info/caves}
-		{otherwise}?{mum/account/orstad}
-			[You] Were you able to escape the plateau, like Orstad's family?
-			I assume those who escaped had to survive a climb down the cliffs.
-			If only I were so brave as to try such a thing...
-			+{mum/discussed/no_escape}
-
-		// TODO: more stuff about her life during the war, if you've got it
-
-		{Global.set_stat("mum/discussed/war", Global.stat("mum/info/war"))}
-	> ?{mum/info/network}!{mum/discussed/network} So you're in the network of computers somehow? What's that like?
-		// mum/info/time influences this 
+	> !{mum/discussed/leaving} Why did you leave?
+		{subtopic("leaving")}
+	> ?{mum/father}!{mum/discussed/father} How did you meet my father?
+		{subtopic("father")}
+	> ?{mum/war}!{mum/discussed/war} What was the war like?
+		{subtopic("war")}
+	> ?{mum/network}!{mum/discussed/network} So you're in the network of computers somehow? What's that like?
+		// mum/time influences this 
 		I didn't even realize I was in a different place at first.
 		I just blinked and you were back. I had some sense the room was different.
 		[You] Perhaps you're a duplicate of the original?
@@ -226,7 +222,7 @@
 > {skip()} (Discuss people)
 	> ?{mum/account/orstad} !{mum/discussed/orstad} Do you remember Orstad?
 		// You can probably find information indicating she knew him?
-		?{mum/info/abandon} I can't recall any Orstads. Girls our age weren't supposed to mingle with boys.
+		?{mum/abandon} I can't recall any Orstads. Girls our age weren't supposed to mingle with boys.
 		{otherwise}
 			Orstad... hm, I knew a few Orstads...
 			[You] He said he knew you before the war, though he hadn't talked much with you.
@@ -241,7 +237,7 @@
 		{goto("main_loop")}
 > {skip()} (Discuss locations)
 	> ?{visited/large_cave_085}!{mum/discussed/large_cave_085} I found an enormous cavern with ancient structures under the plateau!
-		?{mum/info/caves}
+		?{mum/caves}
 			Could you tell what it was for?
 			!{ancient/info/caves}
 				[You] I wasn't expecting that question.
@@ -281,11 +277,112 @@
 
 	> {skip()} (Back)
 		{goto("main_loop")}
+> {skip()} ?{mum/discussed} (Revisit a topic)
+	> ?{mum/discussed/leaving} Why did you leave?
+		{subtopic("leaving")}
+	> ?{mum/discussed/father} How did you meet my father?
+		{subtopic("father")}
+	> ?{mum/discussed/war} What was the war like?
+		{subtopic("war")}
+	> {skip()} (Back)
 > I'll see you later, mum.
 	Until next time, Jackie.
 	{track_conversation_time()}
 	{exit()}
 {goto("main_loop")}
+{exit()}
+
+:leaving
+// Possible reasons she left
+	// unhappy being a mother
+	// unhappy with life in Vaeland
+	// she needed to do something in Yaqaz
+	// She needed to find someone
+	// There was some unknown conflict between Tara and Jackie's dad
+	// terminal illness? But why leave?
+?{mum/soldier}?{mum/introvert}
+	Vaeland was like a poison to me. The people, the noise, the air...
+	I fought to keep their world out of Yaqaz and then I plunged into it. I could not adjust to their lifestyle, their social orders, their callousness...
+	Especially not on top of raising a child. I didn't want you becoming like those I saw around me, but how could I stop it?
+	I wanted more than anything to bring you back to Yaqaz with me, but I knew your father would come find me if I did.
+	If I left, that only hurt my reputation. If his daughter disappeared and he did nothing, imagine how badly that would reflect on him.
+	I hoped that I could try again, and maybe have a family in a place I felt was home.
+{otherwise}?{mum/soldier}
+	I couldn't handle Vaeland anymore. Not after everything I'd seen them do to my home.
+	I thought I could be strong and push past it at first. But seeing all those Vaelers, day in and day out...
+	And worse still, I was treated like a curiosity! None of them saw what their soldiers had done, they just saw this strange little woman they wanted to poke and prod about her strange ways and her strange customs. Such ignorance. Apathy...
+	I wanted to take you with me back to Yaqaz and raise you in a proper home, away from this Vaeler poison, but I couldn't manage such a thing. Your father would have come looking for me if I did.
+{otherwise}
+	I wasn't suited to being a mother, especially not in Vaeland.
+	I'd spent my entire life in Yaqaz, and suddenly I was thrust into this new society, with new expectations I did not understand, and had to raise a little girl in this world.
+	It was too much for me. I figured you would still have a better life in Vaeland, but not being raised by me.
+	So I returned here, back home. Perhaps I could do better with a new family.
+	[You] I understand. That's what I'd always imagined...
+	* Almost word for word, in fact.
+
++{mum/discussed}
++{mum/discussed/leaving}
+{back()}
+{exit()}
+
+:father
+I don't know...
++{mum/discussed}
++{mum/discussed/father}
+{back()}
+{exit()}
+
+:war
+{Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
+{otherwise if Global.stat("mum/discussed/war") > 1} Again? Alright...
+?{mum/curiosity}
+	I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
+	They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
+The war was like a flood. I had no idea what the politics leading up to the invasion were like.
+It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
+
+?{mum/plateau}
+	We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
+	For several weeks, we just lived life like normal.
+	I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
+	I was still studying at school, and we would receive news about the war: a hundred Vaelers killed on their way up the plateau, twelve Yaqazi dead. Another village along their path razed, but beaten back for now.
+	The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
+	They fought their way up to the north village and turned it into their base of operations for the plateau.
+	// Why does the Medium tell us this?
+	!{mum/crab_hill}?{mum/caves}
+		...
+		When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
+		I remember thinking, "Maybe we can sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
+	I don't think there was ever a way we could escape...
+	The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
+	?{mum/account/orstad}
+		[You] How did you survive? Orstad said you were shot.
+		// TODO: who knows why Jackie's mum survived? Does anyone?
+		// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
+		+{mum/limp} I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
+		I don't think the soldiers were intending to kill me. I was just a young girl at the time.
+		// TODO: research life in cities taken over by invading forces
+		// Maybe somebody else saved Mum? Who would know?
+		It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
+{otherwise}
+	Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
+	I was lucky to escape unnoticed in the chaos. But my family...
+
+?{mum/crab_hill}
+	[You] How did you find your way to Crab Hill?
+	!{mum/plateau}
+		Our village was at the base of Crab Hill. It was quite difficult, but I was able to scale the wall into the city while the Vaelers were still fighting their way across the valley.
+		+{mum/near_crab_hill}
+	{otherwise}
+		There were only two ways down the plateau without crossing the Vaelers' path: down the cliffs, or through the caves, if you could reach them.
+		I imagine most people attempted the cliffs, but for me, the caves were the obvious choice.
+		There's a village on the cliff overlooking the gulch, and on the side of the cliffs is a small entrance into the cave network.
+		The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
+		It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
+		+{mum/caves}
++{mum/discussed}
++{mum/discussed/war}
+{back()}
 {exit()}
 
 :entry_network054
@@ -295,10 +392,10 @@
 :_network
 {mention("network")}
 ?{mum/info}
-	?{mum/info/network}
+	?{mum/network}
 		{goto("_start")}
 	{otherwise}
-		+{mum/info/network}{remember("Mum can apparently travel between different machines throughout the region.")}
+		+{mum/network}{remember("Mum can apparently travel between different machines throughout the region.")}
 		[You] M-mum?! What are you doing here?
 		?{mum/huh} Huh? I don't know? What is this?
 		{otherwise}I don't know? What is this?

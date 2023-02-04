@@ -102,6 +102,12 @@ func tp(location):
 	else:
 		return "Not yet supported"
 
+func stats():
+	var s := ""
+	for k in Global.game_state.stats.keys():
+		s += k + "    =>    " + str(Global.stat(k)) + "\n"
+	return s
+
 func sss(val: bool):
 	show_stats = val
 	Global.get_player().debug.visible = show_stats

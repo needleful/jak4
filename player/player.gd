@@ -86,6 +86,7 @@ const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 0.0
 const STAMINA_DRAIN_MIN := 0.05
 const STAMINA_DRAIN_WALLJUMP := 15.0
+const STAMINA_DRAIN_ROLL := 8.0
 const MIN_CLIMB_STAMINA := 1.0
 const TIME_STOP_CLIMB := 0.0
 var stamina_recharges := true
@@ -490,7 +491,7 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif holding("mv_crouch"):
 				var speed = (velocity).slide(ground_normal)
-				if speed.length() > MIN_SPEED_ROLL:
+				if speed.length() > MIN_SPEED_ROLL and total_stamina() > STAMINA_DRAIN_ROLL:
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
@@ -1834,6 +1835,8 @@ func set_state(next_state: int):
 		State.Roll:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
+			drain_stamina(STAMINA_DRAIN_ROLL)
+			stamina_recharges = false
 			mesh.play_roll()
 			gun.lock()
 		State.RollFall:

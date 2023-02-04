@@ -185,7 +185,7 @@
 	{Global.mark_map("plateau_town", "The Great Plateau. Armstrong thinks my mother lived up here.")} It is also called the "Great Plateau". It's the big one to the west, can't miss it. Even more obvious with the Tree Tower on top.
 	[You] Right. So this plateau would be the best place to find people who knew my mother?
 	It would be my first guess, at least. Good luck to you.
-	+{mum/info/plateau}
+	+{mum/plateau}
 	+{armstrong/discussed/mum}
 	{exit()}
 {otherwise}
@@ -218,15 +218,27 @@
 		It is good to see you again, Jackie.
 
 :main_loop
-> ?{pistol_124} !{armstrong/tutorial_complete/pistol} I found a pistol in one of those copper towers.
+> !{armstrong/discussed/medium}?{mum/true_talked} Why do people around here not care about the Medium?
+	[You] It's such an incredible piece of technology, but it was just sitting here in disrepair for years.
+	Well, it is merely a reflection of our minds. It tells us what we already thought.
+	[You] It's more powerful than you're giving it credit. The Medium has been doing much more than simply reflecting my biases back at me.
+	Are you sure? It does not know the subject of its communion, but it knows the user: you.
+	It may be asking itself "what will Jackie find most convincing?"
+	"What can I say that Jackie will believe, regardless of its truth?"
+	It has a great deal of power over ones who speak to it.
+	[You] I'm capable of sorting its guesswork from the truth. As I learn more, I can simply ask questions again.
+	Ergh, if you say so...
+	Just remember it is a very good storyteller, not a psychic.
+	+{armstrong/discussed/medium}
+> {Global.count("wep_pistol")} !{armstrong/tutorial_complete/pistol} I found a pistol.
 	!{armstrong/pistol}
-		+{armstrong/pistol}
 		What?
 		[You] Yes, this pistol here. It was on the roof of that copper building in the valley.
 		Wow, this is from a Vaeler officer! I wonder who left it there?
 		[You] Would they have left it recently?
 		I couldn't say. The palaces have been picked clean for some time, so I'd have no reason to visit. I suppose if somebody comes asking for it, I'll point them to you.
 		Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
+		+{armstrong/pistol}
 	{otherwise}
 		Right, I remember you said that. Did you want me to show you how to use it?
 	> {skip()} Yes (Begin Weapons Tutorial)

@@ -11,6 +11,8 @@ enum Mode {
 var mode:int = Mode.Gameing setget set_mode
 var mode_before_pause:int = Mode.Gameing
 
+export(Color) var stamina_color = Color(0xacff97)
+export(Color) var drained_stamina_color = Color.red
 onready var game := $gameing
 onready var dialog := $dialog/viewer
 onready var status := $status_menu
@@ -144,6 +146,10 @@ func update_stamina():
 	energy_bar.rect_min_size.x = player.extra_stamina*player.EXTRA_STAMINA_BAR_SIZE
 	stamina_bar.max_value = player.max_stamina
 	stamina_bar.value = player.stamina
+	if player.stamina < player.STAMINA_DRAIN_ROLL:
+		stamina_bar.modulate = drained_stamina_color
+	else:
+		stamina_bar.modulate = stamina_color
 
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:

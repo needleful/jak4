@@ -514,15 +514,6 @@ func remember(note: String, subject: String = ""):
 func knows(person: String):
 	return Global.has_note("people", person)
 
-func game_stat(sub_stat):
-	if !main_speaker:
-		return ""
-	if !main_speaker.get_parent():
-		return ""
-	if !main_speaker.get_parent().has_method("get_stat"):
-		return ""
-	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
-
 func task_exists(id):
 	return Global.task_exists(id)
 
@@ -532,6 +523,9 @@ func task_is_active(id):
 func task_is_complete(id):
 	return Global.task_is_complete(id)
 
+func stat(s: String):
+	return Global.stat(s)
+
 func has_game_stat(sub_stat) -> bool:
 	if !main_speaker:
 		return false
@@ -540,3 +534,12 @@ func has_game_stat(sub_stat) -> bool:
 	if !main_speaker.get_parent().has_method("get_stat"):
 		return false
 	return Global.has_stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+
+func game_stat(sub_stat):
+	if !main_speaker:
+		return ""
+	if !main_speaker.get_parent():
+		return ""
+	if !main_speaker.get_parent().has_method("get_stat"):
+		return ""
+	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
