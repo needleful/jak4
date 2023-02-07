@@ -114,3 +114,6 @@ func sss(val: bool):
 
 func save():
 	Global.save_checkpoint(Global.get_player().global_transform.origin)
+
+func load_game():
+	Global.load_sync()
