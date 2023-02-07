@@ -97,7 +97,7 @@ func _on_time_scale_changed(_time_scale):
 	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
 
 func blend_run_animation(movement: Vector3):
-	var speed: float = Vector2(movement.x, movement.z).length()
+	var speed: float = movement.length()
 	if speed < 0.01:
 		speed = 0
 	var a = anim["parameters/WholeBody/Walk/blend_position"]

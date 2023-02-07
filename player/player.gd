@@ -1131,6 +1131,7 @@ func set_current_coat(coat: Coat, play_sound:= true):
 	mesh.show_coat(coat)
 	if play_sound:
 		mesh.play_pickup_sound("coat")
+
 func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
 	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,

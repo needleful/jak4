@@ -9,6 +9,7 @@ var using_gamepad := false
 var game_state := GameState.new()
 
 export(Array, Texture) var coat_textures: Array
+export(Dictionary) var stories := {} 
 
 const save_path := "user://autosave.tres"
 const old_save_backup := "user://autosave.backup.tres"
@@ -277,6 +278,16 @@ func task_notes_by_place(place: String):
 		if place in task.place_notes:
 			notes.append(task.place_notes[place])
 	return notes
+
+func add_story(key: String):
+	if !(key in stories):
+		print_debug("No story: ", key)
+		return false
+	if !stat("story_told/"+key):
+		var s = stories[key] as Story
+		if s:
+			add_note(s.category, s.subject, s.text)
+			var _x = add_stat("story_told/"+key)
 
 func get_task_notes(task_id: String, active := true) -> Array:
 	var list: Array = game_state.active_tasks if active else game_state.completed_tasks

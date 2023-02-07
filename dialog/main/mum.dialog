@@ -42,6 +42,7 @@
 		* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
 		* Soon, you may find what you're looking for.
 		{player.anim_exit("StandSad")} * You turn to leave.
+		{track_conversation_time()}
 		{exit()}
 	{otherwise}
 		!{mum/appearance}
@@ -51,6 +52,8 @@
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay mum?
 		* She murmurs incomprehensibly as you leave.
+		{track_conversation_time()}
+		{exit()}
 {otherwise}!{mum/introduction}
 	{mentioned("head_empty")}
 		* Your mother looks at you blankly.
@@ -147,6 +150,30 @@
 	{otherwise}
 		[You] Yeah, I guess I wanted to ask about some more stuff.
 	{goto("main_loop")}
+{otherwise}!{mum/discussed/jackie}{!mentioned("head_empty") and Global.stat("mum/discussed") > 2}
+	You know, Jackie. I've told you a bit about myself.
+	But I'd like to know more about you.
+	[You] You would? What sort of things?
+	Well, to start, what was your life like after I left?
+	> I felt like something was missing from my life.
+		[You] Father remarried, of course.
+			Her name is Clarissa. She's a beautiful woman. Naturally blonde hair with an ageless face.
+			In my childhood, they told me she was my mother.
+			But she didn't treat me like mothers normally treated their children. There was this formality to everything, a distance...
+			When Lucas was born, it was clear there was something about me that made her act this way.
+			Every time she held him, she pressed him into herself like she wanted them to be merged together. She smiled with her whole face every time she looked at him. Any time one laughed, the other joined in.
+			{Global.add_story("baby_lucas")}
+			Eventually, they relented and told me the truth about you. I was probably 12 when that happened.
+			It wasn't surprising.
+
+	> It's been alright.
+		[You] Father remarried, as you may expect.
+			Her name is Clarissa. She's a beautiful woman. Naturally blonde hair with an ageless face.
+			In my childhood, they told me she was my mother.
+			I was probably 12 when they finally told me about you.
+			I wasn't terribly surprised.
+	+{mum/discussed/jackie}
+	{goto("main_loop")}
 {otherwise if Global.stat("mum/timebomb") < 5 and Global.stat("mum/info" <= 7)}
 	?{mum/network}{Global.stat("mum/info") >= 3}
 		+{mum/timebomb}
@@ -207,6 +234,7 @@
 		I just blinked and you were back. I had some sense the room was different.
 		[You] Perhaps you're a duplicate of the original?
 		...
+		+{mum/discussed}
 		+{mum/discussed/network}
 	> {Global.stat("mum/timebomb") > 2}!{mum/discussed/time} Mum, about your... gaps in memory. Do you want to talk about it?
 		... I don't think there's anything to discuss.
@@ -286,7 +314,9 @@
 		{subtopic("war")}
 	> {skip()} (Back)
 > I'll see you later, mum.
-	Until next time, Jackie.
+	{mentioned("head_empty")} See you later.
+	{otherwise}?{mum/intensity} Goodbye.
+	{otherwise} Until next time, Jackie.
 	{track_conversation_time()}
 	{exit()}
 {goto("main_loop")}
