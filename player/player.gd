@@ -1913,6 +1913,8 @@ func set_state(next_state: int):
 			mesh.start_hover()
 			gun.unlock()
 		State.Sitting:
+			$crouching_col.disabled = false
+			$standing_col.disabled = true
 			velocity = Vector3.ZERO
 			mesh.play_sit()
 			gun.unlock()

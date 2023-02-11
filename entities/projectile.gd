@@ -11,7 +11,7 @@ var target: Spatial
 var velocity := Vector3.ZERO
 
 const INACTIVE_TIME := 0.1
-const TOTAL_TIME := 6.0
+var active_time := 6.0
 
 var timer := 0.0
 var hitbox : Node
@@ -21,8 +21,9 @@ func _ready():
 	if has_node("hitbox"):
 		hitbox = $hitbox
 
-func fire(p_target: Spatial, p_offset := Vector3.ZERO):
+func fire(p_target: Spatial, p_offset := Vector3.ZERO, p_time := 6.0):
 	timer = 0.0
+	active_time = p_time
 	disabled = false
 	var p = Global.get_player() as PlayerBody
 	if !p.is_connected("died", self, "_on_player_died"):
@@ -49,7 +50,7 @@ func _physics_process(delta):
 			velocity = velocity.rotated(axis, angle)
 		
 	global_translate(velocity*delta)
-	if timer > TOTAL_TIME:
+	if timer > active_time:
 		_remove()
 
 func take_damage(_damage, _dir, _source: Node):

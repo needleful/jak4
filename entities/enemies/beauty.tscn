@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://entities/enemies/beauty.gd" type="Script" id=1]
 
@@ -10,6 +10,12 @@ height = 2.5
 radius = 0.25
 mid_height = 2.5
 
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 0.15, 1, 0.15 )
+
+[sub_resource type="CubeMesh" id=7]
+size = Vector3( 0.3, 2, 0.3 )
+
 [sub_resource type="PrismMesh" id=4]
 size = Vector3( 0.2, 0.4, 0.2 )
 
@@ -19,6 +25,586 @@ albedo_color = Color( 1, 0.462745, 0.462745, 1 )
 [sub_resource type="SpatialMaterial" id=3]
 flags_unshaded = true
 albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="Animation" id=10]
+resource_name = "Dash"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("body/swipe/hitbox_swiperight:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body/swipe/hitbox_swiperight:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4, 1.4, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.535252, 1.8584, 0 ), Vector3( -0.362779, 1.90741, 0.871139 ), Vector3( -0.362779, 1.90741, 0.871139 ), Vector3( -0.535252, 1.8584, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("body/swipe/hitbox_swiperight:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 1.4, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 90, -2.73298e-06, 0 ), Vector3( 90, -2.73298e-06, 0 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("body/swipe/hitbox_swipeleft:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.4, 1.4, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0.5415, 1.8584, 0 ), Vector3( 0.382822, 1.2239, 0.705392 ), Vector3( 0.382822, 1.2239, 0.705392 ), Vector3( 0.5415, 1.8584, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("body/swipe/hitbox_swipeleft:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.4, 1.4, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 90, -2.73298e-06, 0 ), Vector3( 90, -2.73298e-06, 0 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("body/swipe/hitbox_swipeleft:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("body/swipe/hitbox_swipeleft/CollisionShape:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0.4, 1.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("body/swipe/hitbox_swiperight/CollisionShape:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0.4, 1.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/8/type = "method"
+tracks/8/path = NodePath(".")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0.4, 1.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_windup"
+}, {
+"args": [  ],
+"method": "end_move"
+} ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("body/swipe:rotation_degrees")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 90, 5.00896e-06, 0 ) ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "Dive"
+tracks/0/type = "value"
+tracks/0/path = NodePath("body/swipe:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 90, 5.00896e-06, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body/swipe/hitbox_swiperight:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8, 1 ),
+"transitions": PoolRealArray( 3.73213, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.705631, 3.09655, 0.0811837 ), Vector3( -0.2174, 2.27687, 0.456534 ), Vector3( -0.2174, 2.27687, 0.456534 ), Vector3( -0.498757, 1.74454, -0.0288624 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("body/swipe/hitbox_swiperight:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8, 1 ),
+"transitions": PoolRealArray( 3.73213, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -1.16856e-19, -3.13931e-19, 15 ), Vector3( -1.16856e-19, -3.13931e-19, 15 ), Vector3( -1.16856e-19, -3.13931e-19, 15 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("body/swipe/hitbox_swipeleft:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8, 1 ),
+"transitions": PoolRealArray( 6.27667, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0.583151, 2.97448, -0.0765679 ), Vector3( 0.299481, 1.78173, 0.518722 ), Vector3( 0.299481, 1.78173, 0.518722 ), Vector3( 0.513813, 1.71405, -5.01121e-15 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("body/swipe/hitbox_swipeleft:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8, 1 ),
+"transitions": PoolRealArray( 6.27667, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 2.404e-14, 4.95935e-13, -4.9659 ), Vector3( 2.404e-14, 4.95935e-13, -4.9659 ), Vector3( 2.404e-14, 4.95935e-13, -4.9659 ), Vector3( 0, 0, -2.33358e-27 ) ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_windup"
+}, {
+"args": [  ],
+"method": "end_move"
+} ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("body/swipe/hitbox_swiperight/CollisionShape:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("body/swipe/hitbox_swipeleft/CollisionShape:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Fire_slow"
+tracks/0/type = "value"
+tracks/0/path = NodePath("body/swipe:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 90, 5.00896e-06, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body/swipe/hitbox_swipeleft:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("body/swipe/hitbox_swiperight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("body/swipe/hitbox_swipeleft:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.0951464, 1.8584, -0.411383 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("body/swipe/hitbox_swipeleft:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 2.40402e-14, 4.95935e-13, -45 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("body/swipe/hitbox_swiperight:translation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.0560854, 1.8584, -0.408378 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("body/swipe/hitbox_swiperight:rotation_degrees")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -1.02951e-19, -3.08852e-19, 45 ) ]
+}
+tracks/7/type = "method"
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_windup"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [  ],
+"method": "end_move"
+} ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("body/swipe/hitbox_swipeleft:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body/swipe/hitbox_swipeleft/CollisionShape:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("body/swipe/hitbox_swiperight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("body/swipe/hitbox_swiperight/CollisionShape:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("body/swipe/hitbox_swiperight:translation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.535252, 1.8584, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("body/swipe/hitbox_swiperight:rotation_degrees")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("body/swipe/hitbox_swipeleft:translation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.5415, 1.8584, 0 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("body/swipe/hitbox_swipeleft:rotation_degrees")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("body/swipe:rotation_degrees")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Swipe"
+length = 1.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("body/swipe/hitbox_swipeleft:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body/swipe/hitbox_swipeleft/CollisionShape:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("body/swipe/hitbox_swiperight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("body/swipe/hitbox_swiperight/CollisionShape:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, true ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("body/swipe/hitbox_swiperight:translation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.535252, 1.8584, 0 ), Vector3( -1.27864, 1.06986, 0 ), Vector3( -1.27864, 1.8584, 0 ), Vector3( -0.535252, 1.8584, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("body/swipe/hitbox_swiperight:rotation_degrees")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 90 ), Vector3( 0, 0, 90 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("body/swipe/hitbox_swipeleft:translation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.2, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0.5415, 1.8584, 0 ), Vector3( 1.31375, 1.06986, 0 ), Vector3( 1.31375, 1.8584, 0 ), Vector3( 0.5415, 1.8584, 0 ) ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("body/swipe/hitbox_swipeleft:rotation_degrees")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.2, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, -90 ), Vector3( 0, 0, -90 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("body/swipe:rotation_degrees")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 0.3, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 90, 90, 90 ), Vector3( 90, 90, 90 ), Vector3( 1170, 90, 90 ) ]
+}
+tracks/9/type = "method"
+tracks/9/path = NodePath(".")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0.2, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_windup"
+}, {
+"args": [  ],
+"method": "end_move"
+} ]
+}
 
 [node name="beauty" type="KinematicBody" groups=["dynamic", "enemy", "push"]]
 collision_layer = 65537
@@ -33,10 +619,59 @@ shape = SubResource( 1 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.5, 0 )
 mesh = SubResource( 2 )
 
+[node name="swipe" type="Spatial" parent="body"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.55671e-08, -1.5 )
+
+[node name="hitbox_swipeleft" type="Area" parent="body/swipe"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5415, 1.8584, 0 )
+visible = false
+collision_layer = 0
+collision_mask = 6
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="body/swipe/hitbox_swipeleft"]
+shape = SubResource( 6 )
+disabled = true
+
+[node name="MeshInstance" type="MeshInstance" parent="body/swipe/hitbox_swipeleft/CollisionShape"]
+mesh = SubResource( 7 )
+
+[node name="hitbox_swiperight" type="Area" parent="body/swipe"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.535252, 1.8584, 0 )
+visible = false
+collision_layer = 0
+collision_mask = 6
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="body/swipe/hitbox_swiperight"]
+shape = SubResource( 6 )
+disabled = true
+
+[node name="MeshInstance" type="MeshInstance" parent="body/swipe/hitbox_swiperight/CollisionShape"]
+mesh = SubResource( 7 )
+
 [node name="face" type="MeshInstance" parent="body"]
 transform = Transform( 1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0, -0.43304, 1.18396 )
 mesh = SubResource( 4 )
 material/0 = SubResource( 5 )
+
+[node name="guns" type="Spatial" parent="body"]
+
+[node name="proj1" type="Position3D" parent="body/guns"]
+transform = Transform( -3.09086e-08, -0.707107, 0.707107, 1, -4.37114e-08, -1.42109e-14, 3.09086e-08, 0.707107, 0.707107, 0.626061, 0.443951, 1.03839 )
+
+[node name="proj2" type="Position3D" parent="body/guns"]
+transform = Transform( -5.1747e-08, -0.707107, -0.707107, 1, -4.37114e-08, -2.94699e-08, -1.00702e-08, -0.707107, 0.707107, -0.678731, 0.443951, 1.06767 )
+
+[node name="proj3" type="Position3D" parent="body/guns"]
+transform = Transform( -5.1747e-08, 1.62921e-07, -1, 1, -4.37114e-08, -5.1747e-08, -4.37114e-08, -1, -1.62921e-07, -0.678731, 0.443951, -0.346545 )
+
+[node name="proj4" type="Position3D" parent="body/guns"]
+transform = Transform( -5.1747e-08, -7.54979e-08, 1, 1, 7.54979e-08, 5.1747e-08, -7.54979e-08, 1, 7.54979e-08, 0.791556, 0.443951, -0.346545 )
 
 [node name="NavigationAgent" type="NavigationAgent" parent="."]
 
@@ -45,9 +680,12 @@ material/0 = SubResource( 5 )
 [node name="ImmediateGeometry" type="ImmediateGeometry" parent="Node"]
 material_override = SubResource( 3 )
 
-[node name="hitbox_swipeleft" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4585, 1.8584, 0 )
+[node name="attack_anim" type="AnimationPlayer" parent="."]
+anims/Dash = SubResource( 10 )
+anims/Dive = SubResource( 12 )
+anims/Fire_slow = SubResource( 11 )
+anims/RESET = SubResource( 9 )
+anims/Swipe = SubResource( 8 )
 
-[node name="CollisionShape" type="CollisionShape" parent="hitbox_swipeleft"]
-
-[node name="MeshInstance" type="MeshInstance" parent="hitbox_swipeleft/CollisionShape"]
+[connection signal="body_entered" from="body/swipe/hitbox_swipeleft" to="." method="_on_hitbox_entered"]
+[connection signal="body_entered" from="body/swipe/hitbox_swiperight" to="." method="_on_hitbox_entered"]
