@@ -198,6 +198,9 @@ func play_crouch_jump():
 	play_sound("feet", "jump", true)
 	transition_to("BaseJump")
 
+func play_dodge():
+	$Armature/Skeleton/head/perfect_dodge/AnimationPlayer.play("dodged")
+
 func play_roll():
 	play_attack_sound(sound_roll)
 	transition_to("Roll")

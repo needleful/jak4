@@ -1329,22 +1329,25 @@ func can_flinch():
 		or state == State.UppercutWindup)
 
 func takes_damage():
-	return not (
-		is_dead()
-		or state == State.Locked
-		or state == State.Damaged
-		or ( !after(TIME_SPIN_INVINCIBILITY)
-			and ( state == State.SpinKick
-				or state == State.AirSpinKick))
-		or (!after(TIME_LUNGE_INVINCIBILITY)
-			and state == State.LungeKick)
-		or (!after(TIME_ROLL_INVINCIBILITY)
-			and state == State.Roll)
-		or ( !after(TIME_UPPERCUT_INVINCIBILITY)
-			and state == State.Uppercut)
-		or ( !after(TIME_DIVE_INVINCIBILITY)
-			and state == State.DiveEnd)
+	if is_dead() or state == State.Locked or state == State.Damaged:
+		return false
+	var dodged = (
+		(( state == State.SpinKick
+			or state == State.AirSpinKick))
+			and !after(TIME_SPIN_INVINCIBILITY)
+		or (state == State.LungeKick)
+			and !after(TIME_LUNGE_INVINCIBILITY) 
+		or (state == State.Roll
+			and !after(TIME_ROLL_INVINCIBILITY))
+		or ( state == State.Uppercut
+			and !after(TIME_UPPERCUT_INVINCIBILITY))
+		or ( state == State.DiveEnd
+			and !after(TIME_DIVE_INVINCIBILITY))
 	)
+	if dodged:
+		mesh.play_dodge()
+		return false
+	return true
 
 func should_hover() -> bool:
 	return ( can_use_hover_scooter 
