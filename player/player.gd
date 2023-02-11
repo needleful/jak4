@@ -53,7 +53,7 @@ const MIN_SPEED_ROLL := 3.0
 const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
 const TIME_ROLL_MIN_JUMP := 0.3
-const TIME_ROLL_INVINCIBILITY := 0.2
+const TIME_ROLL_INVINCIBILITY := 0.1
 
 # Accelerating from zero
 const ACCEL_START := 50.0
@@ -86,10 +86,8 @@ const STAMINA_DRAIN_CLIMB := 25.0
 const STAMINA_DRAIN_CLIMB_START := 0.0
 const STAMINA_DRAIN_MIN := 0.05
 const STAMINA_DRAIN_WALLJUMP := 15.0
-const STAMINA_DRAIN_ROLL := 8.0
 const MIN_CLIMB_STAMINA := 1.0
 const TIME_STOP_CLIMB := 0.0
-var stamina_recharges := true
 const MIN_STAMINA_LEDGE_HANG := 0.0
 const MAX_TIME_WALL_CLING := 1.0
 const WALL_CLING_GRAVITY := 0.2
@@ -98,23 +96,25 @@ const WALL_CLING_GRAVITY := 0.2
 const TIME_LUNGE_MAX := 0.6
 const TIME_LUNGE_MIN := 0.4
 const TIME_LUNGE_MIN_UPPERCUT := 0.2
-const TIME_LUNGE_INVINCIBILITY := 0.2
+const TIME_LUNGE_INVINCIBILITY := 0.1
 const TIME_LUNGE_PARTICLES := 0.4
 const TIME_LUNGE_COMBO := 0.15
 
 const TIME_SPIN_MAX := 0.7
 const TIME_SPIN_MIN := 0.2
-const TIME_SPIN_INVINCIBILITY := 0.4
+const TIME_SPIN_INVINCIBILITY := 0.1
 
 const TIME_UPPERCUT_WINDUP := 0.25
 const TIME_UPPERCUT_MIN := 0.4
 const TIME_UPPERCUT_MAX := 0.8
+const TIME_UPPERCUT_INVINCIBILITY := 0.3
 
 const TIME_DIVE_WINDUP := 0.2
 const TIME_DIVE_END_MIN := 0.4
 const TIME_DIVE_END_MAX := 0.5
 const TIME_DIVE_UPPERCUT := 0.1
 const TIME_DIVE_HIGHJUMP := 0.1
+const TIME_DIVE_INVINCIBILITY := 0.3
 
 const SPEED_LUNGE := 25.0
 const VEL_REDUCTION_WATER := 0.78
@@ -183,7 +183,6 @@ const ARMOR_BAR_DEFAULT_SIZE := 96.0
 const DEFAULT_MAX_STAMINA := 40.0
 const STAMINA_UP_BOOST := 0.5
 var max_stamina := DEFAULT_MAX_STAMINA
-var stamina_recover := 16.0
 var stamina := max_stamina
 
 const EXTRA_STAMINA_BOOST := 15.0
@@ -192,9 +191,6 @@ var extra_stamina := 0.0
 
 const STAMINA_BAR_DEFAULT_SIZE := 280
 const EXTRA_STAMINA_BAR_SIZE := 7
-
-const STAMINA_RECOVERY_BOOST := 0.5
-var stamina_factor := 1.0
 
 const MAX_DAMAGE_UP := 10
 const DAMAGE_UP_BOOST := 0.4
@@ -432,8 +428,6 @@ func _physics_process(delta):
 		velocity.y = TERMINAL_VELOCITY
 	for i in range(timers.size()):
 		timers[i] += delta
-	if stamina_recharges:
-		stamina += stamina_factor*stamina_recover*delta
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
@@ -491,7 +485,7 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif holding("mv_crouch"):
 				var speed = (velocity).slide(ground_normal)
-				if speed.length() > MIN_SPEED_ROLL and total_stamina() > STAMINA_DRAIN_ROLL:
+				if speed.length() > MIN_SPEED_ROLL:
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
@@ -1346,9 +1340,11 @@ func takes_damage():
 			and state == State.LungeKick)
 		or (!after(TIME_ROLL_INVINCIBILITY)
 			and state == State.Roll)
-		# These moves suck so just give em i-frames during windup lol
-		or state == State.UppercutWindup
-		or state == State.DiveWindup)
+		or ( !after(TIME_UPPERCUT_INVINCIBILITY)
+			and state == State.Uppercut)
+		or ( !after(TIME_DIVE_INVINCIBILITY)
+			and state == State.DiveEnd)
+	)
 
 func should_hover() -> bool:
 	return ( can_use_hover_scooter 
@@ -1493,6 +1489,7 @@ func compute_fall_damage(distance):
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, _source) -> bool:
 	if !takes_damage() or damage == 0:
+		# TODO: make a little indicator when the player didn't take damage (twinkle in Jackie's eye?)
 		return false
 	
 	mesh.start_damage_particle(direction)
@@ -1756,7 +1753,7 @@ func set_state(next_state: int):
 			can_slide_lunge = true
 			can_wall_cling = true
 			dash_charges = Global.count("dash_charge")
-			stamina_recharges = true
+			stamina = max_stamina
 			mesh.ground_transition("Walk")
 			gun.unlock()
 		State.Fall, State.LedgeFall, State.WadingFall, State.WaveJump:
@@ -1799,14 +1796,12 @@ func set_state(next_state: int):
 			mesh.ground_transition("Slide")
 			gun.unlock()
 		State.Crouch:
-			stamina_recharges = true
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.ground_transition("Crouch")
 			can_air_spin = true
 			gun.unlock()
 		State.Climb:
-			stamina_recharges = false
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.ground_transition("Climb")
@@ -1817,7 +1812,6 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			can_wall_cling = true
-			stamina_recharges = false
 			mesh.play_ledge_grab()
 			var ledgeCast = ledgeCastCenter
 			if !ledgeCast.is_colliding():
@@ -1836,8 +1830,6 @@ func set_state(next_state: int):
 		State.Roll:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			drain_stamina(STAMINA_DRAIN_ROLL)
-			stamina_recharges = false
 			mesh.play_roll()
 			gun.lock()
 		State.RollFall:
@@ -1936,7 +1928,6 @@ func set_state(next_state: int):
 			can_slide_lunge = true
 			can_wall_cling = true
 			dash_charges = Global.count("dash_charge")
-			stamina_recharges = true
 			mesh.ground_transition("Wading")
 			gun.unlock()
 		State.WadingJump:
@@ -1946,7 +1937,6 @@ func set_state(next_state: int):
 		State.WallCling:
 			can_air_spin = true
 			can_wall_cling = false
-			stamina_recharges = false
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("WallCling")

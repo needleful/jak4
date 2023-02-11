@@ -146,7 +146,7 @@ func update_stamina():
 	energy_bar.rect_min_size.x = player.extra_stamina*player.EXTRA_STAMINA_BAR_SIZE
 	stamina_bar.max_value = player.max_stamina
 	stamina_bar.value = player.stamina
-	if player.stamina < player.STAMINA_DRAIN_ROLL:
+	if player.stamina < player.STAMINA_DRAIN_WALLJUMP:
 		stamina_bar.modulate = drained_stamina_color
 	else:
 		stamina_bar.modulate = stamina_color
@@ -204,7 +204,6 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				player.max_stamina = player.DEFAULT_MAX_STAMINA*s_factor
 				stamina_bar.max_value = player.max_stamina
 				stamina_bar.rect_min_size.x = player.STAMINA_BAR_DEFAULT_SIZE*s_factor
-				player.stamina_factor = (1 + player.STAMINA_RECOVERY_BOOST*count)
 			"jump_height_up":
 				player.jump_factor = (1 + player.JUMP_UP_BOOST*count)
 			"move_speed_up":

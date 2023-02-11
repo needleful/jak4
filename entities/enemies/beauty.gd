@@ -30,6 +30,16 @@ var player_last_origin := Vector3.ZERO
 
 const GRAVITY := Vector3.DOWN*24.0
 var velocity := Vector3.ZERO
+var move := {}
+
+const SWIPE := {
+	"animation": "SwipeLeft",
+	"windup": 0.7,
+	"active": 0.2,
+	"endlag":0.6,
+	"track":5.0,
+	"damage": 15.0
+}
 
 func _ready():
 	var p = Global.get_player()
