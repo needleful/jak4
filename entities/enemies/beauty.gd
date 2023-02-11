@@ -1,5 +1,7 @@
 extends KinematicBody
 
+signal died(id, path)
+
 enum AIState {
 	Inactive,
 	Stalk,
@@ -19,6 +21,7 @@ enum MoveState {
 
 # Assumed true for now
 export(AIState) var ai_state = AIState.Inactive
+export(int) var health := 80.0
 var move_state = MoveState.Locked
 
 onready var nav := $NavigationAgent
@@ -51,8 +54,8 @@ var M_DASH := {
 	"damage":10,
 	"min_range":3,
 	"max_range":10,
-	"min_angle":-PI/8.0,
-	"max_angle":PI/8.0,
+	"min_angle":-PI/2.0,
+	"max_angle":PI/2.0,
 	"cooldown":1.3,
 	"move_speed":7.0,
 	"accel":60.0,
@@ -181,7 +184,9 @@ func chase(delta):
 func plot_attack():
 	var diff = player.global_transform.origin - global_transform.origin
 	var dist = diff.length()
-	var angle = global_transform.basis.z
+	diff /= diff
+	diff.y = 0
+	var angle = -body.global_transform.basis.y.angle_to(diff)
 	var best_move = null
 	for m in moves:
 		if "grounded" in m and is_on_floor() != m.grounded:
@@ -190,6 +195,8 @@ func plot_attack():
 			continue
 		if best_move and best_move.damage > m.damage:
 			continue
+		if angle < m.min_angle or angle > m.max_angle:
+			continue 
 		best_move = m
 		
 	return best_move
@@ -259,7 +266,7 @@ func calculate_path(loc: Vector3) -> Vector3:
 	player_last_origin = loc
 	var next = nav.get_next_location()
 	
-	if true:
+	if false:
 		debug_path.clear()
 		debug_path.begin(Mesh.PRIMITIVE_LINE_STRIP)
 		for c in nav.get_nav_path():
@@ -295,3 +302,12 @@ func _on_hitbox_entered(body):
 		var dir = (body.global_transform.origin - global_transform.origin).normalized()
 		body.take_damage(current_move.damage, dir, self)
 		damaged_objects.append(body)
+
+func take_damage(damage:int, dir:Vector3, source:Node):
+	if source == self:
+		return
+	velocity += dir*damage
+	health -= damage
+	if health <= 0.0:
+		emit_signal("died", "beauty", get_path())
+		queue_free()
