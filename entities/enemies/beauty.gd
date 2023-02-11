@@ -127,8 +127,7 @@ func _physics_process(delta):
 			var dir := (loc - global_transform.origin).normalized()
 			var fixed_path:bool = "fixed_path" in current_move and current_move.fixed_path
 			if fixed_path:
-				# TODO replace with proper vector once modeled
-				dir = -body.global_transform.basis.y
+				dir = body.global_transform.basis.z
 			if is_on_floor():
 				var accel: float
 				if "accel" in current_move:
@@ -145,7 +144,7 @@ func _physics_process(delta):
 func chase(delta):
 	var loc = player.global_transform.origin
 	var next_pos : Vector3
-	if (loc - player_last_origin).length() > 2.0:
+	if (loc - player_last_origin).length() > 1.0:
 		next_pos = calculate_path(loc)
 	else:
 		next_pos = nav.get_next_location()
@@ -186,11 +185,14 @@ func plot_attack():
 	var dist = diff.length()
 	diff /= diff
 	diff.y = 0
-	var angle = -body.global_transform.basis.y.angle_to(diff)
+	var angle = body.global_transform.basis.z.angle_to(diff)
 	var best_move = null
 	for m in moves:
-		if "grounded" in m and is_on_floor() != m.grounded:
-			continue
+		if "grounded" in m:
+			if is_on_floor() != m.grounded or (
+				m.grounded and !nav.is_target_reachable()
+			):
+				continue
 		if dist > m.max_range or dist < m.min_range:
 			continue
 		if best_move and best_move.damage > m.damage:
@@ -249,8 +251,7 @@ func air_move(delta:float, dir: Vector3, accel_scale := 1.0):
 	velocity = move_and_slide(velocity, Vector3.UP, false, 4, 1.7)
 
 func rotate_toward(dir:Vector3, delta:float):
-	# TODO: change forward when we get a real mesh
-	var forward := -body.global_transform.basis.y
+	var forward := body.global_transform.basis.z
 	dir.y = 0
 	var angle := forward.angle_to(dir)
 	if abs(angle) > 0.01:
