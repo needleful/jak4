@@ -27,6 +27,8 @@ var move_state = MoveState.Locked
 onready var nav := $NavigationAgent
 onready var debug_path := $Node/ImmediateGeometry
 onready var body:Spatial = $body
+onready var animTree :AnimationTree = $AnimationTree
+onready var move_anim :AnimationNodeStateMachinePlayback = animTree["parameters/Movement/playback"]
 
 var player: PlayerBody
 var player_last_origin := Vector3.ZERO
@@ -46,8 +48,7 @@ var M_AOE := {
 	"cooldown": 1.0,
 	"move_speed": 1.0,
 	"grounded":true,
-	"name": "Swipe",
-	"anim": "Swipe",
+	"name": "Swipe"
 }
 
 var M_DASH := {
@@ -60,8 +61,7 @@ var M_DASH := {
 	"move_speed":7.0,
 	"accel":60.0,
 	"grounded":true,
-	"name":"Dash",
-	"anim":"Dash"
+	"name":"Dash"
 }
 
 var M_FIRE := {
@@ -72,8 +72,8 @@ var M_FIRE := {
 	"max_angle":PI,
 	"cooldown":0.5,
 	"move_speed":1.0,
-	"name":"Fire_Slow",
-	"anim":"Fire_slow"
+	"blend":"HalfBody",
+	"name":"Fire_Slow"
 }
 
 var M_DIVE := {
@@ -84,8 +84,7 @@ var M_DIVE := {
 	"max_angle":PI/2,
 	"cooldown":0.5,
 	"move_speed":1.0,
-	"name":"Dive",
-	"anim":"Dive"
+	"name":"Dive"
 }
 
 var moves := [
@@ -95,9 +94,14 @@ var moves := [
 	M_DIVE
 ]
 
+var move_blends := [
+	"HalfBody"
+]
+
 var cooldown := 3.0
 var current_move
-
+var state_timer := 0.0
+var was_on_floor := true
 
 func _ready():
 	var p = Global.get_player()
@@ -107,6 +111,7 @@ func _ready():
 		var _x = calculate_path(player_last_origin)
 
 func _physics_process(delta):
+	
 	if !player:
 		print_debug("Where's the player?")
 		return
@@ -139,9 +144,9 @@ func _physics_process(delta):
 				air_move(delta, dir*current_move.move_speed)
 			if !fixed_path:
 				rotate_toward(dir, delta)
-			
 
 func chase(delta):
+	state_timer += delta
 	var loc = player.global_transform.origin
 	var next_pos : Vector3
 	if (loc - player_last_origin).length() > 1.0:
@@ -153,32 +158,42 @@ func chase(delta):
 	var final_diff := final_pos - global_transform.origin
 	
 	if move_state == MoveState.JumpCharge:
-		velocity.y = get_jump_velocity(player.global_transform.origin - global_transform.origin)
-		move_state = MoveState.Jumping
+		if state_timer >= 0.4:
+			velocity.y = get_jump_velocity(player.global_transform.origin - global_transform.origin)
+			move_state = MoveState.Jumping
+			move_anim.travel("Jump")
+		else:
+			if is_on_floor():
+				ground_move(delta, Vector3.ZERO)
+			else:
+				air_move(delta, Vector3.ZERO)
 	elif move_state == MoveState.Jumping:
 		dir = (player.global_transform.origin - global_transform.origin).normalized()
 		air_move(delta, dir*2, 12.0)
 		if is_on_floor():
 			move_state = MoveState.Ground
+			move_anim.travel("Walk")
 			var _x = calculate_path(loc)
 	else:
 		cooldown -= delta
 		if cooldown <= 0.0:
 			var move = plot_attack()
 			if move:
-				current_move = move
-				$attack_anim.play(move.anim)
-				ai_state = AIState.MoveWindup
-				
+				execute(move)
 		if final_diff.length() < 2:
 			dir = Vector3.ZERO
 			if !nav.is_target_reachable() and player.is_grounded():
+				state_timer = 0.0
 				move_state = MoveState.JumpCharge
+				move_anim.travel("JumpCharge")
+				animTree["parameters/WalkSpeed/scale"] = 1.0
 		if is_on_floor():
 			ground_move(delta, dir)
+			walk_blend()
 		else:
 			air_move(delta, dir)
 	rotate_toward(dir, delta)
+	was_on_floor = is_on_floor()
 
 func plot_attack():
 	var diff = player.global_transform.origin - global_transform.origin
@@ -202,6 +217,30 @@ func plot_attack():
 		best_move = m
 		
 	return best_move
+
+func execute(move):
+	current_move = move
+	var anim:String = move.name
+	if "anim" in move:
+		anim = move.anim
+	$attack_anim.play(anim)
+	var blend := "FullBody"
+	if "blend" in move:
+		blend = move.blend
+
+	var a:AnimationNodeAnimation = animTree.tree_root.get_node("Move" + blend)
+	a.animation = anim
+	animTree["parameters/%s/active" % blend] = true
+	ai_state = AIState.MoveWindup
+
+func walk_blend():
+	var walk := velocity
+	walk.y = 0
+	# TODO: make default walk speed a constant
+	walk /= 4.0
+	var speed = walk.length()
+	animTree["parameters/Movement/Walk/blend_position"] = speed
+	animTree["parameters/WalkSpeed/scale"] = max(speed, 0.5)
 
 func end_windup():
 	ai_state = AIState.MoveActive
