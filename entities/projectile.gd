@@ -16,6 +16,7 @@ var active_time := 6.0
 var timer := 0.0
 var hitbox : Node
 var disabled := false
+var this_is_a_projectile := true
 
 func _ready():
 	if has_node("hitbox"):
@@ -71,7 +72,7 @@ func _on_deletion_timer_timeout():
 	_remove()
 
 func _on_projectile_body_entered(body):
-	if body == hitbox:
+	if body == hitbox or "this_is_a_projectile" in body:
 		return
 	if timer > INACTIVE_TIME:
 		dir_damage(body)

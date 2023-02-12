@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://entities/enemies/beauty.gd" type="Script" id=1]
 [ext_resource path="res://_glb/enemies/beauty.glb" type="PackedScene" id=2]
@@ -189,6 +189,9 @@ animation = "Fire_Slow"
 [sub_resource type="AnimationNodeAnimation" id=20]
 animation = "Fire_Slow"
 
+[sub_resource type="AnimationNodeAnimation" id=35]
+animation = "Fall-loop"
+
 [sub_resource type="AnimationNodeAnimation" id=30]
 animation = "Jump"
 
@@ -214,16 +217,27 @@ blend_point_1/pos = 1.0
 [sub_resource type="AnimationNodeStateMachineTransition" id=34]
 xfade_time = 0.1
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=37]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=38]
+xfade_time = 0.2
+
 [sub_resource type="AnimationNodeStateMachine" id=28]
+states/Fall/node = SubResource( 35 )
+states/Fall/position = Vector2( 532, 102 )
 states/Jump/node = SubResource( 30 )
 states/Jump/position = Vector2( 604, -7 )
 states/JumpCharge/node = SubResource( 31 )
 states/JumpCharge/position = Vector2( 365, 15 )
 states/Walk/node = SubResource( 27 )
 states/Walk/position = Vector2( 278, 94 )
-transitions = [ "Walk", "JumpCharge", SubResource( 32 ), "JumpCharge", "Jump", SubResource( 33 ), "Jump", "Walk", SubResource( 34 ) ]
+transitions = [ "Walk", "JumpCharge", SubResource( 32 ), "JumpCharge", "Jump", SubResource( 33 ), "Jump", "Walk", SubResource( 34 ), "Jump", "Fall", SubResource( 36 ), "Fall", "Walk", SubResource( 37 ), "Walk", "Fall", SubResource( 38 ) ]
 start_node = "Walk"
-graph_offset = Vector2( -92, -59 )
+graph_offset = Vector2( 12, -60 )
 
 [sub_resource type="AnimationNodeTimeScale" id=16]
 
@@ -246,8 +260,12 @@ node_connections = [ "output", 0, "FullBody", "HalfBody", 0, "WalkSpeed", "HalfB
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=29]
 
+[sub_resource type="SphereShape" id=39]
+radius = 0.312028
+
 [node name="beauty" type="KinematicBody" groups=["dynamic", "enemy", "push"]]
-collision_layer = 65541
+collision_layer = 65540
+collision_mask = 3
 moving_platform_exclude_mask = 65536
 script = ExtResource( 1 )
 
@@ -258,7 +276,7 @@ shape = SubResource( 1 )
 [node name="body" parent="." instance=ExtResource( 2 )]
 
 [node name="forearm_l" type="BoneAttachment" parent="body/Armature/Skeleton" index="1"]
-transform = Transform( -0.482702, 0.22312, 0.846886, 0.0574752, -0.956848, 0.284849, 0.873897, 0.186174, 0.449048, 0.347361, 2.06428, -0.182182 )
+transform = Transform( -0.482702, 0.223121, 0.846886, 0.0574749, -0.956847, 0.28485, 0.873897, 0.186173, 0.449048, 0.347361, 2.06428, -0.182182 )
 bone_name = "Radius.L"
 
 [node name="hitbox" type="Area" parent="body/Armature/Skeleton/forearm_l"]
@@ -271,7 +289,7 @@ shape = SubResource( 24 )
 disabled = true
 
 [node name="forearm_r" type="BoneAttachment" parent="body/Armature/Skeleton" index="2"]
-transform = Transform( -0.481684, -0.216201, -0.849257, -0.0795406, -0.954304, 0.288058, -0.872728, 0.206303, 0.442476, -0.339169, 2.05409, -0.147727 )
+transform = Transform( -0.481684, -0.216201, -0.849258, -0.0795406, -0.954304, 0.288058, -0.872728, 0.206303, 0.442476, -0.339169, 2.05409, -0.147727 )
 bone_name = "Radius.R"
 
 [node name="hitbox" type="Area" parent="body/Armature/Skeleton/forearm_r"]
@@ -332,6 +350,13 @@ parameters/HalfBody/active = false
 parameters/Movement/playback = SubResource( 29 )
 parameters/Movement/Walk/blend_position = 0
 parameters/WalkSpeed/scale = 1.0
+
+[node name="GroundArea" type="Area" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="GroundArea"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.204283, 0 )
+shape = SubResource( 39 )
 
 [connection signal="body_entered" from="body/Armature/Skeleton/forearm_l/hitbox" to="." method="_on_hitbox_entered"]
 [connection signal="body_entered" from="body/Armature/Skeleton/forearm_r/hitbox" to="." method="_on_hitbox_entered"]

@@ -9,6 +9,7 @@ enum AIState {
 	MoveWindup,
 	MoveActive,
 	MoveEnd,
+	Dead
 }
 
 enum MoveState {
@@ -21,7 +22,8 @@ enum MoveState {
 
 # Assumed true for now
 export(AIState) var ai_state = AIState.Inactive
-export(int) var health := 80.0
+export(int) var health := 320.0
+export(bool) var reset_on_player_death := false
 var move_state = MoveState.Locked
 
 onready var nav := $NavigationAgent
@@ -55,9 +57,9 @@ var M_DASH := {
 	"damage":10,
 	"min_range":3,
 	"max_range":10,
-	"min_angle":-PI/2.0,
-	"max_angle":PI/2.0,
-	"cooldown":1.3,
+	"min_angle":-PI/1.6,
+	"max_angle":PI/1.6,
+	"cooldown":1.0,
 	"move_speed":7.0,
 	"accel":60.0,
 	"grounded":true,
@@ -72,6 +74,7 @@ var M_FIRE := {
 	"max_angle":PI,
 	"cooldown":0.5,
 	"move_speed":1.0,
+	"navigate":true,
 	"blend":"HalfBody",
 	"name":"Fire_Slow"
 }
@@ -98,10 +101,14 @@ var move_blends := [
 	"HalfBody"
 ]
 
+var ground_normal := Vector3.UP
 var cooldown := 3.0
 var current_move
 var state_timer := 0.0
 var was_on_floor := true
+var starting_position:Transform
+var starting_health := health
+var starting_collision_layer = collision_layer 
 
 func _ready():
 	var p = Global.get_player()
@@ -109,51 +116,70 @@ func _ready():
 		player = p
 		player_last_origin = player.global_transform.origin
 		var _x = calculate_path(player_last_origin)
+	if reset_on_player_death:
+		if !p.is_connected("died", self, "_on_player_died"):
+			var _x = Global.get_player().connect("died", self, "_on_player_died")
+			starting_position = global_transform
+			starting_health = health
+			starting_collision_layer = collision_layer
+		else:
+			global_transform = starting_position
+			health = starting_health
+			collision_layer = starting_collision_layer
+			velocity = Vector3.ZERO
+
+func _on_player_died():
+	if ai_state != AIState.Dead:
+		_reset()
+
+func _reset():
+	_ready()
 
 func _physics_process(delta):
-	
 	if !player:
 		print_debug("Where's the player?")
 		return
 	
 	match ai_state:
+		AIState.Dead:
+			move(delta, Vector3.ZERO)
+			if is_on_floor():
+				set_physics_process(false)
 		AIState.Chase:
 			chase(delta)
 		AIState.MoveWindup:
-			if is_on_floor():
-				ground_move(delta, Vector3.ZERO)
-			else:
-				air_move(delta, Vector3.ZERO)
+			move(delta, Vector3.ZERO)
 			var loc := player.global_transform.origin
 			var dir := (loc - global_transform.origin).normalized()
 			rotate_toward(dir, delta)
 		AIState.MoveActive:
-			var loc := player.global_transform.origin
-			var dir := (loc - global_transform.origin).normalized()
-			var fixed_path:bool = "fixed_path" in current_move and current_move.fixed_path
-			if fixed_path:
-				dir = body.global_transform.basis.z
-			if is_on_floor():
-				var accel: float
-				if "accel" in current_move:
-					accel = current_move.accel
-				else:
-					accel = ACCEL_GROUND
-				ground_move(delta, dir*current_move.move_speed, accel)
+			var dir: Vector3
+			if "navigate" in current_move and current_move.navigate:
+				dir = get_direction()
 			else:
-				air_move(delta, dir*current_move.move_speed)
-			if !fixed_path:
-				rotate_toward(dir, delta)
+				var loc := player.global_transform.origin
+				dir = (loc - global_transform.origin).normalized()
+			var accel: float
+			if "accel" in current_move:
+				accel = current_move.accel
+			else:
+				accel = ACCEL_GROUND
+			move(delta, dir*current_move.move_speed, accel)
+			rotate_toward(dir, delta)
 
-func chase(delta):
-	state_timer += delta
+func get_direction() -> Vector3:
 	var loc = player.global_transform.origin
 	var next_pos : Vector3
 	if (loc - player_last_origin).length() > 1.0:
 		next_pos = calculate_path(loc)
 	else:
 		next_pos = nav.get_next_location()
-	var dir := (next_pos - global_transform.origin).normalized()
+	return (next_pos - global_transform.origin).normalized()
+
+func chase(delta):
+	state_timer += delta
+	var loc = player.global_transform.origin
+	var dir := get_direction()
 	var final_pos:Vector3 = nav.get_final_location()
 	var final_diff := final_pos - global_transform.origin
 	
@@ -163,10 +189,7 @@ func chase(delta):
 			move_state = MoveState.Jumping
 			move_anim.travel("Jump")
 		else:
-			if is_on_floor():
-				ground_move(delta, Vector3.ZERO)
-			else:
-				air_move(delta, Vector3.ZERO)
+			ground_move(delta, Vector3.ZERO)
 	elif move_state == MoveState.Jumping:
 		dir = (player.global_transform.origin - global_transform.origin).normalized()
 		air_move(delta, dir*2, 12.0)
@@ -177,23 +200,18 @@ func chase(delta):
 	else:
 		cooldown -= delta
 		if cooldown <= 0.0:
-			var move = plot_attack()
-			if move:
-				execute(move)
+			var newmove = plot_attack()
+			if newmove:
+				execute(newmove)
 		if final_diff.length() < 2:
 			dir = Vector3.ZERO
-			if !nav.is_target_reachable() and player.is_grounded():
+			if !nav.is_target_reachable() and is_on_floor() and player.is_grounded():
 				state_timer = 0.0
 				move_state = MoveState.JumpCharge
 				move_anim.travel("JumpCharge")
 				animTree["parameters/WalkSpeed/scale"] = 1.0
-		if is_on_floor():
-			ground_move(delta, dir)
-			walk_blend()
-		else:
-			air_move(delta, dir)
+		move(delta, dir)
 	rotate_toward(dir, delta)
-	was_on_floor = is_on_floor()
 
 func plot_attack():
 	var diff = player.global_transform.origin - global_transform.origin
@@ -262,12 +280,34 @@ func get_jump_velocity(difference: Vector3) -> float:
 	var v0 := sqrt(2 * a * p)
 	return v0
 
+func move(delta:float, dir:Vector3, accel:float = ACCEL_GROUND):
+	var on_ground: bool
+	if was_on_floor:
+		on_ground = !$GroundArea.get_overlapping_bodies().empty()
+	else:
+		on_ground = is_on_floor()
+	if is_on_floor():
+		ground_normal = get_floor_normal()
+		
+	if on_ground:
+		if !was_on_floor:
+			move_anim.travel("Walk")
+		ground_move(delta, dir, accel)
+		walk_blend()
+	else:
+		if was_on_floor:
+			move_anim.travel("Fall")
+			animTree["parameters/WalkSpeed/scale"] = 1.0
+		air_move(delta, dir)
+	was_on_floor = on_ground
+
+
 func ground_move(delta: float, dir: Vector3, accel:float = ACCEL_GROUND):
 	var gravity: Vector3
-	if GRAVITY.dot(get_floor_normal()) >= 0:
+	if GRAVITY.dot(ground_normal) >= 0:
 		gravity = Vector3.ZERO
 	else:
-		gravity = GRAVITY.project(get_floor_normal())
+		gravity = GRAVITY.project(ground_normal)
 	var movement := 4.0*dir
 	var vy := velocity.y
 	velocity.y = 0
@@ -299,14 +339,13 @@ func rotate_toward(dir:Vector3, delta:float):
 			axis = Vector3.UP
 		var rot := sign(angle)*min(abs(angle), delta*10.0)
 		body.global_rotate(axis, rot)
-	
 
 func calculate_path(loc: Vector3) -> Vector3:
 	nav.set_target_location(loc)
 	player_last_origin = loc
 	var next = nav.get_next_location()
 	
-	if false:
+	if true:
 		debug_path.clear()
 		debug_path.begin(Mesh.PRIMITIVE_LINE_STRIP)
 		for c in nav.get_nav_path():
@@ -350,4 +389,4 @@ func take_damage(damage:int, dir:Vector3, source:Node):
 	health -= damage
 	if health <= 0.0:
 		emit_signal("died", "beauty", get_path())
-		queue_free()
+		ai_state = AIState.Dead

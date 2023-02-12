@@ -948,7 +948,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.RollJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
-			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity)
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity.normalized())
 			rotate_to_velocity(desired_velocity)
 		State.RollFall, State.WallJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
