@@ -30,8 +30,10 @@ func prev():
 	safe_set_tab(c)
 
 func safe_set_tab(tab):
-	if tab < 0 or tab >= tabs.get_tab_count():
-		return
+	if tab < 0:
+		tab = tabs.get_tab_count() - 1
+	elif tab >= tabs.get_tab_count():
+		tab = 0
 	tabs.current_tab = tab
 
 func _on_wardrobe_exited():

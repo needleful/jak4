@@ -22,8 +22,11 @@ enum MoveState {
 
 # Assumed true for now
 export(AIState) var ai_state = AIState.Inactive
-export(int) var health := 320.0
+export(int) var health := 250
 export(bool) var reset_on_player_death := false
+export(bool) var cloaked := false
+export(NodePath) var navigation
+export(float) var chase_speed := 7.0
 var move_state = MoveState.Locked
 
 onready var nav := $NavigationAgent
@@ -34,6 +37,12 @@ onready var move_anim :AnimationNodeStateMachinePlayback = animTree["parameters/
 
 var player: PlayerBody
 var player_last_origin := Vector3.ZERO
+
+onready var hitboxes := [
+	$body/hitboxes/dash_hitbox,
+	$body/Armature/Skeleton/forearm_l/hitbox,
+	$body/Armature/Skeleton/forearm_r/hitbox
+]
 
 const GRAVITY := Vector3.DOWN*24.0
 var velocity := Vector3.ZERO
@@ -48,7 +57,7 @@ var M_AOE := {
 	"min_angle":-PI,
 	"max_angle": PI,
 	"cooldown": 1.0,
-	"move_speed": 1.0,
+	"move_speed": 0.5,
 	"grounded":true,
 	"name": "Swipe"
 }
@@ -98,7 +107,8 @@ var moves := [
 ]
 
 var move_blends := [
-	"HalfBody"
+	"HalfBody",
+	"FullBody"
 ]
 
 var ground_normal := Vector3.UP
@@ -110,15 +120,21 @@ var starting_position:Transform
 var starting_health := health
 var starting_collision_layer = collision_layer 
 
+onready var chest := $body/Armature/Skeleton/chest
+
 func _ready():
-	var p = Global.get_player()
-	if p is PlayerBody:
-		player = p
-		player_last_origin = player.global_transform.origin
-		var _x = calculate_path(player_last_origin)
+	if Global.is_picked(self.get_path()):
+		die(true)
+		set_physics_process(false)
+		global_transform = Global.stat("death"+get_path())
+		return
+
+	player = Global.get_player()
+	player_last_origin = player.global_transform.origin
+	var _x = calculate_path(player_last_origin)
 	if reset_on_player_death:
-		if !p.is_connected("died", self, "_on_player_died"):
-			var _x = Global.get_player().connect("died", self, "_on_player_died")
+		if !player.is_connected("died", self, "_on_player_died"):
+			_x = player.connect("died", self, "_on_player_died")
 			starting_position = global_transform
 			starting_health = health
 			starting_collision_layer = collision_layer
@@ -126,7 +142,11 @@ func _ready():
 			global_transform = starting_position
 			health = starting_health
 			collision_layer = starting_collision_layer
+			collision_mask = 3
 			velocity = Vector3.ZERO
+
+func process_player_distance(pos: Vector3):
+	return (pos - global_transform.origin).length_squared()
 
 func _on_player_died():
 	if ai_state != AIState.Dead:
@@ -164,7 +184,7 @@ func _physics_process(delta):
 				accel = current_move.accel
 			else:
 				accel = ACCEL_GROUND
-			move(delta, dir*current_move.move_speed, accel)
+			move(delta, dir*chase_speed*current_move.move_speed, accel)
 			rotate_toward(dir, delta)
 
 func get_direction() -> Vector3:
@@ -192,7 +212,7 @@ func chase(delta):
 			ground_move(delta, Vector3.ZERO)
 	elif move_state == MoveState.Jumping:
 		dir = (player.global_transform.origin - global_transform.origin).normalized()
-		air_move(delta, dir*2, 12.0)
+		air_move(delta, chase_speed*2*dir, 12.0)
 		if is_on_floor():
 			move_state = MoveState.Ground
 			move_anim.travel("Walk")
@@ -210,8 +230,11 @@ func chase(delta):
 				move_state = MoveState.JumpCharge
 				move_anim.travel("JumpCharge")
 				animTree["parameters/WalkSpeed/scale"] = 1.0
-		move(delta, dir)
+		move(delta, chase_speed*dir)
 	rotate_toward(dir, delta)
+
+func get_target_ref():
+	return chest.global_transform.origin
 
 func plot_attack():
 	var diff = player.global_transform.origin - global_transform.origin
@@ -256,9 +279,12 @@ func walk_blend():
 	walk.y = 0
 	# TODO: make default walk speed a constant
 	walk /= 4.0
-	var speed = walk.length()
-	animTree["parameters/Movement/Walk/blend_position"] = speed
-	animTree["parameters/WalkSpeed/scale"] = max(speed, 0.5)
+	var d := walk.dot(body.global_transform.basis.z)
+	var speed = sign(d)*sqrt(abs(d))
+	var b :float = animTree["parameters/Movement/Walk/blend_position"]
+	var blend :float = lerp(b, speed, 0.1)
+	animTree["parameters/Movement/Walk/blend_position"] = blend
+	animTree["parameters/WalkSpeed/scale"] = max(blend, 0.5)
 
 func end_windup():
 	ai_state = AIState.MoveActive
@@ -280,7 +306,7 @@ func get_jump_velocity(difference: Vector3) -> float:
 	var v0 := sqrt(2 * a * p)
 	return v0
 
-func move(delta:float, dir:Vector3, accel:float = ACCEL_GROUND):
+func move(delta:float, movement:Vector3, accel:float = ACCEL_GROUND):
 	var on_ground: bool
 	if was_on_floor:
 		on_ground = !$GroundArea.get_overlapping_bodies().empty()
@@ -292,23 +318,22 @@ func move(delta:float, dir:Vector3, accel:float = ACCEL_GROUND):
 	if on_ground:
 		if !was_on_floor:
 			move_anim.travel("Walk")
-		ground_move(delta, dir, accel)
+		ground_move(delta, movement, accel)
 		walk_blend()
 	else:
 		if was_on_floor:
 			move_anim.travel("Fall")
 			animTree["parameters/WalkSpeed/scale"] = 1.0
-		air_move(delta, dir)
+		air_move(delta, movement)
 	was_on_floor = on_ground
 
 
-func ground_move(delta: float, dir: Vector3, accel:float = ACCEL_GROUND):
+func ground_move(delta: float, movement: Vector3, accel:float = ACCEL_GROUND):
 	var gravity: Vector3
 	if GRAVITY.dot(ground_normal) >= 0:
 		gravity = Vector3.ZERO
 	else:
 		gravity = GRAVITY.project(ground_normal)
-	var movement := 4.0*dir
 	var vy := velocity.y
 	velocity.y = 0
 	velocity = velocity.move_toward(movement, accel*delta)
@@ -319,9 +344,8 @@ func ground_move(delta: float, dir: Vector3, accel:float = ACCEL_GROUND):
 		#Vector3.DOWN*0.25,
 		Vector3.UP, false, 4, 0.5*PI)
 
-func air_move(delta:float, dir: Vector3, accel_scale := 1.0):
-	dir.y = 0
-	var movement := 4.0*dir
+func air_move(delta:float, movement: Vector3, accel_scale := 1.0):
+	movement.y = 0
 	var vy := velocity.y
 	velocity.y = 0
 	velocity = velocity.move_toward(movement, accel_scale*5.0*delta)
@@ -341,11 +365,16 @@ func rotate_toward(dir:Vector3, delta:float):
 		body.global_rotate(axis, rot)
 
 func calculate_path(loc: Vector3) -> Vector3:
+	if !(nav.get_navigation() is Navigation):
+		if has_node(navigation):
+			nav.set_navigation(get_node(navigation))
+		else:
+			die()
 	nav.set_target_location(loc)
 	player_last_origin = loc
 	var next = nav.get_next_location()
 	
-	if true:
+	if false:
 		debug_path.clear()
 		debug_path.begin(Mesh.PRIMITIVE_LINE_STRIP)
 		for c in nav.get_nav_path():
@@ -374,13 +403,13 @@ func fire_from(point: Transform):
 	proj.fire(player, Vector3.UP*0.5, 20.0)
 	proj.velocity = 6.0*point.basis.z
 
-func _on_hitbox_entered(body):
-	if body in damaged_objects:
+func _on_hitbox_entered(b):
+	if b in damaged_objects:
 		return
-	if current_move and body.has_method("take_damage"):
-		var dir = (body.global_transform.origin - global_transform.origin).normalized()
-		body.take_damage(current_move.damage, dir, self)
-		damaged_objects.append(body)
+	if current_move and b.has_method("take_damage"):
+		var dir = (b.global_transform.origin - global_transform.origin).normalized()
+		b.take_damage(current_move.damage, dir, self)
+		damaged_objects.append(b)
 
 func take_damage(damage:int, dir:Vector3, source:Node):
 	if source == self:
@@ -388,5 +417,19 @@ func take_damage(damage:int, dir:Vector3, source:Node):
 	velocity += dir*damage
 	health -= damage
 	if health <= 0.0:
+		die()
+
+func die(on_start := false):
+	if !on_start:
 		emit_signal("died", "beauty", get_path())
-		ai_state = AIState.Dead
+	# Todo: rapidly go to the end when on startup
+	move_anim.start("Die")
+	$attack_anim.play("RESET")
+	for blend in move_blends:
+		animTree["parameters/%s/active" % blend] = false
+	animTree["parameters/WalkSpeed/scale"] = 1.0
+	ai_state = AIState.Dead
+	collision_layer = 0
+	collision_mask = 1
+	Global.mark_picked(self.get_path())
+	Global.set_stat("death"+get_path(), global_transform)

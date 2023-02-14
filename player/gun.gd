@@ -106,7 +106,7 @@ func _process(delta):
 	var target_dir : Vector3
 	var aiming: bool = aim_toggle or Input.is_action_pressed("combat_aim")
 	var locked_aim := false
-	var lock_on := true
+	var lock_on: bool = current_weapon and current_weapon.locks_on
 	
 	state_timer += delta
 	if charging() and !Input.is_action_pressed("combat_shoot"):
@@ -238,7 +238,7 @@ func set_current_weapon(weapon: Node):
 	current_weapon = weapon
 	if !current_weapon.is_inside_tree():
 		ref.add_child(current_weapon)
-	current_weapon.show()
+	current_weapon.unholster()
 	holder.track_weapon(current_weapon.name)
 
 func fire():
@@ -386,8 +386,9 @@ func set_state(new_state, force := false):
 			visible = true
 			holder.blend_gun(1.0)
 			holder.hold_gun(1.0)
-			gun_ik.interpolation = 1.0
-			gun_ik.start()
+			if current_weapon.locks_on:
+				gun_ik.interpolation = 1.0
+				gun_ik.start()
 			time_since_fired = 0
 		State.Locked:
 			visible = true

@@ -96,25 +96,21 @@ const WALL_CLING_GRAVITY := 0.2
 const TIME_LUNGE_MAX := 0.6
 const TIME_LUNGE_MIN := 0.4
 const TIME_LUNGE_MIN_UPPERCUT := 0.2
-const TIME_LUNGE_INVINCIBILITY := 0.1
 const TIME_LUNGE_PARTICLES := 0.4
 const TIME_LUNGE_COMBO := 0.15
 
 const TIME_SPIN_MAX := 0.7
 const TIME_SPIN_MIN := 0.2
-const TIME_SPIN_INVINCIBILITY := 0.1
 
 const TIME_UPPERCUT_WINDUP := 0.25
 const TIME_UPPERCUT_MIN := 0.4
 const TIME_UPPERCUT_MAX := 0.8
-const TIME_UPPERCUT_INVINCIBILITY := 0.3
 
 const TIME_DIVE_WINDUP := 0.2
 const TIME_DIVE_END_MIN := 0.4
 const TIME_DIVE_END_MAX := 0.5
 const TIME_DIVE_UPPERCUT := 0.1
 const TIME_DIVE_HIGHJUMP := 0.1
-const TIME_DIVE_INVINCIBILITY := 0.3
 
 const SPEED_LUNGE := 25.0
 const VEL_REDUCTION_WATER := 0.78
@@ -1331,20 +1327,7 @@ func can_flinch():
 func takes_damage():
 	if is_dead() or state == State.Locked or state == State.Damaged:
 		return false
-	var dodged = (
-		(( state == State.SpinKick
-			or state == State.AirSpinKick))
-			and !after(TIME_SPIN_INVINCIBILITY)
-		or (state == State.LungeKick)
-			and !after(TIME_LUNGE_INVINCIBILITY) 
-		or (state == State.Roll
-			and !after(TIME_ROLL_INVINCIBILITY))
-		or ( state == State.Uppercut
-			and !after(TIME_UPPERCUT_INVINCIBILITY))
-		or ( state == State.DiveEnd
-			and !after(TIME_DIVE_INVINCIBILITY))
-	)
-	if dodged:
+	if state == State.Roll and !after(TIME_ROLL_INVINCIBILITY):
 		mesh.play_dodge()
 		return false
 	return true

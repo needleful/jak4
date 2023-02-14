@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=2]
+[gd_scene load_steps=100 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -96,6 +96,15 @@ shader_param/ceiling = ExtResource( 58 )
 
 [sub_resource type="SphereShape" id=274]
 radius = 19.9496
+
+[sub_resource type="NavigationMesh" id=276]
+vertices = PoolVector3Array( -0.616653, 3.49048, -9.26577, -8.11665, 3.49048, -1.76577, -8.11665, 3.49048, 5.73423, -0.616653, 3.49048, 5.73423, 6.88335, 3.49048, -1.76577, 6.88335, 3.49048, -9.26577, -0.616653, 3.49048, 5.73423, 6.88335, 3.49048, 5.73423, 6.88335, 3.49048, -1.76577, -0.616653, 3.49048, -9.26577, -8.11665, 3.49048, -9.26577, -8.11665, 3.49048, -1.76577, 0.133347, -1.75952, -2.01577, 1.38335, -1.75952, -2.26577, 1.38335, -1.75952, -3.76577, -1.11665, -1.75952, -4.01577, -7.36665, -1.75952, -1.76577, -7.36665, -1.75952, 4.98423, 0.133347, -1.75952, 4.98423, 0.133347, -1.75952, -2.01577, -1.11665, -1.75952, -4.01577, -1.11665, -1.75952, -4.01577, -1.11665, -1.75952, -8.51577, -7.36665, -1.75952, -8.51577, -7.36665, -1.75952, -1.76577, 2.63335, -1.75952, -4.01577, 1.38335, -1.75952, -3.76577, 1.38335, -1.75952, -2.26577, 2.63335, -1.75952, -2.01577, 6.13335, -1.75952, -1.76577, 2.63335, -1.75952, 4.98423, 6.13335, -1.75952, 4.98423, 6.13335, -1.75952, -1.76577, 2.63335, -1.75952, -2.01577, 6.13335, -1.75952, -8.51577, 2.63335, -1.75952, -8.51577, 2.63335, -1.75952, -4.01577, 6.13335, -1.75952, -1.76577 )
+polygons = [ PoolIntArray( 5, 4, 0 ), PoolIntArray( 0, 4, 3 ), PoolIntArray( 0, 3, 1 ), PoolIntArray( 1, 3, 2 ), PoolIntArray( 8, 7, 6 ), PoolIntArray( 11, 10, 9 ), PoolIntArray( 13, 12, 14 ), PoolIntArray( 14, 12, 15 ), PoolIntArray( 20, 19, 16 ), PoolIntArray( 16, 19, 17 ), PoolIntArray( 17, 19, 18 ), PoolIntArray( 22, 21, 23 ), PoolIntArray( 23, 21, 24 ), PoolIntArray( 26, 25, 27 ), PoolIntArray( 27, 25, 28 ), PoolIntArray( 28, 25, 29 ), PoolIntArray( 31, 30, 32 ), PoolIntArray( 32, 30, 33 ), PoolIntArray( 35, 34, 36 ), PoolIntArray( 36, 34, 37 ) ]
+geometry_source_geometry_mode = 1
+agent_height = 3.0
+agent_radius = 0.3
+agent_max_climb = 1.0
+agent_max_slope = 88.54
 
 [sub_resource type="CubeMesh" id=253]
 size = Vector3( 2.5, 2, 2 )
@@ -262,6 +271,8 @@ polygon_points = PoolVector2Array( 279.692, -233.021, 235.474, 54.6092, -65.3707
 [node name="chunk124" instance=ExtResource( 3 )]
 script = ExtResource( 2 )
 lighting_preview = true
+
+[node name="medium" parent="." index="0" groups=["navmesh"]]
 
 [node name="StaticBody" parent="medium" index="0"]
 collision_layer = 257
@@ -879,22 +890,26 @@ friendly_name = "scooter_124"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -231.618, -225.576, -40.6129 )
 script = ExtResource( 16 )
 
-[node name="epic_death_timer" type="Timer" parent="active_entities/the_medium" index="0"]
-wait_time = 4.0
+[node name="Navigation" type="Navigation" parent="active_entities/the_medium" index="0"]
+
+[node name="NavigationMeshInstance" type="NavigationMeshInstance" parent="active_entities/the_medium/Navigation" index="0"]
+navmesh = SubResource( 276 )
+
+[node name="epic_death_timer" type="Timer" parent="active_entities/the_medium" index="1"]
+wait_time = 15.0
 one_shot = true
 
-[node name="enemy_spawn" type="Position3D" parent="active_entities/the_medium" index="1"]
+[node name="enemy_spawn" type="Position3D" parent="active_entities/the_medium" index="2"]
 transform = Transform( 0.905061, 0, -0.425283, 0, 1, 0, 0.425283, 0, 0.905061, 4.13731, -2.25952, -6.21434 )
 script = ExtResource( 61 )
 
 [node name="epic_boss" parent="active_entities/the_medium/enemy_spawn" index="0" instance=ExtResource( 46 )]
+ai_state = 2
+reset_on_player_death = true
+navigation = NodePath("../../Navigation")
+chase_speed = 4.0
 
-[node name="OmniLight" type="OmniLight" parent="active_entities/the_medium/enemy_spawn/epic_boss" index="5"]
-transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0.125961, 0.221157 )
-light_color = Color( 1, 0.223529, 0.223529, 1 )
-omni_range = 1.53735
-
-[node name="door" type="KinematicBody" parent="active_entities/the_medium" index="2"]
+[node name="door" type="KinematicBody" parent="active_entities/the_medium" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.21773, 0.0294952, 5.62034 )
 script = ExtResource( 11 )
 __meta__ = {
@@ -914,7 +929,7 @@ shape = SubResource( 254 )
 anims/Activate = SubResource( 255 )
 anims/RESET = SubResource( 256 )
 
-[node name="door2" type="KinematicBody" parent="active_entities/the_medium" index="3"]
+[node name="door2" type="KinematicBody" parent="active_entities/the_medium" index="4"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1.24524, -0.359253, -3.03695 )
 script = ExtResource( 11 )
 
@@ -930,10 +945,10 @@ shape = SubResource( 254 )
 anims/Activate = SubResource( 257 )
 anims/RESET = SubResource( 258 )
 
-[node name="power_thing3" parent="active_entities/the_medium" index="4" instance=ExtResource( 9 )]
+[node name="power_thing3" parent="active_entities/the_medium" index="5" instance=ExtResource( 9 )]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -9.46501, -3.3362, -1.17644 )
 
-[node name="entrance" type="Area" parent="active_entities/the_medium" index="5"]
+[node name="entrance" type="Area" parent="active_entities/the_medium" index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.30196, -1.11064, 8.0642 )
 collision_layer = 0
 collision_mask = 2
@@ -942,7 +957,7 @@ collision_mask = 2
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57933, -1.24027 )
 shape = SubResource( 259 )
 
-[node name="dialog_zone" type="Area" parent="active_entities/the_medium" index="6"]
+[node name="dialog_zone" type="Area" parent="active_entities/the_medium" index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50098, -1.5452, -2.22174 )
 collision_layer = 0
 collision_mask = 2
@@ -954,7 +969,7 @@ main_speaker = NodePath("..")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.302307, 0.751144, -2.13738 )
 shape = SubResource( 250 )
 
-[node name="mum" parent="active_entities/the_medium" index="7" instance=ExtResource( 35 )]
+[node name="mum" parent="active_entities/the_medium" index="8" instance=ExtResource( 35 )]
 transform = Transform( -0.998923, 0, -0.0464091, 0, 1, 0, 0.0464091, 0, -0.998923, -3.1154, -2.25954, 3.33357 )
 
 [node name="mum_dialog" type="Area" parent="active_entities/the_medium/mum" index="1"]
@@ -971,71 +986,71 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.996246, 0 )
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/the_medium/mum/mum_dialog" index="1"]
 shape = SubResource( 251 )
 
-[node name="OmniLight" type="OmniLight" parent="active_entities/the_medium" index="8"]
+[node name="OmniLight" type="OmniLight" parent="active_entities/the_medium" index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.82181, -2.0892, 1.69101 )
 light_color = Color( 0.784314, 0.976471, 0.92549, 1 )
 
-[node name="OmniLight8" type="OmniLight" parent="active_entities/the_medium" index="9"]
+[node name="OmniLight8" type="OmniLight" parent="active_entities/the_medium" index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000152588, -2.0892, -0.679638 )
 light_color = Color( 0.784314, 0.894118, 0.976471, 1 )
 light_energy = 0.538
 
-[node name="OmniLight9" type="OmniLight" parent="active_entities/the_medium" index="10"]
+[node name="OmniLight9" type="OmniLight" parent="active_entities/the_medium" index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.19003, -2.0892, -0.679638 )
 light_color = Color( 0.784314, 0.894118, 0.976471, 1 )
 light_energy = 0.538
 
-[node name="OmniLight2" type="OmniLight" parent="active_entities/the_medium" index="11"]
+[node name="OmniLight2" type="OmniLight" parent="active_entities/the_medium" index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.129, -2.188, -7.6353 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.98359
 
-[node name="OmniLight3" type="OmniLight" parent="active_entities/the_medium" index="12"]
+[node name="OmniLight3" type="OmniLight" parent="active_entities/the_medium" index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.437, -2.188, -7.6353 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.95059
 
-[node name="OmniLight4" type="OmniLight" parent="active_entities/the_medium" index="13"]
+[node name="OmniLight4" type="OmniLight" parent="active_entities/the_medium" index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.129, -2.188, -1.7554 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.98359
 
-[node name="OmniLight5" type="OmniLight" parent="active_entities/the_medium" index="14"]
+[node name="OmniLight5" type="OmniLight" parent="active_entities/the_medium" index="15"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.437, -2.188, -1.7554 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.95059
 
-[node name="OmniLight6" type="OmniLight" parent="active_entities/the_medium" index="15"]
+[node name="OmniLight6" type="OmniLight" parent="active_entities/the_medium" index="16"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.129, -2.188, 3.4238 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.98359
 
-[node name="OmniLight7" type="OmniLight" parent="active_entities/the_medium" index="16"]
+[node name="OmniLight7" type="OmniLight" parent="active_entities/the_medium" index="17"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.437, -2.188, 3.4238 )
 light_color = Color( 0.607843, 0.972549, 1, 1 )
 omni_range = 1.95059
 
-[node name="Occluder" type="Occluder" parent="active_entities/the_medium" index="17"]
+[node name="Occluder" type="Occluder" parent="active_entities/the_medium" index="18"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.483719, 0, -8.98439 )
 shape = SubResource( 268 )
 
-[node name="Occluder2" type="Occluder" parent="active_entities/the_medium" index="18"]
+[node name="Occluder2" type="Occluder" parent="active_entities/the_medium" index="19"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.69279, -0.137695, -1.59429 )
 shape = SubResource( 268 )
 
-[node name="Occluder3" type="Occluder" parent="active_entities/the_medium" index="19"]
+[node name="Occluder3" type="Occluder" parent="active_entities/the_medium" index="20"]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.6102, 0, -1.68985 )
 shape = SubResource( 268 )
 
-[node name="Occluder5" type="Occluder" parent="active_entities/the_medium" index="20"]
+[node name="Occluder5" type="Occluder" parent="active_entities/the_medium" index="21"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.77061, -1.94793 )
 shape = SubResource( 267 )
 
-[node name="Occluder4" type="Occluder" parent="active_entities/the_medium" index="21"]
+[node name="Occluder4" type="Occluder" parent="active_entities/the_medium" index="22"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.60159, 0, 5.96384 )
 shape = SubResource( 269 )
 
-[node name="env" type="Area" parent="active_entities/the_medium" index="22"]
+[node name="env" type="Area" parent="active_entities/the_medium" index="23"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 75 )

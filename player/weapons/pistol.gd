@@ -38,3 +38,7 @@ func combo_fire():
 
 func _combo_fire_mid(_a):
 	var _x = fire()
+
+func unholster():
+	show()
+	$AnimationPlayer.play("RESET")

@@ -11,3 +11,6 @@ func fire() -> bool:
 
 func stow():
 	hide()
+
+func unholster():
+	show()

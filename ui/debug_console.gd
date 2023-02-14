@@ -58,6 +58,16 @@ func rapid_start():
 	_x = Global.add_item("lantern")
 	_x = Global.add_item("flag", 10)
 
+func item(item_id:String, count:int = 1):
+	var _x = Global.add_item(item_id, count)
+
+func rapid_end():
+	var _x = Global.set_stat("mum/info", 8)
+	_x = Global.set_stat("mum/introduction", 1)
+	_x = Global.set_stat("mum/time", 1)
+	_x = Global.set_stat("mum/discussed/jackie", 1)
+	_x = Global.set_stat("mum/timebomb", 5)
+
 func echo(text):
 	var label := Label.new()
 	label.autowrap = true
