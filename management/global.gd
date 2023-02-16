@@ -279,7 +279,7 @@ func task_notes_by_place(place: String):
 			notes.append(task.place_notes[place])
 	return notes
 
-func add_story(key: String):
+func add_story(key: String) -> bool:
 	if !(key in stories):
 		print_debug("No story: ", key)
 		return false
@@ -288,6 +288,8 @@ func add_story(key: String):
 		if s:
 			add_note(s.category, s.subject, s.text)
 			var _x = add_stat("story_told/"+key)
+			return true
+	return false
 
 func get_task_notes(task_id: String, active := true) -> Array:
 	var list: Array = game_state.active_tasks if active else game_state.completed_tasks

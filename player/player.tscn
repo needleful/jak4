@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -33,6 +33,7 @@
 [ext_resource path="res://ui/save_load.tscn" type="PackedScene" id=31]
 [ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=32]
 [ext_resource path="res://ui/dialog.gd" type="Script" id=33]
+[ext_resource path="res://ui/story_time.gd" type="Script" id=34]
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -1056,6 +1057,7 @@ drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1163,6 +1165,7 @@ align = 2
 
 [node name="gameing" type="Control" parent="ui"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1923,6 +1926,42 @@ margin_top = 1032.0
 margin_right = 2375.0
 margin_bottom = 1064.0
 
+[node name="story_time" type="Panel" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 34 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ui/story_time"]
+anchor_left = 0.25
+anchor_top = 0.1
+anchor_right = 0.75
+anchor_bottom = 0.9
+margin_left = -6.0
+margin_right = 6.0
+rect_min_size = Vector2( 400, 0 )
+
+[node name="Label" type="Label" parent="ui/story_time/ScrollContainer"]
+margin_right = 972.0
+margin_bottom = 864.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+autowrap = true
+
+[node name="input_prompt" parent="ui/story_time" instance=ExtResource( 8 )]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+margin_left = -41.5
+margin_top = -64.0
+margin_right = 41.5
+margin_bottom = 0.0
+action = "ui_cancel"
+small = true
+
+[node name="timer" type="Timer" parent="ui/story_time"]
+wait_time = 3.0
+one_shot = true
+
 [node name="post_pause_timer" type="Timer" parent="ui"]
 time_scale_response = false
 wait_time = 0.1
@@ -1979,3 +2018,4 @@ shape = SubResource( 73 )
 [connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
+[connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]

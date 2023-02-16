@@ -5,6 +5,7 @@ enum Mode {
 	Gameing,
 	Dialog,
 	DebugConsole,
+	StoryTime,
 	Custom
 }
 
@@ -106,6 +107,11 @@ func _input(event):
 			if event.is_action_pressed("debug_console"):
 				var _x = unpause()
 				get_tree().set_input_as_handled()
+		Mode.StoryTime:
+			if !$story_time.exit_ready:
+				return
+			if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause"):
+				set_mode(Mode.Paused)
 
 func _process(delta):
 	if mode == Mode.Gameing:
@@ -375,6 +381,10 @@ func set_mode(m):
 		toggled_pause = true
 		mode_before_pause = mode
 	get_tree().paused = should_pause
+	
+	if should_pause and $story_time.queued_story:
+		m = Mode.StoryTime
+		$story_time.start_countdown()
 	
 	if m != Mode.Paused:
 		Global.get_player().set_camera_render(true)

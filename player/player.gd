@@ -1782,6 +1782,7 @@ func set_state(next_state: int):
 			mesh.ground_transition("Slide")
 			gun.unlock()
 		State.Crouch:
+			stamina = max_stamina
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.ground_transition("Crouch")
