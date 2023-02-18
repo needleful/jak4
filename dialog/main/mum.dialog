@@ -196,7 +196,13 @@
 			[You] Is something wrong?
 			...
 		{main_speaker.end_game()}
+		{mention("end_game")}
 		* There is something behind you
+		[You] Mum? Mum! What is that doing in here?
+			T-talk to me.
+			Say something! Please!
+		* She does not respond.
+		[You] I've never seen that thing before...
 	{otherwise}
 		!{mum/discussed/go_to_medium}
 			[You] Hello again, mum.
@@ -461,4 +467,6 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 
 :_exit
 {track_conversation_time()}
+{mentioned("end_game")}
+	{main_speaker.hide()}
 {exit()}

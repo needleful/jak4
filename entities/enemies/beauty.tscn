@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://entities/enemies/beauty.gd" type="Script" id=1]
 [ext_resource path="res://_glb/enemies/beauty.glb" type="PackedScene" id=2]
@@ -85,6 +85,54 @@ tracks/0/keys = {
 "values": [ {
 "args": [  ],
 "method": "end_windup"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [  ],
+"method": "end_move"
+} ]
+}
+
+[sub_resource type="Animation" id=48]
+resource_name = "GravityPanic"
+length = 2.2
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "end_windup"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
+}, {
+"args": [ -1 ],
+"method": "fire"
 }, {
 "args": [ -1 ],
 "method": "fire"
@@ -196,6 +244,9 @@ animation = "Die"
 [sub_resource type="AnimationNodeAnimation" id=35]
 animation = "Fall-loop"
 
+[sub_resource type="AnimationNodeAnimation" id=42]
+animation = "GravityStunned-loop"
+
 [sub_resource type="AnimationNodeAnimation" id=30]
 animation = "Jump"
 
@@ -235,25 +286,42 @@ xfade_time = 0.05
 [sub_resource type="AnimationNodeStateMachineTransition" id=38]
 xfade_time = 0.2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=43]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=44]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=45]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=46]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=47]
+xfade_time = 0.2
+
 [sub_resource type="AnimationNodeStateMachine" id=28]
 states/Die/node = SubResource( 41 )
 states/Die/position = Vector2( 365, -71 )
 states/Fall/node = SubResource( 35 )
 states/Fall/position = Vector2( 532, 102 )
+states/GravityStunned/node = SubResource( 42 )
+states/GravityStunned/position = Vector2( 398, 208 )
 states/Jump/node = SubResource( 30 )
 states/Jump/position = Vector2( 604, -7 )
 states/JumpCharge/node = SubResource( 31 )
 states/JumpCharge/position = Vector2( 365, 15 )
 states/Walk/node = SubResource( 27 )
-states/Walk/position = Vector2( 278, 94 )
-transitions = [ "Walk", "JumpCharge", SubResource( 32 ), "JumpCharge", "Jump", SubResource( 33 ), "Jump", "Walk", SubResource( 34 ), "Jump", "Fall", SubResource( 36 ), "Fall", "Walk", SubResource( 37 ), "Walk", "Fall", SubResource( 38 ) ]
+states/Walk/position = Vector2( 272, 102 )
+transitions = [ "Walk", "JumpCharge", SubResource( 32 ), "JumpCharge", "Jump", SubResource( 33 ), "Jump", "Walk", SubResource( 34 ), "Jump", "Fall", SubResource( 36 ), "Fall", "Walk", SubResource( 37 ), "Walk", "Fall", SubResource( 38 ), "Walk", "GravityStunned", SubResource( 43 ), "Fall", "GravityStunned", SubResource( 44 ), "JumpCharge", "GravityStunned", SubResource( 45 ), "Jump", "GravityStunned", SubResource( 46 ), "GravityStunned", "Fall", SubResource( 47 ) ]
 start_node = "Walk"
-graph_offset = Vector2( 35, -150 )
+graph_offset = Vector2( -50, 23 )
 
 [sub_resource type="AnimationNodeTimeScale" id=16]
 
 [sub_resource type="AnimationNodeBlendTree" id=17]
-graph_offset = Vector2( -346.976, 130.036 )
+graph_offset = Vector2( -550, 134 )
 nodes/FullBody/node = SubResource( 22 )
 nodes/FullBody/position = Vector2( 400, 200 )
 nodes/HalfBody/node = SubResource( 21 )
@@ -267,7 +335,7 @@ nodes/Movement/position = Vector2( -300, 220 )
 nodes/WalkSpeed/node = SubResource( 16 )
 nodes/WalkSpeed/position = Vector2( -60, 220 )
 nodes/output/position = Vector2( 680, 220 )
-node_connections = [ "output", 0, "FullBody", "FullBody", 0, "HalfBody", "FullBody", 1, "MoveFullBody", "HalfBody", 0, "WalkSpeed", "HalfBody", 1, "MoveHalfBody", "WalkSpeed", 0, "Movement" ]
+node_connections = [ "output", 0, "FullBody", "HalfBody", 0, "WalkSpeed", "HalfBody", 1, "MoveHalfBody", "WalkSpeed", 0, "Movement", "FullBody", 0, "HalfBody", "FullBody", 1, "MoveFullBody" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=29]
 
@@ -290,11 +358,11 @@ shape = SubResource( 1 )
 material/0 = ExtResource( 3 )
 
 [node name="chest" type="BoneAttachment" parent="body/Armature/Skeleton" index="1"]
-transform = Transform( 1, -3.05452e-05, 0.000150873, 2.65516e-06, 0.983392, 0.181495, -0.000153911, -0.181495, 0.983392, 0.000152492, 2.38738, -0.0411996 )
+transform = Transform( 0.999459, 0.0208474, -0.0254277, -0.0199724, 0.999215, 0.0341914, 0.0261206, -0.0336651, 0.999092, 0.000372667, 2.44966, 0.0163409 )
 bone_name = "Chest"
 
 [node name="forearm_l" type="BoneAttachment" parent="body/Armature/Skeleton" index="2"]
-transform = Transform( -0.482669, 0.222928, 0.846956, 0.0584024, -0.956717, 0.2851, 0.873854, 0.187074, 0.448757, 0.347306, 2.06414, -0.182242 )
+transform = Transform( -0.668076, 0.293981, 0.683556, 0.579317, -0.37102, 0.725765, 0.466975, 0.880863, 0.0775615, 0.490207, 2.18133, -0.0097518 )
 bone_name = "Radius.L"
 
 [node name="hitbox" type="Area" parent="body/Armature/Skeleton/forearm_l"]
@@ -306,9 +374,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0 )
 shape = SubResource( 24 )
 disabled = true
 
+[node name="gun" type="Position3D" parent="body/Armature/Skeleton/forearm_l"]
+transform = Transform( 1, -2.98023e-08, 7.45058e-08, -1.49012e-07, 2.23517e-08, 1, -8.9407e-08, -1, 8.9407e-08, -4.61936e-07, 0.647203, -2.98023e-07 )
+
 [node name="forearm_r" type="BoneAttachment" parent="body/Armature/Skeleton" index="3"]
-transform = Transform( -0.481615, -0.215989, -0.849351, -0.080354, -0.954189, 0.288213, -0.872692, 0.207056, 0.442196, -0.339209, 2.05399, -0.147951 )
+transform = Transform( -0.515623, -0.324441, -0.793014, -0.666711, -0.429409, 0.609182, -0.538171, 0.84282, 0.00510453, -0.418752, 2.17859, 0.194965 )
 bone_name = "Radius.R"
+
+[node name="gun" type="Position3D" parent="body/Armature/Skeleton/forearm_r"]
+transform = Transform( 1, -1.78814e-07, 0, -8.9407e-08, -7.45058e-08, 1, -2.98023e-08, -1, 8.9407e-08, -7.45058e-08, 0.657001, 2.98023e-07 )
 
 [node name="hitbox" type="Area" parent="body/Armature/Skeleton/forearm_r"]
 collision_layer = 0
@@ -318,6 +392,20 @@ collision_mask = 6
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0 )
 shape = SubResource( 24 )
 disabled = true
+
+[node name="ulna_l" type="BoneAttachment" parent="body/Armature/Skeleton" index="4"]
+transform = Transform( -0.678644, 0.251685, 0.689998, 0.597262, -0.357648, 0.71789, 0.427459, 0.899302, 0.0923934, 0.490207, 2.18133, -0.00975199 )
+bone_name = "Ulna.L"
+
+[node name="gun" type="Position3D" parent="body/Armature/Skeleton/ulna_l"]
+transform = Transform( 1, 0, 0, 0, -2.23517e-08, 1, 0, -1, -8.19564e-08, -5.51343e-07, 0.648916, -5.96046e-07 )
+
+[node name="ulna_r" type="BoneAttachment" parent="body/Armature/Skeleton" index="5"]
+transform = Transform( -0.527401, -0.286966, -0.799687, -0.686852, -0.409998, 0.600112, -0.500081, 0.865767, 0.0191301, -0.418752, 2.17859, 0.194965 )
+bone_name = "Ulna.R"
+
+[node name="gun" type="Position3D" parent="body/Armature/Skeleton/ulna_r"]
+transform = Transform( 1, 0, 0, 0, -2.23517e-08, 1, 0, -1, -8.19564e-08, -5.51343e-07, 0.648916, -5.96046e-07 )
 
 [node name="hitboxes" type="Spatial" parent="body"]
 
@@ -330,21 +418,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07639, 0.571153 )
 shape = SubResource( 23 )
 disabled = true
 
-[node name="guns" type="Spatial" parent="body"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.5, 0 )
-
-[node name="proj1" type="Position3D" parent="body/guns"]
-transform = Transform( -0.174441, -0.707107, 0.685252, 0.969093, -4.23604e-08, 0.246697, -0.174441, 0.707107, 0.685252, 1.17649, 0.347029, 1.55157 )
-
-[node name="proj2" type="Position3D" parent="body/guns"]
-transform = Transform( 0.280922, -0.643223, -0.712284, 0.917696, -0.0372092, 0.395537, -0.280922, -0.764775, 0.57983, -1.14602, 0.32074, 1.52669 )
-
-[node name="proj3" type="Position3D" parent="body/guns"]
-transform = Transform( 0.500272, 0.706479, -0.500615, 0.820359, -0.201754, 0.535076, 0.277019, -0.678368, -0.680498, -0.850553, 0.529332, 0.532846 )
-
-[node name="proj4" type="Position3D" parent="body/guns"]
-transform = Transform( -0.460885, 0.602592, 0.651511, 0.81638, 6.1635e-08, 0.577515, 0.348006, 0.798049, -0.491944, 0.769397, 0.509673, 0.490447 )
-
 [node name="NavigationAgent" type="NavigationAgent" parent="."]
 
 [node name="Node" type="Node" parent="."]
@@ -356,6 +429,7 @@ material_override = SubResource( 3 )
 anims/Dash = SubResource( 10 )
 anims/Dive = SubResource( 12 )
 anims/Fire_Slow = SubResource( 11 )
+anims/GravityPanic = SubResource( 48 )
 anims/RESET = SubResource( 9 )
 anims/Swipe = SubResource( 8 )
 

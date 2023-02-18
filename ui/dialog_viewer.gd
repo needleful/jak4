@@ -543,3 +543,6 @@ func game_stat(sub_stat):
 	if !main_speaker.get_parent().has_method("get_stat"):
 		return ""
 	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+
+func control_screen(val := true):
+	$"../black".visible = val

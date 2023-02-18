@@ -353,7 +353,7 @@ func get_dynamic_content(chunk_name):
 ## Day/night cycle
 
 func start_day():
-	Global.add_stat("current_day")
+	var _x = Global.add_stat("current_day")
 	get_tree().call_group("daily_schedule", "_on_midnight")
 
 # Hours with decimals

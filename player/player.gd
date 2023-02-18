@@ -1324,8 +1324,13 @@ func can_flinch():
 		or state == State.DiveStart
 		or state == State.UppercutWindup)
 
-func takes_damage():
-	if is_dead() or state == State.Locked or state == State.Damaged:
+func takes_damage(source: Node):
+	if state == State.Locked and !(
+		'lock_damage_override' in source
+		and source.lock_damage_override
+	):
+		return false
+	if is_dead() or state == State.Damaged:
 		return false
 	if state == State.Roll and !after(TIME_ROLL_INVINCIBILITY):
 		mesh.play_dodge()
@@ -1473,10 +1478,12 @@ func compute_fall_damage(distance):
 		var _x = take_damage(FALL_DAM_MIN, Vector3.UP, self)
 
 # Returns true if dead
-func take_damage(damage: int, direction: Vector3, _source) -> bool:
-	if !takes_damage() or damage == 0:
-		# TODO: make a little indicator when the player didn't take damage (twinkle in Jackie's eye?)
+func take_damage(damage: int, direction: Vector3, source) -> bool:
+	if !takes_damage(source) or damage == 0:
 		return false
+	
+	if ui.in_dialog():
+		get_dialog_viewer().exit()
 	
 	mesh.start_damage_particle(direction)
 	if extra_health:

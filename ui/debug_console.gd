@@ -67,6 +67,12 @@ func rapid_end():
 	_x = Global.set_stat("mum/time", 1)
 	_x = Global.set_stat("mum/discussed/jackie", 1)
 	_x = Global.set_stat("mum/timebomb", 5)
+	_x = Global.add_item("capacitor")
+
+func coat(count := 1):
+	for _i in range(count):
+		var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Sublime)
+		Global.add_coat(coat)
 
 func echo(text):
 	var label := Label.new()

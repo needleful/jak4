@@ -422,6 +422,8 @@ func get_rarity_color(rarity: int) -> Color:
 func reset_game():
 	valid_game_state = false
 	game_state = GameState.new()
+	stats_temp = {}
+	gravity_stunned_bodies = {}
 	print("New game...")
 	var dir := Directory.new()
 	if ResourceLoader.exists(save_path):

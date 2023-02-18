@@ -30,8 +30,4 @@ func end_game():
 func _on_epic_boss_killed():
 	var _x = Global.add_stat("mum/end")
 	emit_signal("endgame_completed")
-	Global.get_player().teleport_to(
-		get_tree().current_scene.get_node(
-			"endgame_teleport_marker").global_transform)
-	get_tree().current_scene.set_time(5.5)
 	queue_free()

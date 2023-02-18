@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -35,6 +35,9 @@
 [ext_resource path="res://ui/diagetic/dialog_circle.tscn" type="PackedScene" id=33]
 [ext_resource path="res://entities/one_time/end_train.gd" type="Script" id=34]
 [ext_resource path="res://dialog/main/ending_train.dialog" type="Resource" id=35]
+[ext_resource path="res://entities/npc/npc_armstrong.gd" type="Script" id=36]
+[ext_resource path="res://_glb/npc_clothes/hats_goggles_asym.mesh" type="ArrayMesh" id=37]
+[ext_resource path="res://dialog/intro/armstrong.dialog" type="Resource" id=38]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -464,7 +467,7 @@ __meta__ = {
 curve = SubResource( 11 )
 
 [node name="player_teleport_marker" type="Position3D" parent="." index="6"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 91.5673, 12.5731, 113.799 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 98.9362, 12.5731, 121.167 )
 
 [node name="active_entnties" type="Spatial" parent="." index="7"]
 
@@ -532,6 +535,17 @@ modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
+
+[node name="armstrong_npc" type="KinematicBody" parent="active_entnties/end_train" index="8" groups=["distance_activated", "dynamic"] instance=ExtResource( 18 )]
+transform = Transform( 0.602235, 0, -0.798319, 0, 1, 0, 0.798319, 0, 0.602235, 29.9297, 0.300569, 3.89036 )
+collision_layer = 69633
+script = ExtResource( 36 )
+dialog = ExtResource( 38 )
+visual_name = "Armstrong"
+friendly_id = "armstrong"
+accessory = ExtResource( 37 )
+custom_entry = "_entry_ending"
+tutorial_node = NodePath("../tutorials")
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="active_entnties" index="1"]
 transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 56.2098, 14.6167, 72.1143 )

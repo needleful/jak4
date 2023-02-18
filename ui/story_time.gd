@@ -16,7 +16,7 @@ func queue_story(key: String) -> bool:
 
 func _on_stat_changed(stat, value):
 	if stat == "current_day" and value == 5:
-		queue_story("lucas_birthday")
+		var _x = queue_story("lucas_birthday")
 
 func start_countdown():
 	queued_story = false

@@ -4,6 +4,7 @@ signal died(id, path)
 
 enum AIState {
 	Inactive,
+	# When to use Stalk versus Chase?
 	Stalk,
 	Chase,
 	MoveWindup,
@@ -17,7 +18,9 @@ enum MoveState {
 	Ground,
 	JumpCharge,
 	Jumping,
-	Air
+	# Is this needed?
+	Air,
+	GravityStun
 }
 
 # Assumed true for now
@@ -27,6 +30,8 @@ export(bool) var reset_on_player_death := false
 export(bool) var cloaked := false
 export(NodePath) var navigation
 export(float) var chase_speed := 7.0
+export(bool) var lock_damage_override := false
+export(String) var activation_stat := ""
 var move_state = MoveState.Locked
 
 onready var nav := $NavigationAgent
@@ -49,6 +54,13 @@ var velocity := Vector3.ZERO
 const ACCEL_GROUND := 20.0
 var orb := load("res://entities/projectile.tscn")
 var damaged_objects := []
+
+onready var guns := [
+	$body/Armature/Skeleton/forearm_l/gun,
+	$body/Armature/Skeleton/forearm_r/gun,
+	$body/Armature/Skeleton/ulna_l/gun,
+	$body/Armature/Skeleton/ulna_r/gun
+]
 
 var M_AOE := {
 	"damage": 15,
@@ -99,11 +111,25 @@ var M_DIVE := {
 	"name":"Dive"
 }
 
+var M_GRAV_PANIC := {
+	"damage":3,
+	"min_range":0.0,
+	"max_range":20.0,
+	"min_angle":-PI,
+	"max_angle":PI,
+	"cooldown":3.0,
+	"move_speed":1.0,
+	"blend":"FullBody",
+	"gravity_stunned":true,
+	"name":"GravityPanic"
+}
+
 var moves := [
 	M_AOE,
 	M_DASH,
 	M_FIRE,
-	M_DIVE
+	M_DIVE,
+	M_GRAV_PANIC
 ]
 
 var move_blends := [
@@ -118,32 +144,50 @@ var state_timer := 0.0
 var was_on_floor := true
 var starting_position:Transform
 var starting_health := health
-var starting_collision_layer = collision_layer 
+var starting_collision_layer = collision_layer
+const GRAVITY_STUN_TIME := 5.5
+var stun_timer := 0.0
 
 onready var chest := $body/Armature/Skeleton/chest
 
 func _ready():
 	if Global.is_picked(self.get_path()):
 		die(true)
-		set_physics_process(false)
 		global_transform = Global.stat("death"+get_path())
-		return
+	elif activation_stat != "":
+		if Global.stat("activation_stat"):
+			ai_state = AIState.Chase
+		elif !Global.is_connected("stat_changed", self, "_on_stat_changed"):
+			var _x = Global.connect("stat_changed", self, "_on_stat_changed")
 
+	if ai_state == AIState.Inactive or ai_state == AIState.Dead:
+		set_physics_process(false)
+	else:
+		activate()
+		if reset_on_player_death:
+			if !player.is_connected("died", self, "_on_player_died"):
+				var _x = player.connect("died", self, "_on_player_died")
+				starting_position = global_transform
+				starting_health = health
+				starting_collision_layer = collision_layer
+			else:
+				global_transform = starting_position
+				health = starting_health
+				collision_layer = starting_collision_layer
+				collision_mask = 3
+				velocity = Vector3.ZERO
+
+func _on_stat_changed(stat, value):
+	if ai_state == AIState.Inactive and stat == activation_stat and value:
+		activate()
+
+func activate():
 	player = Global.get_player()
 	player_last_origin = player.global_transform.origin
 	var _x = calculate_path(player_last_origin)
-	if reset_on_player_death:
-		if !player.is_connected("died", self, "_on_player_died"):
-			_x = player.connect("died", self, "_on_player_died")
-			starting_position = global_transform
-			starting_health = health
-			starting_collision_layer = collision_layer
-		else:
-			global_transform = starting_position
-			health = starting_health
-			collision_layer = starting_collision_layer
-			collision_mask = 3
-			velocity = Vector3.ZERO
+	ai_state = AIState.Chase
+	move_anim.travel("Walk")
+	set_physics_process(true)
 
 func process_player_distance(pos: Vector3):
 	return (pos - global_transform.origin).length_squared()
@@ -223,7 +267,7 @@ func chase(delta):
 			var newmove = plot_attack()
 			if newmove:
 				execute(newmove)
-		if final_diff.length() < 2:
+		if final_diff.length() < 2 and move_state != MoveState.GravityStun:
 			dir = Vector3.ZERO
 			if !nav.is_target_reachable() and is_on_floor() and player.is_grounded():
 				state_timer = 0.0
@@ -244,17 +288,22 @@ func plot_attack():
 	var angle = body.global_transform.basis.z.angle_to(diff)
 	var best_move = null
 	for m in moves:
-		if "grounded" in m:
+		if best_move and best_move.damage > m.damage:
+			continue
+		if dist > m.max_range or dist < m.min_range:
+			continue
+		if angle < m.min_angle or angle > m.max_angle:
+			continue 
+		if move_state == MoveState.GravityStun:
+			if !("gravity_stunned" in m) or !m.gravity_stunned:
+				continue
+		elif "grounded" in m and move_state:
 			if is_on_floor() != m.grounded or (
 				m.grounded and !nav.is_target_reachable()
 			):
 				continue
-		if dist > m.max_range or dist < m.min_range:
+		elif "gravity_stunned" in m and m.gravity_stunned:
 			continue
-		if best_move and best_move.damage > m.damage:
-			continue
-		if angle < m.min_angle or angle > m.max_angle:
-			continue 
 		best_move = m
 		
 	return best_move
@@ -307,6 +356,16 @@ func get_jump_velocity(difference: Vector3) -> float:
 	return v0
 
 func move(delta:float, movement:Vector3, accel:float = ACCEL_GROUND):
+	if move_state == MoveState.GravityStun:
+		stun_timer += delta
+		if stun_timer > GRAVITY_STUN_TIME:
+			move_state = MoveState.Ground
+			was_on_floor = false
+			move_anim.travel("Fall")
+		velocity *= 0.99
+		velocity.y *= 0.99
+		velocity = move_and_slide(velocity, Vector3.UP)
+		return
 	var on_ground: bool
 	if was_on_floor:
 		on_ground = !$GroundArea.get_overlapping_bodies().empty()
@@ -384,8 +443,10 @@ func calculate_path(loc: Vector3) -> Vector3:
 
 func fire(id: int = -1):
 	if id < 0:
-		for c in $body/guns.get_children():
+		for c in guns:
 			fire_from(c.global_transform)
+	else:
+		fire_from(guns[id].global_transform)
 
 func fire_from(point: Transform):
 	var proj
@@ -414,10 +475,23 @@ func _on_hitbox_entered(b):
 func take_damage(damage:int, dir:Vector3, source:Node):
 	if source == self:
 		return
+	# TODO: Other activation conditions
+	if ai_state == AIState.Inactive:
+		activate()
 	velocity += dir*damage
 	health -= damage
 	if health <= 0.0:
 		die()
+
+func gravity_stun(damage):
+	take_damage(damage, Vector3.UP, Global.get_player())
+	if ai_state != AIState.Dead:
+		move_anim.travel("GravityStunned")
+		animTree["parameters/WalkSpeed/scale"] = 1.0
+		if move_state != MoveState.GravityStun:
+			end_move()
+		move_state = MoveState.GravityStun
+		stun_timer = 0.0
 
 func die(on_start := false):
 	if !on_start:

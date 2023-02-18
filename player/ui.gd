@@ -368,6 +368,9 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	set_mode(Mode.Dialog)
 	dialog.start(source, sequence, speaker, starting_label)
 
+func in_dialog():
+	return mode == Mode.Dialog
+
 func set_mode(m):
 	if m < 0 or m >= get_child_count():
 		print_debug("Bad mode! ", m)
