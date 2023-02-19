@@ -461,11 +461,6 @@ func _physics_process(delta):
 		crushing_death()
 	
 	if water_cast.is_colliding():
-		var mpart : Particles = $body_mesh/Particles2
-		$water_cast/Particles.emitting = true
-		mpart.emitting = velocity.length_squared() > 4
-		$water_cast/Particles.global_transform.origin = water_cast.get_collision_point()
-		mpart.global_transform.origin = water_cast.get_collision_point()
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
 		if water_depth > DEPTH_WATER_DROWN and !is_dead():
 			fall_to_death()
@@ -473,11 +468,27 @@ func _physics_process(delta):
 			$ui/gameing/debug/stats/a8.text = "Wading"
 		else:
 			$ui/gameing/debug/stats/a8.text = "Splashing"
+
+		var wpart : Particles = $water_cast/Particles
+		var mpart : Particles = $body_mesh/Particles2
+		wpart.emitting = true
+		mpart.emitting = velocity.length_squared() > 4
+		
+		var ripple_color := Color.white
+		if water_cast.get_collider().has_method("get_ripple_color"):
+			ripple_color = water_cast.get_collider().get_ripple_color()
+		wpart.process_material.color = ripple_color
+		mpart.process_material.color = ripple_color
+		
+		var ripple_pos = water_cast.get_collision_point() + Vector3.DOWN*0.0375
+		wpart.global_transform.origin = ripple_pos
+		mpart.global_transform.origin = ripple_pos
 	else:
-		$water_cast/Particles.emitting = false
-		$body_mesh/Particles2.emitting = false
 		$ui/gameing/debug/stats/a8.text = "Dry"
 		water_depth = 0
+		
+		$water_cast/Particles.emitting = false
+		$body_mesh/Particles2.emitting = false
 	
 	var next_state = State.None
 	match state:

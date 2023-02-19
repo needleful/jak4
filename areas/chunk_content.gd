@@ -3,6 +3,8 @@ extends Spatial
 class_name Chunk
 
 export(bool) var lighting_preview := false
+export(NodePath) var grass_node := NodePath("active_entities/grass")
+export(float) var grass_density := 1.0
 var exits := []
 
 var active_entities : Spatial

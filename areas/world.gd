@@ -31,8 +31,6 @@ onready var enemies_last_position :Vector3 = player.global_transform.origin
 var enemies_present := false
 var MIN_DIST_SQ_ENEMIES := 2000.0
 
-
-
 onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween

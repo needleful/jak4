@@ -87,11 +87,11 @@ width = 32
 curve = SubResource( 91 )
 
 [sub_resource type="ParticlesMaterial" id=86]
-direction = Vector3( 0, 1, 0 )
-spread = 114.44
+direction = Vector3( 0, 0, -1 )
+spread = 27.42
 flatness = 1.0
 gravity = Vector3( 0, 0, 0 )
-initial_velocity = 0.1
+initial_velocity = 1.0
 scale_curve = SubResource( 92 )
 color_ramp = SubResource( 90 )
 
@@ -101,8 +101,9 @@ vertex_color_use_as_albedo = true
 params_cull_mode = 2
 albedo_texture = ExtResource( 36 )
 
-[sub_resource type="QuadMesh" id=88]
+[sub_resource type="PlaneMesh" id=93]
 material = SubResource( 87 )
+size = Vector2( 1, 1 )
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -853,13 +854,12 @@ draw_pass_1 = SubResource( 85 )
 time_scale_response = true
 
 [node name="Particles2" type="Particles" parent="body_mesh"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2, 0 )
-emitting = false
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
 amount = 16
 lifetime = 1.2
 local_coords = false
 process_material = SubResource( 86 )
-draw_pass_1 = SubResource( 88 )
+draw_pass_1 = SubResource( 93 )
 
 [node name="flag_ref" type="Spatial" parent="body_mesh"]
 time_scale_response = false
