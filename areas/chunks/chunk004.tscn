@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://_glb/chunks/chunk004.glb" type="PackedScene" id=1]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
+[ext_resource path="res://material/env/wave_noise.png" type="Texture" id=3]
+[ext_resource path="res://material/env/water.shader" type="Shader" id=4]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 4 )
+shader_param/surface_albedo = Color( 0.478431, 0.521569, 0.423529, 1 )
+shader_param/deep_albedo = Color( 0.129412, 0.0392157, 0.0117647, 1 )
+shader_param/max_depth = 1.5
+shader_param/foam_color = Color( 0.945098, 0.921569, 0.690196, 0.388235 )
+shader_param/refraction = 0.004
+shader_param/foam_distance = 1.0
+shader_param/foam_noise_scale = 0.253
+shader_param/foam_noise_scale2 = 0.213
+shader_param/foam_noise = ExtResource( 3 )
+
+[node name="chunk004" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+lighting_preview = true
+
+[node name="water" parent="." index="0"]
+collision_layer = 8448
+collision_mask = 0
+
+[node name="mesh" parent="water" index="0"]
+material/0 = SubResource( 1 )
+
+[node name="active_entities" type="Spatial" parent="." index="10"]
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="0"]
+transform = Transform( 0.92616, 0, 0.37713, 0, 1, 0, -0.37713, 0, 0.92616, 78.4688, -157.727, -39.984 )
+max_distance = 16384.0
+extents = Vector3( 66.4746, 49.1983, 113.578 )
+origin_offset = Vector3( 0, -2.23517e-10, 0 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="1"]
+transform = Transform( 0.652553, 0, 0.757743, 0, 1, 0, -0.757743, 0, 0.652553, 141.524, -157.647, 87.4585 )
+max_distance = 16384.0
+extents = Vector3( 92.4306, 49.1983, 113.578 )
+origin_offset = Vector3( 0, -2.23517e-10, 0 )
+
+[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

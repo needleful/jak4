@@ -3,38 +3,15 @@
 [ext_resource path="res://_glb/ui/dialog_circle.glb" type="PackedScene" id=1]
 [ext_resource path="res://ui/diagetic/dialog_circle.gd" type="Script" id=2]
 [ext_resource path="res://ui/diagetic/gradient.png" type="Texture" id=3]
-
-[sub_resource type="Shader" id=1]
-code = "// NOTE: Shader automatically converted from Godot Engine 3.4.4.rc's SpatialMaterial.
-
-shader_type spatial;
-render_mode blend_add,cull_disabled,unshaded,world_vertex_coords;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
-
-uniform vec3 world_player;
-uniform float min_distance = 2.0;
-uniform float max_distance = 5.0;
-
-varying float offset;
-
-void vertex() {
-	float d = length(world_player - VERTEX);
-	offset = clamp((d-min_distance)/(max_distance-min_distance), 0, 1);
-}
-
-void fragment() {
-	float brightness = clamp(texture(texture_albedo,UV).r - offset, 0, 1);
-	ALBEDO = albedo.rgb * brightness;
-}
-"
+[ext_resource path="res://ui/diagetic/dialog_circle.gdshader" type="Shader" id=4]
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = ExtResource( 4 )
 shader_param/albedo = Color( 0.729412, 0.992157, 1, 1 )
 shader_param/world_player = null
 shader_param/min_distance = 2.0
 shader_param/max_distance = 5.0
+shader_param/debug = false
 shader_param/texture_albedo = ExtResource( 3 )
 
 [node name="dialog_circle" groups=["distance_activated"] instance=ExtResource( 1 )]

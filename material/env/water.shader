@@ -32,7 +32,7 @@ void fragment() {
 	float foam_factor = texture(foam_noise, pos.xz*foam_noise_scale + foam_sample_offset).r;
 	foam_factor *= texture(foam_noise, pos.xz*foam_noise_scale2).r;
 	
-	float f = foam_color.a * float(diffy >= 0.0 && diffy < foam_distance*foam_factor);
+	float f = foam_color.a * float(diffy >= -0.1 && diffy < foam_distance*foam_factor);
 	
 	vec4 color = textureLod(SCREEN_TEXTURE, ref_ofs, 0);
 	float amount = sqrt(clamp(diffy/max_depth, 0.0, 1.0));
@@ -40,10 +40,9 @@ void fragment() {
 	EMISSION = mix(color.rgb * mix(surface_albedo, deep_albedo, amount).rgb, vec3(0.0), f);
 	
 	ALBEDO = mix(vec3(0), foam_color.rgb, f);
-	SPECULAR = mix(1.0, 0.7, f);
-	METALLIC = 1.0;
-	ROUGHNESS = 0.0;
-	TRANSMISSION = EMISSION;
+	ROUGHNESS = mix(0.0, 0.3, f);
+	METALLIC = 0.8;
+	SPECULAR = 1.0;
 }
 
 void light()

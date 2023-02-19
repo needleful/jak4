@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=104 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -34,6 +34,75 @@
 [ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=32]
 [ext_resource path="res://ui/dialog.gd" type="Script" id=33]
 [ext_resource path="res://ui/story_time.gd" type="Script" id=34]
+[ext_resource path="res://material/env/water_ripple.png" type="Texture" id=35]
+[ext_resource path="res://material/env/water_ripple_moving.png" type="Texture" id=36]
+
+[sub_resource type="Gradient" id=79]
+offsets = PoolRealArray( 0, 0.239216, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.972549, 0.972549, 0.972549, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=80]
+gradient = SubResource( 79 )
+width = 32
+
+[sub_resource type="Curve" id=81]
+_data = [ Vector2( 0, 0.0897727 ), 0.0, 1.56096, 0, 0, Vector2( 1, 1 ), 0.32761, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=82]
+width = 32
+curve = SubResource( 81 )
+
+[sub_resource type="ParticlesMaterial" id=83]
+flag_align_y = true
+spread = 180.0
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 0.1
+scale = 2.0
+scale_random = 0.19
+scale_curve = SubResource( 82 )
+color_ramp = SubResource( 80 )
+
+[sub_resource type="SpatialMaterial" id=84]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_cull_mode = 2
+albedo_texture = ExtResource( 35 )
+
+[sub_resource type="QuadMesh" id=85]
+material = SubResource( 84 )
+
+[sub_resource type="Gradient" id=89]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=90]
+gradient = SubResource( 89 )
+width = 32
+
+[sub_resource type="Curve" id=91]
+_data = [ Vector2( 0, 0.401136 ), 0.0, 1.51636, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=92]
+width = 32
+curve = SubResource( 91 )
+
+[sub_resource type="ParticlesMaterial" id=86]
+direction = Vector3( 0, 1, 0 )
+spread = 114.44
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 0.1
+scale_curve = SubResource( 92 )
+color_ramp = SubResource( 90 )
+
+[sub_resource type="SpatialMaterial" id=87]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_cull_mode = 2
+albedo_texture = ExtResource( 36 )
+
+[sub_resource type="QuadMesh" id=88]
+material = SubResource( 87 )
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -772,8 +841,25 @@ enabled = true
 cast_to = Vector3( 0, -2, 0 )
 collision_mask = 8192
 
+[node name="Particles" type="Particles" parent="water_cast"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
+emitting = false
+lifetime = 5.0
+local_coords = false
+process_material = SubResource( 83 )
+draw_pass_1 = SubResource( 85 )
+
 [node name="body_mesh" parent="." instance=ExtResource( 3 )]
 time_scale_response = true
+
+[node name="Particles2" type="Particles" parent="body_mesh"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2, 0 )
+emitting = false
+amount = 16
+lifetime = 1.2
+local_coords = false
+process_material = SubResource( 86 )
+draw_pass_1 = SubResource( 88 )
 
 [node name="flag_ref" type="Spatial" parent="body_mesh"]
 time_scale_response = false

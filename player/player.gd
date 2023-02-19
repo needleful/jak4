@@ -461,6 +461,11 @@ func _physics_process(delta):
 		crushing_death()
 	
 	if water_cast.is_colliding():
+		var mpart : Particles = $body_mesh/Particles2
+		$water_cast/Particles.emitting = true
+		mpart.emitting = velocity.length_squared() > 4
+		$water_cast/Particles.global_transform.origin = water_cast.get_collision_point()
+		mpart.global_transform.origin = water_cast.get_collision_point()
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
 		if water_depth > DEPTH_WATER_DROWN and !is_dead():
 			fall_to_death()
@@ -469,6 +474,8 @@ func _physics_process(delta):
 		else:
 			$ui/gameing/debug/stats/a8.text = "Splashing"
 	else:
+		$water_cast/Particles.emitting = false
+		$body_mesh/Particles2.emitting = false
 		$ui/gameing/debug/stats/a8.text = "Dry"
 		water_depth = 0
 	
@@ -1771,8 +1778,6 @@ func set_state(next_state: int):
 			mesh.play_ledge_jump()
 			gun.unlock()
 		State.CrouchJump:
-			$crouching_col.disabled = false
-			$standing_col.disabled = true
 			start_jump(JUMP_VEL_CROUCH)
 			mesh.play_crouch_jump()
 			gun.unlock()
