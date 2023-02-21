@@ -2,7 +2,7 @@ extends PhysicsBody
 
 export(NodePath) var mesh_path = NodePath("..")
 
-onready var node: GeometryInstance = get_node(mesh_path)
+onready var node: GeometryInstance
 
 export(bool) var double_sided := false
 export(bool) var persistent := true
@@ -10,6 +10,8 @@ export(bool) var persistent := true
 var coat: Coat
 
 func _ready():
+	if has_node(mesh_path):
+		node = get_node(mesh_path)
 	if persistent:
 		var c = Global.stat(get_coat_stat())
 		if !(c is Coat):
@@ -26,7 +28,14 @@ func get_coat():
 
 func set_coat(c: Coat):
 	coat = c
-	node.material_override = coat.generate_material(!double_sided)
+	var mat = coat.generate_material(!double_sided)
+	if node:
+		node.material_override = mat
+	else:
+		for c in get_children():
+			if c is GeometryInstance:
+				c.material_override = mat
+
 	if persistent:
 		Global.set_stat(get_coat_stat(), c)
 	if has_node("light"):
