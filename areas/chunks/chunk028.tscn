@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/hive_hut_flat_roof.tscn" type="PackedScene" id=2]
@@ -34,6 +34,9 @@
 [ext_resource path="res://dialog/side_content/jump_game.dialog" type="Resource" id=32]
 [ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=33]
 [ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=34]
+[ext_resource path="res://dialog/side_content/little_gods_treasure/kels.dialog" type="Resource" id=35]
+[ext_resource path="res://entities/shop_stock/shop_default_stock.inv" type="Resource" id=36]
+[ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=37]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 4.25, 1, 4 )
@@ -151,6 +154,15 @@ transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 8
 
 [node name="zone_village" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 48.154, 7.42639, -210.094 )
+
+[node name="kels_market" type="Spatial" parent="active_entities/zone_village"]
+transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 5.24968, -10.4915, -3.98055 )
+
+[node name="npc_kels" parent="active_entities/zone_village/kels_market" instance=ExtResource( 37 )]
+transform = Transform( 0.982479, 0, -0.18637, 0, 1, 0, 0.18637, 0, 0.982479, -2.2063, 0.112466, -1.18115 )
+dialog = ExtResource( 35 )
+visual_name = "Kels"
+inventory_data = ExtResource( 36 )
 
 [node name="lonely_house" type="Spatial" parent="active_entities/zone_village"]
 transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -31.745, 6.05851, -30.7477 )

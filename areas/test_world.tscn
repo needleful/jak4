@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=81 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://entities/visual/material_swap.gd" type="Script" id=26]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=27]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=28]
+[ext_resource path="res://entities/control/rot_switch.gd" type="Script" id=29]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -956,6 +957,168 @@ size = Vector3( 4, 4, 4 )
 
 [sub_resource type="CubeMesh" id=47]
 
+[sub_resource type="BoxShape" id=48]
+extents = Vector3( 0.5, 1, 0.25 )
+
+[sub_resource type="CubeMesh" id=49]
+size = Vector3( 1, 2, 0.5 )
+
+[sub_resource type="SpatialMaterial" id=52]
+albedo_color = Color( 0.647059, 0.2, 0.2, 1 )
+
+[sub_resource type="Animation" id=50]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=51]
+resource_name = "rotate"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -180, 0 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "start"
+}, {
+"args": [  ],
+"method": "end"
+} ]
+}
+
+[sub_resource type="Animation" id=53]
+resource_name = "Activate"
+tracks/0/type = "value"
+tracks/0/path = NodePath("KinematicBody:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, -3.09478 ), Vector3( 0, -1.06772, -2.53654 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("KinematicBody2:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, -1.86022, -5.42821 ), Vector3( 0, 1.08865, -4.77723 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("KinematicBody3:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.474344, -2.22263, -7.47841 ), Vector3( -0.474344, 3.10235, -7.00266 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("KinematicBody5:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 2.67061, 0.853984, -7.27437 ), Vector3( -0.262552, 5.17758, -9.29324 ) ]
+}
+
+[sub_resource type="Animation" id=54]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("KinematicBody:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, -3.09478 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("KinematicBody2:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, -1.86022, -5.42821 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("KinematicBody3:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.474344, -2.22263, -7.47841 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("KinematicBody5:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 2.67061, 0.853984, -7.27437 ) ]
+}
+
+[sub_resource type="BoxShape" id=55]
+
+[sub_resource type="CubeMesh" id=56]
+
 [node name="test_world" instance=ExtResource( 2 )]
 
 [node name="test-world" parent="." index="0"]
@@ -1251,12 +1414,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0529, 0, -9.95459 )
 
 [node name="wave_shot_pickup" parent="." index="54" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.88364, 0, -8.23728 )
+respawn_on_player_death = false
 
 [node name="wave_shot_pickup2" parent="." index="55" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3816, 0, -8.19347 )
+respawn_on_player_death = false
 
 [node name="wave_shot_pickup3" parent="." index="56" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9663, -4.76837e-07, -8.18305 )
+respawn_on_player_death = false
 
 [node name="grav_gun_pickup" parent="." index="57" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.72278, 4.76837e-07, -7.14934 )
@@ -1749,9 +1915,91 @@ shape = SubResource( 46 )
 [node name="MeshInstance" type="MeshInstance" parent="RigidBody2/CollisionShape" index="0"]
 mesh = SubResource( 47 )
 
+[node name="rotating_switch_test" type="Spatial" parent="." index="73"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.078, 0.0176327, -19.3835 )
+
+[node name="KinematicBody4" type="KinematicBody" parent="rotating_switch_test" index="0" groups=["target"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735653, 0 )
+collision_layer = 5
+script = ExtResource( 29 )
+world_animations = NodePath("../AnimationPlayer")
+
+[node name="CollisionShape" type="CollisionShape" parent="rotating_switch_test/KinematicBody4" index="0"]
+shape = SubResource( 48 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rotating_switch_test/KinematicBody4/CollisionShape" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0.10813 )
+mesh = SubResource( 49 )
+material/0 = SubResource( 52 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="rotating_switch_test/KinematicBody4/CollisionShape" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, -0.130959 )
+mesh = SubResource( 49 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rotating_switch_test/KinematicBody4" index="1"]
+playback_process_mode = 0
+anims/RESET = SubResource( 50 )
+anims/rotate = SubResource( 51 )
+
+[node name="Timer" type="Timer" parent="rotating_switch_test/KinematicBody4" index="2"]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rotating_switch_test" index="1"]
+anims/Activate = SubResource( 53 )
+anims/RESET = SubResource( 54 )
+
+[node name="KinematicBody" type="KinematicBody" parent="rotating_switch_test" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.09478 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="rotating_switch_test/KinematicBody" index="0"]
+shape = SubResource( 55 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rotating_switch_test/KinematicBody/CollisionShape" index="0"]
+mesh = SubResource( 56 )
+
+[node name="KinematicBody2" type="KinematicBody" parent="rotating_switch_test" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.86022, -5.42821 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="rotating_switch_test/KinematicBody2" index="0"]
+shape = SubResource( 55 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rotating_switch_test/KinematicBody2/CollisionShape" index="0"]
+mesh = SubResource( 56 )
+
+[node name="KinematicBody3" type="KinematicBody" parent="rotating_switch_test" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.474344, -2.22263, -7.47841 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="rotating_switch_test/KinematicBody3" index="0"]
+shape = SubResource( 55 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rotating_switch_test/KinematicBody3/CollisionShape" index="0"]
+mesh = SubResource( 56 )
+
+[node name="KinematicBody5" type="KinematicBody" parent="rotating_switch_test" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67061, 0.853984, -7.27437 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="rotating_switch_test/KinematicBody5" index="0"]
+shape = SubResource( 55 )
+
+[node name="MeshInstance" type="MeshInstance" parent="rotating_switch_test/KinematicBody5/CollisionShape" index="0"]
+mesh = SubResource( 56 )
+
 [connection signal="activated" from="player_activation" to="KinematicBody3" method="_on_activated"]
 [connection signal="activated" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 2 ]]
 [connection signal="alerted" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 1 ]]
 [connection signal="deactivated" from="player_activation" to="KinematicBody3" method="_on_deactivated"]
 [connection signal="deactivated" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 0 ]]
 [connection signal="activated" from="bridge/player_trigger" to="bridge" method="_on_activated"]
+[connection signal="timeout" from="rotating_switch_test/KinematicBody4/Timer" to="rotating_switch_test/KinematicBody4" method="_on_Timer_timeout"]
