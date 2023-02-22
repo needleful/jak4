@@ -9,6 +9,7 @@ var using_gamepad := false
 var game_state := GameState.new()
 
 export(Array, Texture) var coat_textures: Array
+export(Texture) var coat_detail: Texture
 export(Dictionary) var stories := {} 
 
 const save_path := "user://autosave.tres"
@@ -387,6 +388,9 @@ func add_temp_stat(tag: String, amount := 1) -> int:
 	var value =  stats_temp[tag]
 	emit_signal("stat_changed", tag, value)
 	return value
+
+func get_coat_detail():
+	return coat_detail
 
 func add_coat(coat: Coat):
 	game_state.all_coats.append(coat)

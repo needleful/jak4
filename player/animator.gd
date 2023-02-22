@@ -90,6 +90,7 @@ func _input(event):
 		anim.active = !anim.active
 
 func _ready():
+	$Armature/Skeleton/booba_ik.start()
 	hover_board.hide()
 	var _x = TimeManagement.connect("time_scale_changed", self, "_on_time_scale_changed")
 
