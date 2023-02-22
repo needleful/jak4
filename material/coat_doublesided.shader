@@ -3,6 +3,7 @@ render_mode cull_disabled;
 
 uniform sampler2D palette: hint_albedo;
 uniform sampler2D gradient;
+uniform sampler2D detail;
 uniform float light_bias: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
 uniform float specularity: hint_range(1, 16) = 1.0;
@@ -10,7 +11,8 @@ uniform float specularity: hint_range(1, 16) = 1.0;
 void fragment()
 {
 	float t = texture(palette, UV).r;
-	ALBEDO = texture(gradient, vec2(t, 0)).rgb;
+	float d = mix(1.0, texture(detail, UV*256.0).r, COLOR.b);
+	ALBEDO = d*texture(gradient, vec2(t, 0)).rgb;
 	ROUGHNESS = clamp(2.0/specularity, 0, 1);
 }
 
