@@ -2083,11 +2083,13 @@ mesh = SubResource( 59 )
 
 [node name="hover_floor_finder" type="RayCast" parent="."]
 time_scale_response = false
+visible = false
 enabled = true
 collision_mask = 8193
 
 [node name="hover_cast" type="RayCast" parent="."]
 time_scale_response = false
+visible = false
 enabled = true
 collision_mask = 8193
 
@@ -2101,6 +2103,11 @@ collision_mask = 8193
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0, -0.0106984, -9.91884e-09 )
 shape = SubResource( 73 )
+
+[node name="emergency_floor_raycast" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0157221, 0 )
+enabled = true
+cast_to = Vector3( 0, -0.1, 0 )
 
 [connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]

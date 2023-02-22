@@ -24,7 +24,7 @@ const SPEED_WADE := 4.0
 const MIN_DOT_GROUND := 0.7
 const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
-const MIN_DOT_CLIMB_MOVEMENT := -0.7
+const MIN_DOT_CLIMB_MOVEMENT := -0.4
 const MIN_DOT_CLIMB_AIR := 0.1
 const MIN_DOT_LEDGE := 0.4
 const MIN_DOT_LEDGE_SLIDE := 0.7
@@ -587,10 +587,15 @@ func _physics_process(delta):
 				next_state = State.Fall
 			elif (best_floor_dot < MIN_DOT_GROUND
 				and best_floor_dot > MIN_DOT_CLIMB
-				and desired_velocity.dot(best_normal) < MIN_DOT_CLIMB_MOVEMENT
 				and can_climb()
 			):
-				next_state = State.Climb
+				if (desired_velocity.dot(best_normal) > MIN_DOT_CLIMB_MOVEMENT
+					and $emergency_floor_raycast.is_colliding()
+					and $emergency_floor_raycast.get_collision_normal().y > MIN_DOT_GROUND
+				):
+					next_state = State.Crouch
+				else:
+					next_state = State.Climb
 			elif water_depth > DEPTH_WATER_WADE:
 				next_state = State.Wading
 			elif !holding("mv_crouch") and empty(crouch_head):
