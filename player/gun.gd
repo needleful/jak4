@@ -301,7 +301,7 @@ func in_combo():
 		or state == State.ComboReadyHidden)
 
 func lock():
-	if state == State.Hidden:
+	if state == State.Hidden or state == State.HiddenLocked:
 		set_state(State.HiddenLocked)
 	elif current_weapon:
 		set_state(State.Locked)
@@ -309,6 +309,8 @@ func lock():
 func aim_lock():
 	if visible:
 		set_state(State.AimLocked)
+	else:
+		set_state(State.HiddenLocked)
 
 func unlock():
 	if visible:
@@ -337,7 +339,6 @@ func charging() -> bool:
 	return current_weapon and current_weapon.charge_fire and current_weapon.charging
 
 func swap_to(id: String):
-	print("swapping to: ", id)
 	if !(id in weapons):
 		print_debug("Weapon does not exist: ", id)
 		return
