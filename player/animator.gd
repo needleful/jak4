@@ -80,6 +80,8 @@ onready var camera_rig := $"../camera_rig"
 onready var hover_board := $Armature/Skeleton/hover_board
 onready var aim_reference := $Armature/Skeleton/lumbar/body_reference
 
+onready var gun_tween := $Armature/Skeleton/gun/Tween
+
 var item_sound := 0
 var move_blend:= 0.0
 var lunge_right_foot := true
@@ -323,7 +325,12 @@ func track_weapon(weapon: String):
 	player.track_weapon(weapon)
 
 func blend_gun(active: float):
-	anim["parameters/Gun/blend_amount"] = active*0.9
+	gun_tween.stop_all()
+	gun_tween.interpolate_property(
+		anim, "parameters/Gun/blend_amount",
+		anim["parameters/Gun/blend_amount"], active*0.9,
+		0.1, Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT)
+	gun_tween.start()
 
 func target_aim(target_dir: Vector3) -> Vector2:
 	var aim_basis:Basis = aim_reference.global_transform.basis

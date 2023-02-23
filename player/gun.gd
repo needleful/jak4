@@ -84,11 +84,11 @@ func _input(event):
 		elif can_fire():
 			fire()
 	elif event.is_action_pressed("combat_aim_toggle"):
+		if !aim_toggle and !can_aim():
+			return
 		if !visible:
 			time_since_fired = 0
 			enable()
-		if !aim_toggle and !can_aim():
-			return
 		aim_toggle = !aim_toggle
 	elif player.ui.choosing_item:
 		return
@@ -125,7 +125,7 @@ func _process(delta):
 				set_state(state_before_fire)
 		State.AimLocked, State.ComboReady:
 			locked_aim = true
-		State.Locked:
+		State.Locked, State.HiddenLocked:
 			locked_aim = true
 			lock_on = false
 		State.DelayedFire:
@@ -227,7 +227,10 @@ func remove_weapon(id):
 				set_state(State.NoWeapon)
 
 func can_aim():
-	return state != State.Locked and state != State.AimLocked and state != State.HiddenLocked
+	return (
+		state != State.Locked
+		and state != State.AimLocked
+		and state != State.HiddenLocked)
 
 func show_weapon():
 	call_deferred("set_state", State.Free, true)
@@ -336,15 +339,20 @@ func swap_to(id: String):
 		print_debug("Weapon does not exist: ", id)
 		return
 	if current_weapon:
+		if current_weapon == weapons[id] and state == State.Free:
+			set_state(State.Hidden, true)
+			return
 		current_weapon.stow()
 	if !enabled_wep[id]:
 		return
 	holder.play_pickup_sound(id)
 	set_current_weapon(weapons[id])
-	if !visible:
-		time_since_fired = 0
-		enable()
-	set_state(State.Free, true)
+	var current_state = state
+	if current_state == State.Hidden:
+		current_state = State.Free
+	if current_state == State.HiddenLocked:
+		current_state = State.Locked
+	set_state(current_state, true)
 
 func set_state(new_state, force := false):
 	$debug/list/d1.text = 'State: '+State.keys()[new_state]

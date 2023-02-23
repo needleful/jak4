@@ -499,7 +499,7 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif holding("mv_crouch"):
 				var speed = (velocity).slide(ground_normal)
-				if speed.length() > MIN_SPEED_ROLL:
+				if speed.length() > MIN_SPEED_ROLL or movement.length_squared() >= 0.8:
 					next_state = State.Roll
 				else:
 					next_state = State.Crouch
