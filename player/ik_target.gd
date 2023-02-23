@@ -3,7 +3,7 @@ extends Spatial
 export(NodePath) var target_node
 export(float, 0.01, 1.0, 0.01) var max_distance := 0.02
 export(float, 0.00, 1.00, 0.001) var damp := 0.2
-export(float, 0.1, 15.0) var acceleration := 5.0
+export(float, 0.1, 25.0) var acceleration := 5.0
 export(float, 0.0, 1.0) var player_velocity_match := 0.75
 
 const max_rel_velocity := 0.0

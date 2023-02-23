@@ -206,43 +206,43 @@ func play_roll():
 	play_attack_sound(sound_roll)
 	transition_to("Roll")
 
-func play_roll_jump(max_damage: bool):
-	#if max_damage:
+func play_roll_jump(_max_damage: bool):
+	#if _max_damage:
 	#	start_roll_particles()
 	transition_to("RollJump")
 	play_attack_sound(sound_roll_jump)
 	play_sound("feet", "jump", true)
 
-func play_dive_windup(_max_damage: bool):
+func play_dive_windup(__max_damage: bool):
 	play_sound("attack", "dive_windup", true)
 	transition_to("DiveStart")
 
-func play_dive_start(max_damage: bool):
-	#start_kick_left(max_damage)
+func play_dive_start(_max_damage: bool):
+	#start_kick_left(_max_damage)
 	play_sound("attack", "dive_start")
 
-func play_dive_end(max_damage: bool):
+func play_dive_end(_max_damage: bool):
 	play_sound("attack", "dive_end", true)
 	transition_to("DiveEnd")
-	#start_dive_shockwave(max_damage)
+	#start_dive_shockwave(_max_damage)
 
-func play_spin_kick(max_damage: bool):
+func play_spin_kick(_max_damage: bool):
 	force_play("SpinKickLeft")
-	#start_kick_left(max_damage)
+	#start_kick_left(_max_damage)
 	play_attack_sound(sound_spin_kick)
 
-func play_uppercut(max_damage: bool):
-	#start_kick_left(max_damage)
-	#start_kick_right(max_damage)
+func play_uppercut(_max_damage: bool):
+	#start_kick_left(_max_damage)
+	#start_kick_right(_max_damage)
 	play_attack_sound(sound_uppercut)
 
-func play_lunge_kick(max_damage: bool):
+func play_lunge_kick(_max_damage: bool):
 	anim["parameters/WholeBody/LungeKick/blend_position"] = float(lunge_right_foot)
 	transition_to("LungeKick")
 	#if lunge_right_foot:
-	#	start_kick_right(max_damage)
+	#	start_kick_right(_max_damage)
 	#else:
-	#	start_kick_left(max_damage)
+	#	start_kick_left(_max_damage)
 	lunge_right_foot = !lunge_right_foot
 	play_attack_sound(sound_lunge_kick)
 
@@ -258,19 +258,19 @@ func play_sit():
 func play_ledge_grab():
 	transition_to("LedgeGrab")
 
-func start_kick_left(max_damage: bool):
+func start_kick_left(_max_damage: bool):
 	$Armature/Skeleton/footLeft/kick_particles.emitting = true
-	if max_damage:
+	if _max_damage:
 		$Armature/Skeleton/footLeft/max_kick_particles.emitting = true
 
-func start_kick_right(max_damage: bool):
+func start_kick_right(_max_damage: bool):
 	$Armature/Skeleton/footRight/kick_particles.emitting = true
-	if max_damage:
+	if _max_damage:
 		$Armature/Skeleton/footRight/max_kick_particles.emitting = true
 
-func start_dive_shockwave(max_damage: bool):
+func start_dive_shockwave(_max_damage: bool):
 	$dive_particles.emitting = true
-	if max_damage:
+	if _max_damage:
 		$max_dive_particles.emitting = true
 
 func start_damage_particle(dir: Vector3):
