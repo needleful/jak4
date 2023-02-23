@@ -43,6 +43,9 @@ func _on_text_entered(new_text):
 func scene():
 	return get_tree().current_scene
 
+func set_time(time):
+	scene().set_time(time)
+
 func clear():
 	for l in logs.get_children():
 		l.queue_free()

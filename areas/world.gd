@@ -37,25 +37,17 @@ onready var sun_tween: Tween = $sun_tween
 onready var sun := $sun
 onready var indirect := $indirect_light
 onready var indirect_tween := $indirect_tween
+onready var wind := $audio_wind
 var sun_enabled := true
 
-var env_override := false
+onready var env_settings := $env_settings
+var env_overrides := []
 var shaders_ready := false
 
-onready var env_defaults := {
-	"end": env.environment.fog_depth_end,
-	"begin":env.environment.fog_depth_begin,
-	"color":env.environment.fog_color,
-	"indirect_light":indirect.light_color
-}
 var time := 0.0
 var TIME_READY := 0.5
 
 const FOG_TWEEN_TIME := 2.5
-const FOG_MIN_HEIGHT := 1000
-const FOG_MAX_HEIGHT := 3500
-onready var FOG_DISTANCE_MIN = env_defaults.end
-onready var FOG_DISTANCE_MAX = env_defaults.end*2.0
 
 const DIST_HIRES := 1500.0
 const DIST_LOWRES := 2000.0
@@ -70,12 +62,9 @@ func _input(event):
 		if $mapcam.current:
 			player.ui.show()
 			player.cam_rig.camera.current = true
-			env_override = false
 		else:
 			player.hide()
 			$mapcam.current = true
-			env_override = true
-			env.environment.fog_depth_end *= 3
 
 func _enter_tree():
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
@@ -239,13 +228,6 @@ func update_active_chunks(position: Vector3):
 		elif !deactivate_zone.has_point(local):
 			chunk_loader.deactivate(ch)
 
-
-func apply_fog(height: float):
-	var factor := clamp((height - FOG_MIN_HEIGHT)/(FOG_MAX_HEIGHT - FOG_MIN_HEIGHT), 0, 1)
-	env_defaults.end = lerp(FOG_DISTANCE_MIN, FOG_DISTANCE_MAX, factor)
-	if !env_override and !env_tween.is_active():
-		env.environment.fog_depth_end = env_defaults.end
-
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
 	player.ui.show_prompt(["combat_lunge"], "Lunge Kick")
@@ -272,6 +254,73 @@ func _on_tutorial_swap_timeout():
 		player.ui.show_prompt(["combat_spin"], "Spin Kick")
 
 # Environment
+func apply_environment(p_env: Dictionary):
+	print("applying environment")
+	var insert_index := env_overrides.size()
+	for i in range(env_overrides.size()):
+		if p_env.priority >= env_overrides[i].priority:
+			insert_index = i
+			break
+	if insert_index > 0:
+		# Not enabled right now
+		env_overrides.insert(insert_index, p_env)
+		return
+	env_overrides.push_front(p_env)
+	_set_env(p_env)
+
+func remove_environment(id:int):
+	var remove_index := -1
+	for i in range(env_overrides.size()):
+		if env_overrides[i].id == id:
+			remove_index = i
+	if remove_index < 0:
+		# Not found
+		return
+	elif remove_index == 0:
+		# Set next in list or clear env
+		var _renv = env_overrides.pop_front()
+		if !env_overrides.empty():
+			_set_env(env_overrides[0])
+		else:
+			_clear_env()
+	else:
+		# just remove it from the list
+		env_overrides.remove(remove_index)
+
+func _set_env(p_env: Dictionary):
+	$env_settings.active_overrides = p_env.keys()
+	if "wind_reduction_db" in p_env:
+		wind.apply_volume(-p_env.wind_reduction_db)
+	else:
+		wind.apply_volume(0.0)
+	if "custom_fog" in p_env:
+		set_fog_override(p_env.custom_fog, p_env.fog_start, p_env.fog_end)
+	else:
+		clear_fog_override()
+	if "indirect_light" in p_env:
+		indirect_light_override(p_env.indirect_light)
+	else:
+		clear_indirect_light()
+	if "default_music" in p_env and "combat_music" in p_env:
+		Music.set_music(p_env.default_music, p_env.combat_music)
+	else:
+		Music.reset()
+	if "show_sun" in p_env:
+		set_sun_enabled(p_env.show_sun)
+	else:
+		set_sun_enabled(env_settings.sun_visible)
+	var p = Global.get_player()
+	if "do_not_disturb" in p_env:
+		p.do_not_disturb = p_env.do_not_disturb
+	else:
+		p.do_not_disturb = false
+	if "close_cam" in p_env:
+		p.cam_rig.set_close_cam(p_env.close_cam)
+	else:
+		p.cam_rig.set_close_cam(false)
+
+func _clear_env():
+	_set_env({})
 
 func get_wind_audio():
 	return $audio_wind
@@ -301,7 +350,6 @@ func set_sun_enabled(enabled:bool):
 
 func indirect_light_override(light: Color):
 	var _x = indirect_tween.stop_all()
-	env_override = true
 	if time < TIME_READY:
 		indirect.light_color = light
 		return
@@ -312,12 +360,10 @@ func indirect_light_override(light: Color):
 	_x = indirect_tween.start()
 
 func clear_indirect_light():
-	indirect_light_override(env_defaults.indirect_light)
-	env_override = false
+	indirect_light_override(env_settings.indirect_light_color)
 
 func set_fog_override(fog: Color, begin: float, end:float):
 	var _x = env_tween.stop_all()
-	env_override = true
 	if time < TIME_READY:
 		env.environment.fog_color = fog
 		env.environment.fog_depth_begin = begin
@@ -339,8 +385,10 @@ func set_fog_override(fog: Color, begin: float, end:float):
 	_x = env_tween.start()
 
 func clear_fog_override():
-	set_fog_override(env_defaults.color, env_defaults.begin, env_defaults.end)
-	env_override = false
+	set_fog_override(
+		env_settings.fog_color,
+		env_settings.fog_depth_begin,
+		env_settings.fog_depth_end)
 
 func is_active(chunk_name):
 	return chunk_loader.is_loaded(chunk_name)
