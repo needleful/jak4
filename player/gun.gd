@@ -73,7 +73,6 @@ var enabled_wep : Dictionary = {
 func _ready():
 	if has_node(holder_path):
 		holder = get_node(holder_path)
-	call_deferred("set_state", State.NoWeapon, true)
 
 func _input(event):
 	if holder.weapons_locked():
@@ -107,7 +106,6 @@ func _process(delta):
 	var aiming: bool = aim_toggle or Input.is_action_pressed("combat_aim")
 	var locked_aim := false
 	var lock_on: bool = current_weapon and current_weapon.locks_on
-	
 	state_timer += delta
 	if charging() and !Input.is_action_pressed("combat_shoot"):
 		if in_combo():
@@ -199,17 +197,14 @@ func _process(delta):
 	if laser.visible:
 		laser_cast.update()
 
-func add_weapon(id):
+func add_weapon(id, startup):
 	if !(id in weapons):
 		print_debug("Weapon not found: ", id)
 		return
-	if enabled_wep[id]:
-		call_deferred("set_current_weapon", weapons[id])
-		call_deferred("enable")
 	enabled_wep[id] = true
-	call_deferred("set_current_weapon", weapons[id])
-	call_deferred("disable")
-	var _x = Global.add_stat("weapon")
+	if !startup:
+		swap_to(id)
+		var _x = Global.add_stat("weapon")
 
 func remove_weapon(id):
 	# TODO: laser and IK doesn't change
@@ -320,6 +315,13 @@ func unlock():
 		set_state(State.Free)
 	elif current_weapon:
 		set_state(State.Hidden)
+	else:
+		for i in enabled_wep.keys():
+			if !enabled_wep[i]:
+				continue
+			set_current_weapon(weapons[i])
+			set_state(State.Hidden)
+			return
 
 func enable():
 	if current_weapon:
@@ -335,6 +337,7 @@ func charging() -> bool:
 	return current_weapon and current_weapon.charge_fire and current_weapon.charging
 
 func swap_to(id: String):
+	print("swapping to: ", id)
 	if !(id in weapons):
 		print_debug("Weapon does not exist: ", id)
 		return
@@ -347,20 +350,22 @@ func swap_to(id: String):
 		return
 	holder.play_pickup_sound(id)
 	set_current_weapon(weapons[id])
-	var current_state = state
-	if current_state == State.Hidden:
-		current_state = State.Free
-	if current_state == State.HiddenLocked:
-		current_state = State.Locked
-	set_state(current_state, true)
+	var new_state = State.Free
+	time_since_fired = 0
+	match state:
+		State.Locked, State.HiddenLocked:
+			new_state = State.Locked
+		State.AimLocked:
+			new_state = State.AimLocked
+	set_state(new_state, true)
 
 func set_state(new_state, force := false):
+	print(State.keys()[state], " -> ", State.keys()[new_state])
 	$debug/list/d1.text = 'State: '+State.keys()[new_state]
 	if !force and new_state == state:
 		return
 	state_timer = 0.0
 	set_process(true)
-	set_process_input(true)
 	if current_weapon:
 		laser.visible = current_weapon.locks_on
 		if !current_weapon.locks_on:
@@ -371,12 +376,13 @@ func set_state(new_state, force := false):
 	match new_state:
 		State.NoWeapon:
 			set_process(false)
-			set_process_input(false)
 			visible = false
 			holder.blend_gun(0.0)
 			holder.hold_gun(0.0)
 			gun_ik.stop()
 		State.Hidden, State.HiddenLocked, State.ComboReadyHidden:
+			aim_toggle = false
+			holder.aim_gun(Vector3.ZERO, false)
 			if !charging():
 				set_process(false)
 				visible = false

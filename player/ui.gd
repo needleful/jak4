@@ -177,8 +177,9 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		show_specific_item(item)
 	elif item in WEAPONS:
 		if count > 0:
-			player.gun.add_weapon(item)
-			player.gun.show_weapon()
+			player.gun.add_weapon(item, startup)
+			if !startup:
+				player.gun.swap_to(item)
 			show_ammo()
 			if !startup:
 				match item:
