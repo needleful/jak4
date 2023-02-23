@@ -7,8 +7,16 @@ var show_stats := false setget sss
 
 var history := []
 var index := 0
+var cheats
 
 onready var G = Global
+
+func _ready():
+	var cheat_file = "res://scripts/cheats.gd"
+	if ResourceLoader.exists(cheat_file):
+		var script = load(cheat_file)
+		cheats = script.new()
+		add_child(cheats)
 
 func _input(event):
 	if !visible:
@@ -26,6 +34,11 @@ func _notification(what):
 			line_edit.text = ""
 
 func _on_text_entered(new_text):
+	if cheats and cheats.has_method(new_text):
+		cheats.call(new_text)
+		echo("code enabled")
+		line_edit.text = ""
+		return
 	history.append(new_text)
 	index = history.size()
 	line_edit.text = ""
