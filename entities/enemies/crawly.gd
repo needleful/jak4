@@ -188,6 +188,7 @@ func set_state(new_ai, force := false):
 			sleeping = false
 			anim.play("GravityStun-loop")
 			gravity_scale = 0
+			sound.stop()
 		AI.GravityStunDead:
 			gravity_scale = 0
 		AI.Attacking:

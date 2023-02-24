@@ -1,4 +1,4 @@
-[gd_scene load_steps=121 format=2]
+[gd_scene load_steps=122 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/junkyard.tscn" type="PackedScene" id=2]
@@ -93,6 +93,7 @@
 [ext_resource path="res://entities/env/train_set/cargo_cart.tscn" type="PackedScene" id=91]
 [ext_resource path="res://dialog/side_content/chunk063/train_quest_intro.dialog" type="Resource" id=92]
 [ext_resource path="res://dialog/foundry/foreman.dialog" type="Resource" id=93]
+[ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=94]
 
 [sub_resource type="ShaderMaterial" id=25]
 shader = ExtResource( 59 )
@@ -421,14 +422,23 @@ script = ExtResource( 1 )
 [node name="foundry" parent="." index="0"]
 material/0 = SubResource( 25 )
 
+[node name="StaticBody" parent="foundry" index="0"]
+collision_layer = 257
+
 [node name="office" parent="." index="1"]
 material/0 = SubResource( 29 )
 
 [node name="reactor" parent="." index="2"]
 material/0 = ExtResource( 65 )
 
+[node name="StaticBody" parent="reactor" index="0"]
+collision_layer = 257
+
 [node name="furnace" parent="." index="3"]
 material/0 = SubResource( 27 )
+
+[node name="StaticBody" parent="furnace" index="0"]
+collision_layer = 257
 
 [node name="cable" parent="." index="4"]
 material/0 = SubResource( 27 )
@@ -439,9 +449,15 @@ material/0 = SubResource( 27 )
 [node name="furnace_vent" parent="." index="6"]
 material/0 = SubResource( 27 )
 
+[node name="StaticBody" parent="furnace_vent" index="0"]
+collision_layer = 257
+
 [node name="reactor_windows" parent="." index="7"]
 cast_shadow = 0
 material/0 = SubResource( 24 )
+
+[node name="door" parent="." index="8"]
+material/0 = SubResource( 39 )
 
 [node name="entry" parent="." index="9"]
 material/0 = SubResource( 25 )
@@ -453,10 +469,19 @@ material/0 = SubResource( 25 )
 [node name="stairs2" parent="entry" index="1"]
 material/0 = SubResource( 25 )
 
+[node name="StaticBody" parent="entry" index="2"]
+collision_layer = 257
+
 [node name="foundry-influence" parent="." index="10"]
 visible = false
 
-[node name="zone_train" type="Spatial" parent="." index="14"]
+[node name="door001" parent="." index="11"]
+material/0 = SubResource( 39 )
+
+[node name="train_stop" parent="." index="12"]
+material/0 = SubResource( 25 )
+
+[node name="zone_train" type="Spatial" parent="." index="13"]
 transform = Transform( 0.79624, 0, -0.60498, 0, 1, 0, 0.60498, 0, 0.79624, -257.334, 15.2869, 75.6479 )
 
 [node name="rail" parent="zone_train" index="0" instance=ExtResource( 78 )]
@@ -748,7 +773,7 @@ move_scale = 0.2
 transform = Transform( -0.966065, 0, 0.258299, 0, 1, 0, -0.258299, 0, -0.966065, 82.6012, -6.52615, -187.554 )
 move_scale = 0.2
 
-[node name="zone_cliff" type="Spatial" parent="." index="15"]
+[node name="zone_cliff" type="Spatial" parent="." index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 138.343, 101.545, 204.384 )
 
 [node name="fountain" parent="zone_cliff" index="0" instance=ExtResource( 4 )]
@@ -781,7 +806,7 @@ transform = Transform( -0.219702, 0.00735825, 0.975539, 0.0334732, 0.99944, 4.65
 [node name="tree1" parent="zone_cliff" index="9" instance=ExtResource( 76 )]
 transform = Transform( 0.807886, 0, 0.589338, 0, 1, 0, -0.589338, 0, 0.807886, -145.121, 47.3218, 49.2833 )
 
-[node name="zone_rubble" type="Spatial" parent="." index="16"]
+[node name="zone_rubble" type="Spatial" parent="." index="15"]
 transform = Transform( -0.0056199, 0, -0.999984, 0.960288, 0.278958, -0.00539681, 0.278953, -0.960303, -0.00156771, 108.997, -5.052, 152.768 )
 
 [node name="scrap_pile2" parent="zone_rubble" index="0" instance=ExtResource( 5 )]
@@ -808,10 +833,10 @@ transform = Transform( 0.924716, 0.259009, 0.278954, 0.269055, 0.0736657, -0.960
 [node name="scrap5" parent="zone_rubble" index="7" instance=ExtResource( 6 )]
 transform = Transform( 0.611791, 0.761334, -0.21467, -0.716192, 0.648345, 0.258297, 0.33583, -0.00427869, 0.941912, -6.50565, 43.4729, -10.7826 )
 
-[node name="junkyard" parent="." index="17" instance=ExtResource( 2 )]
+[node name="junkyard" parent="." index="16" instance=ExtResource( 2 )]
 transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -93.9996, 18, -4 )
 
-[node name="active_entities" type="Spatial" parent="." index="18"]
+[node name="active_entities" type="Spatial" parent="." index="17"]
 
 [node name="zone_scrapyard" type="Spatial" parent="active_entities" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -139.049, 4.58447, 0.849531 )
@@ -1125,6 +1150,7 @@ transform = Transform( 0.866542, 0.499081, -0.0048256, -0.498407, 0.86478, -0.06
 [node name="CSGBox" type="CSGBox" parent="active_entities/zone_foundry" index="2"]
 transform = Transform( 0.570264, 0, 0.821461, 0, 1, 0, -0.821461, 0, 0.570264, 98.3348, 12.8409, -42.0048 )
 use_collision = true
+collision_layer = 257
 width = 11.6696
 height = 8.38614
 depth = 14.7267
@@ -1141,6 +1167,7 @@ material = SubResource( 28 )
 [node name="CSGBox7" type="CSGBox" parent="active_entities/zone_foundry" index="4"]
 transform = Transform( -0.984752, 0, 0.173973, 0, 1, 0, -0.173973, 0, -0.984752, 157.794, 44.849, -8.27614 )
 use_collision = true
+collision_layer = 257
 width = 7.27589
 height = 1.07015
 depth = 7.73949
@@ -1149,6 +1176,7 @@ material = SubResource( 28 )
 [node name="CSGBox5" type="CSGBox" parent="active_entities/zone_foundry" index="5"]
 transform = Transform( -0.356509, 0, 0.934292, 0, 1, 0, -0.934292, 0, -0.356509, 136.264, 38.0601, 25.0438 )
 use_collision = true
+collision_layer = 257
 width = 6.55273
 height = 3.16432
 depth = 7.76131
@@ -1185,6 +1213,7 @@ material = ExtResource( 68 )
 [node name="CSGBox4" type="CSGBox" parent="active_entities/zone_foundry" index="7"]
 transform = Transform( -0.985064, 0, -0.172187, 0, 1, 0, 0.172187, 0, -0.985064, 123.897, 36.6226, 28.8779 )
 use_collision = true
+collision_layer = 257
 width = 6.34132
 height = 3.18126
 depth = 6.94998
@@ -1201,6 +1230,7 @@ material = SubResource( 28 )
 [node name="CSGBox2" type="CSGBox" parent="active_entities/zone_foundry" index="8"]
 transform = Transform( -0.176079, 0, 0.984376, 0, 1, 0, -0.984376, 0, -0.176079, 78.9195, 32.1082, -6.22143 )
 use_collision = true
+collision_layer = 257
 width = 11.6696
 height = 8.38614
 depth = 14.7267
@@ -1484,93 +1514,101 @@ active = true
 [node name="zone_cliff" type="Spatial" parent="active_entities" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 138.343, 101.545, 204.384 )
 
-[node name="target_flower5" parent="active_entities/zone_cliff" index="0" instance=ExtResource( 52 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -138.343, -101.545, -204.384 )
-
-[node name="random_ammo_pickup" parent="active_entities/zone_cliff" index="1" instance=ExtResource( 73 )]
+[node name="random_ammo_pickup" parent="active_entities/zone_cliff" index="0" instance=ExtResource( 73 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.2885, 33.7512, 2.1879 )
 generate_on_ready = true
 regenerate_on_death = true
 
-[node name="random_ammo_pickup2" parent="active_entities/zone_cliff" index="2" instance=ExtResource( 73 )]
+[node name="random_ammo_pickup2" parent="active_entities/zone_cliff" index="1" instance=ExtResource( 73 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.349, 33.8338, 2.92088 )
 generate_on_ready = true
 regenerate_on_death = true
 
-[node name="bug_pickup" parent="active_entities/zone_cliff" index="3" instance=ExtResource( 45 )]
+[node name="bug_pickup" parent="active_entities/zone_cliff" index="2" instance=ExtResource( 45 )]
 transform = Transform( -0.459315, 0, -0.888273, 0, 1, 0, 0.888273, 0, -0.459315, 8.34105, 38.6635, 63.2499 )
 
-[node name="bug_pickup2" parent="active_entities/zone_cliff" index="4" instance=ExtResource( 45 )]
+[node name="bug_pickup2" parent="active_entities/zone_cliff" index="3" instance=ExtResource( 45 )]
 transform = Transform( -0.459315, 0, -0.888273, 0, 1, 0, 0.888273, 0, -0.459315, 14.0208, 39.2296, 58.6019 )
 
-[node name="bug_pickup3" parent="active_entities/zone_cliff" index="5" instance=ExtResource( 45 )]
+[node name="bug_pickup3" parent="active_entities/zone_cliff" index="4" instance=ExtResource( 45 )]
 transform = Transform( 0.579605, 0, -0.814898, 0, 1, 0, 0.814898, 0, 0.579605, 11.114, 43.997, 56.726 )
 
-[node name="target_flower" parent="active_entities/zone_cliff" index="6" instance=ExtResource( 52 )]
+[node name="target_flower" parent="active_entities/zone_cliff" index="5" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.6087, 34.3931, 50.0861 )
 open = false
 
-[node name="target_flower2" parent="active_entities/zone_cliff" index="7" instance=ExtResource( 52 )]
+[node name="target_flower2" parent="active_entities/zone_cliff" index="6" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.2816, 38.9059, 55.2381 )
 
-[node name="target_flower3" parent="active_entities/zone_cliff" index="8" instance=ExtResource( 52 )]
+[node name="target_flower3" parent="active_entities/zone_cliff" index="7" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.7311, 42.6517, 54.4595 )
 open = false
 
-[node name="holstered_platform" parent="active_entities/zone_cliff" index="9" instance=ExtResource( 61 )]
+[node name="holstered_platform" parent="active_entities/zone_cliff" index="8" instance=ExtResource( 61 )]
 transform = Transform( 0.280991, 0, 0.95971, 0, 1, 0, -0.95971, 0, 0.280991, -15.9901, 42.3387, 65.3367 )
 
-[node name="crawly" parent="active_entities/zone_cliff" index="10" instance=ExtResource( 64 )]
+[node name="crawly" parent="active_entities/zone_cliff" index="9" instance=ExtResource( 64 )]
 transform = Transform( 0.28313, 0, 0.959082, 0, 1, 0, -0.959082, 0, 0.28313, -26.2269, 42.4595, 55.4984 )
 
-[node name="target_flower4" parent="active_entities/zone_cliff" index="11" instance=ExtResource( 52 )]
+[node name="target_flower4" parent="active_entities/zone_cliff" index="10" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.5556, 41.403, 55.5561 )
 
-[node name="dswitch" parent="active_entities/zone_cliff" index="12" instance=ExtResource( 50 )]
+[node name="dswitch" parent="active_entities/zone_cliff" index="11" instance=ExtResource( 50 )]
 transform = Transform( -0.91568, -0.401477, 0.0186005, -4.04596e-09, -0.0462804, -0.998928, 0.401908, -0.914699, 0.042378, 8.74297, 37.5936, 63.3878 )
 
-[node name="bug_pickup4" parent="active_entities/zone_cliff" index="13" instance=ExtResource( 45 )]
+[node name="bug_pickup4" parent="active_entities/zone_cliff" index="12" instance=ExtResource( 45 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.4133, 36.5436, 2.89822 )
 
-[node name="bug_pickup5" parent="active_entities/zone_cliff" index="14" instance=ExtResource( 45 )]
+[node name="bug_pickup5" parent="active_entities/zone_cliff" index="13" instance=ExtResource( 45 )]
 transform = Transform( -0.00461343, 0, -0.999989, 0, 1, 0, 0.999989, 0, -0.00461343, 73.9188, 36.5659, 23.2567 )
 
-[node name="crawly2" parent="active_entities/zone_cliff" index="15" instance=ExtResource( 64 )]
+[node name="crawly2" parent="active_entities/zone_cliff" index="14" instance=ExtResource( 64 )]
 transform = Transform( -0.835418, 0, -0.549615, 0, 1, 0, 0.549615, 0, -0.835418, -90.9092, 58.5179, 44.0411 )
 mesh_node = NodePath("../crawly/Armature/Skeleton/crawly")
 
-[node name="crawly3" parent="active_entities/zone_cliff" index="16" instance=ExtResource( 64 )]
+[node name="crawly3" parent="active_entities/zone_cliff" index="15" instance=ExtResource( 64 )]
 transform = Transform( -0.854749, 0, 0.519041, 0, 1, 0, -0.519041, 0, -0.854749, -101.752, 58.0863, 46.0736 )
 
-[node name="deathgnat" parent="active_entities/zone_cliff" index="17" instance=ExtResource( 77 )]
+[node name="deathgnat" parent="active_entities/zone_cliff" index="16" instance=ExtResource( 77 )]
 transform = Transform( -0.417673, 0, 0.908597, 0, 1, 0, -0.908597, 0, -0.417673, -131.963, 68.6325, 50.9726 )
 
-[node name="deathgnat2" parent="active_entities/zone_cliff" index="18" instance=ExtResource( 77 )]
+[node name="deathgnat2" parent="active_entities/zone_cliff" index="17" instance=ExtResource( 77 )]
 transform = Transform( -0.417673, 0, 0.908597, 0, 1, 0, -0.908597, 0, -0.417673, -134.547, 63.6868, 45.3509 )
 
-[node name="crawly4" parent="active_entities/zone_cliff" index="19" instance=ExtResource( 64 )]
+[node name="crawly4" parent="active_entities/zone_cliff" index="18" instance=ExtResource( 64 )]
 transform = Transform( -0.703044, 0, 0.711146, 0, 1, 0, -0.711146, 0, -0.703044, -104.818, 51.2748, 46.0394 )
 
-[node name="target_flower6" parent="active_entities/zone_cliff" index="20" instance=ExtResource( 52 )]
+[node name="target_flower6" parent="active_entities/zone_cliff" index="19" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -199.051, 60.7518, 68.4469 )
 
-[node name="target_flower7" parent="active_entities/zone_cliff" index="21" instance=ExtResource( 52 )]
+[node name="target_flower7" parent="active_entities/zone_cliff" index="20" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -205.231, 64.5015, 64.1542 )
 
-[node name="target_flower8" parent="active_entities/zone_cliff" index="22" instance=ExtResource( 52 )]
+[node name="target_flower8" parent="active_entities/zone_cliff" index="21" instance=ExtResource( 52 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -212.389, 70.9197, 68.5504 )
 
-[node name="crawly5" parent="active_entities/zone_cliff" index="23" instance=ExtResource( 64 )]
+[node name="crawly5" parent="active_entities/zone_cliff" index="22" instance=ExtResource( 64 )]
 transform = Transform( -0.104478, 0, 0.994527, 0, 1, 0, -0.994527, 0, -0.104478, -199.255, 61.7051, 68.35 )
 mesh_node = NodePath("../crawly/Armature/Skeleton/crawly")
 
-[node name="crawly6" parent="active_entities/zone_cliff" index="24" instance=ExtResource( 64 )]
+[node name="crawly6" parent="active_entities/zone_cliff" index="23" instance=ExtResource( 64 )]
 transform = Transform( -0.104478, 0, 0.994527, 0, 1, 0, -0.994527, 0, -0.104478, -205.131, 65.4228, 63.847 )
 mesh_node = NodePath("../crawly2/Armature/Skeleton/crawly")
 
-[node name="crawly7" parent="active_entities/zone_cliff" index="25" instance=ExtResource( 64 )]
+[node name="crawly7" parent="active_entities/zone_cliff" index="24" instance=ExtResource( 64 )]
 transform = Transform( -0.104478, 0, 0.994527, 0, 1, 0, -0.994527, 0, -0.104478, -212.096, 71.6078, 68.0003 )
 mesh_node = NodePath("../crawly3/Armature/Skeleton/crawly")
+
+[node name="pistol_pickup" parent="active_entities/zone_cliff" index="25" instance=ExtResource( 94 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -105.402, 54.1784, 47.1687 )
+respawn_on_player_death = true
+
+[node name="pistol_pickup2" parent="active_entities/zone_cliff" index="26" instance=ExtResource( 94 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106.406, 54.2023, 46.261 )
+respawn_on_player_death = true
+
+[node name="pistol_pickup3" parent="active_entities/zone_cliff" index="27" instance=ExtResource( 94 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -88.8315, 54.3523, 50.1829 )
 
 [node name="npc_conductor" parent="active_entities" index="3" instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 1, -92.6342, 6.38731, 150.844 )

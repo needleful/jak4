@@ -48,7 +48,7 @@ const JUMP_VEL_WALL := 5.0
 const JUMP_VEL_WALL_V := 8.0
 const JUMP_VEL_WATER := 5.0
 
-const MIN_SPEED_ROLL := 3.0
+const MIN_SPEED_ROLL := 5.0
 
 const TIME_ROLL_MIN := 0.25
 const TIME_ROLL_MAX := 0.5
@@ -295,6 +295,9 @@ var best_floor : Node
 var dash_charges := 0
 var can_use_hover_scooter := true
 
+var jump_time := TIME_BASE_JUMP
+var jump_time_min := TIME_JUMP_MIN
+
 var current_coat: Coat
 # Camera settings
 var sensitivity := 1.0
@@ -324,6 +327,7 @@ onready var ledgeCastLeft := $body_mesh/leftHandCast
 onready var ledgeCastRight := $body_mesh/rightHandCast
 onready var ledgeCastCenter := $body_mesh/centerCast
 onready var ledgeCastCeiling := $body_mesh/ceilingCast
+onready var ledgeCastHeadFloor := $body_mesh/headFloorCast
 onready var wallCheck := $body_mesh/wall_check
 onready var ledge_area := $body_mesh/ledge_area
 onready var ledgeRef := $body_mesh/reference
@@ -356,7 +360,7 @@ var applied_ground_velocity := Vector3.ZERO
 
 var last_ground_origin := Vector3.ZERO
 
-const TIMERS_MAX := 2
+const TIMERS_MAX := 3
 
 const INPUT_EPSILON := 0.1
 var input_buffer := {
@@ -454,7 +458,7 @@ func _physics_process(delta):
 			best_floor = col.collider as Node
 	if best_floor_dot > MIN_DOT_GROUND:
 		ground_normal = best_normal
-	$ui/gameing/debug/stats/a2.text = "Floor Dot: %f [of %d]" % [best_floor_dot, get_slide_count()]
+	$ui/gameing/debug/stats/a2.text = "Input: " + str(movement.length_squared())
 	$ui/gameing/debug/stats/a9.text = "Depth: " + str(max_depth)
 	
 	if max_depth > DEPTH_CRUSH:
@@ -564,16 +568,16 @@ func _physics_process(delta):
 					next_state = State.Slide
 			elif after(TIME_DASH):
 				next_state = State.Fall
-		State.BaseJump, State.LedgeJump, State.HighJump, State.WallJump, State.WaveJump:
-			if pressed("combat_lunge"):
+		State.BaseJump, State.LedgeJump, State.HighJump, State.WallJump, State.WaveJump, State.CrouchJump:
+			if after(jump_time_min) and pressed("combat_lunge"):
 				next_state = State.DiveWindup
-			elif pressed("combat_spin"):
+			elif after(jump_time_min) and pressed("combat_spin"):
 				next_state = State.AirSpinKick
 			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
 				next_state = State.Dash
-			elif after(TIME_BASE_JUMP):
+			elif after(jump_time):
 				next_state = State.Fall
-			elif after(TIME_JUMP_MIN):
+			elif after(jump_time_min):
 				if best_floor_dot > MIN_DOT_GROUND:
 					next_state = State.Ground
 				elif best_floor_dot > MIN_DOT_SLIDE:
@@ -600,28 +604,16 @@ func _physics_process(delta):
 				next_state = State.Wading
 			elif !holding("mv_crouch") and empty(crouch_head):
 				next_state = State.Ground
-			elif after(TIME_COYOTE, empty(ground_area)):
+			elif after(TIME_COYOTE, empty(ground_area), 1):
 				next_state = State.Fall
-			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND):
+			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1):
 				if best_floor_dot > MIN_DOT_CLIMB and can_climb():
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
 			else:
-				if after(TIME_TO_SIT, desired_velocity.length() < 0.001, 1):
+				if after(TIME_TO_SIT, desired_velocity.length() < 0.001, 2):
 					next_state = State.Sitting
-		State.CrouchJump:
-			if pressed("combat_lunge"):
-				next_state = State.DiveWindup
-			elif after(TIME_TO_DASH) and can_dash() and pressed("mv_jump"):
-				next_state = State.Dash
-			elif after(TIME_CROUCH_JUMP):
-				next_state = State.Fall
-			elif after(TIME_JUMP_MIN):
-				if best_floor_dot > MIN_DOT_GROUND:
-					next_state = State.Ground
-				elif best_floor_dot > MIN_DOT_SLIDE:
-					next_state = State.Slide
 		State.Climb:
 			drain_stamina(
 				(desired_velocity.length() + STAMINA_DRAIN_MIN)
@@ -1373,7 +1365,7 @@ func can_climb() -> bool:
 	)
 
 func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
-	if ledgeCastCeiling.is_colliding():
+	if ledgeCastCeiling.is_colliding() or ledgeCastHeadFloor.is_colliding():
 		return false
 	
 	var left:bool = check_cast(ledgeCastLeft, min_dot)
@@ -1743,10 +1735,15 @@ func set_state(next_state: int):
 	while i < min(timers.size(), TIMERS_MAX):
 		timers[i] = 0.0
 		i += 1
+	
+	# Default properties
 	mesh.stop_particles()
 	var head_blocked = crouch_head.get_overlapping_bodies().size() > 0
 	$crouching_col.disabled = !head_blocked
 	$standing_col.disabled = head_blocked
+	jump_time = TIME_BASE_JUMP
+	jump_time_min = TIME_JUMP_MIN
+	
 	# Exit effects
 	match state: 
 		State.PlaceFlag:
@@ -1758,7 +1755,7 @@ func set_state(next_state: int):
 			collision_mask &= ~(1 << 13)
 		State.LungeKick, State.SlideLungeKick, State.DiveEnd:
 			gun.end_combo()
-
+	
 	# Entry effects
 	match next_state:
 		State.Ground:
@@ -1779,6 +1776,8 @@ func set_state(next_state: int):
 			mesh.play_jump()
 			gun.unlock()
 		State.HighJump:
+			jump_time = TIME_CROUCH_JUMP
+			jump_time_min = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_HIGH)
 			mesh.play_high_jump()
 			gun.lock()
@@ -1794,6 +1793,7 @@ func set_state(next_state: int):
 			mesh.play_ledge_jump()
 			gun.unlock()
 		State.CrouchJump:
+			jump_time = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_CROUCH)
 			mesh.play_crouch_jump()
 			gun.unlock()

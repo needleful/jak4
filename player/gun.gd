@@ -48,7 +48,7 @@ const lockon_weight_distance := 0.3
 const lockon_weight_angle := 4.5
 
 const lockon_max_dist_sq := 900.0
-const lockon_max_angle_rad := PI/2.0
+const lockon_max_angle_rad := PI/2.05
 
 var timer_cant_lock_on := 0.0
 const TIME_QUIT_LOCK_ON := 0.25
@@ -163,6 +163,8 @@ func _process(delta):
 			var angle := current_dir.angle_to(dir)
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
+			if g.is_in_group("enemy"):
+				score /= 1.5
 			if score < best_score:
 				# new target
 				var cast_end: Vector3
@@ -192,7 +194,9 @@ func _process(delta):
 		else:
 			target_dir = current_dir
 			ik_target.global_transform.origin = base_ref.global_transform.origin + target_dir*100.0
+
 	# Aiming:
+	$debug/list/d2.text = str(target_dir)
 	holder.aim_gun(target_dir, aiming)
 	if laser.visible:
 		laser_cast.update()
@@ -361,7 +365,7 @@ func swap_to(id: String):
 	set_state(new_state, true)
 
 func set_state(new_state, force := false):
-	print(State.keys()[state], " -> ", State.keys()[new_state])
+	#print(State.keys()[state], " -> ", State.keys()[new_state])
 	$debug/list/d1.text = 'State: '+State.keys()[new_state]
 	if !force and new_state == state:
 		return

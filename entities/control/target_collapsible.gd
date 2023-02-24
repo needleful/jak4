@@ -28,4 +28,5 @@ func toggle(should_open):
 		anim.travel("Closed")
 		if !closed.is_inside_tree():
 			add_child(closed)
-		remove_child(opened)
+		# A single-frame window for high jumping
+		call_deferred("remove_child", opened)

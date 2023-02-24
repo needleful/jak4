@@ -120,11 +120,13 @@ extents = Vector3( 0.170593, 0.228779, 0.270713 )
 [sub_resource type="SphereShape" id=13]
 radius = 0.831067
 
-[sub_resource type="SphereShape" id=33]
-radius = 0.728934
+[sub_resource type="CylinderShape" id=95]
+height = 0.894503
+radius = 0.514844
 
-[sub_resource type="SphereShape" id=15]
-radius = 0.764673
+[sub_resource type="CylinderShape" id=94]
+height = 1.11658
+radius = 0.6381
 
 [sub_resource type="Animation" id=34]
 length = 0.001
@@ -855,6 +857,7 @@ time_scale_response = true
 
 [node name="Particles2" type="Particles" parent="body_mesh"]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
+emitting = false
 amount = 16
 lifetime = 1.2
 local_coords = false
@@ -925,6 +928,13 @@ enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
 
+[node name="headFloorCast" type="RayCast" parent="body_mesh"]
+time_scale_response = false
+transform = Transform( 1, 0, 0, 0, -0.999456, 0.0329856, 0, -0.0329856, -0.999456, -7.45068e-08, 1.6733, 0.0595681 )
+enabled = true
+cast_to = Vector3( 0, 0.75, 0 )
+collision_mask = 17
+
 [node name="reference" type="Position3D" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.501811 )
@@ -947,19 +957,18 @@ shape = SubResource( 13 )
 
 [node name="attack_spin" type="Area" parent="body_mesh"]
 time_scale_response = false
-visible = false
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_spin"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.489956, 0.40164, 0 )
-shape = SubResource( 33 )
+shape = SubResource( 95 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="body_mesh/attack_spin"]
 time_scale_response = false
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.325395, 0 )
-shape = SubResource( 15 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.555129, 0 )
+shape = SubResource( 94 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="body_mesh/attack_spin"]
 time_scale_response = false

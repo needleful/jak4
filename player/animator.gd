@@ -345,9 +345,12 @@ func target_aim(target_dir: Vector3) -> Vector2:
 	)
 
 func aim_gun(dir: Vector3, aiming: bool):
-	if dir != Vector3.ZERO:
-		var aim = target_aim(dir)
-		anim["parameters/Aim/blend_position"] = aim
+	var aim: Vector2
+	if dir == Vector3.ZERO:
+		aim = Vector2.ZERO
+	else:
+		aim = target_aim(dir)
+	anim["parameters/Aim/blend_position"] = aim
 	camera_rig.set_aiming(aiming)
 
 func get_normal_gun_orientation() -> Vector3:
