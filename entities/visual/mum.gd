@@ -1,33 +1,32 @@
 extends Spatial
 
-signal endgame
-signal endgame_completed
+onready var mesh := $Armature/Skeleton/mum
+onready var detail := $Armature/Skeleton/mum_deatail
 
-export(Material) var hologram_material
-var mum_material: Material
-var detail_material: Material
-var friendly_id := 'mum'
+func hello():
+	show()
+	var t:Tween = $Tween
+	var _x = t.stop_all()
+	_x = t.interpolate_method(
+		self,
+		"_set_real",
+		0.0,
+		1.0 if Global.stat("mum/appearance") else 0.5,
+		1.0)
+	_x = t.start()
 
-func _ready():
-	if Global.stat("mum/end"):
-		queue_free()
-	mum_material = $Armature/Skeleton/mum.material_override
-	detail_material = $Armature/Skeleton/mum_deatail.material_override
-	if !Global.stat("mum/appearance"):
-		$Armature/Skeleton/mum.material_override = hologram_material
-		$Armature/Skeleton/mum_deatail.material_override = hologram_material
-	var _x = Global.connect("stat_changed", self, "_on_stat_changed")
+func bye():
+	var t:Tween = $Tween
+	var _x = t.stop_all()
+	_x = t.interpolate_method(
+		self,
+		"_set_real",
+		mesh.material_override.get_shader_param("realness"),
+		0,
+		1.0)
+	_x = t.interpolate_callback(self, 1.0, "hide")
+	_x = t.start()
 
-func _on_stat_changed(stat, _val):
-	if stat == "mum/appearance":
-		$Armature/Skeleton/mum.material_override = mum_material
-		$Armature/Skeleton/mum_deatail.material_override = detail_material
-
-func end_game():
-	$mum_dialog.deactivate()
-	emit_signal("endgame")
-
-func _on_epic_boss_killed():
-	var _x = Global.add_stat("mum/end")
-	emit_signal("endgame_completed")
-	queue_free()
+func _set_real(realness: float):
+	mesh.material_override.set_shader_param("realness", realness)
+	detail.material_override.set_shader_param("realness", realness)

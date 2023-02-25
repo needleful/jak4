@@ -119,9 +119,11 @@ func get_next():
 	var c = sequence.canonical_next(current_item)
 	if !c:
 		exit()
+		return false
 	else:
 		current_item = c
 		advance()
+		return true
 
 func advance():
 	if !current_item:
@@ -355,6 +357,12 @@ func trade_coats():
 		advance()
 	else:
 		insert_label("[You cannot trade coats at this time]", "narration")
+
+func skip_and_exit():
+	if !is_exiting:
+		fast_exit()
+	while get_next():
+		continue
 
 func fast_exit():
 	if is_exiting:

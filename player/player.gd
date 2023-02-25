@@ -1502,7 +1502,7 @@ func take_damage(damage: int, direction: Vector3, source) -> bool:
 		return false
 	
 	if ui.in_dialog():
-		get_dialog_viewer().exit()
+		get_dialog_viewer().skip_and_exit()
 	
 	mesh.start_damage_particle(direction)
 	if extra_health:

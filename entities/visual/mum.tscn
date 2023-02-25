@@ -1,32 +1,30 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://_glb/mum.glb" type="PackedScene" id=1]
-[ext_resource path="res://material/main_spatial.shader" type="Shader" id=2]
-[ext_resource path="res://entities/visual/mum_albedo.png" type="Texture" id=3]
+[ext_resource path="res://material/hologram.shader" type="Shader" id=2]
+[ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=3]
 [ext_resource path="res://entities/visual/mum_detail_albedo.png" type="Texture" id=4]
 [ext_resource path="res://entities/visual/mum.gd" type="Script" id=5]
 [ext_resource path="res://entities/visual/mum_hologram.material" type="Material" id=6]
-
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 2 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 0.25
-shader_param/specularity = 2.536
-shader_param/main_texture = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
 shader_param/subsurface_scattering = -1.0
 shader_param/softness = 0.279
+shader_param/realness = 0.5
 shader_param/specularity = 2.731
+shader_param/hologram_uv_scale = 25.0
+shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
 shader_param/main_texture = ExtResource( 4 )
+shader_param/hologram = ExtResource( 3 )
 
 [node name="mum" instance=ExtResource( 1 )]
 script = ExtResource( 5 )
-hologram_material = ExtResource( 6 )
 
 [node name="mum" parent="Armature/Skeleton" index="0"]
-material_override = SubResource( 1 )
+material_override = ExtResource( 6 )
 
 [node name="mum_deatail" parent="Armature/Skeleton" index="1"]
 material_override = SubResource( 2 )
+
+[node name="Tween" type="Tween" parent="." index="1"]

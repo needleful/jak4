@@ -44,6 +44,9 @@
 	// Special case when she has no personality
 	{mention("head_empty")}
 
+* You hear something behind you.
+{main_speaker.show_mum()}
+
 !{mum/info}
 	{talked == 0}
 		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")}
@@ -221,8 +224,8 @@
 			...
 		{main_speaker.end_game()}
 		{mention("end_game")}
-		* There is something behind you
-		[You] Mum? Mum! What is that doing in here?
+		* You hear something behind you.
+		[You] Mum? Mum! Is there someone else in the room?
 			T-talk to me.
 			Say something! Please!
 		* She does not respond.
@@ -491,6 +494,4 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 :_exit
 {track_conversation_time()}
 {mentioned("activated")}
-	{mentioned("end_game")}
-		{main_speaker.hide()}
 	{main_speaker.exit(mentioned("end_game"))}

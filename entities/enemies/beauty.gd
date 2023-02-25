@@ -270,6 +270,8 @@ func chase(delta):
 		if final_diff.length() < 2 and move_state != MoveState.GravityStun:
 			dir = Vector3.ZERO
 			if !nav.is_target_reachable() and is_on_floor() and player.is_grounded():
+				# TODO: calculate the path from the target to the end of our path
+				# then jump to that point
 				state_timer = 0.0
 				move_state = MoveState.JumpCharge
 				move_anim.travel("JumpCharge")

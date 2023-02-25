@@ -1,16 +1,14 @@
-[gd_scene load_steps=92 format=2]
+[gd_scene load_steps=85 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
 [ext_resource path="res://_glb/chunks/chunk124.glb" type="PackedScene" id=3]
 [ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=5]
-[ext_resource path="res://entities/env/ancient/medium_chair.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=6]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=7]
-[ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=8]
 [ext_resource path="res://entities/control/power_thing.tscn" type="PackedScene" id=9]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=10]
-[ext_resource path="res://material/hologram.shader" type="Shader" id=11]
 [ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://management/player_start.gd" type="Script" id=13]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=14]
@@ -34,7 +32,6 @@
 [ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=32]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=33]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=34]
-[ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=35]
 [ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=37]
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=38]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=39]
@@ -94,114 +91,20 @@ shader_param/wall = ExtResource( 58 )
 shader_param/ground = ExtResource( 58 )
 shader_param/ceiling = ExtResource( 58 )
 
-[sub_resource type="ShaderMaterial" id=278]
-shader = ExtResource( 11 )
-shader_param/subsurface_scattering = null
-shader_param/softness = 1.0
-shader_param/realness = 0.0
-shader_param/specularity = 1.0
-shader_param/hologram_uv_scale = 64.0
-shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
-shader_param/main_texture = ExtResource( 35 )
-shader_param/hologram = ExtResource( 8 )
-
 [sub_resource type="SphereShape" id=274]
 radius = 19.9496
 
 [sub_resource type="NavigationMesh" id=276]
-vertices = PoolVector3Array( -2.73226, 8.11645, -6.38457, -2.73226, 8.11645, -15.8846, -9.73226, 8.11645, -15.8846, -9.73226, 8.11645, -6.38457, -4.13226, 8.11645, -6.38457, -4.13226, 8.11645, -15.8846, -9.73226, 8.11645, -6.38457, -9.73226, 8.11645, 3.36543, -2.73226, 8.11645, 3.36543, -2.73226, 8.11645, -6.38457, -4.13226, 8.11645, -6.38457, -4.13226, 8.11645, 3.36543, -2.98226, 0.116446, -14.6346, -2.98226, 0.116446, -15.3846, -9.23226, 0.116446, -15.3846, -9.23226, 0.116446, -8.13457, -3.23226, 0.116446, -8.13457, -0.982256, 1.36645, -6.88457, -0.982256, 1.36645, 3.36543, 4.51774, 1.36645, 3.36543, 4.51774, 1.36645, -6.88457, -9.73226, -2.38355, -6.63457, -9.73226, -2.38355, 1.11543, -2.48226, -2.38355, 1.11543, -2.48226, -2.38355, -6.63457, -0.982256, -2.38355, -6.63457, -0.982256, -2.38355, 2.61543, 3.76774, -2.38355, 2.61543, 3.76774, -2.38355, -6.63457, -9.23226, 1.11645, 2.11543, -9.23226, 1.11645, 2.61543, -3.23226, 1.11645, 2.61543, -3.23226, 1.11645, 2.11543 )
-polygons = [ PoolIntArray( 0, 4, 1 ), PoolIntArray( 1, 4, 5 ), PoolIntArray( 5, 4, 3 ), PoolIntArray( 5, 3, 2 ), PoolIntArray( 9, 8, 10 ), PoolIntArray( 10, 8, 11 ), PoolIntArray( 10, 11, 7 ), PoolIntArray( 10, 7, 6 ), PoolIntArray( 13, 12, 14 ), PoolIntArray( 14, 12, 16 ), PoolIntArray( 14, 16, 15 ), PoolIntArray( 20, 19, 17 ), PoolIntArray( 17, 19, 18 ), PoolIntArray( 24, 23, 21 ), PoolIntArray( 21, 23, 22 ), PoolIntArray( 28, 27, 25 ), PoolIntArray( 25, 27, 26 ), PoolIntArray( 32, 31, 29 ), PoolIntArray( 29, 31, 30 ) ]
+vertices = PoolVector3Array( -2.73226, 8.11645, -6.38457, -2.73226, 8.11645, -15.8846, -9.73226, 8.11645, -15.8846, -9.73226, 8.11645, -6.38457, -4.13226, 8.11645, -6.38457, -4.13226, 8.11645, -15.8846, -9.73226, 8.11645, -6.38457, -9.73226, 8.11645, 3.36543, -2.73226, 8.11645, 3.36543, -2.73226, 8.11645, -6.38457, -4.13226, 8.11645, -6.38457, -4.13226, 8.11645, 3.36543, -9.23226, 1.11645, -15.3846, -9.23226, 1.11645, -8.13457, -3.23226, 1.11645, -8.13457, -3.23226, 1.11645, -15.3846, -6.23226, -2.38355, -7.38457, -5.98226, -2.38355, -7.38457, -5.73226, -2.38355, -8.13457, -6.48226, -2.38355, -8.13457, -5.73226, -2.38355, -8.13457, -2.48226, -2.38355, -15.1346, -9.73226, -2.38355, -15.1346, -6.48226, -2.38355, -8.13457, -5.73226, -2.38355, -8.13457, -2.48226, -2.38355, -8.13457, -2.48226, -2.38355, -15.1346, -9.73226, -2.38355, -15.1346, -9.73226, -2.38355, -8.13457, -6.48226, -2.38355, -8.13457, -5.98226, -2.38355, -7.38457, -6.23226, -2.38355, -7.38457, -6.48226, -2.38355, -6.63457, -5.73226, -2.38355, -6.63457, -6.48226, -2.38355, -6.63457, -9.73226, -2.38355, 1.11543, -2.48226, -2.38355, 1.11543, -5.73226, -2.38355, -6.63457, -6.48226, -2.38355, -6.63457, -9.73226, -2.38355, -6.63457, -9.73226, -2.38355, 1.11543, -2.48226, -2.38355, 1.11543, -2.48226, -2.38355, -6.63457, -5.73226, -2.38355, -6.63457, -0.982256, 1.36645, -6.88457, -0.982256, 1.36645, 3.36543, 4.51774, 1.36645, 3.36543, 4.51774, 1.36645, -6.88457, -0.982256, -2.38355, -6.63457, -0.982256, -2.38355, 2.61543, 3.76774, -2.38355, 2.61543, 3.76774, -2.38355, -6.63457, -9.23226, 1.11645, 2.11543, -9.23226, 1.11645, 2.61543, -3.23226, 1.11645, 2.61543, -3.23226, 1.11645, 2.11543 )
+polygons = [ PoolIntArray( 0, 4, 1 ), PoolIntArray( 1, 4, 5 ), PoolIntArray( 5, 4, 3 ), PoolIntArray( 5, 3, 2 ), PoolIntArray( 9, 8, 10 ), PoolIntArray( 10, 8, 11 ), PoolIntArray( 10, 11, 7 ), PoolIntArray( 10, 7, 6 ), PoolIntArray( 15, 14, 12 ), PoolIntArray( 12, 14, 13 ), PoolIntArray( 16, 19, 17 ), PoolIntArray( 17, 19, 18 ), PoolIntArray( 23, 22, 20 ), PoolIntArray( 20, 22, 21 ), PoolIntArray( 26, 25, 24 ), PoolIntArray( 29, 28, 27 ), PoolIntArray( 30, 33, 31 ), PoolIntArray( 31, 33, 32 ), PoolIntArray( 37, 36, 34 ), PoolIntArray( 34, 36, 35 ), PoolIntArray( 40, 39, 38 ), PoolIntArray( 43, 42, 41 ), PoolIntArray( 47, 46, 44 ), PoolIntArray( 44, 46, 45 ), PoolIntArray( 51, 50, 48 ), PoolIntArray( 48, 50, 49 ), PoolIntArray( 55, 54, 52 ), PoolIntArray( 52, 54, 53 ) ]
 geometry_source_geometry_mode = 1
-agent_height = 3.0
+agent_height = 2.75
 agent_radius = 0.3
 agent_max_climb = 1.0
 agent_max_slope = 88.54
 
 [sub_resource type="BoxShape" id=259]
-extents = Vector3( 1.24123, 1.82926, 1 )
-
-[sub_resource type="Animation" id=279]
-resource_name = "Activate"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("../../hologram:material/0:shader_param/realness")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 0.68302, 0.297302 ),
-"update": 0,
-"values": [ 0.0, 1.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("../../hologram:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-
-[sub_resource type="Animation" id=281]
-resource_name = "Deactivate"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("../../hologram:material/0:shader_param/realness")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 2 ),
-"transitions": PoolRealArray( 0.392292, 1 ),
-"update": 0,
-"values": [ 1.0, 0.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("../../hologram:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-
-[sub_resource type="Animation" id=280]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("../../hologram:material/0:shader_param/realness")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0.0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("../../hologram:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
+extents = Vector3( 3.12602, 2.09681, 1 )
 
 [sub_resource type="BoxShape" id=272]
 extents = Vector3( 18.5566, 18.4452, 27.3279 )
@@ -292,6 +195,9 @@ material/1 = ExtResource( 7 )
 [node name="StaticBody" parent="medium" index="1"]
 collision_layer = 257
 
+[node name="Spatial" type="Position3D" parent="medium" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.54922, 4.55167, -5.57178 )
+
 [node name="rail" parent="." index="1"]
 material/0 = ExtResource( 25 )
 
@@ -318,20 +224,7 @@ collision_layer = 257
 [node name="fence2" parent="." index="5"]
 material/0 = SubResource( 270 )
 
-[node name="hologram" parent="." index="6"]
-visible = false
-layers = 32768
-material/0 = SubResource( 278 )
-
-[node name="Cube" parent="hologram" index="0"]
-layers = 32768
-material/0 = SubResource( 278 )
-
-[node name="Cube001" parent="hologram" index="1"]
-layers = 32768
-material/0 = SubResource( 278 )
-
-[node name="zone_pallace" type="Spatial" parent="." index="7"]
+[node name="zone_pallace" type="Spatial" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 156.818, -240.56, -54.8446 )
 
 [node name="palace1" parent="zone_pallace" index="0" instance=ExtResource( 1 )]
@@ -445,7 +338,7 @@ transform = Transform( -0.232403, 2.98023e-08, 0.97262, 0.82125, -0.535761, 0.19
 [node name="rock1" parent="zone_pallace" index="21" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 0.915428, -0.402482, 0, 0.402482, 0.915428, -139.391, 7.953, 203.844 )
 
-[node name="zone_village" type="Spatial" parent="." index="8"]
+[node name="zone_village" type="Spatial" parent="." index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -206.564, -223.545, -11.3175 )
 
 [node name="hut" parent="zone_village" index="0" instance=ExtResource( 4 )]
@@ -551,7 +444,7 @@ transform = Transform( 0.0167477, -0.999826, -0.00822058, 0.897533, 0.0186565, -
 [node name="rock1" parent="zone_village" index="13" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 0.947311, 0.320315, 0, -0.320315, 0.947311, -34.433, -4.98112, -50.6721 )
 
-[node name="active_entities" type="Spatial" parent="." index="9"]
+[node name="active_entities" type="Spatial" parent="." index="8"]
 
 [node name="zone_palace" type="MultiMeshSystem" parent="active_entities" index="0"]
 transform = Transform( -0.807444, 2.19771e-09, 0.589944, 0.0384403, 0.997875, 0.0526125, -0.58869, 0.0651593, -0.805728, 164.012, -251.52, -54.7653 )
@@ -918,8 +811,8 @@ friendly_name = "scooter_124"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -231.618, -225.576, -40.6129 )
 script = ExtResource( 16 )
 
-[node name="medium_chair" parent="active_entities/the_medium" index="0" instance=ExtResource( 6 )]
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -6.28076, -2.70953, -10.9209 )
+[node name="illusory_room" parent="active_entities/the_medium" index="0" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.12064, -1.5498, -11.746 )
 
 [node name="Navigation" type="Navigation" parent="active_entities/the_medium" index="1"]
 
@@ -931,7 +824,7 @@ wait_time = 15.0
 one_shot = true
 
 [node name="enemy_spawn" type="Position3D" parent="active_entities/the_medium" index="3"]
-transform = Transform( 0.920118, 0, 0.391643, 0, 1, 0, -0.391643, 0, 0.920118, -8.39043, -0.149368, -12.1011 )
+transform = Transform( -0.223054, 0, 0.974807, 0, 1, 0, -0.974807, 0, -0.223054, -9.11685, -2.70543, -4.49537 )
 script = ExtResource( 61 )
 
 [node name="epic_boss" parent="active_entities/the_medium/enemy_spawn" index="0" instance=ExtResource( 46 )]
@@ -942,60 +835,25 @@ chase_speed = 4.0
 lock_damage_override = true
 
 [node name="power_thing3" parent="active_entities/the_medium" index="4" instance=ExtResource( 9 )]
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -2.56073, -2.68352, 2.59694 )
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -2.56073, -3.00438, 2.59694 )
 
 [node name="power_thing4" parent="active_entities/the_medium" index="5" instance=ExtResource( 9 )]
-transform = Transform( 1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, -9.53929, -2.68352, 2.59694 )
+transform = Transform( 1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, -9.53929, -3.00438, 2.59694 )
 active = true
 
 [node name="entrance" type="Area" parent="active_entities/the_medium" index="6"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60495, -1.69722, 3.42195 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60495, -1.69722, 1.74325 )
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/the_medium/entrance" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57933, -1.24027 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0783997, 0.57933, -1.24027 )
 shape = SubResource( 259 )
 
 [node name="ending_dialog" type="Node" parent="active_entities/the_medium" index="7"]
 script = ExtResource( 49 )
 dialog_sequence = ExtResource( 76 )
 friendly_id = "you"
-
-[node name="activator" type="AnimationPlayer" parent="active_entities/the_medium" index="8"]
-anims/Activate = SubResource( 279 )
-anims/Deactivate = SubResource( 281 )
-anims/RESET = SubResource( 280 )
-
-[node name="OmniLight" type="OmniLight" parent="active_entities/the_medium" index="9"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.32794, -1.49651, -13.4009 )
-layers = 32768
-light_color = Color( 0.529412, 0.501961, 0.333333, 1 )
-light_cull_mask = 4293951488
-
-[node name="SpotLight" type="SpotLight" parent="active_entities/the_medium/OmniLight" index="0"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.84956, 1.22362, 2.31528 )
-layers = 6
-light_color = Color( 0.403922, 0.894118, 0.815686, 1 )
-light_cull_mask = 4293918727
-
-[node name="OmniLight4" type="OmniLight" parent="active_entities/the_medium" index="10"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.53368, -1.49651, -13.3402 )
-layers = 32768
-light_color = Color( 0.529412, 0.501961, 0.333333, 1 )
-light_cull_mask = 4293951488
-
-[node name="OmniLight2" type="OmniLight" parent="active_entities/the_medium" index="11"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.55975, -1.5051, -9.60239 )
-layers = 32768
-light_color = Color( 0.529412, 0.501961, 0.333333, 1 )
-light_cull_mask = 4293951488
-
-[node name="OmniLight3" type="OmniLight" parent="active_entities/the_medium" index="12"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.46962, -1.5051, -9.28516 )
-layers = 32768
-light_color = Color( 0.529412, 0.501961, 0.333333, 1 )
-light_cull_mask = 4293951488
 
 [node name="zone_cave" type="MultiMeshSystem" parent="active_entities" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -128.238, -222.404, 8.43033 )
@@ -1672,8 +1530,8 @@ shape = SubResource( 266 )
 transform = Transform( -0.782128, -0.00255837, -0.623112, 0.0290326, 0.998756, -0.0405424, 0.62244, -0.0497999, -0.781081, 9.98512, -184.615, -197.965 )
 shape = SubResource( 264 )
 
-[connection signal="activated" from="active_entities/the_medium/medium_chair" to="active_entities/the_medium" method="activate"]
-[connection signal="deactivated" from="active_entities/the_medium/medium_chair" to="active_entities/the_medium" method="deactivate"]
+[connection signal="endgame" from="active_entities/the_medium/illusory_room" to="active_entities/the_medium/enemy_spawn" method="spawn"]
+[connection signal="timeout" from="active_entities/the_medium/epic_death_timer" to="active_entities/the_medium" method="complete_game"]
 [connection signal="died" from="active_entities/the_medium/enemy_spawn/epic_boss" to="active_entities/the_medium" method="_on_epic_boss_died"]
 [connection signal="body_entered" from="active_entities/the_medium/entrance" to="active_entities/the_medium" method="_on_entrance_body_entered"]
 [connection signal="toggled" from="active_entities/zone_village/dswitch_shortcut" to="active_entities/rail_cart_shortcut" method="_on_toggled"]
