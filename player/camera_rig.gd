@@ -14,6 +14,7 @@ const CORRECTION_VELOCITY_GROUND := 8.0
 const MIN_FLOOR_HEIGHT := 0.5
 const H_CORRECTION := 30.0
 const H_SLOW_CORRECTION := 15.0
+const H_LOCKED_CORRECTION := 1.0
 const H_DIFF_BOUND := 2.5
 
 const LEDGE_GRAB_RAISE := 1.0
@@ -98,6 +99,8 @@ func _physics_process(delta):
 	
 	if player.should_slow_follow():
 		hv = lerp(hv, H_SLOW_CORRECTION, 0.1)
+	elif player.is_locked():
+		hv = lerp(hv, H_LOCKED_CORRECTION, 0.1)
 	else:
 		hv = lerp(hv, H_CORRECTION, 0.1)
 	

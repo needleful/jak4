@@ -1128,6 +1128,10 @@ func anim_exit(transition:String):
 	mesh.exit_custom_loop(transition)
 	return true
 
+func set_visual_position(new_transform:Transform):
+	global_transform = new_transform
+	rotate_mesh(global_transform.basis.z)
+
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath
 

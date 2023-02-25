@@ -1,18 +1,59 @@
 shader_type spatial;
-render_mode cull_back, blend_add, unshaded;
 
-uniform sampler2D main_texture;
-uniform float normal_deformation :hint_range(0, 10) = 0.1;
-varying vec2 uv_deform;
+uniform sampler2D main_texture: hint_albedo;
+uniform sampler2D hologram: hint_albedo; 
 
-void vertex() {
-	float normal_deform = sin(0.7*TIME + 5.13*VERTEX.x*VERTEX.z) + sin(1.2*TIME + 2.3*(VERTEX.y));
-	VERTEX += NORMAL*normal_deformation*normal_deform;
-	uv_deform = 0.5*vec2(
-		sin(0.2*TIME + 0.1*VERTEX.y),
-		cos(0.5*TIME + 0.3*(VERTEX.x*VERTEX.z + VERTEX.y)));
+uniform float subsurface_scattering: hint_range(-1, 1);
+uniform float softness: hint_range(0, 1) = 1.0;
+uniform float realness: hint_range(0, 1) = 0.5;
+uniform float specularity: hint_range(0.1, 32) = 1.0;
+uniform float hologram_uv_scale = 25.0;
+uniform vec4 hologram_emission : hint_color;
+
+varying vec3 vert_color;
+
+void fragment()
+{
+	float weight = realness * 2.0;
+	float alpha = clamp(weight, 0.0, 1.0);
+	float blend = clamp(weight - 1.0, 0.0, 1.0);
+	
+	vec4 real = texture(main_texture, UV);
+	vec4 h = texture(hologram, UV*hologram_uv_scale);
+	vec4 result = mix(h, real, blend);
+	EMISSION = mix(hologram_emission.rgb, vec3(0.0), blend*blend);
+	
+	if (alpha*result.a < 0.8) {
+		discard;
+	}
+	ALBEDO = result.rgb;
+	ROUGHNESS = (32.0 - specularity)/32.0;
+	vert_color = COLOR.rgb;
 }
 
-void fragment() {
-	ALBEDO = texture(main_texture, UV+uv_deform).rgb;
+void light()
+{
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
+	}
+	else {
+		float smoothness = specularity/32.0;
+		
+		float ndotl = dot(NORMAL, LIGHT);
+		float light = 0.4*(1.0-smoothness)*smoothstep(0, softness, ndotl);
+		vec3 diffuse = light * LIGHT_COLOR * ATTENUATION * ALBEDO;
+		
+		// Specular
+		vec3 h = normalize(VIEW + LIGHT);
+		float cNdotH = max(0.0, dot(NORMAL, h));
+		float blinn = 0.4*smoothness*pow(cNdotH, specularity);
+		float intensity = blinn;
+		vec3 specular = intensity * LIGHT_COLOR * ATTENUATION * ALBEDO;
+		
+		// subsurface
+		vec3 subsurface = 0.2*ATTENUATION*LIGHT_COLOR*vert_color*clamp(ndotl + subsurface_scattering, 0, 1);
+		
+		DIFFUSE_LIGHT += specular + diffuse + subsurface;
+	}
 }
