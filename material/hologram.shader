@@ -21,9 +21,9 @@ void fragment()
 	vec4 real = texture(main_texture, UV);
 	vec4 h = texture(hologram, UV*hologram_uv_scale);
 	vec4 result = mix(h, real, blend);
-	EMISSION = mix(hologram_emission.rgb, vec3(0.0), blend*blend);
+	EMISSION = mix(hologram_emission.rgb, vec3(0.0), blend);
 	
-	if (alpha*result.a < 0.8) {
+	if (result.a < 1.0 - alpha) {
 		discard;
 	}
 	ALBEDO = result.rgb;
