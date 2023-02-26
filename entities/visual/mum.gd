@@ -5,6 +5,7 @@ onready var detail := $Armature/Skeleton/mum_deatail
 
 func hello():
 	show()
+	$AnimationPlayer.play("IntroWalk")
 	var t:Tween = $Tween
 	var _x = t.stop_all()
 	_x = t.interpolate_method(

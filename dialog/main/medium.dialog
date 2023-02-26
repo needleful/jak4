@@ -9,7 +9,7 @@
 		* You've read about this.
 		* To activate the medium, you just sit in the chair.
 	* Do you want to activate the Medium?
-		> Yes
+		> {skip()} (Yes)
 			{mention("activated")}
 			{main_speaker.sit()}
 			!{medium/activated} 
@@ -21,7 +21,7 @@
 					My God...
 			{otherwise}
 				{main_speaker.activate()}
-		> No
+		> {skip()} (No)
 			{exit()}
 
 :mum
@@ -44,8 +44,9 @@
 	// Special case when she has no personality
 	{mention("head_empty")}
 
-* You hear something behind you.
 {main_speaker.show_mum()}
+* You hear something behind you.
+* ...
 
 !{mum/info}
 	{talked == 0}
@@ -53,14 +54,14 @@
 		{Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")}
 		{Global.add_stat("mum/info_needed")}
 		!{mum/appearance}
-			* The thing in front of you is almost nothing at all.
+			* The thing sitting next to you is barely human.
 			* The outline of a dress. Her arched nose. The faint hum of her voice, whispering something less than words.
 			* That's all you can make out. Somehow this is more than you could recall.
 			* It's unmistakable.
 		{otherwise}
 			* Combined with the photograph you found, the face is unmistakable.
 			* She stares blankly ahead.
-		[You] Hi... Mum.
+		[You] Hi Mum.
 			I....
 		{player.anim_play("SitSad", "SittingSad-loop")} 
 		[You] ...
@@ -79,7 +80,7 @@
 			* Though she appears real, there is nothing behind her eyes.
 		* You won't get anything more from her without learning more.
 		[You] I'll come back, okay mum?
-		* She murmurs incomprehensibly as you leave.
+		* She murmurs incomprehensibly.
 		{goto("_exit")}
 {otherwise}!{mum/introduction}
 	{mentioned("head_empty")}

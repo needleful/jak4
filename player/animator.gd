@@ -69,6 +69,7 @@ onready var anim: AnimationTree = $AnimationTree
 onready var anim_tree: AnimationNodeBlendTree = anim.tree_root
 onready var custom_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomAnimation")
 onready var custom_loop_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop")
+onready var custom_loop_node2: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop2")
 onready var custom_exit_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomExit")
 
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
@@ -132,9 +133,17 @@ func play_custom(animation):
 	body.travel("CustomAnimation")
 
 func play_custom_loop(transition: String, end_point: String):
+	var c : String
 	custom_node.animation = transition
-	custom_loop_node.animation = end_point
-	body.travel("CustomLoop")
+	if body.get_current_node() == "CustomLoop":
+		print("Transitioning to 2")
+		c = "CustomLoop2"
+		custom_loop_node2.animation = end_point
+	else:
+		c = "CustomLoop"
+		custom_loop_node.animation = end_point
+		
+	body.travel(c)
 
 func exit_custom_loop(transition:String):
 	custom_exit_node.animation = transition
