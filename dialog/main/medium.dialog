@@ -4,25 +4,25 @@
 		* There is no response.
 	> {skip()} (Leave)
 	{exit()}
-{otherwise}
-	!{medium/activated}
-		* You've read about this.
-		* To activate the medium, you just sit in the chair.
+{otherwise}!{medium/activated}
+	* You've read about this.
+	* To activate the medium, you just sit in the chair.
 	* Do you want to activate the Medium?
-		> {skip()} (Yes)
-			{mention("activated")}
-			{main_speaker.sit()}
-			!{medium/activated} 
-				* ...
-				* Nothing seems to happen.
-				[You] Drat! Maybe I need to talk with Armstrong again. Perhaps we-
-				{main_speaker.activate()}
-				[You] ...
-					My God...
-			{otherwise}
-				{main_speaker.activate()}
-		> {skip()} (No)
-			{exit()}
+	> {skip()} (Yes)
+		{main_speaker.sit()}
+			* ...
+			* Nothing seems to happen.
+			[You] Drat! Maybe I need to talk with Armstrong again. Perhaps we-
+			{main_speaker.activate()}
+			[You] ...
+				My God...
+	> {skip()} (No)
+		{exit()}
+{otherwise}
+	[You] ...
+	{main_speaker.sit()}
+	{mention("activated")}
+	{main_speaker.activate()}
 
 :mum
 {mention("main_area")}
@@ -71,7 +71,7 @@
 			I didn't expect to feel like this....
 		* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
 		* Soon, you may find what you're looking for.
-		{player.anim_exit("StandSad")} * You turn to leave.
+		{player.anim_play("SitRecover", "M_Sitting-loop")} [You] I'll be back soon. Okay, Mum?
 		{goto("_exit")}
 	{otherwise}
 		!{mum/appearance}
@@ -496,3 +496,5 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 {track_conversation_time()}
 {mentioned("activated")}
 	{main_speaker.exit(mentioned("end_game"))}
+	// TODO: this is so the animation plays properly. fix this
+	[You] ...

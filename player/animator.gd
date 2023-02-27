@@ -146,6 +146,8 @@ func play_custom_loop(transition: String, end_point: String):
 	body.travel(c)
 
 func exit_custom_loop(transition:String):
+	if !$AnimationPlayer.has_animation(transition):
+		print_debug("MISSING: ", transition)
 	custom_exit_node.animation = transition
 	body.travel("CustomExit")
 

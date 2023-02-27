@@ -18,7 +18,7 @@ func sit():
 func exit(_fast:bool = false):
 	var p:PlayerBody = Global.get_player()
 	p.set_visual_position($chair.global_transform.translated(-$chair.global_transform.basis.z*0.5))
-	p.anim_exit("M_Sitting-loop")
+	p.anim_exit("M_StandCalm")
 	$activator.play("Deactivate")
 	emit_signal("deactivated")
 	$DialogTrigger.show()
