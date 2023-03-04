@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=2]
+[gd_scene load_steps=89 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=6]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=7]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=8]
 [ext_resource path="res://entities/control/power_thing.tscn" type="PackedScene" id=9]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=10]
 [ext_resource path="res://items/capacitor_pickup.tscn" type="PackedScene" id=12]
@@ -103,6 +104,125 @@ agent_radius = 0.3
 agent_max_climb = 1.0
 agent_max_slope = 88.54
 
+[sub_resource type="Animation" id=277]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../medium/door1-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 0.31864, 1 ),
+"update": 0,
+"values": [ Vector3( 2.71971, 2.63217, 5.25331 ), Vector3( 2.71971, 0.271927, 5.25331 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../medium/door3-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 0.329877, 1 ),
+"update": 0,
+"values": [ Vector3( -1.14111, 2.62614, -2.49102 ), Vector3( -1.14111, 0.311478, -2.49102 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../../medium/door2-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 0.378929, 1 ),
+"update": 0,
+"values": [ Vector3( -5.5153, 2.6181, 3.58686 ), Vector3( -5.5153, 0.327408, 3.58686 ) ]
+}
+
+[sub_resource type="Animation" id=279]
+resource_name = "Deactivate"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../medium/door1-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.2 ),
+"transitions": PoolRealArray( 0.353553, 1 ),
+"update": 0,
+"values": [ Vector3( 2.71971, 0.271927, 5.25331 ), Vector3( 2.71971, 2.63217, 5.25331 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../medium/door2-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.1 ),
+"transitions": PoolRealArray( 0.406126, 1 ),
+"update": 0,
+"values": [ Vector3( -5.5153, 0.327408, 3.58686 ), Vector3( -5.5153, 2.6181, 3.58686 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../../medium/door3-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.307786, 1 ),
+"update": 0,
+"values": [ Vector3( -1.14111, 0.311478, -2.49102 ), Vector3( -1.14111, 2.62614, -2.49102 ) ]
+}
+
+[sub_resource type="Animation" id=278]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../../medium/door1-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 2.71971, 2.63217, 5.25331 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../medium/door3-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -1.14111, 2.62614, -2.49102 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../../medium/door2-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -5.5153, 2.6181, 3.58686 ) ]
+}
+
 [sub_resource type="BoxShape" id=259]
 extents = Vector3( 3.12602, 2.09681, 1 )
 
@@ -188,15 +308,42 @@ layers = 5
 material/0 = ExtResource( 10 )
 material/1 = ExtResource( 7 )
 
-[node name="stairs" parent="medium" index="0"]
+[node name="door1-kine" parent="medium" index="0"]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="mesh" parent="medium/door1-kine" index="0"]
 material/0 = ExtResource( 10 )
 material/1 = ExtResource( 7 )
 
-[node name="StaticBody" parent="medium" index="1"]
-collision_layer = 257
+[node name="door2-kine" parent="medium" index="1"]
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="Spatial" type="Position3D" parent="medium" index="2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.54922, 4.55167, -5.57178 )
+[node name="mesh" parent="medium/door2-kine" index="0"]
+material/0 = ExtResource( 10 )
+material/1 = ExtResource( 7 )
+
+[node name="door3-kine" parent="medium" index="2"]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="mesh" parent="medium/door3-kine" index="0"]
+material/0 = ExtResource( 10 )
+material/1 = ExtResource( 7 )
+
+[node name="mesh" parent="medium/door_hidden-kine" index="0"]
+material/0 = ExtResource( 10 )
+
+[node name="stairs" parent="medium" index="4"]
+material/0 = ExtResource( 10 )
+material/1 = ExtResource( 7 )
+
+[node name="StaticBody" parent="medium" index="5"]
+collision_layer = 257
 
 [node name="rail" parent="." index="1"]
 material/0 = ExtResource( 25 )
@@ -825,8 +972,11 @@ wait_time = 15.0
 one_shot = true
 
 [node name="enemy_spawn" type="Position3D" parent="active_entities/the_medium" index="3"]
-transform = Transform( -0.223054, 0, 0.974807, 0, 1, 0, -0.974807, 0, -0.223054, -9.11685, -2.70543, -4.49537 )
+transform = Transform( 0.999322, 0, -0.036845, 0, 1, 0, 0.036845, 0, 0.999322, -6.08839, 1.57053, -12.4849 )
 script = ExtResource( 61 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="epic_boss" parent="active_entities/the_medium/enemy_spawn" index="0" instance=ExtResource( 46 )]
 ai_state = 2
@@ -835,14 +985,22 @@ navigation = NodePath("../../Navigation")
 chase_speed = 4.0
 lock_damage_override = true
 
-[node name="power_thing3" parent="active_entities/the_medium" index="4" instance=ExtResource( 9 )]
+[node name="entry_doors" type="AnimationPlayer" parent="active_entities/the_medium" index="4"]
+anims/Activate = SubResource( 277 )
+anims/Deactivate = SubResource( 279 )
+anims/RESET = SubResource( 278 )
+script = ExtResource( 8 )
+required_power = 2
+tracked_stat = "medium_door"
+
+[node name="power_thing3" parent="active_entities/the_medium" index="5" instance=ExtResource( 9 )]
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, -2.56073, -3.00438, 2.59694 )
 
-[node name="power_thing4" parent="active_entities/the_medium" index="5" instance=ExtResource( 9 )]
+[node name="power_thing4" parent="active_entities/the_medium" index="6" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, -9.53929, -3.00438, 2.59694 )
 active = true
 
-[node name="entrance" type="Area" parent="active_entities/the_medium" index="6"]
+[node name="entrance" type="Area" parent="active_entities/the_medium" index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60495, -1.69722, 1.74325 )
 collision_layer = 0
 collision_mask = 2
@@ -851,7 +1009,7 @@ collision_mask = 2
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0783997, 0.57933, -1.24027 )
 shape = SubResource( 259 )
 
-[node name="ending_dialog" type="Node" parent="active_entities/the_medium" index="7"]
+[node name="ending_dialog" type="Node" parent="active_entities/the_medium" index="8"]
 script = ExtResource( 49 )
 dialog_sequence = ExtResource( 76 )
 friendly_id = "you"
@@ -1534,6 +1692,8 @@ shape = SubResource( 264 )
 [connection signal="endgame" from="active_entities/the_medium/illusory_room" to="active_entities/the_medium/enemy_spawn" method="spawn"]
 [connection signal="timeout" from="active_entities/the_medium/epic_death_timer" to="active_entities/the_medium" method="complete_game"]
 [connection signal="died" from="active_entities/the_medium/enemy_spawn/epic_boss" to="active_entities/the_medium" method="_on_epic_boss_died"]
+[connection signal="toggled" from="active_entities/the_medium/power_thing3" to="active_entities/the_medium/entry_doors" method="_on_toggled"]
+[connection signal="toggled" from="active_entities/the_medium/power_thing4" to="active_entities/the_medium/entry_doors" method="_on_toggled"]
 [connection signal="body_entered" from="active_entities/the_medium/entrance" to="active_entities/the_medium" method="_on_entrance_body_entered"]
 [connection signal="toggled" from="active_entities/zone_village/dswitch_shortcut" to="active_entities/rail_cart_shortcut" method="_on_toggled"]
 [connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

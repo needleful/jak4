@@ -2,7 +2,7 @@
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
-[ext_resource path="res://entities/one_time/chunks/chunk113.gd" type="Script" id=3]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=3]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/stone/garden_empty.tscn" type="PackedScene" id=6]
@@ -362,7 +362,6 @@ radius = 0.589667
 
 [node name="chunk113" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
-lighting_preview = true
 
 [node name="door_bit_lower2-kine" parent="tower" index="0"]
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, -15.9707, -77.3291, -17.3971 )
@@ -2021,4 +2020,3 @@ transform = Transform( -0.640936, -0.767595, 3.35526e-08, 0, -4.37114e-08, -1, 0
 [connection signal="insta_toggled" from="active_entities/tower_not_collapsed/floor3/dswitch_a3" to="active_entities/tower_not_collapsed/floor3/platform_square3" method="_on_toggled" binds= [ true ]]
 [connection signal="toggled" from="active_entities/tower_not_collapsed/floor3/dswitch_a3" to="active_entities/tower_not_collapsed/floor3/platform_square3" method="_on_toggled"]
 [connection signal="deactivated" from="active_entities/tower_not_collapsed/floor3/get_capacitor/power" to="active_entities/tower_not_collapsed/floor3/get_capacitor" method="set_enabled" binds= [ false ]]
-[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
