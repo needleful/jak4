@@ -54,13 +54,14 @@ func fall(instant := false):
 		Global.disconnect("stat_changed", self, "_on_stat_changed")
 	get_tree().call_group("113_delete", "queue_free")
 	
-	var env = $environment
-	if env.get_overlapping_bodies().size() > 0:
-		env._on_body_exited(null)
-	env.queue_free()
+	var env = $active_entities/tower_not_collapsed/environment
+	if env:
+		if env.get_overlapping_bodies().size() > 0:
+			env._on_body_exited(null)
+		env.queue_free()
 	
 	if !instant:
-		var flags:Area = $flag_check
+		var flags:Area = $active_entities/tower_not_collapsed/flag_check
 		for flag in flags.get_overlapping_bodies():
 			flag.queue_free()
 		var dss_rid := get_world().space
@@ -71,4 +72,4 @@ func fall(instant := false):
 		for shape in intersect:
 			print("intersect: ", shape.collider.name)
 			if shape.collider == flags:
-				Global.game_state.checkpoint_position = $player_new_checkpoint.global_transform.origin
+				Global.game_state.checkpoint_position = $active_entities/player_new_checkpoint.global_transform.origin

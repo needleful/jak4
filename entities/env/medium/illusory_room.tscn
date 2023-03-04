@@ -1,6 +1,6 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
-[ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=1]
+[ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=3]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=4]
@@ -10,35 +10,35 @@
 [ext_resource path="res://entities/dialog_trigger.gd" type="Script" id=8]
 [ext_resource path="res://dialog/main/medium.dialog" type="Resource" id=9]
 [ext_resource path="res://entities/one_time/illusory_room.gd" type="Script" id=10]
+[ext_resource path="res://material/mum/discard.shader" type="Shader" id=11]
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.791512
 radius = 0.715599
 
+[sub_resource type="ShaderMaterial" id=283]
+shader = ExtResource( 11 )
+
 [sub_resource type="ShaderMaterial" id=278]
 shader = ExtResource( 2 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
 shader_param/realness = 0.0
-shader_param/specularity = 1.0
 shader_param/hologram_uv_scale = 64.0
 shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
-shader_param/main_texture = ExtResource( 1 )
 shader_param/hologram = ExtResource( 4 )
 
 [sub_resource type="Animation" id=279]
 length = 3.0
 tracks/0/type = "value"
-tracks/0/path = NodePath("hologram:material/0:shader_param/realness")
+tracks/0/path = NodePath("hologram:hologram_material:shader_param/realness")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 0.68302, 0.297302 ),
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 0.68302, 3.36359, 1 ),
 "update": 0,
-"values": [ 0.0, 1.0 ]
+"values": [ 0.0, 1.0, 0.0 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("hologram:visible")
@@ -52,20 +52,32 @@ tracks/1/keys = {
 "update": 1,
 "values": [ true ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("hologram:real_object_visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
 
 [sub_resource type="Animation" id=281]
-length = 2.0
+length = 2.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("hologram:material/0:shader_param/realness")
+tracks/0/path = NodePath("hologram:hologram_material:shader_param/realness")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2 ),
-"transitions": PoolRealArray( 0.392292, 1 ),
+"times": PoolRealArray( 0, 1.1, 2.5 ),
+"transitions": PoolRealArray( 0.392292, 1, 1 ),
 "update": 0,
-"values": [ 1.0, 0.0 ]
+"values": [ 0.0, 1.0, 0.0 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("hologram:visible")
@@ -74,7 +86,19 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 2 ),
+"times": PoolRealArray( 0, 2.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("hologram:real_object_visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
@@ -106,12 +130,23 @@ tracks/1/keys = {
 "update": 0,
 "values": [ false ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("hologram:real_object_visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
 
 [node name="illusory_room" instance=ExtResource( 5 )]
 script = ExtResource( 10 )
 
 [node name="mum" parent="." index="0" instance=ExtResource( 7 )]
-visible = false
 
 [node name="DialogTrigger" type="Area" parent="." index="1"]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, -9.00453e-07, -1.1073, -0.147872 )
@@ -131,31 +166,36 @@ shape = SubResource( 1 )
 [node name="hologram" parent="." index="2"]
 visible = false
 layers = 32768
-material/0 = SubResource( 278 )
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
+script = ExtResource( 1 )
+real_object_visible = false
+invisible_material = SubResource( 283 )
+hologram_material = SubResource( 278 )
 
-[node name="hg_chair" parent="hologram" index="0"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="chair" parent="hologram" index="0"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
-[node name="hg_chair001" parent="hologram" index="1"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="chair001" parent="hologram" index="1"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
-[node name="hg_sofa" parent="hologram" index="2"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="coffee_table" parent="hologram" index="2"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
-[node name="hg_table" parent="hologram" index="3"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="end_table" parent="hologram" index="3"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
-[node name="hg_table2" parent="hologram" index="4"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="end_table2" parent="hologram" index="4"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
-[node name="hg_thing" parent="hologram" index="5"]
-layers = 32768
-material/0 = SubResource( 278 )
+[node name="lounge-sofa" parent="hologram" index="5"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
 
 [node name="chair" parent="." index="3"]
 material/0 = ExtResource( 3 )

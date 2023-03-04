@@ -321,6 +321,7 @@ onready var crouch_head := $crouchHeadArea
 onready var intention := $intention
 
 onready var ground_area := $groundArea
+onready var floor_cast := $emergency_floor_raycast
 onready var climb_area := $climbArea
 
 onready var ledgeCastLeft := $body_mesh/leftHandCast
@@ -522,7 +523,11 @@ func _physics_process(delta):
 			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1) or (
 				best_floor and best_floor.is_in_group("dont_stand")
 			):
-				next_state = State.Slide
+				if (!floor_cast.is_colliding()
+					or floor_cast.get_collider().is_in_group("dont_stand")
+					or floor_cast.get_collision_normal().y < MIN_DOT_GROUND
+				):
+					next_state = State.Slide
 		State.PlaceFlag, State.GetItem:
 			if after(time_animation):
 				next_state = State.Ground
@@ -594,8 +599,8 @@ func _physics_process(delta):
 				and can_climb()
 			):
 				if (desired_velocity.dot(best_normal) > MIN_DOT_CLIMB_MOVEMENT
-					and $emergency_floor_raycast.is_colliding()
-					and $emergency_floor_raycast.get_collision_normal().y > MIN_DOT_GROUND
+					and floor_cast.is_colliding()
+					and floor_cast.get_collision_normal().y > MIN_DOT_GROUND
 				):
 					next_state = State.Crouch
 				else:

@@ -1,33 +1,27 @@
+tool
 extends Spatial
 
-onready var mesh := $Armature/Skeleton/mum
-onready var detail := $Armature/Skeleton/mum_deatail
+export(Material) var hologram_material
+export(Material) var hidden_material
+
+export(bool) var real_visible := false setget set_real_visible
 
 func hello():
-	show()
 	$AnimationPlayer.play("IntroWalk")
-	var t:Tween = $Tween
-	var _x = t.stop_all()
-	_x = t.interpolate_method(
-		self,
-		"_set_real",
-		0.0,
-		1.0 if Global.stat("mum/appearance") else 0.5,
-		1.0)
-	_x = t.start()
+	if Global.stat("mum/appearance"):
+		$vis_anim.play("Show")
+	else:
+		$vis_anim.play("Show_Partial")
 
 func bye():
-	var t:Tween = $Tween
-	var _x = t.stop_all()
-	_x = t.interpolate_method(
-		self,
-		"_set_real",
-		mesh.material_override.get_shader_param("realness"),
-		0,
-		1.0)
-	_x = t.interpolate_callback(self, 1.0, "hide")
-	_x = t.start()
+	if Global.stat("mum/appearance"):
+		$vis_anim.play("Hide")
+	else:
+		$vis_anim.play("Hide_Partial")
 
-func _set_real(realness: float):
-	mesh.material_override.set_shader_param("realness", realness)
-	detail.material_override.set_shader_param("realness", realness)
+func set_real_visible(v):
+	real_visible = v
+	if is_inside_tree():
+		var mat = null if v else hidden_material
+		$Armature/Skeleton/mum.material_override = mat
+		$Armature/Skeleton/mum_deatail.material_override = mat
