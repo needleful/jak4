@@ -1136,7 +1136,6 @@ func anim_play(start:String, loop:String):
 func anim_exit(transition:String, wait_to_unlock := false):
 	mesh.exit_custom_loop(transition)
 	if wait_to_unlock:
-		print("Unlocking via ", transition)
 		state = State.LockedWaiting
 	return true
 
@@ -1567,7 +1566,6 @@ func respawn():
 	emit_signal("died")
 
 func teleport_to(t: Transform):
-	print("teleporting to: ", t)
 	$fade/AnimationPlayer.play("fadein")
 	global_transform.origin = t.origin
 
