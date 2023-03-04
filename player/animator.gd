@@ -322,6 +322,12 @@ func play_pickup_sound(item):
 			item = "_pickup"
 		play_sound(part, item, true)
 
+func lock():
+	anim.process_mode = AnimationTree.ANIMATION_PROCESS_IDLE
+
+func unlock():
+	anim.process_mode = AnimationTree.ANIMATION_PROCESS_PHYSICS
+
 func hold_gun(blend: float):
 	anim["parameters/GunHold/blend_amount"] = blend
 	if blend:

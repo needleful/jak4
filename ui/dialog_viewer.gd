@@ -1,6 +1,7 @@
 extends Control
 
 signal exited(state)
+signal exited_anim(animation)
 signal event(id)
 signal event_with_source(id, source)
 
@@ -454,6 +455,13 @@ func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
+	set_process_input(false)
+	return RESULT_END
+
+func exit_anim(animation:String):
+	var stat: String = get_talked_stat()
+	var _x = Global.add_stat(stat)
+	emit_signal("exited_anim", animation)
 	set_process_input(false)
 	return RESULT_END
 

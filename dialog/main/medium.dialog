@@ -19,7 +19,6 @@
 	> {skip()} (No)
 		{exit()}
 {otherwise}
-	[You] ...
 	{main_speaker.sit()}
 	{mention("activated")}
 	{main_speaker.activate()}
@@ -45,11 +44,12 @@
 	{mention("head_empty")}
 
 {main_speaker.show_mum()}
+{mention("mum")}
 * You hear something behind you.
 * ...
 
 !{mum/info}
-	{talked == 0}
+	!{talked/mum}
 		{remember("Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help...")}
 		{Global.note_task("mum", "The Medium really works. But I don't know enough about her to have a conversation.")}
 		{Global.add_stat("mum/info_needed")}
@@ -75,7 +75,7 @@
 		{goto("_exit")}
 	{otherwise}
 		!{mum/appearance}
-			* The ghost of your mother lingers for a moment.
+			* You stare at the ghost of your mother.
 		{otherwise}
 			* Though she appears real, there is nothing behind her eyes.
 		* You won't get anything more from her without learning more.
@@ -493,8 +493,9 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 	{goto("_exit")}
 
 :_exit
-{track_conversation_time()}
+{mentioned("mum")}
+	+{talked/mum}
 {mentioned("activated")}
-	{main_speaker.exit(mentioned("end_game"))}
-	// TODO: this is so the animation plays properly. fix this
-	[You] ...
+	{track_conversation_time()}
+	{main_speaker.exit()}
+	{exit_anim("M_StandCalm")}

@@ -28,39 +28,6 @@
 		Great! If you find any more weapons, I can show you how to use them!
 		{event("end_tutorial", false)}
 		{exit()}
-{otherwise}?{capacitor_113}!{armstrong/tower}
-	+{armstrong/tower}
-	I thought there was an earthquake outside! The tower east of here collapsed!
-	?{armstrong/asked_tower}
-		You did not happen to be involved in that, did you?
-		[You] Uh... which way is east?
-		The only path out of the village, now blocked by gigantic ruins of the tower that was on the cliff.
-		[You] I.. uh, I didn't expect the tower would collapse from taking the capacitor.
-		Did I not tell you about the tower? I clearly remember you asking me!
-		Did you forget? Did you just ignore me?
-		[You] No, no! I just didn't expect it to happen so quickly!
-		Hmph. Would it have been fine if it collapsed tomorrow? Or next month? When you were not around to be held accountable?
-	{otherwise}
-		Someone must have interfered with the electrical system.
-		[You] Electrical?
-		They have self-repair systems that require constant power. Without it they can become unstable.
-		[You] I... suspect it may have been the capacitor I found inside.
-		What?! You removed a capacitor? You could have been electrocuted! How did you even survive the collapse?
-	{task_is_active("activate_the_medium") and !Global.count("capacitor")}
-		[You] I'm sorry! I just wanted it to activate the Medium.
-		There are better places to get capacitors! Like looking in the cave in town, or buying one in Maslikir! You had many better options.
-	{otherwise if task_is_active("the_tree_tower")}
-		[You] I'm sorry. An acquaintance's been collecting them to get into the Tree Tower.
-		What?! Your friend is an idiot with a death wish. Even if the capacitors would somehow let you in, the tower itself would surely kill you both.
-	{otherwise}
-		[You] I'm sorry, Armstrong...
-		Well, the damage is done.
-	What a mess. Those old buildings have specters all over them. They are like termites... I suspect the valley is filled with them already.
-	Here is my deal to you: If you have the skills to destroy the tower, you can fix this mess by removing the specters that crawl out of the rubble. If you don't, we can get the city authorities to negotiate some other punishment.
-	[You] ... Alright, I'll take care of the mess.
-	{remember("Armstrong is quite angry with me over destroying the tower. I didn't expect it to topple over like it did, but it's not like it hurt anyone.")}
-	{Global.note_task("cleanup", "Armstrong says I have to take care of any spectres that come out of the rubble from the tower.")}
-	{Global.task_note_place("cleanup", "hideaway", "There's a pile of rubble that spectres have crawled into. I have to deal with them or I'll be arrested, I think.")}
 {otherwise if !Global.task_exists("activate_the_medium")}
 	Ah, Jackie the coats girl! Hello!
 	[You] "Coats girl"?
@@ -128,7 +95,7 @@
 		Excellent!  And I will be here if you need any advice.
 	{exit()}
 {otherwise}!{medium/activated}
-	{Global.stat("medium/open")}
+	{Global.stat("medium_door/open")}
 		You did it! The door is open!
 		[You] So I just... walk in?
 		I think so! I've never used the Medium before!  Good luck.

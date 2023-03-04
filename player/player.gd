@@ -271,6 +271,7 @@ enum State {
 	Damaged,
 	Dead,
 	Locked,
+	LockedWaiting,
 	PlaceFlag,
 	GetItem,
 	FallingDeath,
@@ -927,6 +928,9 @@ func _physics_process(delta):
 				or !holding("mv_crouch")
 			):
 				next_state = State.Fall
+		State.LockedWaiting:
+			if mesh.body.get_current_node() == "Walk":
+				unlock()
 	if next_state != State.None:
 		set_state(next_state)
 	
@@ -1045,7 +1049,7 @@ func _physics_process(delta):
 			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
-		State.Locked, State.PlaceFlag, State.GetItem, State.Sitting:
+		State.Locked, State.LockedWaiting, State.PlaceFlag, State.GetItem, State.Sitting:
 			last_ground_origin = global_transform.origin
 			desired_velocity = Vector3.ZERO
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
@@ -1129,8 +1133,11 @@ func anim_play(start:String, loop:String):
 	mesh.play_custom_loop(start, loop)
 	return true
 
-func anim_exit(transition:String):
+func anim_exit(transition:String, wait_to_unlock := false):
 	mesh.exit_custom_loop(transition)
+	if wait_to_unlock:
+		print("Unlocking via ", transition)
+		state = State.LockedWaiting
 	return true
 
 func set_visual_position(new_transform:Transform):
@@ -1608,15 +1615,21 @@ func get_dialog_viewer() -> Node:
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	if game_ui.in_game:
 		return
+	lock()
 	ui.start_dialog(source, sequence, speaker, starting_label)
 	cam_rig.start_dialog()
-	lock()
 
 func _on_dialog_exited(new_state := State.Ground):
 	Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
 	unlock(new_state)
+
+func _on_dialog_exited_anim(animation):
+	Global.save_game()
+	ui.play_game()
+	cam_rig.end_dialog()
+	anim_exit(animation, true)
 
 func _on_dialog_event(id: String, _source: Node):
 	match id:
@@ -1638,6 +1651,7 @@ func wardrobe_unlock(paused):
 	cam_rig.end_wardrobe()
 
 func lock():
+	mesh.lock()
 	set_process_input(false)
 	set_state(State.Locked)
 	$ui/gameing/stats.hide()
@@ -1645,12 +1659,13 @@ func lock():
 	$ui/gameing/inventory.hide()
 
 func unlock(new_state := State.Ground):
+	mesh.unlock()
 	set_process_input(true)
 	set_state(new_state)
 	$ui/gameing/stats.show()
 
 func is_locked() -> bool:
-	return state == State.Locked
+	return state == State.Locked or state == State.LockedWaiting
 
 func is_roll_jumping():
 	return state == State.RollJump or state == State.RollFall or state == State.WaveJumpRoll
@@ -1906,8 +1921,7 @@ func set_state(next_state: int):
 			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)
 			mesh.force_play("Damaged")
 			gun.unlock()
-		State.Locked:
-			mesh.ground_transition("Walk")
+		State.Locked, State.LockedWaiting:
 			velocity = Vector3.ZERO
 			gun.disable()
 		State.PlaceFlag:
