@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -13,6 +13,12 @@
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=11]
 [ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=12]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=13]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=14]
+[ext_resource path="res://material/env/medium/coffee_table.jpg" type="Texture" id=15]
+[ext_resource path="res://material/env/medium/end_table.jpg" type="Texture" id=16]
+[ext_resource path="res://material/env/medium/floral1.jpg" type="Texture" id=17]
+[ext_resource path="res://material/env/medium/floral2.jpg" type="Texture" id=18]
+[ext_resource path="res://material/env/medium/lounge-sofa.jpg" type="Texture" id=19]
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.791512
@@ -28,8 +34,47 @@ shader_param/hologram_uv_scale = 64.0
 shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
 shader_param/hologram = ExtResource( 4 )
 
-[sub_resource type="SpatialMaterial" id=284]
-albedo_texture = ExtResource( 12 )
+[sub_resource type="ShaderMaterial" id=289]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=287]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 18 )
+
+[sub_resource type="ShaderMaterial" id=285]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 10.0
+shader_param/main_texture = ExtResource( 15 )
+
+[sub_resource type="ShaderMaterial" id=286]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 10.0
+shader_param/main_texture = ExtResource( 16 )
+
+[sub_resource type="ShaderMaterial" id=290]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 19 )
+
+[sub_resource type="ShaderMaterial" id=288]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/main_texture = ExtResource( 17 )
 
 [sub_resource type="Animation" id=279]
 length = 3.0
@@ -218,6 +263,7 @@ visible = false
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
+material/0 = SubResource( 289 )
 script = ExtResource( 1 )
 real_object_visible = false
 invisible_material = SubResource( 283 )
@@ -227,47 +273,49 @@ hologram_material = SubResource( 278 )
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 287 )
 
 [node name="chair001" parent="hologram" index="1"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 287 )
 
 [node name="coffee_table" parent="hologram" index="2"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 285 )
 
 [node name="end_table" parent="hologram" index="3"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 286 )
 
 [node name="end_table2" parent="hologram" index="4"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 286 )
 
 [node name="lounge-sofa" parent="hologram" index="5"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 284 )
+material/0 = SubResource( 290 )
 
 [node name="pillow" parent="hologram" index="6"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
+material/0 = SubResource( 288 )
 
 [node name="pillow2" parent="hologram" index="7"]
 layers = 32768
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
+material/0 = SubResource( 288 )
 
 [node name="chair" parent="." index="4"]
 material/0 = ExtResource( 3 )
@@ -286,13 +334,15 @@ spot_range = 3.06288
 spot_angle = 37.4657
 
 [node name="OmniLight" type="OmniLight" parent="." index="7"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.14623, 0.156977, -1.83942 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.380018, 1.19864, -2.16977 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293951488
 
-[node name="OmniLight4" type="OmniLight" parent="." index="8"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55888, 0.156977, -2.03432 )
+[node name="OmniLight5" type="OmniLight" parent="." index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53643, 1.19864, 0.898832 )
+light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293951488
+omni_range = 4.1412
 
 [node name="OmniLight2" type="OmniLight" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.19258, 0.156977, 0.786691 )
