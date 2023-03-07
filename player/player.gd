@@ -4,7 +4,7 @@ class_name PlayerBody
 signal jumped
 signal died
 
-const GRAVITY := Vector3.DOWN*24
+const GRAVITY := Vector3.DOWN*24.0
 export(bool) var doppleganger := false
 
 # Movement
