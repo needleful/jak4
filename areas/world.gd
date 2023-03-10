@@ -3,6 +3,9 @@ extends Spatial
 signal activated(chunk)
 signal deactivated(chunk)
 
+export(Dictionary) var preloaded_chunks := {}
+export(Dictionary) var preloaded_lowres := {}
+
 var air_tutorial := false
 
 # Distance from the bounding box edge
@@ -88,8 +91,8 @@ func _ready():
 	
 	chunk_loader = ChunkLoader.new()
 	print("Readying world...")
-	_x = chunk_loader.connect("load_start", self, "_on_load_started")
-	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
+	#_x = chunk_loader.connect("load_start", self, "_on_load_started")
+	#_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
 	
 	for c in get_children():
 		if c.name.begins_with("chunk_lowres"):
@@ -99,6 +102,7 @@ func _ready():
 		elif c.name.begins_with("chunk"):
 			terrain_hires[c.name] = c.mesh
 			chunks[c.name] = c
+
 	print("Collected meshes")
 	#load_everything()
 	# Briefly render the opposite light
@@ -162,7 +166,7 @@ func start_loading_chunks():
 	# Sort the chunks by distance from player
 	var sorted_chunks := chunks.values()
 	sorted_chunks.sort_custom(self, "compare_distances")
-	chunk_loader.start_loading(sorted_chunks)
+	chunk_loader.add_preloaded(sorted_chunks, preloaded_chunks, preloaded_lowres)
 	#var _x = chunk_loader.first_complete.wait()
 
 func _on_load_started():

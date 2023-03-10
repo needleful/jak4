@@ -36,6 +36,16 @@ func _load_everything(chunks: Array):
 			first_loaded = true
 	call_deferred("_complete_loading")
 
+func add_preloaded(p_chunks: Array, p_content: Dictionary, p_lowres: Dictionary):
+	for c in p_chunks:
+		_nodes[c.name] = c
+	for d in p_content.keys():
+		_set_loaded(_loaded_content, d, p_content[d])
+		if is_loaded(d):
+			_add_content(d, p_content[d], false)
+	for l in p_lowres.keys():
+		_add_lowres(l, p_lowres[l])
+
 func _start_loading():
 	emit_signal("load_start")
 
