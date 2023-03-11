@@ -1,11 +1,11 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/env/copper/palace2.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=5]
-[ext_resource path="res://entities/npc/npc_riley.tscn" type="PackedScene" id=6]
+[ext_resource path="res://items/upgrades/stamina_up_pickup.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=9]
@@ -14,7 +14,6 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=14]
-[ext_resource path="res://dialog/side_content/riley/riley.dialog" type="Resource" id=15]
 [ext_resource path="res://entities/env/copper/scrap3.tscn" type="PackedScene" id=16]
 
 [node name="chunk126" type="MultiMeshSystem"]
@@ -40,6 +39,15 @@ transform = Transform( 0.538345, 0.291902, -0.790556, -0.0428855, 0.946368, 0.32
 
 [node name="ascrap1" parent="zone_tower/palace1" instance=ExtResource( 14 )]
 transform = Transform( -0.729684, -0.566665, 0.382687, -0.429628, -0.0554527, -0.901301, 0.531957, -0.82208, -0.202992, -41.2522, 10.1096, -38.7421 )
+
+[node name="ascrap2" parent="zone_tower/palace1" instance=ExtResource( 14 )]
+transform = Transform( 0.235116, 0.385293, 0.892338, -0.966997, 1.08746e-08, 0.254788, 0.0981678, -0.922793, 0.372578, 4.21139, 49.105, -3.54234 )
+
+[node name="scrap3" parent="zone_tower/palace1" instance=ExtResource( 16 )]
+transform = Transform( 0.530784, -0.545593, 0.648533, 0.84425, 0.407404, -0.348229, -0.0742242, 0.732359, 0.67686, -39.7249, 1.6665, -42.1125 )
+
+[node name="scrap_pile2" parent="zone_tower/palace1" instance=ExtResource( 5 )]
+transform = Transform( 0.569811, -0.26742, -0.777045, 0.772014, 0.49824, 0.394653, 0.281616, -0.824768, 0.490355, -45.3591, 15.5271, -35.9282 )
 
 [node name="scrap_pile1" parent="zone_tower/palace1" instance=ExtResource( 5 )]
 transform = Transform( -0.10257, -0.868572, 0.484829, -0.663587, -0.303348, -0.683837, 0.741033, -0.391868, -0.545259, -18.669, 0.5457, 5.90201 )
@@ -483,18 +491,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.46828, 2.59702, 44.3103 )
 [node name="gem_pickup104" parent="active_entities/zone_tower" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23.3867, 5.77093, -12.629 )
 
-[node name="ascrap1" parent="active_entities/zone_tower" instance=ExtResource( 14 )]
-transform = Transform( 0.146446, 0.81831, 0.555807, -0.208495, 0.574777, -0.791304, -0.966997, 2.98023e-08, 0.254788, 7.50127, -0.251785, 32.9633 )
-
-[node name="npc_riley" parent="active_entities/zone_tower" instance=ExtResource( 6 )]
-transform = Transform( -0.999417, 0, 0.0341563, 0, 1, 0, -0.0341563, 0, -0.999417, -14.591, 53.3401, -6.26419 )
-dialog = ExtResource( 15 )
-custom_entry = "_entry126"
-only_if_saved = false
-enemies = [ NodePath("../deathgnat2"), NodePath("../deathgnat") ]
-
-[node name="scrap3" parent="active_entities/zone_tower" instance=ExtResource( 16 )]
-transform = Transform( 0.488491, -0.852244, 0.187236, -0.220495, -0.328181, -0.91852, 0.84425, 0.407404, -0.348229, -9.07138, 55.8143, -14.4752 )
-
-[node name="scrap_pile2" parent="active_entities/zone_tower" instance=ExtResource( 5 )]
-transform = Transform( 0.331593, 0.214002, -0.91883, -0.542254, 0.840214, 0, 0.772014, 0.49824, 0.394653, -17.1366, 53.5911, -0.614578 )
+[node name="stamina_up_pickup" parent="active_entities/zone_tower" instance=ExtResource( 6 )]
+transform = Transform( 0.0268888, 0.999638, 0, -0.999638, 0.0268888, 0, 0, 0, 1, -13.5952, 53.5505, -5.70826 )

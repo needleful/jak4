@@ -54,7 +54,7 @@ func _physics_process(delta):
 	if timer > active_time:
 		_remove()
 
-func take_damage(_damage, _dir, _source: Node):
+func take_damage(_damage, _dir, _source: Node, _tag := ""):
 	_remove()
 
 func gravity_stun(_damage):
@@ -66,7 +66,7 @@ func dir_damage(body):
 	if !body.has_method("take_damage"):
 		return
 	var dir :Vector3 = velocity.normalized()
-	body.take_damage(damage, dir, source)
+	body.take_damage(damage, dir, source, "projectile")
 
 func _on_deletion_timer_timeout():
 	_remove()

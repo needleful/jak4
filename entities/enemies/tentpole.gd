@@ -56,7 +56,7 @@ func _physics_process(delta):
 				set_state(AI.Dead)
 			
 
-func take_damage(damage, dir, source):
+func take_damage(damage, dir, source, _tag := ""):
 	if source and source != self:
 		return
 	else:

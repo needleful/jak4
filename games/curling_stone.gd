@@ -17,7 +17,7 @@ var velocity_correction := -mass*0.5
 func _ready():
 	var _x = Global.get_player().connect("died", self, "reset")
 
-func take_damage(damage, dir, _source):
+func take_damage(damage, dir, _source, _tag := ""):
 	dir.y = 0
 	apply_central_impulse(damage*dir*damage_impulse)
 

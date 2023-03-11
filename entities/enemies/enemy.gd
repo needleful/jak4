@@ -221,7 +221,7 @@ func drop_item(item: ItemPickup):
 	get_tree().current_scene.add_child(item)
 	item.global_transform = global_transform
 
-func take_damage(damage: int, dir: Vector3, source: Node):
+func take_damage(damage: int, dir: Vector3, source: Node, _tag := ""):
 	if is_dead():
 		return
 	

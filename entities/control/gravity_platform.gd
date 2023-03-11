@@ -66,7 +66,7 @@ func gravity_stun(_damage):
 	set_physics_process(true)
 	velocity = initial_velocity
 
-func take_damage(_damage, _dir, _source: Node):
+func take_damage(_damage, _dir, _source: Node, _tag := ""):
 	pass
 	#velocity += damage*damage_speed
 

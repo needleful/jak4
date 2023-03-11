@@ -10,7 +10,7 @@ func _ready():
 	if persistent and Global.stat(get_path()):
 		emit_signal("toggled", true, true)
 
-func take_damage(_d, _dir, source):
+func take_damage(_d, _dir, source, _tag := ""):
 	if player_only and !(source is PlayerBody):
 		print("Not player: ", source)
 		return

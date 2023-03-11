@@ -23,7 +23,7 @@ func set_playback_speed(vel):
 	switch_anim.playback_speed = vel
 	world_anim.playback_speed = vel
 
-func take_damage(dam, _dir, _source):
+func take_damage(dam, _dir, _source, _tag := ""):
 	if dam > required_damage:
 		set_playback_speed(activation_speed)
 		if !switch_anim.is_playing() and state == State.Start:

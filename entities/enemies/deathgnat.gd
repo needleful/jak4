@@ -123,11 +123,11 @@ func play_damage_sfx():
 	# TODO
 	pass
 
-func take_damage(damage, dir, source):
+func take_damage(damage, dir, source, tag := ""):
 	if source == self:
 		return
 	else:
-		.take_damage(damage, dir, source)
+		.take_damage(damage, dir, source, tag)
 
 func get_shield():
 	if is_inside_tree():

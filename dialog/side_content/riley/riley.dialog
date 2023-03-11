@@ -1,7 +1,35 @@
-:_entry126
+:_entry113
 // Riley's introduction
-{main_speaker.saved}
-	+{riley/126/talked}
+{!main_speaker.saved}
+	{talked == 0}
+		Ey! Jutre! Khur ine siram tes?
+		[You] I'm sorry?
+		You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it!
+		> {skip()} (Accept Challenge) Uh, I'll see what I can do.
+			[You]  Uh, I'll see what I can do.
+			Thank you! Do you need my pistol?
+			{Global.count("wep_pistol")}
+				{Global.count("pistol") < 5}
+					[You] I have a pistol, but I don't have enough bullets to take care of them.
+					{Global.add_item("pistol", 12)} Here's the bullets I have! I'm a terrible shot...
+				{otherwise}
+					[You] I've got it taken care of.
+			{otherwise}
+				[You] I suppose I would.
+				{Global.add_item("wep_pistol")}
+				{Global.add_item("pistol", 12)}
+				* She hands you an old handgun.
+				I was never good with it, anyway.
+			{main_speaker.track_enemies()}
+		> {skip()} (Decline) I'm going to scope out the area first.
+			[You] I'm going to scope out the area first.
+			Uh... don't take too long please!
+	{otherwise}
+		Seriously, I could use some help with those deathgnats.
+		[You] No worries, they're tricky to hit but I've got it.
+		* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
+{otherwise}
+	+{riley/113/talked}
 	{talked == 0}
 		Eey! Klerdena sur!
 		[You]  Uh, apologies.  That's "thank you" in Yaqazi, correct? I forgot how to say "you're welcome".
@@ -9,46 +37,19 @@
 		[You] I did?
 		Yeah, I was pinned down by those deathgnats, but you took them out no problem! I'm Riley, by the way.
 		[You] Jackie. It was no trouble. One of them had a lovely coat.
-		{subtopic("saved_126")}
+		{subtopic("saved_113")}
 		{goto("shop_126")}
-	{otherwise if Global.stat("riley/126/reward")}
+	{otherwise}?{riley/113/reward}
 		Thanks again! I'm heading out of here soon.
 		{goto("shop_126")}
 	{otherwise}
 		Thanks for the help! I'm Riley, by the way.
-		{subtopic("saved_126")}
+		{subtopic("saved_113")}
 		{goto("shop_126")}
-{otherwise if talked > 0}
-	Seriously, I could use some help with those deathgnats.
-	[You] No worries, they're tricky to hit but I've got it.
-	* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
-{otherwise}
-	Ey! Jutre! Khur ine siram tes?
-	[You] I'm sorry?
-	You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it!
-	> {skip()} (Accept Challenge) Uh, I'll see what I can do.
-		[You]  Uh, I'll see what I can do.
-		Thank you! Do you need my pistol?
-		{Global.count("wep_pistol")}
-			{Global.count("pistol") < 5}
-				[You] I have a pistol, but I don't have enough bullets to take care of them.
-				{Global.add_item("pistol", 12)} Here's the bullets I have! I'm a terrible shot...
-			{otherwise}
-				[You] I've got it taken care of.
-		{otherwise}
-			[You] I suppose I would.
-			{Global.add_item("wep_pistol")}
-			{Global.add_item("pistol", 12)}
-			* She hands you an old handgun.
-			I was never good with it, anyway.
-		{main_speaker.track_enemies()}
-	> {skip()} (Decline) I'm going to scope out the area first.
-		[You] I'm going to scope out the area first.
-		Uh... don't take too long please!
 {exit()}
 
-:saved_126
-{remember("I rescued a strange girl stranded at the top of a scrap pile.")}
+:saved_113
+{remember("I rescued a strange girl stranded near one of those white towers.")}
 {Global.note_task("the_tree_tower", "That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.")}
 {Global.task_note_person("the_tree_tower", "Riley", "Riley is scavenging supplies for the expedition to the tower.")}
 {!Global.map_marked("tree_tower")}
@@ -57,18 +58,20 @@
 {Global.mark_map("tree_tower", "There's a back entrance under the roots of the tree")}
 So what brought you out here? Are some kind of hunter?
 [You] Oh no, nothing of the sort. I'm just exploring. What brought you up here?
-I've been searching for anything valuable to sell, but people have been recycling the ruins for like a thousand years, so I have to go to dangerous places like this for anything good.
-[You] Are you saving up for something?
-Yeah. You see the tower with the giant tree?
+I've been looking for capacitors. You see the tower with the giant tree?
 [You] Naturally. It dominates the horizon.
 It's called the Tree Tower. I want to get inside.
 I found an entrance at the base of the tree that punches through the tower's outer wall, but it only got me to some kind of electrical closet, and I couldn't go any further. But there were twelve slots for capacitors. I think if I got a bunch and plugged them in, the front entrance would open.
-[You] That's quite intriguing. So you're trying to find these capacitors?
-And get some supplies to survive that trip again. The Tree Tower was the bloodiest battlefield of the Vaeler war, so it's filled with specters. I had to climb down the plateau to get out alive last time.
+[You] That's quite intriguing. So you think there's one inside this tower?
+Yeah. I spotted a path up to it, but.
 [You] Well, that sound quite thrilling! If I see any more of these capacitors, I could help you get inside, if you like.
 You would? It's pretty dangerous...
 [You] I'll be the judge of that! I'm something of a thrill-seeker.
-Alright! If you can get 12 capacitors and you're willing to get there, I'll meet you at the base of the tree. I'll get some supplies together and we'll explore it together! 
+Alright! If you can get 12 capacitors and you're willing to get there, I'll meet you at the base of the tree. I'll get some supplies together and we'll explore it together!
+{!Global.count("wep_pistol")}
+	{Global.add_item("wep_pistol")}
+	{Global.add_item("pistol", 12)}
+	I'll let you borrow my pistol. I don't know how good I'd be with it, anyway.
 {exit()}
 
 :shop_generic
@@ -109,65 +112,6 @@ Alright! If you can get 12 capacitors and you're willing to get there, I'll meet
 		[You] Are you good?
 		Good. How's the deathgnat situation?
 		[You] In progress.
-{exit()}
-
-:_entry113
-+{riley/113/talked}
-?{capacitor_113}
-	!{riley/113/capacitor}
-		+{riley/113/capacitor}
-		{riley/113/warned}
-			.... Uh-oh.
-			[You] Should we tell someone?
-			Didn't you ask around town about the tower? They probably already know it was you.
-			[You] Am I going to be arrested?
-			Aren't you rich or something?
-			[You] I'm not! We're just... well-off, is all. This was your idea, by the way. I'll be sure to mention that to the jury.
-			Uh, well, on the bright side, it doesn't look like it fell ON the village, so I don't think anybody was hurt.
-			[You] Well, we can hope they feel the same.
-		{otherwise}
-			JACKIE!!! Somebody blew up the tower!
-			[You] Oh, uh... That might have been me.
-			Really???
-			[You] I found this capacitor at the top. The moment I removed it, the entire building exploded.
-			Holy crap! I thought these things were indestructible? 
-			?{armstrong/asked_tower}
-				[You] I had heard it might collapse if I took the capacitor, but I hadn't any idea it would be so immediate.
-				You KNEW this would happen???
-				[You] No! It was... speculation from someone is all.
-				Jeez... We could have just found a different tower or something.
-				[You] Well, it's done now.
-	{otherwise}
-		So uh... How's it going? Get arrested by anybody?
-		[You] Not yet.
-		{goto("shop_generic")}
-{otherwise if Global.stat("riley/113/talked") == 1}
-	[You] Oh, hello again Riley!
-	Hey! Pretty cool tower, right? These were made by the Hasyr literally MILLIONS of years ago!
-	[You] That stretches belief.
-	Believe it! But they're almost impossible to get inside of, so there's probably capacitors and other good stuff inside.
-	I spotted a tiny hole in the side of this tower, just big enough for somebody to crawl through.
-	The problem is, I still can't get to it! I can climb to the roof of this palace, but the gap to get onto the tower is too big for me!
-	?{armstrong/asked_tower}
-		[You] I asked an acquaintance Armstrong about it, actually.
-		Really? What'd he say?
-		[You] Well, that there is probably a capacitor inside. But he was worried the tower would collapse if we took it.
-		He is? Why?
-		[You] Some sort of self-repair system. Apparently it's all that's keeping it together.
-		I've never heard of that before. But these things are almost completely indestructible! I don't see how taking a capacitor would cause so much damage.
-		[You] Hm... Well, I can look inside if you want. Maybe I can see if there's any damage.
-	{otherwise}
-		[You] I could try.
-	Really? It could be dangerous inside.
-	[You] I'm sure it's fine.
-	{Global.task_note_place("the_tree_tower", "village_tower", "Riley told me a way inside: there's a hole in the band of purple gems on the first level.")} 
-	Okay... If you look at the tower, there's those purple bands of gemstone. There's a hole in the bottom one on the southeast side.
-	I put a piece of scrap metal on the roof, but I can't jump far enough to grab the ledge of the tower.
-	[You] Got it. I'll get to the roof, jump on the tower, and look for a hole in the crystal.
-{otherwise}
-	Good luck inside the tower. Did you need anything?
-	{goto("generic_shop")}
-
 {exit()}
 
 :_exit

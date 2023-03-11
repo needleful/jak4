@@ -4,6 +4,7 @@ signal damaged
 signal damage_params(damage, dir)
 
 export(bool) var one_time := false
+export(String) var ignored_tag := ""
 
 var damage_count := 0
 
@@ -13,8 +14,10 @@ func get_target_ref() -> Vector3:
 	else:
 		return global_transform.origin
 
-func take_damage(damage, dir, _source: Node):
+func take_damage(damage, dir, _source: Node, tag := ""):
 	if one_time and damage_count > 0:
+		return
+	if ignored_tag != "" and tag == ignored_tag:
 		return
 	emit_signal("damaged")
 	emit_signal("damage_params", damage, dir)

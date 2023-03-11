@@ -890,7 +890,9 @@ func _physics_process(delta):
 			if after(TIME_BASE_JUMP):
 				next_state = State.WadingFall
 		State.WadingFall:
-			if best_floor_dot > MIN_DOT_GROUND:
+			if can_ledge_grab():
+				next_state = State.LedgeHang
+			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Wading
 			elif water_depth < DEPTH_WATER_DRY:
 				next_state = State.Fall
@@ -968,7 +970,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.RollJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
-			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity.normalized())
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity.normalized(), "rolljump")
 			rotate_to_velocity(desired_velocity)
 		State.RollFall, State.WallJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
@@ -1002,7 +1004,7 @@ func _physics_process(delta):
 		State.Dash:
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, av, DECEL_DASH)
-			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward())
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward(), "dash")
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
 			last_ground_origin = global_transform.origin
@@ -1015,17 +1017,17 @@ func _physics_process(delta):
 				gun.start_combo()
 			rotate_intention(velocity.normalized())
 			accel_lunge(delta, av)
-			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward())
+			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward(), "lunge")
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
 			last_ground_origin = global_transform.origin
 			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = best_normal
 			accel(delta, desired_velocity*SPEED_RUN, av)
-			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "spin")
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, av, 0.75)
-			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin)
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "spin")
 		State.UppercutWindup:
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH, av)
 			rotate_to_velocity(desired_velocity)
@@ -1472,22 +1474,22 @@ func rotate_intention(dir: Vector3):
 			Vector3.UP
 		)
 
-func damage_point(area: Area, damage: int, point: Vector3):
+func damage_point(area: Area, damage: int, point: Vector3, tag := ""):
 	for g in area.get_overlapping_bodies():
 		var damage_dir = g.global_transform.origin - point
 		damage_dir = damage_dir.normalized()
-		damage(g, damage, damage_dir)
+		damage(g, damage, damage_dir, tag)
 
-func damage_directed(area: Area, damage: int, damage_dir: Vector3):
+func damage_directed(area: Area, damage: int, damage_dir: Vector3, tag: String):
 	for g in area.get_overlapping_bodies():
-		damage(g, damage, damage_dir)
+		damage(g, damage, damage_dir, tag)
 
-func damage(node: Node, damage: int, dir: Vector3):
+func damage(node: Node, damage: int, dir: Vector3, tag: String):
 	if node in damaged_objects:
 		return
 	damaged_objects.append(node)
 	if node.has_method("take_damage"):
-		node.take_damage(damage_factor*damage, dir, self)
+		node.take_damage(damage_factor*damage, dir, self, tag)
 
 func move(p_vel: Vector3, grounded := false) -> Vector3:
 	if grounded:
@@ -1508,7 +1510,7 @@ func compute_fall_damage(distance):
 		var _x = take_damage(FALL_DAM_MIN, Vector3.UP, self)
 
 # Returns true if dead
-func take_damage(damage: int, direction: Vector3, source) -> bool:
+func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 	if !takes_damage(source) or damage == 0:
 		return false
 	

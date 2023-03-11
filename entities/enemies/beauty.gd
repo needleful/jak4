@@ -474,7 +474,7 @@ func _on_hitbox_entered(b):
 		b.take_damage(current_move.damage, dir, self)
 		damaged_objects.append(b)
 
-func take_damage(damage:int, dir:Vector3, source:Node):
+func take_damage(damage:int, dir:Vector3, source:Node, _tag := ""):
 	if source == self:
 		return
 	# TODO: Other activation conditions

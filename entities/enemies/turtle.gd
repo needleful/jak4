@@ -47,7 +47,7 @@ func _physics_process(delta):
 		AI.Dead:
 			set_physics_process(false)
 
-func take_damage(damage, dir, source):
+func take_damage(damage, dir, source, _tag := ""):
 	if (source and source != self) or dir.y < MIN_DOT_DAMAGE:
 		return
 	else:
