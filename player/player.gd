@@ -535,8 +535,9 @@ func _physics_process(delta):
 		State.Slide:
 			if pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif can_dash() and pressed("mv_jump"):
-				next_state = State.Dash
+			elif total_stamina() >= 0 and pressed("mv_jump"):
+				drain_stamina(STAMINA_DRAIN_WALLJUMP)
+				next_state = State.BaseJump
 			elif should_hover():
 				next_state = State.Hover
 			elif can_slide_lunge and pressed("combat_lunge"):
@@ -627,7 +628,7 @@ func _physics_process(delta):
 				* delta
 				* (1.0-sqrt(max(best_floor_dot, 0)))
 			)
-			if stamina >= 0 and pressed("mv_jump"):
+			if total_stamina() >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if best_normal == Vector3.ZERO:
 					best_normal = ground_normal
@@ -640,7 +641,10 @@ func _physics_process(delta):
 				$ui/gameing/debug/stats/a6.text = "!!!"
 				next_state = State.Fall
 			elif total_stamina() <= 0 or !holding("mv_crouch"):
-				next_state = State.Slide
+				if best_floor_dot < MIN_DOT_CLIMB_AIR:
+					next_state = State.Fall
+				else:
+					next_state = State.Slide
 			else:
 				$ui/gameing/debug/stats/a6.text = "all good"
 		State.Roll:

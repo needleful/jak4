@@ -8,6 +8,7 @@ onready var ref := $reference
 onready var ik_target := $gun_ik/target
 
 const MASK_ATTACK := 0x1 + 0x4
+const enemy_bias := 1.2
 
 enum State {
 	NoWeapon,
@@ -164,7 +165,7 @@ func _process(delta):
 			var dist := dir.length()
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if g.is_in_group("enemy"):
-				score /= 1.5
+				score /= enemy_bias
 			if score < best_score:
 				# new target
 				var cast_end: Vector3

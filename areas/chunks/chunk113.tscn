@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -11,8 +11,12 @@
 [ext_resource path="res://material/env/wave_noise.png" type="Texture" id=9]
 [ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=10]
 [ext_resource path="res://items/ammo/pistol_pickup.tscn" type="PackedScene" id=11]
+[ext_resource path="res://material/gem_transparent.shader" type="Shader" id=12]
+[ext_resource path="res://material/env/transparent.shader" type="Shader" id=13]
+[ext_resource path="res://material/env/metal/chainlink1.png" type="Texture" id=14]
 [ext_resource path="res://entities/env/ancient/falling_platform.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/npc/npc_riley.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=17]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=21]
 [ext_resource path="res://entities/env/ancient/platform_square.tscn" type="PackedScene" id=23]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=28]
@@ -171,10 +175,10 @@ shader_param/foam_noise_scale2 = 0.2
 shader_param/foam_noise = ExtResource( 9 )
 
 [sub_resource type="BoxShape" id=8]
-extents = Vector3( 13, 6, 12 )
+extents = Vector3( 14, 6, 12 )
 
 [sub_resource type="CubeMesh" id=9]
-size = Vector3( 26, 12, 24 )
+size = Vector3( 28, 12, 24 )
 
 [sub_resource type="Animation" id=10]
 resource_name = "Activate"
@@ -279,6 +283,271 @@ tracks/3/keys = {
 "values": [ Transform( -2.84932e-08, 0.543306, 0.839535, -1, -4.37114e-08, -5.65141e-09, 3.36268e-08, -0.839535, 0.543306, -17.2395, 9.40149, 20.9436 ) ]
 }
 
+[sub_resource type="ShaderMaterial" id=12]
+shader = ExtResource( 12 )
+shader_param/albedo = Color( 0.827451, 0.705882, 0.788235, 1 )
+shader_param/refraction = 0.01
+shader_param/brightness = null
+
+[sub_resource type="Animation" id=13]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square10:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 2.07053, 0.34151, 1 ),
+"update": 0,
+"values": [ Vector3( 8.23931, -3.76606, -15.9149 ), Vector3( 8.23931, 1.86679, -15.9149 ), Vector3( 8.23931, 6.78014, -15.9149 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square10:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 8.23931, -3.76606, -15.9149 ) ]
+}
+
+[sub_resource type="ShaderMaterial" id=270]
+shader = ExtResource( 13 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 2.876
+shader_param/alpha_clip = 0.502
+shader_param/main_texture = ExtResource( 14 )
+
+[sub_resource type="Animation" id=271]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square:transform")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 1.8025, 0.366022, 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.9436, -3.26863, -11.0219 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.9436, -3.0131, -11.0219 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.9436, -0.71339, -11.0219 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../platform_square2:transform")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 1.62451, 0.378929, 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -2.45384, -10.985 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 13.6352, -0.947868, -10.2552 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 11.108, 2.06408, -8.79552 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../platform_square3:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 1.68179, 0.406126, 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -1.62129, -10.985 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 11.7833, 1.32118, -11.8961 ), Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 8.66766, 4.26364, -12.8073 ) ]
+}
+
+[sub_resource type="Animation" id=272]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.9436, -3.26863, -11.0219 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../platform_square2:transform")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -2.45384, -10.985 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../platform_square3:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -1.62129, -10.985 ) ]
+}
+
+[sub_resource type="Animation" id=273]
+resource_name = "Activate"
+length = 7.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 7 ),
+"transitions": PoolRealArray( 0.68302, 1.41421, 1 ),
+"update": 0,
+"values": [ Transform( 0.978906, -0.204312, 8.93074e-09, 0, -4.37114e-08, -1, 0.204312, 0.978906, -4.27893e-08, 7.91618, 10.5712, -21.8461 ), Transform( 0.964232, 0, -0.265059, 0, 1, 0, 0.265059, 0, 0.964232, 6.13142, 6, -16.8339 ), Transform( 0.870295, 0, -0.49253, 0, 1, 0, 0.49253, 0, 0.870295, -5.12556, 6, 19.0176 ) ]
+}
+
+[sub_resource type="Animation" id=274]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.978906, -0.204312, 8.93074e-09, 0, -4.37114e-08, -1, 0.204312, 0.978906, -4.27893e-08, 7.91618, 10.5712, -21.8461 ) ]
+}
+
+[sub_resource type="Animation" id=275]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.868925, 0.494943, 2.16347e-08, 0, -4.37114e-08, 1, 0.494943, -0.868925, -3.79819e-08, -23.7753, 7.71275, 0.0463238 ), Transform( 0.868925, 0.494943, 2.16347e-08, 0, -4.37114e-08, 1, 0.494943, -0.868925, -3.79819e-08, -19.6069, 7.71275, 2.42067 ), Transform( 0.868925, -1.96306e-15, -0.494943, 0, 1, -3.96624e-15, 0.494943, 3.44636e-15, 0.868925, -19.9421, 7.71275, 10.8833 ) ]
+}
+
+[sub_resource type="Animation" id=276]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.868925, 0.494943, 2.16347e-08, 0, -4.37114e-08, 1, 0.494943, -0.868925, -3.79819e-08, -23.7753, 7.71275, 0.0463238 ) ]
+}
+
+[sub_resource type="Animation" id=277]
+resource_name = "Activate"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square6:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0, 0.810809, -0.585311, -1, 0, 0, 0, 0.585311, 0.810809, 6.0159, 12, 16.1263 ), Transform( 0.810809, 2.02305e-08, -0.585311, -2.98023e-08, 1, -6.72036e-09, 0.585311, 2.28926e-08, 0.810809, 9.66218, 7.5, 18.7585 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../platform_square7:transform")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.73355, 0, -0.679635, 0, 1, 0, 0.679635, 0, 0.73355, 16.2076, 6.5, 11.9599 ), Transform( 0, -0.73355, -0.679635, 1, 0, 0, 0, -0.679635, 0.73355, 19.2522, 12, 14.7807 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../platform_square8:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Transform( -3.56523e-08, -0.738766, -0.673962, 1, -4.37114e-08, -4.98509e-09, -2.5777e-08, -0.673962, 0.738766, 28.4248, 12, 4.83408 ), Transform( 0.738766, -3.35976e-09, -0.673962, 0, 1, -4.98509e-09, 0.673962, 3.68282e-09, 0.738766, 26.122, 7.5, 2.73321 ) ]
+}
+
+[sub_resource type="Animation" id=278]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../platform_square6:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0, 0.810809, -0.585311, -1, 0, 0, 0, 0.585311, 0.810809, 6.0159, 12, 16.1263 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../platform_square7:transform")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 0.73355, 0, -0.679635, 0, 1, 0, 0.679635, 0, 0.73355, 16.2076, 6.5, 11.9599 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../platform_square8:transform")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( -3.56523e-08, -0.738766, -0.673962, 1, -4.37114e-08, -4.98509e-09, -2.5777e-08, -0.673962, 0.738766, 28.4248, 12, 4.83408 ) ]
+}
+
 [node name="chunk113" instance=ExtResource( 2 )]
 script = ExtResource( 3 )
 
@@ -346,9 +615,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 145.766, 51.3225, 5.31136 )
 open = false
 
 [node name="OmniLight" type="OmniLight" parent="active_entities" index="8"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 93.2133, 61.3624, 23.4169 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 95.957, 70.6531, 23.4169 )
 light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
 omni_range = 110.862
+omni_attenuation = 3.86374
 
 [node name="OmniLight2" type="OmniLight" parent="active_entities" index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5489, 158.211, 33.8862 )
@@ -476,7 +746,16 @@ height = 14.8082
 depth = 2.90095
 material = ExtResource( 21 )
 
-[node name="CSGBox8" type="CSGBox" parent="active_entities/tower_interior1/CSGBox2" index="1"]
+[node name="CSGBox9" type="CSGBox" parent="active_entities/tower_interior1/CSGBox2" index="1"]
+transform = Transform( 0.951562, 0, 0.307459, 0, 1, 0, -0.307459, 0, 0.951562, 10.7542, -4.51117, -19.4623 )
+operation = 2
+use_collision = true
+width = 2.4918
+height = 14.8082
+depth = 2.90095
+material = ExtResource( 21 )
+
+[node name="CSGBox8" type="CSGBox" parent="active_entities/tower_interior1/CSGBox2" index="2"]
 transform = Transform( 0.997326, 0, 0.0730837, 0, 1, 0, -0.0730837, 0, 0.997326, -20.8009, -4.51117, 22.5643 )
 operation = 2
 use_collision = true
@@ -583,6 +862,7 @@ script = ExtResource( 28 )
 [node name="dswitch_a" parent="active_entities/tower_interior1" index="21" instance=ExtResource( 29 )]
 transform = Transform( 0.681124, 0, 0.732168, 0, 1, 0, -0.732168, 0, 0.681124, -1.9271, -4.04944, 29.538 )
 time_deactivate = 3.0
+reset_upon_death = true
 
 [node name="CSGBox4" type="CSGBox" parent="active_entities/tower_interior1" index="22"]
 transform = Transform( 0.721109, 0, -0.692822, 0, 1, 0, 0.692822, 0, 0.721109, 3.27846, 4.98427, 6.42727 )
@@ -620,7 +900,7 @@ mesh = SubResource( 6 )
 material/0 = SubResource( 7 )
 
 [node name="StaticBody2" type="StaticBody" parent="active_entities/tower_interior1" index="24"]
-transform = Transform( -0.723435, 0, 0.690392, 0, 1, 0, -0.690392, 0, -0.723435, -0.914062, 3.17365, 4.50372 )
+transform = Transform( -0.808048, 0, 0.589116, 0, 1, 0, -0.589116, 0, -0.808048, -2.56719, 3.17365, 3.13391 )
 collision_layer = 8448
 collision_mask = 0
 __meta__ = {
@@ -636,7 +916,7 @@ mesh = SubResource( 9 )
 material/0 = SubResource( 7 )
 
 [node name="StaticBody3" type="StaticBody" parent="active_entities/tower_interior1" index="25"]
-transform = Transform( -0.80183, 0, 0.597553, 0, 1, 0, -0.597553, 0, -0.80183, -15.9061, 3.17365, 9.33126 )
+transform = Transform( -0.850572, 0, 0.525859, 0, 1, 0, -0.525859, 0, -0.850572, -16.9962, 3.17365, 9.49074 )
 collision_layer = 8448
 collision_mask = 0
 __meta__ = {
@@ -657,52 +937,454 @@ use_collision = true
 height = 12.0
 material = ExtResource( 21 )
 
-[node name="falling_platform" parent="active_entities/tower_interior1" index="27" instance=ExtResource( 15 )]
+[node name="CSGBox8" type="CSGBox" parent="active_entities/tower_interior1" index="27"]
+transform = Transform( 0.905463, 0, -0.424425, 0, 1, 0, 0.424425, 0, 0.905463, -1.53602, 1.47703, -12.3592 )
+use_collision = true
+width = 16.2237
+height = 12.0
+material = ExtResource( 21 )
+
+[node name="CSGBox10" type="CSGBox" parent="active_entities/tower_interior1" index="28"]
+transform = Transform( 0.905463, 0, -0.424425, 0, 1, 0, 0.424425, 0, 0.905463, 0.535332, 3.31246, -12.6198 )
+use_collision = true
+width = 19.9502
+height = 22.5995
+material = ExtResource( 21 )
+
+[node name="CSGBox9" type="CSGBox" parent="active_entities/tower_interior1" index="29"]
+transform = Transform( 0.99733, 0, 0.0730266, 0, 1, 0, -0.0730266, 0, 0.99733, -13.1706, 1.50476, -15.2336 )
+use_collision = true
+width = 10.4145
+height = 12.0
+material = ExtResource( 21 )
+
+[node name="falling_platform" parent="active_entities/tower_interior1" index="30" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 38.5199, 9.86812, -9.2383 )
 
-[node name="bug_pickup4" parent="active_entities/tower_interior1" index="28" instance=ExtResource( 35 )]
+[node name="bug_pickup4" parent="active_entities/tower_interior1" index="31" instance=ExtResource( 35 )]
 transform = Transform( -0.170724, 0, -0.985319, 0, 1, 0, 0.985319, 0, -0.170724, 40.2511, 10.827, -8.43224 )
 
-[node name="bug_pickup5" parent="active_entities/tower_interior1" index="29" instance=ExtResource( 35 )]
-transform = Transform( 0.880205, 0, 0.474594, 0, 1, 0, -0.474594, 0, 0.880205, 38.8243, 11.3615, -8.67946 )
-
-[node name="pistol_pickup" parent="active_entities/tower_interior1" index="30" instance=ExtResource( 11 )]
+[node name="pistol_pickup" parent="active_entities/tower_interior1" index="32" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89909, 6.86856, 18.9505 )
 respawn_on_player_death = true
 
-[node name="platform_square6" parent="active_entities/tower_interior1" index="31" instance=ExtResource( 23 )]
+[node name="platform_square6" parent="active_entities/tower_interior1" index="33" instance=ExtResource( 23 )]
 transform = Transform( -6.04459e-08, 0.839535, -0.543306, -1, -4.37114e-08, 4.37114e-08, 1.29486e-08, 0.543306, 0.839535, -28.6234, 9.40149, 4.15881 )
 
-[node name="platform_square7" parent="active_entities/tower_interior1" index="32" instance=ExtResource( 23 )]
+[node name="platform_square7" parent="active_entities/tower_interior1" index="34" instance=ExtResource( 23 )]
 transform = Transform( -2.84932e-08, 0.543306, 0.839535, -1, -4.37114e-08, -5.65141e-09, 3.36268e-08, -0.839535, 0.543306, -28.4288, 9.40149, 13.7024 )
 
-[node name="platform_square8" parent="active_entities/tower_interior1" index="33" instance=ExtResource( 23 )]
+[node name="platform_square8" parent="active_entities/tower_interior1" index="35" instance=ExtResource( 23 )]
 transform = Transform( -2.84932e-08, 0.543306, 0.839535, -1, -4.37114e-08, -5.65141e-09, 3.36268e-08, -0.839535, 0.543306, -22.6197, 9.40149, 17.4618 )
 
-[node name="platform_square9" parent="active_entities/tower_interior1" index="34" instance=ExtResource( 23 )]
+[node name="platform_square9" parent="active_entities/tower_interior1" index="36" instance=ExtResource( 23 )]
 transform = Transform( -2.84932e-08, 0.543306, 0.839535, -1, -4.37114e-08, -5.65141e-09, 3.36268e-08, -0.839535, 0.543306, -17.2395, 9.40149, 20.9436 )
 
-[node name="door2" type="AnimationPlayer" parent="active_entities/tower_interior1" index="35"]
+[node name="door2" type="AnimationPlayer" parent="active_entities/tower_interior1" index="37"]
 root_node = NodePath("../platform_square9")
 anims/Activate = SubResource( 10 )
 anims/RESET = SubResource( 11 )
 script = ExtResource( 28 )
 
-[node name="dswitch_a2" parent="active_entities/tower_interior1" index="36" instance=ExtResource( 29 )]
+[node name="dswitch_a2" parent="active_entities/tower_interior1" index="38" instance=ExtResource( 29 )]
 transform = Transform( -0.794196, 0, 0.607661, 0, 1, 0, -0.607661, 0, -0.794196, 9.01208, 7.20585, 3.26765 )
+reset_upon_death = true
 
 [node name="OmniLight" type="OmniLight" parent="active_entities/tower_interior1/dswitch_a2" index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.320122, 1.30727, 0.237122 )
 light_color = Color( 0.627451, 0.862745, 1, 1 )
 
-[node name="CSGCylinder" type="CSGCylinder" parent="active_entities/tower_interior1" index="37"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23446, 2.48157, -5.72219 )
+[node name="CSGCylinder" type="CSGCylinder" parent="active_entities/tower_interior1" index="39"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15127, 1.38178, -5.02011 )
 use_collision = true
 collision_layer = 257
 radius = 6.23704
 height = 10.0371
 material = ExtResource( 21 )
 
+[node name="CSGBox6" type="CSGBox" parent="active_entities/tower_interior1" index="40"]
+transform = Transform( 0.96078, 0, -0.277313, 0, 1, 0, 0.277313, 0, 0.96078, 16.5397, 1.35976, -10.9597 )
+use_collision = true
+collision_layer = 257
+width = 12.2838
+height = 12.1958
+depth = 26.7905
+material = ExtResource( 21 )
+
+[node name="CSGBox7" type="CSGBox" parent="active_entities/tower_interior1" index="41"]
+transform = Transform( 0.96078, 0, -0.277313, 0, 1, 0, 0.277313, 0, 0.96078, 21.0538, 10.9284, -6.87019 )
+use_collision = true
+collision_layer = 257
+width = 1.3946
+height = 7.76374
+depth = 21.1777
+material = SubResource( 12 )
+
+[node name="bug_pickup5" parent="active_entities/tower_interior1" index="42" instance=ExtResource( 35 )]
+transform = Transform( -0.798932, 0, -0.601421, 0, 1, 0, 0.601421, 0, -0.798932, -26.3871, 17.9758, 5.3772 )
+
+[node name="platform_square10" parent="active_entities/tower_interior1" index="43" instance=ExtResource( 23 )]
+transform = Transform( 0.958071, 0, -0.286531, 0, 1, 0, 0.286531, 0, 0.958071, 8.23931, -3.76606, -15.9149 )
+
+[node name="fountainA_large3" parent="active_entities/tower_interior1" index="44" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.6417, 7.5085, -6.33161 )
+
+[node name="target_flower3" parent="active_entities/tower_interior1" index="45" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.7504, 10.5262, -13.5603 )
+open = false
+
+[node name="door3" type="AnimationPlayer" parent="active_entities/tower_interior1" index="46"]
+root_node = NodePath("../target_flower3")
+playback_process_mode = 0
+anims/Activate = SubResource( 13 )
+anims/RESET = SubResource( 14 )
+script = ExtResource( 28 )
+
+[node name="bug_pickup6" parent="active_entities/tower_interior1" index="47" instance=ExtResource( 35 )]
+transform = Transform( 0.467388, 0, 0.884052, 0, 1, 0, -0.884052, 0, 0.467388, 1.90687, 15.9823, 28.9583 )
+
+[node name="dswitch_a3" parent="active_entities/tower_interior1" index="48" instance=ExtResource( 29 )]
+transform = Transform( 0.446688, 0, 0.89469, 0, 1, 0, -0.89469, 0, 0.446688, 1.87536, -4.15046, -13.7714 )
+reset_upon_death = true
+
+[node name="tower_interior2" type="Spatial" parent="active_entities" index="11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.9718, 63.8687, 27.4691 )
+
+[node name="ceiling" type="CSGBox" parent="active_entities/tower_interior2" index="0"]
+transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 3.05433, 15.6173, -5.41335 )
+use_collision = true
+collision_layer = 257
+width = 82.7232
+depth = 69.8603
+material = ExtResource( 21 )
+
+[node name="CSGBox" type="CSGBox" parent="active_entities/tower_interior2/ceiling" index="0"]
+transform = Transform( 0.941594, 0, 0.33675, 0, 1, 0, -0.33675, 0, 0.941594, 19.942, 0, -23.5654 )
+operation = 2
+height = 3.45045
+
+[node name="ceiling2" type="CSGBox" parent="active_entities/tower_interior2" index="1"]
+transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 3.05433, 57.618, -5.41335 )
+use_collision = true
+collision_layer = 257
+width = 82.7232
+depth = 69.8603
+material = ExtResource( 21 )
+
+[node name="CSGBox" type="CSGBox" parent="active_entities/tower_interior2" index="2"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -25.1038, 4.409, 2.75148 )
+use_collision = true
+collision_layer = 257
+width = 8.0
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox2" type="CSGBox" parent="active_entities/tower_interior2/CSGBox" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.888214, 0, 0 )
+operation = 2
+width = 5.19171
+height = 19.205
+depth = 4.24058
+material = ExtResource( 21 )
+
+[node name="CSGBox3" type="CSGBox" parent="active_entities/tower_interior2" index="3"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -21.4382, 4.409, -3.03605 )
+use_collision = true
+collision_layer = 257
+width = 8.0
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox4" type="CSGBox" parent="active_entities/tower_interior2" index="4"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -18.2597, 4.409, -8.94684 )
+use_collision = true
+collision_layer = 257
+width = 8.0
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox5" type="CSGBox" parent="active_entities/tower_interior2" index="5"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -14.8014, 4.409, -14.8928 )
+use_collision = true
+collision_layer = 257
+width = 8.0
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox7" type="CSGBox" parent="active_entities/tower_interior2" index="6"]
+transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -11.3114, 4.409, -20.5245 )
+use_collision = true
+collision_layer = 257
+width = 8.0
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox2" type="CSGBox" parent="active_entities/tower_interior2" index="7"]
+transform = Transform( -0.21806, 0, -0.975935, 0, 1, 0, 0.975935, 0, -0.21806, 32.6073, 4.409, -13.4664 )
+use_collision = true
+collision_layer = 257
+width = 6.42249
+height = 19.205
+depth = 5.32877
+material = ExtResource( 21 )
+
+[node name="CSGBox2" type="CSGBox" parent="active_entities/tower_interior2/CSGBox2" index="0"]
+transform = Transform( 1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.73956, -5.19335, 2.28882e-05 )
+operation = 2
+width = 6.87289
+height = 10.9431
+depth = 4.24058
+material = ExtResource( 21 )
+
+[node name="CSGBox3" type="CSGBox" parent="active_entities/tower_interior2/CSGBox2" index="1"]
+transform = Transform( -4.37114e-08, -1, 5.96046e-08, 1, -4.37114e-08, 0, 2.66454e-15, 2.98023e-08, 1, -0.889887, 8.95668, 4.57764e-05 )
+operation = 2
+width = 6.87289
+height = 10.9431
+depth = 4.24058
+material = ExtResource( 21 )
+
+[node name="fence" type="CSGBox" parent="active_entities/tower_interior2" index="8"]
+transform = Transform( 0.967718, 0, -0.252035, 0, 1, 0, 0.252035, 0, 0.967718, 13.1585, 0.318184, -18.1441 )
+use_collision = true
+collision_layer = 16
+collision_mask = 10
+width = 0.408696
+height = 12.0
+depth = 6.0
+material = SubResource( 270 )
+
+[node name="platform3" type="CSGBox" parent="active_entities/tower_interior2" index="9"]
+transform = Transform( -4.23003e-08, -0.967718, -0.252035, 1, -4.37114e-08, 8.88178e-16, -1.10168e-08, -0.252035, 0.967718, 11.4934, 6.36845, -18.4409 )
+use_collision = true
+width = 0.408696
+height = 4.12071
+depth = 7.26611
+material = ExtResource( 21 )
+
+[node name="glass2" type="CSGBox" parent="active_entities/tower_interior2" index="10"]
+transform = Transform( -0.252035, -0.967718, 4.23003e-08, 0, -4.37114e-08, -1, 0.967718, -0.252035, 1.10168e-08, 10.6624, 1.19923, -15.4855 )
+use_collision = true
+width = 0.408696
+height = 4.12071
+depth = 9.927
+material = SubResource( 12 )
+
+[node name="fence2" type="CSGBox" parent="active_entities/tower_interior2" index="11"]
+transform = Transform( 0.967718, 0, -0.252035, 0, 1, 0, 0.252035, 0, 0.967718, 9.89969, 1.36049, -19.0321 )
+use_collision = true
+collision_layer = 16
+collision_mask = 10
+width = 0.408696
+height = 10.0
+depth = 6.0
+material = SubResource( 270 )
+
+[node name="fountainA_large" parent="active_entities/tower_interior2" index="12" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8223, -3.65611, -5.57729 )
+
+[node name="platform_square" parent="active_entities/tower_interior2" index="13" instance=ExtResource( 23 )]
+transform = Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.9436, -3.26863, -11.0219 )
+
+[node name="platform_square2" parent="active_entities/tower_interior2" index="14" instance=ExtResource( 23 )]
+transform = Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -2.45384, -10.985 )
+
+[node name="platform_square3" parent="active_entities/tower_interior2" index="15" instance=ExtResource( 23 )]
+transform = Transform( 0.959798, 0, -0.280692, 0, 1, 0, 0.280692, 0, 0.959798, 14.8988, -1.62129, -10.985 )
+
+[node name="door2-1" type="AnimationPlayer" parent="active_entities/tower_interior2" index="16"]
+root_node = NodePath("../dswitch_a")
+playback_process_mode = 0
+anims/Activate = SubResource( 271 )
+anims/RESET = SubResource( 272 )
+script = ExtResource( 28 )
+
+[node name="dswitch_a" parent="active_entities/tower_interior2" index="17" instance=ExtResource( 29 )]
+transform = Transform( 0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 11.6422, -3.65611, -18.4554 )
+
+[node name="random_ammo_pickup" parent="active_entities/tower_interior2" index="18" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.5892, -3.60759, -10.6986 )
+generate_on_ready = true
+regenerate_on_death = true
+
+[node name="platform_square4" parent="active_entities/tower_interior2" index="19" instance=ExtResource( 23 )]
+transform = Transform( 0.978906, -0.204312, 8.93074e-09, 0, -4.37114e-08, -1, 0.204312, 0.978906, -4.27893e-08, 7.91618, 10.5712, -21.8461 )
+
+[node name="door2-2" type="AnimationPlayer" parent="active_entities/tower_interior2" index="20"]
+root_node = NodePath("../platform_square4")
+playback_process_mode = 0
+anims/Activate = SubResource( 273 )
+anims/RESET = SubResource( 274 )
+script = ExtResource( 28 )
+
+[node name="dswitch_a2" parent="active_entities/tower_interior2" index="21" instance=ExtResource( 29 )]
+transform = Transform( 0.970846, 0, -0.239702, 7.77156e-16, 1, 7.10543e-15, 0.239702, -3.55271e-15, 0.970846, 10.2057, 6.57279, -18.3247 )
+reset_upon_death = true
+
+[node name="crawly" parent="active_entities/tower_interior2" index="22" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.57089, -3.65611, -20.4628 )
+reset_on_player_death = true
+drops_ammo = 0.5
+
+[node name="crawly2" parent="active_entities/tower_interior2" index="23" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.1443, -3.65611, -0.549242 )
+reset_on_player_death = true
+drops_ammo = 0.5
+
+[node name="crawly3" parent="active_entities/tower_interior2" index="24" instance=ExtResource( 17 )]
+transform = Transform( -0.591284, 0, 0.806464, 0, 1, 0, -0.806464, 0, -0.591284, 10.7882, -3.65611, 14.4492 )
+reset_on_player_death = true
+drops_ammo = 0.5
+
+[node name="platform_square5" parent="active_entities/tower_interior2" index="25" instance=ExtResource( 23 )]
+transform = Transform( 0.868925, 0.494943, 2.16347e-08, 0, -4.37114e-08, 1, 0.494943, -0.868925, -3.79819e-08, -23.7753, 7.71275, 0.0463238 )
+
+[node name="door2-secret" type="AnimationPlayer" parent="active_entities/tower_interior2" index="26"]
+root_node = NodePath("../platform_square5")
+playback_process_mode = 0
+anims/Activate = SubResource( 275 )
+anims/RESET = SubResource( 276 )
+script = ExtResource( 28 )
+required_power = 3
+
+[node name="dswitch_a3" parent="active_entities/tower_interior2" index="27" instance=ExtResource( 29 )]
+transform = Transform( 2.20243e-08, 0.503857, -0.863787, 1, -4.37114e-08, 0, -3.77573e-08, -0.863787, -0.503857, -16.3748, 11.1891, -10.9372 )
+time_deactivate = 6.5
+reset_upon_death = true
+
+[node name="dswitch_a4" parent="active_entities/tower_interior2" index="28" instance=ExtResource( 29 )]
+transform = Transform( 2.20243e-08, 0.503857, -0.863787, 1, -4.37114e-08, 0, -3.77573e-08, -0.863787, -0.503857, -19.9285, 11.1891, -5.28818 )
+time_deactivate = 6.5
+reset_upon_death = true
+
+[node name="dswitch_a5" parent="active_entities/tower_interior2" index="29" instance=ExtResource( 29 )]
+transform = Transform( 2.20243e-08, 0.503857, -0.863787, 1, -4.37114e-08, 0, -3.77573e-08, -0.863787, -0.503857, -23.2683, 11.1891, 0.681948 )
+time_deactivate = 6.5
+reset_upon_death = true
+
+[node name="CSGBox6" type="CSGBox" parent="active_entities/tower_interior2" index="30"]
+transform = Transform( 0.862281, 0, -0.506431, 0, 1, 0, 0.506431, 0, 0.862281, -18.537, 9.94295, -8.99076 )
+use_collision = true
+width = 8.43141
+height = 0.654351
+depth = 33.7968
+material = SubResource( 12 )
+
+[node name="bug_pickup2" parent="active_entities/tower_interior2" index="31" instance=ExtResource( 35 )]
+transform = Transform( 0.804146, 0, 0.594432, 0, 1, 0, -0.594432, 0, 0.804146, -12.2742, 10.2701, -17.559 )
+
+[node name="bug_pickup3" parent="active_entities/tower_interior2" index="32" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.4462, 10.2701, 5.55163 )
+
+[node name="platform" type="CSGBox" parent="active_entities/tower_interior2" index="33"]
+transform = Transform( -4.3918e-08, -0.853527, -0.521048, 1, -4.37114e-08, -1.26842e-08, -1.19494e-08, -0.521048, 0.853527, -11.8136, 1.36845, 17.2281 )
+use_collision = true
+width = 10.0
+height = 8.0
+depth = 7.26611
+material = ExtResource( 21 )
+
+[node name="fountainA_large2" parent="active_entities/tower_interior2" index="34" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5949, 6.36845, 17.0501 )
+
+[node name="platform2" type="CSGBox" parent="active_entities/tower_interior2" index="35"]
+transform = Transform( -4.35906e-08, -0.869459, -0.494004, 1, -4.37114e-08, -1.13062e-08, -1.17634e-08, -0.494004, 0.869459, -6.06631, 5.28903, 22.7896 )
+use_collision = true
+width = 2.13438
+height = 8.0
+depth = 3.59265
+material = ExtResource( 21 )
+
+[node name="platform4" type="CSGBox" parent="active_entities/tower_interior2" index="36"]
+transform = Transform( -4.3918e-08, -0.853527, -0.521048, 1, -4.37114e-08, -1.26842e-08, -1.19494e-08, -0.521048, 0.853527, 3.6193, 2.3529, 26.6494 )
+use_collision = true
+width = 9.59767
+height = 8.0
+depth = 7.26611
+material = ExtResource( 21 )
+
+[node name="wall" type="CSGBox" parent="active_entities/tower_interior2" index="37"]
+transform = Transform( 0.846642, 0, -0.532164, 0, 1, 0, 0.532164, 0, 0.846642, 4.46986, 5.13418, 15.3778 )
+use_collision = true
+collision_layer = 257
+width = 2.55677
+height = 19.1158
+depth = 27.6245
+material = ExtResource( 21 )
+
+[node name="CSGBox9" type="CSGBox" parent="active_entities/tower_interior2/wall" index="0"]
+transform = Transform( 0.868119, 0, -0.496355, 0, 1, 0, 0.496355, 0, 0.868119, 5.51857, 0.160431, -22.8259 )
+use_collision = true
+collision_layer = 257
+width = 2.55677
+height = 19.0365
+depth = 22.8497
+material = ExtResource( 21 )
+
+[node name="platform4" type="CSGBox" parent="active_entities/tower_interior2/wall" index="1"]
+transform = Transform( -4.31656e-08, -0.999012, 0.04445, 1, -4.37114e-08, -1.13062e-08, 1.3238e-08, 0.04445, 0.999012, -0.646637, 3.87318, 12.2324 )
+operation = 2
+use_collision = true
+width = 4.56043
+height = 8.0
+depth = 4.66169
+material = ExtResource( 21 )
+
+[node name="platform_square6" parent="active_entities/tower_interior2" index="38" instance=ExtResource( 23 )]
+transform = Transform( 0, 0.810809, -0.585311, -1, 0, 0, 0, 0.585311, 0.810809, 6.0159, 12, 16.1263 )
+
+[node name="platform_square7" parent="active_entities/tower_interior2" index="39" instance=ExtResource( 23 )]
+transform = Transform( 0.73355, 0, -0.679635, 0, 1, 0, 0.679635, 0, 0.73355, 16.2076, 6.5, 11.9599 )
+
+[node name="platform_square8" parent="active_entities/tower_interior2" index="40" instance=ExtResource( 23 )]
+transform = Transform( -3.56523e-08, -0.738766, -0.673962, 1, -4.37114e-08, -4.98509e-09, -2.5777e-08, -0.673962, 0.738766, 28.4248, 12, 4.83408 )
+
+[node name="platform_square9" parent="active_entities/tower_interior2" index="41" instance=ExtResource( 23 )]
+transform = Transform( 0.738766, -3.35976e-09, -0.673962, 0, 1, -4.98509e-09, 0.673962, 3.68282e-09, 0.738766, 33.282, 7.5, -2.95355 )
+
+[node name="door2-3" type="AnimationPlayer" parent="active_entities/tower_interior2" index="42"]
+root_node = NodePath("../dswitch_a6")
+playback_process_mode = 0
+anims/Activate = SubResource( 277 )
+anims/RESET = SubResource( 278 )
+script = ExtResource( 28 )
+
+[node name="dswitch_a6" parent="active_entities/tower_interior2" index="43" instance=ExtResource( 29 )]
+transform = Transform( 0.760274, 0, -0.649603, 0, 1, 0, 0.649603, 0, 0.760274, 6.06235, 7.19861, 28.46 )
+time_deactivate = 3.0
+reset_upon_death = true
+
+[node name="target_flower" parent="active_entities/tower_interior2" index="44" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32.7888, 11.7862, -14.1829 )
+open = false
+
+[node name="tower_interior3" type="Spatial" parent="active_entities" index="12"]
+transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 76.0261, 84.4723, 22.0558 )
+
+[node name="fountainA_large" parent="active_entities/tower_interior3" index="0" instance=ExtResource( 10 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, 16.7115, -3.98626, -16.2806 )
+
+[node name="target_flower" parent="active_entities/tower_interior3" index="1" instance=ExtResource( 6 )]
+transform = Transform( -0.320349, 0, -0.9473, 0, 1, 0, 0.9473, 0, -0.320349, 6.94791, 1.01375, 0.0747814 )
+
+[node name="target_flower2" parent="active_entities/tower_interior3" index="2" instance=ExtResource( 6 )]
+transform = Transform( -0.320349, 0, -0.9473, 0, 1, 0, 0.9473, 0, -0.320349, 1.21813, 6.01375, 0.381939 )
+
+[node name="bug_pickup" parent="active_entities/tower_interior3/target_flower2" index="7" instance=ExtResource( 35 )]
+transform = Transform( -0.475094, 0, -0.879935, 0, 1, 0, 0.879935, 0, -0.475094, 0, 4, 0 )
+
 [connection signal="arg_toggled" from="active_entities/tower_interior1/dswitch_a1" to="active_entities/tower_interior1/door1" method="_on_toggled"]
 [connection signal="arg_toggled" from="active_entities/tower_interior1/dswitch_a" to="active_entities/tower_interior1/door_secret" method="_on_toggled"]
 [connection signal="toggled" from="active_entities/tower_interior1/dswitch_a2" to="active_entities/tower_interior1/door2" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior1/dswitch_a3" to="active_entities/tower_interior1/door3" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a" to="active_entities/tower_interior2/door2-1" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a2" to="active_entities/tower_interior2/door2-2" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a3" to="active_entities/tower_interior2/door2-secret" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a4" to="active_entities/tower_interior2/door2-secret" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a5" to="active_entities/tower_interior2/door2-secret" method="_on_toggled"]
+[connection signal="arg_toggled" from="active_entities/tower_interior2/dswitch_a6" to="active_entities/tower_interior2/door2-3" method="_on_toggled"]

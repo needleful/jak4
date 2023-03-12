@@ -341,7 +341,7 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 	orb.fire(target, Vector3.UP*0.5)
 
 func _on_player_died():
-	if ai == AI.Dead and !respawns:
+	if !is_inside_tree() or (ai == AI.Dead and !respawns):
 		return
 	_reset()
 
