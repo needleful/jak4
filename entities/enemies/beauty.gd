@@ -193,6 +193,8 @@ func process_player_distance(pos: Vector3):
 	return (pos - global_transform.origin).length_squared()
 
 func _on_player_died():
+	if !is_inside_tree():
+		return
 	if ai_state != AIState.Dead:
 		_reset()
 

@@ -535,7 +535,7 @@ func _physics_process(delta):
 		State.Slide:
 			if pressed("combat_spin"):
 				next_state = State.AirSpinKick
-			elif total_stamina() >= 0 and pressed("mv_jump"):
+			elif total_stamina() > 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				next_state = State.BaseJump
 			elif should_hover():
@@ -1003,6 +1003,7 @@ func _physics_process(delta):
 				var new_transform := ledge.global_transform
 				var old_position := ledge_last_transform*ledge_local_position
 				var new_position := new_transform*ledge_local_position
+				$ledge_ref/mesh.global_transform.origin = new_position
 				var _x = move_and_collide(new_position - old_position)
 				ledge_last_transform = new_transform
 		State.Dash:
@@ -1406,20 +1407,29 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	elif right:
 		wall_cast_end = ledgeCastRight.get_collision_point()
 	else:
+		ledge = null
 		return false
 	
 	var s = get_world().space
 	s = PhysicsServer.space_get_direct_state(s)
-	var c = s.intersect_ray(wallCheck.global_transform.origin, wall_cast_end, [self], 1)
-	var no_wall = !c or c.normal.y > min_dot
+	var c:Dictionary = s.intersect_ray(wallCheck.global_transform.origin, wall_cast_end, [self], 1)
+	var no_wall:bool = !c or c.normal.y > min_dot
 	
-	return no_wall and (center or left or right)
+	var valid: bool = no_wall and (center or left or right)
+	if !valid:
+		ledge = null
+	return valid
 
 func check_cast(cast: RayCast, min_dot: float):
-	return (
+	var valid = (
 		cast.is_colliding()
 		and cast.get_collision_normal().y >= min_dot
 		and !cast.get_collider().is_in_group("enemy"))
+	if valid and !ledge:
+		ledge = cast.get_collider()
+		ledge_last_transform = ledge.global_transform
+		ledge_local_position = ledge.global_transform.xform_inv(cast.get_collision_point())
+	return valid
 
 func debug_cast(cast: RayCast, min_dot: float, meshi: MeshInstance):
 	if !cast.is_colliding():
@@ -1432,8 +1442,8 @@ func debug_cast(cast: RayCast, min_dot: float, meshi: MeshInstance):
 func is_sitting():
 	return state == State.Sitting
 
-func snap_to_ledge(ledgeCast):
-	var change = ledgeCast.get_collision_point() - ledgeRef.global_transform.origin
+func snap_to_ledge(ledge_position:Vector3):
+	var change = ledge_position - ledgeRef.global_transform.origin
 	global_translate(change)
 
 func should_slow_follow():
@@ -1480,6 +1490,8 @@ func rotate_intention(dir: Vector3):
 
 func damage_point(area: Area, damage: int, point: Vector3, tag := ""):
 	for g in area.get_overlapping_bodies():
+		if !is_instance_valid(g) or !g.is_inside_tree():
+			continue
 		var damage_dir = g.global_transform.origin - point
 		damage_dir = damage_dir.normalized()
 		damage(g, damage, damage_dir, tag)
@@ -1783,6 +1795,8 @@ func set_state(next_state: int):
 			collision_mask &= ~(1 << 13)
 		State.LungeKick, State.SlideLungeKick, State.DiveEnd:
 			gun.end_combo()
+		State.LedgeHang:
+			ledge = null
 	
 	# Entry effects
 	match next_state:
@@ -1856,17 +1870,7 @@ func set_state(next_state: int):
 			$standing_col.disabled = true
 			can_wall_cling = true
 			mesh.play_ledge_grab()
-			var ledgeCast = ledgeCastCenter
-			if !ledgeCast.is_colliding():
-				ledgeCast = ledgeCastLeft
-			if !ledgeCast.is_colliding():
-				ledgeCast = ledgeCastRight
-			if !ledgeCast.is_colliding():
-				print_debug("Tried to ledge grab without a ledge!")
-			snap_to_ledge(ledgeCast)
-			ledge = ledgeCast.get_collider()
-			ledge_last_transform = ledge.global_transform
-			ledge_local_position = ledge.global_transform.xform_inv(global_transform.origin)
+			snap_to_ledge(ledge.global_transform*ledge_local_position)
 			velocity = Vector3.ZERO
 			can_air_spin = true
 			gun.lock()

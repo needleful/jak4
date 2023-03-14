@@ -12,9 +12,10 @@ func _ready():
 	if p is PlayerBody:
 		p.connect("died", self, "_on_player_died")
 
-func _on_body_entered(_body):
+func _on_body_entered(body):
+	if body is PlayerBody and body.velocity.y > 1.0 && body.global_transform.origin.y < global_transform.origin.y:
+		return
 	can_sleep = false
-	print("fall!")
 	if !falling:
 		falling = true
 		$Timer.start(delay)
@@ -28,7 +29,6 @@ func _on_player_died():
 
 func reset():
 	can_sleep = true
-	print("Resetting")
 	$Timer.stop()
 	mode = RigidBody.MODE_KINEMATIC
 	global_transform = starting_position

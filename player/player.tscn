@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=2]
+[gd_scene load_steps=105 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -830,6 +830,10 @@ height = 0.1
 [sub_resource type="CylinderShape" id=73]
 height = 1.13577
 radius = 0.215107
+
+[sub_resource type="SphereMesh" id=96]
+radius = 0.1
+height = 0.2
 
 [node name="player" type="KinematicBody" groups=["player", "post_save_object", "pre_save_object", "push"]]
 time_scale_response = false
@@ -2127,6 +2131,13 @@ time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0157221, 0 )
 enabled = true
 cast_to = Vector3( 0, -0.1, 0 )
+
+[node name="ledge_ref" type="Node" parent="."]
+
+[node name="mesh" type="MeshInstance" parent="ledge_ref"]
+visible = false
+mesh = SubResource( 96 )
+skeleton = NodePath("../..")
 
 [connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]

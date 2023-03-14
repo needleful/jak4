@@ -11,6 +11,7 @@ export(bool) var persistent := false
 export(bool) var reset_upon_death := false
 
 onready var anim: AnimationPlayer = $AnimationPlayer
+onready var sound: AudioStreamPlayer3D = $AudioStreamPlayer3D
 
 func _ready():
 	if persistent and Global.has_stat(get_stat()):
@@ -26,7 +27,6 @@ func deactivate():
 	set_on(false, false, true)
 
 func _on_damaged(_damage, dir):
-	$AudioStreamPlayer3D.play()
 	var switch_on = dir.dot(global_transform.basis.z) > 0.0
 	set_on(switch_on)
 
@@ -35,8 +35,12 @@ func set_on(switch_on, force := false, auto := false):
 	
 	if switch_on and on and !force and !auto:
 		anim.play("AlreadyOn")
+		sound.pitch_scale = 0.7
+		sound.play()
 	elif !switch_on and !on and !force and !auto:
 		anim.play("AlreadyOff")
+		sound.pitch_scale = 0.7
+		sound.play()
 	elif switch_on:
 		emit_signal("activated")
 		anim.play("SwitchOn")
@@ -51,6 +55,12 @@ func set_on(switch_on, force := false, auto := false):
 		emit_signal("insta_toggled", switch_on)
 	elif switch_on != on:
 		emit_signal("toggled", switch_on)
+		if !auto:
+			sound.pitch_scale = 1.0
+			sound.play()
+		else:
+			# play a third sound here
+			pass
 	
 	emit_signal("arg_toggled", switch_on, force)
 		
