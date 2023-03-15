@@ -61,8 +61,9 @@ func set_on(switch_on, force := false, auto := false):
 		else:
 			# play a third sound here
 			pass
-	
-	emit_signal("arg_toggled", switch_on, force)
+
+	if switch_on != on:
+		emit_signal("arg_toggled", switch_on, force)
 		
 	on = switch_on
 	if persistent and !force:
