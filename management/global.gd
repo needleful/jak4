@@ -18,6 +18,8 @@ var valid_game_state := false setget set_valid_game_state, get_valid_game_state
 var player_spawned := false
 var can_pause := true
 
+var save_thread := Thread.new()
+
 var color_common := Color.white
 var color_uncommon := Color.chartreuse
 var color_rare := Color.darkcyan
@@ -438,13 +440,15 @@ func reset_game():
 
 func save_checkpoint(pos: Vector3):
 	game_state.checkpoint_position = pos
-	save_sync()
+	save_async()
 
 func save_game():
-	save_sync()
+	save_async()
 
 func load_sync(reload := true):
 	print("loading save")
+	if save_thread.is_active():
+		save_thread.wait_to_finish()
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
 		valid_game_state = true
@@ -454,9 +458,28 @@ func load_sync(reload := true):
 		print_debug("Tried to load with no save at ", save_path)
 		valid_game_state = false
 
-func save_sync():
+func save_async():
+	if save_thread.is_active():
+		return
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
-	var r = ResourceSaver.save(save_path, game_state)
-	if r == OK:
+	var res = save_thread.start(self, "_save_sync", game_state.duplicate(false))
+	if res != OK:
+		print_debug("ERROR: Save failed with error code ", res)
+
+func save_sync():
+	if save_thread.is_active():
+		save_thread.wait_to_finish()
+	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
+	var res = ResourceSaver.save(save_path, game_state)
+	save_complete(res)
+
+func save_complete(result):
+	# Investigate: could the player accidentally save again before post_save_object groups are updated?
+	save_thread.wait_to_finish()
+	if result == OK:
 		valid_game_state = true
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "post_save_object", "complete_save")
+
+func _save_sync(p_state : GameState):
+	var r = ResourceSaver.save(save_path, p_state)
+	call_deferred("save_complete", r)

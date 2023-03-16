@@ -8,5 +8,5 @@ func _ready():
 func _on_body_entered(body):
 	if body is PlayerBody and body.can_save():
 		if heal:
-			body.heal()
-		Global.save_checkpoint(body.global_transform.origin)
+			body.call_deferred("heal")
+		Global.call_deferred("save_checkpoint", body.global_transform.origin)
