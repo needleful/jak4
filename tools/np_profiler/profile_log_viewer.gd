@@ -43,6 +43,7 @@ func recursive_list(t: TreeItem, f: FrameData.FunctionProfile):
 	for fsub in f.children:
 		var tsub:TreeItem = tree.create_item(t)
 		recursive_list(tsub, fsub)
+	t.collapsed = true
 
 func clear(n: Node):
 	for c in n.get_children():

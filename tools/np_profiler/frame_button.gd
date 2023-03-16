@@ -13,6 +13,8 @@ func set_framedata(p_fd):
 		$ColorRect.color = Color.red
 	elif runtime > 17000:
 		$ColorRect.color = Color.orange
+	elif runtime > 6094:
+		$ColorRect.color = Color.lightgreen
 	else:
 		$ColorRect.color = Color.cadetblue
 
