@@ -123,6 +123,7 @@ func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
 	
 	var slope: float = anim["parameters/WholeBody/Climb/blend_position"]
 	anim["parameters/WholeBody/Climb/blend_position"] = lerp(wall_normal.y, slope, 0.3)
+
 func force_play(state):
 	body.start(state)
 
@@ -266,7 +267,7 @@ func play_attack_sound(sound: AudioStream):
 	attack_sounds.play()
 
 func play_sit():
-	transition_to("Sit_Floor")
+	transition_to("Sitting_Floor")
 
 func play_ledge_grab():
 	transition_to("LedgeGrab")

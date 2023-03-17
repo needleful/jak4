@@ -55,10 +55,15 @@ const FOG_TWEEN_TIME := 2.5
 const DIST_HIRES := 1500.0
 const DIST_LOWRES := 2000.0
 
+const BEDTIME := 21.00
+const TOO_EARLY := 4.00
+const RISE_AND_SHINE := 7.00
+
 var terrain_hires := {}
 var terrain_lowres := {}
 
 var chunk_loader: ChunkLoader
+var ignore_day := false
 
 func _input(event):
 	if event.is_action_pressed("debug_map_view"):
@@ -117,7 +122,7 @@ func _ready():
 	update_terrain_lod(vis_last_position)
 	if Global.valid_game_state:
 		if Global.has_stat("clock_time"):
-			set_time(Global.stat("clock_time"))
+			set_time(Global.stat("clock_time"), true)
 
 func _process(delta):
 	time += delta
@@ -402,9 +407,20 @@ func get_dynamic_content(chunk_name):
 
 ## Day/night cycle
 
+func sleep():
+	var t = get_time()
+	if t > BEDTIME or t < TOO_EARLY:
+		set_time(RISE_AND_SHINE, false)
+	else:
+		set_time(get_time() + 2, false)
+
 func start_day():
-	var _x = Global.add_stat("current_day")
-	get_tree().call_group("daily_schedule", "_on_midnight")
+	if !ignore_day:
+		print("Brand new day!")
+		var _x = Global.add_stat("current_day")
+		get_tree().call_group("daily_schedule", "_on_midnight")
+	else:
+		print("Day ignored!")
 
 # Hours with decimals
 func get_time():
@@ -420,16 +436,23 @@ func get_time():
 		hour -= 24.0
 	return hour
 
-func set_time(hour: float):
+func set_time(hour: float, p_ignore_day := true):
+	var dn := $day_night
+	
 	var seconds_per_hour := 25.0
 	var midnight_offset := 330.0
 	var animation_length := 600.0
+	var current_time = dn.current_animation_position
 	var seconds := seconds_per_hour*hour + midnight_offset
-	while seconds > animation_length:
-		seconds -= animation_length
 	while seconds < 0.0:
 		seconds += animation_length
-	$day_night.stop()
-	$day_night.play("day_night_normal")
-	$day_night.advance(seconds/$day_night.playback_speed)
+		
+	ignore_day = p_ignore_day
+	print("Set time to ", hour, " ignore day: ", p_ignore_day)
+	if seconds < current_time:
+		dn.stop()
+		dn.play("day_night_normal")
+		dn.advance(seconds/dn.playback_speed)
+	else:
+		dn.advance((seconds - current_time)/dn.playback_speed)
 	sun.update_rotation()

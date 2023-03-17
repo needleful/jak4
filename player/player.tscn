@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=2]
+[gd_scene load_steps=106 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -177,6 +177,9 @@ radius = 1.31936
 [sub_resource type="CylinderShape" id=41]
 height = 1.10324
 radius = 1.40098
+
+[sub_resource type="SphereShape" id=97]
+radius = 0.332461
 
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.3
@@ -897,6 +900,7 @@ mesh = SubResource( 43 )
 [node name="ledge_area" type="Area" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26954, 0.136381 )
+visible = false
 collision_layer = 0
 collision_mask = 17
 
@@ -908,6 +912,7 @@ shape = SubResource( 74 )
 [node name="leftHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0.17, 1.65147, 0.193106 )
+visible = false
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
@@ -915,6 +920,7 @@ collision_mask = 17
 [node name="rightHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, -0.17, 1.65147, 0.193106 )
+visible = false
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
@@ -922,6 +928,7 @@ collision_mask = 17
 [node name="centerCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0, 1.70647, 0.327074 )
+visible = false
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 collision_mask = 17
@@ -929,6 +936,7 @@ collision_mask = 17
 [node name="ceilingCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02568, 0.142043 )
+visible = false
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
@@ -936,6 +944,7 @@ collision_mask = 17
 [node name="headFloorCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -0.999456, 0.0329856, 0, -0.0329856, -0.999456, -7.45068e-08, 1.6733, 0.0595681 )
+visible = false
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
@@ -943,10 +952,12 @@ collision_mask = 17
 [node name="reference" type="Position3D" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.501811 )
+visible = false
 
 [node name="wall_check" type="Position3D" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.70827, 0.117608 )
+visible = false
 
 [node name="attack_lunge" type="Area" parent="body_mesh"]
 time_scale_response = false
@@ -962,6 +973,7 @@ shape = SubResource( 13 )
 
 [node name="attack_spin" type="Area" parent="body_mesh"]
 time_scale_response = false
+visible = false
 collision_layer = 0
 collision_mask = 4
 
@@ -1042,6 +1054,14 @@ time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199459, 1.5586, 0.253699 )
 visible = false
 light_cull_mask = 4293918722
+
+[node name="the_sleep_zone" type="Area" parent="body_mesh"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315046, 0 )
+collision_layer = 0
+collision_mask = 512
+
+[node name="CollisionShape" type="CollisionShape" parent="body_mesh/the_sleep_zone"]
+shape = SubResource( 97 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
 time_scale_response = false
@@ -1158,7 +1178,6 @@ drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1267,8 +1286,44 @@ custom_constants/shadow_as_outline = 1
 text = "Next >>"
 align = 2
 
+[node name="date_time" type="PanelContainer" parent="ui/status_menu"]
+anchor_top = 0.95
+anchor_bottom = 0.95
+margin_left = 20.0
+margin_top = -65.0
+margin_right = 210.0
+margin_bottom = 6.0
+
+[node name="margin" type="MarginContainer" parent="ui/status_menu/date_time"]
+margin_right = 190.0
+margin_bottom = 71.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="stats" type="VBoxContainer" parent="ui/status_menu/date_time/margin"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 185.0
+margin_bottom = 66.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="date" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+margin_right = 180.0
+margin_bottom = 22.0
+text = "X Days on Journey"
+
+[node name="time" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+margin_top = 26.0
+margin_right = 180.0
+margin_bottom = 48.0
+text = "Time: "
+
 [node name="gameing" type="Control" parent="ui"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -1877,7 +1932,6 @@ one_shot = true
 
 [node name="reset_bar" type="ProgressBar" parent="ui/gameing"]
 time_scale_response = false
-visible = false
 anchor_left = 0.1
 anchor_top = 1.0
 anchor_right = 0.9
@@ -1924,6 +1978,7 @@ anims/show_and_fade = SubResource( 75 )
 
 [node name="dialog" type="Control" parent="ui"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 33 )
@@ -2054,8 +2109,8 @@ margin_right = 6.0
 rect_min_size = Vector2( 400, 0 )
 
 [node name="Label" type="Label" parent="ui/story_time/ScrollContainer"]
-margin_right = 972.0
-margin_bottom = 864.0
+margin_right = 524.0
+margin_bottom = 480.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 autowrap = true
@@ -2143,6 +2198,7 @@ skeleton = NodePath("../..")
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
 [connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
+[connection signal="sleep" from="ui/gameing/reset_bar" to="." method="go_to_sleep"]
 [connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/viewer" to="." method="_on_dialog_exited_anim"]

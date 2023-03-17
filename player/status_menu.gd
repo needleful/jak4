@@ -36,6 +36,21 @@ func safe_set_tab(tab):
 		tab = 0
 	tabs.current_tab = tab
 
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
+		$date_time/margin/stats/date.text = "%d days of travel" % Global.stat("current_day")
+		if get_tree().current_scene.has_method("get_time"):
+			var time = get_tree().current_scene.get_time()
+			var pm = false
+			var hours := int(floor(time))
+			var minutes := int(60.0*(time - hours))
+			if hours > 12:
+				hours -= 12
+				pm = true
+			if hours == 0:
+				hours = 12
+			$date_time/margin/stats/time.text = "%d:%02d %s" % [hours, minutes, "p.m." if pm else "a.m."]
+
 func _on_wardrobe_exited():
 	ui.unpause()
 

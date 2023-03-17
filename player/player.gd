@@ -350,6 +350,7 @@ onready var water_cast := $water_cast
 onready var ui := $ui
 onready var game_ui := $ui/gameing/custom_game
 
+onready var sleep_zone := $body_mesh/the_sleep_zone
 onready var coat_zone := $body_mesh/the_coat_zone
 onready var gun := $body_mesh/Armature/Skeleton/gun
 onready var lantern := $body_mesh/Armature/Skeleton/coat_tails/lantern
@@ -413,6 +414,12 @@ func _input(event):
 		equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
 		ui.show_inventory()
+	elif state == State.Sitting and event.is_action("mv_crouch"):
+		var reset_bar = $ui/gameing/reset_bar
+		if event.is_action_pressed("mv_crouch"):
+			reset_bar.sleep = true
+		elif event.is_action_released("mv_crouch"):
+			reset_bar.sleep = false
 	elif ui.choosing_item:
 		if event.is_action_pressed("ui_up"):
 			ui.equip_previous()
@@ -504,9 +511,15 @@ func _physics_process(delta):
 			elif should_hover():
 				next_state = State.Hover
 			elif holding("mv_crouch"):
-				var speed = (velocity).slide(ground_normal)
-				if speed.length() > MIN_SPEED_ROLL or movement.length_squared() >= 0.8:
+				var speed:float = (velocity).slide(ground_normal).length()
+				if speed > MIN_SPEED_ROLL or movement.length_squared() >= 0.8:
 					next_state = State.Roll
+				elif speed < 0.2 and !empty(sleep_zone):
+					next_state = State.Sitting
+					for g in sleep_zone.get_overlapping_bodies():
+						global_transform.origin = g.global_transform.origin
+						rotate_mesh(g.global_transform.basis.z)
+						break
 				else:
 					next_state = State.Crouch
 			elif max_depth > DEPTH_CROUCH:
@@ -1059,7 +1072,8 @@ func _physics_process(delta):
 		State.Locked, State.LockedWaiting, State.PlaceFlag, State.GetItem, State.Sitting:
 			last_ground_origin = global_transform.origin
 			desired_velocity = Vector3.ZERO
-			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
+			if mesh.body.get_current_node() == "Walk":
+				mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 		State.FallingDeath:
 			desired_velocity = Vector3.ZERO
 			accel_air(delta, desired_velocity*SPEED_RUN, av, ACCEL)
@@ -1555,6 +1569,19 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 		set_state(State.Damaged)
 	return false
 
+
+func go_to_sleep():
+	lock(false)
+	var fade_anim:AnimationPlayer = $fade/AnimationPlayer
+	fade_anim.play("fadeout")
+	var res = fade_anim.connect("animation_finished", self, "sleep_pass_time", [], CONNECT_ONESHOT)
+
+func sleep_pass_time(_x):
+	if get_tree().current_scene.has_method("sleep"):
+		get_tree().current_scene.sleep()
+	$fade/AnimationPlayer.play("fadein")
+	unlock(State.Sitting)
+
 # TODO: a short animation, then respawn
 func die():
 	set_state(State.Dead)
@@ -1666,8 +1693,9 @@ func wardrobe_unlock(paused):
 		unlock()
 	cam_rig.end_wardrobe()
 
-func lock():
-	mesh.lock()
+func lock(dialog := true):
+	if dialog:
+		mesh.lock()
 	set_process_input(false)
 	set_state(State.Locked)
 	$ui/gameing/stats.hide()
@@ -1771,6 +1799,7 @@ func start_jump(vel:float):
 	velocity.y = jump_factor*vel
 
 func set_state(next_state: int):
+	#print(State.keys()[state], " -> ", State.keys()[next_state])
 	var i = 0
 	while i < min(timers.size(), TIMERS_MAX):
 		timers[i] = 0.0
@@ -1797,6 +1826,8 @@ func set_state(next_state: int):
 			gun.end_combo()
 		State.LedgeHang:
 			ledge = null
+		State.Sitting:
+			$ui/gameing/reset_bar.sleep = false
 	
 	# Entry effects
 	match next_state:
