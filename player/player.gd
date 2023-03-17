@@ -1573,13 +1573,19 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 func go_to_sleep():
 	lock(false)
 	var fade_anim:AnimationPlayer = $fade/AnimationPlayer
+	mesh.transition_to("SleepStart")
 	fade_anim.play("fadeout")
-	var res = fade_anim.connect("animation_finished", self, "sleep_pass_time", [], CONNECT_ONESHOT)
+	$sleep_timer.start()
 
-func sleep_pass_time(_x):
+func _wake_up():
 	if get_tree().current_scene.has_method("sleep"):
 		get_tree().current_scene.sleep()
 	$fade/AnimationPlayer.play("fadein")
+	if !empty(sleep_zone):
+		heal()
+		Global.save_checkpoint(global_transform.origin)
+	else:
+		Global.save_game()
 	unlock(State.Sitting)
 
 # TODO: a short animation, then respawn
@@ -1990,6 +1996,9 @@ func set_state(next_state: int):
 			mesh.start_hover()
 			gun.unlock()
 		State.Sitting:
+			var sat_times = Global.add_stat("player_sat")
+			if state != State.Locked and sat_times < 3:
+				ui.show_prompt(["mv_crouch"], "(Press and Hold) Sleep")
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity = Vector3.ZERO
