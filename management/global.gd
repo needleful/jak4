@@ -475,7 +475,8 @@ func save_sync():
 
 func save_complete(result):
 	# Investigate: could the player accidentally save again before post_save_object groups are updated?
-	save_thread.wait_to_finish()
+	if save_thread.is_active():
+		save_thread.wait_to_finish()
 	if result == OK:
 		valid_game_state = true
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "post_save_object", "complete_save")
