@@ -438,7 +438,8 @@ func reset_game():
 		var _x = dir.rename(save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
 
-func save_checkpoint(pos: Vector3):
+func save_checkpoint(pos: Transform, sleeping := false):
+	set_stat("player_sleeping", sleeping)
 	game_state.checkpoint_position = pos
 	save_async()
 

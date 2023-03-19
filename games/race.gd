@@ -81,7 +81,7 @@ func _process(_delta):
 func start_race():
 	at_end = false
 	player = Global.get_player()
-	Global.save_checkpoint(race_start.global_transform.origin)
+	Global.save_checkpoint(race_start.global_transform)
 	player.respawn()
 	
 	player.can_use_hover_scooter = hover_scooter

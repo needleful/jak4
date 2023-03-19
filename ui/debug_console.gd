@@ -53,6 +53,9 @@ func _on_text_entered(new_text):
 	else:
 		echo(str(output))
 
+func noclip():
+	Global.get_player().toggle_noclip()
+
 func scene():
 	return get_tree().current_scene
 
@@ -145,7 +148,7 @@ func sss(val: bool):
 	Global.get_player().debug.visible = show_stats
 
 func save():
-	Global.save_checkpoint(Global.get_player().global_transform.origin)
+	Global.save_checkpoint(Global.get_player().get_save_transform())
 
 func load_game():
 	Global.load_sync()

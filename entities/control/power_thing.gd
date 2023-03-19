@@ -6,6 +6,7 @@ signal deactivated
 signal toggled(active, instant)
 
 export(bool) var active := false
+export(bool) var used_by_player := true
 
 func _ready():
 	if Global.valid_game_state:
@@ -19,7 +20,7 @@ func _ready():
 		deactivate(true)
 
 func _on_Area_body_entered(_body):
-	if active:
+	if active or used_by_player:
 		return
 	if Global.remove_item("capacitor"):
 		activate()

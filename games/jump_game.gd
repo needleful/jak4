@@ -23,7 +23,7 @@ func start_game():
 	if !res:
 		return
 	
-	Global.save_checkpoint(game_start.global_transform.origin)
+	Global.save_checkpoint(game_start.global_transform)
 	active = true
 	game_target.show()
 	jumps = 0

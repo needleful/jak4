@@ -286,7 +286,8 @@ enum State {
 	WallJump,
 	Wading,
 	WadingJump,
-	WadingFall
+	WadingFall,
+	NoClip
 }
 
 var state: int = State.Fall
@@ -362,6 +363,8 @@ var timers := PoolRealArray()
 var applied_ground_velocity := Vector3.ZERO
 
 var last_ground_origin := Vector3.ZERO
+var normal_layer := collision_layer
+var normal_mask := collision_mask
 
 const TIMERS_MAX := 3
 
@@ -382,16 +385,22 @@ func _ready():
 		set_physics_process(false)
 		return
 	if Global.valid_game_state:
-		global_transform.origin = Global.game_state.checkpoint_position
+		global_transform = Global.game_state.checkpoint_position
 		set_current_coat(Global.game_state.current_coat, false)
+		if Global.stat("player_sleeping"):
+			lock(false)
+			mesh.transition_to("SleepEnd")
+			call_deferred("_wake_up", true)
+		else:
+			set_state(State.Ground)
 	else:
-		Global.game_state.checkpoint_position = global_transform.origin
+		Global.game_state.checkpoint_position = global_transform
 		# Generate three random Common coats
 		for _x in range(3):
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
-	set_state(State.Ground)
+		set_state(State.Ground)
 	health = max_health
 	stamina = max_stamina
 	gun.camera = cam_rig.camera
@@ -516,10 +525,9 @@ func _physics_process(delta):
 					next_state = State.Roll
 				elif speed < 0.2 and !empty(sleep_zone):
 					next_state = State.Sitting
-					for g in sleep_zone.get_overlapping_bodies():
-						global_transform.origin = g.global_transform.origin
-						rotate_mesh(g.global_transform.basis.z)
-						break
+					var g = sleep_zone.get_overlapping_bodies()[0]
+					global_transform.origin = g.global_transform.origin
+					rotate_mesh(g.global_transform.basis.z)
 				else:
 					next_state = State.Crouch
 			elif max_depth > DEPTH_CROUCH:
@@ -886,7 +894,7 @@ func _physics_process(delta):
 		State.Sitting:
 			if pressed("mv_jump"):
 				next_state = State.BaseJump
-			elif empty(ground_area):
+			elif after(TIME_COYOTE, empty(ground_area)):
 				next_state = State.Fall
 			elif desired_velocity.length() > 0.05:
 				next_state = State.Ground
@@ -1112,6 +1120,12 @@ func _physics_process(delta):
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
 			rotate_mesh(-ground_normal)
+		State.NoClip:
+			if holding("mv_jump"):
+				desired_velocity.y = JUMP_VEL_BASE*0.3
+			elif holding("mv_crouch"):
+				desired_velocity.y = -JUMP_VEL_BASE*0.3
+			global_translate(delta*desired_velocity*SPEED_ROLL)
 
 func after(time: float, condition := true, id := 0):
 	if id >= timers.size():
@@ -1569,7 +1583,6 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 		set_state(State.Damaged)
 	return false
 
-
 func go_to_sleep():
 	lock(false)
 	var fade_anim:AnimationPlayer = $fade/AnimationPlayer
@@ -1577,15 +1590,18 @@ func go_to_sleep():
 	fade_anim.play("fadeout")
 	$sleep_timer.start()
 
-func _wake_up():
-	if get_tree().current_scene.has_method("sleep"):
+func _wake_up(from_start := false):
+	if !from_start and get_tree().current_scene.has_method("sleep"):
 		get_tree().current_scene.sleep()
+	if from_start:
+		rotate_mesh(global_transform.basis.z)
 	$fade/AnimationPlayer.play("fadein")
-	if !empty(sleep_zone):
-		heal()
-		Global.save_checkpoint(global_transform.origin)
-	else:
-		Global.save_game()
+	if !from_start:
+		if !empty(sleep_zone):
+			heal()
+			Global.save_checkpoint(get_save_transform(), true)
+		else:
+			Global.save_game()
 	unlock(State.Sitting)
 
 # TODO: a short animation, then respawn
@@ -1611,7 +1627,7 @@ func respawn():
 	applied_ground_velocity = Vector3.ZERO
 	$fade/AnimationPlayer.play("fadein")
 	heal()
-	global_transform.origin = Global.game_state.checkpoint_position
+	global_transform = Global.game_state.checkpoint_position
 	TimeManagement.resume()
 	ui.hide_prompt()
 	emit_signal("died")
@@ -1650,7 +1666,12 @@ func can_dash() -> bool:
 func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $body_mesh/flag_ref.global_transform)
-	Global.save_checkpoint(global_transform.origin)
+	Global.save_checkpoint(get_save_transform())
+
+func get_save_transform() -> Transform:
+	var save_transform = global_transform
+	save_transform.basis = mesh.global_transform.basis
+	return save_transform
 
 func can_save():
 	return !game_ui.in_game
@@ -1713,6 +1734,12 @@ func unlock(new_state := State.Ground):
 	set_process_input(true)
 	set_state(new_state)
 	$ui/gameing/stats.show()
+
+func toggle_noclip():
+	if state != State.NoClip:
+		set_state(State.NoClip)
+	else:
+		set_state(State.Fall)
 
 func is_locked() -> bool:
 	return state == State.Locked or state == State.LockedWaiting
@@ -1834,6 +1861,9 @@ func set_state(next_state: int):
 			ledge = null
 		State.Sitting:
 			$ui/gameing/reset_bar.sleep = false
+		State.NoClip:
+			collision_layer = normal_layer
+			collision_mask = normal_mask
 	
 	# Entry effects
 	match next_state:
@@ -2030,5 +2060,8 @@ func set_state(next_state: int):
 			mesh.transition_to("WallCling")
 			velocity.y = 0
 			gun.lock()
+		State.NoClip:
+			collision_layer = 0
+			collision_mask = 0 
 	state = next_state
 	$ui/gameing/debug/stats/a1.text = "State: %s" % State.keys()[state]

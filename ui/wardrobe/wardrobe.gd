@@ -25,10 +25,10 @@ func _input(event):
 		set_process_input(false)
 		return
 	if event.is_action_pressed("ui_accept"):
-		Global.save_checkpoint(player.global_transform.origin)
+		Global.save_checkpoint(player.get_save_transform())
 		exit()
 	elif !pause_menu and event.is_action_pressed("ui_cancel"):
-		Global.save_checkpoint(player.global_transform.origin)
+		Global.save_checkpoint(player.get_save_transform())
 		player.set_current_coat(old_coat)
 		exit()
 	elif event.is_action_pressed("ui_up"):

@@ -1,24 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://material/env/copper/copper_local_coords.tres" type="Material" id=1]
 [ext_resource path="res://_glb/env/copper/light_hang1.glb" type="PackedScene" id=3]
 [ext_resource path="res://entities/visual/light.gd" type="Script" id=4]
 
-[sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 0.270588, 0.270588, 0.270588, 1 )
-emission_enabled = true
-emission = Color( 1, 0.945098, 0.74902, 1 )
-emission_energy = 1.0
-emission_operator = 0
-emission_on_uv2 = false
-
 [node name="light_hang1" instance=ExtResource( 3 )]
 script = ExtResource( 4 )
-mesh_instance = NodePath("KinematicBody/mesh")
-
-[node name="mesh" parent="KinematicBody" index="0"]
-material/0 = ExtResource( 1 )
-material/1 = SubResource( 1 )
+mesh_instance = NodePath("light-kine/mesh")
 
 [node name="OmniLight" type="OmniLight" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.7606, -9.39953e-09 )
