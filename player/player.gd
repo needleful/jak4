@@ -310,8 +310,8 @@ var current_weapon : String
 
 const INFINITE_INERTIA := false
 
-const DEPTH_WATER_WADE := 0.5
-const DEPTH_WATER_DRY := 0.3
+const DEPTH_WATER_WADE := 0.3
+const DEPTH_WATER_DRY := 0.2
 const DEPTH_WATER_DROWN := 1.8
 var water_depth := 0.0
 
