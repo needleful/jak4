@@ -1020,11 +1020,11 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.LedgeHang:
 			last_ground_origin = global_transform.origin
+			$ledge_ref/mesh.global_transform.origin = ledge_last_transform*ledge_local_position
 			if ledge.global_transform != ledge_last_transform:
 				var new_transform := ledge.global_transform
 				var old_position := ledge_last_transform*ledge_local_position
 				var new_position := new_transform*ledge_local_position
-				$ledge_ref/mesh.global_transform.origin = new_position
 				var _x = move_and_collide(new_position - old_position)
 				ledge_last_transform = new_transform
 		State.Dash:
@@ -1443,9 +1443,15 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	var c:Dictionary = s.intersect_ray(wallCheck.global_transform.origin, wall_cast_end, [self], 1)
 	var no_wall:bool = !c or c.normal.y > min_dot
 	
+	
 	var valid: bool = no_wall and (center or left or right)
 	if !valid:
 		ledge = null
+	#else:
+		#print("Ledge: ",
+		#	"center, " if center else "",
+		#	"left, " if left else "",
+		#	"right" if right else "")
 	return valid
 
 func check_cast(cast: RayCast, min_dot: float):

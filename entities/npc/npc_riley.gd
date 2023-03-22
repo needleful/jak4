@@ -32,7 +32,7 @@ func _on_target_died(_id, path):
 		return
 
 	var p = Global.get_player()
-	if enemies.size() == 1:
+	if enemies.size() <= 1:
 		var _x = Global.add_stat("riley/saved")
 		_x = Global.add_stat(str(get_path()) + "/saved")
 		saved = true

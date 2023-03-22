@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/render_test_camera.gd" type="Script" id=1]
 [ext_resource path="res://entities/visual/lil_man.tscn" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material/env/ancient/gem_transparent.tres" type="Material" id=5]
 [ext_resource path="res://material/env/terrain_main.material" type="Material" id=6]
+[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=7]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Curve3D" id=1]
 _data = {
@@ -45,17 +47,24 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0 ]
 }
 
+[sub_resource type="ProceduralSky" id=4]
+
+[sub_resource type="Environment" id=5]
+background_mode = 2
+background_sky = SubResource( 4 )
+
 [node name="render_test" type="Spatial"]
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, -1, 0 )
+layers = 3
+shadow_enabled = true
 
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 width = 26.0
 depth = 24.0
 material = ExtResource( 6 )
-
-[node name="DirectionalLight" type="DirectionalLight" parent="CSGBox"]
-transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 0, 0 )
-shadow_enabled = true
 
 [node name="lil_man" parent="CSGBox" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
@@ -1089,5 +1098,17 @@ height = 12.0
 depth = 14.0
 material = ExtResource( 5 )
 
+[node name="CSGBox3" type="CSGBox" parent="."]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.325285, 0, 12.0771 )
+height = 21.5726
+depth = 14.0
+material = ExtResource( 7 )
+
 [node name="ReflectionProbe" type="ReflectionProbe" parent="."]
-extents = Vector3( 16.0754, 8.61801, 12.9442 )
+extents = Vector3( 16.0754, 15.5231, 13.5999 )
+
+[node name="fountain" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.29526, -0.358098, -6.34894 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 5 )

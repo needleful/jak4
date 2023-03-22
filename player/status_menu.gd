@@ -38,7 +38,10 @@ func safe_set_tab(tab):
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
-		$date_time/margin/stats/date.text = "%d days of travel" % Global.stat("current_day")
+		var days = Global.stat("current_day") + 1
+		$date_time/margin/stats/date.text = "%d %s of travel" % [
+			days,
+			"day" if days == 1 else "days" ] 
 		if get_tree().current_scene.has_method("get_time"):
 			var time = get_tree().current_scene.get_time()
 			var pm = false

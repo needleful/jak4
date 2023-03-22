@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=2]
+[gd_scene load_steps=107 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -838,6 +838,9 @@ radius = 0.215107
 radius = 0.1
 height = 0.2
 
+[sub_resource type="SpatialMaterial" id=98]
+flags_unshaded = true
+
 [node name="player" type="KinematicBody" groups=["player", "post_save_object", "pre_save_object", "push"]]
 time_scale_response = false
 collision_layer = 65546
@@ -912,7 +915,6 @@ shape = SubResource( 74 )
 [node name="leftHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0.17, 1.65147, 0.193106 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
@@ -920,7 +922,6 @@ collision_mask = 17
 [node name="rightHandCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, -0.17, 1.65147, 0.193106 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
@@ -928,7 +929,6 @@ collision_mask = 17
 [node name="centerCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0, 1.70647, 0.327074 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 collision_mask = 17
@@ -936,7 +936,6 @@ collision_mask = 17
 [node name="ceilingCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02568, 0.142043 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
@@ -944,7 +943,6 @@ collision_mask = 17
 [node name="headFloorCast" type="RayCast" parent="body_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -0.999456, 0.0329856, 0, -0.0329856, -0.999456, -7.45068e-08, 1.6733, 0.0595681 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
@@ -1056,6 +1054,7 @@ visible = false
 light_cull_mask = 4293918722
 
 [node name="the_sleep_zone" type="Area" parent="body_mesh"]
+time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315046, 0 )
 collision_layer = 0
 collision_mask = 512
@@ -1172,6 +1171,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 5 )
 script = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 stamina_color = Color( 0.513726, 1, 0.580392, 1 )
 drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 
@@ -1181,6 +1183,9 @@ time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="TextureRect" type="TextureRect" parent="ui/status_menu"]
 time_scale_response = false
@@ -1190,6 +1195,9 @@ texture = SubResource( 77 )
 expand = true
 stretch_mode = 1
 flip_v = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="tabs" type="TabContainer" parent="ui/status_menu"]
 time_scale_response = false
@@ -1197,6 +1205,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 65 )
 custom_styles/tabs_panel = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="Options" parent="ui/status_menu/tabs" instance=ExtResource( 9 )]
 time_scale_response = false
@@ -1232,6 +1243,9 @@ time_scale_response = false
 margin_left = 15.0
 margin_right = 357.0
 margin_bottom = 64.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
 time_scale_response = false
@@ -1262,6 +1276,9 @@ margin_left = -326.0
 margin_right = -15.0
 margin_bottom = 64.0
 alignment = 2
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
 time_scale_response = false
@@ -1287,14 +1304,19 @@ text = "Next >>"
 align = 2
 
 [node name="date_time" type="PanelContainer" parent="ui/status_menu"]
+time_scale_response = false
 anchor_top = 0.95
 anchor_bottom = 0.95
 margin_left = 20.0
 margin_top = -65.0
 margin_right = 210.0
 margin_bottom = 6.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="margin" type="MarginContainer" parent="ui/status_menu/date_time"]
+time_scale_response = false
 margin_right = 190.0
 margin_bottom = 71.0
 custom_constants/margin_right = 5
@@ -1303,6 +1325,7 @@ custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
 [node name="stats" type="VBoxContainer" parent="ui/status_menu/date_time/margin"]
+time_scale_response = false
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 185.0
@@ -1311,11 +1334,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="date" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+time_scale_response = false
 margin_right = 180.0
 margin_bottom = 22.0
 text = "X Days on Journey"
 
 [node name="time" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+time_scale_response = false
 margin_top = 26.0
 margin_right = 180.0
 margin_bottom = 48.0
@@ -2186,13 +2211,17 @@ enabled = true
 cast_to = Vector3( 0, -0.1, 0 )
 
 [node name="ledge_ref" type="Node" parent="."]
+time_scale_response = false
 
 [node name="mesh" type="MeshInstance" parent="ledge_ref"]
+time_scale_response = false
 visible = false
 mesh = SubResource( 96 )
 skeleton = NodePath("../..")
+material/0 = SubResource( 98 )
 
 [node name="sleep_timer" type="Timer" parent="."]
+time_scale_response = false
 wait_time = 3.0
 one_shot = true
 

@@ -53,6 +53,19 @@ func _on_text_entered(new_text):
 	else:
 		echo(str(output))
 
+func debug_time(debugging := true, parent:Node = null):
+	if !parent:
+		parent = Global.get_player()
+	parent.time_scale_response = debugging
+	for c in parent.get_children():
+		debug_time(debugging, c)
+
+func time():
+	if TimeManagement.time_slowed:
+		TimeManagement.resume()
+	else:
+		TimeManagement.slow_time()
+
 func noclip():
 	Global.get_player().toggle_noclip()
 
