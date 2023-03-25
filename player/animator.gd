@@ -352,10 +352,11 @@ func blend_gun(active: float):
 
 func target_aim(target_dir: Vector3) -> Vector2:
 	var aim_basis:Basis = aim_reference.global_transform.basis
-	if !aim_basis.y.is_normalized():
+	var up := aim_basis.y.normalized()
+	if !up.is_normalized():
 		return Vector2.ZERO
 	var y_cur: Vector3 = aim_basis.z
-	var y_tar: Vector3 = target_dir.slide(aim_basis.y)
+	var y_tar: Vector3 = target_dir.slide(up)
 	var y_axis: Vector3 = y_cur.cross(y_tar).normalized()
 	var y_angle: float = y_cur.angle_to(y_tar)
 	

@@ -18,7 +18,8 @@ var show_background := true
 const DEFAULT_ICONS := {
 	ItemDescription.Category.Equipment: preload("res://ui/items/icons/default_equipment.svg"),
 	ItemDescription.Category.Firearm: preload("res://ui/items/icons/default_firearm.svg"),
-	ItemDescription.Category.Sundries: preload("res://ui/items/icons/default_sundries.svg")
+	ItemDescription.Category.Sundries: preload("res://ui/items/icons/default_sundries.svg"),
+	ItemDescription.Category.Keys: preload("res://ui/items/icons/default_keys.svg")
 }
 
 const MIN_ZOOM := 0.1

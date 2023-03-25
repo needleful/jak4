@@ -5,6 +5,7 @@ enum Category {
 	Firearm,
 	Equipment,
 	Sundries,
+	Keys,
 }
 
 export(Category) var category
