@@ -16,6 +16,8 @@ export(bool) var close_cam := false
 func _ready():
 	var _x = connect("body_entered", self, "_on_body_entered", [], CONNECT_DEFERRED)
 	_x = connect("body_exited", self, "_on_body_exited", [], CONNECT_DEFERRED)
+	if get_overlapping_bodies().empty():
+		hide()
 
 func _on_body_entered(_body):
 	var overrides := {
@@ -31,21 +33,14 @@ func _on_body_entered(_body):
 		overrides["default_music"] = default_music
 		overrides["combat_music"] = combat_music
 	overrides["show_sun"] = show_sun
-	for c in get_children():
-		if c is ReflectionProbe:
-			c.show()
 	overrides["do_not_disturb"] = no_combat
 	overrides["close_cam"] = close_cam
 	overrides["id"] = hash(get_path())
 	overrides["priority"] = override_priority
 	get_tree().current_scene.apply_environment(overrides)
-	for ref in get_children():
-		if ref is ReflectionProbe:
-			ref.show()
+	show()
 
 func _on_body_exited(_body):
 	var id := hash(get_path())
 	get_tree().current_scene.remove_environment(id)
-	for ref in get_children():
-		if ref is ReflectionProbe:
-			ref.hide()
+	hide()

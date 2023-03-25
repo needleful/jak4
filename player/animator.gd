@@ -114,8 +114,7 @@ func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
 	var b :Vector2 = anim["parameters/WholeBody/Climb/0/blend_position"]
 	var right := -global_transform.basis.x.dot(velocity)
 	var up := 0.0
-	if wall_normal.y != 0:
-		up = velocity.y
+	up = velocity.y
 	b =  lerp(b, Vector2(right, up), 0.3)
 	anim["parameters/WholeBody/Climb/0/blend_position"] = b
 	anim["parameters/WholeBody/Climb/1/blend_position"] = b
