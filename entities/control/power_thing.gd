@@ -20,7 +20,7 @@ func _ready():
 		deactivate(true)
 
 func _on_Area_body_entered(_body):
-	if active or used_by_player:
+	if active or !used_by_player:
 		return
 	if Global.remove_item("capacitor"):
 		activate()
