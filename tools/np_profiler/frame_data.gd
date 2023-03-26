@@ -44,7 +44,7 @@ func parse(data: String) -> bool:
 		var remove_after = s
 		for i in range(1, s + 1):
 			var prev : FunctionProfile = top_level_functions[s - i]
-			if fp.start < prev.start:
+			if fp.start <= prev.start and fp.end >= prev.end:
 				prev.parent = fp
 				fp.children.push_front(prev)
 				remove_after = s - i
