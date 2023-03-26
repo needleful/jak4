@@ -9,9 +9,6 @@ var d_distance := directional_shadow_max_distance
 
 const orthogonal_shadow_distance = 30.0
 
-func _ready():
-	call_deferred("update_rotation")
-
 func set_distance(d):
 	distance = d
 	directional_shadow_split_1 = lerp(0.1, d_split1, clamp(distance, 0, 1))

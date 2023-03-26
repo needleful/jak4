@@ -38,7 +38,6 @@ onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween
 onready var sun := $sun
-onready var indirect := $indirect_light
 onready var indirect_tween := $indirect_tween
 onready var wind := $audio_wind
 var sun_enabled := true
@@ -123,6 +122,9 @@ func _ready():
 	if Global.valid_game_state:
 		if Global.has_stat("clock_time"):
 			set_time(Global.stat("clock_time"), true)
+	else:
+		set_time(9.75)
+	
 
 func _process(delta):
 	time += delta
@@ -350,7 +352,7 @@ func set_sun_enabled(enabled:bool):
 	
 	if !enabled and sun.visible:
 		_x = sun_tween.interpolate_callback(sun, 
-			FOG_TWEEN_TIME, "hide")
+			FOG_TWEEN_TIME + 0.1, "hide")
 	elif enabled:
 		if !sun.visible:
 			sun.light_energy = 0
@@ -360,11 +362,11 @@ func set_sun_enabled(enabled:bool):
 func indirect_light_override(light: Color):
 	var _x = indirect_tween.stop_all()
 	if time < TIME_READY:
-		indirect.light_color = light
+		env.environment.indirect_light_color = light
 		return
 	_x = indirect_tween.remove_all()
-	_x = indirect_tween.interpolate_property(indirect, "light_color",
-		indirect.light_color, light,
+	_x = indirect_tween.interpolate_property(env.environment, "indirect_light_color",
+		env.environment.indirect_light_color, light,
 		FOG_TWEEN_TIME, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	_x = indirect_tween.start()
 
@@ -455,4 +457,4 @@ func set_time(hour: float, p_ignore_day := true):
 		dn.advance(seconds/dn.playback_speed)
 	else:
 		dn.advance((seconds - current_time)/dn.playback_speed)
-	sun.update_rotation()
+	sun.call_deferred("update_rotation")

@@ -522,6 +522,7 @@ background_sky = SubResource( 2 )
 background_color = Color( 0.286275, 0.223529, 0.54902, 1 )
 ambient_light_color = Color( 0.27451, 0.294118, 0.388235, 1 )
 ambient_light_sky_contribution = 0.0
+indirect_light_color = Color( 0.662745, 0.388235, 0.388235, 1 )
 fog_enabled = true
 fog_color = Color( 1, 1.5, 2.5, 1 )
 fog_depth_end = 12000.0
@@ -2514,14 +2515,17 @@ visible = false
 [node name="chunk_lowres_outer051" parent="." index="403"]
 visible = false
 
-[node name="sun_true_rotation" type="Spatial" parent="." index="404"]
+[node name="chunk_lowres_outer052" parent="." index="404"]
+visible = false
+
+[node name="sun_true_rotation" type="Spatial" parent="." index="405"]
 transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
 
 [node name="skybox_sun" parent="sun_true_rotation" index="0" instance=ExtResource( 19 )]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.229608, 0.888723, -0.478454 )
 script = ExtResource( 22 )
 
-[node name="sun" type="DirectionalLight" parent="." index="405"]
+[node name="sun" type="DirectionalLight" parent="." index="406"]
 transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
 layers = 1024
 light_color = Color( 1, 0.968627, 0.878431, 1 )
@@ -2538,12 +2542,6 @@ script = ExtResource( 7 )
 [node name="Timer" type="Timer" parent="sun" index="0"]
 wait_time = 7.0
 autostart = true
-
-[node name="indirect_light" type="DirectionalLight" parent="." index="406"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-layers = 1024
-light_color = Color( 0.380392, 0.556863, 0.784314, 1 )
-light_cull_mask = 4294934527
 
 [node name="skybox" type="MeshInstance" parent="." index="407"]
 transform = Transform( 200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0 )
@@ -2762,9 +2760,6 @@ text = "Loading World..."
 
 [node name="endgame_teleport_marker" type="Position3D" parent="." index="427"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -658.433, 12.5731, 2363.8 )
-
-[node name="chunk_lowres_outer052" parent="." index="428"]
-visible = false
 
 [connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

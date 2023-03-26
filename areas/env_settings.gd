@@ -18,7 +18,6 @@ var active_overrides := []
 
 onready var sun := $"../sun"
 onready var vis_sun := $"../sun_true_rotation"
-onready var indirect_light := $"../indirect_light"
 onready var skybox := $"../skybox"
 onready var env := $"../WorldEnvironment"
 
@@ -39,8 +38,8 @@ func set_sun_visible(sv: bool):
 
 func set_indirect_light_color(ic: Color):
 	indirect_light_color = ic
-	if indirect_light and no("indirect_light"):
-		indirect_light.light_color = ic
+	if env and no("indirect_light"):
+		env.environment.indirect_light_color = ic
 
 func set_fog_color(fc: Color):
 	fog_color = fc
