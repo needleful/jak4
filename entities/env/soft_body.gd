@@ -3,7 +3,6 @@ extends SoftBody
 var queued_pause := false
 
 func _enter_tree():
-	physics_enabled = true
 	queued_pause = true
 	call_deferred("disable_on_delay")
 
