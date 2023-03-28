@@ -2220,21 +2220,15 @@ mesh = SubResource( 96 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 98 )
 
-[node name="sleep_timer" type="Timer" parent="."]
-time_scale_response = false
-wait_time = 3.0
-one_shot = true
-
 [connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
 [connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
-[connection signal="sleep" from="ui/gameing/reset_bar" to="." method="go_to_sleep"]
+[connection signal="sleep" from="ui/gameing/reset_bar" to="." method="go_to_sleep" flags=3]
 [connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/viewer" to="." method="_on_dialog_exited_anim"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]
-[connection signal="timeout" from="sleep_timer" to="." method="_wake_up"]

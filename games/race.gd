@@ -134,7 +134,8 @@ func _fail():
 func _end():
 	player.can_use_hover_scooter = true
 	print("game ended")
-	player.game_ui.disconnect("cancelled", self, "_on_timeout")
+	if player.game_ui.is_connected("cancelled", self, "_fail"):
+		player.game_ui.disconnect("cancelled", self, "_fail")
 	active = false
 	set_process(false)
 	overlay = null

@@ -21,7 +21,7 @@ var lowres_chunks: Dictionary
 #var chunk_collider: Dictionary
 
 const CHUNK_SQDIST_UPDATE := 17
-const VIS_SQDIST_UPDATE := 23
+const VIS_SQDIST_UPDATE := 1
 const ACTIVE_SQDIST_UPDATE := 19
 const ENEMIES_SQDIST_UPDATE := 9
 
@@ -266,7 +266,6 @@ func _on_tutorial_swap_timeout():
 
 # Environment
 func apply_environment(p_env: Dictionary):
-	print("applying environment")
 	var insert_index := env_overrides.size()
 	for i in range(env_overrides.size()):
 		if p_env.priority >= env_overrides[i].priority:
@@ -410,11 +409,16 @@ func get_dynamic_content(chunk_name):
 ## Day/night cycle
 
 func sleep():
+	chunk_loader.unload_all()
 	var t = get_time()
 	if t > BEDTIME or t < TOO_EARLY:
 		set_time(RISE_AND_SHINE, false)
 	else:
 		set_time(get_time() + 2, false)
+
+func wake_up():
+	load_nearby_chunks(player.global_transform.origin)
+	update_active_chunks(player.global_transform.origin)
 
 func start_day():
 	if !ignore_day:
@@ -423,6 +427,7 @@ func start_day():
 		get_tree().call_group("daily_schedule", "_on_midnight")
 	else:
 		print("Day ignored!")
+	ignore_day = false
 
 # Hours with decimals
 func get_time():

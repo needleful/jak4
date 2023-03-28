@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/stone/hive_hut_flat_roof.tscn" type="PackedScene" id=2]
@@ -15,8 +15,6 @@
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/city/sign_small.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/copper/pail.tscn" type="PackedScene" id=15]
-[ext_resource path="res://entities/control/conditional.gd" type="Script" id=16]
-[ext_resource path="res://tutorial_prompt.gd" type="Script" id=17]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=18]
 [ext_resource path="res://entities/env/furniture/fruit_stand.tscn" type="PackedScene" id=19]
 [ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=20]
@@ -38,14 +36,10 @@
 [ext_resource path="res://entities/shop_stock/shop_default_stock.inv" type="Resource" id=36]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=37]
 
-[sub_resource type="BoxShape" id=1]
-extents = Vector3( 4.25, 1, 4 )
-
 [sub_resource type="SphereShape" id=2]
 
 [node name="chunk028" type="Spatial"]
 script = ExtResource( 1 )
-lighting_preview = true
 
 [node name="zone_village" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 45.9, -3.3, -222.2 )
@@ -239,31 +233,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.154, -7.17639, 2.59399 )
 [node name="bug_pickup2" parent="active_entities/zone_village" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.904, -10.9264, 1.59399 )
 
-[node name="demo" type="Spatial" parent="active_entities/zone_village"]
-
-[node name="hover_scooter_pickup" parent="active_entities/zone_village/demo" instance=ExtResource( 11 )]
+[node name="hover_scooter_pickup" parent="active_entities/zone_village" instance=ExtResource( 11 )]
 transform = Transform( -0.0529627, -0.935159, 0.350247, -0.998539, 0.0533814, -0.0084659, -0.0107797, -0.350184, -0.936618, -7.63697, 14.1708, -25.929 )
 item_id = "hover_scooter"
 preview = ExtResource( 10 )
 friendly_name = "scooter_demo"
 
-[node name="gem_pickup" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3465, -10.8866, -1.37177 )
+[node name="demo" type="Spatial" parent="active_entities/zone_village"]
 
 [node name="gem_pickup2" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37345, -6.74431, 4.06894 )
-
-[node name="gem_pickup20" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37345, -6.74431, 5.06894 )
-
-[node name="gem_pickup21" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3734, -6.74431, 2.31894 )
-
-[node name="gem_pickup3" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.18505, -10.8981, 2.03612 )
-
-[node name="gem_pickup4" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3476, -10.8381, 0.0153046 )
 
 [node name="gem_pickup5" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6249, -2.55085, 0.836243 )
@@ -271,92 +250,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6249, -2.55085, 0.836243 )
 [node name="gem_pickup6" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.2676, 1.44789, -4.60493 )
 
-[node name="gem_pickup15" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.76762, -2.55211, -3.35493 )
-
-[node name="gem_pickup7" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.1063, 1.4502, -16.7743 )
-
-[node name="gem_pickup12" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 17.8563, 1.9502, -22.0243 )
-
-[node name="gem_pickup13" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 19.1504, 1.4502, -26.8539 )
-
-[node name="gem_pickup16" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 16.8697, 2.9502, -31.8649 )
-
-[node name="gem_pickup8" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.76229, 5.70804, -25.6086 )
-
 [node name="gem_pickup9" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.737705, 5.70804, -27.1086 )
 
 [node name="gem_pickup17" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98771, 5.70804, -23.1086 )
 
-[node name="gem_pickup18" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.23771, 10.208, -23.3586 )
-
-[node name="gem_pickup19" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.23771, 12.958, -23.3586 )
-
 [node name="gem_pickup11" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5123, 5.70804, -31.1086 )
 
-[node name="gem_pickup14" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5123, 6.45804, -27.8586 )
-
 [node name="gem_pickup10" parent="active_entities/zone_village/demo" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.90401, 14.0736, -24.4062 )
-
-[node name="demo_tutorial" type="Spatial" parent="active_entities/zone_village/demo"]
-script = ExtResource( 16 )
-condition = "!Global.stat(\"scooter_demo\")"
-
-[node name="tut_prompt" type="Area" parent="active_entities/zone_village/demo/demo_tutorial"]
-transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.55801, -10.5, 3.4306 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 17 )
-input_actions = [ "mv_crouch", "mv_jump" ]
-text = "(Standing Still) Crouch Jump"
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/demo/demo_tutorial/tut_prompt"]
-shape = SubResource( 1 )
-
-[node name="tut_prompt2" type="Area" parent="active_entities/zone_village/demo/demo_tutorial"]
-transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 14.4462, 2.25, -13.0215 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 17 )
-input_actions = [ "mv_crouch", "mv_jump" ]
-text = "(While Running) Roll Jump"
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/demo/demo_tutorial/tut_prompt2"]
-shape = SubResource( 1 )
-
-[node name="tut_prompt3" type="Area" parent="active_entities/zone_village/demo/demo_tutorial"]
-transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 15.8595, 7.25, -30.9694 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 17 )
-input_actions = [ "mv_jump", "combat_spin" ]
-text = "Air Spin"
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/demo/demo_tutorial/tut_prompt3"]
-shape = SubResource( 1 )
-
-[node name="tut_prompt4" type="Area" parent="active_entities/zone_village/demo/demo_tutorial"]
-transform = Transform( 0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -0.0932732, 6.75, -20.8385 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 17 )
-input_actions = [ "mv_crouch" ]
-text = "(At Wall) Climb"
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/demo/demo_tutorial/tut_prompt4"]
-shape = SubResource( 1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.86212, 14.0736, -23.6062 )
 
 [node name="scrap1" parent="active_entities/zone_village" instance=ExtResource( 13 )]
 transform = Transform( -1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 0, 0, 1, 16.096, 3.57361, -30.656 )
@@ -434,5 +338,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.324883, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/jump_game/game_target"]
 shape = SubResource( 2 )
-
-[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

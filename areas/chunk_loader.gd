@@ -86,6 +86,10 @@ func _get_content(dic:Dictionary, chunk: String):
 	res = dic.get(chunk)
 	return res
 
+func unload_all():
+	for c in _nodes.values():
+		queue_unload(c)
+
 func queue_load(chunk: Spatial, active: bool):
 	set_active(chunk.name, true)
 	if chunk.has_node("dynamic_content"):

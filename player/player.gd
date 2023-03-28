@@ -390,7 +390,8 @@ func _ready():
 		if Global.stat("player_sleeping"):
 			lock(false)
 			mesh.transition_to("SleepEnd")
-			call_deferred("_wake_up", true)
+			call_deferred("_wake_up")
+			rotate_mesh(global_transform.basis.z)
 		else:
 			set_state(State.Ground)
 	else:
@@ -1590,24 +1591,30 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 	return false
 
 func go_to_sleep():
-	lock(false)
 	var fade_anim:AnimationPlayer = $fade/AnimationPlayer
+	lock(false)
 	mesh.transition_to("SleepStart")
 	fade_anim.play("fadeout")
-	$sleep_timer.start()
+	
+	yield(get_tree().create_timer(1.5), "timeout")
+	
+	if get_tree().current_scene.has_method("sleep"):
+		get_tree().current_scene.call_deferred("sleep")
+	
+	yield(get_tree().create_timer(1.5), "timeout")
+	
+	if get_tree().current_scene.has_method("wake_up"):
+		get_tree().current_scene.call_deferred("wake_up")
+	call_deferred("_wake_up")
+	
+	if !empty(sleep_zone):
+		heal()
+		Global.save_checkpoint(get_save_transform(), true)
+	else:
+		Global.save_game()
 
-func _wake_up(from_start := false):
-	if !from_start and get_tree().current_scene.has_method("sleep"):
-		get_tree().current_scene.sleep()
-	if from_start:
-		rotate_mesh(global_transform.basis.z)
+func _wake_up():
 	$fade/AnimationPlayer.play("fadein")
-	if !from_start:
-		if !empty(sleep_zone):
-			heal()
-			Global.save_checkpoint(get_save_transform(), true)
-		else:
-			Global.save_game()
 	unlock(State.Sitting)
 
 # TODO: a short animation, then respawn
@@ -1673,6 +1680,7 @@ func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $body_mesh/flag_ref.global_transform)
 	Global.save_checkpoint(get_save_transform())
+	f.body.queued_pause = false
 
 func get_save_transform() -> Transform:
 	var save_transform = global_transform

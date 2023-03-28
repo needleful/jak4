@@ -2,7 +2,7 @@
 
 [ext_resource path="res://material/env/stone/bricks.material" type="Material" id=1]
 [ext_resource path="res://_glb/env/stone/hut_bath.glb" type="PackedScene" id=2]
-[ext_resource path="res://entities/visual/flag.gd" type="Script" id=3]
+[ext_resource path="res://entities/env/soft_body.gd" type="Script" id=3]
 [ext_resource path="res://entities/visual/coat_like.gd" type="Script" id=5]
 
 [sub_resource type="PlaneMesh" id=1]
@@ -16,8 +16,7 @@ params_cull_mode = 2
 [sub_resource type="CylinderShape" id=3]
 radius = 0.774413
 
-[node name="hut_bath" instance=ExtResource( 2 )]
-script = ExtResource( 3 )
+[node name="hut_bath" groups=["distance_activated"] instance=ExtResource( 2 )]
 
 [node name="hut_bath" parent="." index="0"]
 material/0 = ExtResource( 1 )
@@ -30,7 +29,9 @@ transform = Transform( -0.123792, 0.992308, -4.33752e-08, 0, -4.37114e-08, -1, -
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = SubResource( 2 )
-collision_layer = 4097
+physics_enabled = false
+collision_layer = 4096
+collision_mask = 2
 simulation_precision = 2
 linear_stiffness = 0.3
 areaAngular_stiffness = 0.34
@@ -43,6 +44,7 @@ attachments/0/offset = Vector3( 1.41492, 2.54975, -1.11111 )
 attachments/1/point_index = 48
 attachments/1/spatial_attachment_path = NodePath("../StaticBody")
 attachments/1/offset = Vector3( 1.61298, 2.54975, 0.476578 )
+script = ExtResource( 3 )
 
 [node name="StaticBody" type="StaticBody" parent="." index="1"]
 collision_layer = 4096
