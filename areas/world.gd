@@ -417,6 +417,7 @@ func sleep():
 		set_time(get_time() + 2, false)
 
 func wake_up():
+	start_loading_chunks()
 	load_nearby_chunks(player.global_transform.origin)
 	update_active_chunks(player.global_transform.origin)
 

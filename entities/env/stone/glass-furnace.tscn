@@ -1,31 +1,15 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://_glb/env/furniture/glass-furnace.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/visual/light.gd" type="Script" id=2]
 [ext_resource path="res://material/env/stone/bricks.material" type="Material" id=3]
 [ext_resource path="res://material/env/stone/albedo_furnace.png" type="Texture" id=4]
-[ext_resource path="res://material/env/stone/emmisive_furnace.png" type="Texture" id=5]
-
-[sub_resource type="SpatialMaterial" id=2]
-albedo_texture = ExtResource( 4 )
-emission_enabled = true
-emission = Color( 0, 0, 0, 1 )
-emission_energy = 1.0
-emission_operator = 0
-emission_on_uv2 = false
-emission_texture = ExtResource( 5 )
-
-[sub_resource type="SpatialMaterial" id=3]
-albedo_texture = ExtResource( 4 )
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_texture = ExtResource( 4 )
 
 [node name="glass-furnace" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-light_material = SubResource( 2 )
-dark_material = SubResource( 3 )
-mesh_instance = NodePath("furnace")
 
 [node name="furnace" parent="." index="0"]
 material/0 = ExtResource( 3 )

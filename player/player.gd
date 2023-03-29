@@ -1596,24 +1596,23 @@ func go_to_sleep():
 	mesh.transition_to("SleepStart")
 	fade_anim.play("fadeout")
 	
-	yield(get_tree().create_timer(1.5), "timeout")
+	yield(get_tree().create_timer(1), "timeout")
 	
 	if get_tree().current_scene.has_method("sleep"):
 		get_tree().current_scene.call_deferred("sleep")
 	
-	yield(get_tree().create_timer(1.5), "timeout")
+	yield(get_tree().create_timer(1), "timeout")
 	
 	if get_tree().current_scene.has_method("wake_up"):
 		get_tree().current_scene.call_deferred("wake_up")
 	call_deferred("_wake_up")
-	
+
+func _wake_up():
 	if !empty(sleep_zone):
 		heal()
 		Global.save_checkpoint(get_save_transform(), true)
 	else:
 		Global.save_game()
-
-func _wake_up():
 	$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
 
