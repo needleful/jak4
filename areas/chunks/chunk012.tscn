@@ -154,7 +154,6 @@ radius = 9.97388
 
 [node name="chunk012" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-lighting_preview = true
 
 [node name="fort" parent="." index="0"]
 material/0 = SubResource( 1 )
@@ -279,11 +278,15 @@ material/0 = ExtResource( 9 )
 [node name="garden_soil004" parent="stairs_large/garden004" index="0"]
 material/0 = SubResource( 2 )
 
+[node name="StaticBody" parent="stairs_large/garden004/garden_soil004" index="0" groups=["flag_surface"]]
+
 [node name="garden005" parent="stairs_large" index="1"]
 material/0 = ExtResource( 9 )
 
 [node name="garden_soil005" parent="stairs_large/garden005" index="0"]
 material/0 = SubResource( 2 )
+
+[node name="StaticBody" parent="stairs_large/garden005/garden_soil005" index="0" groups=["flag_surface"]]
 
 [node name="rail" parent="stairs_large" index="2"]
 material/0 = ExtResource( 9 )
@@ -299,6 +302,8 @@ material/0 = ExtResource( 9 )
 
 [node name="garden_soul" parent="garden" index="0"]
 material/0 = SubResource( 2 )
+
+[node name="StaticBody" parent="garden/garden_soul" index="0" groups=["flag_surface"]]
 
 [node name="doorway_large" parent="." index="34"]
 material/0 = ExtResource( 9 )
@@ -318,11 +323,15 @@ material/0 = ExtResource( 9 )
 [node name="garden_soil001" parent="garden001" index="0"]
 material/0 = SubResource( 2 )
 
+[node name="StaticBody" parent="garden001/garden_soil001" index="0" groups=["flag_surface"]]
+
 [node name="garden002" parent="." index="38"]
 material/0 = ExtResource( 9 )
 
 [node name="garden_soil003" parent="garden002" index="0"]
 material/0 = SubResource( 2 )
+
+[node name="StaticBody" parent="garden002/garden_soil003" index="0" groups=["flag_surface"]]
 
 [node name="church" parent="." index="39"]
 material/0 = SubResource( 5 )
@@ -343,11 +352,15 @@ material/0 = ExtResource( 9 )
 [node name="garden_soil002" parent="garden003" index="0"]
 material/0 = SubResource( 2 )
 
+[node name="StaticBody" parent="garden003/garden_soil002" index="0" groups=["flag_surface"]]
+
 [node name="garden006" parent="." index="41"]
 material/0 = ExtResource( 9 )
 
 [node name="garden_soil006" parent="garden006" index="0"]
 material/0 = SubResource( 2 )
+
+[node name="StaticBody" parent="garden006/garden_soil006" index="0" groups=["flag_surface"]]
 
 [node name="garden007" parent="." index="42"]
 material/0 = ExtResource( 9 )
@@ -363,6 +376,8 @@ material/0 = ExtResource( 15 )
 
 [node name="garden_soil007" parent="garden007" index="3"]
 material/0 = SubResource( 2 )
+
+[node name="StaticBody" parent="garden007/garden_soil007" index="0" groups=["flag_surface"]]
 
 [node name="doorway_large005" parent="." index="43"]
 material/0 = ExtResource( 9 )
@@ -458,7 +473,7 @@ material/4 = SubResource( 11 )
 [node name="garden_villa" parent="villa" index="0"]
 material/0 = SubResource( 5 )
 
-[node name="garden_soil008" parent="villa/garden_villa" index="0"]
+[node name="garden_soil008" parent="villa/garden_villa" index="0" groups=["flag_surface"]]
 material/0 = SubResource( 2 )
 
 [node name="house" parent="." index="71"]
@@ -509,7 +524,9 @@ material/0 = ExtResource( 9 )
 [node name="garden_soil" parent="garden008" index="0"]
 material/0 = SubResource( 2 )
 
-[node name="active_entities" type="Spatial" parent="." index="88"]
+[node name="StaticBody" parent="garden008/garden_soil" index="0" groups=["flag_surface"]]
+
+[node name="active_entities" type="Spatial" parent="." index="78"]
 
 [node name="zone_fort" type="MultiMeshSystem" parent="active_entities" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -43.8926, -13.4246, -106.934 )
@@ -579,7 +596,7 @@ transform = Transform( 0.778889, 0, 0.627162, 0, 1, 0, -0.627162, 0, 0.778889, 7
 transform = Transform( -0.522573, 0, -0.852595, 0, 1, 0, 0.852595, 0, -0.522573, -5.39101, -4.52195, -16.1766 )
 
 [node name="garden2" parent="active_entities/zone_fort/level_1" index="7" instance=ExtResource( 25 )]
-transform = Transform( -0.967898, 0, 0.251345, 0, 1, 0, -0.251345, 0, -0.967898, -18.7731, 0.992649, -9.7347 )
+transform = Transform( -0.967898, 0, 0.251345, 0, 1, 0, -0.251345, 0, -0.967898, -18.5704, 0.992649, -11.0504 )
 
 [node name="fountain_npc" parent="active_entities/zone_fort/level_1" index="8" instance=ExtResource( 3 )]
 transform = Transform( -0.976381, 0, 0.216057, 0, 1, 0, -0.216057, 0, -0.976381, 2.53032, -4.52732, 8.76057 )
@@ -700,5 +717,3 @@ transform = Transform( -0.257304, 0, -0.966331, 0, 1, 0, 0.966331, 0, -0.257304,
 transform = Transform( -0.0986199, 0, 0.995125, 0, 1, 0, -0.995125, 0, -0.0986199, -35.1683, 6.41824, -60.2354 )
 visual_name = "Siraj"
 friendly_id = "siraj"
-
-[connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

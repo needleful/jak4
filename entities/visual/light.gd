@@ -1,3 +1,4 @@
+tool
 extends Spatial
 
 export(bool) var light_enabled := true setget set_enabled
@@ -24,6 +25,7 @@ func set_enabled(e):
 		else:
 			var m := mesh.get_surface_material(1) as SpatialMaterial
 			if m:
+				print("Emitting: ", name)
 				m.emission_enabled = light_enabled
 
 func enable():

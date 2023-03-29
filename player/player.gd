@@ -1165,6 +1165,10 @@ func get_target_ref():
 func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
+func lock_in_animation(anim:String):
+	mesh.exit_custom_loop(anim)
+	state = State.LockedWaiting
+
 func anim_play(start:String, loop:String):
 	mesh.play_custom_loop(start, loop)
 	return true
@@ -1679,7 +1683,6 @@ func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $body_mesh/flag_ref.global_transform)
 	Global.save_checkpoint(get_save_transform())
-	f.body.queued_pause = false
 
 func get_save_transform() -> Transform:
 	var save_transform = global_transform
@@ -1877,6 +1880,8 @@ func set_state(next_state: int):
 		State.NoClip:
 			collision_layer = normal_layer
 			collision_mask = normal_mask
+		State.LockedWaiting:
+			mesh.release_item()
 	
 	# Entry effects
 	match next_state:
