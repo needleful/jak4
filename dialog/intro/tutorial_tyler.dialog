@@ -2,8 +2,10 @@
 	* The boy gestures to the roofs. It seems he wants you to play with him.
 	* Will you?
 	{goto("choice")}
-	
-{otherwise if main_speaker.in_tutorial} *The boy seems satisfied.
+
+{otherwise}?{tyler_tutorial}
+	*The boy seems satisfied.
+	{main_speaker.chase = false}
 	{exit()}
 
 {otherwise} Hugote? Eeya ili paina?
@@ -14,7 +16,7 @@
 > {skip()} Yes (Play tutorial)
 	[You] Uh, eya?
 	* The boys eyes glint. He starts running. You suppose he wants you to chase him.
-	{event("start_tutorial", false)}
+	{main_speaker.start_tutorial()}
 	{exit()}
 
 > {skip()} No (Skip Tutorial)

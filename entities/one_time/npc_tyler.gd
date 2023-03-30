@@ -1,17 +1,16 @@
 extends NPC
 
-export(AudioStream) var music
-
 onready var last_position := global_transform.origin
 onready var player :PlayerBody = get_tree().current_scene.get_node("player")
 const ROTATE_SPEED := 10.0
 var look_at_player := false
 var chase := false
 var in_tutorial := false
+var dialog_node
 
 func _ready():
 	if (Global.stat($tutorial_area.get_stat_name())):
-		$dialog.queue_free()
+		disable_dialog()
 	idle()
 
 func _process(delta):
@@ -67,8 +66,16 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	set_process(true)
 	chase = true
-	$dialog.queue_free()
-	Music.play_music(music)
+	disable_dialog()
 	in_tutorial = true
 	$tutorial_area.next_stage()
+
+func disable_dialog():
+	dialog_node = $dialog
+	remove_child($dialog)
+
+func enable_dialog():
+	if dialog_node:
+		add_child(dialog_node)

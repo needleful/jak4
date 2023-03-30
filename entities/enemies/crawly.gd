@@ -39,11 +39,17 @@ var ground_normal := Vector3.UP
 onready var anim := $AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
 onready var ref_target = $ref_target
+var attack_player : AudioStreamPlayer3D
 
 func _init():
 	skip_alert = false
 
 func _ready():
+	if has_node("attack_audio"):
+		attack_player = $attack_audio
+	else:
+		attack_player = sound
+
 	anim.play("Idle-loop")
 
 func _physics_process(delta):
@@ -182,8 +188,9 @@ func set_state(new_ai, force := false):
 		AI.Windup:
 			sleeping = false
 			anim.play("Attack")
-			sound.stream = attack_audio
-			sound.play()
+			sound.stop()
+			attack_player.stream = attack_audio
+			attack_player.play()
 		AI.GravityStun:
 			sleeping = false
 			anim.play("GravityStun-loop")

@@ -123,7 +123,7 @@ func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
 	anim["parameters/WholeBody/Climb/blend_position"] = lerp(wall_normal.y, slope, 0.3)
 
 func force_play(state):
-	body.start(state)
+	body.call_deferred("start", state)
 
 func play_custom(animation):
 	if !$AnimationPlayer.has_animation(animation):
@@ -151,7 +151,7 @@ func exit_custom_loop(transition:String):
 	body.travel("CustomExit")
 
 func transition_to(state):
-	body.travel(state)
+	body.call_deferred("travel", state)
 
 func show_coat(coat: Coat):
 	var mat = coat.generate_material()

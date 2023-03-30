@@ -28,7 +28,9 @@
 		Great! If you find any more weapons, I can show you how to use them!
 		{event("end_tutorial", false)}
 		{exit()}
-{otherwise if !Global.task_exists("activate_the_medium")}
+!{armstrong/intro}
+
+
 	Ah, Jackie the coats girl! Hello!
 	[You] "Coats girl"?
 	{main_speaker.boast() or true} You brought your whole wardrobe, did you not? {remember("According to him, I'm the \"Coats Girl\". I don't have that many coats, I don't think.")}
@@ -37,8 +39,7 @@
 	{main_speaker.shrug() or true} See! Coats Girl.
 	+{armstrong/coats_girl}
 
-	?{medium/activated}
-		{Global.complete_task("activate_the_medium", "I activated the Medium with a device I found.")}
+	{Global.task_is_complete("activate_the_medium")}
 		But more important matters, clearly. How did you know you needed a capacitor to fix the Medium?
 		[You] Well, it looked like that device needed something plugged into it, so I plugged in the white tube I found.
 		Have you used it yet?
@@ -58,6 +59,7 @@
 	[You] No? Just like that?
 
 	{Global.note_task("activate_the_medium", "Armstrong says I need to find a capacitor to activate the medium. There's possibly one in the village, but I don't know about the others.")}
+	+{armstrong/intro}
 	
 	Not without a capacitor. Big heavy one. It goes in the machine here. Can't run without it.
 	[You] Where do we get it?

@@ -1736,9 +1736,7 @@ func wardrobe_unlock(paused):
 		unlock()
 	cam_rig.end_wardrobe()
 
-func lock(dialog := true):
-	if dialog:
-		mesh.lock()
+func lock(_dialog := true):
 	set_process_input(false)
 	set_state(State.Locked)
 	$ui/gameing/stats.hide()
@@ -1746,7 +1744,6 @@ func lock(dialog := true):
 	$ui/gameing/inventory.hide()
 
 func unlock(new_state := State.Ground):
-	mesh.unlock()
 	set_process_input(true)
 	set_state(new_state)
 	$ui/gameing/stats.show()

@@ -29,15 +29,19 @@ func next_stage():
 	if $tutorial_anim.has_animation(anim):
 		$tutorial_anim.play(anim)
 	else:
-		Music.stop_music()
-		player.start_dialog(self, tyler.dialog, tyler)
-		var _x = Global.add_stat(get_stat_name())
-		emit_signal("tutorial_complete")
-		for c in prompts.get_children():
-			if "enabled" in c:
-				c.enabled = false
-		tyler.in_tutorial = false
+		end_tutorial()
+		tyler.enable_dialog()
 	$CollisionShape.disabled = true
+
+func end_tutorial():
+	tyler.in_tutorial = false
+	tyler.chase = false
+	tyler.idle()
+	var _x = Global.add_stat(get_stat_name())
+	emit_signal("tutorial_complete")
+	for c in prompts.get_children():
+		if "enabled" in c:
+			c.enabled = false
 
 func _on_AnimationPlayer_animation_finished(_anim_name):
 	$CollisionShape.disabled = false

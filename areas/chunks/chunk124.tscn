@@ -1155,7 +1155,7 @@ transform = Transform( 0.627725, 0, -0.778435, 0, 1, 0, 0.778435, 0, 0.627725, 2
 dialog = ExtResource( 62 )
 visual_name = "Guard"
 
-[node name="hut2" type="Spatial" parent="active_entities/zone_village" index="9"]
+[node name="hut2" type="Spatial" parent="active_entities/zone_village" index="8"]
 transform = Transform( -0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, -13.436, -7.33182, 25.3175 )
 
 [node name="npc" parent="active_entities/zone_village/hut2" index="0" instance=ExtResource( 18 )]
@@ -1227,6 +1227,7 @@ shape = SubResource( 264 )
 [connection signal="endgame" from="active_entities/the_medium/illusory_room" to="active_entities/the_medium/enemy_spawn" method="spawn"]
 [connection signal="timeout" from="active_entities/the_medium/epic_death_timer" to="active_entities/the_medium" method="complete_game"]
 [connection signal="died" from="active_entities/the_medium/enemy_spawn/epic_boss" to="active_entities/the_medium" method="_on_epic_boss_died"]
+[connection signal="activated" from="active_entities/the_medium/power_thing3" to="active_entities/the_medium" method="_on_activated"]
 [connection signal="toggled" from="active_entities/the_medium/power_thing3" to="active_entities/the_medium/entry_doors" method="_on_toggled"]
 [connection signal="toggled" from="active_entities/the_medium/power_thing4" to="active_entities/the_medium/entry_doors" method="_on_toggled"]
 [connection signal="body_entered" from="active_entities/the_medium/entrance" to="active_entities/the_medium" method="_on_entrance_body_entered"]

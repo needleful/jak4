@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=2]
+[gd_scene load_steps=110 format=2]
 
 [ext_resource path="res://entities/one_time/chunks/chunk112.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -25,12 +25,10 @@
 [ext_resource path="res://entities/env/vaeler/cannon.tscn" type="PackedScene" id=23]
 [ext_resource path="res://entities/env/vaeler/v_rifle.tscn" type="PackedScene" id=24]
 [ext_resource path="res://entities/env/vaeler/cannon_wheel.tscn" type="PackedScene" id=25]
-[ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=26]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=27]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=28]
 [ext_resource path="res://dialog/intro/fountain.dialog" type="Resource" id=29]
 [ext_resource path="res://dialog/intro/tylers_mom.dialog" type="Resource" id=30]
-[ext_resource path="res://audio/music/tutorial.ogg" type="AudioStream" id=31]
 [ext_resource path="res://entities/one_time/npc_tyler.gd" type="Script" id=32]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=33]
 [ext_resource path="res://dialog/intro/bathhouse.dialog" type="Resource" id=34]
@@ -68,7 +66,6 @@
 [ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=66]
 [ext_resource path="res://entities/env/plants/cactus_round_flower.tscn" type="PackedScene" id=67]
 [ext_resource path="res://entities/env/plants/cactus_round.tscn" type="PackedScene" id=68]
-[ext_resource path="res://entities/wardrobe.gd" type="Script" id=69]
 [ext_resource path="res://entities/shop_stock/shop_default_stock.inv" type="Resource" id=70]
 [ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=71]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=72]
@@ -86,7 +83,6 @@
 [ext_resource path="res://entities/env/jackie/tea_cup.tscn" type="PackedScene" id=84]
 [ext_resource path="res://entities/env/jackie/tea_plate.tscn" type="PackedScene" id=85]
 [ext_resource path="res://management/player_start.gd" type="Script" id=86]
-[ext_resource path="res://entities/npc/npc.gd" type="Script" id=87]
 [ext_resource path="res://dialog/intro/landlord.dialog" type="Resource" id=88]
 
 [sub_resource type="OccluderShapePolygon" id=251]
@@ -986,66 +982,62 @@ spot_angle = 67.6998
 transform = Transform( 0.253782, 0, 0.967262, 0, 1, 0, -0.967262, 0, 0.253782, -2.01971, 4.12927, 1.15512 )
 script = ExtResource( 86 )
 
-[node name="wardrobe" type="Spatial" parent="active_entities/zone_village/player_hut" index="2" instance=ExtResource( 35 )]
+[node name="wardrobe" parent="active_entities/zone_village/player_hut" index="2" instance=ExtResource( 35 )]
 transform = Transform( -0.48664, 0, -0.873603, 0, 1, 0, 0.873603, 0, -0.48664, 2.72159, 4.09042, 1.96341 )
-script = ExtResource( 69 )
-ui = ExtResource( 26 )
 
-[node name="tea_chair" type="Spatial" parent="active_entities/zone_village/player_hut" index="3" instance=ExtResource( 80 )]
+[node name="tea_chair" parent="active_entities/zone_village/player_hut" index="3" instance=ExtResource( 80 )]
 transform = Transform( -0.630621, 0, 0.77609, 0, 1, 0, -0.77609, 0, -0.630621, -0.281478, 4.07346, 0.304535 )
 
-[node name="tea_chair2" type="Spatial" parent="active_entities/zone_village/player_hut" index="4" instance=ExtResource( 80 )]
+[node name="tea_chair2" parent="active_entities/zone_village/player_hut" index="4" instance=ExtResource( 80 )]
 transform = Transform( 0.630621, 0, -0.77609, 0, 1, 0, 0.77609, 0, 0.630621, 1.23399, 4.07346, -0.9207 )
 
-[node name="tea_table" type="StaticBody" parent="active_entities/zone_village/player_hut" index="5" instance=ExtResource( 83 )]
+[node name="tea_table" parent="active_entities/zone_village/player_hut" index="5" instance=ExtResource( 83 )]
 transform = Transform( -0.736737, 0, -0.67618, 0, 1, 0, 0.67618, 0, -0.736737, 0.428392, 4.1067, -0.349304 )
 
-[node name="tea_plate" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table" index="1" instance=ExtResource( 85 )]
+[node name="tea_plate" parent="active_entities/zone_village/player_hut/tea_table" index="1" instance=ExtResource( 85 )]
 transform = Transform( -0.752725, 0, 0.658335, 0, 1, 0, -0.658335, 0, -0.752725, 0.200272, 0.7173, 0.185638 )
 
-[node name="tea_cup" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_plate" index="1" instance=ExtResource( 84 )]
+[node name="tea_cup" parent="active_entities/zone_village/player_hut/tea_table/tea_plate" index="1" instance=ExtResource( 84 )]
 transform = Transform( -0.898288, 0, -0.439406, 0, 1, 0, 0.439406, 0, -0.898288, 0, 0, -2.86102e-06 )
 
-[node name="tea_plate3" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table" index="2" instance=ExtResource( 85 )]
+[node name="tea_plate3" parent="active_entities/zone_village/player_hut/tea_table" index="2" instance=ExtResource( 85 )]
 transform = Transform( 0.988019, 0, -0.154331, 0, 1, 0, 0.154331, 0, 0.988019, -0.0789642, 0.7173, -0.210281 )
 
-[node name="tea_plate2" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="1" instance=ExtResource( 85 )]
+[node name="tea_plate2" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="1" instance=ExtResource( 85 )]
 transform = Transform( 0.526689, 0, 0.850058, 0, 1, 0, -0.850058, 0, 0.526689, -0.000518799, 0.00724792, 0.000832558 )
 
-[node name="tea_plate3" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="2" instance=ExtResource( 85 )]
+[node name="tea_plate3" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="2" instance=ExtResource( 85 )]
 transform = Transform( 0.998757, 0, -0.0498434, 0, 1, 0, 0.0498434, 0, 0.998757, -0.00050354, 0.0130005, 0.000832558 )
 
-[node name="tea_plate4" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="3" instance=ExtResource( 85 )]
+[node name="tea_plate4" parent="active_entities/zone_village/player_hut/tea_table/tea_plate3" index="3" instance=ExtResource( 85 )]
 transform = Transform( -0.472843, 0, 0.881147, 0, 1, 0, -0.881147, 0, -0.472843, -0.00050354, 0.0194702, 0.000832558 )
 
-[node name="tea_cup" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table" index="3" instance=ExtResource( 84 )]
+[node name="tea_cup" parent="active_entities/zone_village/player_hut/tea_table" index="3" instance=ExtResource( 84 )]
 transform = Transform( -0.188804, 0, -0.982015, 0, 1, 0, 0.982015, 0, -0.188804, -0.0802612, 0.738297, -0.20845 )
 
-[node name="tea_cup2" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="1" instance=ExtResource( 84 )]
+[node name="tea_cup2" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="1" instance=ExtResource( 84 )]
 transform = Transform( 0.332849, -0.0215127, 0.942735, 0.114511, 0.993263, -0.0177644, -0.936001, 0.113867, 0.33307, -0.0015564, 0.0297394, 0.000796318 )
 
-[node name="tea_cup3" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="2" instance=ExtResource( 84 )]
+[node name="tea_cup3" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="2" instance=ExtResource( 84 )]
 transform = Transform( -0.464726, 0.0377553, -0.884649, 0.0678321, 0.997673, 0.00694525, 0.882853, -0.05678, -0.466205, -0.00157166, 0.0542603, 0.000796318 )
 
-[node name="tea_cup4" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="3" instance=ExtResource( 84 )]
+[node name="tea_cup4" parent="active_entities/zone_village/player_hut/tea_table/tea_cup" index="3" instance=ExtResource( 84 )]
 transform = Transform( -0.81751, 0.225887, 0.529767, 0.167394, 0.973355, -0.156715, -0.551051, -0.0394362, -0.833539, -0.00157166, 0.080246, 0.000796318 )
 
-[node name="tea_pot" type="Spatial" parent="active_entities/zone_village/player_hut/tea_table" index="4" instance=ExtResource( 81 )]
+[node name="tea_pot" parent="active_entities/zone_village/player_hut/tea_table" index="4" instance=ExtResource( 81 )]
 transform = Transform( 0.83749, 0, 0.546453, 0, 1, 0, -0.546453, 0, 0.83749, -0.164627, 0.7173, 0.10495 )
 
-[node name="bed_jackie" type="Spatial" parent="active_entities/zone_village/player_hut" index="6" instance=ExtResource( 82 )]
+[node name="bed_jackie" parent="active_entities/zone_village/player_hut" index="6" instance=ExtResource( 82 )]
 transform = Transform( 0.0551165, 0, -0.998479, 0, 1, 0, 0.998479, 0, 0.0551165, -0.0132136, 4.08292, 3.06613 )
 
-[node name="sofa" type="Spatial" parent="active_entities/zone_village/player_hut" index="7" instance=ExtResource( 33 )]
+[node name="sofa" parent="active_entities/zone_village/player_hut" index="7" instance=ExtResource( 33 )]
 transform = Transform( 0.400989, 0, -0.916083, 0, 1, 0, 0.916083, 0, 0.400989, -3.68472, 0.936371, 1.14435 )
 
 [node name="bed_native" parent="active_entities/zone_village/player_hut" index="8" instance=ExtResource( 66 )]
 transform = Transform( -0.925634, 0, 0.37842, 0, 1, 0, -0.37842, 0, -0.925634, 2.87933, 0.960007, 1.03076 )
 
-[node name="intro_npc" type="KinematicBody" parent="active_entities/zone_village/player_hut" index="9" groups=["distance_activated", "dynamic"] instance=ExtResource( 28 )]
+[node name="intro_npc" parent="active_entities/zone_village/player_hut" index="9" instance=ExtResource( 28 )]
 transform = Transform( -0.979883, 0, 0.199573, 0, 1, 0, -0.199573, 0, -0.979883, 1.85721, 0.712036, 9.02547 )
-collision_layer = 69633
-script = ExtResource( 87 )
 dialog = ExtResource( 88 )
 visual_name = "Landlord"
 
@@ -1974,7 +1966,6 @@ script = ExtResource( 32 )
 dialog = ExtResource( 19 )
 visual_name = "Young Boy"
 model_scale = 0.75
-music = ExtResource( 31 )
 
 [node name="tutorial_area" type="Area" parent="active_entities/npc_tutorial_tyler" index="3"]
 collision_layer = 0
