@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://_glb/mat_basic.material" type="Material" id=1]
 [ext_resource path="res://material/env/terrain_snow.material" type="Material" id=2]
@@ -16,6 +16,13 @@
 [ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=15]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=16]
+[ext_resource path="res://player/particles/kick_stars.png" type="Texture" id=17]
+[ext_resource path="res://material/env/water_ripple.png" type="Texture" id=18]
+[ext_resource path="res://material/env/water_ripple_moving.png" type="Texture" id=19]
+[ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=20]
+[ext_resource path="res://player/weapons/laser.material" type="Material" id=21]
+[ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=22]
+[ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=23]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "world_Plane289"
@@ -31,6 +38,198 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 2601
 }
+
+[sub_resource type="Curve" id=78]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=79]
+width = 32
+curve = SubResource( 78 )
+
+[sub_resource type="ParticlesMaterial" id=85]
+lifetime_randomness = 0.23
+direction = Vector3( 0, 0.2, 1 )
+spread = 137.26
+flatness = 0.86
+gravity = Vector3( 0, 2, 0 )
+initial_velocity = 5.0
+radial_accel = -30.0
+scale = 0.5
+scale_curve = SubResource( 79 )
+
+[sub_resource type="SpatialMaterial" id=86]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 1.10588, 1.95686, 1, 1 )
+albedo_texture = ExtResource( 17 )
+
+[sub_resource type="QuadMesh" id=87]
+material = SubResource( 86 )
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="Gradient" id=76]
+offsets = PoolRealArray( 0, 0.47479, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.0743922, 0.0756836, 0.0570583, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=77]
+gradient = SubResource( 76 )
+width = 32
+
+[sub_resource type="ParticlesMaterial" id=73]
+direction = Vector3( 0, 0, 1 )
+spread = 8.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 12.0
+scale = 4.0
+scale_curve = SubResource( 79 )
+color_ramp = SubResource( 77 )
+
+[sub_resource type="SpatialMaterial" id=74]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 13.0902, 1.93333, 1, 1 )
+
+[sub_resource type="QuadMesh" id=75]
+material = SubResource( 74 )
+size = Vector2( 0.05, 0.05 )
+
+[sub_resource type="Curve" id=70]
+_data = [ Vector2( 0, 1 ), 0.0, 0.121963, 0, 0, Vector2( 1, 0 ), -4.03178, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=71]
+width = 32
+curve = SubResource( 70 )
+
+[sub_resource type="ParticlesMaterial" id=67]
+spread = 20.0
+gravity = Vector3( 0, 0.5, 0 )
+initial_velocity = 2.0
+scale_curve = SubResource( 71 )
+
+[sub_resource type="SpatialMaterial" id=90]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 1.4, 1, 1.2, 1 )
+albedo_texture = ExtResource( 17 )
+
+[sub_resource type="QuadMesh" id=91]
+material = SubResource( 90 )
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="ParticlesMaterial" id=89]
+spread = 20.0
+gravity = Vector3( 0, 0.5, 0 )
+initial_velocity = 2.0
+scale = 2.0
+scale_curve = SubResource( 71 )
+
+[sub_resource type="SpatialMaterial" id=88]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_color = Color( 4.05, 1, 1, 1 )
+albedo_texture = ExtResource( 17 )
+
+[sub_resource type="QuadMesh" id=69]
+material = SubResource( 88 )
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="SphereMesh" id=171]
+radius = 0.2
+height = 0.4
+radial_segments = 12
+rings = 12
+
+[sub_resource type="SpatialMaterial" id=172]
+flags_transparent = true
+flags_unshaded = true
+params_cull_mode = 1
+
+[sub_resource type="Gradient" id=173]
+offsets = PoolRealArray( 0, 0.239216, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.972549, 0.972549, 0.972549, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=80]
+gradient = SubResource( 173 )
+width = 32
+
+[sub_resource type="Curve" id=81]
+_data = [ Vector2( 0, 0.0897727 ), 0.0, 1.56096, 0, 0, Vector2( 1, 1 ), 0.32761, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=82]
+width = 32
+curve = SubResource( 81 )
+
+[sub_resource type="ParticlesMaterial" id=83]
+flag_align_y = true
+spread = 180.0
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 0.1
+scale = 2.0
+scale_random = 0.19
+scale_curve = SubResource( 82 )
+color_ramp = SubResource( 80 )
+
+[sub_resource type="SpatialMaterial" id=84]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_cull_mode = 2
+albedo_texture = ExtResource( 18 )
+
+[sub_resource type="QuadMesh" id=174]
+material = SubResource( 84 )
+
+[sub_resource type="Gradient" id=175]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=176]
+gradient = SubResource( 175 )
+width = 32
+
+[sub_resource type="Curve" id=177]
+_data = [ Vector2( 0, 0.401136 ), 0.0, 1.51636, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=92]
+width = 32
+curve = SubResource( 177 )
+
+[sub_resource type="ParticlesMaterial" id=178]
+direction = Vector3( 0, 0, -1 )
+spread = 27.42
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.0
+scale_curve = SubResource( 92 )
+color_ramp = SubResource( 176 )
+
+[sub_resource type="SpatialMaterial" id=179]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+params_cull_mode = 2
+albedo_texture = ExtResource( 19 )
+
+[sub_resource type="PlaneMesh" id=93]
+material = SubResource( 179 )
+size = Vector2( 1, 1 )
+
+[sub_resource type="SphereMesh" id=180]
 
 [node name="shader_preload" type="Spatial"]
 pause_mode = 2
@@ -71,9 +270,9 @@ transform = Transform( 1, 0, 0, 0, 0.844306, 0.535862, 0, -0.535862, 0.844306, 0
 far = 8192.0
 
 [node name="action" type="Spatial" parent="."]
-pause_mode = 1
 
 [node name="crawly" parent="action" instance=ExtResource( 4 )]
+pause_mode = 1
 script = null
 
 [node name="chunk2" type="MeshInstance" parent="action"]
@@ -99,8 +298,81 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
 preview = true
 
 [node name="player" parent="action" instance=ExtResource( 16 )]
+pause_mode = 1
 
 [node name="dialog_circle" parent="action" instance=ExtResource( 6 )]
+
+[node name="heal_particles" type="Particles" parent="action"]
+time_scale_response = false
+transform = Transform( 1, -8.40217e-13, 1.42109e-14, -3.2685e-13, 0.258819, 0.965926, 7.10543e-15, -0.965925, 0.258819, 4.20022e-09, 0.03219, -0.120134 )
+amount = 70
+lifetime = 0.75
+local_coords = false
+process_material = SubResource( 85 )
+draw_pass_1 = SubResource( 87 )
+
+[node name="damage_particles" type="Particles" parent="action"]
+time_scale_response = false
+transform = Transform( 1, 3.55271e-15, -2.84217e-14, 3.55271e-15, 1, 0, 1.42109e-14, 0, 1, 1.73858e-09, 0.0544889, -0.00340463 )
+lifetime = 0.25
+local_coords = false
+process_material = SubResource( 73 )
+draw_pass_1 = SubResource( 75 )
+
+[node name="kick_particles" type="Particles" parent="action"]
+time_scale_response = false
+transform = Transform( 0.215962, 0.971355, -0.0991552, 0.974529, -0.208147, 0.0834676, 0.0604379, -0.114656, -0.991564, -0.0816975, 0.0667774, 0.0070541 )
+amount = 12
+lifetime = 0.3
+local_coords = false
+process_material = SubResource( 67 )
+draw_pass_1 = SubResource( 91 )
+
+[node name="max_kick_particles" type="Particles" parent="action"]
+time_scale_response = false
+transform = Transform( 0.222719, 0.969865, -0.0987868, 0.973008, -0.214865, 0.0841961, 0.060433, -0.114873, -0.991539, -0.0208296, 0.166308, 0.0125393 )
+amount = 12
+lifetime = 0.4
+local_coords = false
+process_material = SubResource( 89 )
+draw_pass_1 = SubResource( 69 )
+
+[node name="perfect_dodge" type="MeshInstance" parent="action"]
+transform = Transform( 1, -7.10543e-14, 2.59348e-13, -4.26326e-14, 1, 0, -4.44089e-13, 0, 1, -3.13806e-08, 0.0707452, -0.102417 )
+visible = false
+mesh = SubResource( 171 )
+skeleton = NodePath("")
+material/0 = SubResource( 172 )
+
+[node name="Particles" type="Particles" parent="action"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
+lifetime = 5.0
+local_coords = false
+process_material = SubResource( 83 )
+draw_pass_1 = SubResource( 174 )
+
+[node name="Particles2" type="Particles" parent="action"]
+time_scale_response = false
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
+amount = 16
+lifetime = 1.2
+local_coords = false
+process_material = SubResource( 178 )
+draw_pass_1 = SubResource( 93 )
+
+[node name="mum" parent="action" instance=ExtResource( 20 )]
+pause_mode = 1
+
+[node name="MeshInstance" type="MeshInstance" parent="action"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.818597, 0 )
+mesh = SubResource( 180 )
+material/0 = ExtResource( 21 )
+
+[node name="rail_cart" parent="action" instance=ExtResource( 23 )]
+script = null
+
+[node name="palace1" parent="action" instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.3, 0 )
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
@@ -110,7 +382,7 @@ theme = ExtResource( 12 )
 [node name="ColorRect" type="ColorRect" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.0470588, 0.0352941, 0.0352941, 0.682353 )
+color = Color( 0.0470588, 0.0352941, 0.0352941, 0.917647 )
 
 [node name="Label" type="Label" parent="Control"]
 anchor_right = 1.0
