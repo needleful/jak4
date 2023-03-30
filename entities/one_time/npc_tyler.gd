@@ -10,7 +10,6 @@ var chase := false
 var in_tutorial := false
 
 func _ready():
-	# TODO: maybe add some tutorial-free dialog
 	if (Global.stat($tutorial_area.get_stat_name())):
 		$dialog.queue_free()
 	idle()

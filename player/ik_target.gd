@@ -17,6 +17,8 @@ var max_velocity := 30.0
 
 func _ready():
 	global_transform = target.global_transform
+	if !player:
+		set_physics_process(false)
 
 func _physics_process(delta):
 	var md2 := max_distance*max_distance

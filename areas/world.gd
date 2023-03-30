@@ -56,7 +56,7 @@ const DIST_LOWRES := 2000.0
 
 const BEDTIME := 21.00
 const TOO_EARLY := 4.00
-const RISE_AND_SHINE := 7.00
+const RISE_AND_SHINE := 6.00
 
 var terrain_hires := {}
 var terrain_lowres := {}
