@@ -29,8 +29,6 @@
 		{event("end_tutorial", false)}
 		{exit()}
 !{armstrong/intro}
-
-
 	Ah, Jackie the coats girl! Hello!
 	[You] "Coats girl"?
 	{main_speaker.boast() or true} You brought your whole wardrobe, did you not? {remember("According to him, I'm the \"Coats Girl\". I don't have that many coats, I don't think.")}
@@ -61,11 +59,11 @@
 	{Global.note_task("activate_the_medium", "Armstrong says I need to find a capacitor to activate the medium. There's possibly one in the village, but I don't know about the others.")}
 	+{armstrong/intro}
 	
-	Not without a capacitor. Big heavy one. It goes in the machine here. Can't run without it.
+	Not without a capacitor. It goes in the machine inside the building here.
 	[You] Where do we get it?
 	If anyone found one, they would have stored it in the cave at the back of the village. You can check there if you want.
 	>?{cave_capacitor_124} {player.show_item("capacitor")} Is it this white thing I found?
-		Fantastic! Plug it in and we can see if it works!
+		Fantastic! In the wall here is the receptor. You can plug it in and we'll see if that works!
 	> Why would one of these just be lying in a cave?
 		It's where we store scrap for transport to Maslikir.
 		> "Scrap"? This capacitor sounds important, though.
@@ -90,17 +88,16 @@
 				{goto("l_power")}
 			> Well, I suppose that's clear enough. I'll take a look in the cave.
 				Hopefully there is one. Save you a trip out of town.
+				+{armstrong/discussed/capacitor_scrap_pre}
 		> Alright, I'll take a look in there.
 			Hopefully there is one. Save you a trip out of town.
-
 	> I'll look there. Thanks.
 		Excellent!  And I will be here if you need any advice.
 	{exit()}
 {otherwise}!{medium/activated}
 	{Global.stat("medium_door/open")}
-		You did it! The door is open!
-		[You] So I just... walk in?
-		I think so! I've never used the Medium before!  Good luck.
+		You did it! The door is open! Do you know how to use the Medium?
+		[You] Yes.
 	{otherwise}
 		How goes your search, Coats Girl? Was there a capacitor in the cave?
 		{Global.count("capacitor")}
@@ -119,9 +116,9 @@
 				[You] And presumably they built the Medium?
 				I do not know, actually.
 				[You] Huh?
-				But anyway, we are not here for history. Let us plug in the capacitor and see if it still works!
-			> So I just plug it into the white machine there?
-				Yes! Let us see if this thing still works.
+				But anyway, we are not here for history. If you climb in the hole in the wall, you should see where the capacitor goes.
+			> Where did you need this?
+				In the wall here is a, uh, receptor. It matches the bottom of the capacitor, so it is easy to fit.
 		{otherwise}
 			?{cave_124_entered}
 				[You] I've been in the cave, but I didn't find anything.
@@ -187,6 +184,40 @@
 		It is good to see you again, Jackie.
 
 :main_loop
+> !{armstrong/discussed/medium_hole} Why is there a hole in the Medium, anyway?
+	Don't know who did it. I guess they needed to fix it? The doors are locked shut without power.
+	It is strong metal. It must have taken months of cutting.
+	I saw a guy took a grinder to some of this metal. Whole blade exploded! Nearly died!
+	+{armstrong/discussed/medium_hole}
+> ?{capacitor_124}!{armstrong/discussed/capacitor_scrap} Why was there a capacitor in the cave with the scrap, if they're so valuable?
+	?{armstrong/discussed/capacitor_scrap_pre}
+		I distinctly remember you asking this before.
+		[You] Have I?
+		Yes. Basically, the capacitors are too powerful for us to use. The wind generators are enough.
+		So we just sell them in Maslikir, and they put them on the train to who-knows-where.
+	{otherwise}
+		The capacitors are very impressive, but they are also seventy thousand Volts, thirty Farads.
+		[You] What does that mean?
+		It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are shipped off on the train I assume.
+	:l_power2
+	> !{armstrong/discussed/medium_capacitor}Why would the Medium need two of these, if they're so strong?
+		+{armstrong/discussed/medium_capacitor}
+		I would not know. Computers are power-hungry, and it is far stronger than normal computers.
+		{goto("l_power2")}
+	> !{armstrong/discussed/maslikir}Where is this "Maslikir"?
+		+{armstrong/discussed/maslikir}
+		{Global.mark_map("maslikir", "A town that makes its money melting down scrap.")}
+		It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
+		We sell them scrap and they make useful things from it. Mostly copper wire.
+		If you like melted metal, it could be a fun stop on your visit.
+		{goto("l_power2")}
+	> !{armstrong/discussed/capacitor_export}So these capacitors are leaving the country?
+		+{armstrong/discussed/capacitor_export}
+		I would assume so. Maybe they are good for big power grids or labs, but I do not get news of such things.
+		{goto("l_power2")}
+	> Well, I suppose that all makes sense.
+		Clear as mud, yes?
+		+{armstrong/discussed/capacitor_scrap}
 > !{armstrong/discussed/medium}?{mum/true_talked} Why do people around here not care about the Medium?
 	[You] It's such an incredible piece of technology, but it was just sitting here in disrepair for years.
 	Well, it is merely a reflection of our minds. It tells us what we already thought.
@@ -202,10 +233,11 @@
 > {Global.count("wep_pistol")} !{armstrong/tutorial_complete/pistol} I found a pistol.
 	!{armstrong/pistol}
 		What?
-		[You] Yes, this pistol here. It was on the roof of that copper building in the valley.
-		Wow, this is from a Vaeler officer! I wonder who left it there?
-		[You] Would they have left it recently?
-		I couldn't say. The palaces have been picked clean for some time, so I'd have no reason to visit. I suppose if somebody comes asking for it, I'll point them to you.
+		[You] Yes, this pistol here. A young woman gave it to me.
+		Wow, this is from a Vaeler officer! Quite the gift! Who gave it to you? Why?
+		[You] Her name is Riley. She was being harassed by those giant insects, so she lent me her pistol to deal with them.
+		And let you keep it?
+
 		Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
 		+{armstrong/pistol}
 	{otherwise}
@@ -219,7 +251,7 @@
 		[You] Maybe Later.
 		Okay, let me know. I don't want you hurting yourself.
 		{exit()}
-> {task_is_active("the_tree_tower")} !{capacitor_113} !{armstrong/asked_tower} Would there be a capacitor in the tower near the village?
+> {Global.task_is_active("the_tree_tower")} !{capacitor_113} !{armstrong/asked_tower} Would there be a capacitor in the tower near the village?
 	{subtopic("ask_tower")}
 > See you.
 	Take care, Jackie.

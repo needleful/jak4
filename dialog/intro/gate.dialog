@@ -9,12 +9,13 @@
 	> It's just very important to me I can use the Medium without so many barriers.
 		Ah, I see. They must be someone very important.
 		I suppose even the Vaelic can feel love...
-{otherwise if Global.has_stat("hdw/clear")}
-	[You] I cleared the gate.
-	{subtopic("gate_cleared")}
-{otherwise if Global.has_note("tasks", "the_village_gate")}
+{otherwise}{Global.task_exists("the_village_gate")}
 	[You] Can you open the gate now?
 	Is the front clear of specters?
+	?{hdw/clear}
+		[You] Yes.
+		{subtopic("gate_cleared")}
+		{exit()}
 	[You] Uh...
 	Past the village entrance is a small cliff, on the right. There, under the rocks, is where they like to rest. Some also come down directly in front of the gate.
 	If you remove all of them, I can open the gate.
@@ -38,9 +39,16 @@
 	>{Global.stat("tyler_tutorial")} A little boy and I were running all up and down this wall earlier today. How much protection does it even offer?
 		Enough to protect the lives of everyone here.
 		If you climbed wall before, you can again.
+		?{asked_to_climb}
+			[You] Of course...
+		+{asked_to_climb}
 	> {otherwise} What am I supposed to do, climb over it?
 		If you want to leave, yes.
-		[You] Ugh. But I might tear my coat...
+		?{asked_to_climb}
+			[You] I've had to do an awful lot of climbing today.
+		{otherwise}
+			[You] Ugh. But I might tear my coat...
+		+{asked_to_climb}
 	> Fine. I'll find some other way around.
 {exit()}
 
@@ -59,17 +67,13 @@ Okay
 {back()}
 
 :gate_cleared
-?{capacitor_113}
-	Well, it's no use.
-	{goto("entry_collapsed")}
-{otherwise}
-	What? You did?
-	{!Global.stat("weapon")} How? Where is your gun?
-		[You] I kicked them mostly.
-	{otherwise} With a pistol?
-		[You] Well, kicking is faster usually.
-	You KICKED them to death? Hm, it makes sense. You are rather tall.
-	{Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
+What? You did?
+{!Global.stat("weapon")} How? Where is your gun?
+	[You] I kicked them mostly.
+{otherwise} With a pistol?
+	[You] Well, kicking is faster usually.
+You KICKED them to death? Hm, it makes sense. You are rather tall.
+{Global.add_stat("hdw_gate")}{Global.complete_task("the_village_gate", "Glad to see he's letting me through.")}
 {back()}
 
 :entry_collapsed
@@ -87,10 +91,7 @@ Until we can get help from Crab Hill to clear the entire area, nobody comes in o
 {exit()}
 
 :_coat
-?{capacitor_113}
-	[You] That's a lovely fabric you're wearing.
-	Hm? Sorry. I have to keep a close watch with the specters outside. No time for dallying.
-{otherwise if !Global.stat("hdw_gate")}
+{!Global.stat("hdw_gate")}
 	[You] That's a lovely fabric you're wearing.
 	If this is flattery, it will not work.
 	> Never mind. It was just a compliment.

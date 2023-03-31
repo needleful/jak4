@@ -16,10 +16,22 @@
 		[You] I found this strange white artifact in the back.
 		Hm... It looks expensive.
 		You should ask Armstrong what that is. Man with goggles, by the Medium here.
-{otherwise if Global.task_exists("activate_the_medium")}
+{otherwise}{Global.task_is_active("activate_the_medium")}
 	[You] Could a capacitor be in there?
 	I don't know what capacitor is. Maybe?
-	[You] ...
+	> Can you open the gate? I'd like to check.
+		No. Too risky. If you want in so bad, you will need to climb it.
+		+{asked_to_climb}
+		{Global.stat("asked_to_climb") > 1}
+			[You] That's the second time I've been told that so far.
+			It is dangerous times.
+		{otherwise}
+			[You] Climb the fence? What if I get hurt?
+			You do not understand: the fence is not the danger. A crawler will remove your intestines with its teeth.
+		[You] Surely it can't be that dangerous.
+		* He mutters something in Yaqazi.
+	> {skip()} (Leave)
+		{exit()}
 {otherwise}
 	[You] ...
 

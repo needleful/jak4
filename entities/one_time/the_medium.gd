@@ -10,4 +10,4 @@ func complete_game():
 	$ending_dialog.enter_dialog()
  
 func _on_activated():
-	Global.complete_task("activate_the_medium", "I activated the medium with an artefact I found.")
+	var _x = Global.complete_task("activate_the_medium", "I activated the medium with an artefact I found.")

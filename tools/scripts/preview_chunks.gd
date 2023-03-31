@@ -10,7 +10,6 @@ func _run():
 		if ResourceLoader.exists(chunk):
 			var sc: Chunk = load(chunk).instance()
 			sc.set_active(false)
-			sc.lighting_preview = false
 			c.add_child(sc)
 			sc.get_node("__autogen_preview").queue_free()
 			print("Adding ", c.name)
