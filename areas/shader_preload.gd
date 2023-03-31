@@ -7,7 +7,6 @@ func _ready():
 	get_tree().paused = true
 
 func _process(_delta):
-	print(flags)
 	$lights/sun.visible = flags & 1
 	$lights/OmniLight.visible = flags & 2
 	$lights/SpotLight.visible = flags & 4

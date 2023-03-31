@@ -60,9 +60,12 @@ const WEAPONS := [
 var choose_time := 0.0
 const TIME_CHOOSE_ITEM := 0.25
 
-onready var equipment_inventory := {}
+var equipment_inventory: Dictionary
 onready var player := get_parent()
 var choosing_item := false
+
+func _init():
+	equipment_inventory = {}
 
 func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")

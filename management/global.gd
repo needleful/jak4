@@ -6,11 +6,11 @@ signal stat_changed(tag, value)
 
 var using_gamepad := false
 
-var game_state := GameState.new()
+var game_state : GameState
 
 export(Array, Texture) var coat_textures: Array
 export(Texture) var coat_detail: Texture
-export(Dictionary) var stories := {} 
+export(Dictionary) var stories
 
 const save_path := "user://autosave.tres"
 const old_save_backup := "user://autosave.backup.tres"
@@ -36,15 +36,19 @@ var player : Node
 # measuring the total collected 
 var tracked_items = ["bug", "capacitor"]
 
-var stats_temp := {}
+var stats_temp: Dictionary
 
 var ammo_drop_pity := randf()
 
-var gravity_stunned_bodies := {}
+var gravity_stunned_bodies: Dictionary
 var render_distance := 1.0
 var show_lowres := true
 
 func _init():
+	game_state = GameState.new()
+	stories = {}
+	stats_temp = {}
+	gravity_stunned_bodies = {}
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
 func _input(event):
@@ -258,7 +262,7 @@ func task_remove_place(task_id: String, place: String):
 	var t = find_task(task_id, true)
 	if !t:
 		t = find_task(task_id, false)
-	if t is Task and place in t.people_notes:
+	if t is Task and place in t.place_notes:
 		t.place_notes.erase(place)
 	return true
 
@@ -432,7 +436,7 @@ func reset_game():
 	gravity_stunned_bodies = {}
 	print("New game...")
 	var dir := Directory.new()
-	if ResourceLoader.exists(save_path):
+	if dir.file_exists(save_path):
 		print("Backing up save...")
 		# copy as a backup
 		var _x = dir.rename(save_path, old_save_backup)

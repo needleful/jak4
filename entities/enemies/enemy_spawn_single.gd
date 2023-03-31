@@ -1,6 +1,9 @@
 extends Spatial
 
-var removed_children := {}
+var removed_children:Dictionary
+
+func _init():
+	removed_children = {}
 
 func _ready():
 	for c in get_children():

@@ -2,8 +2,12 @@ extends Spatial
 
 export(Array, NodePath) var light_nodes
 
-var ambient_info := {}
-var reflection_info := {}
+var ambient_info: Dictionary
+var reflection_info: Dictionary
+
+func _init():
+	ambient_info = {}
+	reflection_info = {}
 
 func _ready():
 	for l in light_nodes:

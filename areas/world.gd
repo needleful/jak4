@@ -3,8 +3,8 @@ extends Spatial
 signal activated(chunk)
 signal deactivated(chunk)
 
-export(Dictionary) var preloaded_chunks := {}
-export(Dictionary) var preloaded_lowres := {}
+export(Dictionary) var preloaded_chunks: Dictionary
+export(Dictionary) var preloaded_lowres: Dictionary
 
 var air_tutorial := false
 
@@ -43,7 +43,7 @@ onready var wind := $audio_wind
 var sun_enabled := true
 
 onready var env_settings := $env_settings
-var env_overrides := []
+var env_overrides: Array
 var shaders_ready := false
 
 var time := 0.0
@@ -58,11 +58,18 @@ const BEDTIME := 21.00
 const TOO_EARLY := 4.00
 const RISE_AND_SHINE := 6.00
 
-var terrain_hires := {}
-var terrain_lowres := {}
+var terrain_hires: Dictionary
+var terrain_lowres: Dictionary
 
 var chunk_loader: ChunkLoader
 var ignore_day := false
+
+func _init():
+	preloaded_chunks = {}
+	preloaded_lowres = {}
+	terrain_hires = {}
+	terrain_lowres = {}
+	env_overrides = []
 
 func _input(event):
 	if event.is_action_pressed("debug_map_view"):

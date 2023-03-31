@@ -2,7 +2,10 @@ extends Spatial
 
 signal cleared
 
-var enemies := {}
+var enemies: Dictionary
+
+func _init():
+	enemies = {}
 
 func _ready():
 	for e in get_children():

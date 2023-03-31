@@ -1126,7 +1126,7 @@ func _physics_process(delta):
 				desired_velocity.y = JUMP_VEL_BASE*0.3
 			elif holding("mv_crouch"):
 				desired_velocity.y = -JUMP_VEL_BASE*0.3
-			global_translate(delta*desired_velocity*SPEED_ROLL)
+			global_translate(delta*desired_velocity*SPEED_ROLL*2)
 
 func after(time: float, condition := true, id := 0):
 	if id >= timers.size():

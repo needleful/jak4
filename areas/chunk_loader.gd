@@ -4,13 +4,19 @@ class_name ChunkLoader
 signal load_complete
 signal load_start
 
-var _nodes := {}
-var _active := {}
-var _lowres := {}
-var _loaded_content := {}
+var _nodes : Dictionary
+var _active : Dictionary
+var _lowres : Dictionary
+var _loaded_content : Dictionary
 
 const PATH_CONTENT := "res://areas/chunks/%s.tscn"
 const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
+
+func _init():
+	_nodes = {}
+	_active = {}
+	_lowres = {}
+	_loaded_content = {}
 
 func start_loading(chunks: Array):
 	for c in chunks:

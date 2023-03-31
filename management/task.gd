@@ -1,7 +1,7 @@
 extends Resource
 class_name Task
 
-export(String) var id := ""
+export(String) var id
 # Dictionary (string place -> String note)
 export(Dictionary) var place_notes
 # Dictionary (string place -> String note)

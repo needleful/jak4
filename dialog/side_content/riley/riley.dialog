@@ -27,8 +27,7 @@
 	{otherwise}
 		Seriously, I could use some help with those deathgnats.
 		[You] No worries, they're tricky to hit but I've got it.
-		* [Hint: You can perform an uppercut by doing a lunge kick when crouched. It's well-suited to flying enemies.]
-{otherwise}
+{otherwise}!{riley/discussed/capacitors}
 	+{riley/113/talked}
 	{talked == 0}
 		Eey! Klerdena sur!
@@ -46,36 +45,65 @@
 		Thanks for the help! I'm Riley, by the way.
 		{subtopic("saved_113")}
 		{goto("shop_126")}
+{otherwise}!{capacitor_113}
+	Have anything else you wanted to ask?
+	[You] Not at the moment.
+	// TODO: more content
+{otherwise}
+	[You] I found that capacitor you were looking for.
+	Really? Wow!
+	You can hold onto it, if you want. Once we've got twelve, we can make our way up to the tree and see what's inside!
+	// TODO: more content
 {exit()}
 
 :saved_113
 {remember("I rescued a strange girl stranded near one of those white towers.")}
-{Global.note_task("the_tree_tower", "That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.")}
-{Global.task_note_person("the_tree_tower", "Riley", "Riley is scavenging supplies for the expedition to the tower.")}
-{!Global.map_marked("tree_tower")}
-	{Global.mark_map("tree_tower", "A former battleground, now filled with dangerous Spectres.")}
-{Global.task_note_place("the_tree_tower", "tree_tower", "It requires 12 capacitors to open the tower's entrance. Riley wants inside.")}
-{Global.mark_map("tree_tower", "There's a back entrance under the roots of the tree")}
-So what brought you out here? Are some kind of hunter?
-[You] Oh no, nothing of the sort. I'm just exploring. What brought you up here?
+So what are you doing out here? Are some kind of hunter?
+[You] Oh no, nothing of the sort. I'm just exploring. What about you?
 I've been looking for capacitors. You see the tower with the giant tree?
 [You] Naturally. It dominates the horizon.
 It's called the Tree Tower. I want to get inside.
 I found an entrance at the base of the tree that punches through the tower's outer wall, but it only got me to some kind of electrical closet, and I couldn't go any further. But there were twelve slots for capacitors. I think if I got a bunch and plugged them in, the front entrance would open.
-[You] That's quite intriguing. So you think there's one inside this tower?
-Yeah. I spotted a path up to it, but, well...
-I'm a little in over my head, I guess... I don't know how smart it is to go alone.
-[You] Well, what if I helped you? I could get inside that tower and find your capacitor for you.
-You would? It's pretty dangerous... And I can't really pay you or anything.
-[You] Oh, money's no concern. I've been intrigued by these structures since I got here. Perhaps sooner or later I would have ventured in anyway!
-Alright! Before those deathgnats came, I pushed those floating flower things up so they make a path to the tower's lower level. Hop on those and look for a little hole in the wall. I'll come in after you.
-[You] Alright, I'll look for a hole.
+
+{Global.note_task("the_tree_tower", "That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.")}
+{Global.task_note_person("the_tree_tower", "Riley", "Riley is scavenging supplies for the expedition to the tower.")}
+{Global.task_note_place("the_tree_tower", "tree_tower", "It requires 12 capacitors to open the tower's entrance. Riley wants inside.")}
+
+{!Global.map_marked("tree_tower")}
+	{Global.mark_map("tree_tower", "A former battleground, now filled with dangerous Spectres.")}
+
+{Global.mark_map("tree_tower", "There's a back entrance under the roots of the tree")}
+
+!{capacitor_113}
+	[You] That's quite intriguing. So you think there's one inside this tower?
+	Yeah. I spotted a path up to it, but, well...
+	I'm a little in over my head, I guess... I don't know how smart it is to go alone.
+	[You] Well, what if I helped you? I could get inside that tower and find your capacitor for you.
+	You would? It's pretty dangerous... And I can't really pay you or anything.
+	[You] Oh, money's no concern. I've been intrigued by these structures since I got here. Perhaps sooner or later I would have ventured in anyway!
+	Alright! Before those deathgnats came, I pushed those floating flower things up so they make a path to the tower's lower level. Hop on those and look for a little hole in the wall. I'll come in after you.
+	[You] Alright, I'll look for a hole.
+	{Global.task_note_place("the_tree_tower", "village_tower", "Riley says there must be a capacitor inside this tower.")}
+{otherwise}
+	[You] That's an interesting coincidence. I actually found one of those capacitors in the tower.
+	What!? Were you using it for something?
+	{Global.task_is_active("activate_the_medium")}
+		[You] I needed one to activate the Medium down in the village.
+		Oh...
+	{otherwise}
+		[You] Not particularly, no.
+		Really?
+	Well, if you come across any more, could you lend me a hand? I'm a little in over my head, I guess...
+	[You] Sure! I don't have much interest in electronics, anyway.
+
+Thank you! I think we'll make a great team.
 {!Global.count("wep_pistol")}
 	{Global.add_item("wep_pistol")}
 	{Global.add_item("pistol", 12)}
-	And here: I'll let you borrow my pistol. I don't know how good I'd be with it, anyway.
+	And here: I'll let you have my pistol. I think you'll get more use out of it than I ever have.
 {otherwise}
-	And also, 
+	You can keep that pistol, by the way. You seem to know how to use it better than I do.
++{riley/discussed/capacitors}
 {exit()}
 
 :shop_generic

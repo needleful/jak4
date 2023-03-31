@@ -7,7 +7,7 @@ var player: PlayerBody
 
 export(bool) var pause_menu := false
 
-var coats_by_rarity := {}
+var coats_by_rarity: Dictionary
 var viewing_rarity = Coat.Rarity.Common
 var viewing_index := 0
 var show_background := false
@@ -16,6 +16,9 @@ const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
 var old_coat: Coat
 var is_active := false
+
+func _init():
+	coats_by_rarity = {}
 
 func _ready():
 	set_process_input(false)

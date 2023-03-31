@@ -33,19 +33,22 @@ func _on_target_died(_id, path):
 
 	var p = Global.get_player()
 	if enemies.size() <= 1:
-		var _x = Global.add_stat("riley/saved")
-		_x = Global.add_stat(str(get_path()) + "/saved")
-		saved = true
-		
-	# Assume the player is playing our game
-	if p.game_ui.label == game_label and p.game_ui.in_game:
-		p.game_ui.value = enemies.size() - 1
-		p.game_ui.remove_target(get_node(enemies[idx]))
-		if saved:
-			p.game_ui.complete_game()
-	
+		complete_game()
+	else:
+		# Assume the player is playing our game
+		if p.game_ui.label == game_label and p.game_ui.in_game:
+			p.game_ui.value = enemies.size() - 1
+			p.game_ui.remove_target(get_node(enemies[idx]))
 	enemies.remove(idx)
-	
+
+func complete_game():
+	var _x = Global.add_stat("riley/saved")
+	_x = Global.add_stat(str(get_path()) + "/saved")
+	saved = true
+	var p = Global.get_player()
+	if p.game_ui.label == game_label and p.game_ui.in_game:
+		p.game_ui.complete_game()
+
 func track_enemies():
 	var player = Global.get_player()
 	Global.save_checkpoint(player.get_save_transform())
@@ -53,3 +56,5 @@ func track_enemies():
 	player.game_ui.value = enemies.size()
 	for e in enemies:
 		player.game_ui.add_target(get_node(e))
+	if enemies.size() == 0:
+		complete_game()

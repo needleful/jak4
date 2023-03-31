@@ -1,6 +1,9 @@
 extends Node
 
-var pools := {}
+var pools : Dictionary
+
+func _init():
+	pools = {}
 
 func has(type:String) -> bool:
 	return type in pools and !pools[type].empty()
