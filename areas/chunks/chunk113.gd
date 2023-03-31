@@ -8,8 +8,8 @@ export(NodePath) var inactive_lights
 
 func _on_power_deactivated():
 	if !Global.stat("capacitor_113"):
-		Global.add_stat("capacitor_113")
-		Global.task_remove_place("the_tree_tower", "village_tower")
+		var _x = Global.add_stat("capacitor_113")
+		_x = Global.task_remove_place("the_tree_tower", "village_tower")
 	get_tree().call_group(reflection_group, "set", "interior_ambient_color", deactivated_color)
 	for c in get_node(active_lights).get_children():
 		if c is Light:

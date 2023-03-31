@@ -431,6 +431,7 @@ func get_rarity_color(rarity: int) -> Color:
 
 func reset_game():
 	valid_game_state = false
+	player_spawned = false
 	game_state = GameState.new()
 	stats_temp = {}
 	gravity_stunned_bodies = {}
