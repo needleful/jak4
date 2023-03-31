@@ -1,10 +1,37 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://material/env/ancient/gem.material" type="Material" id=1]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=2]
 [ext_resource path="res://_glb/env/ancient/target_flower.glb" type="PackedScene" id=3]
 [ext_resource path="res://entities/control/damage_trigger.gd" type="Script" id=4]
 [ext_resource path="res://entities/control/target_collapsible.gd" type="Script" id=5]
+
+[sub_resource type="Animation" id=15]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("body_open/CollisionShape:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("body_open/CollisionShape:shape:radius")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.54811 ]
+}
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 animation = "Close"
@@ -41,7 +68,7 @@ states/Opened/node = SubResource( 4 )
 states/Opened/position = Vector2( 137, 114 )
 transitions = [ "Opened", "Close", SubResource( 5 ), "Close", "Closed", SubResource( 6 ), "Closed", "Open", SubResource( 7 ), "Open", "Opened", SubResource( 8 ) ]
 start_node = "Opened"
-graph_offset = Vector2( -141.626, 7.35602 )
+graph_offset = Vector2( -174.626, -43.644 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 
@@ -50,7 +77,7 @@ height = 1.45185
 radius = 0.437309
 
 [sub_resource type="CylinderShape" id=13]
-height = 0.436402
+height = 0.613565
 radius = 1.59766
 
 [sub_resource type="CylinderShape" id=12]
@@ -70,6 +97,9 @@ collision_mask = 2
 
 [node name="mesh" parent="closed-kine" index="0"]
 visible = false
+
+[node name="AnimationPlayer" parent="." index="2"]
+anims/RESET = SubResource( 15 )
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="3"]
 tree_root = SubResource( 9 )
@@ -94,12 +124,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.238748, 0 )
 shape = SubResource( 14 )
 
 [node name="CollisionShape" type="CollisionShape" parent="hitbox" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.253542, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.393878, 0 )
 shape = SubResource( 13 )
 
 [node name="body_open" type="KinematicBody" parent="." index="6" groups=["dynamic"]]
-collision_layer = 16
-collision_mask = 7
 
 [node name="CollisionShape" type="CollisionShape" parent="body_open" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.419359, 0 )

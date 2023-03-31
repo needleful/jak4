@@ -7,6 +7,11 @@ var enabled := true
 
 onready var mat: ShaderMaterial = $Circle.get_active_material(0)
 
+func _ready():
+	if !Global.get_player():
+		mat.set_shader_param("world_player", Vector3.ZERO)
+		set_process(false)
+
 func process_player_distance(origin: Vector3):
 	if !enabled:
 		visible = false
