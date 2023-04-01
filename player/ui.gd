@@ -69,6 +69,7 @@ func _init():
 
 func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
+	_x = Global.connect("journal_updated", self, "on_journal_updated")
 	set_mode(Mode.Gameing)
 	set_process_input(true)
 
@@ -268,6 +269,11 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 						show_prompt(["use_item"], tr("Use Item"))
 					else:
 						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
+
+func on_journal_updated(category: String, subject: String):
+	var alert = [category.capitalize(), subject.capitalize()]
+	$gameing/note_get.show_alert(alert)
+	$dialog/note_get.show_alert(alert)
 
 func equip_previous():
 	if equipment_inventory.size() == 1:

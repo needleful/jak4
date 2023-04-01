@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ui/map/map.png" type="Texture" id=1]
 [ext_resource path="res://ui/map/map.gd" type="Script" id=2]
 [ext_resource path="res://ui/map/marker_icon.svg" type="Texture" id=3]
 [ext_resource path="res://ui/map/node.gd" type="Script" id=4]
 [ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=5]
+[ext_resource path="res://ui/map/map_reticle.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 35.3104
@@ -212,12 +213,8 @@ position = Vector2( 512, 300 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="reticle"]
 shape = SubResource( 1 )
 
-[node name="ColorRect" type="ColorRect" parent="reticle/CollisionShape2D"]
-margin_left = -31.0
-margin_top = -33.0
-margin_right = 33.0
-margin_bottom = 31.0
-color = Color( 1, 1, 1, 0.439216 )
+[node name="Sprite" type="Sprite" parent="reticle"]
+texture = ExtResource( 6 )
 
 [node name="panel" type="PanelContainer" parent="reticle"]
 margin_left = 78.0

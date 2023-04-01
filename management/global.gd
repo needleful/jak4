@@ -3,6 +3,7 @@ extends Node
 signal inventory_changed
 signal item_changed(item, change, count)
 signal stat_changed(tag, value)
+signal journal_updated(category, subject)
 
 var using_gamepad := false
 
@@ -171,6 +172,7 @@ func add_note(category: String, subject: String, note: String):
 	if !(subject in game_state.journal[category]):
 		game_state.journal[category][subject] = []
 	game_state.journal[category][subject].append(note)
+	emit_signal("journal_updated", category, subject)
 	return true
 
 func get_notes(category: String, subject: String = ""):
@@ -199,7 +201,6 @@ func note_task(task_id: String, note: String) -> bool:
 	var task := Task.new(task_id)
 	task.general_notes.append(note)
 	game_state.active_tasks.append(task)
-	print("Noted task %s [of %d]: %s" % [task_id, game_state.active_tasks.size(), note])
 	return true
 
 func complete_task(task_id: String, note := "")-> bool:

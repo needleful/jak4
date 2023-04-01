@@ -15,20 +15,30 @@ var last_moved_dir := Vector2.ZERO
 var highlighted_point = null
 var min_pos : Vector2
 var max_pos : Vector2
+var mouse_accum : Vector2
+
+func _input(event):
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(BUTTON_LEFT):
+		mouse_accum += event.relative
 
 func _ready():
 	set_active(false)
 
 func _process(delta: float):
-	# Snap
-	if snap_timer > 0:
-		var ratio = clamp(delta*10, 0.0, 0.1)
-		snap_timer *= 1 - ratio
-		var snap_move = ratio*snap_direction
-		snap_direction *= 1 - ratio
-		if snap_timer < 0.01:
-			snap_timer = 0
-		scroll_area.position -= snap_move
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		reticle.global_position = get_global_mouse_position()
+		pass
+	else:
+		mouse_accum = Vector2.ZERO
+		# Snap
+		if snap_timer > 0:
+			var ratio = clamp(delta*10, 0.0, 0.1)
+			snap_timer *= 1 - ratio
+			var snap_move = ratio*snap_direction
+			snap_direction *= 1 - ratio
+			if snap_timer < 0.01:
+				snap_timer = 0
+			scroll_area.position -= snap_move
 	# Zoom
 	var zoom := Input.get_axis("map_zoom_out", "map_zoom_in")
 	if zoom != 0:
@@ -44,7 +54,7 @@ func _process(delta: float):
 	var movement = Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
 	if movement != Vector2.ZERO:
 		last_moved_dir = movement
-	scroll_area.translate(-delta*400*movement)
+	scroll_area.translate(-delta*400*movement + mouse_accum)
 	scroll_area.position.x = clamp(scroll_area.position.x, min_pos.x, max_pos.x)
 	scroll_area.position.y = clamp(scroll_area.position.y, min_pos.y, max_pos.y)
 	
@@ -88,6 +98,7 @@ func _process(delta: float):
 			l.size_flags_horizontal = SIZE_EXPAND_FILL
 			l.text = n
 			note_box.add_child(l)
+	mouse_accum = Vector2.ZERO
 
 func update_zoom():
 	max_pos = OS.window_size/2 + zoom_scale*scroll_area.texture.get_size()/2
@@ -103,6 +114,7 @@ func set_active(a):
 	scroll_area.scale = Vector2(1, 1)
 	active = a
 	set_process(active)
+	set_process_input(active)
 	if active:
 		update_zoom()
 		for g in scroll_area.get_children():

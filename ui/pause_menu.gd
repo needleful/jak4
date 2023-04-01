@@ -156,3 +156,6 @@ func _on_graphics_pressed():
 
 func _on_displayOptions_ui_redraw():
 	get_tree().call_group("ui_settings_custom", "ui_settings_apply")
+
+func _on_back_pressed():
+	set_level(level - 1)

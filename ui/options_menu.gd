@@ -1,8 +1,10 @@
 extends Control
 
 signal ui_redraw
+signal back_pressed
 
 export(Script) var options_script: Script
+export(bool) var with_back_button := true
 
 const WIDGET_SCENES = {
 	TYPE_BOOL: preload("res://addons/fast_options/widgets/bool_widget.tscn"),
@@ -36,6 +38,11 @@ func redraw():
 	for property in options.get_property_list():
 		if is_export_var(property):
 			add_child(create_widget(property))
+	if with_back_button:
+		var back := Button.new()
+		back.text = tr("Back")
+		add_child(back)
+		var _x = back.connect("pressed", self, "emit_signal", ["back_pressed"])
 
 func create_widget(property:Dictionary)->Control:
 	var type = property.type

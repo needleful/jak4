@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://ui/inventory.gd" type="Script" id=1]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=2]
@@ -9,22 +9,10 @@
 [ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=7]
 [ext_resource path="res://ui/icons/item_gem.png" type="Texture" id=8]
 [ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=9]
-
-[sub_resource type="ProceduralSky" id=2]
-radiance_size = 0
-sky_top_color = Color( 1, 1, 1, 1 )
-sky_horizon_color = Color( 1, 0.541176, 0.713726, 1 )
-sky_curve = 0.237511
-ground_bottom_color = Color( 0.262745, 0, 0.411765, 1 )
-ground_horizon_color = Color( 1, 0.541176, 0.713726, 1 )
-ground_curve = 0.226274
-
-[sub_resource type="Environment" id=3]
-background_mode = 2
-background_sky = SubResource( 2 )
+[ext_resource path="res://ui/inventory_env.res" type="Environment" id=10]
 
 [sub_resource type="World" id=4]
-environment = SubResource( 3 )
+environment = ExtResource( 10 )
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
@@ -45,8 +33,7 @@ render_target_update_mode = 3
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Viewport"]
 transform = Transform( 0.614907, 0.774376, -0.1491, -0.313623, 0.41361, 0.854732, 0.723554, -0.47882, 0.497194, -0.0264456, 0.209806, 0.094446 )
-light_energy = 0.8
-light_indirect_energy = 0.8
+light_energy = 0.5
 
 [node name="SpringArm" type="SpringArm" parent="Viewport"]
 transform = Transform( 1, 0, 0, 0, 0.944584, 0.32827, 0, -0.32827, 0.944584, 0, -0.00165046, 0.00688021 )
@@ -61,28 +48,29 @@ anchor_bottom = 1.0
 margin_top = 32.0
 
 [node name="large_items" type="VBoxContainer" parent="box"]
-margin_right = 400.0
-margin_bottom = 1048.0
-rect_min_size = Vector2( 400, 0 )
+margin_right = 350.0
+margin_bottom = 688.0
+rect_min_size = Vector2( 350, 0 )
+size_flags_horizontal = 0
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="box/large_items"]
-margin_right = 400.0
-margin_bottom = 1048.0
+margin_right = 350.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="rows" type="VBoxContainer" parent="box/large_items/ScrollContainer"]
-margin_right = 400.0
-margin_bottom = 1048.0
+margin_right = 350.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 15
 
 [node name="viewport_window" type="TextureRect" parent="box"]
-margin_left = 404.0
-margin_right = 1660.0
-margin_bottom = 1048.0
+margin_left = 354.0
+margin_right = 940.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 1 )
@@ -101,7 +89,7 @@ rect_min_size = Vector2( 320, 0 )
 [node name="MarginContainer" type="MarginContainer" parent="box/viewport_window/Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 361.755
+margin_right = 313.0
 margin_bottom = 151.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
@@ -111,49 +99,50 @@ custom_constants/margin_bottom = 20
 [node name="item" type="VBoxContainer" parent="box/viewport_window/Panel/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 344.0
+margin_right = 296.0
 margin_bottom = 124.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="name" type="Label" parent="box/viewport_window/Panel/MarginContainer/item"]
-margin_right = 334.0
+margin_right = 286.0
 margin_bottom = 54.0
 custom_fonts/font = ExtResource( 3 )
 text = "Item"
 
 [node name="spacer" type="Panel" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 58.0
-margin_right = 334.0
+margin_right = 286.0
 margin_bottom = 73.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 6 )
 
 [node name="description" type="Label" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 77.0
-margin_right = 334.0
+margin_right = 286.0
 margin_bottom = 91.0
 text = "Item"
 autowrap = true
 
 [node name="spacer2" type="Panel" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 95.0
-margin_right = 334.0
+margin_right = 286.0
 margin_bottom = 110.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 6 )
 
 [node name="sub_items" type="GridContainer" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 114.0
-margin_right = 334.0
+margin_right = 286.0
 margin_bottom = 114.0
 columns = 2
 
 [node name="small_items" type="GridContainer" parent="box"]
-margin_left = 1664.0
-margin_right = 1920.0
-margin_bottom = 1048.0
+margin_left = 944.0
+margin_right = 1200.0
+margin_bottom = 688.0
 rect_min_size = Vector2( 256, 0 )
+size_flags_horizontal = 0
 custom_constants/vseparation = 25
 columns = 2
 

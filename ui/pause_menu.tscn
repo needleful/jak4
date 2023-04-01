@@ -201,7 +201,7 @@ margin_bottom = -50.0
 
 [node name="main_menu" type="VBoxContainer" parent="foreground"]
 margin_right = 250.0
-margin_bottom = 880.0
+margin_bottom = 520.0
 rect_min_size = Vector2( 250, 0 )
 custom_constants/separation = 40
 
@@ -237,7 +237,7 @@ text = "Save and Quit"
 [node name="mainOptions" type="VBoxContainer" parent="foreground"]
 margin_left = 254.0
 margin_right = 504.0
-margin_bottom = 880.0
+margin_bottom = 520.0
 rect_min_size = Vector2( 250, 0 )
 custom_constants/separation = 40
 
@@ -266,6 +266,12 @@ margin_top = 204.0
 margin_right = 250.0
 margin_bottom = 232.0
 text = "Graphics"
+
+[node name="back" type="Button" parent="foreground/mainOptions"]
+margin_top = 272.0
+margin_right = 250.0
+margin_bottom = 300.0
+text = "Back"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="foreground/mainOptions"]
 anims/RESET = SubResource( 2 )
@@ -328,4 +334,9 @@ text = "Paused"
 [connection signal="pressed" from="foreground/mainOptions/controls" to="." method="_on_controls_pressed"]
 [connection signal="pressed" from="foreground/mainOptions/display" to="." method="_on_display_pressed"]
 [connection signal="pressed" from="foreground/mainOptions/graphics" to="." method="_on_graphics_pressed"]
+[connection signal="pressed" from="foreground/mainOptions/back" to="." method="_on_back_pressed"]
+[connection signal="back_pressed" from="foreground/audioOptions" to="." method="_on_back_pressed"]
+[connection signal="back_pressed" from="foreground/controlOptions" to="." method="_on_back_pressed"]
+[connection signal="back_pressed" from="foreground/displayOptions" to="." method="_on_back_pressed"]
 [connection signal="ui_redraw" from="foreground/displayOptions" to="." method="_on_displayOptions_ui_redraw"]
+[connection signal="back_pressed" from="foreground/graphicsOptions" to="." method="_on_back_pressed"]

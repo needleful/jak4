@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=2]
+[gd_scene load_steps=105 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
@@ -9,7 +9,7 @@
 [ext_resource path="res://player/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
-[ext_resource path="res://ui/item_get.gd" type="Script" id=10]
+[ext_resource path="res://ui/components/alert_prompt.tscn" type="PackedScene" id=10]
 [ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/diagetic/target.png" type="Texture" id=12]
 [ext_resource path="res://ui/icons/wep_pistol.svg" type="Texture" id=13]
@@ -762,61 +762,6 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=76]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=75]
-resource_name = "show_and_fade"
-length = 2.5
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 2.5 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 2.5 ),
-"transitions": PoolRealArray( 6.27667, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
 [sub_resource type="PrismMesh" id=58]
 size = Vector3( 0.2, 0.2, 0.1 )
 
@@ -1205,6 +1150,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 65 )
 custom_styles/tabs_panel = SubResource( 5 )
+all_tabs_in_front = true
 __meta__ = {
 "_edit_use_anchors_": true
 }
@@ -1227,6 +1173,8 @@ visible = false
 time_scale_response = false
 visible = false
 margin_top = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Wardrobe" parent="ui/status_menu/tabs" instance=ExtResource( 32 )]
 pause_mode = 2
@@ -1240,18 +1188,16 @@ visible = false
 
 [node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
 time_scale_response = false
-margin_left = 15.0
-margin_right = 357.0
-margin_bottom = 64.0
-__meta__ = {
-"_edit_use_anchors_": true
-}
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -80.0
+margin_right = 342.0
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
 time_scale_response = false
-margin_top = 21.0
+margin_top = 29.0
 margin_right = 104.0
-margin_bottom = 43.0
+margin_bottom = 51.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
@@ -1264,21 +1210,19 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 108.0
 margin_right = 191.0
-margin_bottom = 64.0
+margin_bottom = 80.0
 action = "ui_page_down"
 small = true
 
 [node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
 time_scale_response = false
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-margin_left = -326.0
-margin_right = -15.0
-margin_bottom = 64.0
+anchor_bottom = 1.0
+margin_left = -311.0
+margin_top = -80.0
 alignment = 2
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
 time_scale_response = false
@@ -1286,16 +1230,16 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 155.0
 margin_right = 238.0
-margin_bottom = 64.0
+margin_bottom = 80.0
 action = "ui_page_up"
 small = true
 
 [node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
 time_scale_response = false
 margin_left = 242.0
-margin_top = 21.0
+margin_top = 29.0
 margin_right = 311.0
-margin_bottom = 43.0
+margin_bottom = 51.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
@@ -1305,8 +1249,8 @@ align = 2
 
 [node name="date_time" type="PanelContainer" parent="ui/status_menu"]
 time_scale_response = false
-anchor_top = 0.95
-anchor_bottom = 0.95
+anchor_top = 0.875
+anchor_bottom = 0.875
 margin_left = 20.0
 margin_top = -65.0
 margin_right = 210.0
@@ -1565,16 +1509,16 @@ alignment = 1
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 196.0
+margin_left = 241.0
 margin_right = 324.0
-margin_bottom = 128.0
+margin_bottom = 80.0
 
 [node name="plus" type="Label" parent="ui/gameing/tutorial"]
 time_scale_response = false
 margin_left = 328.0
-margin_top = 37.0
+margin_top = 13.0
 margin_right = 388.0
-margin_bottom = 91.0
+margin_bottom = 67.0
 rect_min_size = Vector2( 60, 0 )
 custom_fonts/font = ExtResource( 6 )
 text = "+"
@@ -1585,22 +1529,22 @@ time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 392.0
-margin_right = 520.0
-margin_bottom = 128.0
+margin_right = 475.0
+margin_bottom = 80.0
 
 [node name="spacer" type="Control" parent="ui/gameing/tutorial"]
 time_scale_response = false
-margin_left = 524.0
-margin_right = 584.0
-margin_bottom = 128.0
+margin_left = 479.0
+margin_right = 539.0
+margin_bottom = 80.0
 rect_min_size = Vector2( 60, 0 )
 
 [node name="Label" type="Label" parent="ui/gameing/tutorial"]
 time_scale_response = false
-margin_left = 588.0
-margin_top = 37.0
-margin_right = 827.0
-margin_bottom = 91.0
+margin_left = 543.0
+margin_top = 13.0
+margin_right = 782.0
+margin_bottom = 67.0
 custom_fonts/font = ExtResource( 6 )
 text = "Stuff here!"
 
@@ -1977,30 +1921,15 @@ text = "Resetting"
 align = 1
 valign = 1
 
-[node name="item_get" type="Control" parent="ui/gameing"]
-time_scale_response = false
-visible = false
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = -90.0
-margin_bottom = -42.0
-script = ExtResource( 10 )
+[node name="item_get" parent="ui/gameing" instance=ExtResource( 10 )]
+format = "Item Found: %s"
 
-[node name="Label" type="Label" parent="ui/gameing/item_get"]
-time_scale_response = false
-anchor_right = 1.0
+[node name="note_get" parent="ui/gameing" instance=ExtResource( 10 )]
+anchor_top = 1.0
 anchor_bottom = 1.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 1
-text = "Item Get: Wombo"
-align = 1
-valign = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/item_get"]
-time_scale_response = false
-anims/RESET = SubResource( 76 )
-anims/show_and_fade = SubResource( 75 )
+margin_top = -38.0
+margin_bottom = 0.0
+format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="Control" parent="ui"]
 time_scale_response = false
@@ -2082,6 +2011,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
 
+[node name="note_get" parent="ui/dialog" instance=ExtResource( 10 )]
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_top = -37.0
+margin_right = 640.0
+margin_bottom = 0.0
+format = "New Journal Entry: %s/%s"
+
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false
 visible = false
@@ -2135,8 +2073,8 @@ margin_right = 6.0
 rect_min_size = Vector2( 400, 0 )
 
 [node name="Label" type="Label" parent="ui/story_time/ScrollContainer"]
-margin_right = 524.0
-margin_bottom = 480.0
+margin_right = 612.0
+margin_bottom = 576.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 autowrap = true

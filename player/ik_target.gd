@@ -17,7 +17,7 @@ var max_velocity := 30.0
 
 func _ready():
 	global_transform = target.global_transform
-	if !player:
+	if !Global.get_player():
 		set_physics_process(false)
 
 func _physics_process(delta):

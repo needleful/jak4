@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=2]
@@ -14,7 +14,10 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=14]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=15]
 [ext_resource path="res://entities/env/copper/scrap3.tscn" type="PackedScene" id=16]
+[ext_resource path="res://items/item_pickup.gd" type="Script" id=17]
+[ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=18]
 
 [node name="chunk126" type="MultiMeshSystem"]
 script = ExtResource( 1 )
@@ -493,3 +496,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23.3867, 5.77093, -12.629 )
 
 [node name="stamina_up_pickup" parent="active_entities/zone_tower" instance=ExtResource( 6 )]
 transform = Transform( 0.0268888, 0.999638, 0, -0.999638, 0.0268888, 0, 0, 0, 1, -13.5952, 53.5505, -5.70826 )
+
+[node name="hover_scooter_pickup" type="KinematicBody" parent="active_entities/zone_tower" groups=["distance_activated", "push"] instance=ExtResource( 15 )]
+transform = Transform( 0.411581, 0.029021, -0.910911, -0.6726, 0.684123, -0.282109, 0.614987, 0.72879, 0.301092, -14.9321, 53.462, -5.15427 )
+collision_layer = 4
+script = ExtResource( 17 )
+item_id = "hover_scooter"
+preview = ExtResource( 18 )
+friendly_name = "scooter_097"

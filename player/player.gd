@@ -1780,7 +1780,7 @@ func celebrate(id: String = "", item: Spatial = null, local := Transform()):
 	if held_item:
 		held_item.transform = local
 	if id and id != "":
-		$ui/gameing/item_get.show_get(id)
+		$ui/gameing/item_get.show_alert(id.capitalize())
 
 func get_item(item: ItemPickup):
 	if item.item_id == "capacitor" or item.item_id in ui.UPGRADE_ITEMS or item.celebrate:

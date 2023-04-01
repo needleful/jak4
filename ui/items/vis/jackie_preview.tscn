@@ -25,6 +25,18 @@ script = null
 [node name="Armature" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.285116, 0 )
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [ NodePath("lumbar") ]
+bones/4/bound_children = [ NodePath("chest") ]
+bones/6/bound_children = [ NodePath("head") ]
+bones/27/bound_children = [ NodePath("gun") ]
+bones/46/bound_children = [ NodePath("handRight") ]
+bones/50/bound_children = [ NodePath("coat_tails") ]
+bones/56/bound_children = [ NodePath("knee_left") ]
+bones/58/bound_children = [ NodePath("footLeft") ]
+bones/60/bound_children = [ NodePath("knee_right") ]
+bones/62/bound_children = [ NodePath("footRight") ]
+
 [node name="coat" parent="Armature/Skeleton" index="0"]
 script = ExtResource( 2 )
 
@@ -50,6 +62,9 @@ script = null
 [node name="head" parent="Armature/Skeleton" index="7"]
 transform = Transform( 1, 4.26326e-14, -3.05533e-13, -3.41061e-13, 0.203954, -0.97898, 7.10543e-14, 0.97898, 0.203954, 1.49966e-15, 1.21111, -0.0060491 )
 
+[node name="hair" parent="Armature/Skeleton/head" index="3"]
+script = null
+
 [node name="gun" parent="Armature/Skeleton" index="8"]
 transform = Transform( 0.777109, 0.00107549, 0.629366, 0.0282345, -0.999052, -0.0331554, 0.628733, 0.0435355, -0.776402, 0.25739, 0.720046, 0.0177433 )
 visible = false
@@ -70,23 +85,23 @@ script = null
 [node name="target" parent="Armature/Skeleton/gun/gun_ik" index="0"]
 visible = false
 
-[node name="handRight" parent="Armature/Skeleton" index="12"]
-transform = Transform( 0.777108, -0.00107619, -0.629367, -0.028236, -0.999051, -0.0331559, -0.628734, 0.0435363, -0.776401, -0.247847, 0.722929, 0.0260771 )
+[node name="handRight" parent="Armature/Skeleton" index="10"]
+transform = Transform( 0.714481, -0.451552, -0.534432, -0.568359, -0.820052, -0.0669587, -0.408027, 0.35159, -0.842555, -0.279338, 0.734651, 0.0478614 )
 visible = false
 
 [node name="ref" parent="Armature/Skeleton/handRight" index="0"]
 visible = false
 
-[node name="knee_left" parent="Armature/Skeleton" index="13"]
+[node name="knee_left" parent="Armature/Skeleton" index="11"]
 transform = Transform( -0.0255654, 0.0538723, -0.998221, -0.0492497, -0.997402, -0.0525668, -0.998459, 0.0478181, 0.0281522, 0.0866715, 0.809257, 0.014476 )
 
-[node name="knee_right" parent="Armature/Skeleton" index="14"]
+[node name="knee_right" parent="Armature/Skeleton" index="12"]
 transform = Transform( -0.0255653, -0.0538732, 0.998221, 0.0492598, -0.997402, -0.0525674, 0.998459, 0.0478282, 0.0281526, -0.0866715, 0.809257, 0.014476 )
 
-[node name="coat_tails" parent="Armature/Skeleton" index="15"]
+[node name="coat_tails" parent="Armature/Skeleton" index="13"]
 transform = Transform( 1.92244e-07, -2.54188e-08, -1, -2.98023e-08, -1, 3.6704e-08, -1, 2.98023e-08, -2.3978e-07, -0.00271823, 0.9178, 0.0244011 )
 
-[node name="lumbar" parent="Armature/Skeleton" index="16"]
+[node name="lumbar" parent="Armature/Skeleton" index="14"]
 transform = Transform( 1, 0, 2.38419e-07, 7.88893e-08, 0.943671, -0.330886, -2.24989e-07, 0.330886, 0.943671, 7.10085e-15, 0.84089, -0.0280461 )
 
 [node name="AnimationTree" parent="." index="2"]

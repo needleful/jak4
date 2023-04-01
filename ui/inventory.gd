@@ -26,8 +26,21 @@ const MIN_ZOOM := 0.1
 const MAX_ZOOM := 10.0
 const ZOOM_SPEED := 3.0
 
+var mouse_accum := Vector2.ZERO
+var mouse_sns := Vector2(0.01, 0.01)
+
+func _input(event):
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(BUTTON_LEFT):
+		mouse_accum += event.relative
+
+func _ready():
+	set_active(false)
+
 func _process(delta):
 	var cam := Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
+	cam -= mouse_accum*mouse_sns
+	mouse_accum = Vector2.ZERO
+	
 	object_ref.global_rotate(Vector3.UP, cam.x*delta)
 	object_ref.global_rotate(Vector3.RIGHT, -cam.y*delta)
 	var zoom := Input.get_axis("map_zoom_in", "map_zoom_out")
@@ -37,15 +50,15 @@ func _process(delta):
 		MIN_ZOOM, MAX_ZOOM)
 	ref_cam_arm.spring_length = c_zoom
 
-func _ready():
-	set_process(false)
-
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		set_active(is_visible_in_tree())
 
 func set_active(active):
 	if active:
+		var p = Global.get_player()
+		if p:
+			mouse_sns = p.cam_rig.mouse_sns
 		viewport.size = view_window.rect_size
 		clear(items_list)
 		var items := {}
@@ -59,6 +72,7 @@ func set_active(active):
 					items[c] = r
 		view_items(items)
 	set_process(active)
+	set_process_input(active)
 
 func view_items(items: Dictionary):
 	var button = Button.new()
