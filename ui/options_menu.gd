@@ -3,7 +3,7 @@ extends Control
 signal ui_redraw
 signal back_pressed
 
-export(Script) var options_script: Script
+export(String) var menu_name := ""
 export(bool) var with_back_button := true
 
 const WIDGET_SCENES = {
@@ -17,18 +17,12 @@ const CUSTOM_WIDGETS = {
 	"AudioChannel": preload("res://addons/fast_options/widgets/volume_widget.tscn")
 }
 
-const USAGE_FLAGS = PROPERTY_USAGE_SCRIPT_VARIABLE | PROPERTY_USAGE_EDITOR
-
 var options: Object
 
 func _ready():
-	options = options_script.new()
-	if options is Node:
-		add_child(options)
-	if options_script.has_script_signal("ui_redraw"):
-		var res = options.connect("ui_redraw", self, "_on_ui_redraw")
-		if res != OK:
-			print_debug("Could not connect ui_redraw signal!  Error: ", res)
+	if menu_name == "":
+		menu_name = name
+	options = Settings.sub_options[menu_name]
 	call_deferred("redraw")
 
 func redraw():
@@ -80,7 +74,7 @@ func link_widget(property, widget: Control):
 		var _x = widget.connect("changed", options, "set")
 
 func is_export_var(property)->bool:
-	return property.usage & USAGE_FLAGS == USAGE_FLAGS
+	return property.usage & Settings.USAGE_FLAGS == Settings.USAGE_FLAGS
 
 func _on_ui_redraw():
 	emit_signal("ui_redraw")
@@ -90,17 +84,3 @@ func grab_focus():
 		if c is Control:
 			c.grab_focus()
 			return
-
-func save_to(file: ConfigFile):
-	for property in options.get_property_list():
-		if property.usage & USAGE_FLAGS == USAGE_FLAGS:
-			file.set_value(get_name(), property.name, options.get(property.name))
-	return file
-
-func load_from(file: ConfigFile):
-	if options.has_method("set_option"):
-		for property in file.get_section_keys(get_name()):
-			options.set_option(property, file.get_value(name, property))
-	else:
-		for property in file.get_section_keys(get_name()):
-			options.set(property, file.get_value(name, property))

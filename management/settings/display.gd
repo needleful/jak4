@@ -1,4 +1,5 @@
 extends Object
+class_name DisplaySettings
 
 signal ui_redraw
 

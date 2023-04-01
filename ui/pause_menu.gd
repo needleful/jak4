@@ -4,10 +4,7 @@ var level := 0
 onready var ui := get_parent().get_parent().get_parent()
 var show_background = true
 
-const save_path = "user://settings.cfg"
-
 func _ready():
-	load_settings()
 	hide()
 
 func _notification(what):
@@ -16,10 +13,10 @@ func _notification(what):
 
 func set_active(active):
 	if active:
-		load_settings()
+		Settings.load_settings()
 		set_level(0)
 	else:
-		save_settings()
+		Settings.save_settings()
 
 func set_level(l: int):
 	if l < 0:
@@ -77,36 +74,6 @@ func set_level(l: int):
 				$foreground/mainOptions/AnimationPlayer.play("fade_out")
 	level = l
 
-func save_settings():
-	var file:ConfigFile = ConfigFile.new()
-	file = $foreground/audioOptions.save_to(file)
-	file = $foreground/controlOptions.save_to(file)
-	file = $foreground/displayOptions.save_to(file)
-	file = $foreground/graphicsOptions.save_to(file)
-
-	var res = file.save(save_path)
-	if res != OK:
-		print_debug("Failed to save config file with error: ",res)
-
-func load_settings():
-	var f:File = File.new()
-	if !f.file_exists(save_path):
-		print_debug("No settings file: ", save_path)
-		return
-	var file:ConfigFile = ConfigFile.new()
-	var res = file.load(save_path)
-	if res != OK:
-		print_debug("Failed to load save file: ", save_path,
-				 "\nError code: ", res)
-		return
-	
-	for section in file.get_sections():
-		if !$foreground.has_node(section):
-			print_debug("No options menu for section: ", section)
-			continue
-		var menu = $foreground.get_node(section)
-		menu.load_from(file)
-
 func _on_resume_pressed():
 	ui.unpause()
 
@@ -119,7 +86,6 @@ func _on_reload_pressed():
 
 func _on_quit_pressed():
 	Global.save_sync()
-	save_settings()
 	get_tree().quit()
 
 func _on_audio_pressed():

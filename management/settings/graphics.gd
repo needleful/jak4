@@ -1,4 +1,5 @@
 extends Node
+class_name GraphicsSettings
 
 export(bool) var bloom := true setget set_bloom, get_bloom
 export(bool) var high_quality_shadows := true setget set_hq_shadows, get_hq_shadows
@@ -45,13 +46,13 @@ func set_render_distance(d):
 	render_distance = d
 	if is_inside_tree():
 		Global.render_distance = render_distance
-	if "default_far_plane" in get_viewport().get_camera():
 		var cam := get_viewport().get_camera()
-		cam.far = Global.render_distance*cam.default_far_plane
-	if is_inside_tree() and get_tree().current_scene.has_node("DirectionalLight"):
-		var dl:DirectionalLight = get_tree().current_scene.get_node("DirectionalLight")
-		if "high_quality" in dl:
-			dl.distance = render_distance
+		if cam and "default_far_plane" in cam:
+			cam.far = Global.render_distance*cam.default_far_plane
+		if get_tree().current_scene.has_node("DirectionalLight"):
+			var dl:DirectionalLight = get_tree().current_scene.get_node("DirectionalLight")
+			if "high_quality" in dl:
+				dl.distance = render_distance
 
 func set_far_render(far):
 	render_distant_objects = far
