@@ -66,7 +66,10 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		mouse_accum += event.relative
+		if (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+			or Input.is_mouse_button_pressed(BUTTON_LEFT)
+		): 
+			mouse_accum += event.relative
 
 func _physics_process(delta):
 	if locked:

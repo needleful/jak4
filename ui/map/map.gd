@@ -40,7 +40,7 @@ func _process(delta: float):
 				snap_timer = 0
 			scroll_area.position -= snap_move
 	# Zoom
-	var zoom := Input.get_axis("map_zoom_out", "map_zoom_in")
+	var zoom := Input.get_axis("map_zoom_out", "map_zoom_in") + Global.get_mouse_zoom_axis()
 	if zoom != 0:
 		var rel_pos = reticle.global_position - scroll_area.global_position
 		var zoom_change =  pow(1 + delta, zoom)

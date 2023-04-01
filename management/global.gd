@@ -69,6 +69,10 @@ func _physics_process(delta):
 			b.gravity_scale = 1
 			var _x = gravity_stunned_bodies.erase(b)
 
+func get_mouse_zoom_axis() -> float:
+	return 15*( float(Input.is_action_just_released("mouse_zoom_in"))
+			- float(Input.is_action_just_released("mouse_zoom_out")) )
+
 func get_action_input_string(action: String, override = null):
 	var gamepad
 	if override != null:

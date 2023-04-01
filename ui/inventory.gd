@@ -38,12 +38,19 @@ func _ready():
 
 func _process(delta):
 	var cam := Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
-	cam -= mouse_accum*mouse_sns
+	mouse_accum.y *= -1
+	cam += mouse_accum*mouse_sns
+	var player = Global.get_player()
+	if player:
+		if player.invert_x:
+			cam.x *= -1
+		if player.invert_y:
+			cam.y *= -1
 	mouse_accum = Vector2.ZERO
 	
 	object_ref.global_rotate(Vector3.UP, cam.x*delta)
 	object_ref.global_rotate(Vector3.RIGHT, -cam.y*delta)
-	var zoom := Input.get_axis("map_zoom_in", "map_zoom_out")
+	var zoom := Input.get_axis("map_zoom_in", "map_zoom_out") - Global.get_mouse_zoom_axis()
 	var c_zoom: float = ref_cam_arm.spring_length
 	c_zoom = clamp(
 		c_zoom + delta * ZOOM_SPEED * c_zoom * zoom * 0.5,
@@ -58,7 +65,8 @@ func set_active(active):
 	if active:
 		var p = Global.get_player()
 		if p:
-			mouse_sns = p.cam_rig.mouse_sns
+			mouse_sns = 60*p.sensitivity*p.cam_rig.mouse_sns
+			
 		viewport.size = view_window.rect_size
 		clear(items_list)
 		var items := {}
