@@ -21,10 +21,11 @@ func _ready():
 func _input(event):
 	if !visible:
 		return
-	if event.is_action_pressed("ui_up"):
-		view_history(-1)
-	elif event.is_action_pressed("ui_down"):
-		view_history(+1)
+	if event is InputEventKey and event.is_pressed():
+		if event.scancode == KEY_UP:
+			view_history(-1)
+		elif event.scancode == KEY_DOWN:
+			view_history(+1)
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
