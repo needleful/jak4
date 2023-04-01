@@ -211,6 +211,7 @@ const TIME_LEDGE_LEAVE := 0.1
 
 const TIME_PLACE_FLAG := 0.5
 const TIME_GET_ITEM := 0.9
+const MIN_TIME_LOCKED := 0.2
 var time_animation := 0.0
 
 const TIME_FALLING_DEATH := 2.0
@@ -957,7 +958,7 @@ func _physics_process(delta):
 			):
 				next_state = State.Fall
 		State.LockedWaiting:
-			if mesh.body.get_current_node() == "Walk":
+			if after(MIN_TIME_LOCKED) and mesh.body.get_current_node() == "Walk":
 				unlock()
 	if next_state != State.None:
 		set_state(next_state)
@@ -1166,7 +1167,8 @@ func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
 func lock_in_animation(anim:String):
-	mesh.exit_custom_loop(anim)
+	print("Locked in: ", anim)
+	mesh.play_single(anim)
 	state = State.LockedWaiting
 
 func anim_play(start:String, loop:String):

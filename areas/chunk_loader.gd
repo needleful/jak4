@@ -118,8 +118,11 @@ func queue_unload(chunk: Spatial):
 	if !chunk.has_node("lowres"):
 		var c = _get_content(_lowres, chunk.name)
 		if c is Node:
-			c.request_ready()
-			chunk.add_child(c)
+			if !c.is_inside_tree():
+				c.request_ready()
+				chunk.add_child(c)
+			else:
+				c.name = "lowres"
 
 func activate(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=139 format=2]
+[gd_scene load_steps=140 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -103,6 +103,7 @@
 [ext_resource path="res://material/demo_boundary.material" type="Material" id=101]
 [ext_resource path="res://areas/demo_fence.gd" type="Script" id=102]
 [ext_resource path="res://areas/chunks/chunk002.tscn" type="PackedScene" id=103]
+[ext_resource path="res://areas/chunks/chunk-cave137.tscn" type="PackedScene" id=104]
 
 [sub_resource type="OccluderShapePolygon" id=12]
 polygon_points = PoolVector2Array( 1410.04, -495.734, -234.006, 40.7117, -319.745, -602.753, 1048.05, 125.556 )
@@ -564,6 +565,7 @@ font_data = ExtResource( 3 )
 script = ExtResource( 2 )
 preloaded_chunks = {
 "chunk": ExtResource( 24 ),
+"chunk-cave137": ExtResource( 104 ),
 "chunk002": ExtResource( 103 ),
 "chunk004": ExtResource( 25 ),
 "chunk005": ExtResource( 23 ),
@@ -2771,6 +2773,12 @@ script = ExtResource( 102 )
 [node name="StaticBody" parent="boundary_demo" index="0"]
 collision_layer = 0
 collision_mask = 2
+
+[node name="chunk-cave137" parent="." index="429"]
+material/0 = ExtResource( 8 )
+
+[node name="StaticBody" parent="chunk-cave137" index="0"]
+collision_layer = 257
 
 [connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

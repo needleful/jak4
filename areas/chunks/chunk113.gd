@@ -15,3 +15,4 @@ func _on_power_deactivated():
 		if c is Light:
 			c.hide()
 	get_node(inactive_lights).show()
+	$active_entities/tower_interior3/dswitch_a2.deactivate()

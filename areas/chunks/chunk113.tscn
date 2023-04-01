@@ -1,9 +1,9 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=103 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
 [ext_resource path="res://areas/chunks/chunk113.gd" type="Script" id=3]
-[ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/env/copper/palace2.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=5]
 [ext_resource path="res://entities/env/ancient/target_flower.tscn" type="PackedScene" id=6]
 [ext_resource path="res://material/env/water.shader" type="Shader" id=7]
@@ -32,7 +32,31 @@
 [ext_resource path="res://entities/save_zone.gd" type="Script" id=30]
 [ext_resource path="res://material/water_surface.material" type="Material" id=31]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=32]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=33]
+[ext_resource path="res://entities/env/stone/hive_hut_dome_roof.tscn" type="PackedScene" id=34]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=36]
+[ext_resource path="res://entities/env/plants/cactus_round.tscn" type="PackedScene" id=37]
+[ext_resource path="res://entities/env/plants/cactus_round_flower.tscn" type="PackedScene" id=38]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=39]
+[ext_resource path="res://entities/env/stone/ruin2.tscn" type="PackedScene" id=40]
+[ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=41]
+[ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=42]
+[ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=43]
+[ext_resource path="res://entities/env/copper/light_hang1.tscn" type="PackedScene" id=44]
+[ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=45]
+[ext_resource path="res://entities/env/electrical/wind_generator.tscn" type="PackedScene" id=46]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=47]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=48]
+[ext_resource path="res://entities/env/stone/rock3.tscn" type="PackedScene" id=49]
+[ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=50]
+[ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=51]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=52]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=53]
+[ext_resource path="res://material/env/copper/copper_corroded.material" type="Material" id=54]
+[ext_resource path="res://entities/env/electrical/outlet_box.tscn" type="PackedScene" id=55]
+[ext_resource path="res://entities/env/electrical/charger.tscn" type="PackedScene" id=56]
+[ext_resource path="res://entities/env/electrical/phone.tscn" type="PackedScene" id=57]
 
 [sub_resource type="ShaderMaterial" id=284]
 shader = ExtResource( 13 )
@@ -1254,6 +1278,85 @@ deactivated_color = Color( 0.156863, 0.0235294, 0.0235294, 1 )
 active_lights = NodePath("active_entities/env_tower")
 inactive_lights = NodePath("active_entities/env_tower/red_lights")
 
+[node name="tower" parent="." index="0"]
+material/0 = ExtResource( 21 )
+
+[node name="tower2" parent="tower" index="0"]
+material/0 = ExtResource( 1 )
+
+[node name="entry" parent="tower/tower2" index="0"]
+material/0 = ExtResource( 1 )
+
+[node name="StaticBody" parent="tower/tower2/entry" index="0" groups=["hard"]]
+collision_layer = 257
+
+[node name="entry001" parent="tower/tower2" index="1"]
+material/0 = ExtResource( 21 )
+material/1 = ExtResource( 1 )
+
+[node name="StaticBody" parent="tower/tower2/entry001" index="0" groups=["hard"]]
+collision_layer = 257
+
+[node name="StaticBody" parent="tower/tower2" index="2" groups=["hard"]]
+collision_layer = 257
+
+[node name="tower3" parent="tower" index="1"]
+material/0 = ExtResource( 21 )
+
+[node name="StaticBody" parent="tower/tower3" index="0" groups=["hard"]]
+collision_layer = 257
+
+[node name="tower4" parent="tower" index="2"]
+material/0 = ExtResource( 21 )
+
+[node name="StaticBody" parent="tower/tower4" index="0" groups=["hard"]]
+collision_layer = 257
+
+[node name="StaticBody" parent="tower" index="3" groups=["hard"]]
+collision_layer = 257
+
+[node name="cube" parent="exterior" index="0"]
+collision_layer = 257
+
+[node name="mesh" parent="exterior/cube" index="0"]
+material/0 = ExtResource( 54 )
+
+[node name="cylinder" parent="exterior" index="1"]
+collision_layer = 257
+
+[node name="mesh" parent="exterior/cylinder" index="0"]
+material/0 = ExtResource( 54 )
+
+[node name="cylinder001" parent="exterior" index="2"]
+collision_layer = 257
+
+[node name="mesh" parent="exterior/cylinder001" index="0"]
+material/0 = ExtResource( 54 )
+
+[node name="cylinder002" parent="exterior" index="3"]
+collision_layer = 257
+
+[node name="mesh" parent="exterior/cylinder002" index="0"]
+material/0 = ExtResource( 54 )
+
+[node name="cylinder003" parent="exterior" index="4"]
+collision_layer = 257
+
+[node name="mesh" parent="exterior/cylinder003" index="0"]
+material/0 = ExtResource( 54 )
+
+[node name="pipe001" parent="exterior" index="5"]
+material/0 = ExtResource( 54 )
+
+[node name="StaticBody" parent="exterior/pipe001" index="0"]
+collision_layer = 257
+
+[node name="platform001" parent="exterior" index="6"]
+material/0 = ExtResource( 54 )
+
+[node name="StaticBody" parent="exterior/platform001" index="0"]
+collision_layer = 257
+
 [node name="env_area" parent="active_entities" index="0"]
 visible = false
 
@@ -1951,50 +2054,224 @@ anims/Activate = SubResource( 304 )
 anims/RESET = SubResource( 305 )
 script = ExtResource( 28 )
 
-[node name="tower_exterior" type="MultiMeshSystem" parent="active_entities" index="6"]
+[node name="bug_pickup3" parent="active_entities" index="6" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.90475, 30.5841, 36.8362 )
+
+[node name="zone_village" type="MultiMeshSystem" parent="active_entities" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 105.622, 0, -180.978 )
+
+[node name="cactus_round8" parent="active_entities/zone_village" index="0" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40.6853, 0.00723112, -5.98532 )
+
+[node name="cactus_round9" parent="active_entities/zone_village" index="1" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.3016, 0.00723016, -5.81413 )
+
+[node name="cactus_round_flower4" parent="active_entities/zone_village" index="2" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.9737, 0.00723016, -3.97929 )
+
+[node name="cactus_round_flower5" parent="active_entities/zone_village" index="3" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40.504, 0.00723112, -8.03336 )
+
+[node name="cactus_round10" parent="active_entities/zone_village" index="4" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.3369, 0.00723112, -4.98947 )
+
+[node name="cactus_round11" parent="active_entities/zone_village" index="5" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.6959, 0.00723064, -8.08603 )
+
+[node name="cactus_round_flower" parent="active_entities/zone_village" index="6" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.1516, 0.166719, -3.0218 )
+
+[node name="cactus_round" parent="active_entities/zone_village" index="7" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.5737, 0.166719, -2.56352 )
+
+[node name="cactus_round2" parent="active_entities/zone_village" index="8" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8998, 0.166719, -3.42996 )
+
+[node name="cactus_round3" parent="active_entities/zone_village" index="9" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.4358, 0.166719, -2.8885 )
+
+[node name="cactus_round4" parent="active_entities/zone_village" index="10" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.1513, 0.166719, -1.16307 )
+
+[node name="cactus_round_flower2" parent="active_entities/zone_village" index="11" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0247, 0.166719, -2.29208 )
+
+[node name="cactus_round5" parent="active_entities/zone_village" index="12" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.4218, 0.166718, -0.26503 )
+
+[node name="cactus_round_flower3" parent="active_entities/zone_village" index="13" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64.1474, 0.166719, -4.12796 )
+
+[node name="cactus_round6" parent="active_entities/zone_village" index="14" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.4021, 0.166718, -2.1093 )
+
+[node name="cactus_round7" parent="active_entities/zone_village" index="15" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 62.6049, 0.166719, -2.98247 )
+
+[node name="bug_pickup" parent="active_entities/zone_village" index="16" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.4662, 7.84398, -4.62624 )
+
+[node name="gem_pickup" parent="active_entities/zone_village" index="17" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 43.6442, 11.2503, 15.3941 )
+
+[node name="gem_pickup2" parent="active_entities/zone_village" index="18" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25.8102, 11.8614, 4.50719 )
+
+[node name="gem_pickup3" parent="active_entities/zone_village" index="19" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.7397, 11.527, -22.8668 )
+
+[node name="gem_pickup4" parent="active_entities/zone_village" index="20" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 54.1986, 12.0267, -23.3699 )
+
+[node name="hut" type="Spatial" parent="active_entities/zone_village" index="21"]
+transform = Transform( -0.90181, 0, 0.432133, 0, 1, 0, -0.432133, 0, -0.90181, 47.2456, -0.738268, 15.7772 )
+
+[node name="bed_native" parent="active_entities/zone_village/hut" index="0" instance=ExtResource( 45 )]
+transform = Transform( -0.99665, 0, -0.0817842, 0, 1, 0, 0.0817842, 0, -0.99665, 2.49518, 4.0778, -0.105026 )
+
+[node name="bed_native2" parent="active_entities/zone_village/hut" index="1" instance=ExtResource( 45 )]
+transform = Transform( -0.318406, 0, -0.947954, 0, 1, 0, 0.947954, 0, -0.318406, 1.06083, 0.96, -3.06976 )
+
+[node name="light_hang1" parent="active_entities/zone_village/hut" index="2" instance=ExtResource( 44 )]
+transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.85982, 6.3068, 6.0058 )
+
+[node name="carpet" parent="active_entities/zone_village/hut" index="3" instance=ExtResource( 47 )]
+transform = Transform( -0.562255, 0, -0.826964, 0, 1, 0, 0.826964, 0, -0.562255, 0.135376, 0.96, 0.365021 )
+
+[node name="sitting_pillow" parent="active_entities/zone_village/hut" index="4" instance=ExtResource( 52 )]
+transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.26609, 4.09293, 3.14957 )
+
+[node name="npc" parent="active_entities/zone_village/hut" index="5" instance=ExtResource( 53 )]
+transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.27773, 4.19901, 3.14561 )
+visual_name = "Solitary Man"
+sitting = true
+
+[node name="outlet_box" parent="active_entities/zone_village/hut" index="6" instance=ExtResource( 55 )]
+transform = Transform( -0.752873, 0, 0.658166, 0, 1, 0, -0.658166, 0, -0.752873, 1.4118, 4.11143, 3.7142 )
+
+[node name="charger" parent="active_entities/zone_village/hut/outlet_box" index="1" instance=ExtResource( 56 )]
+transform = Transform( 0.998946, 0, 0.0459103, 0, 1, 0, -0.0459103, 0, 0.998946, 0.104118, 0.137493, -0.0814514 )
+
+[node name="phone" parent="active_entities/zone_village/hut/outlet_box" index="2" instance=ExtResource( 57 )]
+transform = Transform( 0.394533, 0, 0.918882, 0, 1, 0, -0.918882, 0, 0.394533, 0.277107, -0.0164499, 0.0456543 )
+
+[node name="wind_generator" parent="active_entities/zone_village" index="22" instance=ExtResource( 46 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 67.996, 8.6259, 4.78935 )
+
+[node name="bug_pickup2" parent="active_entities/zone_village" index="23" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.0638, 0, -29.5896 )
+
+[node name="crawly" parent="active_entities/zone_village" index="24" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.7892, 18.7494, -44.9683 )
+
+[node name="crawly2" parent="active_entities/zone_village" index="25" instance=ExtResource( 17 )]
+transform = Transform( -0.75405, 0, -0.656817, 0, 1, 0, 0.656817, 0, -0.75405, -44.3814, -9.53674e-07, 47.2619 )
+
+[node name="gem_pickup5" parent="active_entities/zone_village" index="26" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -56.797, 11.7931, 58.2996 )
+
+[node name="gem_pickup6" parent="active_entities/zone_village" index="27" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -65.0403, 11.7482, 65.3395 )
+
+[node name="gem_pickup7" parent="active_entities/zone_village" index="28" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50.5691, 17.4715, -45.2099 )
+
+[node name="gem_pickup8" parent="active_entities/zone_village" index="29" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -48.8806, 18.5364, -42.7678 )
+
+[node name="gem_pickup9" parent="active_entities/zone_village" index="30" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 49.4286, 0.861696, -5.84036 )
+
+[node name="tower_exterior" type="MultiMeshSystem" parent="active_entities" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153.945, 42.3289, 3.38622 )
 
-[node name="npc_riley" parent="active_entities/tower_exterior" index="0" instance=ExtResource( 16 )]
-transform = Transform( -0.649633, 0, 0.760248, 0, 1, 0, -0.760248, 0, -0.649633, 7.5025, -3.44859, -5.23253 )
+[node name="gem_pickup6" parent="active_entities/tower_exterior" index="0" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.823, 1.12874, -14.1982 )
+
+[node name="gem_pickup7" parent="active_entities/tower_exterior" index="1" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48943, 1.49169, -9.09869 )
+
+[node name="gem_pickup8" parent="active_entities/tower_exterior" index="2" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.3985, 2.69931, -24.717 )
+
+[node name="gem_pickup9" parent="active_entities/tower_exterior" index="3" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.288452, -2.89225, -29.8751 )
+
+[node name="riley_intro" type="Spatial" parent="active_entities/tower_exterior" index="4"]
+script = ExtResource( 33 )
+condition = "!Global.task_exists(\"the_tree_tower\") or !Global.stat(\"capacitor_113\") or !Global.stat(\"riley/discussed/capacitor_113\")"
+
+[node name="npc_riley" parent="active_entities/tower_exterior/riley_intro" index="0" instance=ExtResource( 16 )]
+transform = Transform( 0.999896, 0, -0.0144152, 0, 1, 0, 0.0144152, 0, 0.999896, 3.64833, -3.3102, -12.4199 )
 custom_entry = "_entry113"
 only_if_saved = false
 delete_if_saved = false
-enemies = [ NodePath("../deathgnat"), NodePath("../deathgnat2"), NodePath("../deathgnat3") ]
+enemies = [ NodePath("../../deathgnat"), NodePath("../../deathgnat2"), NodePath("../../deathgnat3") ]
 
-[node name="deathgnat" parent="active_entities/tower_exterior" index="1" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3525, 4.78192, -20.2416 )
+[node name="deathgnat" parent="active_entities/tower_exterior" index="5" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.73657, 16.0571, -35.7074 )
 respawns = false
 reset_on_player_death = true
+speed = 0.0
 
-[node name="deathgnat2" parent="active_entities/tower_exterior" index="2" instance=ExtResource( 5 )]
-transform = Transform( 0.754065, 0, 0.656799, 0, 1, 0, -0.656799, 0, 0.754065, -24.4085, 13.7023, -20.9225 )
+[node name="deathgnat2" parent="active_entities/tower_exterior" index="6" instance=ExtResource( 5 )]
+transform = Transform( 0.754065, 0, 0.656799, 0, 1, 0, -0.656799, 0, 0.754065, -6.62434, 12.3386, -48.7495 )
 respawns = false
 reset_on_player_death = true
 drops_coat = true
 health = 60
+speed = 0.0
 
-[node name="deathgnat3" parent="active_entities/tower_exterior" index="3" instance=ExtResource( 5 )]
-transform = Transform( 0.226601, 0, 0.973988, 0, 1, 0, -0.973988, 0, 0.226601, -38.8045, 13.7023, -14.6903 )
+[node name="deathgnat3" parent="active_entities/tower_exterior" index="7" instance=ExtResource( 5 )]
+transform = Transform( 0.226601, 0, 0.973988, 0, 1, 0, -0.973988, 0, 0.226601, -32.9616, 13.368, -30.2823 )
 respawns = false
 reset_on_player_death = true
+speed = 0.0
 
-[node name="target_flower" parent="active_entities/tower_exterior" index="4" instance=ExtResource( 6 )]
+[node name="target_flower" parent="active_entities/tower_exterior" index="8" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.4245, 14.3093, 12.3246 )
 open = false
 
-[node name="target_flower2" parent="active_entities/tower_exterior" index="5" instance=ExtResource( 6 )]
+[node name="target_flower2" parent="active_entities/tower_exterior" index="9" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.9585, 11.703, 11.0708 )
 open = false
 
-[node name="target_flower3" parent="active_entities/tower_exterior" index="6" instance=ExtResource( 6 )]
+[node name="target_flower3" parent="active_entities/tower_exterior" index="10" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5205, 10.463, 6.45092 )
 open = false
 
-[node name="target_flower4" parent="active_entities/tower_exterior" index="7" instance=ExtResource( 6 )]
+[node name="target_flower4" parent="active_entities/tower_exterior" index="11" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.1785, 8.99361, 1.92514 )
 open = false
 
-[node name="tower_interior1" type="MultiMeshSystem" parent="active_entities" index="7"]
+[node name="bug_pickup" parent="active_entities/tower_exterior" index="12" instance=ExtResource( 35 )]
+transform = Transform( 0.444987, 0, -0.895537, 0, 1, 0, 0.895537, 0, 0.444987, -18.4068, -9.98771, -42.4717 )
+
+[node name="gem_pickup" parent="active_entities/tower_exterior" index="13" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.18794, -4.17912, -21.3007 )
+
+[node name="gem_pickup2" parent="active_entities/tower_exterior" index="14" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0358, 4.46531, -48.1697 )
+
+[node name="bug_pickup2" parent="active_entities/tower_exterior" index="15" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.79037, 13.964, -35.4649 )
+
+[node name="bug_pickup3" parent="active_entities/tower_exterior" index="16" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.40469, -4.01684, 9.25845 )
+
+[node name="gem_pickup3" parent="active_entities/tower_exterior" index="17" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.27245, 7.83863, -13.804 )
+
+[node name="gem_pickup4" parent="active_entities/tower_exterior" index="18" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05486, 8.29556, -9.68534 )
+
+[node name="gem_pickup5" parent="active_entities/tower_exterior" index="19" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.32658, 7.09968, 7.30626 )
+
+[node name="bug_pickup4" parent="active_entities/tower_exterior" index="20" instance=ExtResource( 35 )]
+transform = Transform( -0.0199696, 0, -0.999801, 0, 1, 0, 0.999801, 0, -0.0199696, 2.39749, -3.29031, -13.8841 )
+
+[node name="tower_interior1" type="MultiMeshSystem" parent="active_entities" index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.8738, 44.2597, 25.2743 )
 
 [node name="random_ammo_pickup" parent="active_entities/tower_interior1" index="0" instance=ExtResource( 8 )]
@@ -2119,7 +2396,7 @@ transform = Transform( 0.467388, 0, 0.884052, 0, 1, 0, -0.884052, 0, 0.467388, 1
 transform = Transform( -0.446688, 0, -0.89469, 0, 1, 0, 0.89469, 0, -0.446688, 2.40472, -4.15046, -13.7037 )
 reset_upon_death = true
 
-[node name="tower_interior2" type="MultiMeshSystem" parent="active_entities" index="8"]
+[node name="tower_interior2" type="MultiMeshSystem" parent="active_entities" index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.9718, 63.8687, 27.4691 )
 
 [node name="fountainA_large" parent="active_entities/tower_interior2" index="0" instance=ExtResource( 10 )]
@@ -2278,7 +2555,7 @@ key_item = "eye_tablet"
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/tower_interior2/sensor" index="0"]
 shape = SubResource( 286 )
 
-[node name="tower_interior3" type="MultiMeshSystem" parent="active_entities" index="9"]
+[node name="tower_interior3" type="MultiMeshSystem" parent="active_entities" index="11"]
 transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 76.0261, 85.4723, 22.0558 )
 
 [node name="fountainA_large" parent="active_entities/tower_interior3" index="0" instance=ExtResource( 10 )]
@@ -2398,7 +2675,7 @@ script = ExtResource( 28 )
 transform = Transform( 0.998135, 0, 0.0610521, 0, 1, 0, -0.0610521, 0, 0.998135, -20.2628, 30.4953, -2.22266 )
 persistent = true
 
-[node name="tower_interior4" type="MultiMeshSystem" parent="active_entities" index="10"]
+[node name="tower_interior4" type="MultiMeshSystem" parent="active_entities" index="12"]
 transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 76.0261, 131.817, 22.0558 )
 
 [node name="save_zone" type="Area" parent="active_entities/tower_interior4" index="0"]
@@ -2584,45 +2861,123 @@ transform = Transform( -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0
 [node name="preview" parent="active_entities/tower_interior4/pickup_eye_tablet/preview" index="0" instance=ExtResource( 27 )]
 transform = Transform( -3.01992e-08, -3.49691e-08, 0.4, -3.49691e-08, -0.4, -3.49691e-08, 0.4, -3.49691e-08, 3.01992e-08, 0, 0, 0 )
 
-[node name="palace1" parent="." index="1" instance=ExtResource( 4 )]
-transform = Transform( -0.133093, 0.920271, 0.367951, 0.948155, 0.0101213, 0.317647, 0.288597, 0.391151, -0.873906, 154.628, 39.2251, -4.12603 )
+[node name="bug_pickup" parent="active_entities/tower_interior4" index="32" instance=ExtResource( 35 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, -13.3191, 18.3077, 6.33935 )
 
-[node name="tower" parent="." index="2"]
-material/0 = ExtResource( 21 )
+[node name="random_ammo_pickup2" parent="active_entities/tower_interior4" index="33" instance=ExtResource( 8 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, -8.98917, -1.62865, 15.3184 )
+generate_on_ready = true
+regenerate_on_death = true
 
-[node name="tower2" parent="tower" index="0"]
-material/0 = ExtResource( 1 )
+[node name="random_ammo_pickup3" parent="active_entities/tower_interior4" index="34" instance=ExtResource( 8 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, -10.4862, -1.62865, 15.042 )
+generate_on_ready = true
+regenerate_on_death = true
 
-[node name="entry" parent="tower/tower2" index="0"]
-material/0 = ExtResource( 1 )
+[node name="bug_pickup2" parent="active_entities/tower_interior4" index="35" instance=ExtResource( 35 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, -19.2199, 37.5407, 23.9839 )
 
-[node name="StaticBody" parent="tower/tower2/entry" index="0" groups=["hard"]]
-collision_layer = 257
+[node name="bug_pickup3" parent="active_entities/tower_interior4" index="36" instance=ExtResource( 35 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, 11.4393, 49.2856, 3.72294 )
 
-[node name="entry001" parent="tower/tower2" index="1"]
-material/0 = ExtResource( 21 )
-material/1 = ExtResource( 1 )
+[node name="bug_pickup4" parent="active_entities/tower_interior4" index="37" instance=ExtResource( 35 )]
+transform = Transform( -0.876166, 0, 0.48201, 0, 1, 0, -0.48201, 0, -0.876166, -17.4476, 61.2573, 5.89756 )
 
-[node name="StaticBody" parent="tower/tower2/entry001" index="0" groups=["hard"]]
-collision_layer = 257
+[node name="falling_platform" parent="active_entities/tower_interior4" index="38" instance=ExtResource( 15 )]
+transform = Transform( 0.999177, 0, 0.0405638, 0, 1, 0, -0.0405638, 0, 0.999177, 15.7509, 48.0754, 13.9267 )
 
-[node name="StaticBody" parent="tower/tower2" index="2" groups=["hard"]]
-collision_layer = 257
+[node name="bug_pickup5" parent="active_entities/tower_interior4" index="39" instance=ExtResource( 35 )]
+transform = Transform( 0.833884, 0, 0.55194, 0, 1, 0, -0.55194, 0, 0.833884, 24.1492, 59.6084, -24.7115 )
 
-[node name="tower3" parent="tower" index="1"]
-material/0 = ExtResource( 21 )
+[node name="rock8" parent="." index="3" instance=ExtResource( 49 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.79733, 35.7423, 58.391 )
 
-[node name="StaticBody" parent="tower/tower3" index="0" groups=["hard"]]
-collision_layer = 257
+[node name="rock5" parent="rock8" index="1" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 0.417979, -0.908457, 0, 0.908457, 0.417979, -2.06335, -8.13717, -29.2979 )
 
-[node name="tower4" parent="tower" index="2"]
-material/0 = ExtResource( 21 )
+[node name="rock6" parent="rock8" index="2" instance=ExtResource( 48 )]
+transform = Transform( -0.655193, 0.755462, 0, -0.755462, -0.655193, 0, 0, 0, 1, 2.77734, -1.57101, -23.1578 )
 
-[node name="StaticBody" parent="tower/tower4" index="0" groups=["hard"]]
-collision_layer = 257
+[node name="rock7" parent="rock8" index="3" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, -0.527346, -0.84965, 0, 0.84965, -0.527346, -2.92383, -5.39458, -18.5149 )
 
-[node name="StaticBody" parent="tower" index="3" groups=["hard"]]
-collision_layer = 257
+[node name="zone_village" type="Spatial" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 105.622, 0, -180.978 )
+
+[node name="hut" parent="zone_village" index="0" instance=ExtResource( 36 )]
+transform = Transform( 0.143868, 0, 0.989597, 0, 1, 0, -0.989597, 0, 0.143868, 26.6573, -0.430541, 8.12563 )
+
+[node name="hut2" parent="zone_village" index="1" instance=ExtResource( 36 )]
+transform = Transform( 0.709016, 0, -0.705192, 0, 1, 0, 0.705192, 0, 0.709016, 50.9319, 0.0268402, -24.9145 )
+
+[node name="hut3" parent="zone_village" index="2" instance=ExtResource( 36 )]
+transform = Transform( 0.872653, 0, 0.488342, 0, 1, 0, -0.488342, 0, 0.872653, 21.3311, -0.454456, -20.4469 )
+
+[node name="hut4" parent="zone_village" index="3" instance=ExtResource( 36 )]
+transform = Transform( -0.90181, 0, 0.432133, 0, 1, 0, -0.432133, 0, -0.90181, 47.2456, -0.738268, 15.7772 )
+
+[node name="hive_hut_dome_roof" parent="zone_village" index="4" instance=ExtResource( 34 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 67.6525, -0.0402716, -1.34192 )
+
+[node name="fountain" parent="zone_village" index="5" instance=ExtResource( 39 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.8368, -0.385192, -5.3951 )
+
+[node name="wall1" parent="zone_village" index="6" instance=ExtResource( 41 )]
+transform = Transform( 0.351628, 0, 0.93614, 0, 1, 0, -0.93614, 0, 0.351628, 39.3435, -1.06366, 21.0671 )
+
+[node name="wall2" parent="zone_village" index="7" instance=ExtResource( 41 )]
+transform = Transform( -0.634907, 0, 0.772589, 0, 1, 0, -0.772589, 0, -0.634907, 65.3454, -1.06366, 8.49747 )
+
+[node name="wall3" parent="zone_village" index="8" instance=ExtResource( 41 )]
+transform = Transform( -0.91059, 0, -0.413312, 0, 1, 0, 0.413312, 0, -0.91059, 62.7633, -1.06366, -22.2224 )
+
+[node name="wall4" parent="zone_village" index="9" instance=ExtResource( 41 )]
+transform = Transform( 0.163551, 0, -0.986535, 0, 1, 0, 0.986535, 0, 0.163551, 30.2823, -1.06366, -26.1786 )
+
+[node name="ruin2" parent="zone_village" index="10" instance=ExtResource( 40 )]
+transform = Transform( -0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 17.3285, -9.53674e-07, -2.75726 )
+
+[node name="ruin3" parent="zone_village" index="11" instance=ExtResource( 40 )]
+transform = Transform( -0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 20.1001, -9.53674e-07, -14.1413 )
+
+[node name="hut_bath" parent="zone_village" index="12" instance=ExtResource( 43 )]
+transform = Transform( -0.36532, 0, 0.930882, 0, 1, 0, -0.930882, 0, -0.36532, 35.8195, 9.53674e-07, -20.6726 )
+
+[node name="hut_bath2" parent="zone_village" index="13" instance=ExtResource( 43 )]
+transform = Transform( 0.871239, 0, 0.490858, 0, 1, 0, -0.490858, 0, 0.871239, 62.2373, 9.53674e-07, -12.8777 )
+
+[node name="hut_bath3" parent="zone_village" index="14" instance=ExtResource( 43 )]
+transform = Transform( 0.558585, 0, -0.829448, 0, 1, 0, 0.829448, 0, 0.558585, 56.5094, 9.53674e-07, 7.66425 )
+
+[node name="hut_bath4" parent="zone_village" index="15" instance=ExtResource( 43 )]
+transform = Transform( -0.0591825, 0, -0.998247, 0, 1, 0, 0.998247, 0, -0.0591825, 35.5702, 9.53674e-07, 13.1691 )
+
+[node name="rock3" parent="zone_village" index="16" instance=ExtResource( 49 )]
+transform = Transform( 1, 0, 0, 0, 0.879867, -0.47522, 0, 0.47522, 0.879867, -45.5785, -1.00709, -36.6128 )
+
+[node name="rock2" parent="zone_village" index="17" instance=ExtResource( 50 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9945, -2.38419e-07, 31.7841 )
+
+[node name="rock1" parent="zone_village" index="18" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -43.0811, -0.765068, 57.0958 )
+
+[node name="rock4" parent="zone_village" index="19" instance=ExtResource( 50 )]
+transform = Transform( -0.276239, 0.769341, 0.576027, 0.411978, -0.446704, 0.794185, 0.868312, 0.456695, -0.193554, -63.0769, 3.1069, 66.761 )
+
+[node name="rock9" parent="zone_village" index="20" instance=ExtResource( 51 )]
+transform = Transform( 0.765732, 0, 0.64316, 0, 1, 0, -0.64316, 0, 0.765732, 66.8152, 4.24537, -31.4152 )
+
+[node name="palace2" parent="." index="6" instance=ExtResource( 4 )]
+transform = Transform( 0.575224, -0.211713, -0.790123, 0, -0.965926, 0.258819, -0.817996, -0.148879, -0.555624, 163.495, 42.8213, 6.0792 )
+
+[node name="zone_lower_cliffs" type="Spatial" parent="." index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 128.199, -202.676, 183.494 )
+
+[node name="rock1" parent="zone_lower_cliffs" index="0" instance=ExtResource( 48 )]
+transform = Transform( -0.0416103, 0.999134, 0, -0.999134, -0.0416103, 0, 0, 0, 1, 5.34793, -2.92375, 26.2548 )
+
+[node name="rock3" parent="zone_lower_cliffs" index="1" instance=ExtResource( 49 )]
+transform = Transform( -0.884317, 0.466887, 0, -0.420899, -0.797213, -0.432776, -0.202058, -0.382711, 0.901501, 1.36351, 59.922, -58.4317 )
 
 [connection signal="arg_toggled" from="active_entities/tower_interior1/dswitch_a1" to="active_entities/tower_interior1/door1" method="_on_toggled"]
 [connection signal="arg_toggled" from="active_entities/tower_interior1/dswitch_a" to="active_entities/tower_interior1/door_secret" method="_on_toggled"]

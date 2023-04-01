@@ -3,10 +3,10 @@ render_mode world_vertex_coords, cull_back;
 
 uniform vec4 surface_albedo : hint_color;
 uniform vec4 deep_albedo : hint_color;
-uniform float max_depth : hint_range(0.1, 10.0);
+uniform float max_depth : hint_range(0.1, 100.0) = 1.0;
 uniform vec4 foam_color : hint_color;
 uniform float refraction : hint_range(-1,1) = 0.004;
-uniform float foam_distance : hint_range(0, 1);
+uniform float foam_distance : hint_range(0, 5) = 0.5;
 uniform sampler2D foam_noise;
 uniform float foam_noise_scale : hint_range(0.1, 4) = 1.0;
 uniform float foam_noise_scale2 : hint_range(0.1, 2) = 0.2;
@@ -35,7 +35,7 @@ void fragment() {
 	float f = foam_color.a * float(diffy >= -0.1 && diffy < foam_distance*foam_factor);
 	
 	vec4 color = textureLod(SCREEN_TEXTURE, ref_ofs, 0);
-	float amount = sqrt(clamp(diffy/max_depth, 0.0, 1.0));
+	float amount = pow(clamp(diffy/max_depth, 0.0, 1.0), 0.2);
 	
 	EMISSION = mix(color.rgb * mix(surface_albedo, deep_albedo, amount).rgb, vec3(0.0), f);
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -11,21 +11,25 @@
 [ext_resource path="res://dialog/main/medium.dialog" type="Resource" id=9]
 [ext_resource path="res://entities/one_time/illusory_room.gd" type="Script" id=10]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=11]
-[ext_resource path="res://material/env/copper/copper1.png" type="Texture" id=12]
+[ext_resource path="res://material/env/medium/garbage_wood_wainscot.jpg" type="Texture" id=12]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=13]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=14]
 [ext_resource path="res://material/env/medium/coffee_table.jpg" type="Texture" id=15]
 [ext_resource path="res://material/env/medium/end_table.jpg" type="Texture" id=16]
-[ext_resource path="res://material/env/medium/floral1.jpg" type="Texture" id=17]
-[ext_resource path="res://material/env/medium/floral2.jpg" type="Texture" id=18]
+[ext_resource path="res://material/env/medium/floral4_stolen_from_vecteezy.jpg" type="Texture" id=17]
+[ext_resource path="res://material/coat/checkers1.jpg" type="Texture" id=18]
 [ext_resource path="res://material/env/medium/lounge-sofa.jpg" type="Texture" id=19]
+[ext_resource path="res://material/env/medium/wood_stolen_from_ambientcg.jpg" type="Texture" id=20]
+[ext_resource path="res://material/env/medium/floral3_stolen_from_vecteezy.png" type="Texture" id=21]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=22]
+[ext_resource path="res://material/coat.shader" type="Shader" id=23]
+[ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=24]
+[ext_resource path="res://material/coat/fabric2.jpg" type="Texture" id=25]
+[ext_resource path="res://material/env/snow.png" type="Texture" id=26]
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.791512
 radius = 0.715599
-
-[sub_resource type="ShaderMaterial" id=283]
-shader = ExtResource( 11 )
 
 [sub_resource type="ShaderMaterial" id=278]
 shader = ExtResource( 2 )
@@ -34,19 +38,69 @@ shader_param/hologram_uv_scale = 64.0
 shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
 shader_param/hologram = ExtResource( 4 )
 
-[sub_resource type="ShaderMaterial" id=289]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/main_texture = ExtResource( 12 )
+[sub_resource type="ShaderMaterial" id=291]
+shader = ExtResource( 22 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 4.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 20 )
+shader_param/ground = ExtResource( 20 )
+shader_param/ceiling = ExtResource( 20 )
 
-[sub_resource type="ShaderMaterial" id=287]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
+[sub_resource type="ShaderMaterial" id=292]
+shader = ExtResource( 22 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 21 )
+shader_param/ground = ExtResource( 21 )
+shader_param/ceiling = ExtResource( 21 )
+
+[sub_resource type="ShaderMaterial" id=293]
+shader = ExtResource( 22 )
+shader_param/uv_scale = -0.95
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 5.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 12 )
+shader_param/ground = ExtResource( 12 )
+shader_param/ceiling = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=294]
+shader = ExtResource( 22 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 26 )
+shader_param/ground = ExtResource( 26 )
+shader_param/ceiling = ExtResource( 26 )
+
+[sub_resource type="ShaderMaterial" id=283]
+shader = ExtResource( 11 )
+
+[sub_resource type="Gradient" id=295]
+offsets = PoolRealArray( 0, 0.343173, 1 )
+colors = PoolColorArray( 0.738281, 0.39798, 0.39798, 1, 0.594238, 0.366756, 0.366756, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=296]
+gradient = SubResource( 295 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=297]
+shader = ExtResource( 23 )
+shader_param/light_bias = 0.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
-shader_param/main_texture = ExtResource( 18 )
+shader_param/palette = ExtResource( 18 )
+shader_param/gradient = SubResource( 296 )
+shader_param/detail = ExtResource( 24 )
 
 [sub_resource type="ShaderMaterial" id=285]
 shader = ExtResource( 14 )
@@ -68,6 +122,22 @@ shader_param/subsurface_scattering = -1.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/main_texture = ExtResource( 19 )
+
+[sub_resource type="Gradient" id=298]
+colors = PoolColorArray( 0.887795, 0.936035, 0.884846, 1, 0.936302, 0.939941, 0.811434, 1 )
+
+[sub_resource type="GradientTexture" id=299]
+gradient = SubResource( 298 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=300]
+shader = ExtResource( 23 )
+shader_param/light_bias = null
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 25 )
+shader_param/gradient = SubResource( 299 )
+shader_param/detail = ExtResource( 24 )
 
 [sub_resource type="ShaderMaterial" id=288]
 shader = ExtResource( 14 )
@@ -231,6 +301,7 @@ tracks/3/keys = {
 
 [node name="illusory_room" instance=ExtResource( 5 )]
 script = ExtResource( 10 )
+preview = true
 
 [node name="mum" parent="." index="0" instance=ExtResource( 7 )]
 
@@ -261,9 +332,11 @@ interior_ambient_color = Color( 0.223529, 0.262745, 0.235294, 1 )
 [node name="hologram" parent="." index="3"]
 visible = false
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 289 )
+material/0 = SubResource( 291 )
+material/1 = SubResource( 292 )
+material/2 = SubResource( 293 )
+material/3 = SubResource( 294 )
 script = ExtResource( 1 )
 real_object_visible = false
 invisible_material = SubResource( 283 )
@@ -271,49 +344,47 @@ hologram_material = SubResource( 278 )
 
 [node name="chair" parent="hologram" index="0"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 287 )
+material/0 = SubResource( 297 )
 
 [node name="chair001" parent="hologram" index="1"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 287 )
+material/0 = SubResource( 297 )
 
 [node name="coffee_table" parent="hologram" index="2"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 285 )
 
-[node name="end_table" parent="hologram" index="3"]
+[node name="door_frame" parent="hologram" index="3"]
+layers = 98304
+material_overlay = SubResource( 278 )
+material/0 = SubResource( 291 )
+
+[node name="end_table" parent="hologram" index="4"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 286 )
 
-[node name="end_table2" parent="hologram" index="4"]
+[node name="end_table2" parent="hologram" index="5"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 286 )
 
-[node name="lounge-sofa" parent="hologram" index="5"]
+[node name="lounge-sofa" parent="hologram" index="6"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 290 )
+material/1 = SubResource( 300 )
 
-[node name="pillow" parent="hologram" index="6"]
+[node name="pillow" parent="hologram" index="7"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 288 )
 
-[node name="pillow2" parent="hologram" index="7"]
+[node name="pillow2" parent="hologram" index="8"]
 layers = 65536
-material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 288 )
 

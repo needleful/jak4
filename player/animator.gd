@@ -71,6 +71,7 @@ onready var custom_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody"
 onready var custom_loop_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop")
 onready var custom_loop_node2: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop2")
 onready var custom_exit_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomExit")
+onready var single_custom :AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("Single")
 
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
@@ -143,6 +144,12 @@ func play_custom_loop(transition: String, end_point: String):
 		custom_loop_node.animation = end_point
 		
 	body.travel(c)
+
+func play_single(anim: String):
+	if !$AnimationPlayer.has_animation(anim):
+		print_debug("MISSING: ", anim)
+	single_custom.animation = anim
+	body.travel("Single")
 
 func exit_custom_loop(transition:String):
 	if !$AnimationPlayer.has_animation(transition):

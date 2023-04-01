@@ -72,20 +72,48 @@
 			I didn't expect to feel like this....
 		* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
 		* Soon, you may find what you're looking for.
-		{player.anim_play("SitRecover", "M_Sitting-loop")} [You] I'll be back soon. Okay, Mum?
-		{goto("_exit")}
+		{player.anim_play("SitRecover", "M_Sitting-loop")}
 	{otherwise}
-		!{mum/appearance}
-			* You stare at the ghost of your mother.
-		{otherwise}
-			* Though she appears real, there is nothing behind her eyes.
-		* You won't get anything more from her without learning more.
-		[You] I'll come back, okay mum?
-		* She murmurs incomprehensibly.
+		* The ghost of your mother sits and stares.
+	> I wonder what you'll say in this state...
+		!{mum/discussed/brainless_intro}
+			[You] Hello, Mum?
+			Mum?
+			[You] Yes. You're my mother.
+			I'm your mother?
+			[You] ...
+			+{mum/discussed/brainless_intro}
+		:brainless_loop
+		> {mentioned("brainless")} This is going nowhere. I'll be back when I learn a little more.
+			Going nowhere...
+		> Do you know where you are?
+			Where am I?
+			{mention("brainless")}
+			{goto("brainless_loop")}
+		> Do you know why you left Vaeland?
+			!{world/info/vaelers_disliked} Too cold.
+				[You] What?
+			{otherwise} I don't like Vaelers.
+				[You] Then why did you marry Father?
+				I don't know.
+			{mention("brainless")}
+			{goto("brainless_loop")}
+		> You abandoned me.
+			I suppose I did.
+			[You] ... Why did you answer like that?
+			{mention("brainless")}
+			{goto("brainless_loop")}
 		{goto("_exit")}
-{otherwise}!{mum/introduction}
+	> I'll be back, okay mum?
+		You'll be back...
+		{goto("_exit")}
+
+!{mum/introduction}
 	{mentioned("head_empty")}
-		* Your mother looks at you blankly.
+		!{mum/appearance}
+			* The ghost stares blankly
+		{otherwise}
+			* Your mother looks at you blankly.
 		[You] Uh, hello?
 		Hello?
 		[You] You can understand me now.

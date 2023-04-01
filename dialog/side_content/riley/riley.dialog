@@ -4,7 +4,7 @@
 	{talked == 0}
 		Ey! Jutre! Khur ine siram tes?
 		[You] I'm sorry?
-		You're a Vaeler? I'm stuck up here because of those two deathgnats! If you could help get rid of them, I'd really appreciate it!
+		You're a Vaeler? I'm stuck up here because of those deathgnats! If you could help get rid of them, I'd really appreciate it!
 		> {skip()} (Accept Challenge) Uh, I'll see what I can do.
 			[You]  Uh, I'll see what I can do.
 			Thank you! Do you need my pistol?
@@ -25,10 +25,10 @@
 			[You] I'm going to scope out the area first.
 			Uh... don't take too long please!
 	{otherwise}
+		{main_speaker.track_enemies()}
 		Seriously, I could use some help with those deathgnats.
 		[You] No worries, they're tricky to hit but I've got it.
 {otherwise}!{riley/discussed/capacitors}
-	+{riley/113/talked}
 	{talked == 0}
 		Eey! Klerdena sur!
 		[You]  Uh, apologies.  That's "thank you" in Yaqazi, correct? I forgot how to say "you're welcome".
@@ -37,23 +37,29 @@
 		Yeah, I was pinned down by those deathgnats, but you took them out no problem! I'm Riley, by the way.
 		[You] Jackie. It was no trouble. One of them had a lovely coat.
 		{subtopic("saved_113")}
-		{goto("shop_126")}
-	{otherwise}?{riley/113/reward}
-		Thanks again! I'm heading out of here soon.
-		{goto("shop_126")}
 	{otherwise}
 		Thanks for the help! I'm Riley, by the way.
 		{subtopic("saved_113")}
-		{goto("shop_126")}
 {otherwise}!{capacitor_113}
 	Have anything else you wanted to ask?
-	[You] Not at the moment.
-	// TODO: more content
-{otherwise}
+	> {Global.count("wep_pistol") and Global.count("pistol") < 5} I'm running a little low on bullets for your pistol.
+		{Global.add_item("pistol", 8)} Oh, I can give you some more.
+		[You] Thanks.
+	> Not at the moment.
+	{exit()}
+{otherwise}!{riley/discussed/capacitor_113}
 	[You] I found that capacitor you were looking for.
 	Really? Wow!
 	You can hold onto it, if you want. Once we've got twelve, we can make our way up to the tree and see what's inside!
-	// TODO: more content
+	I'll be out of here in a bit. See you around!
+	+{riley/discussed/capacitor_113}
+{otherwise}
+	// TODO: more content here
+	Did you want to talk about anything else before I head out?
+	[You] Where are you going next?
+	I guess anywhere there's ancient ruins. Most of them are hard enough to get into that there's bound to be a capacitor somewhere inside.
+	I bet we'll bump into each other again sooner or later! 
+
 {exit()}
 
 :saved_113
@@ -66,7 +72,7 @@ It's called the Tree Tower. I want to get inside.
 I found an entrance at the base of the tree that punches through the tower's outer wall, but it only got me to some kind of electrical closet, and I couldn't go any further. But there were twelve slots for capacitors. I think if I got a bunch and plugged them in, the front entrance would open.
 
 {Global.note_task("the_tree_tower", "That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.")}
-{Global.task_note_person("the_tree_tower", "Riley", "Riley is scavenging supplies for the expedition to the tower.")}
+{Global.task_note_person("the_tree_tower", "Riley", "Riley is looking for capacitors across the province.")}
 {Global.task_note_place("the_tree_tower", "tree_tower", "It requires 12 capacitors to open the tower's entrance. Riley wants inside.")}
 
 {!Global.map_marked("tree_tower")}
@@ -120,17 +126,17 @@ Thank you! I think we'll make a great team.
 :_entry111
 +{riley/111/talked}
 {main_speaker.saved}
-	{Global.stat("riley/111/reward")}
+	+{riley/111/reward}
 		Thanks again.
 		[You] Do you need any help getting down?
 		Thanks, but no. The deathgnats are really the only specters that worry me. I can just jump around the others, but those bullets are too much for me!
 	{otherwise}
 		Phew! You really saved me there, Jackie!
 		{talked == 0} I was pinned down before you took out those deathgnats!
-		{Global.add_stat("riley/111/reward")} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Here's some of the loot I got before it hit the fan. I can take it from here.
+		+{riley/111/reward} {Global.add_item("bug", 31)} {Global.add_item("gem", 75)} Here's some of the loot I got before it hit the fan. I can take it from here.
 		{goto("shop_generic")}
 {otherwise}
-	{Global.stat("riley/111/talked") > 1}
+	{Global.add_stat("riley/111/talked") > 1}
 		Hey again, Jackie!
 		[You] Hey. Are you okay?
 		Uh, been better. I tried to get some salvage while the specters were dormant, but that went about as well as it looks.
