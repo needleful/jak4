@@ -35,7 +35,7 @@ func show_mum():
 	$mum.hello()
 
 func set_preview(p):
-	if !Engine.editor_hint:
+	if !Engine.editor_hint or !has_node("activator"):
 		return
 	preview = p
 	if preview:
