@@ -1,7 +1,7 @@
 # At the Ends of Eras
 (formerly known as Jak 4)
 
-Platable here: https://needleful.itch.io/ends-of-eras
+Playable here: https://needleful.itch.io/ends-of-eras
 
 This is an open world 3D platformer I've been working on since March 2022 for the Open World Jam.
 
