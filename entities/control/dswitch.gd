@@ -17,7 +17,7 @@ func _ready():
 	if persistent and Global.has_stat(get_stat()):
 		on = Global.stat(get_stat())
 	if reset_upon_death:
-		var _x = Global.get_player().connect("died", self, "set_on", [on, true])
+		var _x = Global.get_player().connect("died", self, "set_on", [on, true, true])
 	set_on(on, true, false, true)
 
 func activate():
@@ -52,23 +52,23 @@ func set_on(switch_on, instant := false, auto := false, override := false):
 		if time_deactivate > 0:
 			$deactivate_timer.start(time_deactivate)
 	
-	if instant:
-		emit_signal("insta_toggled", switch_on)
+	if switch_on:
+		anim.play("SwitchOn")
 	else:
-		if switch_on:
-			anim.play("SwitchOn")
+		if auto and anim.has_animation("AutoDeactivate"):
+			anim.play("AutoDeactivate")
 		else:
-			if auto and anim.has_animation("AutoDeactivate"):
-				anim.play("AutoDeactivate")
-			else:
-				anim.play("SwitchOff")
+			anim.play("SwitchOff")
 
-		if !auto:
-			sound.pitch_scale = 1.0
-			sound.play()
-		else:
-			# play a third sound here
-			pass
+	if instant:
+		anim.seek(anim.current_animation_length)
+		emit_signal("insta_toggled", switch_on)
+	elif !auto:
+		sound.pitch_scale = 1.0
+		sound.play()
+	else:
+		# play a third sound here
+		pass
 		
 	on = switch_on
 	if persistent and !instant:

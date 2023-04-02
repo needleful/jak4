@@ -1,4 +1,4 @@
-[gd_scene load_steps=140 format=2]
+[gd_scene load_steps=141 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -104,6 +104,7 @@
 [ext_resource path="res://areas/demo_fence.gd" type="Script" id=102]
 [ext_resource path="res://areas/chunks/chunk002.tscn" type="PackedScene" id=103]
 [ext_resource path="res://areas/chunks/chunk-cave137.tscn" type="PackedScene" id=104]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=105]
 
 [sub_resource type="OccluderShapePolygon" id=12]
 polygon_points = PoolVector2Array( 1410.04, -495.734, -234.006, 40.7117, -319.745, -602.753, 1048.05, 125.556 )
@@ -476,7 +477,7 @@ tracks/10/loop_wrap = true
 tracks/10/imported = false
 tracks/10/enabled = true
 tracks/10/keys = {
-"times": PoolRealArray( 0, 100, 135, 245, 285, 385, 410, 510, 550 ),
+"times": PoolRealArray( 0, 100, 135, 270, 285, 360, 370, 530, 570 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ 7.0, 7.0, 0.01, 0.01, 28.529, 19.9857, 0.01, 0.01, 7.0 ]
@@ -2773,11 +2774,14 @@ script = ExtResource( 102 )
 [node name="StaticBody" parent="boundary_demo" index="0"]
 collision_layer = 0
 collision_mask = 2
+script = ExtResource( 105 )
+condition = "!Global.stat(\"demo_freedom\")"
+listen_for_change = true
 
 [node name="chunk-cave137" parent="." index="429"]
 material/0 = ExtResource( 8 )
 
-[node name="StaticBody" parent="chunk-cave137" index="0"]
+[node name="StaticBody" parent="chunk-cave137" index="0" groups=["flag_surface"]]
 collision_layer = 257
 
 [connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]

@@ -70,7 +70,8 @@ func _on_target_entered(body):
 func _end():
 	active = false
 	game_target.hide()
-	game_target.disconnect("body_entered", self, "_on_target_entered")
+	if game_target.is_connected("body_entered", self, "_on_target_entered"):
+		game_target.disconnect("body_entered", self, "_on_target_entered")
 	Global.get_player().game_ui.disconnect("cancelled", self, "_on_cancelled")
 	Global.get_player().disconnect("jumped", self, "_on_player_jumped")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/scrap_pile3.tscn" type="PackedScene" id=2]
@@ -9,11 +9,9 @@
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=7]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=9]
-[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=10]
-[ext_resource path="res://entities/env/copper/scrap2.tscn" type="PackedScene" id=11]
-[ext_resource path="res://entities/env/copper/scrap4.tscn" type="PackedScene" id=12]
-[ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=13]
-[ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=10]
+[ext_resource path="res://items/item_pickup.gd" type="Script" id=11]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=12]
 
 [node name="chunk138" type="Spatial"]
 script = ExtResource( 1 )
@@ -43,36 +41,7 @@ transform = Transform( -0.177145, 0.831762, -0.52611, 0.965192, 0.251332, 0.0723
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500 )
 script = ExtResource( 1 )
 
-[node name="rock1" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, -0.995878, 0.0907016, 0, -0.0907016, -0.995878, 20.6119, -39.706, 305.047 )
-
-[node name="rock2" parent="." instance=ExtResource( 10 )]
-transform = Transform( -0.221116, -0.756567, 0.615398, 0.96464, -0.262483, 0.0239062, 0.143445, 0.598924, 0.787854, 37.3113, -46.4764, 299.213 )
-
-[node name="scrap_pile4" parent="." instance=ExtResource( 4 )]
-transform = Transform( 0.865105, -0.22889, 0.446322, 0.369485, 0.892579, -0.258425, -0.339227, 0.388474, 0.856746, 48.2759, -36.1495, 306.049 )
-
-[node name="scrap2" parent="." instance=ExtResource( 11 )]
-transform = Transform( 0.32917, 0, 0.944271, -0.467886, 0.868608, 0.163104, -0.820201, -0.4955, 0.28592, 74.2646, -16.5073, 307.326 )
-
-[node name="scrap3" parent="." instance=ExtResource( 11 )]
-transform = Transform( 0.478968, 0.805651, 0.348591, 0.859177, -0.511675, 0.00204876, 0.180016, 0.29852, -0.937273, 81.7663, -16.5072, 306.068 )
-
-[node name="scrap4" parent="." instance=ExtResource( 12 )]
-transform = Transform( -0.0829069, 0, 0.996557, -0.434245, 0.90007, -0.0361263, -0.896971, -0.435745, -0.074622, 90.3019, 12.4802, 256.099 )
-
-[node name="scrap5" parent="." instance=ExtResource( 11 )]
-transform = Transform( 0.486308, 0, 0.873788, -0.0791982, 0.995884, 0.0440778, -0.870191, -0.0906377, 0.484306, 49.881, -40.1412, 303.426 )
-
 [node name="active_entities" type="MultiMeshSystem" parent="."]
-
-[node name="rail_cart" parent="active_entities" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 0.0556208, -0.998452, 0, 0.998452, 0.0556208, 89.8459, 9.18056, 255.509 )
-script = null
-
-[node name="rock_kinematic" parent="active_entities" instance=ExtResource( 14 )]
-transform = Transform( -0.42791, 0, -0.903821, 0, 1, 0, 0.903821, 0, -0.42791, 33.8319, -43.5334, 301.407 )
-max_rotation_speed = Vector3( 0, 0.3, 0 )
 
 [node name="crawly" parent="active_entities" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.71565, 0.525883, -30.9345 )
@@ -169,3 +138,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2399, 0.637075, -6.26616 )
 
 [node name="gem_pickup27" parent="active_entities" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62757, 0.148749, -41.8405 )
+
+[node name="hover_scooter_pickup" type="KinematicBody" parent="active_entities" groups=["distance_activated", "push"] instance=ExtResource( 12 )]
+transform = Transform( -0.103476, -0.205784, 0.973112, -0.529376, 0.839675, 0.121275, -0.842053, -0.502593, -0.195824, -0.00773174, 0.731086, -34.8924 )
+collision_layer = 4
+script = ExtResource( 11 )
+item_id = "hover_scooter"
+preview = ExtResource( 10 )
+friendly_name = "scooter_097"

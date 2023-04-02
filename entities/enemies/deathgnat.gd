@@ -11,6 +11,8 @@ export(float) var time_to_quit = 10.0
 export(float) var minimum_radius = 5.0
 export(float) var maximum_radius = 10.0
 export(float) var desired_height = 3.0
+export(AudioStream) var damaged_sound
+export(AudioStream) var death_sound
 
 const TIME_FLINCH := 0.75
 var state_timer := 0.0
@@ -149,12 +151,16 @@ func set_state(new_state, force:=false):
 			quit_timer = 0
 			orb_timer = orb_cooldown
 		AI.Dead:
+			$AudioStreamPlayer3D.stream = death_sound
+			$AudioStreamPlayer3D.play()
 			axis_lock_angular_x = false
 			axis_lock_angular_z = false
 			gravity_scale = 1
 			$AnimationPlayer.stop()
 			collision_layer = 0
 		AI.Damaged:
+			$AudioStreamPlayer3D.stream = damaged_sound
+			$AudioStreamPlayer3D.play()
 			if speed == 0:
 				speed = 5.0
 			gravity_scale = 1

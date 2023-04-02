@@ -145,10 +145,10 @@ func play_custom_loop(transition: String, end_point: String):
 		
 	body.travel(c)
 
-func play_single(anim: String):
-	if !$AnimationPlayer.has_animation(anim):
-		print_debug("MISSING: ", anim)
-	single_custom.animation = anim
+func play_single(a: String):
+	if !$AnimationPlayer.has_animation(a):
+		print_debug("MISSING: ", a)
+	single_custom.animation = a
 	body.travel("Single")
 
 func exit_custom_loop(transition:String):

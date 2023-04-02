@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=2]
+[gd_scene load_steps=85 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -35,6 +35,7 @@
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=33]
 [ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=34]
 [ext_resource path="res://entities/env/furniture/stump_table.tscn" type="PackedScene" id=35]
+[ext_resource path="res://dialog/demo.dialog" type="Resource" id=36]
 [ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=37]
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=38]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=39]
@@ -228,6 +229,10 @@ extents = Vector3( 6.1589, 5.35991, 4.74683 )
 
 [sub_resource type="BoxShape" id=262]
 extents = Vector3( 9.25974, 2.62014, 2.34377 )
+
+[sub_resource type="CubeMesh" id=280]
+material = ExtResource( 10 )
+size = Vector3( 0.5, 0.5, 0.5 )
 
 [sub_resource type="Animation" id=260]
 resource_name = "Activate"
@@ -431,7 +436,7 @@ transform = Transform( 1, 0, 0, 0, 0.990249, 0.139311, 0, -0.139311, 0.990249, 5
 transform = Transform( 0.995054, 0.0469804, -0.0875271, -0.0420057, 0.997442, 0.0578369, 0.0900203, -0.0538743, 0.994482, -77.7352, -1.66011, 7.13026 )
 
 [node name="pillar4" parent="zone_pallace" index="5" instance=ExtResource( 31 )]
-transform = Transform( 0.940578, -0.323683, -0.102676, 0.327428, 0.944631, 0.0215349, 0.0900203, -0.0538743, 0.994482, 52.5044, -12.1001, 0.115658 )
+transform = Transform( 0.940578, -0.323683, -0.102676, 0.327428, 0.944631, 0.0215349, 0.0900203, -0.0538743, 0.994482, 52.5044, -0.471008, 0.115658 )
 
 [node name="pillar3" parent="zone_pallace" index="6" instance=ExtResource( 31 )]
 transform = Transform( 0.995054, 0.0469804, -0.0875271, -0.0420057, 0.997442, 0.0578369, 0.0900203, -0.0538743, 0.994482, -77.7352, -7.85411, 28.8053 )
@@ -576,7 +581,7 @@ transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -18.4604, 4.8479, 4.09573 )
 
 [node name="bug_pickup" parent="active_entities/zone_palace" index="6" instance=ExtResource( 14 )]
-transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -29.826, 14.8191, 25.291 )
+transform = Transform( -0.807444, 0.0384404, -0.588691, -2.67427e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -29.379, 26.4235, 25.9028 )
 
 [node name="gem_pickup3" parent="active_entities/zone_palace" index="7" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -59.0544, 5.44189, -4.29433 )
@@ -1250,6 +1255,14 @@ transform = Transform( -0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926,
 
 [node name="gem_pickup" parent="active_entities/zone_village/hut2" index="11" instance=ExtResource( 20 )]
 transform = Transform( -0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -0.832672, 5.1073, 3.47401 )
+
+[node name="npc_demo" parent="active_entities/zone_village" index="9" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2439, 5.75627, -27.5893 )
+dialog = ExtResource( 36 )
+visual_name = "needleful"
+model_scale = 0.9
+accessory = SubResource( 280 )
+sitting = true
 
 [node name="rail_cart_shortcut" parent="active_entities" index="5" instance=ExtResource( 53 )]
 transform = Transform( -0.534574, 0, -0.845122, 0, 1, 0, 0.845122, 0, -0.534574, -237.056, -218.035, -83.3147 )

@@ -12,8 +12,11 @@ func _ready():
 		hat.mesh = p.accessory
 	var coat = Global.stat(coat_stat())
 	if !coat:
-		coat = Global.set_stat(coat_stat(), Coat.new(true, Coat.Rarity.Uncommon, Coat.Rarity.Sublime))
+		coat = generate_coat()
 	show_coat(coat)
+
+func generate_coat(min_rarity = Coat.Rarity.Uncommon, max_rarity = Coat.Rarity.Sublime):
+	return Global.set_stat(coat_stat(), Coat.new(true, min_rarity, max_rarity))
 
 func coat_stat() -> String:
 	if custom_coat_stat == "":

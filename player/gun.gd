@@ -7,7 +7,7 @@ onready var base_ref := $base_reference
 onready var ref := $reference
 onready var ik_target := $gun_ik/target
 
-const MASK_ATTACK := 0x1 + 0x4
+const MASK_ATTACK := 0x1 + 0x4 + (1 << 29)
 const enemy_bias := 1.2
 
 enum State {

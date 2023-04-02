@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=2]
+[gd_scene load_steps=111 format=2]
 
 [ext_resource path="res://entities/one_time/chunks/chunk112.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://entities/env/vaeler/cannon.tscn" type="PackedScene" id=23]
 [ext_resource path="res://entities/env/vaeler/v_rifle.tscn" type="PackedScene" id=24]
 [ext_resource path="res://entities/env/vaeler/cannon_wheel.tscn" type="PackedScene" id=25]
+[ext_resource path="res://entities/env/copper/light_hang1.tscn" type="PackedScene" id=26]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=27]
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=28]
 [ext_resource path="res://dialog/intro/fountain.dialog" type="Resource" id=29]
@@ -559,13 +560,7 @@ material_override = ExtResource( 5 )
 [node name="StaticBody" parent="door_frame" index="0"]
 collision_layer = 257
 
-[node name="palace" parent="." index="3"]
-material_override = ExtResource( 5 )
-
-[node name="StaticBody" parent="palace" index="0"]
-collision_layer = 257
-
-[node name="door" parent="." index="4"]
+[node name="door" parent="." index="3"]
 transform = Transform( 0.917486, 0, 0.397767, 0, 1, 0, -0.397767, 0, 0.917486, 119.317, -239.278, -57.297 )
 material_override = SubResource( 248 )
 script = ExtResource( 74 )
@@ -580,6 +575,12 @@ shape = SubResource( 227 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="door" index="1"]
 anims/Activate = SubResource( 249 )
 anims/RESET = SubResource( 250 )
+
+[node name="palace" parent="." index="4"]
+material_override = ExtResource( 5 )
+
+[node name="StaticBody" parent="palace" index="0"]
+collision_layer = 257
 
 [node name="zone_village_vis" type="Spatial" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 185.971, -218.367, -14.7952 )
@@ -1148,6 +1149,9 @@ transform = Transform( -0.925634, 0, 0.37842, 0, 1, 0, -0.37842, 0, -0.925634, 2
 transform = Transform( -0.979883, 0, 0.199573, 0, 1, 0, -0.199573, 0, -0.979883, 1.85721, 0.712036, 9.02547 )
 dialog = ExtResource( 88 )
 visual_name = "Landlord"
+
+[node name="light_hang1" parent="active_entities/zone_village/player_hut" index="10" instance=ExtResource( 26 )]
+transform = Transform( 0.0472285, 0, -0.998884, 0, 1, 0, 0.998884, 0, 0.0472285, 2.70279, 6.3033, 6.21515 )
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities/zone_village" index="2"]
 transform = Transform( 0.934064, 0, -0.357106, 0, 1, 0, 0.357106, 0, 0.934064, 13.1527, 3.85757, 18.7229 )

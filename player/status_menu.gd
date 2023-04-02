@@ -52,6 +52,7 @@ func _notification(what):
 				pm = true
 			if hours == 0:
 				hours = 12
+				pm = !pm
 			$date_time/margin/stats/time.text = "%d:%02d %s" % [hours, minutes, "p.m." if pm else "a.m."]
 
 func _on_wardrobe_exited():

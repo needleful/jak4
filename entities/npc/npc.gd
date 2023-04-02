@@ -9,6 +9,7 @@ export(Mesh) var accessory: Mesh
 export(bool) var sitting := false
 export(String) var custom_entry := ""
 export(bool) var no_dialog_trigger := false
+export(bool) var fancy := false
 onready var anim := $lil_man/AnimationPlayer
 
 var last_animation := ""
@@ -26,6 +27,8 @@ func _ready():
 	anim.seek(rand_range(0, anim.current_animation_length))
 	if !dialog or no_dialog_trigger:
 		$dialog.queue_free()
+	if fancy:
+		$lil_man.show_coat($lil_man.generate_coat(Coat.Rarity.Sublime, Coat.Rarity.Sublime))
 
 func _on_dialog_body_entered(body):
 	if body is PlayerBody and body.can_talk():
