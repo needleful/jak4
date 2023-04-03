@@ -181,6 +181,8 @@ func set_state(new_ai, force := false):
 			anim.queue("Dead-loop")
 			sound.stream = death_audio
 			sound.play()
+			if attack_player != sound:
+				attack_player.stop()
 		AI.Idle:
 			anim.play("Idle-loop")
 			sound.stream = quit_audio
