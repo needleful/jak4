@@ -1,12 +1,12 @@
 [gd_scene load_steps=105 format=2]
 
-[ext_resource path="res://player/player.gd" type="Script" id=1]
-[ext_resource path="res://player/camera_rig.gd" type="Script" id=2]
-[ext_resource path="res://player/jackie.tscn" type="PackedScene" id=3]
+[ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
+[ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
+[ext_resource path="res://player/base_mesh.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=6]
-[ext_resource path="res://player/status_menu.gd" type="Script" id=7]
+[ext_resource path="res://ui/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/pause_menu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/components/alert_prompt.tscn" type="PackedScene" id=10]
@@ -16,12 +16,12 @@
 [ext_resource path="res://ui/weapon.gd" type="Script" id=14]
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
-[ext_resource path="res://player/ui.gd" type="Script" id=17]
-[ext_resource path="res://player/camera.gd" type="Script" id=18]
+[ext_resource path="res://ui/ui.gd" type="Script" id=17]
+[ext_resource path="res://player/scripts/camera.gd" type="Script" id=18]
 [ext_resource path="res://ui/reset_bar.gd" type="Script" id=19]
-[ext_resource path="res://player/SpringArm.gd" type="Script" id=20]
+[ext_resource path="res://player/scripts/SpringArm.gd" type="Script" id=20]
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
-[ext_resource path="res://player/debug_fps.gd" type="Script" id=22]
+[ext_resource path="res://ui/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
 [ext_resource path="res://ui/custom_game.gd" type="Script" id=24]
 [ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=25]
@@ -808,9 +808,9 @@ local_coords = false
 process_material = SubResource( 83 )
 draw_pass_1 = SubResource( 174 )
 
-[node name="body_mesh" parent="." instance=ExtResource( 3 )]
+[node name="base_mesh" parent="." instance=ExtResource( 3 )]
 
-[node name="Particles2" type="Particles" parent="body_mesh"]
+[node name="Particles2" type="Particles" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
 emitting = false
@@ -820,191 +820,194 @@ local_coords = false
 process_material = SubResource( 178 )
 draw_pass_1 = SubResource( 93 )
 
-[node name="flag_ref" type="Spatial" parent="body_mesh"]
+[node name="flag_ref" type="Spatial" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.260516, 0.947519, 0.346891 )
 
-[node name="debug_center" type="MeshInstance" parent="body_mesh"]
+[node name="debug_center" type="MeshInstance" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72277, 0.299135 )
 visible = false
 material_override = SubResource( 44 )
 mesh = SubResource( 43 )
+skeleton = NodePath("")
 
-[node name="debug_right" type="MeshInstance" parent="body_mesh"]
+[node name="debug_right" type="MeshInstance" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 1.68075, 0.152855 )
 visible = false
 material_override = SubResource( 45 )
 mesh = SubResource( 43 )
+skeleton = NodePath("")
 
-[node name="debug_left" type="MeshInstance" parent="body_mesh"]
+[node name="debug_left" type="MeshInstance" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 1.67863, 0.17822 )
 visible = false
 material_override = SubResource( 46 )
 mesh = SubResource( 43 )
+skeleton = NodePath("")
 
-[node name="ledge_area" type="Area" parent="body_mesh"]
+[node name="ledge_area" type="Area" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26954, 0.136381 )
 visible = false
 collision_layer = 0
 collision_mask = 17
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/ledge_area"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/ledge_area"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15776, 0.235825 )
 shape = SubResource( 74 )
 
-[node name="leftHandCast" type="RayCast" parent="body_mesh"]
+[node name="leftHandCast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0.17, 1.65147, 0.193106 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
 
-[node name="rightHandCast" type="RayCast" parent="body_mesh"]
+[node name="rightHandCast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, -0.17, 1.65147, 0.193106 )
 enabled = true
 cast_to = Vector3( 0, -0.35, 0 )
 collision_mask = 17
 
-[node name="centerCast" type="RayCast" parent="body_mesh"]
+[node name="centerCast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, -1.34887e-07, 2.70194e-07, 0, 0.894704, 0.446659, -3.01992e-07, -0.446659, 0.894704, 0, 1.70647, 0.327074 )
 enabled = true
 cast_to = Vector3( 0, -0.5, 0 )
 collision_mask = 17
 
-[node name="ceilingCast" type="RayCast" parent="body_mesh"]
+[node name="ceilingCast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 0.999456, -0.0329854, 0, 0.0329854, 0.999456, -7.45068e-08, 1.02568, 0.142043 )
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
 
-[node name="headFloorCast" type="RayCast" parent="body_mesh"]
+[node name="headFloorCast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -0.999456, 0.0329856, 0, -0.0329856, -0.999456, -7.45068e-08, 1.6733, 0.0595681 )
 enabled = true
 cast_to = Vector3( 0, 0.75, 0 )
 collision_mask = 17
 
-[node name="reference" type="Position3D" parent="body_mesh"]
+[node name="reference" type="Position3D" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.50822, 0.501811 )
 visible = false
 
-[node name="wall_check" type="Position3D" parent="body_mesh"]
+[node name="wall_check" type="Position3D" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.45588e-09, 1.70827, 0.117608 )
 visible = false
 
-[node name="attack_lunge" type="Area" parent="body_mesh"]
+[node name="attack_lunge" type="Area" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42109e-14, 0.65977, 0.530665 )
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_lunge"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_lunge"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0254159, 0, -0.0763994 )
 shape = SubResource( 13 )
 
-[node name="attack_spin" type="Area" parent="body_mesh"]
+[node name="attack_spin" type="Area" parent="base_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_spin"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_spin"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.489956, 0.40164, 0 )
 shape = SubResource( 95 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="body_mesh/attack_spin"]
+[node name="CollisionShape2" type="CollisionShape" parent="base_mesh/attack_spin"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.555129, 0 )
 shape = SubResource( 94 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="body_mesh/attack_spin"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="base_mesh/attack_spin"]
 time_scale_response = false
 anims/RESET = SubResource( 34 )
 anims/spin = SubResource( 35 )
 
-[node name="attack_roll" type="Area" parent="body_mesh"]
+[node name="attack_roll" type="Area" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.43397, 0 )
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_roll"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_roll"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00123382, -0.0249694, -0.0953637 )
 shape = SubResource( 64 )
 
-[node name="attack_uppercut" type="Area" parent="body_mesh"]
+[node name="attack_uppercut" type="Area" parent="base_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_uppercut"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_uppercut"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.0808, 0.11483 )
 shape = SubResource( 21 )
 
-[node name="attack_dive_start" type="Area" parent="body_mesh"]
+[node name="attack_dive_start" type="Area" parent="base_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_dive_start"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_dive_start"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.347216, 0.265631 )
 shape = SubResource( 22 )
 
-[node name="attack_dive_end" type="Area" parent="body_mesh"]
+[node name="attack_dive_end" type="Area" parent="base_mesh"]
 time_scale_response = false
 visible = false
 collision_layer = 0
 collision_mask = 536870916
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/attack_dive_end"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/attack_dive_end"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.19209e-07, 0.198498, 0.0490749 )
 shape = SubResource( 23 )
 
-[node name="the_coat_zone" type="Area" parent="body_mesh"]
+[node name="the_coat_zone" type="Area" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0624051, 0 )
 visible = false
 collision_layer = 0
 collision_mask = 4096
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/the_coat_zone"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/the_coat_zone"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51068, 1.02734 )
 shape = SubResource( 41 )
 
-[node name="OmniLight" type="OmniLight" parent="body_mesh"]
+[node name="OmniLight" type="OmniLight" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.199459, 1.5586, 0.253699 )
 visible = false
 light_cull_mask = 4293918722
 
-[node name="the_sleep_zone" type="Area" parent="body_mesh"]
+[node name="the_sleep_zone" type="Area" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315046, 0 )
 collision_layer = 0
 collision_mask = 512
 
-[node name="CollisionShape" type="CollisionShape" parent="body_mesh/the_sleep_zone"]
+[node name="CollisionShape" type="CollisionShape" parent="base_mesh/the_sleep_zone"]
 shape = SubResource( 97 )
 
 [node name="standing_col" type="CollisionShape" parent="."]
