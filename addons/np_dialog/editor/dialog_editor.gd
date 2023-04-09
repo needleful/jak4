@@ -8,7 +8,8 @@ onready var active_view : Label = $VBoxContainer/PanelContainer/HBoxContainer/La
 enum FileOp {
 	Open,
 	Save,
-	SaveAs
+	SaveAs,
+	New
 }
 
 func _ready():
@@ -30,6 +31,9 @@ func _on_file_pressed(id: int):
 		FileOp.SaveAs:
 			yield(select_file(), "completed")
 			save()
+		FileOp.New:
+			_set_active_source("")
+			text_window.text = ""
 
 func open(src_path: String):
 	_set_active_source(src_path)
@@ -53,7 +57,7 @@ func save(auto := false):
 
 func _set_active_source(source):
 	active_source = source
-	active_view.text = source
+	active_view.text = "<new file>" if source == "" else source
 
 func select_file(mode := FileDialog.MODE_SAVE_FILE):
 	var fd :FileDialog = $FileDialog
