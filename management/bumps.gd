@@ -51,11 +51,11 @@ func step_on(surface: Node, position:Vector3, sliding := false, normal := Vector
 	var impact = Impact.Footstep if !sliding else Impact.SlidingStep
 	impact_on(surface, impact, position, normal)
 
-func impact_on(surface:Node, impact, position, normal := Vector3.UP):
+func impact_on(surface:Node, impact: int, position: Vector3, normal := Vector3.UP):
 	if !surface:
 		return
 	var surf = Surface.Rock
-	if surface.is_in_group("metal"):
+	if surface.is_in_group("metal") || surface.is_in_group("enemy"):
 		surf = Surface.Metal
 	elif surface.is_in_group("glass"):
 		surf = Surface.Glass

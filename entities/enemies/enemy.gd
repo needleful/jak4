@@ -57,6 +57,7 @@ var source_chunk : MeshInstance
 
 var min_dot_shielded_damage := -0.5
 var last_attacker: Node
+var best_floor : Node
 var best_floor_normal : Vector3
 var contact_count := 0
 
@@ -72,7 +73,7 @@ func _init():
 func _ready():
 	set_physics_process(false)
 	if reset_on_player_death:
-		var p = Global.get_player() as PlayerBody
+		var p = Global.get_player()
 		if !p.is_connected("died", self, "_on_player_died"):
 			var _x = Global.get_player().connect("died", self, "_on_player_died")
 			starting_position = global_transform
@@ -137,12 +138,14 @@ func retarget():
 		_on_awareness_entered(b)
 
 func _integrate_forces(state):
+	best_floor = null
 	best_floor_normal = Vector3(0, -INF, 0)
 	contact_count = state.get_contact_count()
 	for i in range(contact_count):
 		var n:Vector3 = state.get_contact_local_normal(i)
 		if n.y > best_floor_normal.y:
 			best_floor_normal = n
+			best_floor = state.get_contact_collider_object(i)
 
 func set_active(_active: bool):
 	pass

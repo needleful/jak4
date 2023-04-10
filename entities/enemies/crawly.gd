@@ -203,6 +203,20 @@ func set_state(new_ai, force := false):
 		AI.Attacking:
 			apply_central_impulse(global_transform.basis.z*lunge_impules*mass)
 
+func step(leftForward: bool):
+	if !best_floor:
+		return
+	var leg0: Vector3
+	var leg1: Vector3
+	if leftForward:
+		leg0 = $Armature/Skeleton/legfl.global_transform.origin
+		leg1 = $Armature/Skeleton/legbr.global_transform.origin
+	else:
+		leg0 = $Armature/Skeleton/legfr.global_transform.origin
+		leg1 = $Armature/Skeleton/legbl.global_transform.origin
+	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg0, best_floor_normal)
+	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg1, best_floor_normal)
+
 func _reset():
 	._ready()
 	_ready()

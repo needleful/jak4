@@ -83,7 +83,7 @@ const WATER_GRAVITY := 0.6
 
 const STAMINA_DRAIN_HANG := 0.0
 const STAMINA_DRAIN_CLIMB := 25.0
-const STAMINA_DRAIN_CLIMB_START := 0.0
+const STAMINA_DRAIN_CLIMB_START := 1.0
 const STAMINA_DRAIN_MIN := 0.05
 const STAMINA_DRAIN_WALLJUMP := 15.0
 const MIN_CLIMB_STAMINA := 1.0
@@ -1957,11 +1957,11 @@ func set_state(next_state: int):
 			can_air_spin = true
 			gun.unlock()
 		State.Climb:
+			drain_stamina(STAMINA_DRAIN_CLIMB_START)
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.ground_transition("Climb")
 			can_air_spin = true
-			stamina -= STAMINA_DRAIN_CLIMB_START
 			gun.lock()
 		State.LedgeHang:
 			$crouching_col.disabled = false
