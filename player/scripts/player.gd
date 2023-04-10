@@ -291,6 +291,14 @@ enum State {
 	NoClip
 }
 
+const ground_states = [
+	State.Ground, State.Crouch, State.Climb, State.Slide,
+	State.Sitting, State.Roll, 
+	State.GetItem, State.Locked, State.LockedWaiting,
+	State.LungeKick, State.SpinKick, State.SlideLungeKick,
+	State.DiveEnd, State.DiveWindup, State.UppercutWindup
+]
+
 var state: int = State.Fall
 var ground_normal:Vector3 = Vector3.UP
 var best_floor_dot: float
@@ -540,11 +548,11 @@ func _physics_process(delta):
 				next_state = State.LungeKick
 			elif pressed("combat_spin"):
 				next_state = State.SpinKick
-			elif after(TIME_COYOTE, empty(ground_area)):
+			elif after(TIME_COYOTE, empty(ground_area), 1):
 				next_state = State.Fall
 			elif water_depth > DEPTH_WATER_WADE:
 				next_state = State.Wading
-			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1) or (
+			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 2) or (
 				best_floor and best_floor.is_in_group("dont_stand")
 			):
 				if (!floor_cast.is_colliding()
@@ -571,7 +579,7 @@ func _physics_process(delta):
 				next_state = State.WadingFall
 			elif best_floor_dot > MIN_DOT_GROUND and !best_floor.is_in_group("dont_stand"):
 				next_state = State.Ground
-			elif after(TIME_COYOTE, empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB):
+			elif after(TIME_COYOTE, empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB, 1):
 				next_state = State.Fall
 			elif can_ledge_grab(MIN_DOT_LEDGE_SLIDE):
 				next_state = State.LedgeHang
@@ -1846,6 +1854,9 @@ func start_jump(vel:float):
 	emit_signal("jumped")
 	velocity.y = jump_factor*vel
 
+func is_ground(p_state):
+	return p_state in ground_states
+
 func set_state(next_state: int):
 	#print(State.keys()[state], " -> ", State.keys()[next_state])
 	var i = 0
@@ -1881,6 +1892,9 @@ func set_state(next_state: int):
 			collision_mask = normal_mask
 		State.LockedWaiting:
 			mesh.release_item()
+
+	if !is_ground(state) and is_ground(next_state) and best_floor:
+		Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, global_transform.origin, ground_normal)
 	
 	# Entry effects
 	match next_state:

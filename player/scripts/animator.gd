@@ -1,12 +1,6 @@
 extends Spatial
 
 var sounds := {
-	"stepLevelGround": [
-		preload("res://audio/player/stepdirt1.wav"),
-		preload("res://audio/player/stepdirt2.wav"),
-		preload("res://audio/player/stepdirt3.wav"),
-		preload("res://audio/player/stepdirt4.wav"),
-	],
 	"stepSteepGround": [
 		preload("res://audio/player/stepsteep2.wav"),
 		preload("res://audio/player/stepsteep3.wav"),
@@ -146,6 +140,18 @@ func play_custom_loop(transition: String, end_point: String):
 		
 	body.travel(c)
 
+func step(right: bool):
+	if (player.best_floor 
+		and player.velocity.length_squared() > 0.01
+		and player.after(0.1)
+	):
+		var foot : Spatial
+		if right:
+			foot = $Armature/Skeleton/footRight
+		else:
+			foot = $Armature/Skeleton/footLeft
+		Bumps.step_on(player.best_floor, foot.global_transform.origin, false, player.ground_normal)
+
 func play_single(a: String):
 	if !anim_player.has_animation(a):
 		print_debug("MISSING: ", a)
@@ -192,10 +198,6 @@ func get_random_sound(type: String) -> AudioStream:
 	return array[randi() % array.size()]
 
 func stop_particles():
-	$Armature/Skeleton/footLeft/kick_particles.emitting = false
-	$Armature/Skeleton/footRight/kick_particles.emitting = false
-	$Armature/Skeleton/footLeft/max_kick_particles.emitting = false
-	$Armature/Skeleton/footRight/max_kick_particles.emitting = false
 	$max_dive_particles.emitting = false
 	$dive_particles.emitting = false
 
@@ -277,16 +279,6 @@ func play_sit():
 
 func play_ledge_grab():
 	transition_to("LedgeGrab")
-
-func start_kick_left(_max_damage: bool):
-	$Armature/Skeleton/footLeft/kick_particles.emitting = true
-	if _max_damage:
-		$Armature/Skeleton/footLeft/max_kick_particles.emitting = true
-
-func start_kick_right(_max_damage: bool):
-	$Armature/Skeleton/footRight/kick_particles.emitting = true
-	if _max_damage:
-		$Armature/Skeleton/footRight/max_kick_particles.emitting = true
 
 func start_dive_shockwave(_max_damage: bool):
 	$dive_particles.emitting = true
