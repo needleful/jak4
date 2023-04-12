@@ -8,7 +8,7 @@ const proper_name: Dictionary = {
 	"bug": "Deathgnats"
 }
 
-var stock := {}
+var stock: Dictionary
 const default_tooltips := {
 	"health_up" : "Permanently increase health by 25%.",
 	"stamina_up": "Pernanently increase stamina by 25%.",
@@ -19,6 +19,9 @@ const default_tooltips := {
 	"armor": "Temporarily increase health by 24%. Consumed before health.",
 	"stamina_booster": "Temporarily increase maximum stamina. Consumed after normal stamina."
 }
+
+func _init():
+	stock = {}
 
 func _ready():
 	set_process_input(false)

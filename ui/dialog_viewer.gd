@@ -15,7 +15,7 @@ var last_speaker: String
 var current_item : DialogItem
 var sequence: Resource
 
-export(Dictionary) var fonts := {}
+export(Dictionary) var fonts: Dictionary
 export(Dictionary) var colors := {
 	"narration": Color.dimgray,
 	"you":Color.deeppink
@@ -48,6 +48,7 @@ const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
 func _init():
+	fonts = {}
 	call_stack = []
 	discussed = {}
 
