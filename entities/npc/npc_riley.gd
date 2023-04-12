@@ -3,9 +3,21 @@ extends NPC_Shop
 export(bool) var only_if_saved := true
 export(bool) var delete_if_saved := true
 export(Array, NodePath) var enemies : Array
-export(String) var game_label := "Enemies"
 
 var saved := false
+
+class RileyGame:
+	const title := "Enemies"
+	const friendly_id := ""
+	var id: int
+	
+	func _init(p_id: int):
+		id = p_id
+	
+	func end():
+		pass
+
+onready var game = RileyGame.new(hash(get_path()))
 
 func _init():
 	enemies = []
@@ -20,7 +32,6 @@ func _ready():
 			queue_free()
 	for i in range(enemies.size()):
 		# convert from node-relative to absolute position
-		assert(has_node(enemies[i]))
 		var n = get_node(enemies[i])
 		enemies[i] = n.get_path()
 	for e in enemies:
@@ -35,27 +46,26 @@ func _on_target_died(_id, path):
 	var p = Global.get_player()
 	if enemies.size() <= 1:
 		complete_game()
-	else:
-		# Assume the player is playing our game
-		if p.game_ui.label == game_label and p.game_ui.in_game:
-			p.game_ui.value = enemies.size() - 1
-			p.game_ui.remove_target(get_node(enemies[idx]))
+	elif CustomGames.is_playing(game):
+		p.game_ui.value = enemies.size() - 1
+		p.game_ui.remove_target(get_node(enemies[idx]))
 	enemies.remove(idx)
 
 func complete_game():
 	var _x = Global.add_stat("riley/saved")
 	_x = Global.add_stat(str(get_path()) + "/saved")
 	saved = true
-	var p = Global.get_player()
-	if p.game_ui.label == game_label and p.game_ui.in_game:
-		p.game_ui.complete_game()
+	if CustomGames.is_playing(game):
+		CustomGames.end(true)
 
 func track_enemies():
+	if enemies.size() == 0:
+		complete_game()
+		return
 	var player = Global.get_player()
-	Global.save_checkpoint(player.get_save_transform())
-	player.game_ui.start_game(game_label)
+	CustomGames.start(game)
+	CustomGames.set_spawn(player.get_save_transform(), false)
+	
 	player.game_ui.value = enemies.size()
 	for e in enemies:
 		player.game_ui.add_target(get_node(e))
-	if enemies.size() == 0:
-		complete_game()
