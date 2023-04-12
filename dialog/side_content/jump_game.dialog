@@ -1,13 +1,13 @@
 // The game is active
-{main_speaker.get_parent().active}
+{playing_game()}
 	* The kids are cheering you on. One is booing.
-{otherwise if game_stat("completed")}
+{otherwise if game_completed()}
 	Eeey!
 	* The kids cheer and wave at you as they play.
 	* Do you want to play again?
 	> {skip()} Yes
 		* You approach. The children cheer. You must reach the flag in only #{main_speaker.get_parent().max_jumps} jump(s).
-		{main_speaker.get_parent().start_game()}
+		{game_start()}
 	> {skip()} No
 {otherwise}
 	{talked == 0}
@@ -22,7 +22,7 @@
 	> {skip()} (Play game)
 		{Global.stat("language/eeya")} [You] Eeya, uh, hugotam ko.
 		* The children cheer. You must reach the flag in only #{main_speaker.get_parent().max_jumps} jump(s).
-		{main_speaker.get_parent().start_game()}
+		{game_start()}
 		{exit()}
 	> {skip()} (Do not)
 		[You] Uh, maybe later, thanks.
@@ -36,7 +36,7 @@
 	[You] Oh, your coat is lovely! Would you want to trade?
 	...
 	* You pantomime trading coats to the child.
-{game_stat("completed")}
+{game_completed()}
 	... Ah, eeya!
 	* The child trades coats with you.
 	{swap_coats()}

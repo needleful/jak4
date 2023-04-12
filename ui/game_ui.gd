@@ -1,7 +1,5 @@
 extends Control
 
-signal cancelled
-
 export(String) var label setget set_label, get_label
 export(String) var value setget set_value, get_value
 
@@ -13,9 +11,14 @@ var markers := []
 var custom_overlay : Node
 
 func _ready():
+	var _x = CustomGames.connect("game_started", self, "start_game")
+	_x = CustomGames.connect("game_failed", self, "fail_game")
+	_x = CustomGames.connect("game_completed", self, "complete_game")
+	
+	_x = $AnimationPlayer.connect("animation_finished", self, "_on_animation_finished")
+	
 	visible = in_game
 	remove_child(marker)
-	var _x = $AnimationPlayer.connect("animation_finished", self, "_on_animation_finished")
 
 func _process(_delta):
 	for i in range(targets.size()):
@@ -30,9 +33,9 @@ func _process(_delta):
 			m.hide()
 
 func cancel_game():
-	emit_signal("cancelled")
+	CustomGames.cancel_game()
 
-func start_game(text: String)-> bool:
+func start_game(text: String, _id : int)-> bool:
 	$AnimationPlayer.play("start")
 	show()
 	set_label(text)

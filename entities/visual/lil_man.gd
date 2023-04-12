@@ -7,7 +7,7 @@ onready var hat: MeshInstance = $Armature/Skeleton/attach_hat/ref_hat/MeshInstan
 func _ready():
 	var p = get_parent()
 	if p and ("friendly_id" in p) and (p.friendly_id != ""):
-		custom_coat_stat = p.friendly_id + "/coat"
+		custom_coat_stat = "coats/" + p.friendly_id
 	if p and "accessory" in p and p.accessory:
 		hat.mesh = p.accessory
 	var coat = Global.stat(coat_stat())
@@ -20,7 +20,7 @@ func generate_coat(min_rarity = Coat.Rarity.Uncommon, max_rarity = Coat.Rarity.S
 
 func coat_stat() -> String:
 	if custom_coat_stat == "":
-		return str(get_path()) + "/coat"
+		return "coats/" + Global.node_stat(get_parent())
 	else:
 		return custom_coat_stat
 

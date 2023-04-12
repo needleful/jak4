@@ -13,15 +13,12 @@ func _ready():
 	if has_node(mesh_path):
 		node = get_node(mesh_path)
 	if persistent:
-		var c = Global.stat(get_coat_stat())
+		var c = Global.stat("coats/" + Global.node_stat(self))
 		if !(c is Coat):
 			c = Coat.new(true)
 		set_coat(c)
 	else:
 		set_coat(Coat.new(true))
-
-func get_coat_stat():
-	return str(get_path()) + "/coat"
 
 func get_coat():
 	return coat
@@ -37,7 +34,7 @@ func set_coat(c: Coat):
 				c.material_override = mat
 
 	if persistent:
-		Global.set_stat(get_coat_stat(), c)
+		Global.set_stat("coats/" + Global.node_stat(self), c)
 	if has_node("light"):
 		var l := $light as Light
 		if l:

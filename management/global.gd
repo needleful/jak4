@@ -354,6 +354,9 @@ func remove_item(item: String, amount := 1) -> bool:
 	else:
 		return false
 
+func node_stat(node: Node) -> String:
+	 return node.name + "." + str(hash(node.get_path()))
+
 func has_stat(index: String) -> bool:
 	return index in game_state.stats
 

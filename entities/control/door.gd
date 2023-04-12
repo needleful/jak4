@@ -32,9 +32,9 @@ func _ready():
 	if !is_in_group("dynamic"):
 		add_to_group("dynamic")
 	if generate_stat:
-		tracked_stat = str(get_path())
+		tracked_stat = Global.node_stat(self)
 	if tracked_stat != "":
-		open_stat = tracked_stat + "/open"
+		open_stat = "door/" + tracked_stat
 		var stat_power = Global.stat(tracked_stat)
 		add_power(stat_power, true)
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")

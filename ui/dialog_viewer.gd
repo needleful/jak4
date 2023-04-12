@@ -386,10 +386,7 @@ func resume():
 
 func get_talked_stat():
 	var s: String = speaker_stat()
-	if s.begins_with("/"):
-		return "talked" + s
-	else:
-		return "talked/" + s
+	return "talked/" + s
 
 func ui_settings_apply():
 	for f in fonts.values():
@@ -485,7 +482,7 @@ func back():
 	return RESULT_SKIP
 
 func coat_trade_stat() -> String:
-	return "coat_trade" + speaker_stat()
+	return "coat_trade/" + speaker_stat()
 
 func traded_coats():
 	return Global.stat(coat_trade_stat())
@@ -503,17 +500,17 @@ func swap_coats():
 
 func speaker_stat() -> String:
 	if !main_speaker:
-		return ""
+		return "_NO_SPEAKER_"
 	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
 		return main_speaker.friendly_id
 	else:
-		return str(main_speaker.get_path())
+		return Global.node_stat(main_speaker)
 
 func can_discuss(stat: String) -> bool:
-	return Global.stat(stat) and !Global.stat("discussed" + speaker_stat() + "/" + stat)
+	return Global.stat(stat) and !Global.stat("discussed/" + speaker_stat() + "/" + stat)
 
 func mark_discussed(stat: String) -> bool:
-	var _x = Global.add_stat("discussed" + speaker_stat() + "/" + stat)
+	var _x = Global.add_stat("discussed/" + speaker_stat() + "/" + stat)
 	return true
 
 func shop():
@@ -542,23 +539,20 @@ func task_is_complete(id):
 func stat(s: String):
 	return Global.stat(s)
 
+func playing_game() -> bool:
+	return CustomGames.is_playing(main_speaker.get_parent())
+
 func has_game_stat(sub_stat) -> bool:
-	if !main_speaker:
-		return false
-	if !main_speaker.get_parent():
-		return false
-	if !main_speaker.get_parent().has_method("get_stat"):
-		return false
-	return Global.has_stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+	return CustomGames.has_stat(main_speaker.get_parent(), sub_stat)
 
 func game_stat(sub_stat):
-	if !main_speaker:
-		return ""
-	if !main_speaker.get_parent():
-		return ""
-	if !main_speaker.get_parent().has_method("get_stat"):
-		return ""
-	return Global.stat(main_speaker.get_parent().get_stat() + "/"+sub_stat)
+	return CustomGames.stat(main_speaker.get_parent(), sub_stat)
+
+func game_completed():
+	return CustomGames.completed(main_speaker.get_parent())
+
+func game_start():
+	return main_speaker.get_parent().start()
 
 func control_screen(val := true):
 	$"../black".visible = val
