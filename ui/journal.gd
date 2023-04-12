@@ -14,7 +14,7 @@ const image_path := "res://ui/notes/%s/%s.png"
 var show_background := true
 
 var starting_item : Node
-var temp_notes := []
+var temp_notes: Array
 
 enum NoteType {
 	People,
@@ -22,6 +22,9 @@ enum NoteType {
 	ActiveTasks,
 	CompletedTasks
 }
+
+func _init():
+	temp_notes = []
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:

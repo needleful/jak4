@@ -15,12 +15,13 @@ class FunctionProfile:
 		end = int(p_end)
 
 var frame_time := 0
-var top_level_functions := []
+var top_level_functions : Array
 
 const r_special_data := "([^\\[]+)"
 var regex := RegEx.new()
 
 func _init():
+	top_level_functions = []
 	var _x = regex.compile(r_special_data)
 
 func parse(data: String) -> bool:

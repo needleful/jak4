@@ -14,12 +14,15 @@ export(Texture) var skybox_gradient setget set_skybox_gradient
 export(Texture) var skybox_gradient2 setget set_skybox_gradient2
 export(Transform) var sun_true_transform setget set_sun_transform
 
-var active_overrides := []
+var active_overrides: Array
 
 onready var sun := $"../sun"
 onready var vis_sun := $"../sun_true_rotation"
 onready var skybox := $"../skybox"
 onready var env := $"../WorldEnvironment"
+
+func _init():
+	active_overrides = []
 
 func no(override):
 	return !(override in active_overrides)

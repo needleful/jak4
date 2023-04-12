@@ -1,7 +1,10 @@
 extends MeshInstance
 
-export(Array, Texture) var textures := []
+export(Array, Texture) var textures : Array
 export(String) var shader_param := "main_texture"
+
+func _init():
+	textures = []
 
 func _ready():
 	if textures.empty():

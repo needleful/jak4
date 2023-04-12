@@ -27,6 +27,7 @@ func end(success: bool):
 		add_stat(active_game, "completed")
 		emit_signal("game_completed")
 	else:
+		add_stat(active_game, "failed")
 		emit_signal("game_failed")
 	active_game.end()
 	active_game = null
@@ -51,6 +52,9 @@ func stat(game, sub_stat := ""):
 func has_stat(game, sub_stat := ""):
 	return Global.has_stat(get_stat(game, sub_stat))
 
+func set_stat(game, sub_stat, value):
+	Global.set_stat(get_stat(game, sub_stat), value)
+
 func get_stat(game, sub_stat := "") -> String:
 	if !game:
 		print_stack()
@@ -58,7 +62,12 @@ func get_stat(game, sub_stat := "") -> String:
 		return "_NO_GAME_"
 	if sub_stat != "":
 		sub_stat = "/" + sub_stat
-	return "games/" + game.title + "/" + str(game.id) + sub_stat
+	var game_name: String
+	if game.friendly_id != "":
+		game_name = game.friendly_id
+	else:
+		game_name = game.title + "." + str(game.id)
+	return "games/" + game_name + sub_stat
 
 func completed(game):
 	return stat(game, "completed")

@@ -5,11 +5,14 @@ onready var logs := $ScrollContainer/VBoxContainer/logs
 
 var show_stats := false setget sss
 
-var history := []
+var history: Array
 var index := 0
 var cheats
 
 onready var G = Global
+
+func _init():
+	history = []
 
 func _ready():
 	var cheat_file = "res://scripts/cheats.gd"

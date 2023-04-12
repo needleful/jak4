@@ -5,7 +5,7 @@ export(Array, NodePath) var stair_nodes
 export(Gradient) var light_gradient: Gradient
 
 # Should be an array of mesh instances
-var stairs := []
+var stairs : Array
 var top : Vector3
 var offset : Vector3
 var level := 0
@@ -13,6 +13,9 @@ var level := 0
 const delta := 0.1
 onready var tower: MeshInstance = get_node(tower_node)
 onready var player: Spatial = Global.get_player()
+
+func _init():
+	stairs = []
 
 func _ready():
 	for n in stair_nodes:

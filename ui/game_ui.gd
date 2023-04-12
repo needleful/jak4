@@ -6,9 +6,13 @@ export(String) var value setget set_value, get_value
 onready var marker := $marker_ref
 
 var in_game := false
-var targets := []
-var markers := []
+var targets: Array
+var markers: Array
 var custom_overlay : Node
+
+func _init():
+	targets = []
+	markers = []
 
 func _ready():
 	var _x = CustomGames.connect("game_started", self, "start_game")
@@ -36,6 +40,7 @@ func cancel_game():
 	CustomGames.cancel_game()
 
 func start_game(text: String, _id : int)-> bool:
+	set_process(true)
 	$AnimationPlayer.play("start")
 	show()
 	set_label(text)
@@ -76,6 +81,7 @@ func fail_game():
 		$AnimationPlayer.play("fail")
 
 func _end_game(should_hide := true) -> bool:
+	set_process(false)
 	if !in_game:
 		print_debug("Tried to end game when there was none")
 		return false

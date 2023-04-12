@@ -47,7 +47,7 @@ var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
 var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
 
 var target: Spatial
-var damaged:= []
+var damaged : Array
 
 var in_range := false
 var coat: Coat = null
@@ -67,6 +67,7 @@ var starting_collision_layer : int
 var skip_alert := true
 
 func _init():
+	damaged = []
 	contact_monitor = true
 	contacts_reported = 4
 

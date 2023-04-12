@@ -4,10 +4,13 @@ class_name Chunk
 
 export(NodePath) var grass_node := NodePath("active_entities/grass")
 export(float) var grass_density := 1.0
-var exits := []
+var exits: Array
 
 var active_entities : Spatial
 var active_transform : Transform
+
+func _init():
+	exits = []
 
 func _ready():
 	if Engine.editor_hint:

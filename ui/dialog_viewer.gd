@@ -35,10 +35,10 @@ var r_interpolate := RegEx.new()
 var otherwise := false
 var talked := 0
 var skip_reply := false
-var discussed := {}
+var discussed: Dictionary
 var is_exiting := false
 # Stack of IDs for DialogItems
-var call_stack:= []
+var call_stack: Array
 var advance_on_resume := false
 
 const SECONDS_PER_YEAR := 356*24*3600
@@ -46,6 +46,10 @@ const SECONDS_PER_MONTH := 30*24*3600
 const SECONDS_PER_DAY := 24*3600
 const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
+
+func _init():
+	call_stack = []
+	discussed = {}
 
 func _input(event):
 	if !is_visible_in_tree():

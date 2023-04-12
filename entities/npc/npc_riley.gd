@@ -2,12 +2,13 @@ extends NPC_Shop
 
 export(bool) var only_if_saved := true
 export(bool) var delete_if_saved := true
-export(Array, NodePath) var enemies := []
+export(Array, NodePath) var enemies : Array
 export(String) var game_label := "Enemies"
 
 var saved := false
 
 func _init():
+	enemies = []
 	visual_name = "Riley"
 
 func _ready():
