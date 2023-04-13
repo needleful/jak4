@@ -30,7 +30,7 @@ func fire() -> bool:
 		impact.emitting = false
 		impact.global_transform.origin = collision.position
 		impact.emitting = true
-		Bumps.impact_on(collider, Bumps.Impact.ImpactStrong, collision.position)
+		Bumps.impact_on(collider, Bumps.Impact.ImpactStrong, collision.position, collision.normal)
 	return true
 
 func combo_fire():
