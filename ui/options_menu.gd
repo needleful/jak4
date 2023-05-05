@@ -14,10 +14,15 @@ const WIDGET_SCENES = {
 	TYPE_STRING: preload("res://addons/fast_options/widgets/string_widget.tscn")
 }
 const CUSTOM_WIDGETS = {
-	"AudioChannel": preload("res://addons/fast_options/widgets/volume_widget.tscn")
+	"AudioChannel": preload("res://addons/fast_options/widgets/volume_widget.tscn"),
+	"enum": preload("res://addons/fast_options/widgets/enum_widget.tscn")
 }
 
 var options: Object
+var r_enum_hint := RegEx.new()
+
+func _init():
+	var _x = r_enum_hint.compile("(\\w\\S*:\\d+,?)+")
 
 func _ready():
 	if menu_name == "":
@@ -39,23 +44,24 @@ func redraw():
 		var _x = back.connect("pressed", self, "emit_signal", ["back_pressed"])
 
 func create_widget(property:Dictionary)->Control:
+	#print(property)
 	var type = property.type
 	if options.has_method("get_custom_widgets"):
 		var widgets:Dictionary = options.get_custom_widgets()
 		if property.name in widgets:
-			var widg:Control = widgets[property.name].instance()
-			link_widget(property, widg)
-			return widg
-	if type in WIDGET_SCENES:
-		var widg = WIDGET_SCENES[type].instance();
-		link_widget(property, widg)
-		return widg
+			return link_widget(property, 
+				widgets[property.name].instance())
+	if type == TYPE_INT and r_enum_hint.search(property.hint_string):
+		return link_widget(property, 
+			CUSTOM_WIDGETS["enum"].instance())
+	elif type in WIDGET_SCENES:
+		return link_widget(property, 
+			WIDGET_SCENES[type].instance())
 	else:
 		var value = options.get(property.name)
 		if value is Resource and value.resource_name in CUSTOM_WIDGETS:
-			var widg = CUSTOM_WIDGETS[value.resource_name].instance()
-			link_widget(property, widg)
-			return widg
+			return link_widget(property, 
+				CUSTOM_WIDGETS[value.resource_name].instance())
 
 		var text = Label.new()
 		text.text = "%s: %s (No Widget Available: '%s')" % [
@@ -72,6 +78,7 @@ func link_widget(property, widget: Control):
 		var _x = widget.connect("changed", options, "set_option")
 	else:
 		var _x = widget.connect("changed", options, "set")
+	return widget
 
 func is_export_var(property)->bool:
 	return property.usage & Settings.USAGE_FLAGS == Settings.USAGE_FLAGS

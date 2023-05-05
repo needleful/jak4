@@ -46,7 +46,7 @@ onready var fov_normal:float = camera.fov
 const FOV_ZOOMED := 10.0
 
 var mouse_accum := Vector2.ZERO
-var mouse_sns := Vector2(0.01, 0.01)
+var mouse_sns := 0.5*Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
 var zoomed_sns_factor := 0.3
 
