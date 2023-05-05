@@ -61,14 +61,14 @@ func create_widget(property:Dictionary)->void:
 		var value = options.get(property.name)
 		if value is Resource and value.resource_name in CLASS_WIDGETS:
 			add_widget(property, CLASS_WIDGETS[value.resource_name])
-
-		var text = Label.new()
-		text.text = "%s: %s (No Widget Available: '%s')" % [
-			property.name, 
-			type,
-			str(options.get(property.name).resource_name)
-		]
-		add_child(text)
+		else:
+			var text = Label.new()
+			text.text = "%s: %s (No Widget Available: '%s')" % [
+				property.name, 
+				type,
+				str(options.get(property.name).resource_name)
+			]
+			add_child(text)
 
 func add_widget(property, widget_scene: PackedScene) -> void:
 	var widget:Control = widget_scene.instance()
