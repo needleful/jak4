@@ -1,6 +1,38 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/fast_options/scripts/color_widget.gd" type="Script" id=1]
+[ext_resource path="res://addons/fast_options/scripts/components/hue_slider.gd" type="Script" id=2]
+[ext_resource path="res://addons/fast_options/scripts/components/saturation_slider.gd" type="Script" id=3]
+[ext_resource path="res://addons/fast_options/scripts/components/value_slider.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV.yx);
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+
+[sub_resource type="Image" id=7]
+data = {
+"data": PoolByteArray( 255, 0, 0, 255, 5, 0, 255, 11, 0, 255, 17, 0, 255, 23, 0, 255, 29, 0, 255, 35, 0, 255, 41, 0, 255, 47, 0, 255, 53, 0, 255, 59, 0, 255, 65, 0, 255, 71, 0, 255, 77, 0, 255, 83, 0, 255, 89, 0, 255, 96, 0, 255, 102, 0, 255, 108, 0, 255, 114, 0, 255, 120, 0, 255, 126, 0, 255, 132, 0, 255, 138, 0, 255, 144, 0, 255, 150, 0, 255, 156, 0, 255, 162, 0, 255, 168, 0, 255, 174, 0, 255, 180, 0, 255, 186, 0, 255, 192, 0, 255, 198, 0, 255, 204, 0, 255, 210, 0, 255, 216, 0, 255, 222, 0, 255, 228, 0, 255, 234, 0, 255, 240, 0, 255, 246, 0, 255, 252, 0, 251, 255, 0, 245, 255, 0, 239, 255, 0, 233, 255, 0, 227, 255, 0, 221, 255, 0, 215, 255, 0, 209, 255, 0, 203, 255, 0, 197, 255, 0, 191, 255, 0, 185, 255, 0, 179, 255, 0, 173, 255, 0, 167, 255, 0, 161, 255, 0, 155, 255, 0, 149, 255, 0, 143, 255, 0, 137, 255, 0, 131, 255, 0, 125, 255, 0, 119, 255, 0, 113, 255, 0, 107, 255, 0, 101, 255, 0, 95, 255, 0, 89, 255, 0, 83, 255, 0, 77, 255, 0, 71, 255, 0, 65, 255, 0, 59, 255, 0, 53, 255, 0, 47, 255, 0, 41, 255, 0, 35, 255, 0, 29, 255, 0, 23, 255, 0, 17, 255, 0, 11, 255, 0, 5, 255, 0, 0, 255, 0, 0, 255, 6, 0, 255, 11, 0, 255, 18, 0, 255, 23, 0, 255, 30, 0, 255, 35, 0, 255, 42, 0, 255, 47, 0, 255, 54, 0, 255, 59, 0, 255, 66, 0, 255, 71, 0, 255, 78, 0, 255, 83, 0, 255, 90, 0, 255, 95, 0, 255, 102, 0, 255, 107, 0, 255, 114, 0, 255, 119, 0, 255, 126, 0, 255, 131, 0, 255, 138, 0, 255, 143, 0, 255, 150, 0, 255, 155, 0, 255, 162, 0, 255, 167, 0, 255, 174, 0, 255, 179, 0, 255, 186, 0, 255, 191, 0, 255, 198, 0, 255, 203, 0, 255, 210, 0, 255, 215, 0, 255, 222, 0, 255, 227, 0, 255, 234, 0, 255, 239, 0, 255, 246, 0, 255, 251, 0, 251, 255, 0, 245, 255, 0, 239, 255, 0, 233, 255, 0, 227, 255, 0, 221, 255, 0, 215, 255, 0, 209, 255, 0, 203, 255, 0, 197, 255, 0, 191, 255, 0, 185, 255, 0, 179, 255, 0, 173, 255, 0, 167, 255, 0, 161, 255, 0, 155, 255, 0, 149, 255, 0, 143, 255, 0, 137, 255, 0, 131, 255, 0, 125, 255, 0, 119, 255, 0, 113, 255, 0, 107, 255, 0, 101, 255, 0, 95, 255, 0, 89, 255, 0, 83, 255, 0, 77, 255, 0, 71, 255, 0, 65, 255, 0, 59, 255, 0, 53, 255, 0, 47, 255, 0, 41, 255, 0, 35, 255, 0, 29, 255, 0, 23, 255, 0, 17, 255, 0, 11, 255, 0, 5, 255, 0, 0, 255, 6, 0, 255, 12, 0, 255, 17, 0, 255, 23, 0, 255, 30, 0, 255, 36, 0, 255, 42, 0, 255, 47, 0, 255, 54, 0, 255, 60, 0, 255, 65, 0, 255, 71, 0, 255, 78, 0, 255, 84, 0, 255, 90, 0, 255, 95, 0, 255, 102, 0, 255, 108, 0, 255, 113, 0, 255, 119, 0, 255, 126, 0, 255, 132, 0, 255, 138, 0, 255, 143, 0, 255, 150, 0, 255, 156, 0, 255, 161, 0, 255, 167, 0, 255, 174, 0, 255, 180, 0, 255, 186, 0, 255, 191, 0, 255, 198, 0, 255, 204, 0, 255, 209, 0, 255, 215, 0, 255, 222, 0, 255, 228, 0, 255, 234, 0, 255, 239, 0, 255, 246, 0, 255, 252, 0, 255, 255, 0, 252, 255, 0, 246, 255, 0, 239, 255, 0, 233, 255, 0, 227, 255, 0, 222, 255, 0, 215, 255, 0, 209, 255, 0, 204, 255, 0, 198, 255, 0, 191, 255, 0, 185, 255, 0, 179, 255, 0, 174, 255, 0, 167, 255, 0, 161, 255, 0, 156, 255, 0, 150, 255, 0, 143, 255, 0, 137, 255, 0, 131, 255, 0, 126, 255, 0, 119, 255, 0, 113, 255, 0, 108, 255, 0, 102, 255, 0, 95, 255, 0, 89, 255, 0, 83, 255, 0, 78, 255, 0, 71, 255, 0, 65, 255, 0, 60, 255, 0, 54, 255, 0, 47, 255, 0, 41, 255, 0, 35, 255, 0, 30, 255, 0, 23, 255, 0, 17, 255, 0, 12, 255, 0, 6, 255, 0, 0 ),
+"format": "RGB8",
+"height": 256,
+"mipmaps": false,
+"width": 1
+}
+
+[sub_resource type="ImageTexture" id=3]
+flags = 4
+flags = 4
+image = SubResource( 7 )
+size = Vector2( 1, 256 )
+
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="color_widget" type="HBoxContainer"]
 anchor_right = 1.0
@@ -10,24 +42,99 @@ script = ExtResource( 1 )
 
 [node name="name" type="Label" parent="."]
 margin_top = 353.0
-margin_right = 598.0
+margin_right = 581.0
 margin_bottom = 367.0
 size_flags_horizontal = 3
 text = "Color Name"
 
-[node name="value" type="HBoxContainer" parent="."]
-margin_left = 602.0
+[node name="Preview" type="ColorRect" parent="."]
+margin_left = 585.0
+margin_right = 615.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 30, 30 )
+
+[node name="value" type="GridContainer" parent="."]
+margin_left = 619.0
 margin_right = 1200.0
 margin_bottom = 720.0
 size_flags_horizontal = 3
+custom_constants/vseparation = 15
+columns = 2
 
-[node name="ColorPicker" type="ColorPicker" parent="value"]
-margin_right = 308.0
-margin_bottom = 720.0
-edit_alpha = false
-hsv_mode = true
-deferred_mode = true
-presets_enabled = false
-presets_visible = false
+[node name="Label" type="Label" parent="value"]
+margin_top = 3.0
+margin_right = 10.0
+margin_bottom = 17.0
+text = "H"
 
-[connection signal="color_changed" from="value/ColorPicker" to="." method="_on_color_changed"]
+[node name="hue" type="HSlider" parent="value"]
+margin_left = 14.0
+margin_right = 581.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+custom_styles/slider = SubResource( 4 )
+max_value = 1.0
+step = 0.04
+script = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="value/hue"]
+show_behind_parent = true
+material = SubResource( 6 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 3 )
+expand = true
+stretch_mode = 1
+
+[node name="Label2" type="Label" parent="value"]
+margin_top = 38.0
+margin_right = 10.0
+margin_bottom = 52.0
+text = "S"
+
+[node name="sat" type="HSlider" parent="value"]
+margin_left = 14.0
+margin_top = 35.0
+margin_right = 581.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+custom_styles/slider = SubResource( 1 )
+max_value = 1.0
+step = 0.04
+
+[node name="preview" type="TextureRect" parent="value/sat"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand = true
+script = ExtResource( 3 )
+
+[node name="Label3" type="Label" parent="value"]
+margin_top = 73.0
+margin_right = 10.0
+margin_bottom = 87.0
+text = "V"
+
+[node name="val" type="HSlider" parent="value"]
+margin_left = 14.0
+margin_top = 70.0
+margin_right = 581.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 3
+custom_styles/slider = SubResource( 1 )
+max_value = 1.0
+step = 0.04
+
+[node name="preview" type="TextureRect" parent="value/val"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand = true
+script = ExtResource( 4 )
+
+[connection signal="value_changed" from="value/hue" to="." method="_on_hue_value_changed"]
+[connection signal="value_changed" from="value/sat" to="." method="_on_sat_value_changed"]
+[connection signal="value_changed" from="value/val" to="." method="_on_val_value_changed"]
