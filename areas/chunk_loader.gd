@@ -125,7 +125,7 @@ func load_active(chunk: Spatial):
 		
 		if l < 0:
 			# Have to figure out what I want to do here
-			print_debug("Too late to activate ", chunk.name)
+			# print_debug("Too late to activate ", chunk.name)
 			return
 	_add_content(chunk, _get_content(_hires, chunk.name))
 	_status[chunk.name] = Status.Loaded
