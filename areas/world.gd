@@ -96,8 +96,6 @@ func _ready():
 			print("\t", int(rand_range(0, 144)))
 	
 	chunk_loader = ChunkLoader.new()
-	_x = chunk_loader.connect("load_start", self, "_on_load_started")
-	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
 	
 	for c in get_children():
 		if c.name.begins_with("chunk_lowres"):
@@ -210,13 +208,18 @@ func load_nearby_chunks(position: Vector3):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
 		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
+
 		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
 		
 		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch):
-			chunk_loader.queue_load(ch, false)
+			var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
+			if activate_zone.has_point(local):
+				chunk_loader.load_active(ch)
+			else:
+				chunk_loader.queue_load(ch)
 			emit_signal("activated", ch)
 		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch):
-			chunk_loader.queue_unload(ch)
+			chunk_loader.unload(ch)
 			emit_signal("deactivated", ch)
 
 func update_active_chunks(position: Vector3):

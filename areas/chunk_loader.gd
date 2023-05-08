@@ -1,9 +1,6 @@
 extends Object
 class_name ChunkLoader
 
-signal load_start
-signal load_complete
-
 enum Status {
 	Unloaded,
 	Loaded,
@@ -19,10 +16,17 @@ var _hires : Dictionary
 const PATH_CONTENT := "res://areas/chunks/%s.tscn"
 const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
+var exit_thread := false
+var _load_mutex := Mutex.new()
+var _load_queue : Array
+var _load_thread := Thread.new()
+
 func _init():
 	_status = {}
 	_lowres = {}
 	_hires = {}
+	_load_queue = []
+	var _x = _load_thread.start(self, "_load_wait")
 
 func start_loading(chunks: Array):
 	for c in chunks:
@@ -31,7 +35,6 @@ func start_loading(chunks: Array):
 	_load_lowres(chunks)
 
 func _load_lowres(chunks: Array):
-	call_deferred("_start_loading")
 	var first_loaded = false
 	for chunk in chunks:
 		var name:String = chunk.name
@@ -44,19 +47,30 @@ func _load_lowres(chunks: Array):
 			call_deferred("_add_lowres", name, content)
 		if !first_loaded:
 			first_loaded = true
-	call_deferred("_complete_loading")
-
-func _start_loading():
-	emit_signal("load_start")
-
-func _complete_loading():
-	emit_signal("load_complete")
 
 func _set_loaded(dict: Dictionary, name: String, content):
 	dict[name] = content
 
+func _load_wait():
+	while !exit_thread:
+		_load_mutex.lock()
+		var empty = _load_queue.empty()
+		_load_mutex.unlock()
+		if empty:
+			OS.delay_msec(10)
+			continue
+		
+		_load_mutex.lock()
+		var chunk : Spatial = _load_queue.pop_front()
+		_load_mutex.unlock()
+		
+		var c = _get_content(_hires, chunk.name)
+		call_deferred("_add_content", chunk, c as PackedScene)
+
 func quit():
-	pass
+	exit_thread = true
+	if _load_thread.is_active():
+		_load_thread.wait_to_finish()
 
 func _add_lowres(chunk: String, content: PackedScene):
 	var l = content.instance()
@@ -65,21 +79,21 @@ func _add_lowres(chunk: String, content: PackedScene):
 	if !is_loaded(_nodes[chunk]):
 		_nodes[chunk].add_child(l)
 
-func _add_content(chunk: String, content: PackedScene, active: bool):
-	var c:Node = _nodes[chunk]
-	if c.has_node("dynamic_content"):
+func _add_content(chunk: Spatial, content: PackedScene, active: bool = false):
+	if chunk.has_node("dynamic_content") or !content:
 		return
 	else:
-		if c.has_node("lowres"):
-			var l = c.get_node("lowres")
-			c.remove_child(l)
+		if chunk.has_node("lowres"):
+			var l = chunk.get_node("lowres")
+			chunk.remove_child(l)
 		var n = content.instance()
 		n.name = "dynamic_content"
 		n.set_active(active)
-		c.add_child(n)
+		chunk.add_child(n)
+		_status[chunk.name] = Status.Loaded
 
 func is_alive():
-	return false
+	return _load_thread.is_alive()
 
 func _get_content(dic:Dictionary, chunk: String):
 	var res
@@ -93,9 +107,30 @@ func _get_content(dic:Dictionary, chunk: String):
 
 func unload_all():
 	for c in _nodes.values():
-		queue_unload(c)
+		unload(c)
 
-func queue_load(chunk: Spatial, active: bool):
+func load_active(chunk: Spatial):
+	if chunk.has_node("dynamic_content"):
+		return
+	elif _status[chunk.name] == Status.Loaded:
+		activate(chunk)
+	elif _status[chunk.name] == Status.Loading:
+		
+		_load_mutex.lock()
+		# Try to remove the object from the queue
+		var l := _load_queue.find(chunk)
+		if l >= 0:
+			_load_queue.remove(l)
+		_load_mutex.unlock()
+		
+		if l < 0:
+			# Have to figure out what I want to do here
+			print_debug("Too late to activate ", chunk.name)
+			return
+	_add_content(chunk, _get_content(_hires, chunk.name))
+	_status[chunk.name] = Status.Loaded
+
+func queue_load(chunk: Spatial):
 	if _status[chunk.name] != Status.Unloaded:
 		return
 	_status[chunk.name] = Status.Loading
@@ -103,19 +138,12 @@ func queue_load(chunk: Spatial, active: bool):
 		return
 	if chunk.has_node("dynamic_content"):
 		return
-
-	if chunk.has_node("lowres"):
-		chunk.remove_child(chunk.get_node("lowres"))
-	var c = _get_content(_hires, chunk.name)
-
-	if c is PackedScene:
-		var n:Node = c.instance()
-		n.name = "dynamic_content"
-		n.set_active(active)
-		chunk.add_child(n)
-	_status[chunk.name] = Status.Loaded
 	
-func queue_unload(chunk: Spatial):
+	_load_mutex.lock()
+	_load_queue.push_back(chunk)
+	_load_mutex.unlock()
+	
+func unload(chunk: Spatial):
 	if _status[chunk.name] != Status.Loaded:
 		return
 	_status[chunk.name] = Status.Unloaded

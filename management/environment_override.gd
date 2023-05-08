@@ -45,3 +45,7 @@ func _on_body_exited(_body):
 	if is_inside_tree():
 		get_tree().current_scene.remove_environment(id)
 	hide()
+
+func _exit_tree():
+	var id := hash(get_path())
+	get_tree().current_scene.remove_environment(id)
