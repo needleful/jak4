@@ -1,7 +1,7 @@
 extends NPC
 
 export(NodePath) var tutorial_node
-onready var tut = get_node(tutorial_node)
+onready var tut = get_node(tutorial_node) if tutorial_node else null
 
 var tutorial := ""
 
