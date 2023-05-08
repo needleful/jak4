@@ -17,6 +17,9 @@ func set_enabled(e):
 		for c in get_children():
 			if c is Light:
 				c.visible = light_enabled
+		if mesh.get_surface_material_count() < 2:
+			print_debug("Two materials expected: ", get_path())
+			return
 		if dark_material:
 			if light_enabled:
 				mesh.set_surface_material(1, light_material)
