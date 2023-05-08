@@ -30,7 +30,7 @@ func _on_file_selected(path):
 
 func _on_frame_pressed(f: FrameData):
 	tree.clear()
-	$log_viewer/menus/stats/time.text = "Total time: " + str(f.frame_time)
+	$log_viewer/menus/stats/time.text = "Total time: %.3f" % (f.frame_time/1000.0)
 	var root:TreeItem = tree.create_item()
 	root.set_text(0, "Functions")
 	for fun in f.top_level_functions:

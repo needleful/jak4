@@ -297,6 +297,8 @@ func remove_environment(id:int):
 		env_overrides.remove(remove_index)
 
 func _set_env(p_env: Dictionary):
+	if !is_inside_tree():
+		return
 	$env_settings.active_overrides = p_env.keys()
 	if "wind_reduction_db" in p_env:
 		wind.apply_volume(-p_env.wind_reduction_db)
@@ -319,14 +321,15 @@ func _set_env(p_env: Dictionary):
 	else:
 		set_sun_enabled(env_settings.sun_visible)
 	var p = Global.get_player()
-	if "do_not_disturb" in p_env:
-		p.do_not_disturb = p_env.do_not_disturb
-	else:
-		p.do_not_disturb = false
-	if "close_cam" in p_env:
-		p.cam_rig.set_close_cam(p_env.close_cam)
-	else:
-		p.cam_rig.set_close_cam(false)
+	if p:
+		if "do_not_disturb" in p_env:
+			p.do_not_disturb = p_env.do_not_disturb
+		else:
+			p.do_not_disturb = false
+		if "close_cam" in p_env:
+			p.cam_rig.set_close_cam(p_env.close_cam)
+		else:
+			p.cam_rig.set_close_cam(false)
 
 func _clear_env():
 	_set_env({})

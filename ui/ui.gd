@@ -438,11 +438,12 @@ func hide_prompt():
 func _on_prompt_timer_timeout():
 	$gameing/tutorial.hide()
 
+# TODO: fix in multi-threaded rendering
 func take_screen_shot():
 	Global.get_player().set_camera_render(true)
 	hide()
 	get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
-	yield(VisualServer, "frame_post_draw")
+	#yield(VisualServer, "frame_post_draw")
 	var screen = get_viewport().get_texture().get_data()
 	var stex = ImageTexture.new()
 	stex.create_from_image(screen)

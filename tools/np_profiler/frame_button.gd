@@ -9,11 +9,13 @@ func set_framedata(p_fd):
 	var runtime = framedata.frame_time
 	
 	$ColorRect.rect_min_size.y += clamp(0.01*runtime, 0, 400)
-	if runtime > 30000:
+	if runtime > 100000:
+		$ColorRect.color = Color.purple
+	elif runtime > 30000:
 		$ColorRect.color = Color.red
 	elif runtime > 17000:
 		$ColorRect.color = Color.orange
-	elif runtime > 6094:
+	elif runtime > 6940:
 		$ColorRect.color = Color.lightgreen
 	else:
 		$ColorRect.color = Color.cadetblue
