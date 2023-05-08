@@ -3,9 +3,6 @@ extends Spatial
 signal activated(chunk)
 signal deactivated(chunk)
 
-export(Dictionary) var preloaded_chunks: Dictionary
-export(Dictionary) var preloaded_lowres: Dictionary
-
 var air_tutorial := false
 
 # Distance from the bounding box edge
@@ -65,8 +62,6 @@ var chunk_loader: ChunkLoader
 var ignore_day := false
 
 func _init():
-	preloaded_chunks = {}
-	preloaded_lowres = {}
 	terrain_hires = {}
 	terrain_lowres = {}
 	env_overrides = []
@@ -101,9 +96,8 @@ func _ready():
 			print("\t", int(rand_range(0, 144)))
 	
 	chunk_loader = ChunkLoader.new()
-	print("Readying world...")
-	#_x = chunk_loader.connect("load_start", self, "_on_load_started")
-	#_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
+	_x = chunk_loader.connect("load_start", self, "_on_load_started")
+	_x = chunk_loader.connect("load_complete", self, "_on_load_complete")
 	
 	for c in get_children():
 		if c.name.begins_with("chunk_lowres"):
@@ -113,14 +107,11 @@ func _ready():
 		elif c.name.begins_with("chunk"):
 			terrain_hires[c.name] = c.mesh
 			chunks[c.name] = c
+	chunk_loader.start_loading(chunks.values())
 
-	print("Collected meshes")
-	#load_everything()
-	# Briefly render the opposite light
 	sun.visible = !sun_enabled
 	chunk_last_position = player.global_transform.origin
 	active_last_position = player.global_transform.origin
-	start_loading_chunks()
 	load_nearby_chunks(player.global_transform.origin)
 	update_active_chunks(chunk_last_position)
 	
@@ -176,13 +167,6 @@ func update_terrain_lod(pos: Vector3):
 			if c.mesh != terrain_hires[c.name]:
 				c.mesh = terrain_hires[c.name]
 
-func start_loading_chunks():
-	# Sort the chunks by distance from player
-	var sorted_chunks := chunks.values()
-	sorted_chunks.sort_custom(self, "compare_distances")
-	chunk_loader.add_preloaded(sorted_chunks, preloaded_chunks, preloaded_lowres)
-	#var _x = chunk_loader.first_complete.wait()
-
 func _on_load_started():
 	$loading.show()
 
@@ -219,15 +203,19 @@ func detect_enemies(_delta):
 		show_combat_tutorial()
 
 func load_nearby_chunks(position: Vector3):
+	var loaded_box = $debug/box/loaded_chunks
+	loaded_box.text = "Loaded Chunks:"
 	for ch in chunks.values():
+		if chunk_loader.is_loaded(ch):
+			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
 		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
 		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
 		
-		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch.name):
+		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch):
 			chunk_loader.queue_load(ch, false)
 			emit_signal("activated", ch)
-		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch.name):
+		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch):
 			chunk_loader.queue_unload(ch)
 			emit_signal("deactivated", ch)
 
@@ -235,7 +223,7 @@ func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
-		if !chunk_loader.is_loaded(ch.name):
+		if !chunk_loader.is_loaded(ch):
 			continue
 		var local : Vector3 = position - ch.global_transform.origin
 		var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
@@ -243,6 +231,7 @@ func update_active_chunks(position: Vector3):
 		
 		if activate_zone.has_point(local):
 			chunk_loader.activate(ch)
+			active_box.text += "\n"+ch.name
 		elif !deactivate_zone.has_point(local):
 			chunk_loader.deactivate(ch)
 
@@ -407,9 +396,6 @@ func clear_fog_override():
 		env_settings.fog_depth_begin,
 		env_settings.fog_depth_end)
 
-func is_active(chunk_name):
-	return chunk_loader.is_loaded(chunk_name)
-
 func get_dynamic_content(chunk_name):
 	return get_node(chunk_name).get_node("dynamic_content")
 
@@ -424,7 +410,6 @@ func sleep():
 		set_time(get_time() + 2, false)
 
 func wake_up():
-	start_loading_chunks()
 	load_nearby_chunks(player.global_transform.origin)
 	update_active_chunks(player.global_transform.origin)
 
@@ -463,7 +448,7 @@ func set_time(hour: float, p_ignore_day := true):
 		seconds += animation_length
 		
 	ignore_day = p_ignore_day
-	print("Set time to ", hour, " ignore day: ", p_ignore_day)
+	#print("Set time to ", hour, " ignore day: ", p_ignore_day)
 	if seconds < current_time:
 		dn.stop()
 		dn.play("day_night_normal")
