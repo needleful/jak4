@@ -17,8 +17,8 @@ func set_option_value(val:Color):
 	$value/val.value = val.v
 
 func _on_color_changed(val):
-	$value/sat/preview.modulate = val
-	$value/val/preview.modulate = val
+	$value/sat/preview.color = val
+	$value/val/preview.color = val
 	emit_signal("changed", option_name, val)
 
 func _on_hue_value_changed(h: float):

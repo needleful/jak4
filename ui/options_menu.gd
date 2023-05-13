@@ -105,15 +105,11 @@ func generate_menus():
 
 func _on_option_selected(submenu: String):
 	set_level(2)
-	print("Showing ", submenu)
 	for m in option_menus:
 		var o = option_menus[m]
 		o.visible = submenu == m
-		print(m, "==", submenu)
 		if o.visible:
-			print("Focusing ", o.get_path())
 			o.grab_focus()
-		
 
 func _on_resume_pressed():
 	ui.unpause()
@@ -129,7 +125,7 @@ func _on_quit_pressed():
 	Global.save_sync()
 	get_tree().quit()
 
-func _on_displayOptions_ui_redraw():
+func _on_ui_redraw():
 	get_tree().call_group("ui_settings_custom", "ui_settings_apply")
 
 func _on_back_pressed():

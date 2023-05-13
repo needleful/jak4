@@ -1,9 +1,15 @@
 tool
 extends Control
 
+var color := Color.white setget set_color
+
+func set_color(c: Color):
+	color = c
+	update()
+
 func _draw():
-	var desat := modulate
-	var hisat := modulate
+	var desat := color
+	var hisat := color
 	desat.s = 0
 	hisat.s = 1
 	var colors:PoolColorArray = [desat, desat, hisat, hisat]

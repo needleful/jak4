@@ -1,9 +1,15 @@
 tool
 extends Control
 
+var color := Color.white setget set_color
+
+func set_color(c: Color):
+	color = c
+	update()
+
 func _draw():
-	var dark := modulate
-	var light := modulate
+	var dark := color
+	var light := color
 	dark.v = 0
 	light.v = 1
 	var colors:PoolColorArray = [dark, dark, light, light]
