@@ -17,6 +17,8 @@ func _ready():
 			p.connect("opened", self, "generate")
 
 func generate(force := false):
+	if !is_inside_tree():
+		return
 	if generated and !force:
 		return
 	for c in get_children():

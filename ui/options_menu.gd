@@ -1,93 +1,112 @@
 extends Control
 
-signal ui_redraw
-signal back_pressed
+var level := 0
+onready var ui := get_parent().get_parent().get_parent()
+onready var main_menu := $foreground/main_menu
+onready var main_anim := $foreground/main_menu/AnimationPlayer
 
-export(String) var menu_name := ""
-export(bool) var with_back_button := true
+onready var options_panel := $foreground/mainOptions
+onready var options_anim := $foreground/mainOptions/AnimationPlayer
+onready var options_template := $foreground/options_template
+var show_background = true
 
-const TYPE_WIDGETS = {
-	TYPE_BOOL: preload("res://addons/fast_options/widgets/bool_widget.tscn"),
-	TYPE_REAL: preload("res://addons/fast_options/widgets/range_widget.tscn"),
-	TYPE_INT: preload("res://addons/fast_options/widgets/range_widget.tscn"),
-	TYPE_COLOR: preload("res://addons/fast_options/widgets/color_widget.tscn"),
-	TYPE_STRING: preload("res://addons/fast_options/widgets/string_widget.tscn")
-}
-const CLASS_WIDGETS = {
-	"AudioChannel": preload("res://addons/fast_options/widgets/volume_widget.tscn"),
-	"enum": preload("res://addons/fast_options/widgets/enum_widget.tscn")
-}
-
-var options: Object
-var r_enum_hint := RegEx.new()
-
-var custom_widgets:Dictionary
-
-func _init():
-	var _x = r_enum_hint.compile("(\\w\\S*:\\d+,?)+")
+var option_menus : Dictionary
 
 func _ready():
-	if menu_name == "":
-		menu_name = name
-	options = Settings.sub_options[menu_name]
-	call_deferred("redraw")
+	generate_menus()
+	hide()
 
-func redraw():
-	if options.has_method("get_CLASS_WIDGETS"):
-		custom_widgets = options.get_CLASS_WIDGETS()
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_active(is_visible_in_tree())
+
+func set_active(active):
+	if active:
+		Settings.load_settings()
+		set_level(0)
 	else:
-		custom_widgets = {}
-	for child in get_children():
-		if child is Control:
-			remove_child(child)
-	for property in options.get_property_list():
-		if is_export_var(property):
-			create_widget(property)
-	if with_back_button:
-		var back := Button.new()
-		back.text = tr("Back")
-		add_child(back)
-		var _x = back.connect("pressed", self, "emit_signal", ["back_pressed"])
+		Settings.save_settings()
 
-func create_widget(property:Dictionary)->void:
-	var type = property.type
-	if property.name in custom_widgets:
-		add_widget(property, custom_widgets[property.name])
-	elif type == TYPE_INT and r_enum_hint.search(property.hint_string):
-		add_widget(property, CLASS_WIDGETS["enum"])
-	elif type in TYPE_WIDGETS:
-		add_widget(property, TYPE_WIDGETS[type])
-	else:
-		var value = options.get(property.name)
-		if value is Resource and value.resource_name in CLASS_WIDGETS:
-			add_widget(property, CLASS_WIDGETS[value.resource_name])
-		else:
-			var text = Label.new()
-			text.text = "%s: %s (No Widget Available: '%s')" % [
-				property.name, 
-				type,
-				str(options.get(property.name).resource_name)
-			]
-			add_child(text)
+func set_level(l: int):
+	if l < 0:
+		l = 0
+	if l > 2:
+		l = 2
+	match l:
+		0:
+			for c in main_menu.get_children():
+				if c is Control:
+					c.focus_mode = Control.FOCUS_ALL
+			main_anim.play("fade_in")
+			if level == 1:
+				$foreground/main_menu/options.grab_focus()
+			else:
+				$foreground/main_menu/resume.grab_focus()
+			
+				
+			options_panel.hide()
+			
+			$foreground/audioOptions.hide()
+			$foreground/controlOptions.hide()
+			$foreground/displayOptions.hide()
+			$foreground/graphicsOptions.hide()
+		1:
+			if level == 0:
+				for c in main_menu.get_children():
+					if c is Control:
+						c.focus_mode = Control.FOCUS_NONE
+				main_anim.play("fade_out")
+					
+			for c in options_panel.get_children():
+				if c is Control:
+					c.focus_mode = Control.FOCUS_ALL
+					
+			options_panel.show()
+			options_anim.play("fade_in")
+			options_panel.get_child(0).grab_focus()
+			
+			$foreground/audioOptions.hide()
+			$foreground/controlOptions.hide()
+			$foreground/displayOptions.hide()
+			$foreground/graphicsOptions.hide()
+		2:
+			if level == 0:
+				main_anim.play("fade_out")
+				for c in main_menu.get_children():
+					if c is Control:
+						c.focus_mode = Control.FOCUS_NONE
+			elif level == 1:
+				for c in options_panel.get_children():
+					if c is Control:
+						c.focus_mode = Control.FOCUS_NONE
+				options_anim.play("fade_out")
+	level = l
 
-func add_widget(property, widget_scene: PackedScene) -> void:
-	var widget:Control = widget_scene.instance()
-	add_child(widget)
-	widget.set_option_hint(property)
-	widget.set_option_value(options.get(property.name))
-	if options.has_method("set_option"):
-		var _x = widget.connect("changed", options, "set_option")
-	else:
-		var _x = widget.connect("changed", options, "set")
+func generate_menus():
+	option_menus = {}
+	for s in Settings.sub_options:
+		var menu := options_template.duplicate()
+		menu.menu_name = s
+		menu.generate()
+	options_template.queue_free()
+	options_template = null
 
-func is_export_var(property)->bool:
-	return property.usage & Settings.USAGE_FLAGS == Settings.USAGE_FLAGS
+func _on_resume_pressed():
+	ui.unpause()
 
-func _on_ui_redraw():
-	emit_signal("ui_redraw")
+func _on_options_pressed():
+	set_level(1)
 
-func grab_focus():
-	for c in get_children():
-		if c is Control:
-			c.grab_focus()
-			return
+func _on_reload_pressed():
+	Global.get_player().respawn()
+	ui.unpause()
+
+func _on_quit_pressed():
+	Global.save_sync()
+	get_tree().quit()
+
+func _on_displayOptions_ui_redraw():
+	get_tree().call_group("ui_settings_custom", "ui_settings_apply")
+
+func _on_back_pressed():
+	set_level(level - 1)

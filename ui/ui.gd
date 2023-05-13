@@ -412,19 +412,20 @@ func set_mode(m):
 		c.visible = i == mode
 		i += 1
 
-func show_prompt(actions: Array, text: String):
+func show_prompt(actions: Array, text: String, joiner := "+"):
 	$gameing/tutorial/prompt_timer.stop()
+	$gameing/tutorial/joiner.text = joiner
 	if actions.size() >= 1:
 		$gameing/tutorial/input_prompt.show()
 		$gameing/tutorial/input_prompt.action = actions[0]
 	else:
 		$gameing/tutorial/input_prompt.hide()
 	if actions.size() >= 2:
-		$gameing/tutorial/plus.show()
+		$gameing/tutorial/joiner.show()
 		$gameing/tutorial/input_prompt2.show()
 		$gameing/tutorial/input_prompt2.action = actions[1]
 	else:
-		$gameing/tutorial/plus.hide()
+		$gameing/tutorial/joiner.hide()
 		$gameing/tutorial/input_prompt2.hide()
 
 	$gameing/tutorial/Label.text = text

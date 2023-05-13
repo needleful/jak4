@@ -52,6 +52,9 @@ func step_on(surface: Node, position:Vector3, sliding := false, normal := Vector
 	impact_on(surface, impact, position, normal)
 
 func impact_on(surface:Node, impact: int, position: Vector3, normal := Vector3.UP):
+	call_deferred("immediate_impact_on", surface, impact, position, normal)
+
+func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vector3):
 	if !surface:
 		return
 	var surf = Surface.Rock
@@ -67,8 +70,11 @@ func impact_on(surface:Node, impact: int, position: Vector3, normal := Vector3.U
 		surf = Surface.Sand
 	impact(surf, impact, position, normal)
 
-
-func impact(surf, impact, position: Vector3, normal := Vector3.UP):
+func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):
+	impact_particles(surf, impact, position, normal)
+	impact_sound(surf, impact, position)
+	
+func impact_particles(surf:int, impact:int, position: Vector3, normal:Vector3):
 	if surf in emitters and impact in emitters[surf]:
 		var emitter_orig = emitters[surf][impact]
 		var e: Particles
@@ -76,8 +82,13 @@ func impact(surf, impact, position: Vector3, normal := Vector3.UP):
 		if ObjectPool.has(ename):
 			e = ObjectPool.get(ename)
 		else:
-			e = emitter_orig.duplicate()
-		emit_particles_once(e, position, normal)
+			e = duplicate_particles(emitter_orig)
+		emit_particles_once(ename, e, position, normal)
+
+func duplicate_particles(original: Particles):
+	return original.duplicate()
+
+func impact_sound(surf:int, impact:int, position: Vector3):
 	if surf in sounds and impact in sounds[surf] and impact in audio_players:
 		var array:Array = sounds[surf][impact]
 		var sound_orig = audio_players[impact]
@@ -91,7 +102,7 @@ func impact(surf, impact, position: Vector3, normal := Vector3.UP):
 		s.pitch_scale = rand_range(0.9, 1.2)
 		play_sound_once(aname, s, position)
 
-func emit_particles_once(e: Particles, position: Vector3, normal: Vector3):
+func emit_particles_once(ename: String, e: Particles, position: Vector3, normal: Vector3):
 	get_tree().current_scene.add_child(e)
 	e.global_transform.origin = position
 	var up = e.global_transform.basis.y
@@ -105,7 +116,7 @@ func emit_particles_once(e: Particles, position: Vector3, normal: Vector3):
 	yield(get_tree().create_timer(e.lifetime), "timeout")
 	e.emitting = false
 	e.get_parent().remove_child(e)
-	ObjectPool.put(e.name, e)
+	ObjectPool.put(ename, e)
 
 func play_sound_once(type, s: AudioStreamPlayer3D, position: Vector3):
 	get_tree().current_scene.add_child(s)

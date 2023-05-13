@@ -118,8 +118,11 @@ func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
 	var slope: float = anim["parameters/WholeBody/Climb/blend_position"]
 	anim["parameters/WholeBody/Climb/blend_position"] = lerp(wall_normal.y, slope, 0.3)
 
-func force_play(state):
+func play_deferred(state):
 	body.call_deferred("start", state)
+
+func force_play(state):
+	body.start(state)
 
 func play_custom(animation):
 	if !anim_player.has_animation(animation):

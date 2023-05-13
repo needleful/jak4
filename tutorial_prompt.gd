@@ -1,9 +1,15 @@
 extends Area
 
+enum Mode {
+	Hold,
+	Sequence
+}
+
 export(bool) var enabled: bool = true setget set_enabled
 export(Array, String) var input_actions: Array
 export(String) var text: String
 export(String) var removal_stat: String
+export(Mode) var mode
 
 func _ready():
 	if removal_stat and Global.stat(removal_stat):
@@ -14,7 +20,7 @@ func _ready():
 
 func _on_body_entered(body):
 	if body is PlayerBody:
-		body.ui.show_prompt(input_actions, text)
+		body.ui.show_prompt(input_actions, text, "," if mode == Mode.Sequence else "+")
 
 func set_enabled(e: bool):
 	enabled = e

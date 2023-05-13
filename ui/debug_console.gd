@@ -57,6 +57,9 @@ func _on_text_entered(new_text):
 	else:
 		echo(str(output))
 
+func move(dir:Vector3):
+	Global.get_player().global_translate(dir)
+
 func debug_time(debugging := true, parent:Node = null):
 	if !parent:
 		parent = Global.get_player()

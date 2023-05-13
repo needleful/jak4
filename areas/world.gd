@@ -259,7 +259,7 @@ func show_air_combat_tutorial():
 
 func _on_tutorial_swap_timeout():
 	if air_tutorial:
-		player.ui.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick")
+		player.ui.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick", ",")
 	else:
 		player.ui.show_prompt(["combat_spin"], "Spin Kick")
 

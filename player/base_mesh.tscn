@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=2]
+[gd_scene load_steps=121 format=2]
 
 [ext_resource path="res://_glb/characters/jackie/base_mesh.glb" type="PackedScene" id=1]
 [ext_resource path="res://player/edit/autoload_animations.gd" type="Script" id=2]
@@ -87,6 +87,8 @@
 [ext_resource path="res://_glb/characters/jackie/anim/Hover_LeanHardRight-loop.anim" type="Animation" id=85]
 [ext_resource path="res://_glb/characters/jackie/anim/Hover_LeanHardLeft-loop.anim" type="Animation" id=86]
 [ext_resource path="res://_glb/characters/jackie/anim/Hover_LeanUp-loop.anim" type="Animation" id=87]
+[ext_resource path="res://_glb/characters/jackie/anim/Test.anim" type="Animation" id=88]
+[ext_resource path="res://_glb/characters/jackie/anim/Test2.anim" type="Animation" id=89]
 
 [sub_resource type="Gradient" id=64]
 offsets = PoolRealArray( 0.126437, 0.475096, 0.858238 )
@@ -330,6 +332,18 @@ size = Vector2( 0.1, 0.1 )
 [node name="base_mesh" instance=ExtResource( 1 )]
 script = ExtResource( 63 )
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [ NodePath("lumbar") ]
+bones/4/bound_children = [ NodePath("chest") ]
+bones/6/bound_children = [ NodePath("head") ]
+bones/29/bound_children = [ NodePath("gun") ]
+bones/48/bound_children = [ NodePath("handRight") ]
+bones/52/bound_children = [ NodePath("coat_tails") ]
+bones/58/bound_children = [ NodePath("knee_left") ]
+bones/60/bound_children = [ NodePath("footLeft") ]
+bones/62/bound_children = [ NodePath("knee_right") ]
+bones/64/bound_children = [ NodePath("footRight") ]
+
 [node name="coat" parent="Armature/Skeleton" index="0"]
 layers = 2
 material/0 = SubResource( 66 )
@@ -349,17 +363,17 @@ material/0 = ExtResource( 77 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
 time_scale_response = false
-transform = Transform( 0.0495608, 0.0414537, -0.99791, -0.763603, -0.642443, -0.0646116, -0.64378, 0.76521, -0.000185912, 0.118708, 0.108746, -0.00154163 )
+transform = Transform( 0.049519, 0.0411302, -0.997925, -0.764097, -0.64188, -0.0643717, -0.643196, 0.765701, -0.000357906, 0.118754, 0.108778, -0.000979586 )
 bone_name = "Ankle.L"
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
 time_scale_response = false
-transform = Transform( 0.0493761, -0.0416992, 0.99791, 0.76122, -0.645265, -0.0646283, 0.64661, 0.762819, -0.000118393, -0.118567, 0.108842, -0.00291512 )
+transform = Transform( 0.0492507, -0.0418513, 0.99791, 0.761506, -0.644927, -0.0646309, 0.646284, 0.763097, 0.000106948, -0.118328, 0.108834, -0.00333061 )
 bone_name = "Ankle.R"
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
 time_scale_response = false
-transform = Transform( 1, -2.34106e-06, 0.000121609, -1.62833e-05, 0.988238, 0.152923, -0.000120537, -0.152923, 0.988238, -0.00217568, 1.0189, 0.000180268 )
+transform = Transform( 1, -6.4229e-06, 0.000391695, -5.35518e-05, 0.988238, 0.152923, -0.00038807, -0.152923, 0.988238, -0.00155671, 1.01891, -0.00161691 )
 bone_name = "BackUpper"
 
 [node name="time_trail" type="ImmediateGeometry" parent="Armature/Skeleton/chest" index="0"]
@@ -381,7 +395,7 @@ draw_pass_1 = SubResource( 75 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]
 time_scale_response = false
-transform = Transform( 0.999996, -0.00221255, -0.00184287, -0.0014123, 0.18087, -0.983506, 0.00250938, 0.983504, 0.180866, -0.00208363, 1.21073, 0.00249711 )
+transform = Transform( 0.999998, -0.00142192, -0.0013037, -0.00101245, 0.188407, -0.98209, 0.00164208, 0.98209, 0.188405, -0.00148557, 1.21087, -3.62005e-05 )
 bone_name = "Head"
 
 [node name="heal_particles" type="Particles" parent="Armature/Skeleton/head" index="0"]
@@ -410,7 +424,7 @@ transform = Transform( 1, 0, 0, 0, 0.225302, 0.974289, 0, -0.974289, 0.225302, 0
 
 [node name="gun" type="BoneAttachment" parent="Armature/Skeleton" index="8"]
 time_scale_response = false
-transform = Transform( 0.736512, -0.116447, 0.666327, -0.152836, -0.988245, -0.00377081, 0.658933, -0.0990611, -0.745651, 0.209819, 0.704026, -0.0205998 )
+transform = Transform( 0.72744, -0.116316, 0.676241, -0.128508, -0.991184, -0.032251, 0.67403, -0.0634413, -0.735974, 0.209895, 0.703064, -0.0091467 )
 bone_name = "Gun.R"
 script = ExtResource( 71 )
 holder_path = NodePath("../../..")
@@ -499,7 +513,7 @@ target_node = NodePath("../gun/gun_ik/target")
 
 [node name="handRight" type="BoneAttachment" parent="Armature/Skeleton" index="10"]
 time_scale_response = false
-transform = Transform( 0.721249, 0.0859386, -0.687324, 0.0323563, -0.995371, -0.0905018, -0.69192, 0.043035, -0.720691, -0.209185, 0.715343, 0.00552326 )
+transform = Transform( 0.71315, 0.0834097, -0.696032, 0.00992638, -0.993998, -0.108946, -0.700942, 0.0707859, -0.709698, -0.20993, 0.71577, 0.0159512 )
 bone_name = "Object.R"
 
 [node name="ref" type="Spatial" parent="Armature/Skeleton/handRight" index="0"]
@@ -508,7 +522,7 @@ transform = Transform( 0.707107, -0.707107, -2.23517e-08, -8.61473e-09, -4.47035
 
 [node name="knee_left" type="BoneAttachment" parent="Armature/Skeleton" index="11"]
 time_scale_response = false
-transform = Transform( -0.0314091, 0.0560556, -0.997934, -0.0314273, -0.997988, -0.0550696, -0.999012, 0.0296326, 0.0331075, 0.0844914, 0.809236, 0.0206182 )
+transform = Transform( -0.0295724, 0.0555263, -0.998019, -0.0379486, -0.997798, -0.0543896, -0.998842, 0.036265, 0.0316144, 0.0851071, 0.809251, 0.0188186 )
 bone_name = "Thign.L"
 
 [node name="ref_leg_left" type="Spatial" parent="Armature/Skeleton/knee_left" index="0"]
@@ -516,7 +530,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="knee_right" type="BoneAttachment" parent="Armature/Skeleton" index="12"]
 time_scale_response = false
-transform = Transform( -0.0215597, -0.0497804, 0.998528, 0.0355246, -0.998167, -0.0489954, 0.999136, 0.034416, 0.0232886, -0.0888517, 0.809251, 0.0206163 )
+transform = Transform( -0.0224004, -0.0504235, 0.998477, 0.0379512, -0.998051, -0.0495506, 0.999029, 0.0367834, 0.0242704, -0.088236, 0.809256, 0.0188214 )
 bone_name = "Thign.R"
 
 [node name="ref_leg_right" type="Spatial" parent="Armature/Skeleton/knee_right" index="0"]
@@ -524,7 +538,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="coat_tails" type="BoneAttachment" parent="Armature/Skeleton" index="13"]
 time_scale_response = false
-transform = Transform( 7.3694e-06, 5.43724e-05, -1, 0.000574827, -1, -5.43577e-05, -1, -0.000574827, -7.44326e-06, -0.00489335, 0.917782, 0.0305877 )
+transform = Transform( -0.000121686, -4.52365e-05, -1, 0.00032416, -1, 4.52075e-05, -1, -0.00032416, 0.000121658, -0.00427322, 0.917792, 0.0287908 )
 bone_name = "Coat"
 
 [node name="lantern" parent="Armature/Skeleton/coat_tails" index="0" instance=ExtResource( 60 )]
@@ -534,7 +548,7 @@ light_enabled = false
 
 [node name="lumbar" type="BoneAttachment" parent="Armature/Skeleton" index="14"]
 time_scale_response = false
-transform = Transform( 1, 2.15651e-05, 3.88313e-05, -7.4832e-06, 0.943531, -0.331283, -4.37827e-05, 0.331283, 0.943531, -0.00217799, 0.840894, -0.0218919 )
+transform = Transform( 1, 7.13542e-05, 0.000125847, -2.5634e-05, 0.943531, -0.331283, -0.000142379, 0.331283, 0.943531, -0.00156443, 0.840904, -0.0236891 )
 bone_name = "Lumbar"
 
 [node name="body_reference" type="Spatial" parent="Armature/Skeleton/lumbar" index="0"]
@@ -605,6 +619,8 @@ anims/SleepStart = ExtResource( 32 )
 anims/SlideRun-loop = ExtResource( 66 )
 anims/SpinKickLeft = ExtResource( 37 )
 anims/StandSad = ExtResource( 35 )
+anims/Test = ExtResource( 88 )
+anims/Test2 = ExtResource( 89 )
 anims/Uppercut = ExtResource( 28 )
 anims/WadeIdle-loop = ExtResource( 30 )
 anims/Wading-loop = ExtResource( 31 )

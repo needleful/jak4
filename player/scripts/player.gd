@@ -26,6 +26,7 @@ const MIN_DOT_SLIDE := 0.12
 const MIN_DOT_CLIMB := -0.2
 const MIN_DOT_CLIMB_MOVEMENT := -0.4
 const MIN_DOT_CLIMB_AIR := 0.1
+const MIN_DOT_SLIDE_ROLL := 0.5
 const MIN_DOT_LEDGE := 0.4
 const MIN_DOT_LEDGE_SLIDE := 0.7
 const MIN_DOT_CEILING := -0.7
@@ -394,13 +395,10 @@ func _ready():
 		set_physics_process(false)
 		return
 	if Global.valid_game_state:
-		global_transform = Global.game_state.checkpoint_position
+		set_saved_transform(Global.game_state.checkpoint_position)
 		set_current_coat(Global.game_state.current_coat, false)
 		if Global.stat("player_sleeping"):
-			lock(false)
-			mesh.transition_to("SleepEnd")
-			call_deferred("_wake_up")
-			rotate_mesh(global_transform.basis.z)
+			_slow_wake()
 		else:
 			set_state(State.Ground)
 	else:
@@ -573,6 +571,9 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif can_slide_lunge and pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
+			elif pressed("mv_crouch") and desired_velocity.dot(best_normal) > MIN_DOT_SLIDE_ROLL:
+				next_state = State.Roll
+				# TODO: maybe a neat little slide animation if you hold crouch while sliding down-hill
 			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
 				next_state = State.Climb
 			elif water_depth > DEPTH_WATER_WADE:
@@ -1190,7 +1191,7 @@ func anim_exit(transition:String, wait_to_unlock := false):
 	return true
 
 func set_visual_position(new_transform:Transform):
-	global_transform = new_transform
+	set_saved_transform(new_transform)
 	rotate_mesh(global_transform.basis.z)
 
 func is_dead():
@@ -1309,11 +1310,6 @@ func accel_low_gravity(delta: float, desired_velocity: Vector3, applied_ground: 
 func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector3, wall_normal: Vector3):
 	if desired_velocity.dot(wall_normal) < 0:
 		desired_velocity = desired_velocity.slide(wall_normal)
-	#var angle = Vector3.UP.angle_to(wall_normal)
-	#var axis = Vector3.UP.cross(wall_normal).normalized()
-	#if axis != Vector3.ZERO:
-	#	desired_velocity = desired_velocity.rotated(axis, angle)
-	#desired_velocity.y = -1
 	desired_velocity += applied_ground
 	
 	var hvel := velocity
@@ -1462,11 +1458,6 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	var valid: bool = no_wall and (center or left or right)
 	if !valid:
 		ledge = null
-	#else:
-		#print("Ledge: ",
-		#	"center, " if center else "",
-		#	"left, " if left else "",
-		#	"right" if right else "")
 	return valid
 
 func check_cast(cast: RayCast, min_dot: float):
@@ -1615,11 +1606,19 @@ func go_to_sleep():
 	if get_tree().current_scene.has_method("sleep"):
 		get_tree().current_scene.call_deferred("sleep")
 	
-	yield(get_tree().create_timer(1), "timeout")
+	yield(get_tree().create_timer(.5), "timeout")
 	
 	if get_tree().current_scene.has_method("wake_up"):
 		get_tree().current_scene.call_deferred("wake_up")
-	call_deferred("_wake_up")
+	
+	yield(get_tree().create_timer(0.5), "timeout")
+	_wake_up()
+
+func _slow_wake():
+	lock(false)
+	mesh.force_play("SleepEnd")
+	yield(get_tree().create_timer(0.1), "timeout")
+	_wake_up()
 
 func _wake_up():
 	if !empty(sleep_zone):
@@ -1630,7 +1629,6 @@ func _wake_up():
 	$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
 
-# TODO: a short animation, then respawn
 func die():
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")
@@ -1653,7 +1651,7 @@ func respawn():
 	applied_ground_velocity = Vector3.ZERO
 	$fade/AnimationPlayer.play("fadein")
 	heal()
-	global_transform = Global.game_state.checkpoint_position
+	set_saved_transform(Global.game_state.checkpoint_position)
 	TimeManagement.resume()
 	ui.hide_prompt()
 	emit_signal("died")
@@ -1698,6 +1696,15 @@ func get_save_transform() -> Transform:
 	var save_transform = global_transform
 	save_transform.basis = mesh.global_transform.basis
 	return save_transform
+
+func set_saved_transform(t:Transform):
+	var forward := t.basis.z
+	forward.y = 0
+	forward = forward.normalized()
+	global_transform = Transform(
+		Basis(),
+		t.origin)
+	mesh.transform.basis = Basis(Vector3.UP.cross(forward), Vector3.UP, forward)
 
 func can_save():
 	return !game_ui.in_game
@@ -1899,8 +1906,6 @@ func set_state(next_state: int):
 	# Entry effects
 	match next_state:
 		State.Ground:
-			#var fall_distance:Vector3 = last_ground_origin - global_transform.origin
-			#compute_fall_damage(fall_distance)
 			last_ground_origin = global_transform.origin
 			can_air_spin = true
 			can_slide_lunge = true
@@ -2025,7 +2030,7 @@ func set_state(next_state: int):
 			gun.aim_lock()
 		State.Damaged:
 			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)
-			mesh.force_play("Damaged")
+			mesh.play_deferred("Damaged")
 			gun.unlock()
 		State.Locked, State.LockedWaiting:
 			velocity = Vector3.ZERO
@@ -2070,7 +2075,7 @@ func set_state(next_state: int):
 			dash_charges -= 1
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
-			mesh.force_play("Dash")
+			mesh.play_deferred("Dash")
 			gun.unlock()
 		State.Wading:
 			can_air_spin = true

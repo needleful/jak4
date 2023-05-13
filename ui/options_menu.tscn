@@ -1,9 +1,9 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://ui/pause_menu.gd" type="Script" id=1]
-[ext_resource path="res://ui/default_theme.tres" type="Theme" id=2]
-[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://ui/options_menu.gd" type="Script" id=4]
+[ext_resource path="res://ui/options_menu.gd" type="Script" id=1]
+[ext_resource path="res://ui/options_submenu.gd" type="Script" id=2]
+[ext_resource path="res://ui/default_theme.tres" type="Theme" id=3]
+[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -173,13 +173,13 @@ tracks/1/keys = {
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 
-[node name="pause_menu" type="Control"]
+[node name="options_menu" type="Control"]
 pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 2 )
+theme = ExtResource( 3 )
 script = ExtResource( 1 )
 
 [node name="background" type="Panel" parent="."]
@@ -263,10 +263,16 @@ margin_right = 250.0
 margin_bottom = 232.0
 text = "Graphics"
 
-[node name="back" type="Button" parent="foreground/mainOptions"]
+[node name="difficulty" type="Button" parent="foreground/mainOptions"]
 margin_top = 272.0
 margin_right = 250.0
 margin_bottom = 300.0
+text = "Difficulty"
+
+[node name="back" type="Button" parent="foreground/mainOptions"]
+margin_top = 340.0
+margin_right = 250.0
+margin_bottom = 368.0
 text = "Back"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="foreground/mainOptions"]
@@ -274,15 +280,24 @@ anims/RESET = SubResource( 2 )
 anims/fade_in = SubResource( 3 )
 anims/fade_out = SubResource( 4 )
 
-[node name="audioOptions" type="VBoxContainer" parent="foreground"]
-visible = false
+[node name="options_template" type="VBoxContainer" parent="foreground"]
 margin_left = 508.0
 margin_right = 908.0
 margin_bottom = 520.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 3
 custom_constants/separation = 40
-script = ExtResource( 4 )
+script = ExtResource( 2 )
+menu_name = "<Invalid>"
+
+[node name="audioOptions" type="VBoxContainer" parent="foreground"]
+margin_left = 912.0
+margin_right = 1312.0
+margin_bottom = 520.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 3
+custom_constants/separation = 40
+script = ExtResource( 2 )
 menu_name = "Audio"
 
 [node name="controlOptions" type="VBoxContainer" parent="foreground"]
@@ -293,7 +308,7 @@ margin_bottom = 520.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 3
 custom_constants/separation = 40
-script = ExtResource( 4 )
+script = ExtResource( 2 )
 menu_name = "Controls"
 
 [node name="displayOptions" type="VBoxContainer" parent="foreground"]
@@ -304,7 +319,7 @@ margin_bottom = 520.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 3
 custom_constants/separation = 40
-script = ExtResource( 4 )
+script = ExtResource( 2 )
 menu_name = "Display"
 
 [node name="graphicsOptions" type="VBoxContainer" parent="foreground"]
@@ -315,8 +330,19 @@ margin_bottom = 520.0
 rect_min_size = Vector2( 400, 0 )
 size_flags_horizontal = 3
 custom_constants/separation = 40
-script = ExtResource( 4 )
+script = ExtResource( 2 )
 menu_name = "Graphics"
+
+[node name="difficultyOptions" type="VBoxContainer" parent="foreground"]
+visible = false
+margin_left = 1720.0
+margin_right = 2120.0
+margin_bottom = 520.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 3
+custom_constants/separation = 40
+script = ExtResource( 2 )
+menu_name = "Difficulty"
 
 [node name="Label" type="Label" parent="."]
 margin_left = 48.0
@@ -334,9 +360,12 @@ text = "Paused"
 [connection signal="pressed" from="foreground/mainOptions/controls" to="." method="_on_controls_pressed"]
 [connection signal="pressed" from="foreground/mainOptions/display" to="." method="_on_display_pressed"]
 [connection signal="pressed" from="foreground/mainOptions/graphics" to="." method="_on_graphics_pressed"]
+[connection signal="pressed" from="foreground/mainOptions/difficulty" to="." method="_on_difficulty_pressed"]
 [connection signal="pressed" from="foreground/mainOptions/back" to="." method="_on_back_pressed"]
+[connection signal="back_pressed" from="foreground/options_template" to="." method="_on_back_pressed"]
 [connection signal="back_pressed" from="foreground/audioOptions" to="." method="_on_back_pressed"]
 [connection signal="back_pressed" from="foreground/controlOptions" to="." method="_on_back_pressed"]
 [connection signal="back_pressed" from="foreground/displayOptions" to="." method="_on_back_pressed"]
 [connection signal="ui_redraw" from="foreground/displayOptions" to="." method="_on_displayOptions_ui_redraw"]
 [connection signal="back_pressed" from="foreground/graphicsOptions" to="." method="_on_back_pressed"]
+[connection signal="back_pressed" from="foreground/difficultyOptions" to="." method="_on_back_pressed"]

@@ -72,6 +72,9 @@ func start_tutorial():
 	in_tutorial = true
 	$tutorial_area.next_stage()
 
+func end_tutorial():
+	chase = false
+
 func disable_dialog():
 	dialog_node = $dialog
 	remove_child($dialog)

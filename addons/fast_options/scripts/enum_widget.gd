@@ -5,9 +5,11 @@ signal changed(opt_name, value)
 var option_name:String
 
 var vals: Dictionary
+var id_to_enum: Dictionary
 
 func _init():
 	vals = {}
+	id_to_enum = {}
 
 func _ready():
 	for c in get_children():
@@ -20,8 +22,7 @@ func set_option_hint(option:Dictionary):
 	var values = hint.split(",", false)
 	for val in values:
 		var h = val.split(":", false)
-		$value.add_item(h[0])
-		vals[h[0]] = int(h[1])
+		$value.add_item(h[0].capitalize(), int(h[0]))
 
 func set_option_value(val:int):
 	var text = vals.find_key(val)
