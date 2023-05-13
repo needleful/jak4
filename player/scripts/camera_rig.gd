@@ -140,7 +140,7 @@ func _process(delta):
 	var analog_aim = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
 	analog_aim *= analog_sns
 	
-	var aim : Vector2 = delta*60*player.sensitivity*(mouse_aim + analog_aim)
+	var aim : Vector2 = player.sensitivity*(mouse_aim + delta*60*analog_aim)
 	if zoomed:
 		aim *= zoomed_sns_factor
 
