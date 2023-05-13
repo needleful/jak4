@@ -1599,23 +1599,11 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 
 func damage_taken_factor() -> float:
 	var d:DifficultySettings = Settings.sub_options["Difficulty"]
-	match d.enemy_damage:
-		DifficultySettings.DamageFactor.HalfDamage:
-			return 0.5
-		DifficultySettings.DamageFactor.DoubleDamage:
-			return 2.0
-		_:
-			return 1.0
+	return d.get_factor(d.enemy_damage)
 
 func damage_dealt_factor() -> float:
 	var d:DifficultySettings = Settings.sub_options["Difficulty"]
-	match d.player_damage:
-		DifficultySettings.DamageFactor.HalfDamage:
-			return 0.5
-		DifficultySettings.DamageFactor.DoubleDamage:
-			return 2.0
-		_:
-			return 1.0
+	return d.get_factor(d.player_damage)
 
 func go_to_sleep():
 	var fade_anim:AnimationPlayer = $fade/AnimationPlayer
