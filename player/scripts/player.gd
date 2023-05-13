@@ -1541,6 +1541,7 @@ func damage_directed(area: Area, damage: int, damage_dir: Vector3, tag: String):
 		damage(g, damage, damage_dir, tag)
 
 func damage(node: Node, damage: int, dir: Vector3, tag: String):
+	damage *= damage_dealt_factor()
 	if node in damaged_objects:
 		return
 	damaged_objects.append(node)
@@ -1567,6 +1568,7 @@ func compute_fall_damage(distance):
 
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
+	damage *= damage_taken_factor()
 	if !takes_damage(source) or damage == 0:
 		return false
 	
@@ -1594,6 +1596,26 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 	if can_flinch():
 		set_state(State.Damaged)
 	return false
+
+func damage_taken_factor() -> float:
+	var d:DifficultySettings = Settings.sub_options["Difficulty"]
+	match d.enemy_damage:
+		DifficultySettings.DamageFactor.HalfDamage:
+			return 0.5
+		DifficultySettings.DamageFactor.DoubleDamage:
+			return 2.0
+		_:
+			return 1.0
+
+func damage_dealt_factor() -> float:
+	var d:DifficultySettings = Settings.sub_options["Difficulty"]
+	match d.player_damage:
+		DifficultySettings.DamageFactor.HalfDamage:
+			return 0.5
+		DifficultySettings.DamageFactor.DoubleDamage:
+			return 2.0
+		_:
+			return 1.0
 
 func go_to_sleep():
 	var fade_anim:AnimationPlayer = $fade/AnimationPlayer

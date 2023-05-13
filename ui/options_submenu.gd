@@ -33,8 +33,8 @@ func generate():
 	call_deferred("redraw")
 
 func redraw():
-	if options.has_method("get_CLASS_WIDGETS"):
-		custom_widgets = options.get_CLASS_WIDGETS()
+	if options.has_method("get_custom_widgets"):
+		custom_widgets = options.get_custom_widgets()
 	else:
 		custom_widgets = {}
 	for child in get_children():

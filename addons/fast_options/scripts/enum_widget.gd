@@ -5,11 +5,9 @@ signal changed(opt_name, value)
 var option_name:String
 
 var vals: Dictionary
-var id_to_enum: Dictionary
 
 func _init():
 	vals = {}
-	id_to_enum = {}
 
 func _ready():
 	for c in get_children():
@@ -25,13 +23,10 @@ func set_option_hint(option:Dictionary):
 		$value.add_item(h[0].capitalize(), int(h[0]))
 
 func set_option_value(val:int):
-	var text = vals.find_key(val)
-	var idx = $value.items.find(text)
-	if idx != -1:
-		$value.select(idx)
+	$value.select(val)
 
 func grab_focus():
 	$value.grab_focus()
 
 func _on_value_item_selected(ID):
-	emit_signal("changed", option_name, vals[$value.get_item_text(ID)])
+	emit_signal("changed", option_name, ID)
