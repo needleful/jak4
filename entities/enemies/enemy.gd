@@ -258,6 +258,8 @@ func take_damage(damage: int, dir: Vector3, source: Node, _tag := ""):
 			set_state(AI.Damaged)
 
 func gravity_stun(dam):
+	var d = Settings.sub_options["Difficulty"]
+	dam *= d.get_factor(d.player_damage)
 	set_physics_process(true)
 	health -= dam
 	var dead := health <= 0

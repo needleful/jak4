@@ -491,6 +491,9 @@ func take_damage(damage:int, dir:Vector3, source:Node, _tag := ""):
 		die()
 
 func gravity_stun(damage):
+	var d = Settings.sub_options["Difficulty"]
+	damage *= d.get_factor(d.player_damage)
+	
 	take_damage(damage, Vector3.UP, Global.get_player())
 	if ai_state != AIState.Dead:
 		move_anim.travel("GravityStunned")
