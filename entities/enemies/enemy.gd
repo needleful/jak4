@@ -339,10 +339,40 @@ func fire_orb(position: Vector3, orb_speed: float, seeking: float):
 	get_tree().current_scene.add_child(orb)
 	orb.source = self
 	orb.damage = attack_damage
-	orb.speed = orb_speed
+	orb.speed = orb_speed*projectile_aggro_factor()
 	orb.turn_speed = seeking
 	orb.global_transform.origin = position
 	orb.fire(target, Vector3.UP*0.5)
+
+func time_to_alert_factor()->float:
+	var d: DifficultySettings = Settings.sub_options["Difficulty"]
+	match d.aggression:
+		DifficultySettings.Aggression.LowAggression:
+			return 2.0
+		DifficultySettings.Aggression.HighAggression:
+			return 0.75
+		_:
+			return 1.0
+
+func time_to_quit_factor() -> float:
+	var d: DifficultySettings = Settings.sub_options["Difficulty"]
+	match d.aggression:
+		DifficultySettings.Aggression.LowAggression:
+			return 0.33
+		DifficultySettings.Aggression.HighAggression:
+			return 2.0
+		_:
+			return 1.0
+
+func projectile_aggro_factor() -> float:
+	var d: DifficultySettings = Settings.sub_options["Difficulty"]
+	match d.aggression:
+		DifficultySettings.Aggression.LowAggression:
+			return 0.7
+		DifficultySettings.Aggression.HighAggression:
+			return 1.5
+		_:
+			return 1.0
 
 func _on_player_died():
 	if !is_inside_tree() or (ai == AI.Dead and !respawns):

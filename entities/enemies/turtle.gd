@@ -34,7 +34,7 @@ func _physics_process(delta):
 					fire_orb(gun.global_transform.origin, orb_speed, orb_seeking)
 					cooldown[i] = gun_cooldown
 		AI.Damaged:
-			if state_timer > time_damaged:
+			if state_timer > time_damaged*time_to_alert_factor():
 				set_state(AI.Chasing)
 		AI.GravityStun:
 			stunned_move(delta)

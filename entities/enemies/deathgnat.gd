@@ -51,8 +51,7 @@ func _physics_process(delta):
 				next_state = AI.Idle
 			elif awareness.get_overlapping_bodies().size() == 0:
 				quit_timer += delta
-				if quit_timer > time_to_quit:
-					print("I Quit!")
+				if quit_timer > time_to_quit*time_to_quit_factor():
 					next_state = AI.Idle
 			else:
 				quit_timer = 0
@@ -61,7 +60,7 @@ func _physics_process(delta):
 		AI.Attacking:
 			pass
 		AI.Damaged:
-			if state_timer > TIME_FLINCH:
+			if state_timer > TIME_FLINCH*time_to_alert_factor():
 				next_state = AI.Chasing
 		AI.GravityStun:
 			if state_timer > Global.gravity_stun_time:
@@ -118,11 +117,9 @@ func fly():
 	desired_velocity += speed*dir
 	
 	var force := acceleration*(desired_velocity - linear_velocity)
-	
 	add_central_force(force*mass)
 
 func play_damage_sfx():
-	# TODO
 	pass
 
 func take_damage(damage, dir, source, tag := ""):

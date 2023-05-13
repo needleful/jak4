@@ -75,7 +75,7 @@ func _physics_process(delta):
 			aim(delta, f*aim_speed)
 			walk(0, 100)
 		AI.Windup:
-			if state_timer > TIME_WINDUP:
+			if state_timer > TIME_WINDUP*time_to_alert_factor():
 				set_state(AI.Attacking)
 			var f := DEFAULT_DISTANCE/(1 + dist.length())
 			aim(delta, f*aim_speed_windup)
@@ -85,7 +85,7 @@ func _physics_process(delta):
 				set_state(AI.Chasing)
 			walk(0, 100)
 		AI.Damaged:
-			if state_timer > TIME_DAMAGED:
+			if state_timer > TIME_DAMAGED*time_to_alert_factor():
 				set_state(AI.Chasing)
 			walk(0, 100)
 		AI.Flee:
@@ -139,6 +139,7 @@ func reset_aim():
 	anim_tree["parameters/StateMachine/Aim/blend_position"] = Vector2.ZERO
 
 func aim(delta: float, speed: float):
+	speed *= projectile_aggro_factor()
 	if target:
 		var target_pos: Vector3
 		if target.has_method("get_target_ref"):

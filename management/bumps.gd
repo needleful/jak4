@@ -118,7 +118,7 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 	e.get_parent().remove_child(e)
 	ObjectPool.put(ename, e)
 
-func play_sound_once(type, s: AudioStreamPlayer3D, position: Vector3):
+func play_sound_once(type: String, s: AudioStreamPlayer3D, position: Vector3):
 	get_tree().current_scene.add_child(s)
 	s.global_transform.origin = position
 	s.stop()

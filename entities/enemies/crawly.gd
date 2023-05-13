@@ -61,14 +61,17 @@ func _physics_process(delta):
 		AI.Idle:
 			set_physics_process(false)
 		AI.Alerted:
-			if state_timer > alert_time:
-				next = AI.Chasing
+			if state_timer > alert_time*time_to_alert_factor():
+				if awareness.overlaps_body(target):
+					next = AI.Chasing
+				else:
+					next = AI.Idle
 		AI.Chasing:
 			if no_target():
 				next = AI.Idle
 			elif !awareness.overlaps_body(target):
 				give_up_timer += delta
-				if give_up_timer > extra_chase_time:
+				if give_up_timer > extra_chase_time*time_to_quit_factor():
 					next = AI.Idle
 			elif contact_count and cooldown_timer <= 0 and $attack_range.overlaps_body(target):
 				next = AI.Windup
@@ -81,7 +84,7 @@ func _physics_process(delta):
 			if state_timer > attack_end_time:
 				next = AI.Chasing
 		AI.Damaged:
-			if state_timer > damaged_time:
+			if state_timer > damaged_time*time_to_alert_factor():
 				next = AI.Chasing
 		AI.GravityStun:
 			if state_timer > Global.gravity_stun_time:
