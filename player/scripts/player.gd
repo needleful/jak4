@@ -1541,7 +1541,8 @@ func damage_directed(area: Area, damage: int, damage_dir: Vector3, tag: String):
 		damage(g, damage, damage_dir, tag)
 
 func damage(node: Node, damage: int, dir: Vector3, tag: String):
-	damage *= damage_dealt_factor()
+	# warning-ignore:narrowing_conversion
+	damage = round(float(damage)*damage_dealt_factor())
 	if node in damaged_objects:
 		return
 	damaged_objects.append(node)
@@ -1568,7 +1569,8 @@ func compute_fall_damage(distance):
 
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
-	damage *= damage_taken_factor()
+	# warning-ignore:narrowing_conversion
+	damage = round(float(damage)*damage_taken_factor())
 	if !takes_damage(source) or damage == 0:
 		return false
 	
