@@ -1,6 +1,10 @@
 extends RigidBody
 
 export(float, 0, 10) var delay := 1.0
+export(float, 0, 10) var reset_time := 3.0
+
+export(ShaderMaterial) var discard_material
+export(ShaderMaterial) var hologram_material
 
 const time_to_unlock := 1.0
 
@@ -15,25 +19,33 @@ func _ready():
 func _on_body_entered(body):
 	if body is PlayerBody and body.velocity.y > 1.0 && body.global_transform.origin.y < global_transform.origin.y:
 		return
-	can_sleep = false
-	if !falling:
-		falling = true
-		$Timer.start(delay)
+	fall()
 
-func _on_timeout():
+func fall():
+	can_sleep = false
+	if falling:
+		return
+	falling = true
+	yield(get_tree().create_timer(delay), "timeout")
+	if !falling:
+		return
 	sleeping = false
 	mode = RigidBody.MODE_RIGID
+	if !reset_time:
+		return
+	yield(get_tree().create_timer(reset_time), "timeout")
+	if !falling:
+		return
+	visual_reset()
 
 func _on_player_died():
 	reset()
 
 func reset():
 	can_sleep = true
-	$Timer.stop()
 	mode = RigidBody.MODE_KINEMATIC
 	global_transform = starting_position
 	falling = false
 
-#TODO: for resetting by button. Make a nice visual effect to teleport them
 func visual_reset():
-	reset()
+	$AnimationPlayer.play("vis_reset")
