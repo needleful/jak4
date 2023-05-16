@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=2]
+[gd_scene load_steps=106 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://ui/story_time.gd" type="Script" id=34]
 [ext_resource path="res://material/env/water_ripple.png" type="Texture" id=35]
 [ext_resource path="res://material/env/water_ripple_moving.png" type="Texture" id=36]
+[ext_resource path="res://ui/dialog/item_context.gd" type="Script" id=37]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -1128,6 +1129,7 @@ drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1936,7 +1938,6 @@ format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="Control" parent="ui"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 33 )
@@ -1970,7 +1971,7 @@ small = true
 [node name="Label" type="Label" parent="ui/dialog/VBoxContainer"]
 margin_left = 98.0
 margin_top = 21.0
-margin_right = 203.0
+margin_right = 177.0
 margin_bottom = 43.0
 text = "Continue"
 
@@ -1986,7 +1987,7 @@ small = true
 [node name="Label2" type="Label" parent="ui/dialog/VBoxContainer"]
 margin_left = 98.0
 margin_top = 95.0
-margin_right = 203.0
+margin_right = 177.0
 margin_bottom = 117.0
 text = "Exit"
 
@@ -1996,15 +1997,15 @@ anchor_bottom = 0.0
 margin_top = 148.0
 margin_right = 83.0
 margin_bottom = 212.0
-action = "dialog_coat"
+action = "dialog_item"
 small = true
 
 [node name="label_trade" type="Label" parent="ui/dialog/VBoxContainer"]
 margin_left = 98.0
 margin_top = 169.0
-margin_right = 203.0
+margin_right = 177.0
 margin_bottom = 191.0
-text = "Trade Coats"
+text = "Use Item"
 
 [node name="black" type="ColorRect" parent="ui/dialog"]
 time_scale_response = false
@@ -2022,6 +2023,56 @@ margin_top = -37.0
 margin_right = 640.0
 margin_bottom = 0.0
 format = "New Journal Entry: %s/%s"
+
+[node name="item_context" type="Panel" parent="ui/dialog"]
+visible = false
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 49.0
+margin_top = -242.0
+margin_right = 423.0
+margin_bottom = 237.0
+script = ExtResource( 37 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/dialog/item_context"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="Label" type="Label" parent="ui/dialog/item_context/VBoxContainer"]
+margin_right = 354.0
+margin_bottom = 22.0
+text = "Contextual Dialog"
+
+[node name="HSeparator" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 26.0
+margin_right = 354.0
+margin_bottom = 30.0
+
+[node name="coat" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 34.0
+margin_right = 354.0
+margin_bottom = 62.0
+text = "Trade Coats"
+
+[node name="bar_buttons" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 66.0
+margin_right = 354.0
+margin_bottom = 70.0
+
+[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 74.0
+margin_right = 354.0
+margin_bottom = 78.0
+
+[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 82.0
+margin_right = 354.0
+margin_bottom = 110.0
+text = "Cancel"
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false
@@ -2172,5 +2223,10 @@ material/0 = SubResource( 98 )
 [connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/viewer" to="." method="_on_dialog_exited_anim"]
+[connection signal="pick_item" from="ui/dialog/viewer" to="ui/dialog/item_context" method="show"]
+[connection signal="cancelled" from="ui/dialog/item_context" to="ui/dialog/viewer" method="_on_item_context_cancelled"]
+[connection signal="item_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_item"]
+[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/coat" to="ui/dialog/item_context" method="_on_coat_pressed"]
+[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/item_context" method="_on_cancel_pressed"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]

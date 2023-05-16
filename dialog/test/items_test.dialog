@@ -1,0 +1,25 @@
+{talked == 0}
+	We're meeting for the first time. Hello!
+{otherwise}
+	Hello again!
+
+I love cubes!
+> That's wonderful.
+> Do you like any other shapes?
+	{mention("shapes")} I do!
+
+{exit()}
+
+:item(cube)
+[You] I found this cube. What does it mean?
+It means you win!!!
+{exit()}
+
+:item(shape) :- mentioned("shapes")
+Ah, I see you found some sort of shape.
+My favorite!! You win!
+{back()}
+
+:item(_)
+Uh, okay.
+{back()}

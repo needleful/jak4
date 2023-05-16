@@ -12,7 +12,6 @@ onready var sub_items := $box/viewport_window/Panel/MarginContainer/item/sub_ite
 
 export(Resource) var player_description
 
-var preview_path := "res://ui/items/%s.tres"
 var show_background := true
 
 const DEFAULT_ICONS := {
@@ -66,19 +65,9 @@ func set_active(active):
 		var p = Global.get_player()
 		if p:
 			mouse_sns = 60*p.sensitivity*p.cam_rig.mouse_sns
-			
 		viewport.size = view_window.rect_size
 		clear(items_list)
-		var items := {}
-		for c in Global.game_state.inventory.keys():
-			var path: String = preview_path % c
-			if Global.count(c) > 0 and ResourceLoader.exists(path):
-				var r := ResourceLoader.load(path) as ItemDescription
-				if !r:
-					print_debug("Invalid item: ", path)
-				else:
-					items[c] = r
-		view_items(items)
+		view_items(Global.get_fancy_inventory())
 	set_process(active)
 	set_process_input(active)
 
@@ -108,7 +97,10 @@ func view_items(items: Dictionary):
 func _on_item_focused(item: ItemDescription):
 	clear(sub_items)
 	clear(object_ref)
-	object_ref.add_child(item.preview_3d.instance())
+	if item.preview_3d:
+		object_ref.add_child(item.preview_3d.instance())
+	else:
+		pass # todo: placeholder
 	item_name.text = item.full_name
 	item_desc.text = item.description
 	for i2 in item.extra_items.keys():

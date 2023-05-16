@@ -45,6 +45,8 @@ var gravity_stunned_bodies: Dictionary
 var render_distance := 1.0
 var show_lowres := true
 
+const description_path := "res://ui/items/%s.tres"
+
 func _init():
 	game_state = GameState.new()
 	stories = {}
@@ -352,6 +354,18 @@ func remove_item(item: String, amount := 1) -> bool:
 		return true
 	else:
 		return false
+
+func get_fancy_inventory() -> Dictionary:
+	var items := {}
+	for c in game_state.inventory:
+		var path: String = description_path % c
+		if count(c) > 0 and ResourceLoader.exists(path):
+			var r := ResourceLoader.load(path) as ItemDescription
+			if !r:
+				print_debug("Invalid item: ", path)
+			else:
+				items[c] = r
+	return items
 
 func node_stat(node: Node) -> String:
 	 return node.name + "." + str(hash(node.get_path()))

@@ -11,6 +11,7 @@ var r_expression := RegEx.new()
 var r_narrate := RegEx.new()
 var r_reply := RegEx.new()
 var r_speaker := RegEx.new()
+var r_whitespace := RegEx.new()
 
 var f_query := "Global.stat('%s')"
 var f_add := "Global.add_stat('%s')"
@@ -19,11 +20,12 @@ var f_not := "!Global.stat('%s')"
 func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
-	r_label.compile("^\\s*:(\\w+)")
+	r_label.compile("^\\s*:(.+)")
 	r_expression.compile("[#+!?]?\\{([^\\}]+)\\}")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
 	r_speaker.compile("^\\s*\\[([^\\]]+)]\\s*")
+	r_whitespace.compile("\\s+")
 
 func get_importer_name():
 	return "np.dialog"

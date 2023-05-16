@@ -4,6 +4,7 @@ signal exited(state)
 signal exited_anim(animation)
 signal event(id)
 signal event_with_source(id, source)
+signal pick_item
 
 var shopping := false setget set_shopping
 
@@ -40,6 +41,7 @@ var is_exiting := false
 # Stack of IDs for DialogItems
 var call_stack: Array
 var advance_on_resume := false
+var label_conditions : Dictionary
 
 const SECONDS_PER_YEAR := 356*24*3600
 const SECONDS_PER_MONTH := 30*24*3600
@@ -47,10 +49,13 @@ const SECONDS_PER_DAY := 24*3600
 const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
+const item_fallthrough := "item(_)"
+
 func _init():
 	fonts = {}
 	call_stack = []
 	discussed = {}
+	label_conditions = {}
 
 func _input(event):
 	if !is_visible_in_tree():
@@ -61,8 +66,10 @@ func _input(event):
 			resume()
 	elif event.is_action_pressed("ui_cancel"):
 		fast_exit()
-	elif event.is_action_pressed("dialog_coat"):
-		trade_coats()
+	elif event.is_action_pressed("dialog_item"):
+		emit_signal("pick_item")
+		set_process_input(false)
+		set_process(false)
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
 
@@ -80,7 +87,25 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	set_shopping(false)
 	clear()
 	source_node = p_source_node
-	sequence = p_sequence
+	sequence = p_sequence.duplicate()
+	label_conditions = {}
+	var label_swaps = {}
+	for l in sequence.labels:
+		if l.find(":-") >= 0:
+			var s = l.split(":-")
+			var label = s[0].strip_edges()
+			label_swaps[l] = label
+			var e = Expression.new()
+			var res = e.parse(s[1], ["Global"])
+			if res != OK:
+				print_debug("Bad expression in %s:%s\n\t %s",
+					p_sequence.resource_path,
+					label,
+					s[1])
+			label_conditions[label] = e
+	for l in label_swaps:
+		sequence.labels[label_swaps[l]] = sequence.labels[l]
+		sequence.labels.erase(l)
 	if speaker:
 		main_speaker = speaker
 	else:
@@ -407,6 +432,41 @@ func set_shopping(s):
 	$shop.visible = shopping
 	if shopping:
 		$input_timer.start()
+
+func _on_item_context_cancelled():
+	set_process_input(true)
+	set_process(true)
+
+func use_item(id:String, desc: ItemDescription = null):
+	set_process_input(true)
+	set_process(true)
+	if id == "coat":
+		trade_coats()
+		return true
+	if _use_item(id):
+		return true
+	if desc:
+		for tag in desc.tags:
+			if _use_item(tag):
+				return true
+	return _use_item("_")
+
+func _use_item(item) -> bool:
+	var find_this:String = "item(%s)" % item
+	if !(find_this in sequence.labels):
+		return false
+	if find_this in label_conditions:
+		var ex:Expression = label_conditions[find_this]
+		var res = ex.execute([Global], self)
+		if ex.has_execute_failed():
+			print_debug("Execution failed for ", find_this,
+				"\n\t", ex.get_error_text())
+		if !res:
+			print(find_this, " is not true")
+			return false
+	subtopic(find_this)
+	advance()
+	return true
 
 ## Dialog functions
 

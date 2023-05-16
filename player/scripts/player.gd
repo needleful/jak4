@@ -416,7 +416,7 @@ func _ready():
 	ui.activate()
 
 func _input(event):
-	if can_talk() and event.is_action_pressed("dialog_coat") and !empty(coat_zone):
+	if can_talk() and event.is_action_pressed("dialog_item") and !empty(coat_zone):
 		var c = coat_zone.get_overlapping_bodies()
 		var best_trade = c[0]
 		for b in c :
