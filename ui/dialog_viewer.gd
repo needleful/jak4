@@ -442,14 +442,15 @@ func use_item(id:String, desc: ItemDescription = null):
 	set_process(true)
 	if id == "coat":
 		trade_coats()
-		return true
+		return
 	if _use_item(id):
-		return true
+		return
 	if desc:
 		for tag in desc.tags:
 			if _use_item(tag):
-				return true
-	return _use_item("_")
+				return
+	if !_use_item("_"):
+		insert_label("[Nothing happened]", "narration")
 
 func _use_item(item) -> bool:
 	var find_this:String = "item(%s)" % item
