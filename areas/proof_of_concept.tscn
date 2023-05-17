@@ -1,9 +1,12 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/test/items_test.dialog" type="Resource" id=2]
 [ext_resource path="res://entities/control/trigger_zone.gd" type="Script" id=3]
+[ext_resource path="res://entities/shop_stock/village_shop.inv" type="Resource" id=4]
+[ext_resource path="res://dialog/shops/village_shop.dialog" type="Resource" id=5]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=6]
+[ext_resource path="res://dialog/side_content/fridge_conspiracy/mishar.dialog" type="Resource" id=7]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=8]
 [ext_resource path="res://entities/shop_stock/shop_default_stock.inv" type="Resource" id=10]
 [ext_resource path="res://dialog/shops/plateau_shop.dialog" type="Resource" id=11]
@@ -146,3 +149,20 @@ preview = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1, 7 )
 dialog = ExtResource( 2 )
 visual_name = "cube-loving villager"
+
+[node name="carpet2" parent="." instance=ExtResource( 21 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1, 1 )
+
+[node name="npc_shop_village" parent="." instance=ExtResource( 8 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 19, 1, 0.716075 )
+dialog = ExtResource( 5 )
+visual_name = "Village Shopkeeper"
+friendly_id = "village_shop"
+sitting = true
+inventory_data = ExtResource( 4 )
+
+[node name="npc2" parent="." instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1, 5 )
+dialog = ExtResource( 7 )
+visual_name = "Mishar"
+friendly_id = "mishar"

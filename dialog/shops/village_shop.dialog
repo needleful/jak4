@@ -47,9 +47,13 @@
 
 {otherwise} Welcome back, Jackie!
 	* {talked > 10} The familiar smell of the incense comforts you.
-	* {otherwise if talked > 7} The burning incense is not unpleasant.
-	* {otherwise if talked > 4} The incense is strong.
+	* {otherwise}{talked > 7} The burning incense is not unpleasant.
+	* {otherwise}{talked > 4} The incense is strong.
 	* {otherwise} The bitter incense burns at your sinuses.
+
+	{talked > 1}!{!Global.task_exists("fridge_conspiracy")}
+		{mention("bother")}
+		* The shopkeeper seems bothered by something.
 	
 	{Global.stat("left_village")} I am glad you have returned safely.
 	Do let me know if you need anything.
@@ -60,6 +64,44 @@
 	{shop()}
 	{exiting()} [You] Thank you!
 	I hope you found what you were looking for...
+> {Global.task_is_active("fridge_conspiracy")} About that missing refrigerator...
+	Any news?
+	[You] No.
+	Well, that's what you get for asking this before the quest is written!
+> {mentioned("bother")} Is there something the matter?
+	Oh, it's nothing to worry about. Though...
+	Would you be interested in, ah, some volunteer work for the city?
+	> Not really, sorry.
+		Well, such is the nature of it. Did you want anything else?
+		{unmention("bother")}
+		{goto("shop_replies")}
+	> What sort of work?
+		Ah, good. This is between us, yes?
+		I have that drink fridge over there. It is how I make most of my money. So I ordered a second one a few weeks ago...
+		As you can see, it never arrived.
+		Well, that is not entirely correct. The crate arrived, filled with rocks.
+		// TODO: refactor player dialog into optional questions
+		[You] Somebody stole your drink cooler? Why?
+		He wanted cold drinks, probably.
+		[You] "He"? You already know who did it?
+		I am quite sure it was Mishar, the boy I paid to pick it up from the train station in Maslikir.
+		[You] Why not go to the police, then?
+		Out here we just have the three town guards. They are mostly here to shoot the specters that wander too close, and we need a more tact-filled method.
+		I like Mishar, so I would rather just get the drink cabinet back.
+		If you could find out where he placed it, I'll have it brought back and say somebody stumbled into it in a stroke of luck. Then we can put the whole business behind us.
+		[You] You want to avoid a confrontation?
+		We already had the confrontation. He is very insistent it was either replaced by someone at Maslikir, or after he dropped it off outside my home the morning it was supposed to arrive.
+		But he was the only one who was alone with the machine, and he took almost twelve hours getting back here from Maslikir. It's not nearly that long of a trip.
+		// I don't see this as a good plan. This is placeholder
+		[You] What exactly do you want me to do? I can't imagine he'd just tell me where it is.
+		Pretend you're looking for a tour guide or some such thing. A wealthy Vaeler such as yourself? How could he resist such an easy job?
+		// The shopkeeper specifically says "lend" money here. He'll follow up on that at the end of the quest.
+		I can lend you some money to pay him for a day, and then you would just walk and talk.
+		At some point, perhaps wonder aloud if there's anything to drink, and I suspect he wouldn't worry if he went to his own cache of drinks, for a small fee probably.
+		[You] This is an awfully brittle plan. I can imagine a thousand other ways the events would turn out.
+		Well, if you have a better plan, you can tell me.
+		{Global.task_note_place("fridge_conspiracy", "hideaway", "The local shopkeeper thinks Mishar, a local boy, stole his new refrigerator.")}
+		{Global.task_note_person("fridge_conspiracy", "Mishar", "The alleged fridge-thief, tasked with taking the fridge from Maslikir back to Hideaway, took nearly twelve hours to return, significantly longer than expected.")}
 > What do you sell?
 	:sell_loop
 	Mainly elixirs, deathgnats, flags, and other useful items.
@@ -78,13 +120,13 @@
 		{Global.stat('bug') == 0}
 			[You] What do they look like, exactly?
 			I have one in a jar on the table, if you would like to examine it.
-		{otherwise if Global.stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
+		{otherwise}{Global.stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
 			[You] It keeps vibrating. Do people really carry these around?
 			Hahaha!
 			You do not need to keep it alive. It would be quite unbearable carrying dozens of live deathgnats.
 			{animation("show_deathgnat")} The one I keep is quite a handful.
 			{animation("reset")}
-		{otherwise} You have #{Global.count('bug')} gnats on your person, and have found a total of #{Global.stat('bug')}.
+		{otherwise} You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
 			Commendable work!
 		> Where do I find deathgnats?
 			Ha! Where can you not find them? They are pervasive!

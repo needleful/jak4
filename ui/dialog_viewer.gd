@@ -436,6 +436,9 @@ func set_shopping(s):
 func _on_item_context_cancelled():
 	set_process_input(true)
 	set_process(true)
+	if current_item and current_item.type == DialogItem.Type.REPLY:
+		if replies.get_child_count():
+			replies.get_child(0).grab_focus()
 
 func use_item(id:String, desc: ItemDescription = null):
 	set_process_input(true)
@@ -528,6 +531,9 @@ func exit_anim(animation:String):
 	set_process_input(false)
 	return RESULT_END
 
+func unmention(topic):
+	return discussed.erase(topic)
+
 func mention(topic):
 	discussed[topic] = true
 	return true
@@ -571,6 +577,9 @@ func speaker_stat() -> String:
 		return main_speaker.friendly_id
 	else:
 		return Global.node_stat(main_speaker)
+
+func say_number(v: float) -> String:
+	return NumberToString.verbose(v)
 
 func can_discuss(stat: String) -> bool:
 	return Global.stat(stat) and !Global.stat("discussed/" + speaker_stat() + "/" + stat)
