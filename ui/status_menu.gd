@@ -44,7 +44,7 @@ func _notification(what):
 			"day" if days == 1 else "days" ] 
 		if get_tree().current_scene.has_method("get_time"):
 			var time = get_tree().current_scene.get_time()
-			$date_time/margin/stats/time.text = "%s" % NumberToString.say_time(time, true, true)
+			$date_time/margin/stats/time.text = "%s" % NumberToString.say_time(time, false, true)
 
 func _on_wardrobe_exited():
 	ui.unpause()
