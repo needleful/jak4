@@ -578,6 +578,26 @@ func speaker_stat() -> String:
 	else:
 		return Global.node_stat(main_speaker)
 
+func general_time() -> String:
+	var s = get_tree().current_scene
+	if s.has_method("get_time"):
+		var t:float = s.get_time()
+		if t > 19 or t < 2.5:
+			return "evening"
+		elif t > 12:
+			return "afternoon"
+		elif t > 9.75:
+			return "day"
+		else:
+			return "morning"
+	return "day"
+
+func exact_time() -> String:
+	var s = get_tree().current_scene
+	if s.has_method("get_time"):
+		return NumberToString.say_time(s.get_time())
+	return "noon"
+
 func say_number(v: float) -> String:
 	return NumberToString.verbose(v)
 

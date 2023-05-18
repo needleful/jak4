@@ -123,3 +123,28 @@ static func verbose(v: float) -> String:
 	if v < 0:
 		res = "negative " + res
 	return res
+
+static func say_time(time:float, verbose:=true, say_pm:=false):
+	var pm = false
+	var hours := int(floor(time))
+	var minutes := int(60.0*(time - hours))
+	if hours > 12:
+		hours -= 12
+		pm = true
+	if hours == 0:
+		hours = 12
+		pm = !pm
+	var numeral := ""
+	if verbose:
+		numeral = verbose(hours) 
+		if minutes != 0:
+			if minutes < 10:
+				# Would she say o' or aught?
+				numeral += " o'"
+			numeral += " " + verbose(minutes)
+	else:
+		numeral = "%2d:%02d" % [hours, minutes]
+	var daytime := ""
+	if say_pm:
+		daytime = "p.m." if pm else "a.m."
+	return numeral + " " + daytime

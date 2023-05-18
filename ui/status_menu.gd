@@ -39,21 +39,12 @@ func safe_set_tab(tab):
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
 		var days = Global.stat("current_day") + 1
-		$date_time/margin/stats/date.text = "%d %s of travel" % [
-			days,
+		$date_time/margin/stats/date.text = "%s %s of travel" % [
+			NumberToString.verbose(days).capitalize(),
 			"day" if days == 1 else "days" ] 
 		if get_tree().current_scene.has_method("get_time"):
 			var time = get_tree().current_scene.get_time()
-			var pm = false
-			var hours := int(floor(time))
-			var minutes := int(60.0*(time - hours))
-			if hours > 12:
-				hours -= 12
-				pm = true
-			if hours == 0:
-				hours = 12
-				pm = !pm
-			$date_time/margin/stats/time.text = "%d:%02d %s" % [hours, minutes, "p.m." if pm else "a.m."]
+			$date_time/margin/stats/time.text = "%s" % NumberToString.say_time(time, true, true)
 
 func _on_wardrobe_exited():
 	ui.unpause()
