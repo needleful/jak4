@@ -222,6 +222,7 @@ func load_nearby_chunks(position: Vector3):
 			chunk_loader.unload(ch)
 			emit_signal("deactivated", ch)
 
+
 func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
@@ -237,6 +238,14 @@ func update_active_chunks(position: Vector3):
 			active_box.text += "\n"+ch.name
 		elif !deactivate_zone.has_point(local):
 			chunk_loader.deactivate(ch)
+
+func force_activate(ch: Spatial):
+	if !chunk_loader.is_loaded(ch):
+		chunk_loader.load_active(ch)
+	chunk_loader.activate(ch)
+
+func is_active(chunk: Spatial):
+	return chunk_loader.is_active(chunk)
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")

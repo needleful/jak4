@@ -172,3 +172,7 @@ func deactivate(chunk: Spatial):
 
 func is_loaded(chunk: Spatial):
 	return chunk and _status[chunk.name] == Status.Loaded
+
+func is_active(chunk: Spatial):
+	return (chunk 
+		and chunk.has_node("dynamic_content/active_entities"))

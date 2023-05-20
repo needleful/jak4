@@ -355,6 +355,12 @@ func remove_item(item: String, amount := 1) -> bool:
 	else:
 		return false
 
+func set_item_count(item: String, amount: int) -> bool:
+	game_state.inventory[item] = amount
+	emit_signal("inventory_changed")
+	emit_signal("item_changed", item, amount, game_state.inventory[item])
+	return true
+
 func get_fancy_inventory() -> Dictionary:
 	var items := {}
 	for c in game_state.inventory:

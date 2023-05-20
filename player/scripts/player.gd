@@ -289,7 +289,8 @@ enum State {
 	Wading,
 	WadingJump,
 	WadingFall,
-	NoClip
+	NoClip,
+	Vehicle
 }
 
 const ground_states = [
@@ -1655,7 +1656,7 @@ func crushing_death():
 	die()
 
 func respawn():
-	if game_ui.in_game:
+	if game_ui.in_game and !CustomGames.respawn():
 		game_ui.cancel_game()
 	cam_rig.reset()
 	set_state(State.Ground)
@@ -1668,9 +1669,17 @@ func respawn():
 	ui.hide_prompt()
 	emit_signal("died")
 
+func disable_collision():
+	collision_layer = 0
+	collision_mask = 0
+
+func enable_collision():
+	collision_layer = normal_layer
+	collision_mask = normal_mask
+
 func teleport_to(t: Transform):
 	$fade/AnimationPlayer.play("fadein")
-	global_transform.origin = t.origin
+	set_saved_transform(t)
 
 func heal():
 	mesh.start_heal_particle()

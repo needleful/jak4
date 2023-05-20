@@ -141,7 +141,7 @@ func get_next_point():
 			var world = get_tree().current_scene
 			target = world.get_node(chunk_name)
 			
-			if world.is_active(chunk_name):
+			if world.is_active(target):
 				_on_chunk_activated(target)
 			else:
 				if !world.is_connected("activated", self, "_on_chunk_activated"):

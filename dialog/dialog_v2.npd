@@ -1,0 +1,27 @@
+// NPDialog 2
+l = Laili
+default = l
+u = You
+
+// First group is the default entry.
+label1:	
+	u - Good [time\general], Laili.
+	- Hi.
+	* You reach a mutual understanding
+
+	shopping
+
+shopping:
+	loop:
+		> Show me what's for sale!
+			// The identifier for characters is an object
+			// if the object doesn't have the field or function,
+			// it searches object stats, like Global.stat("Laili/sad")
+			if l.sad and not override:
+				- Sorry, not today.
+			else
+				- Okay, here's what I can do.
+				l.shop
+		> I'm pretty cool I think
+		> See you!
+			exit

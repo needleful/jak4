@@ -71,3 +71,6 @@ func get_stat(game, sub_stat := "") -> String:
 
 func completed(game):
 	return stat(game, "completed")
+
+func respawn():
+	return active_game and "respawn" in active_game and active_game.respawn

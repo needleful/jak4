@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/scrap_pile3.tscn" type="PackedScene" id=2]
@@ -10,8 +10,25 @@
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=10]
-[ext_resource path="res://items/item_pickup.gd" type="Script" id=11]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=11]
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=12]
+[ext_resource path="res://games/laili/point.gd" type="Script" id=13]
+[ext_resource path="res://games/laili/path.gd" type="Script" id=14]
+[ext_resource path="res://entities/control/spawner.gd" type="Script" id=15]
+[ext_resource path="res://entities/vehicles/laili_plane_v1.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/npc/npc_laili.tscn" type="PackedScene" id=17]
+
+[sub_resource type="SphereMesh" id=1]
+radial_segments = 12
+rings = 12
+
+[sub_resource type="SphereShape" id=2]
+
+[sub_resource type="SphereMesh" id=3]
+radius = 0.1
+height = 0.2
+radial_segments = 6
+rings = 6
 
 [node name="chunk138" type="Spatial"]
 script = ExtResource( 1 )
@@ -36,10 +53,6 @@ transform = Transform( 0.827414, 0.378227, 0.415127, -0.561592, 0.557255, 0.6116
 
 [node name="scrap_pile2" parent="." instance=ExtResource( 5 )]
 transform = Transform( -0.177145, 0.831762, -0.52611, 0.965192, 0.251332, 0.072359, 0.192414, -0.494979, -0.847333, -17.9988, -0.307041, -18.812 )
-
-[node name="chunk137" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500 )
-script = ExtResource( 1 )
 
 [node name="active_entities" type="MultiMeshSystem" parent="."]
 
@@ -139,10 +152,199 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2399, 0.637075, -6.26616 )
 [node name="gem_pickup27" parent="active_entities" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.62757, 0.148749, -41.8405 )
 
-[node name="hover_scooter_pickup" type="KinematicBody" parent="active_entities" groups=["distance_activated", "push"] instance=ExtResource( 12 )]
+[node name="hover_scooter_pickup" parent="active_entities" instance=ExtResource( 12 )]
 transform = Transform( -0.103476, -0.205784, 0.973112, -0.529376, 0.839675, 0.121275, -0.842053, -0.502593, -0.195824, -0.00773174, 0.731086, -34.8924 )
 collision_layer = 4
-script = ExtResource( 11 )
 item_id = "hover_scooter"
 preview = ExtResource( 10 )
 friendly_name = "scooter_097"
+
+[node name="laili_points" type="Spatial" parent="active_entities"]
+transform = Transform( 0.526632, 0, 0.850093, 0, 1, 0, -0.850093, 0, 0.526632, 58.1171, -20.5132, 314.525 )
+script = ExtResource( 14 )
+
+[node name="p7" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.832235, 0, -0.554424, 0, 1, 0, 0.554424, 0, 0.832235, 0.898285, -13.3821, -17.2588 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p7"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p7"]
+shape = SubResource( 2 )
+
+[node name="p1" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.832235, 0, -0.554424, 0, 1, 0, 0.554424, 0, 0.832235, 0.821518, -1.62757, -4.87906 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p1"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p1"]
+shape = SubResource( 2 )
+
+[node name="p2" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.871837, 0, 0.489796, 0, 1, 0, -0.489796, 0, 0.871837, -0.126343, -0.424767, 18.4084 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+checkpoint = true
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p2"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p2"]
+shape = SubResource( 2 )
+
+[node name="p9" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.871837, 0, 0.489796, 0, 1, 0, -0.489796, 0, 0.871837, 4.71255, -0.744202, 24.7355 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p9"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p9"]
+shape = SubResource( 2 )
+
+[node name="p8" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.871837, 0, 0.489796, 0, 1, 0, -0.489796, 0, 0.871837, 10.2647, -0.744202, 30.8539 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p8"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p8"]
+shape = SubResource( 2 )
+
+[node name="p10" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.726335, 0, 0.687342, 0, 1, 0, -0.687342, 0, 0.726335, 17.4403, -0.924345, 39.6587 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p10"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p10"]
+shape = SubResource( 2 )
+
+[node name="p3" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.709569, 0, 0.704637, 0, 1, 0, -0.704637, 0, 0.709569, 23.1359, -0.915123, 46.5361 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+checkpoint = true
+extra_stamina = 7
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p3"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p3"]
+shape = SubResource( 2 )
+
+[node name="p4" type="Area" parent="active_entities/laili_points"]
+transform = Transform( 0.709569, 0, 0.704637, 0, 1, 0, -0.704637, 0, 0.709569, 34.4733, 3.37469, 54.4616 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p4"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p4"]
+shape = SubResource( 2 )
+
+[node name="p5" type="Area" parent="active_entities/laili_points"]
+transform = Transform( -0.0232574, 0, 0.99973, 0, 1, 0, -0.99973, 0, -0.0232574, 58.2526, 3.37469, 57.6915 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p5"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p5"]
+shape = SubResource( 2 )
+
+[node name="p6" type="Area" parent="active_entities/laili_points"]
+transform = Transform( -0.0232574, 0, 0.99973, 0, 1, 0, -0.99973, 0, -0.0232574, 95.4897, 19.3073, 61.3911 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_points/p6"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/laili_points/p6"]
+shape = SubResource( 2 )
+
+[node name="laili_pre_flight" type="Spatial" parent="active_entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 85.9182, 28.4512, 264.403 )
+script = ExtResource( 15 )
+listened_stat = "laili/pre_flight"
+
+[node name="bolt_pickup" parent="active_entities/laili_pre_flight" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0676, -3.24687, 26.9974 )
+item_id = "long_bolt"
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/laili_pre_flight/bolt_pickup"]
+mesh = SubResource( 3 )
+
+[node name="npc_laili" parent="active_entities/laili_pre_flight" instance=ExtResource( 17 )]
+transform = Transform( -0.3628, 0, 0.931867, 0, 1, 0, -0.931867, 0, -0.3628, 5.59603, -3.41991, 33.3276 )
+custom_entry = "laili_flight"
+plane = NodePath("../laili_plane_v1")
+
+[node name="laili_plane_v1" parent="active_entities/laili_pre_flight" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.78815, -3.12355, 35.879 )
+
+[node name="rock1" parent="." instance=ExtResource( 11 )]
+transform = Transform( 0.971912, 2.98023e-08, 0.235344, -0.228636, 0.237067, 0.944206, -0.0557924, -0.971493, 0.230408, 49.1996, -26.2951, 303.589 )
