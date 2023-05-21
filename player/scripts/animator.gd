@@ -377,8 +377,9 @@ func get_normal_gun_orientation() -> Vector3:
 	var t : Transform = skeleton.global_transform*local_bone_transform
 	return t.basis.y
 
-func start_hover():
-	hover_board.show()
+func start_hover(with_scooter := true):
+	if with_scooter:
+		hover_board.show()
 	transition_to("Hover")
 
 func hover_lean(input: Vector2, delta: float):
