@@ -27,13 +27,36 @@ onready var laili := $npc_laili
 var original_parent: Node
 var original_transform: Transform
 
+onready var wing_right := {
+	"shape1": $wing_right,
+	"shape2": $wing_tip_right,
+	"mesh":$plane_body/wing_right
+}
+
+onready var wing_left := {
+	"shape1": $wing_left,
+	"shape2": $wing_tip_left,
+	"mesh":$plane_body/wing_left
+}
+
+var wing_parents : Dictionary
+# left, right
+var wing_broken := [false, false]
+var wing_mass := 40.0
+
 func _ready():
+	for v in wing_right.values():
+		wing_parents[v] = v.get_parent()
+	for v in wing_left.values():
+		wing_parents[v] = v.get_parent()
+
 	original_parent = get_parent()
 	original_transform = transform
 	remove_child(laili)
 	set_physics_process(false)
 
 func activate():
+	wing_broken = [false, false]
 	flight_time = 0
 	state = State.Start
 	var t := global_transform
@@ -48,10 +71,14 @@ func activate():
 	player.transform = Transform()
 	player.mesh.transform = Transform()
 	player.mesh.start_hover(false)
-	var _x = player.connect("died", self, "exit", [], CONNECT_ONESHOT)
+	var _x = player.connect("died", self, "_on_player_died", [], CONNECT_ONESHOT)
 	
 	set_physics_process(true)
 	velocity = global_transform.basis.z*start_speed
+
+func _on_player_died():
+	exit()
+	reset()
 
 func exit(with_dialog := false):
 	if !player:
@@ -79,6 +106,8 @@ func _physics_process(delta: float):
 
 func process_flight(delta:float):
 	flight_time += delta
+	if flight_time > 4.0 and !Global.stat("laili/disaster_averted"):
+		break_wing(true)
 	if state == State.Start:
 		if flight_time > 3 and landing_gear.get_overlapping_bodies().empty():
 			state = State.Fly
@@ -106,7 +135,7 @@ func process_flight(delta:float):
 		flight_time = 0
 		state = State.Crash
 		laili.crashed = true
-		exit()
+		exit(true)
 
 func process_crash(delta):
 	flight_time += delta
@@ -119,7 +148,7 @@ func process_crash(delta):
 		player = temp_p
 		spawn_laili()
 		player = null
-	var spin := min(velocity.length_squared()/30.0, 2.0)
+	var spin := 0.0 if wing_broken else min(velocity.length_squared()/30.0, 2.0)
 	fly(0,spin,delta)
 	if get_slide_count():
 		velocity = velocity.move_toward( Vector3.ZERO,
@@ -128,10 +157,16 @@ func process_crash(delta):
 			set_physics_process(false)
 
 func fly(pitch: float, roll: float, delta: float):
+	var wings_lift := 0.5*(float(!wing_broken[0]) + float(!wing_broken[1]))
+	if wing_broken[0]:
+		roll += min(velocity.length_squared()/30.0, 2.0)
+	if wing_broken[1]:
+		roll -= min(velocity.length_squared()/30.0, 2.0)
 	var pitch_speed := 1.5
 	var roll_speed := 1.5
 	
 	var total_pitch := delta*pitch*pitch_speed
+		
 	var total_roll := delta*roll*roll_speed
 	
 	global_rotate(global_transform.basis.x, total_pitch)
@@ -142,7 +177,7 @@ func fly(pitch: float, roll: float, delta: float):
 			global_transform.basis.z, total_roll)
 
 	var lift := clamp(
-		lift_factor * velocity.dot(global_transform.basis.z),
+		wings_lift*lift_factor * velocity.dot(global_transform.basis.z),
 		-15, 15
 	) * global_transform.basis.y
 
@@ -225,9 +260,40 @@ func _exit_tree():
 func reset():
 	if !is_instance_valid(original_parent):
 		queue_free()
-	laili.get_parent().remove_child(laili)
+	for i in 2:
+		if wing_broken[i]:
+			var wing = wing_right if i else wing_left
+			var body
+			for v in wing.values():
+				body = v.get_parent()
+				v.get_parent().remove_child(v)
+				wing_parents[v].add_child(v)
+				v.transform = Transform()
+			if body:
+				body.queue_free()
+	wing_broken = [false, false]
+	if laili.get_parent():
+		laili.get_parent().remove_child(laili)
 	get_parent().remove_child(self)
 	original_parent.add_child(self)
 	transform = original_transform
 	player = null
 	set_physics_process(false)
+
+func break_wing(right: bool):
+	wing_broken[1 if right else 0] = true
+	var wing = wing_right if right else wing_left
+	var spawner = $wing_spawn_right if right else $wing_spawn_left
+	
+	var body := RigidBody.new()
+	body.mass = wing_mass
+	get_tree().current_scene.add_child(body)
+	body.global_transform = spawner.global_transform
+	
+	for v in wing.values():
+		var g = v.global_transform
+		v.get_parent().remove_child(v)
+		body.add_child(v)
+		v.global_transform = g
+	body.linear_velocity = velocity
+	body.apply_torque_impulse(body.mass*Vector3(randf(), randf(), randf()))

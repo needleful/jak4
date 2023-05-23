@@ -12,7 +12,7 @@
 		[You] Duly noted...
 		* The man's eyes perk up at someone behind you.
 		[Tirus] Ey, kholt mi!
-		{Global.task_exists("strange_girl")}
+		{Global.task_exists("flight_test")}
 			* You recognize who he's looking at. It's that odd girl, Laili.
 		{otherwise} * He's talking to a young girl. She says nothing.
 		// Do you want a bit of food? I would have no trouble (lit: Trouble to me not).
@@ -118,7 +118,6 @@
 		"Jacky"? What country is that
 		[You] Uh, sorry, yes, I'm from Vaeland. My name is Jackie.
 		Ok, Vaeler named Jackie. I'm Laili.
-		{learn_name()}
 		[You] ...
 			Well, it was nice meeting you. Ta-ta!
 		* She grabs your arm.
@@ -244,6 +243,7 @@
 {exit()}
 
 :laili_flight
+{mention("pre-flight")}
 {Global.task_is_complete("flight_test")}
 	Did you want to do another test flight?
 	> Well, what could it hurt?
@@ -251,7 +251,6 @@
 		{main_speaker.fly()}
 	> Not at the moment, thank you.
 {otherwise}
-	{mention("pre-flight")}
 	[Laili] Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
 	[You] Is there a parachute?
 	[Laili] I have a blanket you can use.
@@ -268,10 +267,16 @@
 :item(long_bolt) :- mentioned("pre-flight")
 [You] I found this bolt. Is it from the plane?
 {Global.remove_item("long_bolt")}
-[Laili] Oh, yeah. Good find. That would have been bad.
-[You] What would have happened?
-[Laili] If you want to do another flight test, we can find out.
-[You] I suppose it's a mystery for the ages.
+?{laili/flight}
+	[Laili] Oh, that must be why the wing fell off.
+	[You] Wait, you didn't check?
+	[Laili] I figured it would eventually itself work.
+	[You] Ugh.
+{otherwise}
+	[Laili] Oh, yeah. Good find. That would have been bad.
+	[You] What would have happened?
+	[Laili] If you want to do another flight test, we can find out.
+	[You] I suppose it's a mystery for the ages.
 +{laili/disaster_averted}
 {goto("_flight_choice")}
 
