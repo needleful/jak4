@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://_glb/entities/laili_plane_v1.glb" type="PackedScene" id=1]
+[ext_resource path="res://entities/npc/npc_laili.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/vehicles/glider.gd" type="Script" id=3]
 
 [sub_resource type="ConvexPolygonShape" id=1]
@@ -21,7 +22,12 @@ points = PoolVector3Array( -3.21587, 0.0408053, -1.55191, -3.21587, 0.124551, -1
 [sub_resource type="ConvexPolygonShape" id=6]
 points = PoolVector3Array( -3.21587, -0.0223758, -1.55191, -3.21587, 0.0408018, -1.55191, -3.1495, -0.0228597, -1.53546, -3.21587, -0.0223758, -0.797497, -3.21587, 0.0645968, -1.04903, -3.1495, 0.0412858, -1.53546, -1, -0.0384071, -1.00002, -3.1495, -0.0228597, -0.764587, -3.21587, 0.0223708, -0.797497, -3.1495, 0.0228447, -0.764587, -1, 0.0384022, 0.295427, -1, 0.0568332, -0.568207, -1, 0.0568332, -1.00002, -1, -0.0384071, 0.295427 )
 
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 0.48545, 0.146616, 0.428686 )
+
 [node name="laili_plane_v1" instance=ExtResource( 1 )]
+collision_layer = 0
+collision_mask = 7
 script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
@@ -41,3 +47,14 @@ shape = SubResource( 5 )
 
 [node name="CollisionShape7" type="CollisionShape" parent="." index="6"]
 shape = SubResource( 6 )
+
+[node name="landing_gear" type="Area" parent="." index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.394884, -0.0961491 )
+collision_layer = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="landing_gear" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0487825, 0 )
+shape = SubResource( 7 )
+
+[node name="npc_laili" parent="." index="8" instance=ExtResource( 2 )]
+custom_entry = "laili_post_flight"

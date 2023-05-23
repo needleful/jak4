@@ -24,7 +24,7 @@
 		?{language/intermediate} * (Sigh) So strange...
 		> Well, it was a lovely chat, but I must be off.
 			[Tirus] Yes. Do watch for the heat...
-		> {Global.task_exists("strange_girl")} Laili's certainly a character, isn't she?
+		> {Global.task_exists("flight_test")} Laili's certainly a character, isn't she?
 			[Tirus] What? You know her?
 			[You] Certainly. She's recruited me for her mischief, not that I volunteered.
 			[Tirus] But she talks to you? Every week she comes in, never says anything.
@@ -106,7 +106,7 @@
 
 :laili
 {talked == 0}
-	{Global.task_is_active("strange_girl")}
+	{Global.task_is_active("flight_test")}
 		[You] Hello...
 		[Laili] Oh, you're Vaeler?
 		[You] I am! Uh, very good! So, my friend from the tavern was concerned for you,
@@ -157,7 +157,7 @@
 	[Laili] With the specters, it'd be even more dangerous. This way we don't have to leave the city walls.
 	[You] Hm, I suppose you're the one in charge.
 
-	{Global.note_task("strange_girl", "Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.")}
+	{Global.note_task("flight_test", "Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.")}
 
 :_laili_home_loop
 > !{laili/orphan} What are you doing up here, anyway?
@@ -244,17 +244,25 @@
 {exit()}
 
 :laili_flight
-{mention("pre-flight")}
-[Laili] Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
-[You] Is there a parachute?
-[Laili] I have a blanket you can use.
-[You] It's better than nothing.
-:_flight_choice
-[Laili] Are you ready to fly?
-> I'm going to sort my affairs first. Last will and testament, et cetera.
-	[Laili] I'll be up here doing some final checks.
-> Alright, I'm ready.
-	{main_speaker.fly()}
+{Global.task_is_complete("flight_test")}
+	Did you want to do another test flight?
+	> Well, what could it hurt?
+		Cool, let's see how well you do.
+		{main_speaker.fly()}
+	> Not at the moment, thank you.
+{otherwise}
+	{mention("pre-flight")}
+	[Laili] Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
+	[You] Is there a parachute?
+	[Laili] I have a blanket you can use.
+	[You] It's better than nothing.
+	:_flight_choice
+	[Laili] Are you ready to fly?
+	> Alright, I'm ready.
+		Alright, just remember to pull back to go up.
+		{main_speaker.fly()}
+	> I'm going to sort my affairs first. Last will and testament, et cetera.
+		[Laili] I'll be up here doing some final checks.
 {exit()}
 
 :item(long_bolt) :- mentioned("pre-flight")
@@ -276,8 +284,10 @@
 // Otherwise, they "crashed" and they have like 1 health point.
 
 :laili_post_flight
-+{laili/flight}
-{main_speaker.crashed()}
+{Global.task_is_complete("flight_test")}
+	I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
+	[You] I'll keep that in mind if I'm ever feeling suicidal.
+{otherwise}{main_speaker.crashed}
 	[Laili] Are you okay?
 	[You] I think I've broken my neck.
 		... Is the jacket alright? Any tears?
@@ -288,12 +298,15 @@
 		We'll have to improve the flight time, but otherwise it's basically ready.
 	[You] /"Basically ready"?/
 		Well, if you need another flight test, you can find someone else. The helmet only does so much.
+	{Global.complete_task("flight_test", "I nearly died flying the bloody thing, but at least I got this lovely coat.")}
 {otherwise}
 	[Laili] Wow... I can't believe it.
 	[You] That's comforting.
 		If I may, I'd like to provide some constructive criticism on the machine's controls.
 	[Laili] Nah, that's fine.
 		Now I just need to find a factory to mass produce it.
+	{Global.complete_task("flight_test", "Surprisingly, the flight went without much issue. I've got a lovely coat, as well.")}
+{main_speaker.reset_flight()}
 {exit()}
 
 :laili_new_home

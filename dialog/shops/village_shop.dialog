@@ -51,7 +51,7 @@
 	* {otherwise}{talked > 4} The incense is strong.
 	* {otherwise} The bitter incense burns at your sinuses.
 
-	{talked > 1}!{!Global.task_exists("fridge_conspiracy")}
+	{Global.stat("current_day") > 1}{talked > 0}!{!Global.task_exists("fridge_conspiracy")}
 		{mention("bother")}
 		* The shopkeeper seems bothered by something.
 	
@@ -59,7 +59,53 @@
 	Do let me know if you need anything.
 
 :shop_replies
-{animation("reset")} 
+{animation("reset")}
+> {mentioned("bother")} Is there something the matter?
+	Oh, it's nothing to worry about. Though...
+	You may actually be the person to help. Would you be interested in some work?
+	> Not really, sorry.
+		Well, such is the nature of it. Did you want anything else?
+		{unmention("bother")}
+		{goto("shop_replies")}
+	> What sort of work?
+		Ah, good. This is between us, yes?
+		I have that drink fridge over there. It is how I make most of my money. So I ordered a second one and some more stock a few weeks ago...
+		Yesterday, the crates arrived. Filled with rocks.
+		// TODO: refactor player dialog into optional questions
+		[You] Somebody stole your drink cooler? Why?
+		He wanted cold drinks, probably.
+		[You] "He"? You already know who did it?
+		I am quite sure it was Mishar, the boy I paid to pick it up from the train station in Maslikir.
+		[You] Why not go to the police, then?
+		Out here we just have the three town guards. They are mostly here to shoot the specters that wander too close, and we need a more tactful method. I like Mishar, so I would rather just get the drink cabinet back.
+		If you could find out where he placed it, I'll have it brought back and say somebody stumbled into it in a stroke of luck. Then we can put the whole business behind us.
+		[You] You want to avoid a confrontation?
+		We already had the confrontation. He is very insistent it was either replaced by someone at Maslikir, or after he dropped it off outside my home the morning it was supposed to arrive.
+		But he was the only one who was alone with the machine, and he took almost twelve hours getting back here from Maslikir. It's not nearly that long of a trip.
+		// I don't see this as a good plan. This is placeholder
+		[You] How exactly do I fit into this?
+		Well, how do I put this...
+		Mishar has something of a, ah, crush, rumor has.
+		[You] A crush on /me?/
+			Oh, for God's sake, is that why you're bringing me into this?
+		Yes. My plan is simple.
+		You will pretend you need a guide to Maslikir and ask Mishar. I can lend you the money to pay him for his work.
+		While walking and talking, I suspect he would be eager to impress you, and what better way that offering you a cold drink, for free?
+		[You] This whole business is suddenly /most/ vulgar. You're paying me to toy with this man's emotions over a /soft drink cooler?/
+			It's a hopelessly brittle plan, as well. I can imagine a thousand ways in which we never encounter this refrigerator, even if he actually stole it, which -mind you- is still solely /your/ hypothesis.
+			How am I even supposed to broach the subject? "Oh Mishar, if only a strapping young man brought me a cold drink right now, I would have him right here in the sand!"
+		Ah, yes. You should say exactly that. That would work.
+		[You] I'm going to vomit. What were you intending to pay me for this?
+		The reward for the missing fridge is fifty deathgnats.
+		[You] /Fifty blooming deathgnats?/ I've found more tripping into a hole in the ground.
+			Quadruple it.
+		I can double it.
+		[You] You can triple it.
+		Hm.... you are savvy. Fine, one hundred and fifty deathgnats, as you dictate.
+		[You] And keep in mind, I'll take that reward even if I don't talk to Mishar. For all I know, the fridge is somewhere in town.
+		If you say so.
+		{Global.task_note_place("fridge_conspiracy", "hideaway", "The local shopkeeper thinks Mishar, a local boy, stole his new refrigerator.")}
+		{Global.task_note_person("fridge_conspiracy", "Mishar", "The alleged fridge-thief, tasked with taking the fridge from Maslikir back to Hideaway, took nearly twelve hours to return, significantly longer than expected. Apparently, he's also taken fancy to me, which is why that shopkeeper thinks I can sway him into confessing. I'd rather avoid him if I can, quite frankly.")}
 > Sure, I'll see what you have.
 	{shop()}
 	{exiting()} [You] Thank you!
@@ -68,40 +114,6 @@
 	Any news?
 	[You] No.
 	Well, that's what you get for asking this before the quest is written!
-> {mentioned("bother")} Is there something the matter?
-	Oh, it's nothing to worry about. Though...
-	Would you be interested in, ah, some volunteer work for the city?
-	> Not really, sorry.
-		Well, such is the nature of it. Did you want anything else?
-		{unmention("bother")}
-		{goto("shop_replies")}
-	> What sort of work?
-		Ah, good. This is between us, yes?
-		I have that drink fridge over there. It is how I make most of my money. So I ordered a second one a few weeks ago...
-		As you can see, it never arrived.
-		Well, that is not entirely correct. The crate arrived, filled with rocks.
-		// TODO: refactor player dialog into optional questions
-		[You] Somebody stole your drink cooler? Why?
-		He wanted cold drinks, probably.
-		[You] "He"? You already know who did it?
-		I am quite sure it was Mishar, the boy I paid to pick it up from the train station in Maslikir.
-		[You] Why not go to the police, then?
-		Out here we just have the three town guards. They are mostly here to shoot the specters that wander too close, and we need a more tact-filled method.
-		I like Mishar, so I would rather just get the drink cabinet back.
-		If you could find out where he placed it, I'll have it brought back and say somebody stumbled into it in a stroke of luck. Then we can put the whole business behind us.
-		[You] You want to avoid a confrontation?
-		We already had the confrontation. He is very insistent it was either replaced by someone at Maslikir, or after he dropped it off outside my home the morning it was supposed to arrive.
-		But he was the only one who was alone with the machine, and he took almost twelve hours getting back here from Maslikir. It's not nearly that long of a trip.
-		// I don't see this as a good plan. This is placeholder
-		[You] What exactly do you want me to do? I can't imagine he'd just tell me where it is.
-		Pretend you're looking for a tour guide or some such thing. A wealthy Vaeler such as yourself? How could he resist such an easy job?
-		// The shopkeeper specifically says "lend" money here. He'll follow up on that at the end of the quest.
-		I can lend you some money to pay him for a day, and then you would just walk and talk.
-		At some point, perhaps wonder aloud if there's anything to drink, and I suspect he wouldn't worry if he went to his own cache of drinks, for a small fee probably.
-		[You] This is an awfully brittle plan. I can imagine a thousand other ways the events would turn out.
-		Well, if you have a better plan, you can tell me.
-		{Global.task_note_place("fridge_conspiracy", "hideaway", "The local shopkeeper thinks Mishar, a local boy, stole his new refrigerator.")}
-		{Global.task_note_person("fridge_conspiracy", "Mishar", "The alleged fridge-thief, tasked with taking the fridge from Maslikir back to Hideaway, took nearly twelve hours to return, significantly longer than expected.")}
 > What do you sell?
 	:sell_loop
 	Mainly elixirs, deathgnats, flags, and other useful items.

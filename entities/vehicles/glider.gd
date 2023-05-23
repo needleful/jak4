@@ -1,6 +1,8 @@
 extends KinematicBody
 # For now this is just the plane
 
+signal landing(success)
+
 var player: PlayerBody
 var velocity: Vector3
 var start_speed := 10.0
@@ -9,10 +11,31 @@ var gravity := Vector3.DOWN*9.8
 var drag_factor := 0.004
 var drag_y_factor := 0.5
 
+enum State {
+	Start,
+	Fly,
+	Crash
+}
+
+var state = State.Start
+var flight_time := 0.0
+
+const FEEDBACK_SPEED := 1.0
+
+onready var landing_gear := $landing_gear
+onready var laili := $npc_laili
+var original_parent: Node
+var original_transform: Transform
+
 func _ready():
+	original_parent = get_parent()
+	original_transform = transform
+	remove_child(laili)
 	set_physics_process(false)
 
 func activate():
+	flight_time = 0
+	state = State.Start
 	var t := global_transform
 	var new_p = get_tree().current_scene
 	get_parent().remove_child(self)
@@ -30,26 +53,81 @@ func activate():
 	set_physics_process(true)
 	velocity = global_transform.basis.z*start_speed
 
-func exit():
+func exit(with_dialog := false):
 	if !player:
 		return
 	if player.is_connected("died", self, "exit"):
 		player.disconnect("died", self, "exit")
 	player.enable_collision()
+	player.unlock()
+	if with_dialog:
+		laili._on_dialog_body_entered(player)
 	player = null
-	set_physics_process(false)
 
 func _notification(what):
 	if what == NOTIFICATION_TRANSFORM_CHANGED and player:
 		player.set_saved_transform(global_transform)
 
 func _physics_process(delta: float):
-	if !player:
+	if state == State.Crash:
+		process_crash(delta)
+	elif player:
+		process_flight(delta)
+	else:
 		set_physics_process(false)
 		return
+
+func process_flight(delta:float):
+	flight_time += delta
+	if state == State.Start:
+		if flight_time > 3 and landing_gear.get_overlapping_bodies().empty():
+			state = State.Fly
+	elif !landing_gear.get_overlapping_bodies().empty():
+		velocity = velocity.move_toward( Vector3.ZERO,
+			(4 + velocity.length_squared())*delta)
+		if velocity.length_squared() < 0.2:
+			print("Landed!")
+			emit_signal("landing", true)
+			laili.crashed = false
+			spawn_laili()
+			exit(true)
+			return
 	var pitch := Input.get_axis("mv_down", "mv_up")
 	var roll := Input.get_axis("mv_left", "mv_right")
 	
+	fly(pitch, roll, delta)
+	
+	player.mesh.hover_lean(Vector2(
+		-2*global_transform.basis.x.y,
+		+2*global_transform.basis.z.y),
+	delta)
+	
+	if global_transform.basis.y.y < 0:
+		flight_time = 0
+		state = State.Crash
+		laili.crashed = true
+		exit()
+
+func process_crash(delta):
+	flight_time += delta
+	var temp_p = Global.get_player()
+	if ( flight_time > 1.0 
+		and !laili.get_parent() 
+		and temp_p.state == PlayerBody.State.Ground 
+		and temp_p.best_floor != self
+	):
+		player = temp_p
+		spawn_laili()
+		player = null
+	var spin := min(velocity.length_squared()/30.0, 2.0)
+	fly(0,spin,delta)
+	if get_slide_count():
+		velocity = velocity.move_toward( Vector3.ZERO,
+			(4 + velocity.length_squared())*delta)
+		if !laili.get_parent() and velocity.length_squared() < 0.2:
+			set_physics_process(false)
+
+func fly(pitch: float, roll: float, delta: float):
 	var pitch_speed := 1.5
 	var roll_speed := 1.5
 	
@@ -75,7 +153,81 @@ func _physics_process(delta: float):
 	
 	velocity += (gravity + lift + drag + drag_y)*delta
 	velocity = move_and_slide(velocity)
-	player.mesh.hover_lean(Vector2(
-		-2*global_transform.basis.x.y,
-		+2*global_transform.basis.z.y),
-	delta)
+	
+	var forward := global_transform.basis.z
+	var v := velocity.normalized()
+	if v.is_normalized():
+		var axis = forward.cross(v).normalized()
+		if axis.is_normalized():
+			var angle := forward.angle_to(v)
+			var rote := sign(angle)*min(abs(angle), delta*FEEDBACK_SPEED)
+			global_rotate(axis, rote)
+
+func spawn_laili():
+	laili.plane_node = self
+	var p := player.global_transform.origin + Vector3.UP*2
+	var dirs :PoolVector3Array = [
+		player.global_transform.basis.z,
+		player.global_transform.basis.x,
+		-player.global_transform.basis.x,
+		player.global_transform.basis.z + player.global_transform.basis.x,
+		player.global_transform.basis.z - player.global_transform.basis.x,
+		Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
+	var min_distance := 1.0
+	var max_distance := 3.0
+	var ds := get_world().direct_space_state
+	var h := 10
+	var min_floor_dot := PlayerBody.MIN_DOT_GROUND
+	for v in dirs:
+		var r := ds.intersect_ray(p, p+(Vector3.DOWN+v)*h)
+		if !r or r.normal.y < min_floor_dot:
+			continue
+		
+		var d:float = (r.position - player.global_transform.origin).length()
+		if d > max_distance or d < min_distance:
+			continue
+		spawn_at(r.position)
+		return
+
+	var tries := 0
+	while tries < 5:
+		tries += 1
+		var random_point := (
+			player.global_transform.origin
+			+ (1 if randf() < 0.5 else -1)*Vector3.LEFT*(1 + 2*randf())
+			+ (1 if randf() < 0.5 else -1)*Vector3.FORWARD*(1 + 2*randf())
+		)
+		var from := random_point + Vector3.UP*30
+		var to := random_point + Vector3.DOWN*30
+		var r := ds.intersect_ray(from, to)
+		if !r:
+			continue
+		else:
+			spawn_at(r.position)
+			return
+	
+	spawn_at(player.global_transform.origin + player.global_transform.basis.z)
+
+func spawn_at(point: Vector3):
+	var p := player.global_transform.origin
+	# Concerning: we need to remove laili here!
+	get_tree().current_scene.add_child(laili)
+	laili.global_transform.origin = point
+	p.y = laili.global_transform.origin.y
+	laili.global_transform = laili.global_transform.looking_at(p, Vector3.UP)
+	laili.global_rotate(Vector3.UP, PI)
+	# TODO: force dialog probably
+
+func _exit_tree():
+	if laili.get_parent() and laili.get_parent() != self:
+		laili.queue_free()
+
+func reset():
+	if !is_instance_valid(original_parent):
+		queue_free()
+	laili.get_parent().remove_child(laili)
+	get_parent().remove_child(self)
+	original_parent.add_child(self)
+	transform = original_transform
+	player = null
+	set_physics_process(false)
