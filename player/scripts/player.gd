@@ -1744,13 +1744,13 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	cam_rig.start_dialog()
 
 func _on_dialog_exited(new_state := State.Ground):
-	Global.save_game()
+	#Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
 	unlock(new_state)
 
 func _on_dialog_exited_anim(animation):
-	Global.save_game()
+	#Global.save_game()
 	ui.play_game()
 	cam_rig.end_dialog()
 	anim_exit(animation, true)
