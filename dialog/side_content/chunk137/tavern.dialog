@@ -1,5 +1,4 @@
 // Inspired by Int and Elvis from "Before the Green Moon"
-// TODO: make strange_girl and the flying machine two separate tasks I think
 :tirus
 {talked == 0}
 	[Tirus] Hm? Kholt mi!
@@ -59,7 +58,7 @@
 					If you talk to her, ask that she has enough food. She's skinny. 
 				{Global.task_note_place("strange_girl", "cliff_village", "The local tavern-keeper is concerned for a young girl who comes in but never says anything. I've offered my help talking to her.")}
 				+{tirus/laili}
-{otherwise}!{Global.task_exists("strange_girl")}
+{otherwise}{!Global.task_exists("strange_girl")}
 	// TODO: when the task wasn't made the first time
 {otherwise}{Global.task_is_active("strange_girl")}
 	{laili/friendship}{laili/flight}
@@ -281,6 +280,7 @@
 {goto("_flight_choice")}
 
 :item(_)
+* You show her an item.
 [Laili] Neat.
 {back()}
 
@@ -310,6 +310,7 @@
 		If I may, I'd like to provide some constructive criticism on the machine's controls.
 	[Laili] Nah, that's fine.
 		Now I just need to find a factory to mass produce it.
+		Thanks for your help. Let me know if you want to fly again sometime.
 	{Global.complete_task("flight_test", "Surprisingly, the flight went without much issue. I've got a lovely coat, as well.")}
 {main_speaker.reset_flight()}
 {exit()}

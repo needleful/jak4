@@ -31,8 +31,8 @@ func _ready():
 	if fancy:
 		lil_man.show_coat(lil_man.generate_coat(Coat.Rarity.Sublime, Coat.Rarity.Sublime))
 
-func _on_dialog_body_entered(body):
-	if body is PlayerBody and body.can_talk():
+func _on_dialog_body_entered(body, force := false):
+	if body is PlayerBody and (force or body.can_talk()):
 		body.start_dialog(self, dialog, self, custom_entry)
 
 func get_coat() -> Coat:

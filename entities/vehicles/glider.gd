@@ -80,15 +80,13 @@ func _on_player_died():
 	exit()
 	reset()
 
-func exit(with_dialog := false):
+func exit():
 	if !player:
 		return
 	if player.is_connected("died", self, "exit"):
 		player.disconnect("died", self, "exit")
 	player.enable_collision()
 	player.unlock()
-	if with_dialog:
-		laili._on_dialog_body_entered(player)
 	player = null
 
 func _notification(what):
@@ -118,8 +116,8 @@ func process_flight(delta:float):
 			print("Landed!")
 			emit_signal("landing", true)
 			laili.crashed = false
+			exit()
 			spawn_laili()
-			exit(true)
 			return
 	var pitch := Input.get_axis("mv_down", "mv_up")
 	var roll := Input.get_axis("mv_left", "mv_right")
@@ -135,7 +133,7 @@ func process_flight(delta:float):
 		flight_time = 0
 		state = State.Crash
 		laili.crashed = true
-		exit(true)
+		exit()
 
 func process_crash(delta):
 	flight_time += delta
@@ -245,13 +243,12 @@ func spawn_laili():
 
 func spawn_at(point: Vector3):
 	var p := player.global_transform.origin
-	# Concerning: we need to remove laili here!
 	get_tree().current_scene.add_child(laili)
 	laili.global_transform.origin = point
 	p.y = laili.global_transform.origin.y
 	laili.global_transform = laili.global_transform.looking_at(p, Vector3.UP)
 	laili.global_rotate(Vector3.UP, PI)
-	# TODO: force dialog probably
+	laili._on_dialog_body_entered(player, true)
 
 func _exit_tree():
 	if laili.get_parent() and laili.get_parent() != self:

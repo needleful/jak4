@@ -1,18 +1,19 @@
 {talked == 0}
 	Oh, hello! You must be the visitor from Vaeland.
 	My name is Mishar.
-	[You] Jackie. Lovely meeting you.
-	It is?
-	[You] That's just how the saying goes.
-	Oh.
+	{!Global.task_is_active("fridge_conspiracy")}
+		[You] Jackie. Pleasure meeting you.
+		It is?
+		[You] That's just how the saying goes.
+		Oh.
 {otherwise}
-	Hello again, Jackie.
+	Hello, Jackie!
 {Global.task_is_active("fridge_conspiracy")}!{mishar/tour-guide}
-	> I'm looking for a tour guide to learn more about the area. Would you happen to know someone interested in work?
-		Oh, well, that's a coincidence. I could give you a tour of the nearby areas and things.
+	> #{"I'm Jackie." if talked == 0 else "Hello again."} I'm looking for a guide to take me to Maslikir. Would you happen to know anyone looking for work?
+		Oh, well, that's a coincidence! I'm free for the moment!
 		What sort of budget did you have?
 		{Global.count("gem") >= 100}
-			[You] How does one hundred gems for a day sound?
+			[You] How does a hundred gems sound?
 			Oh, that would work well!
 		{Global.count("gem") == 0}
 			[You] I just realized I don't have any gems.
@@ -24,6 +25,18 @@
 			{otherwise}
 				Uh, sorry, that's a little too low for me.
 				I'm sure there's more around if you wanted to look...
+	> {skip()} (Lay it on thick)
+		{talked == 0}
+			[You] Mishar... What a lovely name. Does it mean something specific?
+		{otherwise}
+			[You] You know, I've been thinking about your name.
+				{format("italic")} "Mishar"...
+				It has a lovely sound to it. Does it mean something specific?
+		Oh.. uh, thank you! Mishar means to wander. Or, eh, wonder. I forget the Vaelic word...
+		[You] Well, do you prefer walking, or thinking?
+		Hehe, right.. wander is walking. Then Mishar means wonder. Or, someone who wonders.
+		[You] Well, it's wonderful getting properly acquainted.
+		* You smile a perhaps-too-large grin. "This is fun!" You think. "I wonder if a cat feels this way playing with a mouse?"
 {exit()}
 
 :_coat
