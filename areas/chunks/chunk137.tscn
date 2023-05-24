@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -42,6 +42,97 @@ shader_param/wall = ExtResource( 12 )
 shader_param/ground = ExtResource( 12 )
 shader_param/ceiling = ExtResource( 12 )
 
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../npc_laili:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../npc_laili")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "reset"
+} ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "laili_pops_in"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../npc_laili:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.4, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.12505, 0, 0.99215, 0, 1, 0, -0.99215, 0, 0.12505, 56.1114, -15.2826, 9.60395 ), Transform( 0.198052, 0, 0.980191, 0, 1, 0, -0.980191, 0, 0.198052, 58.1601, -15.2826, 10.0038 ), Transform( 0.991978, 0, -0.12641, 0, 1, 0, 0.12641, 0, 0.991978, 58.5467, -15.2826, 10.1978 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../npc_laili")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ "Walk-loop" ],
+"method": "anim_play"
+}, {
+"args": [  ],
+"method": "reset"
+} ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "laili_pops_out"
+tracks/0/type = "value"
+tracks/0/path = NodePath("../npc_laili:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.991978, 0, -0.12641, 0, 1, 0, 0.12641, 0, 0.991978, 58.5467, -15.2826, 10.1978 ), Transform( -0.215621, 0, -0.976477, 0, 1, 0, 0.976477, 0, -0.215621, 58.2031, -15.2826, 10.1147 ), Transform( -0.229215, 0, -0.973375, 0, 1, 0, 0.973375, 0, -0.229215, 53.6799, -15.2826, 9.05167 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../npc_laili")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "Run-loop" ],
+"method": "anim_play"
+} ]
+}
+
 [sub_resource type="SphereMesh" id=4]
 radial_segments = 12
 rings = 12
@@ -51,9 +142,8 @@ rings = 12
 [sub_resource type="OccluderShapePolygon" id=2]
 polygon_points = PoolVector2Array( 304.094, -184.746, 183.886, 7.62628, -98.9865, -27.9154, -113.381, -126.337, -4.50912, 15.4447, 246.273, -13.383 )
 
-[node name="chunk137" instance=ExtResource( 27 )]
+[node name="chunk137" groups=["navmesh"] instance=ExtResource( 27 )]
 script = ExtResource( 1 )
-preview_neighbors = true
 
 [node name="city" parent="." index="0"]
 material/0 = ExtResource( 62 )
@@ -249,32 +339,39 @@ visual_name = "Water-tender"
 [node name="zone_city" type="MultiMeshSystem" parent="active_entities" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.7054, -125.736, -129.742 )
 
-[node name="npc_shop_tirus" parent="active_entities/zone_city" index="0" instance=ExtResource( 24 )]
+[node name="tirus_scene_conductor" type="AnimationPlayer" parent="active_entities/zone_city" index="0"]
+root_node = NodePath("../npc_shop_tirus")
+anims/RESET = SubResource( 6 )
+anims/laili_pops_in = SubResource( 7 )
+anims/laili_pops_out = SubResource( 8 )
+
+[node name="npc_shop_tirus" parent="active_entities/zone_city" index="1" instance=ExtResource( 24 )]
 transform = Transform( -0.976936, 0, 0.213531, 0, 1, 0, -0.213531, 0, -0.976936, 56.7071, -14.7281, 16.986 )
 dialog = ExtResource( 22 )
 visual_name = "Tirus"
 friendly_id = "tirus"
 custom_entry = "tirus"
+cutscene_player = NodePath("../tirus_scene_conductor")
 inventory_data = ExtResource( 23 )
 
-[node name="npc_monument" parent="active_entities/zone_city" index="1" instance=ExtResource( 16 )]
+[node name="npc_monument" parent="active_entities/zone_city" index="2" instance=ExtResource( 16 )]
 transform = Transform( 0.893915, 0, -0.448236, 0, 1, 0, 0.448236, 0, 0.893915, 4.1653, -12.4994, 7.81284 )
 dialog = ExtResource( 21 )
 visual_name = "Custodian"
 
-[node name="c_table" parent="active_entities/zone_city" index="2" instance=ExtResource( 15 )]
+[node name="c_table" parent="active_entities/zone_city" index="3" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 56.6184, -15.5187, 17.2506 )
 
-[node name="rock2" parent="active_entities/zone_city" index="3" instance=ExtResource( 3 )]
+[node name="rock2" parent="active_entities/zone_city" index="4" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.02258, 18.1355, -52.413 )
 
-[node name="rock_collapsible" parent="active_entities/zone_city" index="4" instance=ExtResource( 25 )]
+[node name="rock_collapsible" parent="active_entities/zone_city" index="5" instance=ExtResource( 25 )]
 transform = Transform( -0.352418, 0, -0.935843, 0, 1, 0, 0.935843, 0, -0.352418, -28.5404, 78.1974, -68.086 )
 
-[node name="rock_collapsible2" parent="active_entities/zone_city" index="5" instance=ExtResource( 25 )]
+[node name="rock_collapsible2" parent="active_entities/zone_city" index="6" instance=ExtResource( 25 )]
 transform = Transform( 0.0358648, 0, -0.999357, 0, 1, 0, 0.999357, 0, 0.0358648, -37.7935, 78.1974, -69.349 )
 
-[node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="6"]
+[node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 script = ExtResource( 28 )
 chunk_entry = "chunk138:laili_points"
@@ -346,10 +443,10 @@ skeleton = NodePath("../../start")
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p3" index="1"]
 shape = SubResource( 5 )
 
-[node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="7"]
+[node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="8"]
 transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 27.8378, -11.0802, -31.1414 )
 
-[node name="npc_laili" parent="active_entities/zone_city" index="8" instance=ExtResource( 29 )]
+[node name="npc_laili" parent="active_entities/zone_city" index="9" instance=ExtResource( 29 )]
 transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
 climbing_path = NodePath("../laili_points")
 laili_start = NodePath("../laili_climb_start")

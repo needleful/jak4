@@ -521,6 +521,8 @@ func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
+	if main_speaker.has_method("exit_dialog"):
+		main_speaker.exit_dialog()
 	set_process_input(false)
 	return RESULT_END
 

@@ -198,13 +198,16 @@ func fly(pitch: float, roll: float, delta: float):
 
 func spawn_laili():
 	laili.plane_node = self
-	var p := player.global_transform.origin + Vector3.UP*2
+	var p: PlayerBody = Global.get_player()
+	var pt := p.global_transform
+	var point = pt.origin + Vector3.UP*2
+	
 	var dirs :PoolVector3Array = [
-		player.global_transform.basis.z,
-		player.global_transform.basis.x,
-		-player.global_transform.basis.x,
-		player.global_transform.basis.z + player.global_transform.basis.x,
-		player.global_transform.basis.z - player.global_transform.basis.x,
+		pt.basis.z,
+		pt.basis.x,
+		-pt.basis.x,
+		pt.basis.z + pt.basis.x,
+		pt.basis.z - pt.basis.x,
 		Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
 	var min_distance := 1.0
 	var max_distance := 3.0
@@ -212,21 +215,21 @@ func spawn_laili():
 	var h := 10
 	var min_floor_dot := PlayerBody.MIN_DOT_GROUND
 	for v in dirs:
-		var r := ds.intersect_ray(p, p+(Vector3.DOWN+v)*h)
+		var r := ds.intersect_ray(point, point+(Vector3.DOWN+v)*h)
 		if !r or r.normal.y < min_floor_dot:
 			continue
 		
-		var d:float = (r.position - player.global_transform.origin).length()
+		var d:float = (r.position - pt.origin).length()
 		if d > max_distance or d < min_distance:
 			continue
-		spawn_at(r.position)
+		spawn_at(r.position, pt.origin)
 		return
 
 	var tries := 0
 	while tries < 5:
 		tries += 1
 		var random_point := (
-			player.global_transform.origin
+			pt.origin
 			+ (1 if randf() < 0.5 else -1)*Vector3.LEFT*(1 + 2*randf())
 			+ (1 if randf() < 0.5 else -1)*Vector3.FORWARD*(1 + 2*randf())
 		)
@@ -236,19 +239,18 @@ func spawn_laili():
 		if !r:
 			continue
 		else:
-			spawn_at(r.position)
+			spawn_at(r.position, pt.origin)
 			return
 	
-	spawn_at(player.global_transform.origin + player.global_transform.basis.z)
+	spawn_at(pt.origin + pt.basis.z, pt.origin)
 
-func spawn_at(point: Vector3):
-	var p := player.global_transform.origin
+func spawn_at(point: Vector3, player_point: Vector3):
 	get_tree().current_scene.add_child(laili)
 	laili.global_transform.origin = point
-	p.y = laili.global_transform.origin.y
-	laili.global_transform = laili.global_transform.looking_at(p, Vector3.UP)
+	player_point.y = laili.global_transform.origin.y
+	laili.global_transform = laili.global_transform.looking_at(player_point, Vector3.UP)
 	laili.global_rotate(Vector3.UP, PI)
-	laili._on_dialog_body_entered(player, true)
+	laili._on_dialog_body_entered(Global.get_player(), true)
 
 func _exit_tree():
 	if laili.get_parent() and laili.get_parent() != self:

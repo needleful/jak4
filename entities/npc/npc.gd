@@ -12,6 +12,7 @@ export(bool) var no_dialog_trigger := false
 export(bool) var fancy := false
 onready var lil_man = $lil_man
 onready var anim := $lil_man/AnimationPlayer
+export(NodePath) var cutscene_player
 
 var last_animation := ""
 
@@ -58,6 +59,9 @@ func process_player_distance(pos: Vector3):
 	elif !anim.is_playing():
 		anim.play(last_animation)
 
+func anim_play(animation: String):
+	anim.play(animation)
+
 func anim_queue(animation: String):
 	anim.play(animation)
 	anim.queue("Idle-loop")
@@ -72,3 +76,13 @@ func shrug():
 	anim.play("Shrug")
 	anim.queue("Idle-loop")
 	return true
+
+func reset():
+	anim.play("Idle-loop", 0.2)
+
+func scene_play(anim: String):
+	if has_node(cutscene_player):
+		get_node(cutscene_player).play(anim)
+
+func exit_dialog():
+	scene_play("RESET")
