@@ -29,13 +29,13 @@ margin_bottom = -24.0
 
 [node name="info" type="PanelContainer" parent="window"]
 margin_right = 300.0
-margin_bottom = 291.0
+margin_bottom = 427.0
 rect_min_size = Vector2( 300, 211.542 )
 size_flags_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="window/info"]
 margin_right = 300.0
-margin_bottom = 291.0
+margin_bottom = 427.0
 custom_constants/margin_right = 15
 custom_constants/margin_top = 15
 custom_constants/margin_left = 15
@@ -45,7 +45,7 @@ custom_constants/margin_bottom = 15
 margin_left = 15.0
 margin_top = 15.0
 margin_right = 285.0
-margin_bottom = 276.0
+margin_bottom = 412.0
 
 [node name="Label" type="Label" parent="window/info/MarginContainer/box"]
 margin_right = 270.0
@@ -79,13 +79,44 @@ rect_min_size = Vector2( 0, 12 )
 [node name="grid" type="GridContainer" parent="window/info/MarginContainer/box"]
 margin_top = 129.0
 margin_right = 270.0
-margin_bottom = 261.0
+margin_bottom = 397.0
 columns = 2
 
-[node name="Label" type="Label" parent="window/info/MarginContainer/box/grid"]
+[node name="ctype_label1" type="Label" parent="window/info/MarginContainer/box/grid"]
 margin_top = 21.0
 margin_right = 183.0
 margin_bottom = 43.0
+size_flags_horizontal = 3
+text = "Next Coat Type"
+
+[node name="ctype_prompt1" parent="window/info/MarginContainer/box/grid" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 187.0
+margin_right = 270.0
+margin_bottom = 64.0
+action = "combat_aim"
+
+[node name="ctype_label2" type="Label" parent="window/info/MarginContainer/box/grid"]
+margin_top = 89.0
+margin_right = 183.0
+margin_bottom = 111.0
+size_flags_horizontal = 3
+text = "Previous Coat Type"
+
+[node name="ctype_prompt2" parent="window/info/MarginContainer/box/grid" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 187.0
+margin_top = 68.0
+margin_right = 270.0
+margin_bottom = 132.0
+action = "combat_shoot"
+
+[node name="Label" type="Label" parent="window/info/MarginContainer/box/grid"]
+margin_top = 157.0
+margin_right = 183.0
+margin_bottom = 179.0
 size_flags_horizontal = 3
 text = "Accept"
 
@@ -93,14 +124,15 @@ text = "Accept"
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 187.0
+margin_top = 136.0
 margin_right = 270.0
-margin_bottom = 64.0
+margin_bottom = 200.0
 action = "ui_accept"
 
 [node name="Label2" type="Label" parent="window/info/MarginContainer/box/grid"]
-margin_top = 89.0
+margin_top = 225.0
 margin_right = 183.0
-margin_bottom = 111.0
+margin_bottom = 247.0
 size_flags_horizontal = 3
 text = "Cancel"
 
@@ -108,15 +140,15 @@ text = "Cancel"
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 187.0
-margin_top = 68.0
+margin_top = 204.0
 margin_right = 270.0
-margin_bottom = 132.0
+margin_bottom = 268.0
 action = "ui_cancel"
 
 [node name="TextureRect" type="TextureRect" parent="window"]
 margin_left = 304.0
-margin_right = 797.0
-margin_bottom = 1032.0
+margin_right = 557.0
+margin_bottom = 672.0
 rect_min_size = Vector2( 32, 64 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -125,9 +157,9 @@ expand = true
 stretch_mode = 4
 
 [node name="player_view" type="Control" parent="window"]
-margin_left = 801.0
-margin_right = 1294.0
-margin_bottom = 1032.0
+margin_left = 561.0
+margin_right = 814.0
+margin_bottom = 672.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -149,6 +181,18 @@ custom_fonts/font = SubResource( 1 )
 text = "Coat X of T"
 align = 1
 
+[node name="coat_type" type="Label" parent="window/player_view"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 255.0
+margin_top = -71.0
+margin_right = 279.0
+margin_bottom = -35.0
+custom_fonts/font = SubResource( 1 )
+text = "Coat Type: %s"
+align = 1
+
 [node name="no_coats" type="Label" parent="window/player_view"]
 visible = false
 anchor_left = 0.5
@@ -163,9 +207,9 @@ custom_fonts/font = SubResource( 1 )
 text = "No Coats"
 
 [node name="TextureRect2" type="TextureRect" parent="window"]
-margin_left = 1298.0
-margin_right = 1792.0
-margin_bottom = 1032.0
+margin_left = 818.0
+margin_right = 1072.0
+margin_bottom = 672.0
 rect_min_size = Vector2( 32, 64 )
 size_flags_horizontal = 3
 size_flags_vertical = 3

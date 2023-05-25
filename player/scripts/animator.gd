@@ -79,6 +79,8 @@ onready var aim_reference := $Armature/Skeleton/lumbar/body_reference
 
 onready var gun_tween := $Armature/Skeleton/gun/Tween
 
+onready var coat_mesh := $Armature/Skeleton/coat
+
 var item_sound := 0
 var move_blend:= 0.0
 var lunge_right_foot := true
@@ -172,7 +174,7 @@ func transition_to(state):
 
 func show_coat(coat: Coat):
 	var mat = coat.generate_material()
-	$Armature/Skeleton/coat.material_override = mat
+	coat_mesh.material_override = mat
 
 func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	if soundType.begins_with("step") and player.velocity.length_squared() < 0.002:

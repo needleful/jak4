@@ -201,6 +201,8 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		$gameing/weapon/ammo/ammo_label.text = str(count)
 		if player.current_weapon and !$gameing/weapon.visible:
 			show_ammo()
+	elif item in player.mesh.coat_mesh.meshes:
+		player.mesh.coat_mesh.set_coat_type(item)
 	else:
 		match item:
 			"health_up":

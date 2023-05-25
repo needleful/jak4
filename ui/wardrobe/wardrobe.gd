@@ -14,11 +14,24 @@ var show_background := false
 
 const f_sorting := "Sorting through: %s coats"
 const f_coats := "Coat %d of %d"
+const f_mesh := "Coat Type: %s"
 var old_coat: Coat
 var is_active := false
 
+var coat_type: int
+var available_coat_types: Array
+
+onready var ctype_nodes := [
+	$window/info/MarginContainer/box/grid/ctype_label1,
+	$window/info/MarginContainer/box/grid/ctype_label2,
+	$window/info/MarginContainer/box/grid/ctype_prompt1,
+	$window/info/MarginContainer/box/grid/ctype_prompt2,
+	$window/player_view/coat_type
+]
+
 func _init():
 	coats_by_rarity = {}
+	available_coat_types = []
 
 func _ready():
 	set_process_input(false)
@@ -62,6 +75,10 @@ func _input(event):
 			viewing_index += 1
 			viewing_index = viewing_index % l
 			view()
+	elif event.is_action_pressed("combat_shoot"):
+		set_coat_type(coat_type + 1)
+	elif event.is_action_pressed("mv_crouch"):
+		set_coat_type(coat_type - 1)
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
@@ -122,3 +139,33 @@ func view():
 		$window/player_view/coat.modulate = color
 		var coat:Coat = coats_by_rarity[viewing_rarity][viewing_index]
 		player.set_current_coat(coat, true)
+	
+	available_coat_types = []
+	var coat_mesh = player.mesh.coat_mesh
+	for t in coat_mesh.meshes:
+		if Global.count(t):
+			available_coat_types.append(t)
+
+	var vis := available_coat_types.size() > 1
+	for n in ctype_nodes:
+		n.visible = vis
+
+	var i = 0
+	for c in available_coat_types:
+		if coat_mesh.mesh == coat_mesh.meshes[c]:
+			coat_type = i
+			break
+		i += 1
+	set_coat_type(coat_type)
+
+func set_coat_type(type:int):
+	coat_type = type
+	var type_count := available_coat_types.size()
+	if type_count <= 1:
+		return
+	# TODO: evaluate negative modulo (should be type_count - n)
+	type = type % type_count
+
+	var mesh_name = available_coat_types[type]
+	$window/player_view/coat_type.text = f_mesh % mesh_name.capitalize()
+	player.mesh.coat_mesh.set_coat_type(mesh_name)

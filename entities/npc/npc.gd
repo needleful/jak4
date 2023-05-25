@@ -80,9 +80,9 @@ func shrug():
 func reset():
 	anim.play("Idle-loop", 0.2)
 
-func scene_play(anim: String):
+func scene_play(p_anim: String):
 	if has_node(cutscene_player):
-		get_node(cutscene_player).play(anim)
+		get_node(cutscene_player).play(p_anim)
 
 func exit_dialog():
 	scene_play("RESET")
