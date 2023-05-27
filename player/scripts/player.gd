@@ -410,7 +410,7 @@ func _ready():
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
 		# default coat shape
-		Global.add_item("double-breasted")
+		var _x = Global.add_item("double-breasted")
 		set_state(State.Ground)
 	health = max_health
 	stamina = max_stamina

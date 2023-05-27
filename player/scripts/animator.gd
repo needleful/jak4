@@ -174,7 +174,7 @@ func transition_to(state):
 
 func show_coat(coat: Coat):
 	var mat = coat.generate_material()
-	coat_mesh.material_override = mat
+	coat_mesh.set_surface_material(0, mat)
 
 func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	if soundType.begins_with("step") and player.velocity.length_squared() < 0.002:
