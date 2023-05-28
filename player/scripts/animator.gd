@@ -145,6 +145,9 @@ func play_custom_loop(transition: String, end_point: String):
 		
 	body.travel(c)
 
+func get_bone_ref(ref: String):
+	return get_node("Armature/Skeleton/"+ref)
+
 func step(right: bool):
 	if (player.best_floor 
 		and player.velocity.length_squared() > 0.01
