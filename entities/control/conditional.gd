@@ -26,4 +26,8 @@ func _on_stat_changed(_t, _v):
 		queue_free()
 
 func validate():
-	return expression.execute([Global, self])
+	var res = expression.execute([Global, self])
+	if expression.has_execute_failed():
+		print_debug("Bad condition: ", condition, 
+			"\n\t", expression.get_error_text())
+	return res

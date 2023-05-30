@@ -48,7 +48,12 @@ func start_game(text: String, _id : int)-> bool:
 		print_debug("Tried to start a game while inside one!")
 		return false
 	in_game = true
+	set_value_visible(false)
 	return true
+
+func set_value_visible(vis):
+	$values/number.visible = vis
+	$values/spacer.visible = vis
 
 func add_target(target: Spatial):
 	targets.append(target)
@@ -107,6 +112,7 @@ func get_label() -> String:
 
 func set_value(val):
 	value = val
+	set_value_visible(true)
 	$values/number.text = str(val)
 
 func get_value() -> String:

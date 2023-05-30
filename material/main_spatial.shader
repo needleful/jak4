@@ -4,12 +4,13 @@ uniform sampler2D main_texture: hint_albedo;
 uniform float subsurface_scattering: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
 uniform float specularity: hint_range(0.1, 32) = 1.0;
+uniform vec2 uv_scale = vec2(1.0);
 
 varying vec3 vert_color;
 
 void fragment()
 {
-	ALBEDO = texture(main_texture, UV).rgb;
+	ALBEDO = texture(main_texture, uv_scale*UV).rgb;
 	ROUGHNESS = (32.0 - specularity)/32.0;
 	vert_color = COLOR.rgb;
 }

@@ -3,15 +3,18 @@ extends Spatial
 signal activated(point)
 
 export(String) var chunk_entry := ""
-export(Mesh) var rope_segment:Mesh
 export(Mesh) var rope_knot:Mesh
+export(Mesh) var rope_segment:Mesh
+export(ShaderMaterial) var rope_material:ShaderMaterial
 
+var active_segment:Spatial = null
 var previous_node:Spatial = null
 var previous_checkpoint:Spatial = null
 var current_active := 0
 
-var active_segment: MultiMeshComponent
+var rope_compositor: MultiMeshSystem
 var bone_ref:Spatial
+var continuation: Node
 
 func _ready():
 	for c in get_children():
@@ -23,23 +26,40 @@ func _process(_delta):
 		return
 	if !bone_ref:
 		bone_ref = Global.get_player().mesh.get_bone_ref("backLower")
-	set_end_point(bone_ref.global_transform.origin)
+	drag_rope_to(bone_ref.global_transform.origin)
 
 func start(checkpoint:Spatial = null):
+	current_active = 0
+	rope_compositor = MultiMeshSystem.new()
+	get_parent().add_child(rope_compositor)
 	activate(current_active)
 	if !checkpoint:
 		checkpoint = get_child(0)
-	else:
-		add_rope(checkpoint.global_transform.origin)
+		tie_rope(checkpoint.global_transform.origin)
+	add_rope_segment(checkpoint.global_transform.origin)
+
 	previous_checkpoint = checkpoint
 	previous_node = checkpoint
 	set_process(true)
+
+func cancel():
+	rope_compositor.queue_free()
+	rope_compositor = null
+	active_segment = null
+	previous_checkpoint = null
+	previous_node = null
+	set_process(false)
+	if continuation:
+		continuation.cancel()
+		continuation = null
 
 func activate_next():
 	var player := Global.get_player()
 	var crossed = get_child(current_active)
 	
 	crossed.active = false
+	tie_rope(crossed.global_transform.origin)
+
 	if crossed.checkpoint:
 		crossed.connect_spawn(player)
 		if previous_checkpoint:
@@ -49,19 +69,15 @@ func activate_next():
 
 	current_active += 1
 	if current_active < get_child_count():
+		add_rope_segment(crossed.global_transform.origin)
 		activate(current_active)
-		add_rope(crossed.global_transform.origin)
 	elif chunk_entry != "":
 		pass_to_next()
 	elif CustomGames.is_active():
-		set_end_point(crossed.global_transform.origin)
 		active_segment = null
 		CustomGames.end(true)
 
 func activate(point: int):
-	if active_segment:
-		set_end_point(previous_node.global_transform.origin)
-		active_segment = null
 	var p = get_child(point)
 	p.active = true
 	emit_signal("activated", point)
@@ -77,28 +93,29 @@ func pass_to_next():
 			"' is inactive. Forcing activation.")
 		world.force_activate(node)
 		
-	var next = node.get_node("dynamic_content/active_entities").get_node(next_node)
-	next.start(previous_checkpoint)
-	if active_segment:
-		set_end_point(get_child(current_active - 1).global_transform.origin)
-		active_segment = null
+	continuation = node.get_node("dynamic_content/active_entities").get_node(next_node)
+	continuation.start(previous_checkpoint)
 	set_process(false)
 
-func set_end_point(p:Vector3):
-	var d := p - active_segment.global_transform.origin 
+func add_rope_segment(point:Vector3):
+	active_segment = MultiMeshComponent.new()
+	active_segment.mesh = rope_segment
+	active_segment.material_override = rope_material
+	rope_compositor.add_child(active_segment)
+	active_segment.global_transform.origin = point
+
+func drag_rope_to(p:Vector3):
+	var d := p - active_segment.global_transform.origin
 	var z := d.normalized()
 	z = Vector3(z.z, -z.x, z.y)
 	active_segment.global_transform.basis = Basis(
 		d.cross(z).normalized(), d, z)
 
-func add_rope(point:Vector3):
-	var p := get_parent()
-	active_segment = MultiMeshComponent.new()
-	active_segment.mesh = rope_segment
-	p.add_child(active_segment)
-	active_segment.global_transform.origin = point
-	
+func tie_rope(point:Vector3):
+	if active_segment:
+		drag_rope_to(point)
 	var k := MultiMeshComponent.new()
 	k.mesh = rope_knot
-	p.add_child(k)
+	k.material_override = rope_material
+	rope_compositor.add_child(k)
 	k.global_transform.origin = point

@@ -1696,8 +1696,10 @@ func drain_stamina(amount):
 	if diff < 0:
 		extra_stamina += diff
 		extra_stamina = max(extra_stamina, 0)
-		var new_energy = int(ceil(extra_stamina/EXTRA_STAMINA_BOOST))
-		var _x = Global.add_item("stamina_booster", new_energy-energy)
+		var new_energy := int(ceil(extra_stamina/EXTRA_STAMINA_BOOST))
+		var echange := new_energy-energy
+		if echange:
+			var _x = Global.add_item("stamina_booster", echange)
 		energy = new_energy
 		stamina = 0
 	else:
@@ -1739,7 +1741,7 @@ func get_dialog_viewer() -> Node:
 	return $ui/dialog/viewer
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
-	if game_ui.in_game:
+	if !CustomGames.can_talk():
 		return
 	lock()
 	ui.start_dialog(source, sequence, speaker, starting_label)

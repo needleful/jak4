@@ -22,6 +22,11 @@ func is_active():
 func is_playing(game):
 	return active_game and active_game == game
 
+func can_talk():
+	return !active_game or (
+		"dialog_allowed" in active_game 
+		and active_game.dialog_allowed)
+
 func end(success: bool):
 	if success:
 		add_stat(active_game, "completed")

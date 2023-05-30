@@ -70,6 +70,9 @@ func _input(event):
 		emit_signal("pick_item")
 		set_process_input(false)
 		set_process(false)
+	elif event.is_action_pressed("skip_to_next_choice"):
+		while current_item.type != DialogItem.Type.REPLY:
+			get_next()
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
 
@@ -254,7 +257,7 @@ func list_replies():
 			l.margin_top = 5
 			l.margin_bottom = -5
 			l.autowrap = true
-			l.text = reply.text
+			l.text = interpolate(reply.text)
 			if font_override in fonts:
 				l.add_font_override("font", fonts[font_override])
 			call_deferred("resize_replies")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -31,7 +31,12 @@
 [ext_resource path="res://entities/npc/npc_laili.tscn" type="PackedScene" id=29]
 [ext_resource path="res://material/bubble.shader" type="Shader" id=30]
 [ext_resource path="res://games/laili/rock-clip.tscn" type="PackedScene" id=31]
-[ext_resource path="res://_glb/entities/games/rope-segment_Cylinder.mesh" type="ArrayMesh" id=32]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=32]
+[ext_resource path="res://material/env/detail/rope1.png" type="Texture" id=33]
+[ext_resource path="res://_glb/entities/games/rope-segment_Cylinder.mesh" type="ArrayMesh" id=34]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=35]
+[ext_resource path="res://entities/vehicles/laili_plane_v1.tscn" type="PackedScene" id=36]
+[ext_resource path="res://games/laili/laili_plane_blanket.tscn" type="PackedScene" id=37]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 
 [sub_resource type="ShaderMaterial" id=3]
@@ -137,10 +142,26 @@ tracks/1/keys = {
 }
 
 [sub_resource type="SphereMesh" id=10]
+shadow_render_distance = 1
 radius = 0.04
 height = 0.08
 radial_segments = 4
 rings = 2
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 5.0
+shader_param/ground_scale = 5.0
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/wall = ExtResource( 33 )
+shader_param/ground = ExtResource( 33 )
+shader_param/ceiling = ExtResource( 33 )
 
 [sub_resource type="SphereMesh" id=4]
 radial_segments = 12
@@ -393,18 +414,31 @@ transform = Transform( -0.549989, 0.126279, -0.82557, -0.107952, 0.969462, 0.220
 [node name="rock-clip2" parent="active_entities/zone_city/clips" index="1" instance=ExtResource( 31 )]
 transform = Transform( -0.77032, 0.311124, -0.556605, -0.272613, 0.628411, 0.728548, 0.576445, 0.712953, -0.39926, -18.9472, 5.56094, -21.0838 )
 
-[node name="rock-clip3" parent="active_entities/zone_city/clips" index="2" instance=ExtResource( 31 )]
+[node name="rock-clip5" parent="active_entities/zone_city/clips" index="2" instance=ExtResource( 31 )]
+transform = Transform( -0.486798, 0.363295, -0.794383, -0.661173, 0.441071, 0.606882, 0.570857, 0.820654, 0.0254889, -24.3354, 24.1855, -30.6218 )
+
+[node name="rock-clip6" parent="active_entities/zone_city/clips" index="3" instance=ExtResource( 31 )]
+transform = Transform( -0.343345, 0.51266, -0.786953, -0.31512, 0.72644, 0.610725, 0.884768, 0.457673, -0.08787, -38.4385, 37.4972, -29.4185 )
+
+[node name="rock-clip3" parent="active_entities/zone_city/clips" index="4" instance=ExtResource( 31 )]
 transform = Transform( -0.971614, 0.234957, 0.0275742, 0.211849, 0.81228, 0.543434, 0.105286, 0.53385, -0.838999, -51.5447, 43.416, -30.8335 )
 
-[node name="rock-clip4" parent="active_entities/zone_city/clips" index="3" instance=ExtResource( 31 )]
-transform = Transform( -0.99946, -0.00971968, 0.0313768, 0, 0.955219, 0.2959, -0.0328478, 0.295741, -0.954703, -45.619, 64.9731, -34.1616 )
+[node name="rock-clip4" parent="active_entities/zone_city/clips" index="5" instance=ExtResource( 31 )]
+transform = Transform( -0.844364, -0.535767, 0.0011103, -0.017163, 0.0291199, 0.999428, -0.535493, 0.843863, -0.0337831, -45.2096, 66.9607, -34.8019 )
+
+[node name="rock-clip7" parent="active_entities/zone_city/clips" index="6" instance=ExtResource( 31 )]
+transform = Transform( -0.975583, -0.219587, 0.00426473, -0.0243692, 0.127525, 0.991535, -0.218272, 0.967223, -0.129763, -53.7752, 54.2583, -38.7935 )
+
+[node name="rock-clip8" parent="active_entities/zone_city/clips" index="7" instance=ExtResource( 31 )]
+transform = Transform( -0.923353, -0.377581, -0.0696495, -0.0782046, 0.00735261, 0.99691, -0.375902, 0.925947, -0.0363176, -49.7937, 61.5208, -38.804 )
 
 [node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 script = ExtResource( 28 )
 chunk_entry = "chunk138:laili_points"
-rope_segment = ExtResource( 32 )
 rope_knot = SubResource( 10 )
+rope_segment = ExtResource( 34 )
+rope_material = SubResource( 11 )
 
 [node name="start" type="Area" parent="active_entities/zone_city/laili_points" index="0"]
 transform = Transform( -0.532635, 0, -0.846345, 0, 1, 0, 0.846345, 0, -0.532635, 4.24623, -20.0189, 2.00554 )
@@ -440,7 +474,41 @@ material/0 = SubResource( 9 )
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p1" index="1"]
 shape = SubResource( 5 )
 
-[node name="p2" type="Area" parent="active_entities/zone_city/laili_points" index="2"]
+[node name="p4" type="Area" parent="active_entities/zone_city/laili_points" index="2"]
+transform = Transform( -0.532635, 0, -0.846345, 0, 1, 0, 0.846345, 0, -0.532635, -24.2902, 24.2362, -30.5141 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance2" type="MeshInstance" parent="active_entities/zone_city/laili_points/p4" index="0"]
+mesh = SubResource( 4 )
+skeleton = NodePath("../../start")
+material/0 = SubResource( 9 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p4" index="1"]
+shape = SubResource( 5 )
+
+[node name="p5" type="Area" parent="active_entities/zone_city/laili_points" index="3"]
+transform = Transform( -0.532635, 0, -0.846345, 0, 1, 0, 0.846345, 0, -0.532635, -38.3653, 37.5801, -29.3457 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance2" type="MeshInstance" parent="active_entities/zone_city/laili_points/p5" index="0"]
+mesh = SubResource( 4 )
+skeleton = NodePath("../../start")
+material/0 = SubResource( 9 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p5" index="1"]
+shape = SubResource( 5 )
+
+[node name="p2" type="Area" parent="active_entities/zone_city/laili_points" index="4"]
 transform = Transform( -0.99946, 0, 0.0328478, 0, 1, 0, -0.0328478, 0, -0.99946, -51.5168, 43.5471, -30.7465 )
 collision_layer = 0
 collision_mask = 2
@@ -458,8 +526,42 @@ material/0 = SubResource( 9 )
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p2" index="1"]
 shape = SubResource( 5 )
 
-[node name="p3" type="Area" parent="active_entities/zone_city/laili_points" index="3"]
-transform = Transform( -0.99946, 0, 0.0328478, 0, 1, 0, -0.0328478, 0, -0.99946, -45.6206, 65.09, -34.1122 )
+[node name="p6" type="Area" parent="active_entities/zone_city/laili_points" index="5"]
+transform = Transform( -0.99946, 0, 0.0328478, 0, 1, 0, -0.0328478, 0, -0.99946, -53.772, 54.2753, -38.6556 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance2" type="MeshInstance" parent="active_entities/zone_city/laili_points/p6" index="0"]
+mesh = SubResource( 4 )
+skeleton = NodePath("../../start")
+material/0 = SubResource( 9 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p6" index="1"]
+shape = SubResource( 5 )
+
+[node name="p7" type="Area" parent="active_entities/zone_city/laili_points" index="6"]
+transform = Transform( -0.838487, 0, 0.544921, 0, 1, 0, -0.544921, 0, -0.838487, -49.8596, 61.5322, -38.6582 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 26 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance2" type="MeshInstance" parent="active_entities/zone_city/laili_points/p7" index="0"]
+mesh = SubResource( 4 )
+skeleton = NodePath("../../start")
+material/0 = SubResource( 9 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p7" index="1"]
+shape = SubResource( 5 )
+
+[node name="p3" type="Area" parent="active_entities/zone_city/laili_points" index="7"]
+transform = Transform( -0.99946, 0, 0.0328478, 0, 1, 0, -0.0328478, 0, -0.99946, -45.2682, 66.9424, -34.6814 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 26 )
@@ -480,11 +582,25 @@ shape = SubResource( 5 )
 [node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="9"]
 transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 27.8378, -11.0802, -31.1414 )
 
-[node name="npc_laili" parent="active_entities/zone_city" index="10" instance=ExtResource( 29 )]
+[node name="laili_plane_start" type="Position3D" parent="active_entities/zone_city" index="10"]
+transform = Transform( -0.0177755, 0.123469, -0.992189, -0.316599, 0.940588, 0.122719, 0.948393, 0.316308, 0.0223706, 28.4458, -11.5743, -28.8823 )
+
+[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="11"]
+script = ExtResource( 35 )
+condition = "!Global.stat(\"laili/pre_flight\")"
+listen_for_change = true
+
+[node name="laili_plane_v1" parent="active_entities/zone_city/not_pre_flight" index="0" instance=ExtResource( 36 )]
+transform = Transform( -0.21231, 0, 0.977202, 0, 1, 0, -0.977202, 0, -0.21231, -1.50587, 24.8676, 1.58049 )
+
+[node name="laili_plane_blanket" parent="active_entities/zone_city/not_pre_flight/laili_plane_v1" index="9" instance=ExtResource( 37 )]
+
+[node name="npc_laili" parent="active_entities/zone_city" index="12" instance=ExtResource( 29 )]
 transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
 climbing_path = NodePath("../laili_points")
 laili_start = NodePath("../laili_climb_start")
 player_start = NodePath("../laili_points/start")
+on_monument = true
 
 [node name="Occluder2" type="Occluder" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -76.0493, -188.492, 239.204 )

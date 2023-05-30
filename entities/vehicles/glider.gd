@@ -39,6 +39,8 @@ onready var wing_left := {
 	"mesh":$plane_body/wing_left
 }
 
+var spawns := [{}, {}]
+
 var wing_parents : Dictionary
 # left, right
 var wing_broken := [false, false]
@@ -104,7 +106,7 @@ func _physics_process(delta: float):
 
 func process_flight(delta:float):
 	flight_time += delta
-	if flight_time > 4.0 and !Global.stat("laili/disaster_averted"):
+	if flight_time > 4.0 and !wing_broken[1] and !Global.stat("laili/disaster_averted"):
 		break_wing(true)
 	if state == State.Start:
 		if flight_time > 3 and landing_gear.get_overlapping_bodies().empty():
@@ -251,6 +253,7 @@ func spawn_at(point: Vector3, player_point: Vector3):
 	laili.global_transform = laili.global_transform.looking_at(player_point, Vector3.UP)
 	laili.global_rotate(Vector3.UP, PI)
 	laili._on_dialog_body_entered(Global.get_player(), true)
+	laili.show()
 
 func _exit_tree():
 	if laili.get_parent() and laili.get_parent() != self:
@@ -263,11 +266,12 @@ func reset():
 		if wing_broken[i]:
 			var wing = wing_right if i else wing_left
 			var body
-			for v in wing.values():
+			for k in wing:
+				var v = wing[k]
 				body = v.get_parent()
-				v.get_parent().remove_child(v)
+				body.remove_child(v)
 				wing_parents[v].add_child(v)
-				v.transform = Transform()
+				v.transform = spawns[i][k]
 			if body:
 				body.queue_free()
 	wing_broken = [false, false]
@@ -280,16 +284,17 @@ func reset():
 	set_physics_process(false)
 
 func break_wing(right: bool):
-	wing_broken[1 if right else 0] = true
+	wing_broken[int(right)] = true
 	var wing = wing_right if right else wing_left
-	var spawner = $wing_spawn_right if right else $wing_spawn_left
 	
 	var body := RigidBody.new()
 	body.mass = wing_mass
 	get_tree().current_scene.add_child(body)
-	body.global_transform = spawner.global_transform
+	body.global_transform = wing.mesh.global_transform
 	
-	for v in wing.values():
+	for k in wing:
+		var v = wing[k]
+		spawns[int(right)][k] = v.transform
 		var g = v.global_transform
 		v.get_parent().remove_child(v)
 		body.add_child(v)

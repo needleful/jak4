@@ -185,6 +185,7 @@
 		* Laili pulls the blanket off the object she's been sitting on.
 	{otherwise}
 		* The girl pulls the blanket off the object she's been sitting on.
+	{main_speaker.show_plane()}
 
 	[Laili] Vaelers can fly?
 	[You] Wait, is this some sort of aeroplane? How creative!
@@ -197,21 +198,20 @@
 	[Laili] I found this plane stuff you can wear to protect you.
 
 	* That "plane stuff"... 
-	* A vintage fighter helmet with goggles. It must be at least fifty years old, but it looks brand new...
-	* A pair of matching leather gloves, in the same condition. They look like they'd fit...
-	* And a flight jacket, emblazoned with the Majesty's seal, and a message:
+	* It's a vintage leather flight jacket. On the back is a bird killing a snake, and a message
 	* "VAELAND FLIGHT BRIGADE - 1235 - ALL BUT GOD UNDERNEATH".
+	* Is it really from 1235? It'd be almost seventy years old! Besides a bit of sun damage, it's holding up well.
 
-	[You] If you let me keep those I'll do it.
+	[You] If you let me keep the jacket, I'll do it.
 	[Laili] It's too big for me anyway.
 
-	[You] So what, I hop on your little contraption, and you push me off the building?
+	[You] Then it's a deal. So I hop on your little contraption, and you push me off the building?
 	[Laili] No, we need to go higher, all the way up the cliff.
 	[You] How are we supposed to do that? Do you have a cart or something to haul it up?
 	[Laili] There's some linkages. You would go to a point and attach this cable to it. Then I'd winch the plane up to it with me on it, and you'd climb to the next point and do it again.
-	[You] That's absurd. Couldn't we simply find another way around?
-	[Laili] With the specters, it'd be even more dangerous. This way we don't have to leave the city walls.
-	[You] Hm, I suppose you're the one in charge.
+	[You] Directly up the cliff? There's surely a more reasonable path up.
+	[Laili] With the specters, it'd be even more dangerous. This way we don't have to leave the city.
+	[You] Hm, I suppose so.
 
 	{Global.note_task("flight_test", "Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.")}
 {otherwise}{!Global.task_is_complete("flight_test")}
@@ -220,9 +220,9 @@
 	Did you want to talk about anything else?
 
 :_laili_home_loop
-> !{laili/orphan} What are you doing up here, anyway?
-	[Laili] I live here.
-	[You] What? Isn't this some sort of... church or some such thing? Why would they let you up here?
+> !{laili/orphan} What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
+	[Laili] I live #{"here" if main_speaker.on_monument else "there"}.
+	[You] What? Isn't #{"this" if main_speaker.on_monument else "it"} some sort of... church or some such thing? Why would they let you up #{"here" if main_speaker.on_monument else "there"}?
 	[Laili] Optics.
 	[You] ... What?
 	[Laili] They can't stop me if they don't see me.
@@ -237,7 +237,7 @@
 		[Laili] Were you involved somehow? I guess I forgive you.
 		[You] What? No, not at all! That's just how the saying goes!
 		[Laili] That's confusing.
-	{goto("_laili_home_loop")}
+	{{goto("_laili_home_loop")}}
 > !{laili/friendship}?{tirus/laili/home} That tavern-keeper, Tirus, wanted me to see if you wanted to stay with a family instead of sleeping out here.
 	{subtopic("_laili_tirus")}
 	And I care, too. I'd hate for you to sleep out in the cold if you don't want to.
@@ -258,8 +258,8 @@
 	{main_speaker.start_climb()}
 > I'll be back.
 	[Laili] Okay.
-
 {exit()}
+
 :_laili_tirus
 +{laili/tirus}
 [Laili] He did?
@@ -300,16 +300,17 @@ Tirus clearly cares. He said he'd been worried for months.
 // You can point it out and fix it before disaster strikes
 
 :laili_climb
-{!main_speaker.climb_in_progress()}
+!{laili/climb}
 	[Laili] Are you ready?
-	[You] I suppose so...
-	// There are like 15 points
-	[Laili] Just climb to the first point, then the second, and so on up to the twelfth or however many there are. I counted but I didn't write it down.
-{otherwise}{!main_speaker.climb_finished()}
-	[Laili] Good so far... Let's keep going.
+	[You] It's quite a climb. I'm not sure I have the energy for it.
+	[Laili] Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
+	+{laili/climb}
 {otherwise}
-	[Laili] We're here!
-
+	[Laili] How are you doing?
+> I've realized I have other things I need to do. Can we stop?
+	[Laili] Well, I can't force you to climb.
+	{main_speaker.cancel_climb()}
+> I'll keep going.
 {exit()}
 
 :laili_flight
@@ -328,9 +329,12 @@ Tirus clearly cares. He said he'd been worried for months.
 	:_flight_choice
 	[Laili] Are you ready to fly?
 	> Alright, I'm ready.
-		Okay, put on this coat for protection.
-		{Global.add_item("flight_jacket")}
-		And remember remember to pull back to go up.
+		{!Global.count("flight_jacket")}
+			Okay, put on this coat for protection.
+			{Global.add_item("flight_jacket")}
+			And remember remember to pull back to go up.
+		{otherwise}
+			Remember not to crash.
 		{main_speaker.fly()}
 	> I'm going to sort my affairs first. Last will and testament, et cetera.
 		[Laili] I'll be up here doing some final checks.
@@ -342,7 +346,7 @@ Tirus clearly cares. He said he'd been worried for months.
 ?{laili/flight}
 	[Laili] Oh, that must be why the wing fell off.
 	[You] Wait, you didn't check?
-	[Laili] I figured it would eventually itself work.
+	[Laili] I figured it would eventually work itself out.
 	[You] Ugh.
 {otherwise}
 	[Laili] Oh, yeah. Good find. That would have been bad.
@@ -363,8 +367,12 @@ Tirus clearly cares. He said he'd been worried for months.
 
 :laili_post_flight
 {Global.task_is_complete("flight_test")}
-	I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
-	[You] I'll keep that in mind if I'm ever feeling suicidal.
+	!{laili/test_again}
+		I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
+		[You] I'll keep that in mind if I'm ever feeling suicidal.
+		+{laili/test_again}
+	{otherwise}
+		Thanks again for testing. I'll get the plane back up the cliff.
 {otherwise}{main_speaker.crashed}
 	[Laili] Are you okay?
 	[You] I think I've broken my neck.
