@@ -36,7 +36,7 @@ func _process(delta):
 	mat['shader_param/value'] = move_toward(v, tv, abs(vel))
 
 func queue_show():
-	hide_timer = -0.5
+	hide_timer = -1.5
 	if !visible:
 		modulate = Color(1,1,1,0)
 	show()

@@ -17,8 +17,6 @@ export(Color) var drained_stamina_color = Color.red
 onready var game := $gameing
 onready var dialog := $dialog/viewer
 onready var status := $status_menu
-onready var health_bar := $gameing/stats/health/base
-onready var stamina_bar := $gameing/stats/stamina/base
 onready var armor_bar := $gameing/stats/health/extra
 onready var energy_bar := $gameing/stats/stamina/extra
 onready var equipment := $gameing/equipment
@@ -146,20 +144,11 @@ func update_inventory(startup:= false):
 	$gameing/weapon/ammo/ammo_label.text = str(Global.count(player.current_weapon))
 
 func update_health():
-	health_bar.max_value = player.max_health
-	health_bar.value = player.health
-	health_bar.value = player.health
 	armor_bar.max_value = player.armor*player.ARMOR_BOOST
 	armor_bar.value = player.extra_health
 
 func update_stamina():
 	energy_bar.rect_min_size.x = player.extra_stamina*player.EXTRA_STAMINA_BAR_SIZE
-	stamina_bar.max_value = player.max_stamina
-	stamina_bar.value = player.stamina
-	if player.stamina < player.STAMINA_DRAIN_WALLJUMP:
-		stamina_bar.modulate = drained_stamina_color
-	else:
-		stamina_bar.modulate = stamina_color
 
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
@@ -209,14 +198,10 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				var health_up := count
 				var h_factor = (1.0 + player.HEALTH_UP_BOOST*health_up)
 				player.max_health = player.DEFAULT_MAX_HEALTH*h_factor
-				health_bar.max_value = player.max_health
-				health_bar.rect_min_size.x = player.HEALTH_BAR_DEFAULT_SIZE*h_factor
 			"stamina_up":
 				var stamina_up := count
 				var s_factor = (1.0 + player.STAMINA_UP_BOOST*stamina_up)
 				player.max_stamina = player.DEFAULT_MAX_STAMINA*s_factor
-				stamina_bar.max_value = player.max_stamina
-				stamina_bar.rect_min_size.x = player.STAMINA_BAR_DEFAULT_SIZE*s_factor
 			"jump_height_up":
 				player.jump_factor = (1 + player.JUMP_UP_BOOST*count)
 			"move_speed_up":
