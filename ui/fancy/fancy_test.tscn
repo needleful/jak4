@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/fancy/stanima_bar.png" type="Texture" id=1]
+[ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=2]
+[ext_resource path="res://ui/fancy/fancy_test.gd" type="Script" id=3]
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.162476, 0.229751, 0.945312, 1, 0.863281, 0.391174, 0.391174, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+width = 8
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/value = 1.2
+shader_param/gradient = SubResource( 3 )
+
+[node name="fancy_test" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+active = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource( 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 1 )

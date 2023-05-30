@@ -3,6 +3,7 @@ class_name PlayerBody
 
 signal jumped
 signal died
+signal show_stats
 
 const GRAVITY := Vector3.DOWN*24.0
 export(bool) var doppleganger := false
@@ -433,7 +434,7 @@ func _input(event):
 	elif !ui.choosing_item and event.is_action_released("use_item") and equipped_item and equipped_item.can_use():
 		equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
-		ui.show_inventory()
+		emit_signal("show_stats")
 	elif state == State.Sitting and event.is_action("mv_crouch"):
 		var reset_bar = $ui/gameing/reset_bar
 		if event.is_action_pressed("mv_crouch"):

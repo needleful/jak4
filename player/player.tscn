@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=2]
+[gd_scene load_steps=107 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://material/env/water_ripple.png" type="Texture" id=35]
 [ext_resource path="res://material/env/water_ripple_moving.png" type="Texture" id=36]
 [ext_resource path="res://ui/dialog/item_context.gd" type="Script" id=37]
+[ext_resource path="res://ui/fancy/stamina_bar.tscn" type="PackedScene" id=38]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -1333,10 +1334,12 @@ anims/save_start = SubResource( 11 )
 [node name="stats" type="Control" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
-margin_left = 30.0
-margin_top = 16.0
-margin_right = 465.0
-margin_bottom = 53.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 15.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = -15.0
 
 [node name="health" type="HBoxContainer" parent="ui/gameing/stats"]
 time_scale_response = false
@@ -1388,6 +1391,21 @@ rect_min_size = Vector2( 200, 15 )
 custom_styles/fg = SubResource( 40 )
 value = 50.0
 percent_visible = false
+
+[node name="fancy_stamina" parent="ui/gameing/stats" instance=ExtResource( 38 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_top = -88.0
+margin_bottom = -112.0
+tracking_node = NodePath("../../../..")
+value_property = "stamina"
+max_property = "max_stamina"
+time_to_hide = 1.2
+speed = 20.0
+acceleration = 2.0
 
 [node name="debug" type="Panel" parent="ui/gameing"]
 pause_mode = 1
@@ -1559,6 +1577,7 @@ one_shot = true
 
 [node name="custom_game" type="Control" parent="ui/gameing"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
@@ -2126,8 +2145,8 @@ margin_right = 6.0
 rect_min_size = Vector2( 400, 0 )
 
 [node name="Label" type="Label" parent="ui/story_time/ScrollContainer"]
-margin_right = 612.0
-margin_bottom = 576.0
+margin_right = 400.0
+margin_bottom = 22.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 autowrap = true
@@ -2212,6 +2231,8 @@ mesh = SubResource( 96 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 98 )
 
+[connection signal="show_stats" from="." to="ui" method="show_inventory"]
+[connection signal="show_stats" from="." to="ui/gameing/stats/fancy_stamina" method="queue_show"]
 [connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
 [connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
