@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -37,7 +37,19 @@
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=35]
 [ext_resource path="res://entities/vehicles/laili_plane_v1.tscn" type="PackedScene" id=36]
 [ext_resource path="res://games/laili/laili_plane_blanket.tscn" type="PackedScene" id=37]
+[ext_resource path="res://material/env/stone/bricks.material" type="Material" id=38]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=39]
+[ext_resource path="res://material/env/vaeler/wood-slats-old.png" type="Texture" id=40]
+[ext_resource path="res://material/env/stone/mud1.jpg" type="Texture" id=41]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = ExtResource( 39 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/main_texture = ExtResource( 40 )
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 10 )
@@ -49,6 +61,17 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 12 )
 shader_param/ground = ExtResource( 12 )
 shader_param/ceiling = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 41 )
+shader_param/ground = ExtResource( 40 )
+shader_param/ceiling = ExtResource( 41 )
 
 [sub_resource type="Animation" id=6]
 length = 0.001
@@ -182,8 +205,52 @@ script = ExtResource( 1 )
 [node name="city" parent="." index="0"]
 material/0 = ExtResource( 62 )
 
-[node name="protector" parent="city" index="1"]
+[node name="buildings1" parent="city" index="0"]
+material/0 = ExtResource( 38 )
+
+[node name="door1" parent="city/buildings1" index="0"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
+
+[node name="door2" parent="city/buildings1" index="1"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
+
+[node name="tavern_interior" parent="city/buildings1" index="2"]
+material/0 = ExtResource( 62 )
+
+[node name="walkway1" parent="city/buildings1" index="3"]
+material/0 = ExtResource( 62 )
+
+[node name="door3" parent="city" index="1"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
+
+[node name="door4" parent="city" index="2"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
+
+[node name="protector" parent="city" index="3"]
 material/0 = SubResource( 3 )
+
+[node name="pedestal" parent="city/protector" index="0"]
+material/0 = SubResource( 3 )
+
+[node name="walkway2" parent="city" index="4"]
+material/0 = ExtResource( 62 )
+
+[node name="buildings2" parent="city/walkway2" index="0"]
+material/0 = ExtResource( 38 )
+
+[node name="home_interior1" parent="city/walkway2/buildings2" index="0"]
+material/0 = SubResource( 13 )
+
+[node name="door1001" parent="city/walkway2" index="1"]
+material/0 = ExtResource( 38 )
+
+[node name="door1002" parent="city/walkway2" index="2"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
 
 [node name="active_entities" type="Spatial" parent="." index="1"]
 
@@ -585,7 +652,10 @@ transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 2
 [node name="laili_plane_start" type="Position3D" parent="active_entities/zone_city" index="10"]
 transform = Transform( -0.0177755, 0.123469, -0.992189, -0.316599, 0.940588, 0.122719, 0.948393, 0.316308, 0.0223706, 28.4458, -11.5743, -28.8823 )
 
-[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="11"]
+[node name="laili_new_home" type="Position3D" parent="active_entities/zone_city" index="11"]
+transform = Transform( 0.825759, 0, 0.564023, 0, 1, 0, -0.564024, 0, 0.825758, 60.8663, -9.70754, -27.4209 )
+
+[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="12"]
 script = ExtResource( 35 )
 condition = "!Global.stat(\"laili/pre_flight\")"
 listen_for_change = true
@@ -595,7 +665,7 @@ transform = Transform( -0.21231, 0, 0.977202, 0, 1, 0, -0.977202, 0, -0.21231, -
 
 [node name="laili_plane_blanket" parent="active_entities/zone_city/not_pre_flight/laili_plane_v1" index="9" instance=ExtResource( 37 )]
 
-[node name="npc_laili" parent="active_entities/zone_city" index="12" instance=ExtResource( 29 )]
+[node name="npc_laili" parent="active_entities/zone_city" index="13" instance=ExtResource( 29 )]
 transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
 climbing_path = NodePath("../laili_points")
 laili_start = NodePath("../laili_climb_start")

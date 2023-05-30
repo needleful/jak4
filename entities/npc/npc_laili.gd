@@ -26,6 +26,11 @@ class LailiGame:
 
 onready var climb_game = LailiGame.new(hash(get_path()))
 
+func _ready():
+	if on_monument and Global.task_is_complete("strange_girl"):
+		global_transform = $"../laili_new_home".global_transform
+		custom_entry = "laili_new_home"
+
 func start_climb() -> bool:
 	if CustomGames.is_active():
 		return false
