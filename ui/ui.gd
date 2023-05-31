@@ -17,8 +17,6 @@ export(Color) var drained_stamina_color = Color.red
 onready var game := $gameing
 onready var dialog := $dialog/viewer
 onready var status := $status_menu
-onready var armor_bar := $gameing/stats/health/extra
-onready var energy_bar := $gameing/stats/stamina/extra
 onready var equipment := $gameing/equipment
 var equipment_path_f := "res://items/usable/%s.gd"
 
@@ -73,7 +71,6 @@ func _ready():
 
 func activate():
 	update_inventory(true)
-	update_health()
 	equip(0)
 
 func _input(event):
@@ -117,7 +114,6 @@ func _input(event):
 
 func _process(delta):
 	if mode == Mode.Gameing:
-		update_stamina()
 		var scn = get_tree().current_scene
 		if scn.has_method("get_time"):
 			$gameing/debug/stats/a10.text = "Time: " + str(scn.get_time())
@@ -142,13 +138,6 @@ func update_inventory(startup:= false):
 	for item in UPGRADE_ITEMS:
 		on_item_changed(item, 0, Global.count(item), startup)
 	$gameing/weapon/ammo/ammo_label.text = str(Global.count(player.current_weapon))
-
-func update_health():
-	armor_bar.max_value = player.armor*player.ARMOR_BOOST
-	armor_bar.value = player.extra_health
-
-func update_stamina():
-	energy_bar.rect_min_size.x = player.extra_stamina*player.EXTRA_STAMINA_BAR_SIZE
 
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
@@ -217,13 +206,9 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				if new_armor > player.armor:
 					player.extra_health += (new_armor - player.armor)*player.ARMOR_BOOST
 				player.armor = new_armor
-				armor_bar.rect_min_size.x = player.ARMOR_BAR_DEFAULT_SIZE*player.armor
-				armor_bar.visible = player.armor > 0 and player.extra_health > 0
-				update_health()
 			"stamina_booster":
 				player.extra_stamina = count*player.EXTRA_STAMINA_BOOST
 				player.energy = count
-				energy_bar.visible = player.energy > 0
 			"hover_speed_up":
 				player.hover_speed_factor = 1.0 + player.HOVER_SPEED_BOOST*count
 			"hover_scooter":

@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=1]
+[ext_resource path="res://ui/fancy/segmented_bar.gd" type="Script" id=2]
+[ext_resource path="res://ui/fancy/armor_bit.png" type="Texture" id=3]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.953125, 0.740789, 0.409546, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+width = 8
+
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[node name="armor_bar" type="HBoxContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = -103.5
+margin_right = 50.0
+margin_bottom = 103.5
+script = ExtResource( 2 )
+
+[node name="segment" type="TextureRect" parent="."]
+material = SubResource( 3 )
+margin_right = 60.0
+margin_bottom = 207.0
+rect_min_size = Vector2( 60, 0 )
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 3
+
+[node name="bg" type="TextureRect" parent="segment"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+margin_right = 60.0
+rect_min_size = Vector2( 40, 0 )
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 3

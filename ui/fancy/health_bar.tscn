@@ -1,11 +1,17 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://ui/fancy/health_bar.png" type="Texture" id=1]
 [ext_resource path="res://ui/fancy/fancy_bar.gd" type="Script" id=2]
 [ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=3]
+[ext_resource path="res://ui/fancy/health-ex3.png" type="Texture" id=4]
+[ext_resource path="res://ui/fancy/health-ex2.png" type="Texture" id=5]
+[ext_resource path="res://ui/fancy/health-ex6.png" type="Texture" id=6]
+[ext_resource path="res://ui/fancy/health-ex4.png" type="Texture" id=7]
+[ext_resource path="res://ui/fancy/health-ex1.png" type="Texture" id=8]
+[ext_resource path="res://ui/fancy/health-ex5.png" type="Texture" id=9]
 
 [sub_resource type="Gradient" id=1]
-colors = PoolColorArray( 0.793945, 0.148865, 0.148865, 1, 0.954102, 0.424873, 0.614031, 1 )
+colors = PoolColorArray( 0.793945, 0.148865, 0.148865, 1, 0.954102, 0.424873, 0.538058, 1 )
 
 [sub_resource type="GradientTexture" id=2]
 gradient = SubResource( 1 )
@@ -13,7 +19,37 @@ width = 8
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 3 )
-shader_param/value = 1.1
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
+shader_param/gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 3 )
+shader_param/value = 1.0
 shader_param/gradient = SubResource( 2 )
 
 [node name="health_bar" type="Control"]
@@ -21,18 +57,6 @@ script = ExtResource( 2 )
 speed = 5.0
 acceleration = 1.0
 deceleration = 1.0
-
-[node name="bg" type="TextureRect" parent="."]
-modulate = Color( 0, 0, 0, 0.501961 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -119.5
-margin_top = -110.5
-margin_right = 119.5
-margin_bottom = 110.5
-texture = ExtResource( 1 )
 
 [node name="fancy" type="TextureRect" parent="."]
 material = SubResource( 3 )
@@ -45,3 +69,188 @@ margin_top = -110.5
 margin_right = 119.5
 margin_bottom = 110.5
 texture = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="fancy"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 1 )
+
+[node name="extensions" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="fancy2" type="TextureRect" parent="extensions"]
+material = SubResource( 4 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -118.0
+margin_top = 90.0
+margin_right = 121.0
+margin_bottom = 311.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy2"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 8 )
+
+[node name="fancy3" type="TextureRect" parent="extensions"]
+visible = false
+material = SubResource( 5 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -125.0
+margin_top = 57.0
+margin_right = 114.0
+margin_bottom = 278.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy3"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 5 )
+
+[node name="fancy4" type="TextureRect" parent="extensions"]
+visible = false
+material = SubResource( 6 )
+margin_left = -91.0
+margin_top = 275.0
+margin_right = 148.0
+margin_bottom = 496.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy4"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 4 )
+
+[node name="fancy5" type="TextureRect" parent="extensions"]
+visible = false
+material = SubResource( 7 )
+margin_left = -112.0
+margin_top = 205.0
+margin_right = 127.0
+margin_bottom = 426.0
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy5"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 7 )
+
+[node name="fancy6" type="TextureRect" parent="extensions"]
+visible = false
+material = SubResource( 8 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -109.0
+margin_top = 394.0
+margin_right = 130.0
+margin_bottom = 615.0
+texture = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy6"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 9 )
+
+[node name="fancy7" type="TextureRect" parent="extensions"]
+visible = false
+material = SubResource( 9 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -110.0
+margin_top = 468.0
+margin_right = 129.0
+margin_bottom = 689.0
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="bg" type="TextureRect" parent="extensions/fancy7"]
+modulate = Color( 0, 0, 0, 0.501961 )
+show_behind_parent = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -119.5
+margin_top = -110.5
+margin_right = 119.5
+margin_bottom = 110.5
+texture = ExtResource( 6 )

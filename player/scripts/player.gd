@@ -4,6 +4,7 @@ class_name PlayerBody
 signal jumped
 signal died
 signal show_stats
+signal damaged
 
 const GRAVITY := Vector3.DOWN*24.0
 export(bool) var doppleganger := false
@@ -175,9 +176,6 @@ const ARMOR_BOOST := 20.0
 var armor := 0
 var extra_health := 0.0
 
-const HEALTH_BAR_DEFAULT_SIZE := 400
-const ARMOR_BAR_DEFAULT_SIZE := 96.0
-
 const DEFAULT_MAX_STAMINA := 40.0
 const STAMINA_UP_BOOST := 0.5
 var max_stamina := DEFAULT_MAX_STAMINA
@@ -186,9 +184,6 @@ var stamina := max_stamina
 const EXTRA_STAMINA_BOOST := 15.0
 var energy := 0
 var extra_stamina := 0.0
-
-const STAMINA_BAR_DEFAULT_SIZE := 280
-const EXTRA_STAMINA_BAR_SIZE := 7
 
 const MAX_DAMAGE_UP := 10
 const DAMAGE_UP_BOOST := 0.4
@@ -1577,7 +1572,7 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 	damage = round(float(damage)*damage_taken_factor())
 	if !takes_damage(source) or damage == 0:
 		return false
-	
+	emit_signal("damaged")
 	if ui.in_dialog():
 		get_dialog_viewer().skip_and_exit()
 	
@@ -1594,7 +1589,6 @@ func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 		var _x = Global.add_item("armor", new_armor - armor)
 		armor = new_armor
 	health -= damage
-	ui.update_health()
 	if health <= 0:
 		die()
 		return true
@@ -1690,7 +1684,6 @@ func heal():
 	stamina = max_stamina
 	extra_stamina = energy*EXTRA_STAMINA_BOOST
 	extra_health = armor*ARMOR_BOOST
-	ui.update_health()
 
 func drain_stamina(amount):
 	var diff = stamina - amount/stamina_drain_factor
