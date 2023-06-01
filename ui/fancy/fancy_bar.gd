@@ -25,8 +25,12 @@ func _process(delta):
 	var e :int = Global.count(extension_item)
 	var tv:float = value/max_value
 	var d := tv-v
+	vel = move_toward(vel, sign(d)*speed, delta*max(abs(d), 1)*acceleration + delta)
+	vel = move_toward(vel, 0, abs(delta*vel*deceleration))
 	
-	if extensions == e and abs(d) <= 0.01 and value >= max_value:
+	if ( extensions == e and abs(d) <= 0.001
+		and abs(vel) < 0.005 and value >= max_value
+	):
 		if !visible:
 			return
 		elif time_to_hide:
@@ -36,8 +40,6 @@ func _process(delta):
 	elif !visible:
 		queue_show()
 
-	vel = move_toward(vel, sign(d)*speed, abs(delta*d*acceleration))
-	vel = move_toward(vel, 0, abs(delta*vel*deceleration))
 	mat['shader_param/value'] = move_toward(v, tv, abs(vel))
 	
 	if e != extensions:
