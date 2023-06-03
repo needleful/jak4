@@ -1,292 +1,292 @@
 // Inspired by Int and Elvis from "Before the Green Moon"
 :tirus
 {talked == 0}
-	[Tirus] Hm? Kholt mi!
-	[You] Uh, hello.
-	[Tirus] Oh.
+	Tirus -- Hm? Kholt mi!
+	You -- Uh, hello.
+	Tirus -- Oh.
 		Vaeler.
 		What brings you here?
 	// TODO: if I'm not going to have a choice then remove the choice
 	> Just exploring, I suppose.
-		[Tirus] Interesting. You are pale. Be sure to wear hood or the sun will strike.
-		[You] Duly noted...
-	{main_speaker.scene_play("laili_pops_in")}
+		Tirus -- Interesting. You are pale. Be sure to wear hood or the sun will strike.
+		You -- Duly noted...
+	[main_speaker scene_play: laili_pops_in]
 	* The man's eyes perk up at someone behind you.
-	[Tirus] Ey, kholt mi!
-	{Global.task_exists("flight_test")}
+	Tirus -- Ey, kholt mi!
+	[Global task_exists: flight_test]
 		* You recognize who he's looking at. It's that odd girl, Laili.
 	{otherwise} * He's talking to a young girl. She says nothing.
 	// Do you want a bit of food? I would have no trouble (lit: Trouble to me not).
-	[Tirus] {format("italic")} ... Poro-nit leshene? Kirke kame tono.
-	?{language/basic}* You can make part of what he said: "Do you want (something) food? (Something) me not."
-	?{language/intermediate}* "Do you want some food? It's no trouble."
-	{main_speaker.scene_play("laili_pops_out")}
+	Tirus -- [format: italic] ... Poro-nit leshene? Kirke kame tono.
+	[Global stat: language/basic]* You can make part of what he said: "Do you want (something) food? (Something) me not."
+	[Global stat: language/intermediate]* "Do you want some food? It's no trouble."
+	[main_speaker scene_play: laili_pops_out]
 	* The child stares for a moment, then runs out again.
-	[Tirus] {format("italic")} (Sigh) Gara teeya...
-	?{language/intermediate} * (Sigh) So strange...
-	> {Global.task_exists("flight_test")} Laili's certainly a character, isn't she?
-		[Tirus] What? You know her?
-		[You] Certainly. She's recruited me for her mischief, not that I volunteered.
-		[Tirus] But she talks to you? Every week she comes in, never says anything.
+	Tirus -- [format: italic] (Sigh) Gara teeya...
+	[Global stat: language/intermediate] * (Sigh) So strange...
+	> [Global task_exists: flight_test] Laili's certainly a character, isn't she?
+		Tirus -- What? You know her?
+		You -- Certainly. She's recruited me for her mischief, not that I volunteered.
+		Tirus -- But she talks to you? Every week she comes in, never says anything.
 			I worried she had no family.
-		?{laili/orphan}
-			[You] Oh, she doesn't. She lives on the top of the... large monument in the center of town. I don't know what it's called.
+		[Global stat: laili/orphan]
+			You -- Oh, she doesn't. She lives on the top of the... large monument in the center of town. I don't know what it's called.
 		{otherwise}
-			[You] I'm not sure if she does. She lives on top of the... large monument in the center of town. I don't know what it's called.
-		[Tirus] What!? And you let her!?
-		[You] Well- I-... It's not like I can end homelessness, now can I?
-		[Tirus] Yes! You can! We have houses! We ask someone to put her in their house!
+			You -- I'm not sure if she does. She lives on top of the... large monument in the center of town. I don't know what it's called.
+		Tirus -- What!? And you let her!?
+		You -- Well- I-... It's not like I can end homelessness, now can I?
+		Tirus -- Yes! You can! We have houses! We ask someone to put her in their house!
 			Letting a child sleep alone, on cold nights... Only a Vaeler would not bat an eye.
-		[You] I'm not going to tolerate this verbal abuse. I can /ask/ her about such an arrangement, if it must be my responsibility.
+		You -- I'm not going to tolerate this verbal abuse. I can /ask/ her about such an arrangement, if it must be my responsibility.
 			I have to wonder if she would tolerate it. She's rather... eccentric. I can't imagine her getting on well with other people for a whole night.
-		[Tirus] Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
+		Tirus -- Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
 		// Adjust this so the quest doesn't drag on. No foster-home stuff, just get her to eat some food from Tirus.
-		+{tirus/laili/home}
-		{Global.note_task("strange_girl", "Convincing Laili to move into a foster home has now become my responsibility, for some reason.")}
+		[Global add_stat: tirus/laili/home]
+		[Global note_task: strange_girl | Convincing Laili to move into a foster home has now become my responsibility, for some reason.]
 	> {otherwise} Who was that?
-		{subtopic("_tirus_laili")}
+		[subtopic: _tirus_laili]
 	> Say, do you have anything for sale?
 		I do.
-		{shop()}
+		[shop]
 		Thanks.
 	> Well, it was a lovely chat, but I must be off.
-		[Tirus] Yes. Do watch for the heat...
-	{exit()}
-{otherwise}{!Global.task_exists("strange_girl")}
+		Tirus -- Yes. Do watch for the heat...
+	[exit]
+{otherwise}[! Global task_exists: strange_girl]
 	Hello again, uh...
-	[You] Jackie.
+	You -- Jackie.
 	Right..
-{otherwise}{Global.task_is_active("strange_girl")}
-	?{laili/friendship}?{laili/flight}
-		[You] Good #{general_time()}, Tirus.
-		[Tirus] ... 
+{otherwise}[Global task_is_active: strange_girl]
+	[Global stat: laili/friendship][Global stat: laili/flight]
+		You -- Good #{general_time}, Tirus.
+		Tirus -- ... 
 			How do you know my name?
-		{main_speaker.scene_play("laili_pops_in")}
+		[main_speaker scene_play: laili_pops_in]
 		* The door opens behind you.
-		[Laili] Uh.
+		Laili -- Uh.
 			Hi.
-		[Tirus] ... Hi. I don't think we're introduced. I'm Tirus.
-		[Laili] Yeah.
+		Tirus -- ... Hi. I don't think we're introduced. I'm Tirus.
+		Laili -- Yeah.
 			...
 			Oh, right. I'm Laili.
 			I was wondering if... uh, I could 
 			borrow an apple?
-		[Tirus] Hm...
+		Tirus -- Hm...
 			How about I just give you one instead?
 			Less book-keeping.
-		[Laili] Uh, that works too.
+		Laili -- Uh, that works too.
 		// hand it here
-		[Laili] Thanks.
-		[Tirus] If you need anything, just ask. I'll help if I can.
-		[Laili] ... Thanks.
-		{main_speaker.scene_play("laili_pops_out")}
+		Laili -- Thanks.
+		Tirus -- If you need anything, just ask. I'll help if I can.
+		Laili -- ... Thanks.
+		[main_speaker scene_play: laili_pops_out]
 		* She leaves.
-		[Tirus] So that is progress!
+		Tirus -- So that is progress!
 			I have been talking in the hopes of finding a family with extra room for her to sleep.
 			If it fails, she can sleep in the closet here. I have a, uh, hammock somewhere.
-		{Global.complete_task("strange_girl", "Well I think I did quite a lovely job getting her eating!")}
+		[Global complete_task: strange_girl | Well I think I did quite a lovely job getting her eating!]
 	{otherwise}
 		// TODO: avoid repeating this dialog
 		How goes it, Vaeler?
-		[You] I have a name, you know.
+		You -- I have a name, you know.
 		I forgot it.
-		> {Global.task_exists("flight_test")} The girl's name is Laili, by the way. She's recruited me to fly her glider.
+		> [Global task_exists: flight_test] The girl's name is Laili, by the way. She's recruited me to fly her glider.
 			Really? Have you asked if she's getting enough food?
-			?{laili/friendship}
-				[You] I have. She said she was doing alright, but sounded grateful for the offer. I'm not sure when she's coming in, though.
+			[Global stat: laili/friendship]
+				You -- I have. She said she was doing alright, but sounded grateful for the offer. I'm not sure when she's coming in, though.
 				I will keep my eyes out!
 			{otherwise}
-				[You] I haven't brought it up yet.
-				[Tirus] Well, what are you waiting for? I don't want her starving!
+				You -- I haven't brought it up yet.
+				Tirus -- Well, what are you waiting for? I don't want her starving!
 					Did you at least find out where she lives?
-				?{laili/orphan}
-					[You] Oh, she's an orphan. She lives up on top of the monument in town. Quite tragic.
+				[Global stat: laili/orphan]
+					You -- Oh, she's an orphan. She lives up on top of the monument in town. Quite tragic.
 				{otherwise}
-					[You] I assume she lives on the monument in the center of town. That's where I found her, at least.
-				[Tirus] What?! And you let her stay there?
-				[You] I don't see how I can change that.
-				[Tirus] What? There are plenty of families with extra space! I will ask around, and you ask her if she wants to stop sleeping out in the cold.
+					You -- I assume she lives on the monument in the center of town. That's where I found her, at least.
+				Tirus -- What?! And you let her stay there?
+				You -- I don't see how I can change that.
+				Tirus -- What? There are plenty of families with extra space! I will ask around, and you ask her if she wants to stop sleeping out in the cold.
 					Really, this is obvious. Only a Vaeler would not understand.
-				[You] Oh, come on. I'll /ask/ her, that's no trouble. There's no need for the verbal abuse.
-				+{tirus/laili/home}
-				{Global.note_task("strange_girl", "Convincing Laili to move into a foster home has now become my responsibility, for some reason.")}
-				{exit()}
+				You -- Oh, come on. I'll /ask/ her, that's no trouble. There's no need for the verbal abuse.
+				[Global add_stat: tirus/laili/home]
+				[Global note_task: strange_girl | Convincing Laili to move into a foster home has now become my responsibility, for some reason.]
+				[exit]
 		> {otherwise} I haven't found her yet.
 			She is very elusive. I have asked a few people. They never see her going home.
-			[You] I suppose I'll keep looking, then.
+			You -- I suppose I'll keep looking, then.
 {otherwise}
 	// TODO: the task is complete, get updates on Tirus and Laili
 	> How's Laili doing?
-		[Tirus] Oh, she's getting along nice.
+		Tirus -- Oh, she's getting along nice.
 			There was a family. Mom, dad, little boy about five. They took her in.
 			You can go see her if you like! She's just across the road.
 
-> {!Global.task_exists("strange_girl")} Who was that girl who came in earlier?
-	{subtopic("_tirus_laili")}
+> [! Global task_exists: strange_girl] Who was that girl who came in earlier?
+	[subtopic: _tirus_laili]
 > Say, do you have anything for sale?
 	{talked % 3 == 0}
 		For you, the Vaeler discount!
-		[You] What, do I pay twice as much?
+		You -- What, do I pay twice as much?
 		Eh, but would you ever know?
 	{otherwise}
 		Sure.
-	{shop()}
+	[shop]
 	Thanks. See you.
 > Until next time.
-{exit()}
+[exit]
 
 :_tirus_laili
-[Tirus] I don't know. She comes in a few times a week for months now.
+Tirus -- I don't know. She comes in a few times a week for months now.
 	Never says anything. She comes in and leaves. It troubles me.
 	I ask around, and no person recognizes her.
 > Surely she has family nearby. I wouldn't worry.
-	[Tirus] ...
+	Tirus -- ...
 > If you're busy working in here, I could look for her and ask.
-	[Tirus] Eh... Well, she does not like for meetings.
-	[You] Oh, you don't need to worry, I'm quite good with children.
+	Tirus -- Eh... Well, she does not like for meetings.
+	You -- Oh, you don't need to worry, I'm quite good with children.
 	* You remember when your grandparents kicked you out of their apartment for getting angry and thrashing your younger cousins with a towel.
 	* It was two years ago, when they were eight and ten. You were twenty-five.
-	[You] ...
+	You -- ...
 		I mean, it can't go too badly...
-	[Tirus] It couldn't, I suppose. A gentle woman's touch is maybe what she needs.
+	Tirus -- It couldn't, I suppose. A gentle woman's touch is maybe what she needs.
 		If you talk to her, ask that she has enough food. She's skinny. 
-	{Global.note_task("strange_girl", "A tavern-keeper is concerned about a girl who stops by without ever saying anything. I've offered to find her and ask her how she's doing.")}
-	{Global.task_note_place("strange_girl", "cliff_village", "The girl lives somewhere in the village, presumably.")}
-	+{tirus/laili}
-{back()}
+	[Global note_task: strange_girl | A tavern-keeper is concerned about a girl who stops by without ever saying anything. I've offered to find her and ask her how she's doing.]
+	[Global task_note_place: strange_girl | cliff_village | The girl lives somewhere in the village, presumably.]
+	[Global add_stat: tirus/laili]
+[back]
 
 // Rollin' around at the speed of sound up to some neat platforming place or whatever.
 // I'd like some way to hint to the player where she is.
 // She's at the top of the monument and there's a fun way to get up there.
 
 :laili
-{!Global.task_exists("flight_test")}
-	{Global.task_is_active("strange_girl")}
-		[You] Hello...
-		[Laili] Oh, you're Vaeler?
-		[You] I am! Uh, very good! So, my friend from the tavern was concerned for you,
-		[Laili] That's nice. Listen, Vaeler. I need your help with something.
-		[You] Uh, what, exactly?
+[! Global task_exists: flight_test]
+	[Global task_is_active: strange_girl]
+		You -- Hello...
+		Laili -- Oh, you're Vaeler?
+		You -- I am! Uh, very good! So, my friend from the tavern was concerned for you,
+		Laili -- That's nice. Listen, Vaeler. I need your help with something.
+		You -- Uh, what, exactly?
 	{otherwise}
-		[Laili]Hey, you're Vaeler, yeah?
-		[You] Oh, hello. I'm Jackie.
+		Laili --Hey, you're Vaeler, yeah?
+		You -- Oh, hello. I'm Jackie.
 		"Jacky"? What country is that
-		[You] Uh, sorry, yes, I'm from Vaeland. My name is Jackie.
+		You -- Uh, sorry, yes, I'm from Vaeland. My name is Jackie.
 		Ok, Vaeler named Jackie. I'm Laili.
-		[You] ...
+		You -- ...
 			Well, it was nice meeting you. Ta-ta!
 		* She grabs your arm.
-		[Laili] No! Wait! I need Vaeler help. For Vaeler problems.
-		[You] Vaeler problems?
+		Laili -- No! Wait! I need Vaeler help. For Vaeler problems.
+		You -- Vaeler problems?
 
-	?{laili/name}
+	[Global stat: laili/name]
 		* Laili pulls the blanket off the object she's been sitting on.
 	{otherwise}
 		* The girl pulls the blanket off the object she's been sitting on.
-	{main_speaker.show_plane()}
+	[main_speaker show_plane]
 
-	[Laili] Vaelers can fly?
-	[You] Wait, is this some sort of aeroplane? How creative!
-	[Laili] But can you fly?
-	[You] I've been on a plane before, but I'm certainly no pilot.
-	[Laili] ... Good enough. I want you to test my plane.
-	[You] What? I mean, it's a cute plane and all, but no, I'd rather keep my skull in one piece.
-	[Laili] Your skull isn't one piece. It has a bunch of bones in it.
-	[You] You understood what I meant...
-	[Laili] I found this plane stuff you can wear to protect you.
+	Laili -- Vaelers can fly?
+	You -- Wait, is this some sort of aeroplane? How creative!
+	Laili -- But can you fly?
+	You -- I've been on a plane before, but I'm certainly no pilot.
+	Laili -- ... Good enough. I want you to test my plane.
+	You -- What? I mean, it's a cute plane and all, but no, I'd rather keep my skull in one piece.
+	Laili -- Your skull isn't one piece. It has a bunch of bones in it.
+	You -- You understood what I meant...
+	Laili -- I found this plane stuff you can wear to protect you.
 
 	* That "plane stuff"... 
 	* It's a vintage leather flight jacket. On the back is a bird killing a snake, and a message
 	* "VAELAND FLIGHT BRIGADE - 1235 - ALL BUT GOD UNDERNEATH".
 	* Is it really from 1235? It'd be almost seventy years old! Besides a bit of sun damage, it's holding up well.
 
-	[You] If you let me keep the jacket, I'll do it.
-	[Laili] It's too big for me anyway.
+	You -- If you let me keep the jacket, I'll do it.
+	Laili -- It's too big for me anyway.
 
-	[You] Then it's a deal. So I hop on your little contraption, and you push me off the building?
-	[Laili] No, we need to go higher, all the way up the cliff.
-	[You] How are we supposed to do that? Do you have a cart or something to haul it up?
-	[Laili] There's some linkages. You would go to a point and attach this cable to it. Then I'd winch the plane up to it with me on it, and you'd climb to the next point and do it again.
-	[You] Directly up the cliff? There's surely a more reasonable path up.
-	[Laili] With the specters, it'd be even more dangerous. This way we don't have to leave the city.
-	[You] Hm, I suppose so.
+	You -- Then it's a deal. So I hop on your little contraption, and you push me off the building?
+	Laili -- No, we need to go higher, all the way up the cliff.
+	You -- How are we supposed to do that? Do you have a cart or something to haul it up?
+	Laili -- There's some linkages. You would go to a point and attach this cable to it. Then I'd winch the plane up to it with me on it, and you'd climb to the next point and do it again.
+	You -- Directly up the cliff? There's surely a more reasonable path up.
+	Laili -- With the specters, it'd be even more dangerous. This way we don't have to leave the city.
+	You -- Hm, I suppose so.
 
-	{Global.note_task("flight_test", "Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.")}
-{otherwise}{!Global.task_is_complete("flight_test")}
+	[Global note_task: flight_test | Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.]
+{otherwise}[! Global task_is_complete: flight_test]
 	So are you ready to help with the flight test?
 {otherwise}
 	Did you want to talk about anything else?
 
 :_laili_home_loop
-> !{laili/orphan} What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
-	[Laili] I live #{"here" if main_speaker.on_monument else "there"}.
-	[You] What? Isn't #{"this" if main_speaker.on_monument else "it"} some sort of... church or some such thing? Why would they let you up #{"here" if main_speaker.on_monument else "there"}?
-	[Laili] Optics.
-	[You] ... What?
-	[Laili] They can't stop me if they don't see me.
-	[You] Aren't your parents worried?
-	[Laili] Nah, they're dead.
-	+{laili/orphan}
-	[You] Oh...
+> [! Global stat: laili/orphan] What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
+	Laili -- I live #{"here" if main_speaker.on_monument else "there"}.
+	You -- What? Isn't #{"this" if main_speaker.on_monument else "it"} some sort of... church or some such thing? Why would they let you up #{"here" if main_speaker.on_monument else "there"}?
+	Laili -- Optics.
+	You -- ... What?
+	Laili -- They can't stop me if they don't see me.
+	You -- Aren't your parents worried?
+	Laili -- Nah, they're dead.
+	[Global add_stat: laili/orphan]
+	You -- Oh...
 	> I can understand, to an extent. My mother died when I was young.
-		[Laili] Both my parents died, it's completely different.
+		Laili -- Both my parents died, it's completely different.
 		* You admire your self-restraint in this trying moment.
 	> I'm sorry.
-		[Laili] Were you involved somehow? I guess I forgive you.
-		[You] What? No, not at all! That's just how the saying goes!
-		[Laili] That's confusing.
-	{{goto("_laili_home_loop")}}
-> !{laili/friendship}?{tirus/laili/home} That tavern-keeper, Tirus, wanted me to see if you wanted to stay with a family instead of sleeping out here.
-	{subtopic("_laili_tirus")}
+		Laili -- Were you involved somehow? I guess I forgive you.
+		You -- What? No, not at all! That's just how the saying goes!
+		Laili -- That's confusing.
+	[goto: _laili_home_loop]
+> [! Global stats:+ laili/friendship tirus/laili/home] That tavern-keeper, Tirus, wanted me to see if you wanted to stay with a family instead of sleeping out here.
+	[subtopic: _laili_tirus]
 	And I care, too. I'd hate for you to sleep out in the cold if you don't want to.
-	[Laili] ...
+	Laili -- ...
 		If I like them, I guess...
 		It might be better than sleeping out here...
 		Thanks..
-> {otherwise}!{laili/friendship}?{tirus/laili} That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
-	{subtopic("_laili_tirus")}
+> {otherwise}[! Global stats:+ laili/friendship tirus/laili] That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
+	[subtopic: _laili_tirus]
 	And I care, too. I would hate for you to go hungry, just like Tirus.
-	[Laili] ...
+	Laili -- ...
 		I'm doing okay...
 		On food...
 		...
 		Thanks.
-> !{laili/flight} Well, let's get this plane up the cliff.
-	[Laili] Good. I'll show you how the cables work...
-	{main_speaker.start_climb()}
+> [! Global stat: laili/flight] Well, let's get this plane up the cliff.
+	Laili -- Good. I'll show you how the cables work...
+	[main_speaker start_climb]
 > I'll be back.
-	[Laili] Okay.
-{exit()}
+	Laili -- Okay.
+[exit]
 
 :_laili_tirus
-+{laili/tirus}
-[Laili] He did?
-[You] Does that surprise you? He was worried. He's the reason I went looking for you.
-[Laili] ....
+[Global add_stat: laili/tirus]
+Laili -- He did?
+You -- Does that surprise you? He was worried. He's the reason I went looking for you.
+Laili -- ....
 	People don't like me.
 	I don't know. There's something wrong with me.
-[You] ...
+You -- ...
 // Good candidate for ?> maybe
-[You] There's something wrong with everyone...
-[Laili] No there isn't.
-[You] Of course there is! Nobody's perfect.
-[Laili] What's wrong with you, then?
-> {skip()} Anger issues
-> {skip()} Narcissism
-> {skip()} Insecurity
-> {skip()} Being bitter, unlovable, and ugly
-> {skip()} Inattentiveness
-> {skip()} Racism
-> {skip()} Unkind thoughts about my stepmother
-> {skip()} Bulimia
-> {skip()} Pretending to believe in God
-> {skip()} Wishing I was still a child
-> {skip()} You have a point, there's nothing wrong with me...
-[You] It... I'm sure you can think of something. I'm not perfect.
+You -- There's something wrong with everyone...
+Laili -- No there isn't.
+You -- Of course there is! Nobody's perfect.
+Laili -- What's wrong with you, then?
+> [skip] Anger issues
+> [skip] Narcissism
+> [skip] Insecurity
+> [skip] Being bitter, unlovable, and ugly
+> [skip] Inattentiveness
+> [skip] Racism
+> [skip] Unkind thoughts about my stepmother
+> [skip] Bulimia
+> [skip] Pretending to believe in God
+> [skip] Wishing I was still a child
+> [skip] You have a point, there's nothing wrong with me...
+You -- It... I'm sure you can think of something. I'm not perfect.
 My point is, there are people who care about you, no matter what you think is "wrong" with yourself.
 Tirus clearly cares. He said he'd been worried for months.	
-+{laili/friendship}
-{back()}
+[Global add_stat: laili/friendship]
+[back]
 
 // So the mechanics would be:
 // First checkpoint: Laili gives you 3 stamina boosters if needed
@@ -298,112 +298,112 @@ Tirus clearly cares. He said he'd been worried for months.
 // You can point it out and fix it before disaster strikes
 
 :laili_climb
-!{laili/climb}
-	[Laili] Are you ready?
-	[You] It's quite a climb. I'm not sure I have the energy for it.
-	[Laili] Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
-	+{laili/climb}
+[! Global stat: laili/climb]
+	Laili -- Are you ready?
+	You -- It's quite a climb. I'm not sure I have the energy for it.
+	Laili -- Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
+	[Global add_stat: laili/climb]
 {otherwise}
-	[Laili] How are you doing?
+	Laili -- How are you doing?
 > I've realized I have other things I need to do. Can we stop?
-	[Laili] Well, I can't force you to climb.
-	{main_speaker.cancel_climb()}
+	Laili -- Well, I can't force you to climb.
+	[main_speaker cancel_climb]
 > I'll keep going.
-{exit()}
+[exit]
 
 :laili_flight
-{mention("pre-flight")}
-{Global.task_is_complete("flight_test")}
+[mention: pre-flight]
+[Global task_is_complete: flight_test]
 	Did you want to do another test flight?
 	> Well, what could it hurt?
 		Cool, let's see how well you do.
-		{main_speaker.fly()}
+		[main_speaker fly]
 	> Not at the moment, thank you.
 {otherwise}
-	[Laili] Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
-	[You] Is there a parachute?
-	[Laili] I have a blanket you can use.
-	[You] It's better than nothing.
+	Laili -- Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
+	You -- Is there a parachute?
+	Laili -- I have a blanket you can use.
+	You -- It's better than nothing.
 	:_flight_choice
-	[Laili] Are you ready to fly?
+	Laili -- Are you ready to fly?
 	> Alright, I'm ready.
-		{!Global.count("flight_jacket")}
+		[! Global count: flight_jacket]
 			Okay, put on this coat for protection.
-			{Global.add_item("flight_jacket")}
+			[Global add_item: flight_jacket]
 			And remember remember to pull back to go up.
 		{otherwise}
 			Remember not to crash.
-		{main_speaker.fly()}
+		[main_speaker fly]
 	> I'm going to sort my affairs first. Last will and testament, et cetera.
-		[Laili] I'll be up here doing some final checks.
-{exit()}
+		Laili -- I'll be up here doing some final checks.
+[exit]
 
 :item(long_bolt) :- mentioned("pre-flight")
-[You] I found this bolt. Is it from the plane?
-{Global.remove_item("long_bolt")}
-?{laili/flight}
-	[Laili] Oh, that must be why the wing fell off.
-	[You] Wait, you didn't check?
-	[Laili] I figured it would eventually work itself out.
-	[You] Ugh.
+You -- I found this bolt. Is it from the plane?
+[Global remove_item: long_bolt]
+[Global stat: laili/flight]
+	Laili -- Oh, that must be why the wing fell off.
+	You -- Wait, you didn't check?
+	Laili -- I figured it would eventually work itself out.
+	You -- Ugh.
 {otherwise}
-	[Laili] Oh, yeah. Good find. That would have been bad.
-	[You] What would have happened?
-	[Laili] If you want to do another flight test, we can find out.
-	[You] I suppose it's a mystery for the ages.
-+{laili/disaster_averted}
-{goto("_flight_choice")}
+	Laili -- Oh, yeah. Good find. That would have been bad.
+	You -- What would have happened?
+	Laili -- If you want to do another flight test, we can find out.
+	You -- I suppose it's a mystery for the ages.
+[Global add_stat: laili/disaster_averted]
+[goto: _flight_choice]
 
 :item(_)
 * You show her an item.
-[Laili] Neat.
-{back()}
+Laili -- Neat.
+[back]
 
 // The flight would have Jackie on a flying thing.
 // If they land in on the wheels, it's considered a success.
 // Otherwise, they "crashed" and they have like 1 health point.
 
 :laili_post_flight
-{Global.task_is_complete("flight_test")}
-	!{laili/test_again}
+[Global task_is_complete: flight_test]
+	[! Global stat: laili/test_again]
 		I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
-		[You] I'll keep that in mind if I'm ever feeling suicidal.
-		+{laili/test_again}
+		You -- I'll keep that in mind if I'm ever feeling suicidal.
+		[Global add_stat: laili/test_again]
 	{otherwise}
 		Thanks again for testing. I'll get the plane back up the cliff.
 {otherwise}{main_speaker.crashed}
-	[Laili] Are you okay?
-	[You] I think I've broken my neck.
+	Laili -- Are you okay?
+	You -- I think I've broken my neck.
 		... Is the jacket alright? Any tears?
-	[Laili] I think this is... "Technically Successful".
-	[You] /Pardon/ me?
+	Laili -- I think this is... "Technically Successful".
+	You -- /Pardon/ me?
 	* You adjust your neck. It seems not to be broken. Probably.
-	[Laili] It can't be that dangerous. You survived.
+	Laili -- It can't be that dangerous. You survived.
 		We'll have to improve the flight time, but otherwise it's basically ready.
-	[You] /"Basically ready"?/
+	You -- /"Basically ready"?/
 		Well, if you need another flight test, you can find someone else. The helmet only does so much.
-	{Global.complete_task("flight_test", "I nearly died flying the bloody thing, but at least I got this lovely coat.")}
+	[Global complete_task: flight_test | I nearly died flying the bloody thing, but at least I got this lovely coat.]
 {otherwise}
-	[Laili] Wow... I can't believe it.
-	[You] That's comforting.
+	Laili -- Wow... I can't believe it.
+	You -- That's comforting.
 		If I may, I'd like to provide some constructive criticism on the machine's controls.
-	[Laili] Nah, that's fine.
+	Laili -- Nah, that's fine.
 		Now I just need to find a factory to mass produce it.
 		Thanks for your help. Let me know if you want to fly again sometime.
-	{Global.complete_task("flight_test", "Surprisingly, the flight went without much issue. I've got a lovely coat, as well.")}
-{main_speaker.reset_flight()}
-{exit()}
+	[Global complete_task: flight_test | Surprisingly, the flight went without much issue. I've got a lovely coat, as well.]
+[main_speaker reset_flight]
+[exit]
 
 :laili_new_home
 // Some structure. Also, maybe a trip to Maslikir? Very exciting.
-[You] Hi again, Laili.
-[Laili] Hi Jackie.
-[You] I heard you moved here. How exciting! Do you like it?
-[Laili] I could take it or leave it, personally. The bed is nice.
+You -- Hi again, Laili.
+Laili -- Hi Jackie.
+You -- I heard you moved here. How exciting! Do you like it?
+Laili -- I could take it or leave it, personally. The bed is nice.
 	So when should we fly next?
 	The plane's still up on the cliff if you want another go. Maybe next time you can try a loop.
-[You] Uh, I'll let you know.
+You -- Uh, I'll let you know.
 
-{exit()}
+[exit]
 
 // Next up: Laili disappears! You find her in maslikir making her plane out of copper.

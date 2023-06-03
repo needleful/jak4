@@ -386,6 +386,12 @@ func stat(index: String):
 	else:
 		return 0
 
+func stats(ids: Array) -> bool:
+	for e in ids:
+		if !stat(e):
+			return false
+	return true
+
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
 	emit_signal("stat_changed", tag, value)

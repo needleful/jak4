@@ -30,7 +30,6 @@ const RESULT_PAUSE := {"result":"pause"}
 const RESULT_END := {"result":"end"}
 const RESULT_NOSKIP := {"result":"noskip"}
 
-var r_otherwise_if := RegEx.new()
 var r_interpolate := RegEx.new()
 
 var otherwise := false
@@ -81,8 +80,7 @@ func _process(_delta):
 	scr.scroll_vertical = scr.get_v_scrollbar().max_value
 
 func _ready():
-	var _x = r_otherwise_if.compile("^\\s*otherwise\\s+if\\s+")
-	_x = r_interpolate.compile("#\\{([^\\}]+)\\}")
+	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	ui_settings_apply()
 	end()
 
@@ -361,18 +359,11 @@ func evaluate(ex_text: String):
 	return r
 
 func check_condition(cond: String):
-	var oif: RegExMatch = r_otherwise_if.search(cond)
 	
 	if cond == "otherwise":
 		return {"_otherwise": otherwise}
-	if oif:
-		if !otherwise:
-			return {"_otherwise":false}
-		cond = cond.replace(oif.get_string(), "")
 	
 	var result = evaluate(cond)
-	if oif:
-		return {"_otherwise":result}
 	return result
 
 func end():

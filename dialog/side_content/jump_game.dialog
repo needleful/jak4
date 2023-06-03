@@ -1,14 +1,14 @@
 // The game is active
-{playing_game()}
+[playing_game]
 	* The kids are cheering you on. One is booing.
-{otherwise if game_completed()}
+{otherwise}[game_completed]
 	Eeey!
 	* The kids cheer and wave at you as they play.
 	* Do you want to play again?
-	> {skip()} Yes
+	> [skip] Yes
 		* You approach. The children cheer. You must reach the flag in only #{main_speaker.get_parent().max_jumps} jump(s).
-		{game_start()}
-	> {skip()} No
+		[game_start]
+	> [skip] No
 {otherwise}
 	{talked == 0}
 		* A group of children beckons you.
@@ -20,29 +20,29 @@
 	* The children seem to want you to play a game.
 	* From watching, the objective is to get from one point to another, while only jumping a limited number of times.
 	* Do you want to play?
-	> {skip()} (Play game)
+	> [skip] (Play game)
 		// Yes, uh, I play.
-		{Global.stat("language/eeya")} [You] Eeya, uh, hugotam ko.
+		[Global stat: language/eeya] You -- Eeya, uh, hugotam ko.
 		* The children cheer. You must reach the flag in only #{main_speaker.get_parent().max_jumps} jump(s).
-		{game_start()}
-		{exit()}
-	> {skip()} (Do not)
-		[You] Uh, maybe later, thanks.
-		{exit()}
+		[game_start]
+		[exit]
+	> [skip] (Do not)
+		You -- Uh, maybe later, thanks.
+		[exit]
 
-{exit()}
+[exit]
 :_coat
-{traded_coats()}
-	[You] Could we trade coats again?
+[traded_coats]
+	You -- Could we trade coats again?
 {otherwise}
-	[You] Oh, your coat is lovely! Would you want to trade?
+	You -- Oh, your coat is lovely! Would you want to trade?
 	...
 	* You pantomime trading coats to the child.
-{game_completed()}
+[game_completed]
 	... Ah, eeya!
 	* The child trades coats with you.
-	{swap_coats()}
-	[You] Thank you!
+	[swap_coats]
+	You -- Thank you!
 {otherwise}
 	// Hm... No! Play!
 	Hmmmm.... paina! hugoran!

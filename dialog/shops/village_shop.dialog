@@ -2,21 +2,21 @@
 {talked == 0}
 	Ah, the tourist has found fit to visit me!
 	* The shop smells of burning incense. It's different from home. A stronger, more bitter smell.
-	[You] Hello, I'm Jackie.
+	You -- Hello, I'm Jackie.
 		Pleased to meet you.
 	Welcome to my shop, Jackie! Whatever brings you so far from your home, to our modest city?
 	> I'm here to see the Medium.
-		{mention("medium")}... Ah.
-		{format("italic")} Braalni Mhote.
-		{animation("show_medium")} "The Medium of Bralna". I do not believe the machine has worked in some years.
-		{Global.task_exists("activate_the_medium")}
-			[You] I've talked with that gentleman Armstrong about it. Apparently it just needs some missing parts.
+		[mention: medium]... Ah.
+		[format: italic] Braalni Mhote.
+		[animation: show_medium] "The Medium of Bralna". I do not believe the machine has worked in some years.
+		[Global task_exists: activate_the_medium]
+			You -- I've talked with that gentleman Armstrong about it. Apparently it just needs some missing parts.
 			So Armstrong has roped you into repairing that contraption?
-			[You] Well, of course! I need to use it.
+			You -- Well, of course! I need to use it.
 		{otherwise} 
-			[You] I'm going to talk with the repair man working at it to see what I can do.
+			You -- I'm going to talk with the repair man working at it to see what I can do.
 			So Armstrong finally has someone else to help fix that contraption!
-			[You] If that's what he needs, of course I'll help. I need to use it.
+			You -- If that's what he needs, of course I'll help. I need to use it.
 		So you do...
 		But let's put aside such matters. I doubt you came in here to have me talk your ears off. You probably came here to buy something.
 	> My mum used to live around here...
@@ -25,23 +25,23 @@
 		> She's not.
 			I am sorry to hear that. The loss of a parent is deep, though better than the alternative.
 		> We don't know.
-			{mention("mum/alive")}
+			[mention: mum/alive]
 			Oh. It's that sort of loss...
 		You are here for unsettled affairs then, or memories?
-		[You] Both, I suppose...
+		You -- Both, I suppose...
 		> I'm here to see the Medium.
-			{mention("medium")} Oh.
+			[mention: medium] Oh.
 			And you wish to commune with her.
-			{mentioned("mum/alive")} It is unusual for people to commune with the living, if she is alive.
-			{animation("show_medium")} Quite frankly, I do not think the Medium is such a useful machine.
+			[mentioned: mum/alive] It is unusual for people to commune with the living, if she is alive.
+			[animation: show_medium] Quite frankly, I do not think the Medium is such a useful machine.
 			It does not talk to souls. Only simulacra. Faint reflections of those lost.
-			[You] I understand how it works. But it's important to me all the same.
+			You -- I understand how it works. But it's important to me all the same.
 			I hope you find what you are looking for. I hope that machine can help you.
 			If you need anything during your stay, I probably have it in my shop.
-		> {skip()} (Say nothing more)
+		> [skip] (Say nothing more)
 			... I see. Well, if you need anything for your travels, perhaps I have it in my shop.
-	> {skip()} (Come up with a clever excuse)
-		[You] I, uh... um, I
+	> [skip] (Come up with a clever excuse)
+		You -- I, uh... um, I
 		There is no need to tell me if you are shy. It must be important to come all this way.
 		Besides, you probably came in here to buy something, not to have me talk your ears off.
 
@@ -51,93 +51,93 @@
 	* {otherwise}{talked > 4} The incense is strong.
 	* {otherwise} The bitter incense burns at your sinuses.
 
-	{Global.stat("current_day") > 1}{talked > 0}!{!Global.task_exists("fridge_conspiracy")}
-		{mention("bother")}
+	{Global.stat("current_day") > 1}{talked > 0}[! Global task_exists: fridge_conspiracy]
+		[mention: bother]
 		* The shopkeeper seems bothered by something.
 	
-	{Global.stat("left_village")} I am glad you have returned safely.
+	[Global stat: left_village] I am glad you have returned safely.
 	Do let me know if you need anything.
 
 :shop_replies
-{animation("reset")}
-> {mentioned("bother")} Is there something the matter?
+[animation: reset]
+> [mentioned: bother] Is there something the matter?
 	Oh, it's nothing to worry about. Though...
 	You may actually be the person to help. Would you be interested in some work?
 	> Not really, sorry.
 		Well, such is the nature of it. Did you want anything else?
-		{unmention("bother")}
-		{goto("shop_replies")}
+		[unmention: bother]
+		[goto: shop_replies]
 	> What sort of work?
 		Ah, good. This is between us, yes?
 		I have that drink fridge over there. It is how I make most of my money. So I ordered a second one and some more stock a few weeks ago...
 		Yesterday, the crates arrived. Filled with rocks.
 		// TODO: refactor player dialog into optional questions
-		[You] Somebody stole your drink cooler? Why?
+		You -- Somebody stole your drink cooler? Why?
 		He wanted cold drinks, probably.
-		[You] "He"? You already know who did it?
+		You -- "He"? You already know who did it?
 		I am quite sure it was Mishar, the boy I paid to pick it up from the train station in Maslikir.
-		[You] Why not go to the police, then?
+		You -- Why not go to the police, then?
 		Out here we just have the three town guards. They are mostly here to shoot the specters that wander too close, and we need a more tactful method. I like Mishar, so I would rather just get the drink cabinet back.
 		If you could find out where he placed it, I'll have it brought back and say somebody stumbled into it in a stroke of luck. Then we can put the whole business behind us.
-		[You] You want to avoid a confrontation?
+		You -- You want to avoid a confrontation?
 		We already had the confrontation. He is very insistent it was either replaced by someone at Maslikir, or after he dropped it off outside my home the morning it was supposed to arrive.
 		But he was the only one who was alone with the machine, and he took almost twelve hours getting back here from Maslikir. It's not nearly that long of a trip.
 		// I don't see this as a good plan. This is placeholder
-		[You] How exactly do I fit into this?
+		You -- How exactly do I fit into this?
 		Well, how do I put this...
 		Mishar has something of a, ah, crush, rumor has.
-		[You] A crush on /me?/
+		You -- A crush on /me?/
 			Oh, for God's sake, is that why you're bringing me into this?
 		Yes. My plan is simple.
 		You will pretend you need a guide to Maslikir and ask Mishar. I can lend you the money to pay him for his work.
 		While walking and talking, I suspect he would be eager to impress you, and what better way that offering you a cold drink, for free?
-		[You] This whole business is suddenly /most/ vulgar. You're paying me to toy with this man's emotions over a /soft drink cooler?/
+		You -- This whole business is suddenly /most/ vulgar. You're paying me to toy with this man's emotions over a /soft drink cooler?/
 			It's a hopelessly brittle plan, as well. I can imagine a thousand ways in which we never encounter this refrigerator, even if he actually stole it, which -mind you- is still solely /your/ hypothesis.
 			How am I even supposed to broach the subject? "Oh Mishar, if only a strapping young man brought me a cold drink right now, I would have him right here in the sand!"
 		Ah, yes. You should say exactly that. That would work.
-		[You] I'm going to vomit. What were you intending to pay me for this?
+		You -- I'm going to vomit. What were you intending to pay me for this?
 		The reward for the missing fridge is fifty deathgnats.
-		[You] /Fifty blooming deathgnats?/ I've found more tripping into a hole in the ground.
+		You -- /Fifty blooming deathgnats?/ I've found more tripping into a hole in the ground.
 			Quadruple it.
 		I can double it.
-		[You] You can triple it.
+		You -- You can triple it.
 		Hm.... you are savvy. Fine, one hundred and fifty deathgnats, as you dictate.
-		[You] And keep in mind, I'll take that reward even if I don't talk to Mishar. For all I know, the fridge is somewhere in town.
+		You -- And keep in mind, I'll take that reward even if I don't talk to Mishar. For all I know, the fridge is somewhere in town.
 		If you say so.
-		{Global.task_note_place("fridge_conspiracy", "hideaway", "The local shopkeeper thinks Mishar, a local boy, stole his new refrigerator.")}
-		{Global.task_note_person("fridge_conspiracy", "Mishar", "The alleged fridge-thief, tasked with taking the fridge from Maslikir back to Hideaway, took nearly twelve hours to return, significantly longer than expected. Apparently, he's also taken fancy to me, which is why that shopkeeper thinks I can sway him into confessing. I'd rather avoid him if I can, quite frankly.")}
+		[Global task_note_place: fridge_conspiracy | hideaway | The local shopkeeper thinks Mishar, a local boy, stole his new refrigerator.]
+		[Global task_note_person: fridge_conspiracy | Mishar | The alleged fridge-thief, tasked with taking the fridge from Maslikir back to Hideaway, took nearly twelve hours to return, significantly longer than expected. Apparently, he's also taken fancy to me, which is why that shopkeeper thinks I can sway him into confessing. I'd rather avoid him if I can, quite frankly.]
 > Sure, I'll see what you have.
-	{shop()}
-	{exiting()} [You] Thank you!
+	[shop]
+	[exiting] You -- Thank you!
 	I hope you found what you were looking for...
-> {Global.task_is_active("fridge_conspiracy")} About that missing refrigerator...
+> [Global task_is_active: fridge_conspiracy] About that missing refrigerator...
 	Any news?
-	[You] No.
+	You -- No.
 	Well, that's what you get for asking this before the quest is written!
 > What do you sell?
 	:sell_loop
 	Mainly elixirs, deathgnats, flags, and other useful items.
-	> {Global.task_exists("activate_the_medium")} Do you sell capacitors?
+	> [Global task_exists: activate_the_medium] Do you sell capacitors?
 		Hm. That has to do with electronics, yes? Have you asked Armstrong?
-		[You] Yes. He's the one who said I need them, in fact.
+		You -- Yes. He's the one who said I need them, in fact.
 		Ah. Sending a tourist on his errands! With that spirit, he was destined for business.
 		Well, my only advice is to be careful when spelunking ancient ruins. Some of them run dangerously deep... 
 	> What do the elixirs do?
 		Many things.
 		Increase your stamina, strength, vitality.
 		Some temporarily, others permanently.
-	> {format("italic")} Deathgnats?
+	> [format: italic] Deathgnats?
 		A nasty pest made of crystal and white metal, but not nearly as harmful as its larger cousins.
 		We catch them to use as a second currency. Typically for larger purchases.
-		{Global.stat('bug') == 0}
-			[You] What do they look like, exactly?
+		[! Global stat: bug]
+			You -- What do they look like, exactly?
 			I have one in a jar on the table, if you would like to examine it.
-		{otherwise}{Global.stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
-			[You] It keeps vibrating. Do people really carry these around?
+		{otherwise}{Global stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
+			You -- It keeps vibrating. Do people really carry these around?
 			Hahaha!
 			You do not need to keep it alive. It would be quite unbearable carrying dozens of live deathgnats.
-			{animation("show_deathgnat")} The one I keep is quite a handful.
-			{animation("reset")}
+			[animation: show_deathgnat] The one I keep is quite a handful.
+			[animation: reset]
 		{otherwise} You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
 			Commendable work!
 		> Where do I find deathgnats?
@@ -148,41 +148,39 @@
 	> What are the flags for?
 		They mark where you have been, a reminder, I suppose.
 		Adventurers seem keen to stock up on them.
-		* [Hint: Flags serve as consumable checkpoints. When you place one, you will teleport back to it upon death.]
+		* (Hint: Flags serve as consumable checkpoints. When you place one, you will teleport back to it upon death.)
 	> What's that "Drinks" machine in the corner?
 		Ah, they're very popular! A merchant from Kiper gave me the machine for free, though the drinks have gotten quite pricey over the years.
 	> Do you sell any coats? So many people are wearing lovely fabrics.
 		They are not usually sold... We get our clothes from hunting alpha specters. It is too dangerous to hunt for profit.
 		You may be able to trade with people. They won't mind losing an outfit if they get another.
-		{!Global.stat("trade_coat")}
-			{Global.using_gamepad}* [Hint: You can trade clothes with nearly anyone by pressing '#{Global.get_action_input_string('dialog_coat', true)}' (by default, the top face button, such as "Y") on the gamepad. This works both in and out of dialog.]
-			{otherwise}* [Hint: You can trade clothes with nearly anyone by pressing '#{Global.get_action_input_string('dialog_coat', false)}' on the keyboard. This works both in and out of dialog.]
+		* (HINT: You can trade coats from the "Use Item" menu in the dialog.)
 	> Ah okay, that makes sense.
 		It does!
-		{goto("shop_replies")}
-	{goto("sell_loop")}
+		[goto: shop_replies]
+	[goto: sell_loop]
 > I'll see you around!
-	{exiting()}
+	[exiting]
 	Take care, Jackie...
-{exit()}
+[exit]
 
 :_exit
-[You] Gotta go, see you!
-{exit()}
+You -- Gotta go, see you!
+[exit]
 
 :_coat
-{traded_coats()} [You] Could we trade outfits again?
+[traded_coats] You -- Could we trade outfits again?
 	Hm, you changed your mind?
 	How about the same deal as last time: my coat, in exchange for yours plus fifty gems.
 {otherwise}
-	[You] Would you be willing to trade outfits? Yours is so lovely...
+	You -- Would you be willing to trade outfits? Yours is so lovely...
 	Hm... I only have two sets.
 	If you give me your coat in exchange, plus... oh, fifty gems? Then we have a deal.
 > I'll think about it and ask again later.
-> {Global.count("gem") > 50} Deal. My coat and fifty gems.
-	{Global.add_item("gem", -50)} Very well.
-	{swap_coats()} I hope you enjoy.
+> {Global count("gem") > 50} Deal. My coat and fifty gems.
+	{Global add_item("gem", -50)} Very well.
+	[swap_coats] I hope you enjoy.
 > {otherwise} Ouch. I don't have fifty gems.
 	Well, I'm sure you can find some if you are interested.
 Anything else I can help you with?
-{goto("shop_replies")}
+[goto: shop_replies]

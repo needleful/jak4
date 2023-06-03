@@ -7,11 +7,12 @@ var NPSequence = preload("res://addons/np_dialog/resource/sequence.gd")
 var r_comment := RegEx.new()
 var r_whitespace_start := RegEx.new()
 var r_label := RegEx.new()
-var r_expression := RegEx.new()
 var r_narrate := RegEx.new()
 var r_reply := RegEx.new()
 var r_speaker := RegEx.new()
 var r_whitespace := RegEx.new()
+var r_expression := RegEx.new()
+var r_sq_expression := RegEx.new()
 
 var f_query := "Global.stat('%s')"
 var f_add := "Global.add_stat('%s')"
@@ -21,10 +22,11 @@ func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
 	r_label.compile("^\\s*:(.+)")
-	r_expression.compile("[#+!?]?\\{([^\\}]+)\\}")
+	r_expression.compile("#?\\{([^\\}]+)\\}")
+	r_sq_expression.compile("#?\\[([^\\]]+)\\]")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
-	r_speaker.compile("^\\s*\\[([^\\]]+)]\\s*")
+	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
 
 func get_importer_name():
@@ -211,7 +213,48 @@ func extract_expressions(line: String) -> Dictionary:
 		elif s.begins_with("!"):
 			ex = f_not % ex
 		dict.conditions.append(ex)
+	
+	var sq_matches = r_sq_expression.search_all(line)
+	for rm in sq_matches:
+		var func_arg:Array = rm.get_string(1).split(":", true)
+		if func_arg.size() > 2:
+			print_debug("warning: nested functions not supported: ", rm.get_string())
+		var slot := ""
+		for f in func_arg[0].split(" ", false):
+			if slot != "" and slot != "!":
+				slot += "."
+			slot += f.strip_edges()
+		var message := "("
+		var args := 0
+		if func_arg.size() > 1:
+			for a in func_arg[1].split("|"):
+				if args:
+					message += ", "
+					
+				if a.begins_with("+"):
+					message += "["
+					var items := 0
+					for s2 in a.split(" ", false):
+						if items:
+							message += ","
+							message += sq_argument(s2)
+						items += 1
+					message += "]"
+				else:
+					message += sq_argument(a)
+				args += 1
+		message += ")"
+		var sqex := slot + message
+		dict.conditions.append(sqex)
+
 	return dict
+
+func sq_argument(arg: String) -> String:
+	var s := arg.strip_edges()
+	if s.begins_with("#"):
+		return s.substr(1)
+	else:
+		return '"' + s.replace('"', '\\"') + '"'
 
 func extract_type(line: String) -> Dictionary:
 	var dict = {}
@@ -233,6 +276,6 @@ func extract_speaker(line: String) -> Dictionary:
 	var dict = {}
 	var m = r_speaker.search(line)
 	if m:
-		dict.speaker = m.get_string(1)
+		dict.speaker = m.get_string(1).strip_edges()
 		dict.line = line.replace(m.get_string(), "")
 	return dict

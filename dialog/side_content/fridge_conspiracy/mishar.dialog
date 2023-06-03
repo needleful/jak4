@@ -1,62 +1,62 @@
 {talked == 0}
 	Oh, hello! You must be the visitor from Vaeland.
 	My name is Mishar.
-	{!Global.task_is_active("fridge_conspiracy")}
-		[You] Jackie. Pleasure meeting you.
+	[! Global task_is_active: fridge_conspiracy]
+		You -- Jackie. Pleasure meeting you.
 		It is?
-		[You] That's just how the saying goes.
+		You -- That's just how the saying goes.
 		Oh.
 {otherwise}
 	Hello, Jackie!
-{Global.task_is_active("fridge_conspiracy")}!{mishar/tour-guide}
+[Global task_is_active: fridge_conspiracy][! Global stat: mishar/tour-guide]
 	> #{"I'm Jackie." if talked == 0 else "Hello again."} I'm looking for a guide to take me to Maslikir. Would you happen to know anyone looking for work?
 		Oh, well, that's a coincidence! I'm free for the moment!
 		What sort of budget did you have?
 		{Global.count("gem") >= 100}
-			[You] How does a hundred gems sound?
+			You -- How does a hundred gems sound?
 			Oh, that would work well!
-		{Global.count("gem") == 0}
-			[You] I just realized I don't have any gems.
+		[! Global count: gem]
+			You -- I just realized I don't have any gems.
 			Sorry to hear that. I bet there's some, uh, lying around I guess.
 		{otherwise}
-			[You] I have... uh... #{say_number(Global.count("gem"))} gems, if that suits you.
+			You -- I have... uh... #{say_number(Global.count("gem"))} gems, if that suits you.
 			{Global.count("gem") > 50}
 				I suppose I can make it work.
 			{otherwise}
 				Uh, sorry, that's a little too low for me.
 				I'm sure there's more around if you wanted to look...
-	> {skip()} (Lay it on thick)
+	> [skip] (Lay it on thick)
 		{talked == 0}
-			[You] Mishar... What a lovely name. Does it mean something specific?
+			You -- Mishar... What a lovely name. Does it mean something specific?
 		{otherwise}
-			[You] You know, I've been thinking about your name.
-				{format("italic")} "Mishar"...
+			You -- You know, I've been thinking about your name.
+				[format: italic] "Mishar"...
 				It has a lovely sound to it. Does it mean something specific?
 		Oh.. uh, thank you! Mishar means to wander. Or, eh, wonder. I forget the Vaelic word...
-		[You] Well, do you prefer walking, or thinking?
+		You -- Well, do you prefer walking, or thinking?
 		Hehe, right.. wander is walking. Then Mishar means wonder. Or, someone who wonders.
-		[You] Well, it's wonderful getting properly acquainted.
+		You -- Well, it's wonderful getting properly acquainted.
 		* You smile a perhaps-too-large grin. "This is fun!" You think. "I wonder if a cat feels this way playing with a mouse?"
-{exit()}
+[exit]
 
 :_coat
-{mention("_coat")}
-{traded_coats()}
-	[You] Hi again! How do you like my coat?
+[mention: _coat]
+[traded_coats]
+	You -- Hi again! How do you like my coat?
 	It's good, thank you.
 	> That's good to hear. Take care!
 	> Could we trade again?
 		Again? Uh... okay?
-		{swap_coats()} [You] Excellent, thank you!
+		[swap_coats] You -- Excellent, thank you!
 {otherwise}
-	[You] Excuse me! I couldn't help but notice that beautiful fabric you're wearing!
+	You -- Excuse me! I couldn't help but notice that beautiful fabric you're wearing!
 	Oh, this? Thank you!
 	> I just thought I'd mention it. Take care!
-		{exit()}
+		[exit]
 	> I'd like to trade my jacket for yours.
 		Really?
-		[You] Of course! If you don't mind...
+		You -- Of course! If you don't mind...
 		I... guess it's fine?
-		{swap_coats()} Here you go.
-		[You] Wonderful! Thank you very much! Take care!
-{exit()}
+		[swap_coats] Here you go.
+		You -- Wonderful! Thank you very much! Take care!
+[exit]
