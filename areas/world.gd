@@ -183,6 +183,9 @@ func detect_enemies(_delta):
 	var air_enemies_present = false
 	var cloaked_enemies_present = false
 	for e in get_tree().get_nodes_in_group("enemy"):
+		if !e.has_method("process_player_distance"):
+			print_debug("Invalid enemy: ", e.get_path())
+			continue
 		var dist_squared: float = e.process_player_distance(player.global_transform.origin)
 		if dist_squared < MIN_DIST_SQ_ENEMIES:
 			if "can_fly" in e and e.can_fly:

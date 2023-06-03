@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -24,6 +24,9 @@
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=22]
 [ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=23]
 [ext_resource path="res://dialog/side_content/race/race_coat_trade.dialog" type="Resource" id=24]
+[ext_resource path="res://entities/enemies/enemy_group.gd" type="Script" id=25]
+[ext_resource path="res://dialog/side_content/chunk125/bob.dialog" type="Resource" id=26]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=27]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1.37823, 1.71547, 1.36145 )
@@ -331,25 +334,45 @@ transform = Transform( -0.0150965, 0, -0.999886, 0, 1, 0, 0.999886, 0, -0.015096
 [node name="bug_pickup" parent="active_entities/hut_area" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3203, 8.42451, -6.42747 )
 
-[node name="crawly" parent="active_entities/hut_area" instance=ExtResource( 6 )]
-transform = Transform( 0.408426, 0, -0.912791, 0, 1, 0, 0.912791, 0, 0.408426, 9.0563, -2.32248, -8.05447 )
-respawns = false
-
-[node name="crawly2" parent="active_entities/hut_area" instance=ExtResource( 6 )]
-transform = Transform( -0.0771888, 0, -0.997016, 0, 1, 0, 0.997016, 0, -0.0771888, 9.47731, -2.32248, -4.88287 )
-respawns = false
-
 [node name="bug_pickup2" parent="active_entities/hut_area" instance=ExtResource( 7 )]
 transform = Transform( 0.352266, 0, 0.9359, 0, 1, 0, -0.9359, 0, 0.352266, -16.2427, -0.575485, 4.76283 )
 
-[node name="conditional_when_dead" type="Spatial" parent="active_entities/hut_area"]
+[node name="enemy_group" type="Spatial" parent="active_entities/hut_area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09572, 2.23872, 2.51089 )
-script = ExtResource( 16 )
-dead_enemies = [ NodePath("../crawly"), NodePath("../crawly2") ]
+script = ExtResource( 25 )
+stat_name = "bob/saved"
 
-[node name="npc" parent="active_entities/hut_area/conditional_when_dead" instance=ExtResource( 17 )]
-transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 20.894, -5.11421, -11.4747 )
-visual_name = "Hermit"
+[node name="crawly" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
+transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 11.5719, -5.92572, -5.6841 )
+respawns = false
+
+[node name="crawly3" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
+transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 18.5314, -2.04289, -8.54148 )
+respawns = false
+
+[node name="crawly2" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
+transform = Transform( 0.370631, 0, -0.92878, 0, 1, 0, 0.92878, 0, 0.370631, 17.1978, -5.26558, -8.42244 )
+respawns = false
+
+[node name="safe" type="Spatial" parent="active_entities/hut_area"]
+script = ExtResource( 27 )
+condition = "Global.stat(\"bob/saved\")"
+
+[node name="npc_bob_safe" parent="active_entities/hut_area/safe" instance=ExtResource( 17 )]
+transform = Transform( 0.27231, 0, 0.962209, 0, 1, 0, -0.962209, 0, 0.27231, 7.71275, 0.233566, -7.81498 )
+dialog = ExtResource( 26 )
+visual_name = "Bob"
+friendly_id = "bob"
+
+[node name="unsafe" type="Spatial" parent="active_entities/hut_area"]
+script = ExtResource( 27 )
+condition = "!Global.stat(\"bob/saved\")"
+
+[node name="npc_bob" parent="active_entities/hut_area/unsafe" instance=ExtResource( 17 )]
+transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 3.24292, 3.15559, -4.95671 )
+dialog = ExtResource( 26 )
+visual_name = "Bob"
+friendly_id = "bob"
 
 [node name="valley_area" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -164.23, -233.328, 214.16 )

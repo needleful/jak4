@@ -1,6 +1,7 @@
 extends Node
 
 signal enemies_dead
+signal spawned_without_enemies
 
 export(bool) var persistent := true
 export(String) var stat_name := ""
@@ -11,6 +12,7 @@ var enemies : Array
 
 func _ready():
 	if persistent and Global.stat(stat_name):
+		emit_signal("spawned_without_enemies")
 		queue_free()
 	for c in get_children():
 		if c is EnemyBody:
