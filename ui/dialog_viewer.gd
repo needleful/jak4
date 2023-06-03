@@ -659,6 +659,7 @@ func control_screen(val := true):
 func note(stat: String, text: String, tags: Array):
 	if stat != "":
 		var _x = Global.add_stat(stat)
+		tags.append(stat)
 	return Global.add_note(text, tags)
 
 func note_once(stat: String, text:String, tags: Array):

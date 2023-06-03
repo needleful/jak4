@@ -28,5 +28,5 @@ func _on_died(_id, path):
 			if stat_name != "":
 				var _x = Global.add_stat(stat_name)
 			if task_id != "":
-				var _x = Global.note_task(task_id, task_note)
+				var _x = Global.add_note(task_note, [task_id])
 		emit_signal("enemies_dead")
