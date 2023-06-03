@@ -5,9 +5,9 @@ func _ready():
 		Global.mark_map(
 			"hideaway",
 			"My landing point on this excursion. Not much to look at aside from the Medium.")
+		Global.remember("mum")
 		Global.add_note(
-			"people", "Mum",
-			"I suppose if I'd been born out here, I'd have been like Mother. Austere. Stoic. That's what they tell me about her, at least.")
+			"I suppose if I'd been born out here, I'd have been like Mother. Austere. Stoic. That's what they tell me about her, at least.", ["mum"])
 		var p = get_player()
 		if p:
 			p.global_transform.origin = global_transform.origin

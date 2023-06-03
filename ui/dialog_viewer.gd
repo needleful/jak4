@@ -99,10 +99,10 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 			var e = Expression.new()
 			var res = e.parse(s[1], ["Global"])
 			if res != OK:
-				print_debug("Bad expression in %s:%s\n\t %s",
-					p_sequence.resource_path,
-					label,
-					s[1])
+				var msg := "Bad expression in %s:%s\n\t %s" % [
+					p_sequence.resource_path, label, s[1]]
+				insert_label("[Error] "+ msg, "narration")
+				print_debug(msg)
 			label_conditions[label] = e
 	for l in label_swaps:
 		sequence.labels[label_swaps[l]] = sequence.labels[l]
@@ -347,14 +347,18 @@ func evaluate(ex_text: String):
 	var expr: Expression = Expression.new()
 	var err = expr.parse(ex_text, ["Global"])
 	if err != OK:
-		print_debug("\tFailed to parse {%s}. Code %d" % [ex_text, err])
+		var msg := "\tFailed to parse {%s}. Code %d" % [ex_text, err]
+		insert_label("[Error] "+ msg, "narration")
+		print_debug(msg)
 		return true
 	
 	var r = expr.execute([Global], self)
 	
 	if expr.has_execute_failed():
-		print_debug("\tFailed to execute {%s}.\n\t%s" 
-			% [ex_text, expr.get_error_text()])
+		var msg := "\tFailed to execute {%s}.\n\t%s" % [ 
+			ex_text, expr.get_error_text()]
+		insert_label("[Error] "+ msg, "narration")
+		print_debug(msg)
 		return true
 	return r
 
@@ -513,6 +517,8 @@ func noskip():
 
 func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
+	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
+		Global.remember(main_speaker.friendly_id)
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
 	if main_speaker.has_method("exit_dialog"):
@@ -611,12 +617,13 @@ func shop():
 
 func remember(note: String, subject: String = ""):
 	if subject == "":
-		subject = get_speaker_name()
-	Global.add_note("people", subject, note)
+		subject = speaker_stat()
+	Global.remember(subject)
+	Global.add_note(note, [subject])
 	return true
 
 func knows(person: String):
-	return Global.has_note("people", person)
+	return Global.has_note(person)
 
 func task_exists(id):
 	return Global.task_exists(id)
@@ -647,3 +654,14 @@ func game_start():
 
 func control_screen(val := true):
 	$"../black".visible = val
+	return true
+
+func note(stat: String, text: String, tags: Array):
+	if stat != "":
+		var _x = Global.add_stat(stat)
+	return Global.add_note(text, tags)
+
+func note_once(stat: String, text:String, tags: Array):
+	if Global.stat(stat):
+		return false
+	return note(stat, text, tags)

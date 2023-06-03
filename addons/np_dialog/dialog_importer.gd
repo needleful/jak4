@@ -206,12 +206,6 @@ func extract_expressions(line: String) -> Dictionary:
 		
 		var ex : String = rm.get_string(1)
 		dict.line = dict.line.replace(s, "")
-		if s.begins_with("?"):
-			ex = f_query % ex
-		elif s.begins_with("+"):
-			ex = f_add % ex
-		elif s.begins_with("!"):
-			ex = f_not % ex
 		dict.conditions.append(ex)
 	
 	var sq_matches = r_sq_expression.search_all(line)
@@ -232,12 +226,16 @@ func extract_expressions(line: String) -> Dictionary:
 					message += ", "
 					
 				if a.begins_with("+"):
+					a = a.substr(1)
 					message += "["
 					var items := 0
 					for s2 in a.split(" ", false):
+						s2 = sq_argument(s2)
+						if s2 == "":
+							continue
 						if items:
 							message += ","
-							message += sq_argument(s2)
+						message += s2
 						items += 1
 					message += "]"
 				else:
@@ -246,6 +244,8 @@ func extract_expressions(line: String) -> Dictionary:
 		message += ")"
 		var sqex := slot + message
 		dict.conditions.append(sqex)
+		dict.line = dict.line.replace(rm.get_string(), "")
+		#print(rm.get_string(), " --> ", sqex)
 
 	return dict
 

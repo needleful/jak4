@@ -6,7 +6,7 @@
 	You -- Hi!
 [exit]
 
-:item(mother_letter) :- !Global.stat("natia/leaving")
+:item(mother_letter) :- !Global.stat:("natia/leaving")
 You -- I have a letter addressed to you.
 [Global add_stat: info/natia] Oh! Who do I have the pleasure of speaking with?
 You -- I'm Jackie.
@@ -16,12 +16,12 @@ Oh really?
 You -- I have it here, if you'd like.
 * You hand Natia the letter. She reads it quickly and nods. Then she tears it to pieces and throws it into the fountain.
 Hang on.
-{Global.remove_item("mother_letter")}
-{Global.add_item("mother_poem")}
-{Global.task_remove_place("letter_delivery", "muzna_cross")}
-{Global.note_task("letter_delivery","I've delivered the letter, and received a poem for the woman.")}
-{Global.task_note_place("letter_delivery", "hideaway", "Natia gave me a poem to bring back to Hideaway")}
-[Global add_stat: natia/leaving]* She presents you a note of her own.
+[Global remove_item: mother_letter]
+[Global add_item: mother_poem]
+
+[Global abolish_notes:+ letter_delivery muzna_cross]
+[note: natia/leaving | I've delivered the letter to Natia, and received a poem for the woman. |+ hideaway natia yomi letter_delivery]
+* She presents you a note of her own.
 Could you give this poem to the woman you received the letter from?
 You -- Uh... Alright. Is there no mail delivery service out here?
 Hahaha! Sorry you've been caught in the middle of this delivery nonsense.
@@ -42,9 +42,7 @@ What brought you out here, anyway?
 	She was? That was just a guess! I only know a few women who married off to Vaelers, and it would have been about 30 years ago?
 	You -- Yes, that lines up exactly!
 	Oh, I wish I had more time to discuss this, but I'm actually leaving soon.
-	{Global.task_note_place("letter_delivery", "mountain_valley", "Natia said she's going up the mountain to stay here for a while")} 
-	{Global.task_note_place("mum", "mountain_valley", "Natia apparently knew about my mother. She wanted to talk with me after I delivered her poem.")}
-	[Global add_stat: natia/info/mum]
+	[note: natia/info/mum | Natia apparently knew about my mother. She wanted to talk with me after I delivered her poem. |+ letter_delivery natia mountain_village mum]
 	How about this: I'm headed up the mountain, to the valley with the waterfall. It's here on your map.
 	If you can get that poem to Natia, I would love if you stopped by! I'll tell you everything, then!
 	[Global add_stat: natia/chat]
@@ -52,7 +50,7 @@ What brought you out here, anyway?
 	Hm... I don't think you are, but we'll let you have your secrets for today, eh?
 	You -- Uh, y-yes- I mean, I'm not... exactly
 	Hahaha! I'll share one of my secrets:
-	{Global.note_task("letter_delivery", "Natia said she's going up the mountain to stay here for a while")} I'm heading out for a trip up the mountain once you leave. If you're ever up there, I'd love to chat some more!
+	[Global add_note: Natia said she's going up the mountain to stay here for a while. |+ letter_delivery natia mountain_valley] I'm heading out for a trip up the mountain once you leave. If you're ever up there, I'd love to chat some more!
 	After you deliver my poem, of course!
 	You -- Alright, I'll look forward to seeing you again!
 [exit]

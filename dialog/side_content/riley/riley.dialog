@@ -77,14 +77,12 @@ You -- Naturally. It dominates the horizon.
 It's called the Tree Tower. I want to get inside.
 I found an entrance at the base of the tree that punches through the tower's outer wall, but it only got me to some kind of electrical closet, and I couldn't go any further. But there were twelve slots for capacitors. I think if I got a bunch and plugged them in, the front entrance would open.
 
-[Global note_task: the_tree_tower | That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors.]
-[Global task_note_person: the_tree_tower | Riley | Riley is looking for capacitors across the province.]
-[Global task_note_place: the_tree_tower | tree_tower | It requires 12 capacitors to open the tower's entrance. Riley wants inside.]
+[Global create_task: the_tree_tower]
+[Global add_note: That girl Riley wants to open the Tree Tower and explore inside. It apparently needs 12 capacitors. |+ tree_tower the_tree_tower riley]
 
 [! Global map_marked: tree_tower]
 	[Global mark_map: tree_tower | A former battleground, now filled with dangerous Spectres.]
-
-[Global mark_map: tree_tower | There's a back entrance under the roots of the tree]
+[Global add_note: There's a back entrance under the roots of the tree. | tree_tower]
 
 [!Global stat: capacitor_113]
 	You -- That's quite intriguing. So you think there's one inside this tower?
@@ -95,7 +93,7 @@ I found an entrance at the base of the tree that punches through the tower's out
 	You -- Oh, money's no concern. I've been intrigued by these structures since I got here. Perhaps sooner or later I would have ventured in anyway!
 	Alright! Before those deathgnats came, I pushed those floating flower things up so they make a path to the tower's lower level. Hop on those and look for a little hole in the wall. I'll come in after you.
 	You -- Alright, I'll look for a hole.
-	[Global task_note_place: the_tree_tower | village_tower | Riley says there must be a capacitor inside this tower.]
+	[Global add_note: Riley says there must be a capacitor inside the tower by the Hideaway. |+ the_tree_tower village_tower ]
 {otherwise}
 	You -- That's an interesting coincidence. I actually found one of those capacitors in the tower.
 	What!? Were you using it for something?
@@ -142,7 +140,7 @@ Thank you! I think we'll make a great team.
 		[Global add_stat: riley/111/reward] [Global add_item: bug | #31] [Global add_item: gem | #75] Here's some of the loot I got before it hit the fan. I can take it from here.
 		{goto: shop_generic]
 {otherwise}
-	[Global add_stat: riley/111/talked") > 1}
+	{Global add_stat("riley/111/talked") > 1}
 		Hey again, Jackie!
 		You -- Hey. Are you okay?
 		Uh, been better. I tried to get some salvage while the specters were dormant, but that went about as well as it looks.

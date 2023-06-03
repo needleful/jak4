@@ -41,8 +41,7 @@
 			I have to wonder if she would tolerate it. She's rather... eccentric. I can't imagine her getting on well with other people for a whole night.
 		Tirus -- Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
 		// Adjust this so the quest doesn't drag on. No foster-home stuff, just get her to eat some food from Tirus.
-		[Global add_stat: tirus/laili/home]
-		[Global note_task: strange_girl | Convincing Laili to move into a foster home has now become my responsibility, for some reason.]
+		[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
 	> {otherwise} Who was that?
 		[subtopic: _tirus_laili]
 	> Say, do you have anything for sale?
@@ -108,8 +107,7 @@
 				Tirus -- What? There are plenty of families with extra space! I will ask around, and you ask her if she wants to stop sleeping out in the cold.
 					Really, this is obvious. Only a Vaeler would not understand.
 				You -- Oh, come on. I'll /ask/ her, that's no trouble. There's no need for the verbal abuse.
-				[Global add_stat: tirus/laili/home]
-				[Global note_task: strange_girl | Convincing Laili to move into a foster home has now become my responsibility, for some reason.]
+				[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
 				[exit]
 		> {otherwise} I haven't found her yet.
 			She is very elusive. I have asked a few people. They never see her going home.
@@ -150,9 +148,9 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 		I mean, it can't go too badly...
 	Tirus -- It couldn't, I suppose. A gentle woman's touch is maybe what she needs.
 		If you talk to her, ask that she has enough food. She's skinny. 
-	[Global note_task: strange_girl | A tavern-keeper is concerned about a girl who stops by without ever saying anything. I've offered to find her and ask her how she's doing.]
-	[Global task_note_place: strange_girl | cliff_village | The girl lives somewhere in the village, presumably.]
-	[Global add_stat: tirus/laili]
+
+	[Global create_task: strange_girl]
+	[note: tirus/laili | The tavern-keeper is concerned about a girl who stops by without ever saying anything. I've offered to find her and ask her how she's doing. |+ laili tirus strange_girl cliff_village]
 [back]
 
 // Rollin' around at the speed of sound up to some neat platforming place or whatever.
@@ -210,8 +208,8 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 	You -- Directly up the cliff? There's surely a more reasonable path up.
 	Laili -- With the specters, it'd be even more dangerous. This way we don't have to leave the city.
 	You -- Hm, I suppose so.
-
-	[Global note_task: flight_test | Laili has recruited me to test her \"aeroplane\". Hopefully it doesn't kill me, but I would love that flight jacket.]
+	[Global create_task: flight_test]
+	[Global add_note: Laili has recruited me to test her "aeroplane". Hopefully it doesn't kill me, but I would love that flight jacket. | flight_test laili cliff_village]
 {otherwise}[! Global task_is_complete: flight_test]
 	So are you ready to help with the flight test?
 {otherwise}

@@ -45,10 +45,14 @@ var gravity_stunned_bodies: Dictionary
 var render_distance := 1.0
 var show_lowres := true
 
+# Map of tags to an array of ints accessting game_state.journal
+var journal_by_tag : Dictionary
+
 const description_path := "res://ui/items/%s.tres"
 
 func _init():
 	game_state = GameState.new()
+	journal_by_tag = {}
 	stories = {}
 	stats_temp = {}
 	gravity_stunned_bodies = {}
@@ -63,6 +67,16 @@ func _input(event):
 func _ready():
 	randomize()
 	call_deferred("place_flags")
+	journal_by_tag = {}
+	if valid_game_state:
+		var i := 0
+		for entry in game_state.journal:
+			for t in entry[1]:
+				if t in journal_by_tag:
+					journal_by_tag[t].append(i)
+				else:
+					journal_by_tag[t] = [i]
+			i += 1
 
 func _physics_process(delta):
 	for b in gravity_stunned_bodies.keys():
@@ -118,7 +132,6 @@ func get_input_string(input:InputEvent):
 		return "axis"+str(input.axis)
 	return str(input)
 
-
 func gravity_stun_body(b: RigidBody):
 	gravity_stunned_bodies[b] = gravity_stun_time
 	b.sleeping = false
@@ -156,141 +169,62 @@ func get_valid_game_state():
 		valid_game_state = false
 	return valid_game_state
 
+func remember(tag: String, category: String = "people"):
+	if category in game_state.stats:
+		if !(tag in game_state.stats[category]):
+			game_state.stats[category].append(tag)
+	else:
+		game_state.stats[category] = [tag]
+	return true
+
 # Game state management
 func mark_map(id:String, note:String):
-	add_note("places", id, note)
+	add_note(note, [id])
+	remember(id, "places")
 	return true
 
 func map_marked(id: String):
-	var d:Array = get_notes("places", id)
+	var d:Array = get_notes_by_tag(id)
 	return d.empty()
 
-func has_note(category: String, subject: String):
-	if !(category in game_state.journal):
+func add_note(text: String, tags: Array):
+	game_state.journal.append([text, tags])
+	var index := game_state.journal.size() - 1
+	for t in tags:
+		if t in journal_by_tag:
+			journal_by_tag[t].append(index)
+		else:
+			journal_by_tag[t] = [index]
+	return true
+
+func abolish_notes(tags: Array):
+	if tags.size() == 0:
 		return false
-	else:
-		return subject in game_state.journal[category]
-
-func add_note(category: String, subject: String, note: String):
-	if !(category in game_state.journal):
-		game_state.journal[category] = {}
-	if !(subject in game_state.journal[category]):
-		game_state.journal[category][subject] = []
-	game_state.journal[category][subject].append(note)
-	emit_signal("journal_updated", category, subject)
-	return true
-
-func get_notes(category: String, subject: String = ""):
-	var cat_notes := {}
-	if category in game_state.journal:
-		cat_notes = game_state.journal[category]
-	else:
-		return {}
-
-	if subject == "":
-		return cat_notes
-	elif subject in cat_notes:
-		return cat_notes[subject]
-	else:
-		return []
-
-func note_task(task_id: String, note: String) -> bool:
-	for t in game_state.active_tasks:
-		if t.id == task_id:
-			t.general_notes.append(note)
-			return true
-	for t in game_state.completed_tasks:
-		if t.id == task_id:
-			t.general_notes.append(note)
-			return true
-	var task := Task.new(task_id)
-	task.general_notes.append(note)
-	game_state.active_tasks.append(task)
-	return true
-
-func complete_task(task_id: String, note := "")-> bool:
-	var task : Task
-	for t in game_state.active_tasks:
-		if t.id == task_id:
-			game_state.active_tasks.remove(game_state.active_tasks.find(t))
-			game_state.completed_tasks.append(t)
-			task = t
-			break
-	if !task:
-		for t in game_state.completed_tasks:
-			if t.id == task_id:
-				print_debug("Tried to complete already completed task: ", task_id)
-				task = t
-				break
-	if !task:
-		task = Task.new(task_id)
-		game_state.completed_tasks.append(task)
-	if note != "":
-		task.general_notes.append(note)
-	return true
-
-func find_task(id: String, active: bool):
-	var l = game_state.active_tasks if active else game_state.completed_tasks
-	for task in l:
-		if task.id == id:
-			return task
-	return null
-
-func task_note_person(task_id: String, person: String, note: String):
-	var t = find_task(task_id, true)
-	if !t:
-		t = find_task(task_id, false)
-	if !t:
-		t = Task.new(task_id)
-		game_state.active_tasks.append(t)
-	t.people_notes[person] = note
-	return true
-
-func task_remove_person(task_id: String, person: String):
-	var t = find_task(task_id, true)
-	if !t:
-		t = find_task(task_id, false)
-	if t is Task and person in t.people_notes:
-		t.people_notes.erase(person)
-	return true
+	var initial_tag = tags.pop_front()
+	for n in journal_by_tag[initial_tag]:
+		var note:Array = game_state.journal[n]
 		
-func task_note_place(task_id: String, place: String, note: String):
-	var t = find_task(task_id, true)
-	if !t:
-		t = find_task(task_id, false)
-	if !t:
-		t = Task.new(task_id)
-		game_state.active_tasks.append(t)
-	t.place_notes[place] = note
+		for t in tags:
+			if !(t in note[1]):
+				continue
+		if !("abolished" in note[1]):
+			game_state.journal[n][1].append("abolished")
 	return true
 
-func task_remove_place(task_id: String, place: String):
-	var t = find_task(task_id, true)
-	if !t:
-		t = find_task(task_id, false)
-	if t is Task and place in t.place_notes:
-		t.place_notes.erase(place)
-	return true
+# An array of strings
+func get_notes_by_tag(id: String, include_abolished := false):
+	var result := []
+	if id in journal_by_tag:
+		for note_index in journal_by_tag[id]:
+			var text_plus_tags = game_state.journal[note_index]
+			if !include_abolished and "abolished" in text_plus_tags[1]:
+				continue
+			else:
+				result.append(text_plus_tags[0])
+	return result
 
-func task_notes_by_person(person: String):
-	var notes := []
-	for task in game_state.active_tasks:
-		if !(task is Task):
-			print_debug("Bad task in active tasks: ", task)
-			return
-		if person in task.people_notes:
-			notes.append(task.people_notes[person])
-	return notes
-
-func task_notes_by_place(place: String):
-	var notes := []
-	for task in game_state.active_tasks:
-		if !(task is Task):
-			print_debug("Bad task in active tasks: ", task)
-			return
-		if place in task.place_notes:
-			notes.append(task.place_notes[place])
-	return notes
+func has_note(id: String):
+	return id in journal_by_tag
 
 func add_story(key: String) -> bool:
 	if !(key in stories):
@@ -299,29 +233,40 @@ func add_story(key: String) -> bool:
 	if !stat("story_told/"+key):
 		var s = stories[key] as Story
 		if s:
-			add_note(s.category, s.subject, s.text)
+			add_note(s.text, s.subject)
 			var _x = add_stat("story_told/"+key)
 			return true
 	return false
 
-func get_task_notes(task_id: String, active := true) -> Array:
-	var list: Array = game_state.active_tasks if active else game_state.completed_tasks
-	for task in list:
-		if task.id == task_id:
-			return task.general_notes
-	return []
+func create_task(task_id: String, note: String = "") -> bool:
+	if task_exists(task_id):
+		return false
+	else:
+		game_state.active_tasks.append(task_id)
+		if note != "":
+			add_note(note, [task_id])
+		return true
+
+func complete_task(task_id: String, note := "")-> bool:
+	var ind := game_state.active_tasks.find(task_id)
+	if ind >= 0:
+		game_state.active_tasks.remove(ind)
+	
+	if task_id in game_state.completed_tasks:
+		print("Warning: task already completed: ", task_id)
+	else:
+		game_state.completed_tasks.append(task_id)
+
+	if note != "":
+		add_note(note, [task_id])
+	abolish_notes([task_id])
+	return true
 
 func task_is_active(task_id: String) -> bool:
-	for task in game_state.active_tasks:
-		if task.id == task_id:
-			return true
-	return false
+	return task_id in game_state.active_tasks
 
 func task_is_complete(task_id: String) -> bool:
-	for task in game_state.completed_tasks:
-		if task.id == task_id:
-			return true
-	return false
+	return task_id in game_state.completed_tasks
 
 func task_exists(task_id: String) -> bool:
 	return task_is_complete(task_id) or task_is_active(task_id)

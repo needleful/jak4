@@ -118,14 +118,11 @@ func set_active(a):
 	if active:
 		update_zoom()
 		for g in scroll_area.get_children():
-			var t = Global.task_notes_by_place(g.name)
-			var n = Global.get_notes("places", g.name)
-			if t and !t.empty():
-				g.notes = t
+			var n = Global.get_notes_by_tag(g.name)
 			if n and !n.empty():
-				g.headline = n[n.size() - 1]
+				g.notes = n
 
-			if (!t or t.empty()) and (!n or n.empty()):
+			if (!n or n.empty()):
 				g.hide()
 			else:
 				g.show()

@@ -8,14 +8,13 @@ export(Resource) var current_coat: Resource
 export(Array, Resource) var all_coats: Array
 export(Array, NodePath) var picked_items: Array
 export(Array, Transform) var flags : Array
-# Dictionary(string category -> Dictionary(string subject -> Array(string) notes))
-export(Dictionary) var journal
-# Array(task)
-export(Array, Resource) var active_tasks: Array
-export(Array, Resource) var completed_tasks: Array
+
+export(Array) var journal : Array
+export(Array) var active_tasks : Array
+export(Array) var completed_tasks : Array
 
 func _init():
-	journal = {}
+	journal = []
 	inventory = {}
 	stats = {}
 	resource_name = "GameState"

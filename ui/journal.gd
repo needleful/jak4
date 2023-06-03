@@ -5,10 +5,9 @@ export(StyleBox) var hrule_style
 onready var list := $panel/hbox/items/list
 onready var subject_name := $panel/hbox/notes/header/text/name
 onready var subject_image := $panel/hbox/notes/header/TextureRect
-onready var subject_notes := $panel/hbox/notes/header/text/notes
+onready var subject_notes := $panel/hbox/notes/header/text/scroll/notes
 onready var subject_headline := $panel/hbox/notes/header/text
 onready var notes := $panel/hbox/notes
-onready var task_notes := $panel/hbox/notes/notes/list
 
 const image_path := "res://ui/notes/%s/%s.png"
 var show_background := true
@@ -59,18 +58,20 @@ func populate_list(type: int):
 	match type:
 		NoteType.People:
 			category = "people"
-			ids = Global.get_notes(category).keys()
+			var s = Global.stat(category)
+			if s:
+				ids = s
 		NoteType.Places:
 			category = "places"
-			ids = Global.get_notes(category).keys()
+			var s = Global.stat(category)
+			if s:
+				ids = s
 		NoteType.ActiveTasks:
 			category = "tasks"
-			for t in Global.game_state.active_tasks:
-				ids.append(t.id)
+			ids = Global.game_state.active_tasks
 		NoteType.CompletedTasks:
 			category = "completed"
-			for t in Global.game_state.completed_tasks:
-				ids.append(t.id)
+			ids = Global.game_state.completed_tasks
 	if ids.empty():
 		return
 	
@@ -79,6 +80,9 @@ func populate_list(type: int):
 	list.add_child(label)
 	
 	for key in ids:
+		if key == "":
+			print("WARNING: empty key in ", category)
+			continue
 		var button := Button.new()
 		button.text = key.capitalize()
 		list.add_child(button)
@@ -94,52 +98,26 @@ func populate_list(type: int):
 
 func _on_subject_focused(type: int, subject: String):
 	var category := ""
-	var t: Array
-	var n : Array
+	var n : Array = Global.get_notes_by_tag(subject, type == NoteType.CompletedTasks)
 	match type:
 		NoteType.People:
 			category = "people"
-			t = Global.task_notes_by_person(subject)
-			n = Global.get_notes(category, subject)
 		NoteType.Places:
 			category = "places"
-			t = Global.task_notes_by_place(subject)
-			n = Global.get_notes(category, subject)
 		NoteType.ActiveTasks:
 			category = "tasks"
-			var task = Global.find_task(subject, true)
-			if task is Task:
-				for i in range(task.general_notes.size()):
-					n.append(task.general_notes[task.general_notes.size() - 1 - i])
-				t.append_array(task.people_notes.values())
-				t.append_array(task.place_notes.values())
 		NoteType.CompletedTasks:
-			var task = Global.find_task(subject, false)
 			category = "tasks"
-			if task is Task:
-				n = task.general_notes
-				t.append_array(task.people_notes.values())
-				t.append_array(task.place_notes.values())
 	subject_name.text = subject.capitalize()
 	subject_image.texture = get_image(category, subject)
 	
 	clear(subject_notes)
-	clear(task_notes)
-	
 	for note in n:
 		var l := Label.new()
 		l.autowrap = true
 		l.text = note
 		l.size_flags_horizontal = SIZE_EXPAND_FILL
 		subject_notes.add_child(l)
-
-	for note in t:
-		var l := Label.new()
-		l.autowrap = true
-		l.text = note
-		l.size_flags_horizontal = SIZE_EXPAND_FILL
-		task_notes.add_child(l)
-		
 
 func show_notes():
 	notes.show()
