@@ -76,6 +76,7 @@ func _input(event):
 			$mapcam.current = true
 
 func _enter_tree():
+	print("WORLD: Entering tree")
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
 		Global.load_sync(false)
 		

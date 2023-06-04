@@ -71,11 +71,7 @@ func _ready():
 	if valid_game_state:
 		var i := 0
 		for entry in game_state.journal:
-			for t in entry[1]:
-				if t in journal_by_tag:
-					journal_by_tag[t].append(i)
-				else:
-					journal_by_tag[t] = [i]
+			add_tagged_entries(i, entry[1])
 			i += 1
 
 func _physics_process(delta):
@@ -190,12 +186,15 @@ func map_marked(id: String):
 func add_note(text: String, tags: Array):
 	game_state.journal.append([text, tags])
 	var index := game_state.journal.size() - 1
+	add_tagged_entries(index, tags)
+	return true
+
+func add_tagged_entries(index: int, tags:Array):
 	for t in tags:
 		if t in journal_by_tag:
 			journal_by_tag[t].append(index)
 		else:
 			journal_by_tag[t] = [index]
-	return true
 
 func abolish_notes(tags: Array):
 	if tags.size() == 0:
@@ -439,6 +438,11 @@ func load_sync(reload := true):
 		valid_game_state = true
 		if reload:
 			var _x = get_tree().reload_current_scene()
+		else:
+			var i := 0
+			for e in game_state.journal:
+				add_tagged_entries(i, e[1])
+				i += 1
 	else:
 		print_debug("Tried to load with no save at ", save_path)
 		valid_game_state = false
