@@ -20,6 +20,7 @@ var velocity := 0.0
 var axis := Vector3.ZERO
 var rotate_speed := 0.0
 onready var original_y = global_transform.origin.y
+onready var default_mask = collision_mask
 var damaged_bodies = []
 
 func _ready():
@@ -43,6 +44,8 @@ func _physics_process(delta):
 			if rotate_speed != 0:
 				global_rotate(axis, delta*rotate_speed)
 			grav_time += delta
+			if grav_time > 0.5:
+				collision_mask = default_mask
 			if grav_time > Global.gravity_stun_time:
 				state = State.Falling
 		State.Falling:
@@ -63,6 +66,7 @@ func gravity_stun(_damage):
 	damaged_bodies = []
 	state = State.GravityStunned
 	grav_time = 0.0
+	collision_mask = 0
 	set_physics_process(true)
 	velocity = initial_velocity
 

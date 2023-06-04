@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -41,6 +41,10 @@
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=39]
 [ext_resource path="res://material/env/vaeler/wood-slats-old.png" type="Texture" id=40]
 [ext_resource path="res://material/env/stone/mud1.jpg" type="Texture" id=41]
+[ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=42]
+[ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=43]
+[ext_resource path="res://entities/env/stone/rock8.tscn" type="PackedScene" id=44]
+[ext_resource path="res://entities/env/copper/scrap4.tscn" type="PackedScene" id=45]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 
 [sub_resource type="ShaderMaterial" id=12]
@@ -437,6 +441,12 @@ transform = Transform( 0.862054, 0, 0.506816, 0, 1, 0, -0.506816, 0, 0.862054, -
 dialog = ExtResource( 20 )
 visual_name = "Water-tender"
 
+[node name="bug_pickup" parent="active_entities/zone_cliff" index="2" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6728, -166.645, 233.764 )
+
+[node name="bug_pickup2" parent="active_entities/zone_cliff" index="3" instance=ExtResource( 9 )]
+transform = Transform( 0.343199, 0, 0.939263, 0, 1, 0, -0.939263, 0, 0.343199, -0.847931, -171.798, 233.764 )
+
 [node name="zone_city" type="MultiMeshSystem" parent="active_entities" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.7054, -125.736, -129.742 )
 
@@ -477,27 +487,43 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 
 [node name="rock-clip" parent="active_entities/zone_city/clips" index="0" instance=ExtResource( 31 )]
 transform = Transform( -0.549989, 0.126279, -0.82557, -0.107952, 0.969462, 0.220206, 0.828166, 0.210232, -0.519561, 4.2268, -20.1514, 1.98061 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip2" parent="active_entities/zone_city/clips" index="1" instance=ExtResource( 31 )]
 transform = Transform( -0.77032, 0.311124, -0.556605, -0.272613, 0.628411, 0.728548, 0.576445, 0.712953, -0.39926, -18.9472, 5.56094, -21.0838 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip5" parent="active_entities/zone_city/clips" index="2" instance=ExtResource( 31 )]
 transform = Transform( -0.486798, 0.363295, -0.794383, -0.661173, 0.441071, 0.606882, 0.570857, 0.820654, 0.0254889, -24.3354, 24.1855, -30.6218 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip6" parent="active_entities/zone_city/clips" index="3" instance=ExtResource( 31 )]
 transform = Transform( -0.343345, 0.51266, -0.786953, -0.31512, 0.72644, 0.610725, 0.884768, 0.457673, -0.08787, -38.4385, 37.4972, -29.4185 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip3" parent="active_entities/zone_city/clips" index="4" instance=ExtResource( 31 )]
 transform = Transform( -0.971614, 0.234957, 0.0275742, 0.211849, 0.81228, 0.543434, 0.105286, 0.53385, -0.838999, -51.5447, 43.416, -30.8335 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip4" parent="active_entities/zone_city/clips" index="5" instance=ExtResource( 31 )]
 transform = Transform( -0.844364, -0.535767, 0.0011103, -0.017163, 0.0291199, 0.999428, -0.535493, 0.843863, -0.0337831, -45.2096, 66.9607, -34.8019 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip7" parent="active_entities/zone_city/clips" index="6" instance=ExtResource( 31 )]
 transform = Transform( -0.975583, -0.219587, 0.00426473, -0.0243692, 0.127525, 0.991535, -0.218272, 0.967223, -0.129763, -53.7752, 54.2583, -38.7935 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="rock-clip8" parent="active_entities/zone_city/clips" index="7" instance=ExtResource( 31 )]
 transform = Transform( -0.923353, -0.377581, -0.0696495, -0.0782046, 0.00735261, 0.99691, -0.375902, 0.925947, -0.0363176, -49.7937, 61.5208, -38.804 )
+script = ExtResource( 42 )
+distance = 50.0
 
 [node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
@@ -707,6 +733,28 @@ tracked_stat = "chunk137/water"
 [node name="fountain" parent="zone_cliff/water_hut" index="2" instance=ExtResource( 13 )]
 transform = Transform( 0.0127755, 0.0497347, -0.998681, 0, 0.998762, 0.0497388, 0.999918, -0.000635438, 0.0127597, 0.3349, -0.323761, -0.162445 )
 
+[node name="rock_kinematic" parent="zone_cliff" index="2" instance=ExtResource( 43 )]
+transform = Transform( -0.794699, -0.228486, 0.562359, -0.167602, -0.80784, -0.56507, 0.583406, -0.543314, 0.603695, -7.28387, -183.594, 236.564 )
+initial_velocity = 5.0
+
+[node name="rock_kinematic5" parent="zone_cliff" index="3" instance=ExtResource( 43 )]
+transform = Transform( -0.93798, 0.0522163, 0.342735, -0.133288, -0.966925, -0.217462, 0.320044, -0.249657, 0.913916, -5.31433, -183.09, 234.962 )
+initial_velocity = 3.0
+
+[node name="rock_kinematic2" parent="zone_cliff" index="4" instance=ExtResource( 43 )]
+transform = Transform( -0.852005, 0.134371, 0.505996, 0.297446, 0.919599, 0.256639, -0.430828, 0.369164, -0.823471, -8.06711, -182.232, 232.053 )
+initial_velocity = 4.0
+
+[node name="rock_kinematic3" parent="zone_cliff" index="5" instance=ExtResource( 43 )]
+transform = Transform( -0.735892, -0.617857, 0.276977, -3.57615e-08, -0.409064, -0.912506, 0.677099, -0.671505, 0.301026, -9.21507, -183.035, 234.864 )
+initial_velocity = 7.0
+
+[node name="rock_kinematic4" parent="zone_cliff" index="6" instance=ExtResource( 43 )]
+transform = Transform( 1, 0, 0, 0, -0.983264, 0.182184, 0, -0.182184, -0.983264, -6.88203, -181.678, 234.392 )
+
+[node name="rock8" parent="zone_cliff" index="7" instance=ExtResource( 44 )]
+transform = Transform( 0.970443, 0.23153, -0.0680784, 0.236413, -0.968716, 0.075482, -0.0484723, -0.0893456, -0.99482, 0.0865631, -173.595, 233.403 )
+
 [node name="zone_city" type="Spatial" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.7054, -125.736, -129.742 )
 
@@ -724,3 +772,6 @@ transform = Transform( -0.38942, -0.86645, 0.312436, 0.92106, -0.366331, 0.13209
 
 [node name="rock1" parent="zone_city" index="4" instance=ExtResource( 3 )]
 transform = Transform( 0.960118, -0.279596, -7.83173e-08, -0.250474, -0.860117, 0.444367, -0.124243, -0.426644, -0.895845, -33.1112, 86.9157, -69.201 )
+
+[node name="scrap4" parent="." index="7" instance=ExtResource( 45 )]
+transform = Transform( -0.00323469, 0.999995, 0, -0.999995, -0.00323469, 0, 0, 0, 1, -169.399, -157.135, 150.303 )

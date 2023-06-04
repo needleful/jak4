@@ -597,7 +597,7 @@ func _physics_process(delta):
 					next_state = State.Ground
 			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot >  and holding("mv_crouch"):
+			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				if holding("mv_crouch"):
