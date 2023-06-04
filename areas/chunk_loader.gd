@@ -21,7 +21,7 @@ var _load_mutex := Mutex.new()
 var _load_queue : Array
 var _load_thread := Thread.new()
 
-const multi_threaded := false
+const multi_threaded := true
 
 func _init():
 	_status = {}
@@ -102,7 +102,7 @@ func _get_content(dic:Dictionary, chunk: String):
 	var res
 	res = dic.get(chunk)
 	if res is String:
-		var data = load(res)
+		var data = ResourceLoader.load(res)
 		dic[chunk] = data
 		return data
 	else:
@@ -113,25 +113,28 @@ func unload_all():
 		unload(c)
 
 func load_active(chunk: Spatial):
+	# TODO: pause the world until this chunk is loaded
+	queue_load(chunk)
+
+func _old_load_active(chunk):
 	if chunk.has_node("dynamic_content"):
 		return
-	elif _status[chunk.name] == Status.Loaded:
+	if _status[chunk.name] == Status.Loaded:
 		activate(chunk)
-	elif _status[chunk.name] == Status.Loading:
-		if multi_threaded:
-			_load_mutex.lock()
-			# Try to remove the object from the queue
-			var l := _load_queue.find(chunk)
-			if l >= 0:
-				_load_queue.remove(l)
-			_load_mutex.unlock()
-			
-			if l < 0:
-				# Have to figure out what I want to do here
-				# print_debug("Too late to activate ", chunk.name)
-				return
-	_add_content(chunk, _get_content(_hires, chunk.name))
-	_status[chunk.name] = Status.Loaded
+	elif multi_threaded:
+		_load_mutex.lock()
+		# Try to remove the object from the queue
+		var l := _load_queue.find(chunk)
+		if l > 0:
+			_load_queue.remove(l)
+			_load_queue.push_front(chunk.name)
+		elif _status[chunk.name] != Status.Loading:
+			_status[chunk.name] = Status.Loading
+			_load_queue.push_front(chunk.name)
+		_load_mutex.unlock()
+	else:
+		_add_content(chunk, _get_content(_hires, chunk.name))
+		_status[chunk.name] = Status.Loaded
 
 func queue_load(chunk: Spatial):
 	if _status[chunk.name] != Status.Unloaded:
