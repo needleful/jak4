@@ -5,7 +5,7 @@ onready var yaw : Spatial = $yaw
 onready var pitch : Spatial = $yaw/pitch
 onready var spring : SpringArm = $yaw/pitch/SpringArm
 onready var camera:Camera = $yaw/pitch/Camera
-onready var tween := $cam_tween
+onready var tween:Tween = $cam_tween
 
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 1.0
@@ -239,8 +239,4 @@ func tween_to(angle: Vector3, distance: float, time: float):
 			spring.spring_length, distance,
 			time,
 			Tween.TRANS_CUBIC, Tween.EASE_OUT)
-		#tween.interpolate_property(camera, "rotation_degrees",
-		#	camera.rotation_degrees, -angle,
-		#	time,
-		#	Tween.TRANS_CUBIC, Tween.EASE_OUT)
 		_x = tween.start()

@@ -1737,15 +1737,15 @@ func get_dialog_viewer() -> Node:
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	if !CustomGames.can_talk():
 		return
+	cam_rig.start_dialog()
 	lock()
 	ui.start_dialog(source, sequence, speaker, starting_label)
-	cam_rig.start_dialog()
 
 func _on_dialog_exited(new_state := State.Ground):
 	Global.save_game()
 	ui.play_game()
-	cam_rig.end_dialog()
 	unlock(new_state)
+	cam_rig.end_dialog()
 
 func _on_dialog_exited_anim(animation):
 	Global.save_game()
