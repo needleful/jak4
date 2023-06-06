@@ -1,6 +1,9 @@
 extends Object
 class_name ChunkLoader
 
+signal queue_empty
+signal first_item_loaded
+
 enum Status {
 	Unloaded,
 	Loaded,
@@ -21,6 +24,7 @@ var _load_mutex := Mutex.new()
 var _load_queue : Array
 var _load_thread := Thread.new()
 
+var loaded_first := false
 const multi_threaded := true
 
 func _init():
@@ -60,7 +64,8 @@ func _load_wait():
 		var empty = _load_queue.empty()
 		_load_mutex.unlock()
 		if empty:
-			OS.delay_msec(10)
+			call_deferred("emit_signal", "queue_empty")
+			OS.delay_msec(30)
 			continue
 		
 		_load_mutex.lock()
@@ -69,6 +74,9 @@ func _load_wait():
 		
 		var c = _get_content(_hires, chunk.name)
 		call_deferred("_add_content", chunk, c as PackedScene)
+		if !loaded_first:
+			call_deferred("emit_signal", "first_item_loaded")
+			loaded_first = true
 
 func quit():
 	exit_thread = true

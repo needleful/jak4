@@ -111,8 +111,12 @@ func _ready():
 	sun.visible = !sun_enabled
 	chunk_last_position = player.global_transform.origin
 	active_last_position = player.global_transform.origin
+	get_tree().paused = true
 	load_nearby_chunks(player.global_transform.origin)
+	yield(chunk_loader, "first_item_loaded")
+	yield(chunk_loader, "queue_empty")
 	update_active_chunks(chunk_last_position)
+	get_tree().paused = false
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
