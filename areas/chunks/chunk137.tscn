@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -45,6 +45,9 @@
 [ext_resource path="res://entities/env/stone/rock_kinematic.tscn" type="PackedScene" id=43]
 [ext_resource path="res://entities/env/stone/rock8.tscn" type="PackedScene" id=44]
 [ext_resource path="res://entities/env/copper/scrap4.tscn" type="PackedScene" id=45]
+[ext_resource path="res://material/env/detail/water-tower.png" type="Texture" id=46]
+[ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=47]
+[ext_resource path="res://material/env/foundry/concrete.jpg" type="Texture" id=48]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 
 [sub_resource type="ShaderMaterial" id=12]
@@ -76,6 +79,44 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 41 )
 shader_param/ground = ExtResource( 40 )
 shader_param/ceiling = ExtResource( 41 )
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = ExtResource( 39 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/main_texture = ExtResource( 46 )
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 0.7
+shader_param/ground_scale = 0.4
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 3.0
+shader_param/specularity_wall = 3.0
+shader_param/specularity_ceiling = 3.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/wall = ExtResource( 47 )
+shader_param/ground = ExtResource( 48 )
+shader_param/ceiling = ExtResource( 48 )
+
+[sub_resource type="ShaderMaterial" id=16]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 0.6
+shader_param/ground_scale = 0.6
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/wall = ExtResource( 48 )
+shader_param/ground = ExtResource( 48 )
+shader_param/ceiling = ExtResource( 48 )
 
 [sub_resource type="Animation" id=6]
 length = 0.001
@@ -255,6 +296,14 @@ material/0 = ExtResource( 38 )
 [node name="door1002" parent="city/walkway2" index="2"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
+
+[node name="water" parent="city" index="5"]
+material/0 = SubResource( 14 )
+material/1 = SubResource( 15 )
+
+[node name="water-security" parent="city/water" index="0"]
+material/0 = SubResource( 15 )
+material/1 = SubResource( 16 )
 
 [node name="active_entities" type="Spatial" parent="." index="1"]
 
@@ -773,5 +822,5 @@ transform = Transform( -0.38942, -0.86645, 0.312436, 0.92106, -0.366331, 0.13209
 [node name="rock1" parent="zone_city" index="4" instance=ExtResource( 3 )]
 transform = Transform( 0.960118, -0.279596, -7.83173e-08, -0.250474, -0.860117, 0.444367, -0.124243, -0.426644, -0.895845, -33.1112, 86.9157, -69.201 )
 
-[node name="scrap4" parent="." index="7" instance=ExtResource( 45 )]
+[node name="scrap4" parent="." index="6" instance=ExtResource( 45 )]
 transform = Transform( -0.00323469, 0.999995, 0, -0.999995, -0.00323469, 0, 0, 0, 1, -169.399, -157.135, 150.303 )
