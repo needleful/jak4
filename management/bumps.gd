@@ -114,9 +114,10 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 	e.show()
 	e.emitting = true
 	yield(get_tree().create_timer(e.lifetime), "timeout")
-	e.emitting = false
-	e.get_parent().remove_child(e)
-	ObjectPool.put(ename, e)
+	if is_instance_valid(e):
+		e.emitting = false
+		e.get_parent().remove_child(e)
+		ObjectPool.put(ename, e)
 
 func play_sound_once(type: String, s: AudioStreamPlayer3D, position: Vector3):
 	get_tree().current_scene.add_child(s)
@@ -124,9 +125,10 @@ func play_sound_once(type: String, s: AudioStreamPlayer3D, position: Vector3):
 	s.stop()
 	s.play()
 	yield(get_tree().create_timer(s.stream.get_length()), "timeout")
-	s.stop()
-	s.get_parent().remove_child(s)
-	ObjectPool.put(type, s)
+	if is_instance_valid(s):
+		s.stop()
+		s.get_parent().remove_child(s)
+		ObjectPool.put(type, s)
 
 func _emitter_name(surface, impact):
 	return "BE-" + str(surface) + "-" + str(impact)

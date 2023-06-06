@@ -10,7 +10,7 @@ func _ready():
 			"I suppose if I'd been born out here, I'd have been like Mother. Austere. Stoic. That's what they tell me about her, at least.", ["mum"])
 		var p = get_player()
 		if p:
-			p.global_transform.origin = global_transform.origin
+			p.teleport_to(global_transform)
 		Global.player_spawned = true
 
 func get_player():

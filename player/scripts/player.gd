@@ -1614,14 +1614,13 @@ func go_to_sleep():
 	yield(get_tree().create_timer(1), "timeout")
 	
 	if get_tree().current_scene.has_method("sleep"):
-		get_tree().current_scene.call_deferred("sleep")
+		get_tree().current_scene.sleep()
 	
 	yield(get_tree().create_timer(.5), "timeout")
 	
 	if get_tree().current_scene.has_method("wake_up"):
-		get_tree().current_scene.call_deferred("wake_up")
-	
-	yield(get_tree().create_timer(0.5), "timeout")
+		yield(get_tree().current_scene.wake_up(), "completed")
+	yield(get_tree().create_timer(.25), "timeout")
 	_wake_up()
 
 func _slow_wake():
@@ -1631,12 +1630,13 @@ func _slow_wake():
 	_wake_up()
 
 func _wake_up():
+	$fade.hide()
 	if !empty(sleep_zone):
 		heal()
 		Global.save_checkpoint(get_save_transform(), true)
 	else:
 		Global.save_game()
-	$fade/AnimationPlayer.play("fadein")
+	#$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
 
 func die():

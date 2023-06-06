@@ -111,12 +111,7 @@ func _ready():
 	sun.visible = !sun_enabled
 	chunk_last_position = player.global_transform.origin
 	active_last_position = player.global_transform.origin
-	get_tree().paused = true
-	load_nearby_chunks(player.global_transform.origin)
-	yield(chunk_loader, "first_item_loaded")
-	yield(chunk_loader, "queue_empty")
-	update_active_chunks(chunk_last_position)
-	get_tree().paused = false
+	yield(pause_and_load_init(), "completed")
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
@@ -125,7 +120,6 @@ func _ready():
 			set_time(Global.stat("clock_time"), true)
 	else:
 		set_time(9.75)
-	
 
 func _process(delta):
 	time += delta
@@ -150,6 +144,21 @@ func _process(delta):
 		vis_last_position = player_new_position
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
 		update_terrain_lod(vis_last_position)
+
+func pause_and_load_init():
+	get_tree().paused = true
+	load_nearby_chunks(player.global_transform.origin)
+	yield(chunk_loader, "first_item_loaded")
+	yield(chunk_loader, "queue_empty")
+	update_active_chunks(player.global_transform.origin)
+	get_tree().paused = false
+
+func pause_and_load():
+	get_tree().paused = true
+	load_nearby_chunks(player.global_transform.origin)
+	yield(chunk_loader, "queue_empty")
+	update_active_chunks(player.global_transform.origin)
+	get_tree().paused = false
 
 func get_sun():
 	return sun
@@ -433,7 +442,7 @@ func sleep():
 		set_time(get_time() + 2, false)
 
 func wake_up():
-	load_nearby_chunks(player.global_transform.origin)
+	yield(pause_and_load(), "completed")
 	update_active_chunks(player.global_transform.origin)
 
 func start_day():

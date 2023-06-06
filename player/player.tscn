@@ -12,7 +12,7 @@
 [ext_resource path="res://ui/components/alert_prompt.tscn" type="PackedScene" id=10]
 [ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/diagetic/target.png" type="Texture" id=12]
-[ext_resource path="res://ui/icons/wep_pistol.svg" type="Texture" id=13]
+[ext_resource path="res://ui/icons/wep_grav_gun.svg" type="Texture" id=13]
 [ext_resource path="res://ui/weapon.gd" type="Script" id=14]
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
 [ext_resource path="res://ui/map/map.tscn" type="PackedScene" id=16]
@@ -1085,6 +1085,7 @@ script = ExtResource( 20 )
 time_scale_response = false
 
 [node name="fade" type="ColorRect" parent="."]
+pause_mode = 2
 time_scale_response = false
 visible = false
 anchor_right = 1.0
@@ -1286,7 +1287,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="saveStats" type="VBoxContainer" parent="ui/gameing"]
-pause_mode = 1
+pause_mode = 2
 time_scale_response = false
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -1611,6 +1612,7 @@ one_shot = true
 
 [node name="custom_game" type="Control" parent="ui/gameing"]
 time_scale_response = false
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
@@ -1665,7 +1667,6 @@ anims/start = SubResource( 68 )
 [node name="weapon" type="TextureRect" parent="ui/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -562.0
@@ -1674,6 +1675,7 @@ margin_right = -306.0
 margin_bottom = 179.0
 rect_min_size = Vector2( 256, 128 )
 texture = ExtResource( 13 )
+expand = true
 stretch_mode = 6
 script = ExtResource( 14 )
 
@@ -1697,25 +1699,23 @@ valign = 1
 [node name="ArrowUp" type="TextureRect" parent="ui/gameing/weapon"]
 time_scale_response = false
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 22.0
-margin_top = -92.0
-margin_right = 54.0
-margin_bottom = -75.0
+margin_left = -16.0
+margin_top = -19.0
+margin_right = 16.0
+margin_bottom = -2.0
 texture = ExtResource( 15 )
 
 [node name="ArrowDown" type="TextureRect" parent="ui/gameing/weapon"]
 time_scale_response = false
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 22.0
-margin_top = 63.0
-margin_right = 54.0
-margin_bottom = 80.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = 2.0
+margin_right = 16.0
+margin_bottom = 18.0
 texture = ExtResource( 15 )
 flip_v = true
 
@@ -2059,6 +2059,7 @@ margin_bottom = 191.0
 text = "Use Item"
 
 [node name="black" type="ColorRect" parent="ui/dialog"]
+pause_mode = 2
 time_scale_response = false
 visible = false
 show_behind_parent = true
