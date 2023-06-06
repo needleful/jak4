@@ -1630,13 +1630,12 @@ func _slow_wake():
 	_wake_up()
 
 func _wake_up():
-	$fade.hide()
 	if !empty(sleep_zone):
 		heal()
 		Global.save_checkpoint(get_save_transform(), true)
 	else:
 		Global.save_game()
-	#$fade/AnimationPlayer.play("fadein")
+	$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
 
 func die():
