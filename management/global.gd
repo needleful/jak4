@@ -413,6 +413,7 @@ func reset_game():
 	game_state = GameState.new()
 	stats_temp = {}
 	gravity_stunned_bodies = {}
+	journal_by_tag = {}
 	print("New game...")
 	var dir := Directory.new()
 	if dir.file_exists(save_path):
