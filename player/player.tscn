@@ -1985,7 +1985,6 @@ format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="Control" parent="ui"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 33 )
@@ -2001,9 +2000,10 @@ time_scale_response = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 28.0
-margin_top = -233.0
+margin_top = -295.0
 margin_right = 593.0
-margin_bottom = -21.0
+margin_bottom = -9.0
+grow_vertical = 0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 15
 columns = 2
@@ -2019,41 +2019,57 @@ small = true
 [node name="Label" type="Label" parent="ui/dialog/VBoxContainer"]
 margin_left = 98.0
 margin_top = 21.0
-margin_right = 177.0
+margin_right = 272.0
 margin_bottom = 43.0
 text = "Continue"
 
-[node name="input_prompt2" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+[node name="prompt_trade" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 74.0
 margin_right = 83.0
 margin_bottom = 138.0
-action = "ui_cancel"
-small = true
-
-[node name="Label2" type="Label" parent="ui/dialog/VBoxContainer"]
-margin_left = 98.0
-margin_top = 95.0
-margin_right = 177.0
-margin_bottom = 117.0
-text = "Exit"
-
-[node name="prompt_trade" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 148.0
-margin_right = 83.0
-margin_bottom = 212.0
 action = "dialog_item"
 small = true
 
 [node name="label_trade" type="Label" parent="ui/dialog/VBoxContainer"]
 margin_left = 98.0
-margin_top = 169.0
-margin_right = 177.0
-margin_bottom = 191.0
+margin_top = 95.0
+margin_right = 272.0
+margin_bottom = 117.0
 text = "Use Item"
+
+[node name="input_prompt2" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 148.0
+margin_right = 83.0
+margin_bottom = 212.0
+action = "skip_to_next_choice"
+small = true
+
+[node name="label_trade2" type="Label" parent="ui/dialog/VBoxContainer"]
+margin_left = 98.0
+margin_top = 169.0
+margin_right = 272.0
+margin_bottom = 191.0
+text = "Skip to Next Choice"
+
+[node name="input_prompt3" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 222.0
+margin_right = 83.0
+margin_bottom = 286.0
+action = "ui_cancel"
+small = true
+
+[node name="Label2" type="Label" parent="ui/dialog/VBoxContainer"]
+margin_left = 98.0
+margin_top = 243.0
+margin_right = 272.0
+margin_bottom = 265.0
+text = "Exit"
 
 [node name="black" type="ColorRect" parent="ui/dialog"]
 pause_mode = 2
@@ -2107,20 +2123,25 @@ margin_right = 354.0
 margin_bottom = 62.0
 text = "Trade Coats"
 
-[node name="bar_buttons" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+[node name="bar_context" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 66.0
 margin_right = 354.0
 margin_bottom = 70.0
 
-[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+[node name="bar_inventory" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 74.0
 margin_right = 354.0
 margin_bottom = 78.0
 
-[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 82.0
 margin_right = 354.0
-margin_bottom = 110.0
+margin_bottom = 86.0
+
+[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 90.0
+margin_right = 354.0
+margin_bottom = 118.0
 text = "Cancel"
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
@@ -2278,6 +2299,7 @@ material/0 = SubResource( 98 )
 [connection signal="exited_anim" from="ui/dialog/viewer" to="." method="_on_dialog_exited_anim"]
 [connection signal="pick_item" from="ui/dialog/viewer" to="ui/dialog/item_context" method="show"]
 [connection signal="cancelled" from="ui/dialog/item_context" to="ui/dialog/viewer" method="_on_item_context_cancelled"]
+[connection signal="context_reply" from="ui/dialog/item_context" to="ui/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_item"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/coat" to="ui/dialog/item_context" method="_on_coat_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/item_context" method="_on_cancel_pressed"]

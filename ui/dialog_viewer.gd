@@ -5,6 +5,7 @@ signal exited_anim(animation)
 signal event(id)
 signal event_with_source(id, source)
 signal pick_item
+signal new_contextual_reply
 
 var shopping := false setget set_shopping
 
@@ -49,12 +50,15 @@ const SECONDS_PER_HOUR := 3600
 const SECONDS_PER_MINUTE := 60
 
 const item_fallthrough := "item(_)"
+# Dictionary of arrays mapping context to messages
+var contextual_replies : Dictionary
 
 func _init():
 	fonts = {}
 	call_stack = []
 	discussed = {}
 	label_conditions = {}
+	contextual_replies = {}
 
 func _input(event):
 	if !is_visible_in_tree():
@@ -70,8 +74,8 @@ func _input(event):
 		set_process_input(false)
 		set_process(false)
 	elif event.is_action_pressed("skip_to_next_choice"):
-		while current_item.type != DialogItem.Type.REPLY:
-			get_next()
+		while current_item.type != DialogItem.Type.REPLY and get_next():
+			continue
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
 
@@ -139,6 +143,7 @@ func clear():
 	discussed = {}
 	otherwise = false
 	call_stack = []
+	contextual_replies = {}
 	for c in messages.get_children():
 		c.queue_free()
 	clear_replies()
@@ -171,7 +176,7 @@ func advance():
 		if !current_item:
 			exit()
 			return
-		# Conditions on replies are handles in list_replies()
+		# Conditions on replies are handled in list_replies()
 		if current_item.type == DialogItem.Type.REPLY:
 			result = true
 			break
@@ -214,11 +219,19 @@ func advance():
 	if current_item.text != "":
 		match current_item.type:
 			DialogItem.Type.MESSAGE:
-				show_message(font_override)
+				show_message(current_item.text, current_item.speaker, font_override)
 			DialogItem.Type.REPLY:
 				list_replies()
 			DialogItem.Type.NARRATION:
 				show_narration(font_override)
+			DialogItem.Type.CONTEXT_REPLY:
+				insert_contextual_reply(current_item, current_item.speaker)
+				current_item = sequence.failed_next(current_item)
+				advance()
+			_:
+				insert_label("[Error: Unknown message type: %s] %s" % [
+					DialogItem.Type.keys()[current_item.type], current_item.text
+				], "narration")
 
 func list_replies():
 	var reply: DialogItem = current_item
@@ -241,23 +254,8 @@ func list_replies():
 				font_override = r._format
 		if result:
 			otherwise = false
-			var b := Button.new()
-			b.clip_text = false
-			var l := Label.new()
+			var b := multiline_button(reply.text, font_override)
 			replies.add_child(b)
-			b.add_child(l)
-			l.anchor_left = 0
-			l.anchor_right = 1
-			l.anchor_top = 0
-			l.anchor_bottom = 1
-			l.margin_left = 10
-			l.margin_right = -10
-			l.margin_top = 5
-			l.margin_bottom = -5
-			l.autowrap = true
-			l.text = interpolate(reply.text)
-			if font_override in fonts:
-				l.add_font_override("font", fonts[font_override])
 			call_deferred("resize_replies")
 			var r = reply
 			var s = skip_reply
@@ -270,6 +268,25 @@ func list_replies():
 		current_item = reply
 		advance()
 	$input_timer.start()
+
+func multiline_button(text: String, font_override := "") -> Button:
+	var b := Button.new()
+	b.clip_text = false
+	var l := Label.new()
+	b.add_child(l)
+	l.anchor_left = 0
+	l.anchor_right = 1
+	l.anchor_top = 0
+	l.anchor_bottom = 1
+	l.margin_left = 10
+	l.margin_right = -10
+	l.margin_top = 5
+	l.margin_bottom = -5
+	l.autowrap = true
+	l.text = interpolate(text)
+	if font_override in fonts:
+		l.add_font_override("font", fonts[font_override])
+	return b
 
 func resize_replies():
 	for b in replies.get_children():
@@ -287,8 +304,17 @@ func _on_input_timer_timeout():
 
 func choose_reply(item: DialogItem, skip: bool):
 	if !skip:
-		insert_label("You: %s" % item.text, "you")
+		show_message(item.text, "You")
 		last_speaker = "You"
+	current_item = item
+	get_next()
+
+func show_context_reply(item: DialogItem):
+	set_process_input(true)
+	set_process(true)
+	call_stack.push_back(current_item)
+	show_message(item.text, "You")
+	last_speaker = "You"
 	current_item = item
 	get_next()
 
@@ -298,16 +324,12 @@ func get_speaker_name() -> String:
 	else:
 		return main_speaker.name.capitalize()
 
-func show_message(font_override: String):
-	var speaker: String = current_item.speaker
+func show_message(text: String, speaker: String, font_override:= ""):
 	if speaker == "":
 		speaker = get_speaker_name()
 
-	var text := ""
 	if speaker != last_speaker:
-		text = "%s: %s" % [speaker, current_item.text]
-	else:
-		text = current_item.text
+		text = "%s: %s" % [speaker, text]
 	last_speaker = speaker
 	
 	insert_label(text, speaker.to_lower(), font_override)
@@ -363,7 +385,6 @@ func evaluate(ex_text: String):
 	return r
 
 func check_condition(cond: String):
-	
 	if cond == "otherwise":
 		return {"_otherwise": otherwise}
 	
@@ -470,7 +491,20 @@ func _use_item(item) -> bool:
 	advance()
 	return true
 
+func insert_contextual_reply(message: DialogItem, context := ""):
+	var key := "--never-remove--"
+	if context != "":
+		mention(context)
+		key = context
+	if key in contextual_replies:
+		contextual_replies[key].append(message)
+	else:
+		contextual_replies[key] = [message]
+	emit_signal("new_contextual_reply")
+
+########################################
 ## Dialog functions
+########################################
 
 func exiting():
 	is_exiting = true
@@ -534,6 +568,7 @@ func exit_anim(animation:String):
 	return RESULT_END
 
 func unmention(topic):
+	var _x = contextual_replies.erase(topic)
 	return discussed.erase(topic)
 
 func mention(topic):

@@ -4,7 +4,8 @@ class_name DialogItem
 enum Type {
 	MESSAGE,
 	REPLY,
-	NARRATION
+	NARRATION,
+	CONTEXT_REPLY
 }
 
 export(int) var next: int = -1

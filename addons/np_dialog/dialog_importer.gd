@@ -13,10 +13,7 @@ var r_speaker := RegEx.new()
 var r_whitespace := RegEx.new()
 var r_expression := RegEx.new()
 var r_sq_expression := RegEx.new()
-
-var f_query := "Global.stat('%s')"
-var f_add := "Global.add_stat('%s')"
-var f_not := "!Global.stat('%s')"
+var r_context_reply := RegEx.new()
 
 func _init():
 	r_comment.compile("^\\s*//")
@@ -26,6 +23,7 @@ func _init():
 	r_sq_expression.compile("#?\\[([^\\]]+)\\]")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
+	r_context_reply.compile("^\\s*(\\?[a-zA-Z0-9_/]*)?>")
 	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
 
@@ -116,12 +114,15 @@ func parse_text(text: String, src_path = "<local>"):
 		var td := extract_type(line)
 		line = td.line
 		wd.type = td.type
-
-		var nd := extract_speaker(line)
-		if "speaker" in nd:
-			wd.speaker = nd.speaker
-		if "line" in nd:
-			line = nd.line
+		if "speaker" in td:
+			wd.speaker = td.speaker
+	
+		if wd.type == DialogItem.Type.MESSAGE:
+			var nd := extract_speaker(line)
+			if "speaker" in nd:
+				wd.speaker = nd.speaker
+			if "line" in nd:
+				line = nd.line
 		
 		wd.text = line.strip_edges()
 		
@@ -257,20 +258,32 @@ func sq_argument(arg: String) -> String:
 		return '"' + s.replace('"', '\\"') + '"'
 
 func extract_type(line: String) -> Dictionary:
-	var dict = {}
-	var nm = r_narrate.search(line)
+	var nm := r_narrate.search(line)
 	if nm:
-		dict.type = DialogItem.Type.NARRATION
-		dict.line = line.replace(nm.get_string(), "")
+		return {
+			"type": DialogItem.Type.NARRATION,
+			"line": line.replace(nm.get_string(), "")
+		}
+
+	var crm := r_context_reply.search(line)
+	if crm:
+		return {
+			"type": DialogItem.Type.CONTEXT_REPLY,
+			"line": line.replace(crm.get_string(), ""),
+			"speaker": crm.get_string(1).substr(1) if crm.strings.size() > 1 else ""
+		}
+
+	var rm := r_reply.search(line)
+	if rm:
+		return {
+			"type": DialogItem.Type.REPLY,
+			"line": line.replace(rm.get_string(), "")
+		}
 	else:
-		var rm = r_reply.search(line)
-		if rm:
-			dict.type = DialogItem.Type.REPLY
-			dict.line = line.replace(rm.get_string(), "")
-		else:
-			dict.type = DialogItem.Type.MESSAGE
-			dict.line = line
-	return dict
+		return {
+			"type": DialogItem.Type.MESSAGE,
+			"line": line
+		}
 
 func extract_speaker(line: String) -> Dictionary:
 	var dict = {}
