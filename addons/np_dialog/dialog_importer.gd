@@ -209,20 +209,28 @@ func extract_expressions(line: String) -> Dictionary:
 		dict.line = dict.line.replace(s, "")
 		dict.conditions.append(ex)
 	
-	var sq_matches = r_sq_expression.search_all(line)
+	var sq_matches := r_sq_expression.search_all(line)
 	for rm in sq_matches:
-		var func_arg:Array = rm.get_string(1).split(":", true)
-		if func_arg.size() > 2:
-			print_debug("warning: nested functions not supported: ", rm.get_string())
+		var text:String = rm.get_string(1)
+		var func_str := ""
+		var args_str := ""
+		var idx:int = text.find(":")
+		if idx >= 0:
+			func_str = text.substr(0, idx)
+			args_str = text.substr(idx+1)
+		else:
+			func_str = text
+
 		var slot := ""
-		for f in func_arg[0].split(" ", false):
+		for f in func_str.split(" ", false):
 			if slot != "" and slot != "!":
 				slot += "."
 			slot += f.strip_edges()
+
 		var message := "("
 		var args := 0
-		if func_arg.size() > 1:
-			for a in func_arg[1].split("|"):
+		if args_str != "":
+			for a in args_str.split("|"):
 				if args:
 					message += ", "
 					

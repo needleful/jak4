@@ -567,16 +567,16 @@ func exit_anim(animation:String):
 	set_process_input(false)
 	return RESULT_END
 
-func unmention(topic):
-	var _x = contextual_replies.erase(topic)
-	return discussed.erase(topic)
-
 func mention(topic):
 	discussed[topic] = true
 	return true
 
 func mentioned(topic):
 	return topic in discussed
+
+func forget(topic):
+	var _x = contextual_replies.erase(topic)
+	return discussed.erase(topic)
 
 func subtopic(label):
 	call_stack.push_back(current_item)
