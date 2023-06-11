@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -48,6 +48,16 @@
 [ext_resource path="res://material/env/detail/water-tower.png" type="Texture" id=46]
 [ext_resource path="res://material/env/vaeler/grey_brick.png" type="Texture" id=47]
 [ext_resource path="res://material/env/foundry/concrete.jpg" type="Texture" id=48]
+[ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=49]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=50]
+[ext_resource path="res://material/env/stone/bricks2.jpg" type="Texture" id=51]
+[ext_resource path="res://entities/env/stone/furniture/wood_stove.tscn" type="PackedScene" id=52]
+[ext_resource path="res://entities/env/stone/cup.tscn" type="PackedScene" id=53]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=54]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=55]
+[ext_resource path="res://entities/env/city/wok.tscn" type="PackedScene" id=56]
+[ext_resource path="res://entities/env/furniture/shelf_simple.tscn" type="PackedScene" id=57]
+[ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=58]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 
 [sub_resource type="ShaderMaterial" id=12]
@@ -77,7 +87,7 @@ shader_param/softness = 0.5
 shader_param/specularity = 1.0
 shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 41 )
-shader_param/ground = ExtResource( 40 )
+shader_param/ground = ExtResource( 51 )
 shader_param/ceiling = ExtResource( 41 )
 
 [sub_resource type="ShaderMaterial" id=14]
@@ -241,6 +251,18 @@ shader_param/color = Color( 0.580392, 1, 0.666667, 1 )
 
 [sub_resource type="SphereShape" id=5]
 
+[sub_resource type="BoxShape" id=17]
+extents = Vector3( 1.86967, 1, 5.93583 )
+
+[sub_resource type="BoxShape" id=18]
+extents = Vector3( 1.86967, 1, 5.93583 )
+
+[sub_resource type="BoxShape" id=19]
+extents = Vector3( 2.8305, 1, 4.4774 )
+
+[sub_resource type="BoxShape" id=20]
+extents = Vector3( 3.26265, 1, 7.67731 )
+
 [sub_resource type="OccluderShapePolygon" id=2]
 polygon_points = PoolVector2Array( 304.094, -184.746, 183.886, 7.62628, -98.9865, -27.9154, -113.381, -126.337, -4.50912, 15.4447, 246.273, -13.383 )
 
@@ -297,6 +319,10 @@ material/0 = ExtResource( 38 )
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
+[node name="door1003" parent="city/walkway2" index="3"]
+material/0 = ExtResource( 38 )
+material/1 = SubResource( 12 )
+
 [node name="water" parent="city" index="5"]
 material/0 = SubResource( 14 )
 material/1 = SubResource( 15 )
@@ -304,6 +330,9 @@ material/1 = SubResource( 15 )
 [node name="water-security" parent="city/water" index="0"]
 material/0 = SubResource( 15 )
 material/1 = SubResource( 16 )
+
+[node name="window" parent="city" index="6"]
+material/0 = ExtResource( 38 )
 
 [node name="active_entities" type="Spatial" parent="." index="1"]
 
@@ -499,13 +528,22 @@ transform = Transform( 0.343199, 0, 0.939263, 0, 1, 0, -0.939263, 0, 0.343199, -
 [node name="zone_city" type="MultiMeshSystem" parent="active_entities" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 69.7054, -125.736, -129.742 )
 
-[node name="tirus_scene_conductor" type="AnimationPlayer" parent="active_entities/zone_city" index="0"]
+[node name="light_wall3" parent="active_entities/zone_city" index="0" instance=ExtResource( 58 )]
+transform = Transform( -4.7593e-08, 0.901497, -0.432786, -1, -4.37114e-08, 1.89177e-08, -1.86345e-09, 0.432786, 0.901497, -33.534, -0.462601, 18.2331 )
+
+[node name="light_wall4" parent="active_entities/zone_city" index="1" instance=ExtResource( 58 )]
+transform = Transform( -4.7593e-08, 0.901497, -0.432786, -1, -4.37114e-08, 1.89177e-08, -1.86345e-09, 0.432786, 0.901497, -36.5243, -0.462601, 19.6354 )
+
+[node name="light_wall5" parent="active_entities/zone_city" index="2" instance=ExtResource( 58 )]
+transform = Transform( 0.897641, -0.440728, 1.92648e-08, 0, -4.37114e-08, -1, 0.440728, 0.897641, -3.92371e-08, -33.2273, -0.393532, 10.2776 )
+
+[node name="tirus_scene_conductor" type="AnimationPlayer" parent="active_entities/zone_city" index="3"]
 root_node = NodePath("../npc_shop_tirus")
 anims/RESET = SubResource( 6 )
 anims/laili_pops_in = SubResource( 7 )
 anims/laili_pops_out = SubResource( 8 )
 
-[node name="npc_shop_tirus" parent="active_entities/zone_city" index="1" instance=ExtResource( 24 )]
+[node name="npc_shop_tirus" parent="active_entities/zone_city" index="4" instance=ExtResource( 24 )]
 transform = Transform( -0.976936, 0, 0.213531, 0, 1, 0, -0.213531, 0, -0.976936, 56.7071, -14.7281, 16.986 )
 dialog = ExtResource( 22 )
 visual_name = "Tirus"
@@ -514,24 +552,24 @@ custom_entry = "tirus"
 cutscene_player = NodePath("../tirus_scene_conductor")
 inventory_data = ExtResource( 23 )
 
-[node name="npc_monument" parent="active_entities/zone_city" index="2" instance=ExtResource( 16 )]
+[node name="npc_monument" parent="active_entities/zone_city" index="5" instance=ExtResource( 16 )]
 transform = Transform( 0.893915, 0, -0.448236, 0, 1, 0, 0.448236, 0, 0.893915, 4.1653, -12.4994, 7.81284 )
 dialog = ExtResource( 21 )
 visual_name = "Custodian"
 
-[node name="c_table" parent="active_entities/zone_city" index="3" instance=ExtResource( 15 )]
+[node name="c_table" parent="active_entities/zone_city" index="6" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 56.6184, -15.5187, 17.2506 )
 
-[node name="rock2" parent="active_entities/zone_city" index="4" instance=ExtResource( 3 )]
+[node name="rock2" parent="active_entities/zone_city" index="7" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.02258, 18.1355, -52.413 )
 
-[node name="rock_collapsible" parent="active_entities/zone_city" index="5" instance=ExtResource( 25 )]
+[node name="rock_collapsible" parent="active_entities/zone_city" index="8" instance=ExtResource( 25 )]
 transform = Transform( -0.352418, 0, -0.935843, 0, 1, 0, 0.935843, 0, -0.352418, -28.5404, 78.1974, -68.086 )
 
-[node name="rock_collapsible2" parent="active_entities/zone_city" index="6" instance=ExtResource( 25 )]
+[node name="rock_collapsible2" parent="active_entities/zone_city" index="9" instance=ExtResource( 25 )]
 transform = Transform( 0.0358648, 0, -0.999357, 0, 1, 0, 0.999357, 0, 0.0358648, -37.7935, 78.1974, -69.349 )
 
-[node name="clips" type="Spatial" parent="active_entities/zone_city" index="7"]
+[node name="clips" type="Spatial" parent="active_entities/zone_city" index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 
 [node name="rock-clip" parent="active_entities/zone_city/clips" index="0" instance=ExtResource( 31 )]
@@ -574,7 +612,7 @@ transform = Transform( -0.923353, -0.377581, -0.0696495, -0.0782046, 0.00735261,
 script = ExtResource( 42 )
 distance = 50.0
 
-[node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="8"]
+[node name="laili_points" type="Spatial" parent="active_entities/zone_city" index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 script = ExtResource( 28 )
 chunk_entry = "chunk138:laili_points"
@@ -721,16 +759,16 @@ material/0 = SubResource( 9 )
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/laili_points/p3" index="1"]
 shape = SubResource( 5 )
 
-[node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="9"]
+[node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="12"]
 transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 27.8378, -11.0802, -31.1414 )
 
-[node name="laili_plane_start" type="Position3D" parent="active_entities/zone_city" index="10"]
+[node name="laili_plane_start" type="Position3D" parent="active_entities/zone_city" index="13"]
 transform = Transform( -0.0177755, 0.123469, -0.992189, -0.316599, 0.940588, 0.122719, 0.948393, 0.316308, 0.0223706, 28.4458, -11.5743, -28.8823 )
 
-[node name="laili_new_home" type="Position3D" parent="active_entities/zone_city" index="11"]
-transform = Transform( 0.825759, 0, 0.564023, 0, 1, 0, -0.564024, 0, 0.825758, 60.8663, -9.70754, -27.4209 )
+[node name="laili_new_home" type="Position3D" parent="active_entities/zone_city" index="14"]
+transform = Transform( -0.664428, 0, 0.747352, 0, 1, 0, -0.747353, 0, -0.664427, 61.2697, -9.70754, -23.491 )
 
-[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="12"]
+[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="15"]
 script = ExtResource( 35 )
 condition = "!Global.stat(\"laili/pre_flight\")"
 listen_for_change = true
@@ -740,12 +778,121 @@ transform = Transform( -0.21231, 0, 0.977202, 0, 1, 0, -0.977202, 0, -0.21231, -
 
 [node name="laili_plane_blanket" parent="active_entities/zone_city/not_pre_flight/laili_plane_v1" index="9" instance=ExtResource( 37 )]
 
-[node name="npc_laili" parent="active_entities/zone_city" index="13" instance=ExtResource( 29 )]
+[node name="npc_laili" parent="active_entities/zone_city" index="16" instance=ExtResource( 29 )]
 transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
 climbing_path = NodePath("../laili_points")
 laili_start = NodePath("../laili_climb_start")
 player_start = NodePath("../laili_points/start")
 on_monument = true
+
+[node name="scrap4" parent="active_entities/zone_city" index="17" instance=ExtResource( 45 )]
+transform = Transform( -0.00323469, 0.999995, 0, -0.999995, -0.00323469, 0, 0, 0, 1, -239.104, -31.399, 280.045 )
+
+[node name="apartments" type="Spatial" parent="active_entities/zone_city" index="18"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 59.3707, 0, -22.8137 )
+
+[node name="bed_native4" parent="active_entities/zone_city/apartments" index="0" instance=ExtResource( 49 )]
+transform = Transform( -0.134421, 0, 0.990924, 0, 1, 0, -0.990924, 0, -0.134421, 3.63092, -9.71999, 2.34367 )
+
+[node name="sitting_pillow" parent="active_entities/zone_city/apartments" index="1" instance=ExtResource( 54 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.688919, -9.71999, -0.0273132 )
+
+[node name="sitting_pillow2" parent="active_entities/zone_city/apartments" index="2" instance=ExtResource( 54 )]
+transform = Transform( -0.712806, 0, -0.701361, 0, 1, 0, 0.701361, 0, -0.712806, -1.13408, -9.721, 0.139679 )
+
+[node name="sitting_pillow3" parent="active_entities/zone_city/apartments" index="3" instance=ExtResource( 54 )]
+transform = Transform( -0.806376, 0, 0.591402, 0, 1, 0, -0.591402, 0, -0.806376, -0.127487, -9.67336, -1.46344 )
+
+[node name="sitting_pillow4" parent="active_entities/zone_city/apartments" index="4" instance=ExtResource( 54 )]
+transform = Transform( 0.663281, 0, 0.74837, 0, 1, 0, -0.74837, 0, 0.663281, 2.64212, -9.67336, -1.80026 )
+
+[node name="cup" parent="active_entities/zone_city/apartments" index="5" instance=ExtResource( 53 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0790863, -9.721, -0.359314 )
+
+[node name="cup2" parent="active_entities/zone_city/apartments" index="6" instance=ExtResource( 53 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.230087, -9.721, -0.207321 )
+
+[node name="carpet" parent="active_entities/zone_city/apartments" index="7" instance=ExtResource( 55 )]
+transform = Transform( -0.0872632, 0, 0.996185, 0, 1, 0, -0.996185, 0, -0.0872632, 1.67892, -9.71999, -2.24731 )
+
+[node name="wok" parent="active_entities/zone_city/apartments" index="8" instance=ExtResource( 56 )]
+transform = Transform( 0.986487, 0, 0.163837, 0, 1, 0, -0.163837, 0, 0.986487, -4.12782, -9.21439, -3.07771 )
+
+[node name="env_interior" type="Area" parent="active_entities/zone_city/apartments" index="9"]
+transform = Transform( 0.997327, 0, 0.0730731, 0, 1, 0, -0.0730731, 0, 0.997327, 0.983414, -7.76008, -3.09622 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 50 )
+close_cam = true
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_city/apartments/env_interior" index="0"]
+transform = Transform( 0.987624, 0, -0.156838, 0, 1, 0, 0.156838, 0, 0.987624, -3.95726, 0, 0.387131 )
+shape = SubResource( 17 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="active_entities/zone_city/apartments/env_interior" index="1"]
+transform = Transform( -0.211742, 0, -0.977324, 0, 1, 0, 0.977324, 0, -0.211742, 2.01286, 0, -2.65233 )
+shape = SubResource( 18 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/zone_city/apartments/env_interior" index="2"]
+transform = Transform( 0.0779877, 0, -0.996954, 0, 1, 0, 0.996954, 0, 0.0779877, -1.71936, 0, 4.04306 )
+shape = SubResource( 19 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="active_entities/zone_city/apartments/env_interior" index="3"]
+transform = Transform( 0.0513803, 0, -0.998678, 0, 1, 0, 0.998678, 0, 0.0513803, 2.76059, 0, -0.541351 )
+shape = SubResource( 20 )
+
+[node name="bed_native" parent="active_entities/zone_city/apartments" index="10" instance=ExtResource( 49 )]
+transform = Transform( -0.152927, 0, 0.988238, 0, 1, 0, -0.988238, 0, -0.152927, -1.32709, -9.72199, 3.03857 )
+
+[node name="light_wall" parent="active_entities/zone_city/apartments" index="11" instance=ExtResource( 58 )]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.852798, -7.39045, 0.762238 )
+
+[node name="light_wall2" parent="active_entities/zone_city/apartments" index="12" instance=ExtResource( 58 )]
+transform = Transform( 0.993577, -0.113156, -4.9462e-09, 0, -4.37114e-08, 1, -0.113156, -0.993577, -4.34306e-08, 8.92537, -6.85659, -3.0341 )
+
+[node name="npc" parent="active_entities/zone_city/apartments" index="13" instance=ExtResource( 16 )]
+transform = Transform( -0.990145, 0, -0.140046, 0, 1, 0, 0.140046, 0, -0.990145, -0.842484, -9.63194, 2.7728 )
+sitting = true
+
+[node name="npc2" parent="active_entities/zone_city/apartments" index="14" instance=ExtResource( 16 )]
+transform = Transform( -0.98942, 0, 0.145082, 0, 1, 0, -0.145082, 0, -0.98942, -1.75588, -9.63194, 2.95616 )
+sitting = true
+
+[node name="npc3" parent="active_entities/zone_city/apartments" index="15" instance=ExtResource( 16 )]
+transform = Transform( -0.650705, 0, -0.759331, 0, 1, 0, 0.759331, 0, -0.650705, 0.62677, -9.60525, -0.0576324 )
+visual_name = "Child"
+model_scale = 0.7
+sitting = true
+
+[node name="shelf_simple" parent="active_entities/zone_city/apartments" index="16" instance=ExtResource( 57 )]
+transform = Transform( 0.10707, 0, -0.994251, 0, 1, 0, 0.994251, 0, 0.10707, -3.03098, -9.73264, -3.23959 )
+
+[node name="cup" parent="active_entities/zone_city/apartments/shelf_simple" index="1" instance=ExtResource( 53 )]
+transform = Transform( 0.00179122, 0, 0.999999, 0, 1, 0, -0.999999, 0, 0.00179122, -0.072998, 0.34227, -0.133774 )
+
+[node name="cup2" parent="active_entities/zone_city/apartments/shelf_simple" index="2" instance=ExtResource( 53 )]
+transform = Transform( 0.00179122, 0, 0.999999, 0, 1, 0, -0.999999, 0, 0.00179122, -0.130478, 0.33577, -0.276016 )
+
+[node name="cup3" parent="active_entities/zone_city/apartments/shelf_simple" index="3" instance=ExtResource( 53 )]
+transform = Transform( 0.00179122, 0, 0.999999, 0, 1, 0, -0.999999, 0, 0.00179122, -0.0240021, 0.339523, -0.452774 )
+
+[node name="wok2" parent="active_entities/zone_city/apartments/shelf_simple" index="4" instance=ExtResource( 56 )]
+transform = Transform( -0.16207, 0, 0.986779, 0, 1, 0, -0.986779, 0, -0.16207, -0.00759888, 0.339615, 0.265991 )
+
+[node name="wok3" parent="active_entities/zone_city/apartments/shelf_simple" index="5" instance=ExtResource( 56 )]
+transform = Transform( 0.862373, -0.034171, -0.505118, 0.043851, 0.999012, 0.00728283, 0.50437, -0.0284305, 0.863019, -0.00759888, 0.386154, 0.265991 )
+
+[node name="bed_native3" parent="active_entities/zone_city/apartments" index="17" instance=ExtResource( 49 )]
+transform = Transform( -0.152927, 0, 0.988238, 0, 1, 0, -0.988238, 0, -0.152927, -4.26548, -9.72199, 3.49118 )
+
+[node name="bed_native2" parent="active_entities/zone_city/apartments" index="18" instance=ExtResource( 49 )]
+transform = Transform( -0.131524, 0, 0.991313, 0, 1, 0, -0.991313, 0, -0.131524, 1.00862, -9.719, 2.81598 )
+
+[node name="wood_stove" parent="active_entities/zone_city/apartments" index="19" instance=ExtResource( 52 )]
+transform = Transform( -0.999499, 0, -0.0316418, 0, 1, 0, 0.0316418, 0, -0.999499, -4.30489, -9.72297, -3.08893 )
+
+[node name="wood_stove2" parent="active_entities/zone_city/apartments" index="20" instance=ExtResource( 52 )]
+transform = Transform( -0.10927, 0, -0.994012, 0, 1, 0, 0.994012, 0, -0.10927, -5.00948, -9.72297, -1.62383 )
 
 [node name="Occluder2" type="Occluder" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -76.0493, -188.492, 239.204 )
@@ -821,6 +968,3 @@ transform = Transform( -0.38942, -0.86645, 0.312436, 0.92106, -0.366331, 0.13209
 
 [node name="rock1" parent="zone_city" index="4" instance=ExtResource( 3 )]
 transform = Transform( 0.960118, -0.279596, -7.83173e-08, -0.250474, -0.860117, 0.444367, -0.124243, -0.426644, -0.895845, -33.1112, 86.9157, -69.201 )
-
-[node name="scrap4" parent="." index="6" instance=ExtResource( 45 )]
-transform = Transform( -0.00323469, 0.999995, 0, -0.999995, -0.00323469, 0, 0, 0, 1, -169.399, -157.135, 150.303 )

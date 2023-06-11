@@ -194,3 +194,6 @@ func is_loaded(chunk: Spatial):
 func is_active(chunk: Spatial):
 	return (chunk 
 		and chunk.has_node("dynamic_content/active_entities"))
+
+func empty_queue():
+	return _load_queue.empty()
