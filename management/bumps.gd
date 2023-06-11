@@ -112,6 +112,7 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 		if axis.is_normalized():
 			e.global_rotate(axis, angle)
 	e.show()
+	e.restart()
 	e.emitting = true
 	yield(get_tree().create_timer(e.lifetime), "timeout")
 	if is_instance_valid(e):

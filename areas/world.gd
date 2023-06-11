@@ -441,6 +441,10 @@ func sleep():
 	else:
 		set_time(get_time() + 2, false)
 
+func _on_player_died():
+	yield(pause_and_load(), "completed")
+	update_active_chunks(player.global_transform.origin)
+
 func wake_up():
 	yield(pause_and_load(), "completed")
 	update_active_chunks(player.global_transform.origin)

@@ -288,6 +288,8 @@ func add_item(item: String, amount:= 1) -> int:
 		game_state.inventory[item] = amount
 	if item in tracked_items:
 		var _x = add_stat(item, amount)
+	else:
+		var _x = Global.set_item_recency(item)
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount, game_state.inventory[item])
 	return game_state.inventory[item]
@@ -305,6 +307,12 @@ func set_item_count(item: String, amount: int) -> bool:
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount - old_amount, amount)
 	return true
+
+func set_item_recency(item: String):
+	return set_stat("pick_time/"+item, OS.get_unix_time())
+
+func get_item_recency(item: String):
+	return stat("pick_time/"+item)
 
 func get_fancy_inventory() -> Dictionary:
 	var items := {}
