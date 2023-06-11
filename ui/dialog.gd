@@ -7,6 +7,7 @@ func _notification(what):
 		set_active(is_visible_in_tree())
 
 func set_active(a):
+	$item_context.hide()
 	if !a:
 		last_focused = get_focus_owner()
 	elif is_instance_valid(last_focused):

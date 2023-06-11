@@ -70,6 +70,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_cancel"):
 		fast_exit()
 	elif event.is_action_pressed("dialog_item"):
+		print("Input should be ignored!")
 		emit_signal("pick_item")
 		set_process_input(false)
 		set_process(false)

@@ -17,3 +17,4 @@ export(Array, String) var tags
 # key: item id
 # value: visual name
 export(Dictionary) var extra_items
+var id: String

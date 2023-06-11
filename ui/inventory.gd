@@ -5,21 +5,14 @@ onready var object_ref := $Viewport/object_ref
 onready var ref_cam_arm := $Viewport/SpringArm
 
 onready var view_window := $box/viewport_window
-onready var items_list := $box/large_items/ScrollContainer/rows
 onready var item_name := $box/viewport_window/Panel/MarginContainer/item/name
 onready var item_desc := $box/viewport_window/Panel/MarginContainer/item/description
 onready var sub_items := $box/viewport_window/Panel/MarginContainer/item/sub_items
 
-export(Resource) var player_description
-
+onready var item_viewer := $box/items/item_list
 var show_background := true
 
-const DEFAULT_ICONS := {
-	ItemDescription.Category.Equipment: preload("res://ui/items/icons/default_equipment.svg"),
-	ItemDescription.Category.Firearm: preload("res://ui/items/icons/default_firearm.svg"),
-	ItemDescription.Category.Sundries: preload("res://ui/items/icons/default_sundries.svg"),
-	ItemDescription.Category.Keys: preload("res://ui/items/icons/default_keys.svg")
-}
+export(Resource) var player_description
 
 const MIN_ZOOM := 0.1
 const MAX_ZOOM := 10.0
@@ -66,37 +59,17 @@ func set_active(active):
 		if p:
 			mouse_sns = 60*p.sensitivity*p.cam_rig.mouse_sns
 		viewport.size = view_window.rect_size
-		clear(items_list)
-		view_items(Global.get_fancy_inventory())
+		player_description.id = 'you'
+		item_viewer.insert_item('you', player_description)
+		item_viewer.view_items(Global.get_fancy_inventory())
+	else:
+		item_viewer.clear()
 	set_process(active)
 	set_process_input(active)
 
-func view_items(items: Dictionary):
-	var button = Button.new()
-	var player_button: Button = button.duplicate()
-	player_button.text = "You"
-	player_button.icon = player_description.custom_icon
-	var _y = player_button.connect("focus_entered", self, "_on_item_focused", [player_description])
-	items_list.add_child(player_button)
-	
-	var sorted_items = items.values()
-	sorted_items.sort_custom(self, "sort_items")
-	
-	for item in sorted_items:
-		var b: Button = button.duplicate()
-		b.text = item.full_name
-		if item.custom_icon:
-			b.icon = item.custom_icon
-		else:
-			b.icon = DEFAULT_ICONS[item.category]
-		var _x = b.connect("focus_entered", self, "_on_item_focused", [item])
-		items_list.add_child(b)
-	
-	player_button.grab_focus()
-
 func _on_item_focused(item: ItemDescription):
-	clear(sub_items)
-	clear(object_ref)
+	Util.clear(sub_items)
+	Util.clear(object_ref)
 	if item.preview_3d:
 		object_ref.add_child(item.preview_3d.instance())
 	else:
@@ -111,15 +84,3 @@ func _on_item_focused(item: ItemDescription):
 			l2.text = str(Global.count(i2))
 			sub_items.add_child(l1)
 			sub_items.add_child(l2)
-
-func sort_items(a: ItemDescription, b:ItemDescription):
-	if a.category < b.category:
-		return true
-	elif b.category < a.category:
-		return false
-	else:
-		return a.full_name < b.full_name
-
-func clear(node: Node):
-	for c in node.get_children():
-		c.queue_free()

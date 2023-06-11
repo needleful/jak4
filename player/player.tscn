@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=2]
+[gd_scene load_steps=113 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -43,6 +43,7 @@
 [ext_resource path="res://ui/fancy/stamina-booster.png" type="Texture" id=41]
 [ext_resource path="res://ui/fancy/segmented_bar.gd" type="Script" id=42]
 [ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=43]
+[ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=44]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -788,7 +789,7 @@ collision_mask = 8192
 
 [node name="Particles" type="Particles" parent="water_cast"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
-emitting = false
+emitting = true
 lifetime = 5.0
 local_coords = false
 process_material = SubResource( 83 )
@@ -799,7 +800,7 @@ draw_pass_1 = SubResource( 174 )
 [node name="Particles2" type="Particles" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
-emitting = false
+emitting = true
 amount = 16
 lifetime = 1.2
 local_coords = false
@@ -1993,7 +1994,6 @@ format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="Control" parent="ui"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 33 )
@@ -2099,14 +2099,21 @@ margin_bottom = 0.0
 format = "New Journal Entry: %s/%s"
 
 [node name="item_context" type="Panel" parent="ui/dialog"]
-visible = false
 anchor_top = 0.5
 anchor_bottom = 0.5
-margin_left = 49.0
-margin_top = -242.0
-margin_right = 423.0
-margin_bottom = 237.0
+margin_left = 50.0
+margin_top = -260.0
+margin_right = 425.0
+margin_bottom = 260.0
 script = ExtResource( 37 )
+
+[node name="item_list" parent="ui/dialog/item_context" instance=ExtResource( 44 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ui/dialog/item_context"]
 anchor_right = 1.0
@@ -2117,40 +2124,46 @@ margin_right = -10.0
 margin_bottom = -10.0
 
 [node name="Label" type="Label" parent="ui/dialog/item_context/VBoxContainer"]
-margin_right = 354.0
+margin_right = 355.0
 margin_bottom = 22.0
 text = "Contextual Dialog"
 
 [node name="HSeparator" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 26.0
-margin_right = 354.0
+margin_right = 355.0
 margin_bottom = 30.0
 
 [node name="coat" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 34.0
-margin_right = 354.0
+margin_right = 355.0
 margin_bottom = 62.0
 text = "Trade Coats"
 
 [node name="bar_context" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 66.0
-margin_right = 354.0
+margin_right = 355.0
 margin_bottom = 70.0
 
 [node name="bar_inventory" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 74.0
-margin_right = 354.0
+margin_right = 355.0
 margin_bottom = 78.0
 
-[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+[node name="show_inventory" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 82.0
-margin_right = 354.0
-margin_bottom = 86.0
+margin_right = 355.0
+margin_bottom = 110.0
+text = "Open Inventory"
+
+[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 114.0
+margin_right = 355.0
+margin_bottom = 118.0
 
 [node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 90.0
-margin_right = 354.0
-margin_bottom = 118.0
+margin_top = 122.0
+margin_right = 355.0
+margin_bottom = 150.0
 text = "Cancel"
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
@@ -2310,7 +2323,9 @@ material/0 = SubResource( 98 )
 [connection signal="cancelled" from="ui/dialog/item_context" to="ui/dialog/viewer" method="_on_item_context_cancelled"]
 [connection signal="context_reply" from="ui/dialog/item_context" to="ui/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_item"]
+[connection signal="item_pressed" from="ui/dialog/item_context/item_list" to="ui/dialog/item_context" method="_on_item_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/coat" to="ui/dialog/item_context" method="_on_coat_pressed"]
+[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/show_inventory" to="ui/dialog/item_context" method="_on_show_inventory_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/item_context" method="_on_cancel_pressed"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]
