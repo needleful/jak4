@@ -1,6 +1,7 @@
 // Only occurs if Jackie's died three or more times.
 // There are several payphones that can go
 
+:persephone
 [! Global task_exists: gift_from_persephone]
 	* A payphone rings. Nobody seems interested in answering.
 	* You pick up the receiver.
@@ -22,26 +23,82 @@
 		Love, someday you'll have secrets of your own, and I'll be so happy for you.
 		Now, as I was saying...
 		[back]
-	Anyway love, I actually live around there, so I thought
+	I have a flat of sorts in the province actually, so I thought I could leave something for you there!
 	You -- What? A gift?
+	?gift> Why do you have a flat in Yaqaz?
+		I've done quite a bit of traveling since we last talked! 
+		The rent is practically nothing, it was cheaper keeping my things out there than shipping them home.
+		You -- Don't you need them?
+		Nothing I left behind, surely.
+		[note: persephone/travel | She's apparently been travelling quite a bit, which is why she has a flat in Yaqaz. |+ persephone]
+		[back]
 	[forget: introduction]
 	[Global create_task: gift_from_persephone]
-	[note: persephone/gift | Persephone's apparently sent something to Yaqaz for me? |+ persephone gift_from_persephone]
-	Yes! Go to Muzna Cross, Line 5, apartment 8. A cute mint green building! The pass code to the door is 794.
+	[note: persephone/gift | Persephone apparently sent something to Yaqaz for me? |+ persephone gift_from_persephone]
+	Yes! The flat's Muzna Cross, Line 5, apartment 8. A cute mint green box! The pass code to the door is 794.
+	?gift> "Line five"? What does that mean?
+		[main_speaker calling_from: muzna_cross]
+			Honey, it's the train yard right in front of you, to the north of the payphone you're talking at.
+			Each line of the trainyard has a number, and each box also has a number.
+			You -- Oh, it's a train car?
+			Yes! It's quite Bohemian! I felt like we could take off at any moment!
+		{otherwise}
+			You've not been to Muzna Cross yet? You'll understand when you see it, but call me from there if you can't find it.
+		[back]
 	[Global remember: muzna_cross | places]
-	[Global add_note: Persephone's gift is at Muzna Cross, Line 5, Apartment 8 (mint green). The door takes a code: 794. |+ gift_from_persephone muzna_cross]
+	[Global add_note: Persephone's flat is at Muzna Cross, Line 5, Apartment 8 (mint green). The door takes a code: 794. |+ gift_from_persephone muzna_cross persephone]
 	You -- ... Alright, I've put it down in my journal.
 	Excellent! Let me know when you've got it! After that, maybe I can give you a tour of the place!
 	[Global add_note: She apparently wants to give me a tour of the area? I'm not sure how that'd work. |+ persephone]
 
-	// You find a little decorative vase. That's the gift.
-	// Persephone calls you again, explaining you can also use the apartment if you want.
-[! Global task_is_complete: gift_from_persephone]
-	whoops, not implemented!
+{otherwise}[! Global task_is_complete: gift_from_persephone]
+	So, did you visit the flat?
+	[! Global stat: persephone_home/visited]
+		I can see you haven't gone to the flat yet. Are you having trouble finding it?
+		> Yes, I'm not sure where it is.
+			[main_speaker calling_from: muzna_cross]
+				Well, do you see the train yard? It's right in front of you, north past the station.
+				Each track is labelled with a number, and each train car has a number as well.
+				Those are the apartments! Quite interesting, right? I could have rented a little hut to the south for less, but a city of trains was too good to pass up!
+				So find the sign for line 5, follow it to box 8, and my flat is the green car!
+			{otherwise}
+				Do you know how to find Muzna Cross? It's the rail station, just north of the plateau. Following the tracks would get you there. [Global mark_map: muzna_cross | The Muzna Cross railway station. Just north of the plateau.]
+				?> Which way is north again?
+					You really should get that internal compass developed, love!
+					The tree tower is on the south end of the plateau, so Muzna Cross is the other end. 
+					[back]
+				If you get there and still can't find the flat, call me again.
+		> No, I'm just calling to say hello.
+			We've already had our hellos, call me once you get my present!
+			[exit]
+	{otherwise}
+		Oh, good! What do you think of it, love?
+		You -- It's cute! How long has it been since you used it? It seems well taken care of.
+		That's probably the dry air. Nothing ever rots out there, it just gets buried in sand.
+		?rot> It sounds ominous when you say it that way.
+			Well, it's true! Rot is moisture and neglect.
+			You -- Is that how it works?
+			It is, and the sand is a major nusiance. I took great pains to make sure it couldn't get in.
+			[back]
+		[forget: rot]
+		You -- Regardless, it's remarkable it's held up as well as it has, if you don't have someone taking care of it.
+		You could use it if you like! I'm not sure where you're staying, but I imagine my abode is nicer.
+		You -- It's not as close to the Medium as I'd like, but perhaps if I'm waiting for the train or something.
+
+
 {otherwise}
 	Whoops, not implemented!
 
 [exit]
+
+:_payphone
+* The only number you know is Persephone.
+* Call her?
+> [skip] (Yes)
+	* The phone rings...
+	Hi Jackie!
+	You -- Hi Persephone.
+> [skip] (No)
 
 // Ideas
 // Persephone contacts you through increasingly bizarre means, like changing signs or calling other people's cell phones.

@@ -164,6 +164,10 @@ func get_next():
 		return true
 
 func advance():
+	# TODO: make contextual replies load with the previous message.
+	# I'd like responses to show up immediately with the message they're responding to.
+	# It's also necessary for responses that only last for one message.
+
 	if !current_item:
 		exit()
 		return
