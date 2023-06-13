@@ -2,23 +2,29 @@
 ---
 name: Dialog Script
 file_extensions: [dialog]
-scope: source.dialog
+scope: text.dialog
 
 contexts:
   expression_sensitive:
     - match: '{'
-      scope: punctuation.section.interpolation.begin.dialog
+      scope: punctuation.section.block.begin.dialog
       push: expression
     - match: '#{'
       scope: punctuation.section.interpolation.begin.dialog
       push: expression
+    - match: '\['
+      scope: puncuation.section.brackets.begin.dialog
+      push: square_expression
+    - match: \}
+      scope: invalid.end_bracket.dialog
+    - match: \]
+      scope: invalid.end_bracket.dialog
   main:
-    - match: '^\s*>'
+    - match: '^\s*(\?[a-zA-Z0-9_/]*)?>'
       scope: punctuation.accessor.dialog
       push: reply
-    - match: '^\s*\['
-      scope: punctuation.section.brackets.begin.dialog
-      push: named_speaker
+    - match: '^\s*[a-zA-Z0-9_]+\s*\--'
+      scope: keyword.control.speaker
     - match: '^\s*:'
       scope: entity.name.dialog
       push: section_name
@@ -39,13 +45,65 @@ contexts:
     - match: $
       pop: true
     - include: expression_sensitive
-  named_speaker:
-    - meta_scope: keyword.control.dialog
+  base_expression:
+    - match: \b(if|not|or|and|else)\b
+      scope: keyword.control.dialog
+    - match: (==|!=|>=|<=|>|<)
+      scope: keyword.operator.dialog
+    - match: \d+\.?\d*
+      scope: constant.numeric.dialog
+    - match: '\w+(?=\()'
+      scope: entity.name.function.dialog
+    - match: \.
+      scope: punctuation.accessor.dialog
+    - match: \b(otherwise|talked)\b
+      scope: variable.language.dialog
+    - match: \b(exit|animation|event|format|goto|back|skip|mention|mentioned|subtopic)\b
+      scope: entity.name.function.dialog
+    - match: \(
+      scope: puncuation.section.group.begin
+      push: exp_group
+    - match: \)
+      scope: invalid.end_paren.this
+    - match: "'"
+      scope: punctuation.definition.string.begin.dialog
+      push: single_quoted
+    - match: '"'
+      scope: punctuation.definition.string.begin.dialog
+      push: double_quoted
+  square_expression:
+    - match: '\w+'
+      scope: entity.name.function.sq.dialog
+    - match: ':'
+      scope: keyword.operator.args.dialog
+      push: sqe_args
+    - match: \[
+      scope: puncuation.section.brackets.begin
+      push: square_expression
     - match: '\]'
       scope: punctuation.section.brackets.end
       pop: true
+  sqe_args:
+    - include: quoted
+    - match: '(?=\])'
+      pop: true
+    - match: '|\+?'
+      scope: puncuation.separator.sq_arg.dialog
+    - match: '#[\w\d\.]+'
+      scope: constant.numeric.sq_arg.dialog
+    - match: '}'
+      scope: invalid.mismatched_bracket.dialog
+    - match: '[^\|]'
+      scope: string.quoted.double.dialog
   section_name:
     - meta_scope: entity.name.dialog
+    - match: ':-'
+      scope: keyword.operator.section.dialog
+      push: section_expression
+    - match: $
+      pop: true
+  section_expression:
+    - include: base_expression
     - match: $
       pop: true
   line_comment:
@@ -53,34 +111,28 @@ contexts:
     - match: $
       pop: true
   expression:
-    - meta_scope: markup.inserted.dialog
-    - match: \b(if|not|or|and|else)\b
-      scope: keyword.control.dialog
-    - match: (==|!=|>=|<=|>|<)
-      scope: keyword.operator.dialog
-    - match: \.
-      scope: punctuation.accessor.dialog
-    - match: \b(otherwise|talked)\b
-      scope: variable.language.dialog
-    - match: \b(exit|animation|event|format|goto)\b
-      scope: entity.name.function.dialog
-    - match: \(
-      scope: 
+    - include: base_expression
     - match: '}'
-      scope: punctuation.section.interpolation.end.dialog
+      scope: punctuation.section.block.end.dialog
       pop: true
-    - match: "'"
-      scope: punctuation.definition.string.begin.dialog
-      push: single_quoted
-    - match: '"'
-      scope: punctuation.definition.string.begin.dialog
-      push: double_quoted
+  exp_group:
+    - meta_scope: meta.group.exp.dialog
+    - match: ','
+      scope: punctuation.separator.dialog
+    - match: \)
+      pop: true
+    - include: expression
+  quoted:
+    - match: \\.
+      scope: constant.character.escape
   single_quoted:
+    - include: quoted
     - meta_scope: string.quoted.single.dialog
     - match: "'"
       scope: punctuation.definition.string.end.dialog
       pop: true
   double_quoted:
+    - include: quoted
     - meta_scope: string.quoted.double.dialog
     - match: '"'
       scope: punctuation.definition.string.end.dialog
