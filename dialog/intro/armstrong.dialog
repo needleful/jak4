@@ -98,38 +98,42 @@
 		Excellent!  And I will be here if you need any advice.
 	[exit]
 {otherwise}[! Global stat: medium/activated]
-	[Global stat: medium_door/open]
+	[Global stat: door/medium_door]
 		You did it! The door is open! Do you know how to use the Medium?
 		You -- Yes.
 	{otherwise}
-		How goes your search, Coats Girl? Was there a capacitor in the cave?
-		[Global count: capacitor]
-			[Global stat: cave_capacitor_124] [! Global stat: armstrong/cave_capacitor]
-				[Global add_stat: armstrong/cave_capacitor] [Global task_remove_place: activate_the_medium | hideaway]
-				You -- There was.
-				As I suspected!
-			{otherwise}
-				You -- I hadn't checked, but I think I found a capacitor exploring outside.
-				You did?
-				* He examines the object you found.
-				Wow, you did!
+		[! Global stat: armstrong/discussed/door]
+			How goes your search, Coats Girl? Was there a capacitor in the cave?
+			[Global count: capacitor]
+				[Global stat: cave_capacitor_124] [! Global stat: armstrong/cave_capacitor]
+					[Global add_stat: armstrong/cave_capacitor] [Global abolish_note:+ activate_the_medium hideaway]
+					You -- There was.
+					As I suspected!
+				{otherwise}
+					You -- I hadn't checked, but I think I found a capacitor exploring outside.
+					You did?
+					* He examines the object you found.
+					Wow, you did!
 
-			> It looks different than the other artefacts around here.
-				Two different civilizations lived in Braalna before us. Some made structures out of copper, and others out of their white metal, impossible to corrode. Incredible material.
-				You -- And presumably they built the Medium?
-				I do not know, actually.
-				You -- Huh?
-				But anyway, we are not here for history. If you climb in the hole in the wall, you should see where the capacitor goes.
-			> Where did you need this?
-				In the wall here is a, uh, receptor. It matches the bottom of the capacitor, so it is easy to fit.
-		{otherwise}
-			[Global stat: cave_124_entered]
-				You -- I've been in the cave, but I didn't find anything.
-				I would make sure to be thorough. Don't want to miss anything right under our noses.
+				> It looks different than the other artefacts around here.
+					Two different civilizations lived in Braalna before us. Some made structures out of copper, and others out of their white metal, impossible to corrode. Incredible material.
+					You -- And presumably they built the Medium?
+					I do not know, actually.
+					You -- Huh?
+					But anyway, we are not here for history. If you climb in the hole in the wall, you should see where the capacitor goes.
+				> Where did you need this?
+					In the wall here is a, uh, receptor. It matches the bottom of the capacitor, so it is easy to fit.
+				[Global add_stat: armstrong/discussed/door]
 			{otherwise}
-				[Global add_note: Armstrong thinks there's a capacitor in the local cave. |+ activate_the_medium hideaway]
-				You -- I haven't been in the cave yet.
-				That's the first place I would check.
+				[Global stat: cave_124_entered]
+					You -- I've been in the cave, but I didn't find anything.
+					I would make sure to be thorough. Don't want to miss anything right under our noses.
+				{otherwise}
+					[Global add_note: Armstrong thinks there's a capacitor in the local cave. |+ activate_the_medium hideaway]
+					You -- I haven't been in the cave yet.
+					That's the first place I would check.
+		{otherwise}
+
 	[exit]
 {otherwise}[! Global stat: talked/mum]
 	You should use the Medium first. We can talk later.
@@ -146,16 +150,19 @@
 	[Global add_stat: mum/short_name]
 	You -- ...What do you mean? That is her full name.
 	In Yaqazi, a name is usually four parts: a, uh, personal name, then maybe the father's name, then the family, then the place.
-	My full name as an example: Araston Duraraston Oshee Pultere. "Araston, son of Araston, of the Oshee family, from the Pulter valley."
-	You -- Your name's not Armstrong?
-	I like Armstrong. Makes me sound like I have strong arms. An araston is a kind of desert mouse.
-	But anyway, your mother maybe simplified her name for the Vaelers. "Tara Sylde" is her given name and a place: the Sylda plateau.
+	?>I'm curious now, what's your full name?
+		Oh! My full name is Araston Duraraston Oshee Pultere. "Araston, son of Araston, of the Oshee family, from the Pulter valley."
+		You -- Your name's not Armstrong?
+		I like Armstrong. Makes me sound like I have strong arms. An araston is a kind of desert mouse.
+		Anyway...
+		[back]
+	Your mother maybe simplified her name for the Vaelers. "Tara Sylde" is her given name and a place: the Sylda plateau.
 	You -- Where is that?
-	[Global mark_map: plateau_town | The Great Plateau. Armstrong thinks my mother lived up here.] It is also called the "Great Plateau". It's the big one to the west, can't miss it. Even more obvious with the Tree Tower on top.
+	[Global mark_map: plateau_town] It is also called the "Great Plateau". It's the big one to the west, can't miss it. Even more obvious with the Tree Tower on top.
 	You -- Right. So this plateau would be the best place to find people who knew my mother?
 	It would be my first guess, at least. Good luck to you.
 	[Global add_stat: mum/plateau]
-	[Global add_stat: armstrong/discussed/mum]
+	[note: armstrong/discussed/mum | My mother probably lived on the Sylda Plateau, according to Armstrong. |+ mum mum/plateau plateau_town]
 	[exit]
 {otherwise}
 	[task_is_active: cleanup]

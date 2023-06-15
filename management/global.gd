@@ -174,8 +174,9 @@ func remember(tag: String, category: String = "people"):
 	return true
 
 # Game state management
-func mark_map(id:String, note:String):
-	add_note(note, [id])
+func mark_map(id:String, note:String = ""):
+	if note != "":
+		add_note(note, [id])
 	remember(id, "places")
 	return true
 

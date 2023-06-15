@@ -45,7 +45,13 @@ func list_contextual_replies():
 			reply_buttons.append(button)
 			button_box.add_child_below_node(bar_context, button)
 			var _x = button.connect("pressed", self, "context_reply", [c])
+	call_deferred("_resize_buttons")
 	bar_context.visible = reply_buttons.size() > 0
+ 
+func _resize_buttons():
+	for b in reply_buttons:
+		var l: Label = b.get_child(0)
+		b.rect_min_size.y = l.get_line_count()*l.get_line_height()*1.25 + l.margin_top + l.margin_bottom
 
 func context_reply(item: DialogItem):
 	hide()
