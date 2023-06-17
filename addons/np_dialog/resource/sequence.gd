@@ -20,6 +20,12 @@ func get(index) -> DialogItem:
 		return null
 	return dialog[index]
 
+func has(index) -> bool:
+	if index is String:
+		return index in labels
+	else:
+		return index in dialog
+
 func next(item) -> DialogItem:
 	if !(item is DialogItem):
 		item = get(item)

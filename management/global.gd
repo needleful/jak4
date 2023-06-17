@@ -256,9 +256,8 @@ func complete_task(task_id: String, note := "")-> bool:
 		print("Warning: task already completed: ", task_id)
 	else:
 		game_state.completed_tasks.append(task_id)
-
-	if note != "":
-		add_note(note, [task_id])
+		if note != "":
+			add_note(note, [task_id])
 	abolish_notes([task_id])
 	return true
 

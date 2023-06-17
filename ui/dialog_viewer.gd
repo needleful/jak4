@@ -53,7 +53,10 @@ const item_fallthrough := "item(_)"
 # Dictionary of arrays mapping context to messages
 var contextual_replies : Dictionary
 
+var sorted_labels : Array
+
 func _init():
+	sorted_labels = []
 	fonts = {}
 	call_stack = []
 	discussed = {}
@@ -95,6 +98,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	source_node = p_source_node
 	sequence = p_sequence.duplicate()
 	label_conditions = {}
+	sorted_labels = []
 	var label_swaps = {}
 	for l in sequence.labels:
 		if l.find(":-") >= 0:
@@ -112,6 +116,9 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	for l in label_swaps:
 		sequence.labels[label_swaps[l]] = sequence.labels[l]
 		sequence.labels.erase(l)
+	sorted_labels = sequence.labels.keys()
+	sorted_labels.sort_custom(self, "_sort_labels")
+
 	if speaker:
 		main_speaker = speaker
 	else:
@@ -167,7 +174,6 @@ func advance():
 	# TODO: make contextual replies load with the previous message.
 	# I'd like responses to show up immediately with the message they're responding to.
 	# It's also necessary for responses that only last for one message.
-
 	if !current_item:
 		exit()
 		return
@@ -464,37 +470,55 @@ func _on_item_context_cancelled():
 		if replies.get_child_count():
 			replies.get_child(0).grab_focus()
 
+func _sort_labels(a: String, b: String):
+	return sequence.labels[a] < sequence.labels[b]
+
+# tags is an array of strings
+func use_note(tags:Array):
+	set_process_input(true)
+	set_process(true)
+	return _special_label("note", tags)
+
 func use_item(id:String, desc: ItemDescription = null):
 	set_process_input(true)
 	set_process(true)
 	if id == "coat":
 		trade_coats()
 		return
-	if _use_item(id):
+	if _special_label("item", [id]):
 		return
-	if desc:
-		for tag in desc.tags:
-			if _use_item(tag):
-				return
-	if !_use_item("_"):
-		insert_label("[Nothing happened]", "narration")
+	return _special_label("item", desc.tags if desc else [])
 
-func _use_item(item) -> bool:
-	var find_this:String = "item(%s)" % item
-	if !(find_this in sequence.labels):
+func _special_label(type:String, items:Array) -> bool:
+	var found_label = "%s(_)" % type
+	for l in sorted_labels:
+		if !l.begins_with(type):
+			continue
+		var found := false
+		for item in items:
+			if l == "%s(%s)" % [type, item]:
+				found = true
+				break
+		if !found:
+			continue
+			
+		if l in label_conditions:
+			var ex:Expression = label_conditions[l]
+			var res = ex.execute([Global], self)
+			if ex.has_execute_failed():
+				print_debug("Execution failed for ", l,
+					"\n\t", ex.get_error_text())
+			if !res:
+				continue
+		found_label = l
+		break
+	if sequence.has(found_label):
+		subtopic(found_label)
+		advance()
+		return true
+	else:
+		insert_label("[Nothing happened]", "narration")
 		return false
-	if find_this in label_conditions:
-		var ex:Expression = label_conditions[find_this]
-		var res = ex.execute([Global], self)
-		if ex.has_execute_failed():
-			print_debug("Execution failed for ", find_this,
-				"\n\t", ex.get_error_text())
-		if !res:
-			print(find_this, " is not true")
-			return false
-	subtopic(find_this)
-	advance()
-	return true
 
 func insert_contextual_reply(message: DialogItem, context := ""):
 	var key := "--never-remove--"
