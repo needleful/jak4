@@ -211,7 +211,7 @@ func abolish_notes(tags: Array):
 			game_state.journal[n][1].append("abolished")
 	return true
 
-# An array of strings
+# An array of text to tags pairs
 func get_notes_by_tag(id: String, include_abolished := false):
 	var result := []
 	if id in journal_by_tag:
@@ -220,7 +220,7 @@ func get_notes_by_tag(id: String, include_abolished := false):
 			if !include_abolished and "abolished" in text_plus_tags[1]:
 				continue
 			else:
-				result.append(text_plus_tags[0])
+				result.append(text_plus_tags)
 	return result
 
 func has_note(id: String):

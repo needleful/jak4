@@ -23,7 +23,7 @@ func _init():
 	r_sq_expression.compile("#?\\[([^\\]]+)\\]")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
-	r_context_reply.compile("^\\s*(\\?[a-zA-Z0-9_/]*)?>")
+	r_context_reply.compile("^\\s*\\?([a-zA-Z0-9_/]*)>")
 	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
 
@@ -278,7 +278,7 @@ func extract_type(line: String) -> Dictionary:
 		return {
 			"type": DialogItem.Type.CONTEXT_REPLY,
 			"line": line.replace(crm.get_string(), ""),
-			"speaker": crm.get_string(1).substr(1) if crm.strings.size() > 1 else ""
+			"speaker": crm.get_string(1) if crm.strings.size() > 1 else ""
 		}
 
 	var rm := r_reply.search(line)

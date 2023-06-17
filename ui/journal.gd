@@ -1,6 +1,9 @@
 extends Control
 
+signal note_chosen(tags)
+
 export(StyleBox) var hrule_style
+export(bool) var buttons := false
 
 onready var list := $panel/hbox/items/list
 onready var subject_name := $panel/hbox/notes/header/text/name
@@ -90,7 +93,8 @@ func populate_list(type: int):
 			starting_item = button
 		
 		var _x = button.connect("focus_entered", self, "_on_subject_focused", [type, key])
-	
+		if buttons:
+			_x = button.connect("pressed", self, "_on_subject_pressed")
 	var panel := Panel.new()
 	panel.rect_min_size.y = 20
 	panel.add_stylebox_override("panel", hrule_style)
@@ -112,12 +116,25 @@ func _on_subject_focused(type: int, subject: String):
 	subject_image.texture = get_image(category, subject)
 	
 	clear(subject_notes)
-	for note in n:
-		var l := Label.new()
-		l.autowrap = true
-		l.text = note
-		l.size_flags_horizontal = SIZE_EXPAND_FILL
-		subject_notes.add_child(l)
+	if buttons:
+		for note_pair in n:
+			var b := Util.multiline_button(note_pair[0])
+			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
+			subject_notes.add_child(b)
+		call_deferred("_resize_note_buttons")
+	else:
+		for note_pair in n:
+			var l := Label.new()
+			l.autowrap = true
+			l.text = note_pair[0]
+			l.size_flags_horizontal = SIZE_EXPAND_FILL
+			subject_notes.add_child(l)
+
+func _on_subject_pressed():
+	subject_notes.get_child(0).grab_focus()
+
+func _resize_note_buttons():
+	Util.resize_buttons(subject_notes.get_children()) 
 
 func show_notes():
 	notes.show()

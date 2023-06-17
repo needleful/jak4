@@ -265,9 +265,12 @@ func list_replies():
 				font_override = r._format
 		if result:
 			otherwise = false
-			var b := multiline_button(reply.text, font_override)
+			var f: Font
+			if font_override in fonts:
+				f = fonts[font_override]
+			var b := Util.multiline_button(interpolate(reply.text), f)
 			replies.add_child(b)
-			call_deferred("resize_replies")
+			call_deferred("_resize_replies")
 			var r = reply
 			var s = skip_reply
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
@@ -280,31 +283,8 @@ func list_replies():
 		advance()
 	$input_timer.start()
 
-func multiline_button(text: String, font_override := "") -> Button:
-	var b := Button.new()
-	b.clip_text = false
-	var l := Label.new()
-	b.add_child(l)
-	l.anchor_left = 0
-	l.anchor_right = 1
-	l.anchor_top = 0
-	l.anchor_bottom = 1
-	l.margin_left = 10
-	l.margin_right = -10
-	l.margin_top = 5
-	l.margin_bottom = -5
-	l.autowrap = true
-	l.text = interpolate(text)
-	if font_override in fonts:
-		l.add_font_override("font", fonts[font_override])
-	return b
-
-func resize_replies():
-	for b in replies.get_children():
-		if !(b is Button):
-			continue
-		var l: Label = b.get_child(0)
-		b.rect_min_size.y = l.get_line_count()*l.get_line_height()*1.25 + l.margin_top + l.margin_bottom
+func _resize_replies():
+	Util.resize_buttons(replies.get_children())
 
 func _on_input_timer_timeout():
 	if shopping:
@@ -477,7 +457,7 @@ func _sort_labels(a: String, b: String):
 func use_note(tags:Array):
 	set_process_input(true)
 	set_process(true)
-	return _special_label("note", tags)
+	return _special_label("note", tags, true)
 
 func use_item(id:String, desc: ItemDescription = null):
 	set_process_input(true)
@@ -485,12 +465,12 @@ func use_item(id:String, desc: ItemDescription = null):
 	if id == "coat":
 		trade_coats()
 		return
-	if _special_label("item", [id]):
-		return
-	return _special_label("item", desc.tags if desc else [])
+	if _special_label("item", [id], false):
+		return true
+	return _special_label("item", desc.tags if desc else [], true)
 
-func _special_label(type:String, items:Array) -> bool:
-	var found_label = "%s(_)" % type
+func _special_label(type:String, items:Array, fallthrough : bool) -> bool:
+	var found_label = "%s(_)" % type if fallthrough else ""
 	for l in sorted_labels:
 		if !l.begins_with(type):
 			continue
@@ -512,12 +492,13 @@ func _special_label(type:String, items:Array) -> bool:
 				continue
 		found_label = l
 		break
-	if sequence.has(found_label):
+	if found_label != "" and sequence.has(found_label):
 		subtopic(found_label)
 		advance()
 		return true
 	else:
-		insert_label("[Nothing happened]", "narration")
+		if fallthrough:
+			insert_label("[Nothing happened]", "narration")
 		return false
 
 func insert_contextual_reply(message: DialogItem, context := ""):

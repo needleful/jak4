@@ -789,7 +789,6 @@ collision_mask = 8192
 
 [node name="Particles" type="Particles" parent="water_cast"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
-emitting = true
 lifetime = 5.0
 local_coords = false
 process_material = SubResource( 83 )
@@ -800,7 +799,6 @@ draw_pass_1 = SubResource( 174 )
 [node name="Particles2" type="Particles" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
-emitting = true
 amount = 16
 lifetime = 1.2
 local_coords = false
@@ -2153,18 +2151,41 @@ margin_bottom = 78.0
 margin_top = 82.0
 margin_right = 355.0
 margin_bottom = 110.0
-text = "Open Inventory"
+text = "Use an item"
 
 [node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 114.0
 margin_right = 355.0
 margin_bottom = 118.0
 
-[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+[node name="show_journal" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
 margin_top = 122.0
 margin_right = 355.0
 margin_bottom = 150.0
+text = "Use Journal"
+
+[node name="HSeparator4" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 154.0
+margin_right = 355.0
+margin_bottom = 158.0
+
+[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
+margin_top = 162.0
+margin_right = 355.0
+margin_bottom = 190.0
 text = "Cancel"
+
+[node name="mini_journal" parent="ui/dialog" instance=ExtResource( 21 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -600.0
+margin_top = -344.0
+margin_right = 600.0
+margin_bottom = 344.0
+buttons = true
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false
@@ -2323,9 +2344,12 @@ material/0 = SubResource( 98 )
 [connection signal="cancelled" from="ui/dialog/item_context" to="ui/dialog/viewer" method="_on_item_context_cancelled"]
 [connection signal="context_reply" from="ui/dialog/item_context" to="ui/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_item"]
+[connection signal="note_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_note"]
 [connection signal="item_pressed" from="ui/dialog/item_context/item_list" to="ui/dialog/item_context" method="_on_item_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/coat" to="ui/dialog/item_context" method="_on_coat_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/show_inventory" to="ui/dialog/item_context" method="_on_show_inventory_pressed"]
+[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/show_journal" to="ui/dialog/item_context" method="_on_show_journal_pressed"]
 [connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/item_context" method="_on_cancel_pressed"]
+[connection signal="note_chosen" from="ui/dialog/mini_journal" to="ui/dialog/item_context" method="_on_mini_journal_note_chosen"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]
