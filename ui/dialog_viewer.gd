@@ -75,8 +75,7 @@ func _input(event):
 	elif event.is_action_pressed("dialog_item"):
 		print("Input should be ignored!")
 		emit_signal("pick_item")
-		set_process_input(false)
-		set_process(false)
+		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
 		while current_item.type != DialogItem.Type.REPLY and get_next():
 			continue
@@ -143,6 +142,8 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 		current_item = sequence.get(first_index)
 	else:
 		current_item = s
+	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
+		Global.remember(main_speaker.friendly_id)
 	advance()
 
 func clear():
@@ -444,8 +445,7 @@ func set_shopping(s):
 		$input_timer.start()
 
 func _on_item_context_cancelled():
-	set_process_input(true)
-	set_process(true)
+	enable_replies()
 	if current_item and current_item.type == DialogItem.Type.REPLY:
 		if replies.get_child_count():
 			replies.get_child(0).grab_focus()
@@ -453,15 +453,29 @@ func _on_item_context_cancelled():
 func _sort_labels(a: String, b: String):
 	return sequence.labels[a] < sequence.labels[b]
 
-# tags is an array of strings
-func use_note(tags:Array):
+func disable_replies():
+	set_process_input(false)
+	set_process(false)
+	for c in replies.get_children():
+		if c is Button:
+			c.disabled = true
+			c.focus_mode = FOCUS_NONE
+
+func enable_replies():
 	set_process_input(true)
 	set_process(true)
+	for c in replies.get_children():
+		if c is Button:
+			c.disabled = false
+			c.focus_mode = FOCUS_ALL
+
+# tags is an array of strings
+func use_note(tags:Array):
+	enable_replies()
 	return _special_label("note", tags, true)
 
 func use_item(id:String, desc: ItemDescription = null):
-	set_process_input(true)
-	set_process(true)
+	enable_replies()
 	if id == "coat":
 		trade_coats()
 		return
@@ -561,8 +575,6 @@ func noskip():
 
 func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
-	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
-		Global.remember(main_speaker.friendly_id)
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
 	if main_speaker.has_method("exit_dialog"):

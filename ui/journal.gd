@@ -81,7 +81,7 @@ func populate_list(type: int):
 	var label := Label.new()
 	label.text = category.capitalize()
 	list.add_child(label)
-	
+	var previous_button : Button
 	for key in ids:
 		if key == "":
 			print("WARNING: empty key in ", category)
@@ -95,6 +95,12 @@ func populate_list(type: int):
 		var _x = button.connect("focus_entered", self, "_on_subject_focused", [type, key])
 		if buttons:
 			_x = button.connect("pressed", self, "_on_subject_pressed")
+		if previous_button:
+			previous_button.focus_next = button.get_path()
+			button.focus_previous = previous_button.get_path()
+			previous_button.focus_neighbour_bottom = button.get_path()
+			button.focus_neighbour_top = previous_button.get_path()
+		previous_button = button
 	var panel := Panel.new()
 	panel.rect_min_size.y = 20
 	panel.add_stylebox_override("panel", hrule_style)
@@ -120,6 +126,7 @@ func _on_subject_focused(type: int, subject: String):
 		for note_pair in n:
 			var b := Util.multiline_button(note_pair[0])
 			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
+			b.focus_mode = FOCUS_NONE
 			subject_notes.add_child(b)
 		call_deferred("_resize_note_buttons")
 	else:
@@ -131,6 +138,10 @@ func _on_subject_focused(type: int, subject: String):
 			subject_notes.add_child(l)
 
 func _on_subject_pressed():
+	for c in list.get_children():
+		c.focus_mode = FOCUS_NONE
+	for c in subject_notes.get_children():
+		c.focus_mode = FOCUS_ALL
 	subject_notes.get_child(0).grab_focus()
 
 func _resize_note_buttons():
