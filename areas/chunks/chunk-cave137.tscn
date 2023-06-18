@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -28,6 +28,8 @@
 [ext_resource path="res://entities/env/copper/rail_cart.tscn" type="PackedScene" id=26]
 [ext_resource path="res://entities/env/copper/scrap_pile4.tscn" type="PackedScene" id=27]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=28]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=29]
+[ext_resource path="res://dialog/side_content/arena/lia.dialog" type="Resource" id=30]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -357,6 +359,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.8218, -10.8469, 50.6263 )
 
 [node name="crawly" parent="active_entities/cave3" instance=ExtResource( 11 )]
 transform = Transform( -0.884229, 0.453525, -0.111596, 0.314565, 0.754904, 0.575473, 0.345235, 0.473746, -0.810171, 16.1975, -46.2767, 90.6328 )
+
+[node name="npc_lia" parent="active_entities/cave3" instance=ExtResource( 29 )]
+transform = Transform( 0.785348, 0, 0.619055, 0, 1, 0, -0.619055, 0, 0.785348, -43.4264, 19.608, 22.6391 )
+dialog = ExtResource( 30 )
+visual_name = "Lia"
+friendly_id = "lia"
 
 [node name="cave_center" type="Spatial" parent="active_entities"]
 transform = Transform( 0.974303, 0, 0.225242, 0, 1, 0, -0.225242, 0, 0.974303, -5.58957, -26.6197, 17.739 )

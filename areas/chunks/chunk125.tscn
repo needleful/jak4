@@ -25,7 +25,7 @@
 [ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=23]
 [ext_resource path="res://dialog/side_content/race/race_coat_trade.dialog" type="Resource" id=24]
 [ext_resource path="res://entities/enemies/enemy_group.gd" type="Script" id=25]
-[ext_resource path="res://dialog/side_content/chunk125/bob.dialog" type="Resource" id=26]
+[ext_resource path="res://dialog/side_content/arena/bairo.dialog" type="Resource" id=26]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=27]
 [ext_resource path="res://entities/env/stone/rock7.tscn" type="PackedScene" id=28]
 [ext_resource path="res://entities/env/stone/rock6.tscn" type="PackedScene" id=29]
@@ -424,7 +424,7 @@ transform = Transform( 0.352266, 0, 0.9359, 0, 1, 0, -0.9359, 0, 0.352266, -16.2
 [node name="enemy_group" type="Spatial" parent="active_entities/hut_area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09572, 2.23872, 2.51089 )
 script = ExtResource( 25 )
-stat_name = "bob/saved"
+stat_name = "bairo/saved"
 
 [node name="crawly" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
 transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 11.5719, -5.92572, -5.6841 )
@@ -440,23 +440,23 @@ respawns = false
 
 [node name="safe" type="Spatial" parent="active_entities/hut_area"]
 script = ExtResource( 27 )
-condition = "Global.stat(\"bob/saved\")"
+condition = "Global.stat(\"bairo/saved\")"
 
 [node name="npc_bob_safe" parent="active_entities/hut_area/safe" instance=ExtResource( 17 )]
 transform = Transform( 0.27231, 0, 0.962209, 0, 1, 0, -0.962209, 0, 0.27231, 7.71275, 0.233566, -7.81498 )
 dialog = ExtResource( 26 )
-visual_name = "Bob"
-friendly_id = "bob"
+visual_name = "Bairo"
+friendly_id = "bairo"
 
 [node name="unsafe" type="Spatial" parent="active_entities/hut_area"]
 script = ExtResource( 27 )
-condition = "!Global.stat(\"bob/saved\")"
+condition = "!Global.stat(\"bairo/saved\")"
 
 [node name="npc_bob" parent="active_entities/hut_area/unsafe" instance=ExtResource( 17 )]
 transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 3.24292, 3.15559, -4.95671 )
 dialog = ExtResource( 26 )
-visual_name = "Bob"
-friendly_id = "bob"
+visual_name = "Bairo"
+friendly_id = "bairo"
 
 [node name="valley_area" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -164.23, -233.328, 214.16 )

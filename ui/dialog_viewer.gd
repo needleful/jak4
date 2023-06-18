@@ -637,7 +637,7 @@ func speaker_stat() -> String:
 	else:
 		return Global.node_stat(main_speaker)
 
-func general_time() -> String:
+func general_time(late_morning := false) -> String:
 	var s = get_tree().current_scene
 	if s.has_method("get_time"):
 		var t:float = s.get_time()
@@ -646,7 +646,7 @@ func general_time() -> String:
 		elif t > 12:
 			return "afternoon"
 		elif t > 9.75:
-			return "day"
+			return "day" if !late_morning else "morning"
 		else:
 			return "morning"
 	return "day"

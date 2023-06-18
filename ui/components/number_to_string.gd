@@ -135,16 +135,37 @@ static func say_time(time:float, verbose:=true, say_pm:=false):
 		hours = 12
 		pm = !pm
 	var numeral := ""
-	if verbose:
-		numeral = verbose(hours) 
-		if minutes != 0:
-			if minutes < 10:
-				# Would she say o' or aught?
-				numeral += " o'"
-			numeral += " " + verbose(minutes)
-	else:
+	if !verbose:
 		numeral = "%2d:%02d" % [hours, minutes]
+	else:
+		if minutes != 0:
+			if minutes == 30:
+				numeral = "half past "
+			elif minutes == 15:
+				numeral = "quarter past "
+			elif minutes == 45:
+				numeral = "quarter 'til "
+				hours = hour_increment(hours)
+			elif minutes < 30:
+				numeral = verbose_small(minutes) + " past "
+			else:
+				numeral = verbose_small(60 - minutes) + " 'til "
+				hours = hour_increment(hours)
+		if hours == 12:
+			if pm:
+				numeral += "noon"
+			else:
+				numeral += "midnight"
+		else:
+			numeral += verbose_small(hours)
 	var daytime := ""
 	if say_pm:
 		daytime = "p.m." if pm else "a.m."
 	return numeral + " " + daytime
+
+static func hour_increment(hours):
+	hours += 1
+	hours = hours % 12
+	if hours == 0:
+		hours = 12
+	return hours

@@ -1,0 +1,85 @@
+[! Global stat: bairo/saved]
+	{talked == 0}
+		Help! Monsters have taken over my home!
+		You -- I suppose I'll do what I can.
+		[Global create_task: unwanted_visitors]
+		[Global mark_map: bairo_farm | A small farm run by a man named Bairo.]
+		[note: bairo/helping | I met a distressed man on the roof of his home, being harassed by monsters. |+ unwanted_visitors bairo_farm bairo]
+	{otherwise}
+		Help!
+{otherwise}[! Global stat: bairo/conspiracy]
+	Thank you so much for helping me, stranger!
+	You -- Oh, no problem.
+	[Global task_exists: unwanted_visitors]
+		[Global abolish_notes:+ unwanted_visitors bairo_farm]
+		[Global add_note: I cleared out the creatures without much difficulty. |+ unwanted_visitors bairo]
+	{otherwise}
+		[Global create_task: unwanted_visitors]
+		[note: bairo/helping | There was a man stuck on the roof of his home until I cleared out the creatures inside. |+ unwanted_visitors bairo]
+	It is so terrible! Those scoundrels released those creatures into my home!
+	You -- Someone released them? Who?
+	Those terrible miscreants up on the cliff! They have been trying to kill me for months!
+	You -- Those are serious allegations. Is it the whole town? Why would they want to harm you?
+	The natural spring watering my crops is very valuable. Many would kill to have it.
+	But those on the cliff are especially evil! They hold blood sacrifices in the cave near their village! I have heard the screams! They feed ancient evils...
+	[Global stat: arena125/entered]
+		You -- Oh, that. They have a sort of gladiatorial arena in the cave.
+		What? You have seen it?
+		[Global stat: arena125/coat]
+			You -- I've competed, even. In fact, I did so well in their games I won a jacket.
+		{otherwise}[Global stat: arena125/completed]
+			You -- I've competed in their games, in fact. Too much excitement for me, personally.
+		[Global stat: arena125/secret]
+			You -- Wait, I just realized that was supposed to be a secret.
+				Well, I don't care that much. It's not sacrifices, though I don't think it's entirely ethical. I believe your fears are unwarranted.
+		This is insanity! They still released the monsters into my home!
+		You -- Perhaps some of their spectres had escaped on accident? Would you like me to ask?
+		No! Do not "ask" those people if they are intending to murder me! 
+		You -- Alright, I won't say it was from you. If I see anything of note, I'll let you know, alright?
+		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
+		If you do, I can reward you.
+		[Global add_stat: bairo/arena]
+		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. |+ unwanted_visitors bairo actual_cliff_village]
+		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors]
+	{otherwise}
+		You -- What? Are you terribly sure?
+		Yes! But it is no use. Nobody shall listen until poor Bairo is dead.
+		You -- Well, if I ever have reason to stop by that village, I could take a look for you.
+		No, no. It is too dangerous. I cannot let a young woman fight my battles for me.
+		You -- Last I saw, I already fought a battle for you.
+		... Oh no, you are right!
+		* He sighs.
+		Well, if you are already in the area, and it is not inconvenient, I can reward you if you discover what is hidden in their caves.
+		[note: bairo/conspiracy | Bairo claims the inhabitants of the cliff village released spectres in his home to kill him (among other things). |+ unwanted_visitors bairo]
+		[Global mark_map: actual_cliff_village]
+		[note: bairo/sacrifices | Bairo claims the village inhabitants perform blood sacrifices. |+ unwanted_visitors actual_cliff_village]
+{otherwise}[! Global stat: bairo/arena]
+	Have you found anything?
+	[Global stat: arena125/real_conspiracy]
+		You -- Quite a lot. Your fears weren't entirely unfounded.
+		* TODO: Uh I don't know what the actual plot was
+		[Global add_stat: bairo/arena]
+		[Global add_stat: bairo/investigation_complete]
+	{otherwise}[Global stat: arena125/entered]
+		You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
+			No sacrifices or anything like that, though I question the ethics of such blood sport.
+		But why? Are they training soldiers to take my home?
+		[Global stat: arena125/fun]
+			You -- They told me it was strictly for entertainment.
+		{otherwise}
+			You -- I can't imagine they'd go through all the effort just to take your farm.
+				Not that it's not a lovely farm, but they seem to have other priorities.
+		But why send the specters to my home, then?
+		You -- Right, quite frankly I forgot that 
+		[Global add_stat: bairo/arena]
+	{otherwise}
+		You -- Not yet.
+		In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
+{otherwise}[! Global stat: bairo/investigation_complete]
+	* TODO: Uh I don't know what the actual plot was
+{otherwise}[! Global task_is_complete: unwanted_visitors]
+	* TODO: How does the task end?
+{otherwise}
+	You -- How's the farm going?
+	Good, thanks to you!
+	[exit]
