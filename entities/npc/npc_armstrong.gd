@@ -6,13 +6,13 @@ onready var tut = get_node(tutorial_node) if tutorial_node else null
 var tutorial := ""
 
 func start_pistol_tutorial():
-	start_wep_tutorial("pistol")
+	start_tutorial("pistol")
 
-func start_wep_tutorial(wep: String):
+func start_tutorial(wep: String):
 	if wep == "pistol":
 		$"../tutorials/pistol/prompt_aim".input_actions.append(
 			"combat_aim_toggle" if Global.using_gamepad else "combat_aim")
-
+	custom_entry = wep + "_tutorial"
 	tutorial = wep
 	var tw = tut.get_node(tutorial)
 	global_transform = tw.get_node("ref_armstrong").global_transform
@@ -22,9 +22,13 @@ func start_wep_tutorial(wep: String):
 			c.enabled = true
 
 func end_tutorial():
+	custom_entry = ""
+	tutorial = ""
 	var _x = Global.add_stat("armstrong/tutorial_complete/"+tutorial)
 	var tw = tut.get_node(tutorial)
 	for c in tw.get_children():
 		if "enabled" in c:
 			c.enabled = false
-	tutorial = ""
+
+func in_tutorial():
+	return tutorial != ""

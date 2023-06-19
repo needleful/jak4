@@ -1,33 +1,3 @@
-{main_speaker.tutorial == "pistol"}
-	{Global.add_temp_stat("armstrong/tutorial/pistol") == 1}
-		A pistol is a good sidearm for the desert outside the city.
-		It's not very powerful, but it can stun enemies, and it's nice for keeping your distance. The laser still works, even!
-	[Global temp_stat: tut_target_hit]
-		You're doing good! You can keep shooting as long as you want.
-		Also, you see that cart and rail behind the Medium? That goes up the cliff?
-		You -- Yes...
-		There's a switch up on the rocks. With some marksman skills, you can shoot it and activate the cart! It carries you all the way up the mountain!
-		You -- Alright, I'll try it sometime.
-	{otherwise}
-		Try shooting the targets on the rock. Just load, chamber, and pull the trigger!
-	> [skip] (Continue Tutorial)
-		[exit]
-	> Who made these pistols?
-		The Old Kingdom. At least, that's what I'd guess, since they're made of mostly copper.  There are some Ancient weapons as well, and they work very differently.
-		> Alright.
-		> This distinction between "Old" and "Ancient" is lost on me.
-			The simple rule is: white metal and gems are Ancient Kingdom. Old green copper is Old Kingdom.
-			The Ancient Kingdom ruled before the river dried up. When it did, they left. Then the Old Kingdom took over. They disappeared in the 9th century or so. Then our people moved in.
-	> Why was this in the Medium's waiting room? 
-		Beats me. I think somebody used it for storage. Probably for the best. It is an impressive machine, but not worth the maintenance.
-		You -- Wouldn't it drive business here?
-		There are many Mediums in safer places. I don't think they'd come to this one without a good reason like yours.
-		You -- ...
-	> [skip] (End Tutorial)
-		You -- Okay, I think I've got the hang of it.
-		Great! If you find any more weapons, I can show you how to use them!
-		[event: end_tutorial | #false]
-		[exit]
 [! Global stat: armstrong/intro]
 	Ah, Jackie the coats girl! Hello!
 	You -- "Coats girl"?
@@ -197,7 +167,10 @@
 > [! Global stat: armstrong/discussed/medium_hole] Why is there a hole in the Medium, anyway?
 	Don't know who did it. I guess they needed to fix it? The doors are locked shut without power.
 	It is strong metal. It must have taken months of cutting.
-	I saw a guy took a grinder to some of this metal. Whole blade exploded! Nearly died!
+	A guy took a grinder to some of this metal. Whole blade exploded! Nearly died!
+	?> Was "the guy" you?
+		He was me, yes. Thought I could make the hole bigger. Good thing I wore my goggles!
+		[back]
 	[Global add_stat: armstrong/discussed/medium_hole]
 > [Global stat: capacitor_124][! Global stat: armstrong/discussed/capacitor_scrap] Why was there a capacitor in the cave with the scrap, if they're so valuable?
 	[Global stat: armstrong/discussed/capacitor_scrap_pre]
@@ -240,27 +213,6 @@
 	Ergh, if you say so...
 	Just remember it is a very good storyteller, not a psychic.
 	[Global add_stat: armstrong/discussed/medium]
-> [Global count: wep_pistol] [! Global stat: armstrong/tutorial_complete/pistol] I found a pistol.
-	[! Global stat: armstrong/pistol]
-		What?
-		You -- Yes, this pistol here. A young woman gave it to me.
-		Wow, this is from a Vaeler officer! Quite the gift! Who gave it to you? Why?
-		You -- Her name is Riley. She was being harassed by those giant insects, so she lent me her pistol to deal with them.
-		And let you keep it?
-
-		Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
-		[Global add_stat: armstrong/pistol]
-	{otherwise}
-		Right, I remember you said that. Did you want me to show you how to use it?
-	> [skip] Yes (Begin Weapons Tutorial)
-		You -- Yes.
-		Alright, I'll show you the ropes.
-		[event: start_pistol_tutorial | #false]
-		[exit]
-	> [skip] Maybe Layer (Skip Tutorial)
-		You -- Maybe Later.
-		Okay, let me know. I don't want you hurting yourself.
-		[exit]
 > [Global task_is_active: the_tree_tower] [! Global stat: capacitor_113] [! Global stat: armstrong/asked_tower] Would there be a capacitor in the tower near the village?
 	[subtopic: ask_tower]
 > See you.
@@ -268,6 +220,31 @@
 	[exit]
 [goto: main_loop]
 
+:item(wep_pistol) :- !main_speaker.in_tutorial()
+[! Global stat: armstrong/pistol]
+	You -- A young woman gave me this pistol.
+	Wow, this is from a Vaeler officer! Quite the gift! Who gave it to you? Why?
+	You -- Her name is Riley. She was being harassed by those flying spectres, so she lent me her pistol to deal with them.
+	And let you keep it?
+	[Global task_exists: the_tree_tower]
+		You -- Yes! We're working on collecting capacitors, so she let me use it in the meantime.
+	{otherwise}
+		You -- Uh, maybe I should ask her...
+		Well yes, obviously! She should not be without a firearm if she's out exploring the desert.
+	Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
+	[Global add_stat: armstrong/pistol]
+{otherwise}
+	You -- Say, remember when you offered to show me how to use my pistol?
+	Right, did you want me to give you an introduction?
+> [skip] Yes (Begin Weapons Tutorial)
+	You -- Yes.
+	Alright, I'll show you the ropes.
+	[main_speaker start_tutorial: pistol]
+	[exit]
+> [skip] Maybe Layer (Skip Tutorial)
+	You -- Maybe Later.
+	Okay, let me know. I don't want you hurting yourself.
+	[exit]
 :_entry_ending
 [! Global stat: armstrong/discussed/ending]
 	Are you sure it is safe for you to travel? Not shook too bad or anything?
@@ -296,6 +273,37 @@ You -- Really? But surely if it's been standing for centuries, it could go witho
 Seriously. It is dangerous. Those towers use power for self-repair. I would not even go near it.
 You -- ...
 [back]
+
+:pistol_tutorial
+{Global.add_temp_stat("armstrong/tutorial/pistol") == 1}
+	A pistol is a good sidearm for the desert outside the city.
+	It's not very powerful, but it can stun enemies, and it's nice for keeping your distance. The laser still works, even!
+[Global temp_stat: tut_target_hit]
+	You're doing good! You can keep shooting as long as you want.
+	Also, you see that cart and rail behind the Medium? That goes up the cliff?
+	You -- Yes...
+	There's a switch up on the rocks. With some marksman skills, you can shoot it and activate the cart! It carries you all the way up the mountain!
+	You -- Alright, I'll try it sometime.
+{otherwise}
+	Try shooting the targets on the rock. Just load, chamber, and pull the trigger!
+> [skip] (Continue Tutorial)
+	[exit]
+> Who made these pistols?
+	The Old Kingdom. At least, that's what I'd guess, since they're made of mostly copper.  There are some Ancient weapons as well, and they work very differently.
+	> Alright.
+	> This distinction between "Old" and "Ancient" is lost on me.
+		The simple rule is: white metal and gems are Ancient Kingdom. Old green copper is Old Kingdom.
+		The Ancient Kingdom ruled before the river dried up. When it did, they left. Then the Old Kingdom took over. They disappeared in the 9th century or so. Then our people moved in.
+> Why was this in the Medium's waiting room? 
+	Beats me. I think somebody used it for storage. Probably for the best. It is an impressive machine, but not worth the maintenance.
+	You -- Wouldn't it drive business here?
+	There are many Mediums in safer places. I don't think they'd come to this one without a good reason like yours.
+	You -- ...
+> [skip] (End Tutorial)
+	You -- Okay, I think I've got the hang of it.
+	Great! If you find any more weapons, I can show you how to use them!
+	[main_speaker end_tutorial]
+	[exit]
 
 :_exit
 You -- I've got to go, see you.
