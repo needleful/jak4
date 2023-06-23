@@ -272,13 +272,13 @@ func list_replies():
 				f = fonts[font_override]
 			var b := Util.multiline_button(interpolate(reply.text), f)
 			replies.add_child(b)
-			call_deferred("_resize_replies")
 			var r = reply
 			var s = skip_reply
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
 		elif !otherwise_used:
 			otherwise = true
 		reply = sequence.next(reply)
+		call_deferred("_resize_replies")
 	if replies.get_child_count() == 0:
 		print("\tNo replies.")
 		current_item = reply

@@ -1,7 +1,8 @@
 extends Control
 
 var level := 0
-onready var ui := get_parent().get_parent().get_parent()
+export(NodePath) var ui_path
+onready var ui = get_node(ui_path)
 onready var main_menu := $foreground/main_menu
 onready var main_anim := $foreground/main_menu/AnimationPlayer
 
