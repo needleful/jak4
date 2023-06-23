@@ -8,6 +8,7 @@ func _notification(what):
 
 func set_active(a):
 	$item_context.hide()
+	$mini_journal.hide()
 	if !a:
 		last_focused = get_focus_owner()
 	elif is_instance_valid(last_focused):

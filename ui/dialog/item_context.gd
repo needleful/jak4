@@ -80,6 +80,7 @@ func _on_coat_pressed():
 	use_item("coat")
 
 func _on_cancel_pressed():
+	mini_journal.hide()
 	hide()
 	emit_signal("cancelled")
 

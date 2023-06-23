@@ -5,18 +5,20 @@ signal note_chosen(tags)
 export(StyleBox) var hrule_style
 export(bool) var buttons := false
 
-onready var list := $hbox/items/list
-onready var subject_name := $hbox/notes/header/text/name
-onready var subject_image := $hbox/notes/header/TextureRect
-onready var subject_notes := $hbox/notes/header/text/scroll/notes
-onready var subject_headline := $hbox/notes/header/text
+onready var list := $hbox/sidebar/items/list
+onready var subject_name := $hbox/notes/text/name
+onready var subject_image := $hbox/notes/TextureRect
+onready var subject_notes := $hbox/notes/text/scroll/notes
+onready var subject_headline := $hbox/notes/text
 onready var notes := $hbox/notes
+onready var sort_label := $sort/label
 
 const image_path := "res://ui/notes/%s/%s.png"
 var show_background := true
 
 var starting_item : Node
 var temp_notes: Array
+
 
 enum NoteType {
 	People,
@@ -25,24 +27,64 @@ enum NoteType {
 	CompletedTasks
 }
 
+enum Sort {
+	Subject,
+	Recency
+}
+var sort = Sort.Subject
+
 func _init():
 	temp_notes = []
+
+func _ready():
+	set_process_input(false)
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		set_active(is_visible_in_tree())
 
+func _input(event):
+	if event.is_action_pressed("ui_sort"):
+		sort += 1
+		sort = sort % Sort.size()
+		set_sort(sort)
+		call_deferred("draw_list")
+
 func set_active(active):
+	set_process_input(active)
 	if active:
-		notes.hide()
-		starting_item = null
-		clear(list)
+		set_sort(sort)
+		draw_list()
+	else:
+		set_sort(Sort.Subject)
+
+func draw_list():
+	starting_item = null
+	clear(list)
+	if sort == Sort.Subject:
 		populate_list(NoteType.People)
 		populate_list(NoteType.Places)
 		populate_list(NoteType.ActiveTasks)
 		populate_list(NoteType.CompletedTasks)
-		if starting_item:
-			call_deferred("show_notes")
+	else:
+		var n := Global.game_state.journal
+		n.invert()
+		write_notes(n)
+	focus_first_button()
+
+func set_sort(new_sort):
+	sort = new_sort
+	sort_label.text = "Sorting by: " + Sort.keys()[sort]
+	match sort:
+		Sort.Subject:
+			$hbox/sidebar.show()
+			$hbox/spacer.show()
+			subject_image.show()
+		Sort.Recency:
+			$hbox/spacer.hide()
+			$hbox/sidebar.hide()
+			subject_image.hide()
+			subject_name.text = "All Notes"
 
 func get_image(category: String, subject: String) -> Texture:
 	# Competed tasks have the same image as active
@@ -121,12 +163,18 @@ func _on_subject_focused(type: int, subject: String):
 	subject_name.text = subject.capitalize()
 	subject_image.texture = get_image(category, subject)
 	
+	write_notes(n)
+
+func write_notes(n):
 	clear(subject_notes)
 	if buttons:
 		for note_pair in n:
 			var b := Util.multiline_button(note_pair[0])
+			if !starting_item:
+				starting_item = b
 			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
-			b.focus_mode = FOCUS_NONE
+			if sort == Sort.Subject:
+				b.focus_mode = FOCUS_NONE
 			subject_notes.add_child(b)
 		call_deferred("_resize_note_buttons")
 	else:
@@ -147,8 +195,7 @@ func _on_subject_pressed():
 func _resize_note_buttons():
 	Util.resize_buttons(subject_notes.get_children()) 
 
-func show_notes():
-	notes.show()
+func focus_first_button():
 	if starting_item:
 		starting_item.grab_focus()
 
