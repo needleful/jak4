@@ -5,6 +5,11 @@ export(bool) var small := false
 
 var default_size = rect_size
 
+const vis_remap := {
+	"axis6":"gamepad6",
+	"axis7":"gamepad7"
+}
+
 # device/input event
 const prompt_path := "res://ui/prompts/%s/%s.png"
 
@@ -31,6 +36,8 @@ func set_action(a):
 	if !Global.using_gamepad:
 		show_text(input_str)
 	else:
+		if input_str in vis_remap:
+			input_str = vis_remap[input_str]
 		var device = "pad_generic"
 		var prompt = prompt_path % [device, input_str]
 		if ResourceLoader.exists(prompt):
