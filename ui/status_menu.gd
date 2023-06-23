@@ -37,8 +37,8 @@ func safe_set_tab(tab):
 	tabs.current_tab = tab
 
 func _notification(what):
-	var date := get_node("AspectRatioContainer/sized/date_time/margin/stats")
 	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
+		var date := get_node("AspectRatioContainer/sized/date_time/margin/stats")
 		var days = Global.stat("current_day") + 1
 		date.get_node("date").text = "%s %s of travel" % [
 			NumberToString.verbose(days).capitalize(),

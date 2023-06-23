@@ -6,7 +6,7 @@ signal event(id)
 signal event_with_source(id, source)
 signal pick_item
 signal new_contextual_reply
-signal hide_background
+signal control_screen(controlled)
 
 var shopping := false setget set_shopping
 
@@ -711,7 +711,7 @@ func game_start():
 	return main_speaker.get_parent().start()
 
 func control_screen(val := true):
-	emit_signal("hide_screen")
+	emit_signal("control_screen", val)
 	return true
 
 func note(stat: String, text: String, tags: Array):

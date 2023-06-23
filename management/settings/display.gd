@@ -5,8 +5,14 @@ signal ui_redraw
 
 var theme:Theme = load("res://ui/default_theme.tres")
 
+enum ScreenMode {
+	Fullscreen,
+	Windowed,
+	Borderless
+}
+
 #warning-ignore:unused_class_variable
-export(bool) var full_screen setget set_fullscreen, get_fullscreen
+export(ScreenMode) var screen_mode setget set_screen, get_screen
 #warning-ignore:unused_class_variable
 export(bool) var vsync setget set_vsync, get_vsync
 export (int, 8, 48) var text_size setget set_textsize, get_textsize
@@ -15,13 +21,20 @@ export (Color) var text_color setget set_text_color, get_text_color
 func get_name() -> String:
 	return "Display"
 
-func set_fullscreen(val: bool):
-	full_screen = val
-	OS.window_fullscreen = val
+func set_screen(val: int):
+	screen_mode = val
+	match screen_mode:
+		ScreenMode.Fullscreen:
+			OS.window_fullscreen = true
+		ScreenMode.Windowed:
+			OS.window_fullscreen = false
+			OS.window_borderless = false
+		ScreenMode.Borderless:
+			OS.window_fullscreen = false
+			OS.window_borderless = true
 
-func get_fullscreen() -> bool:
-	full_screen = OS.window_fullscreen
-	return full_screen
+func get_screen() -> int:
+	return screen_mode
 
 func set_vsync(val: bool):
 	vsync = val
