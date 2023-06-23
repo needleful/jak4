@@ -14,10 +14,11 @@ var mode_before_pause:int = Mode.Gameing
 
 export(Color) var stamina_color = Color(0xacff97)
 export(Color) var drained_stamina_color = Color.red
-onready var game := $gameing
-onready var dialog := $dialog/viewer
+onready var game := $gameing/gameing
+onready var dialog := $dialog/dialog/viewer
 onready var status := $status_menu
-onready var equipment := $gameing/equipment
+onready var equipment := $gameing/gameing/equipment
+onready var debug_ui := $gameing/gameing/debug
 var equipment_path_f := "res://items/usable/%s.gd"
 
 var custom_ui : Control
@@ -116,10 +117,10 @@ func _process(delta):
 	if mode == Mode.Gameing:
 		var scn = get_tree().current_scene
 		if scn.has_method("get_time"):
-			$gameing/debug/stats/a10.text = "Time: " + str(scn.get_time())
-		$gameing/debug/stats/a7.text = str(player.timers)
+			debug_ui.get_node("stats/a10").text = "Time: " + str(scn.get_time())
+		debug_ui.get_node("stats/a7").text = str(player.timers)
 	
-		$gameing/debug/stats/a4.text = "Gr: " + str(player.ground_normal)
+		debug_ui.get_node("stats/a4").text = "Gr: " + str(player.ground_normal)
 		if player.holding("choose_item"):
 			choose_time += delta
 			if choose_time > TIME_CHOOSE_ITEM:
@@ -137,17 +138,17 @@ func update_inventory(startup:= false):
 		on_item_changed(item, 0, Global.count(item), startup)
 	for item in UPGRADE_ITEMS:
 		on_item_changed(item, 0, Global.count(item), startup)
-	$gameing/weapon/ammo/ammo_label.text = str(Global.count(player.current_weapon))
+	game.get_node("weapon/ammo/ammo_label").text = str(Global.count(player.current_weapon))
 
 func on_item_changed(item: String, change: int, count: int, startup := false):
 	if item in VISIBLE_ITEMS:
 		if !startup and !Global.stat("tutorial/items"):
 			var _x = Global.add_stat("tutorial/items")
 			show_prompt(["show_inventory"], "Show Inventory")
-		var l_count: Label = get_node("gameing/inventory/"+item+"_count")
+		var l_count: Label = game.get_node("inventory/"+item+"_count")
 		l_count.text = str(count)
 		if change != 0:
-			var added: Label = get_node("gameing/inventory/"+item+"_added")
+			var added: Label = game.get_node("inventory/"+item+"_added")
 			var c = change
 			if added.modulate.a > 0.01:
 				var old_added = int(added.text)
@@ -176,8 +177,8 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		else:
 			player.gun.remove_weapon(item)
 	elif player.current_weapon == item:
-		$gameing/weapon/ammo/ammo_label.text = str(count)
-		if player.current_weapon and !$gameing/weapon.visible:
+		game.get_node("weapon/ammo/ammo_label").text = str(count)
+		if player.current_weapon and !game.get_node("weapon").visible:
 			show_ammo()
 	elif item in player.mesh.coat_mesh.meshes:
 		player.mesh.coat_mesh.set_coat_type(item)
@@ -242,7 +243,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 
 func on_journal_updated(category: String, subject: String):
 	var alert = [category.capitalize(), subject.capitalize()]
-	$gameing/note_get.show_alert(alert)
+	game.get_node("note_get").show_alert(alert)
 	$dialog/note_get.show_alert(alert)
 
 func equip_previous():
@@ -288,24 +289,26 @@ func update_equipment():
 		equipment.preview(values[index], values[prev_index], values[next_index])
 
 func show_inventory():
-	for g in $gameing/inventory.get_children():
+	var I := game.get_node("inventory")
+	for g in I.get_children():
 		if g is CanvasItem:
 			g.visible = true
-	$gameing/inventory.show()
-	$gameing/inventory/vis_timer.start()
+	I.show()
+	I.get_node("vis_timer").start()
 	show_ammo()
 	update_equipment()
 
 func show_specific_item(item):
-	if !$gameing/inventory.visible:
-		for g in $gameing/inventory.get_children():
+	var I := game.get_node("inventory")
+	if !I.visible:
+		for g in I.get_children():
 			if g is CanvasItem:
 				g.visible = false
-		$gameing/inventory.show()
-	$gameing/inventory/vis_timer.start()
-	var count = get_node("gameing/inventory/"+item+"_count")
-	var icon = get_node("gameing/inventory/"+item+"_icon")
-	var added = get_node("gameing/inventory/"+item+"_added")
+		I.show()
+	I.get_node("vis_timer").start()
+	var count = I.get_node(item+"_count")
+	var icon = I.get_node(item+"_icon")
+	var added = I.get_node(item+"_added")
 	if !icon or !count or !added:
 		print_debug("BUG: no inventory for ", item)
 		return
@@ -314,16 +317,16 @@ func show_specific_item(item):
 	count.show()
 
 func _on_vis_timer_timeout():
-	$gameing/inventory.hide()
+	game.get_node("inventory").hide()
 	if player.gun.state == Gun.State.Hidden:
 		hide_ammo()
 		
 func show_ammo():
 	if player.current_weapon and player.current_weapon != "":
-		$gameing/weapon.show()
+		game.get_node("weapon").show()
 
 func hide_ammo():
-	$gameing/weapon.hide()
+	game.get_node("weapon").hide()
 
 func add_label(box: Control, text: String):
 	var l := Label.new()
@@ -331,7 +334,7 @@ func add_label(box: Control, text: String):
 	box.add_child(l)
 
 func debug_show_inventory():
-	var state_viewer: Control = $gameing/debug/game_state
+	var state_viewer: Control = debug_ui.get_node("game_state")
 	for c in state_viewer.get_children():
 		state_viewer.remove_child(c)
 	add_label(state_viewer, "Inventory:")
@@ -339,10 +342,10 @@ func debug_show_inventory():
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
 
 func prepare_save():
-	$gameing/saveStats/AnimationPlayer.play("save_start")
+	game.get_node("saveStats/AnimationPlayer").play("save_start")
 
 func complete_save():
-	$gameing/saveStats/AnimationPlayer.queue("save_complete")
+	game.get_node("saveStats/AnimationPlayer").queue("save_complete")
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	set_mode(Mode.Dialog)
@@ -383,31 +386,32 @@ func set_mode(m):
 		i += 1
 
 func show_prompt(actions: Array, text: String, joiner := "+"):
-	$gameing/tutorial/prompt_timer.stop()
-	$gameing/tutorial/joiner.text = joiner
+	var tut := game.get_node("tutorial")
+	tut.get_node("prompt_timer").stop()
+	tut.get_node("joiner").text = joiner
 	if actions.size() >= 1:
-		$gameing/tutorial/input_prompt.show()
-		$gameing/tutorial/input_prompt.action = actions[0]
+		tut.get_node("input_prompt").show()
+		tut.get_node("input_prompt").action = actions[0]
 	else:
-		$gameing/tutorial/input_prompt.hide()
+		tut.get_node("input_prompt").hide()
 	if actions.size() >= 2:
-		$gameing/tutorial/joiner.show()
-		$gameing/tutorial/input_prompt2.show()
-		$gameing/tutorial/input_prompt2.action = actions[1]
+		tut.get_node("joiner").show()
+		tut.get_node("input_prompt2").show()
+		tut.get_node("input_prompt2").action = actions[1]
 	else:
-		$gameing/tutorial/joiner.hide()
-		$gameing/tutorial/input_prompt2.hide()
+		tut.get_node("joiner").hide()
+		tut.get_node("input_prompt2").hide()
 
-	$gameing/tutorial/Label.text = text
-	$gameing/tutorial.show()
-	$gameing/tutorial/prompt_timer.start()
+	tut.get_node("Label").text = text
+	tut.show()
+	tut.get_node("prompt_timer").start()
 
 func hide_prompt():
-	$gameing/tutorial.hide()
-	$gameing/tutorial/prompt_timer.stop()
+	game.get_node("tutorial").hide()
+	game.get_node("tutorial/prompt_timer").stop()
 
 func _on_prompt_timer_timeout():
-	$gameing/tutorial.hide()
+	game.get_node("tutorial").hide()
 
 # TODO: fix in multi-threaded rendering
 func take_screen_shot():

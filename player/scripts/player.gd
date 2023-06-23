@@ -356,7 +356,7 @@ onready var hover_area := $hover_area
 onready var water_cast := $water_cast
 
 onready var ui := $ui
-onready var game_ui := $ui/gameing/custom_game
+onready var game_ui:Control = ui.game.get_node("custom_game")
 
 onready var sleep_zone := $base_mesh/the_sleep_zone
 onready var coat_zone := $base_mesh/the_coat_zone
@@ -383,7 +383,7 @@ var input_buffer := {
 	"combat_spin":INF,
 }
 
-onready var debug = $ui/gameing/debug
+onready var debug = ui.game.get_node("debug")
 
 func _ready():
 	if doppleganger:
@@ -431,7 +431,7 @@ func _input(event):
 	elif event.is_action_pressed("show_inventory"):
 		emit_signal("show_stats")
 	elif state == State.Sitting and event.is_action("mv_crouch"):
-		var reset_bar = $ui/gameing/reset_bar
+		var reset_bar = ui.game.get_node("reset_bar")
 		if event.is_action_pressed("mv_crouch"):
 			reset_bar.sleep = true
 		elif event.is_action_released("mv_crouch"):
@@ -483,8 +483,8 @@ func _physics_process(delta):
 			best_floor = col.collider as Node
 	if best_floor_dot > MIN_DOT_GROUND:
 		ground_normal = best_normal
-	$ui/gameing/debug/stats/a2.text = "Input: " + str(movement.length_squared())
-	$ui/gameing/debug/stats/a9.text = "Depth: " + str(max_depth)
+	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
+	debug.get_node("stats/a9").text = "Depth: " + str(max_depth)
 	
 	if max_depth > DEPTH_CRUSH:
 		crushing_death()
@@ -494,9 +494,9 @@ func _physics_process(delta):
 		if water_depth > DEPTH_WATER_DROWN and !is_dead():
 			fall_to_death()
 		elif water_depth > DEPTH_WATER_WADE:
-			$ui/gameing/debug/stats/a8.text = "Wading"
+			debug.get_node("stats/a8").text = "Wading"
 		else:
-			$ui/gameing/debug/stats/a8.text = "Splashing"
+			debug.get_node("stats/a8").text = "Splashing"
 
 		var wpart : Particles = $water_cast/Particles
 		var mpart : Particles = $base_mesh/Particles2
@@ -513,7 +513,7 @@ func _physics_process(delta):
 		wpart.global_transform.origin = ripple_pos
 		mpart.global_transform.origin = ripple_pos
 	else:
-		$ui/gameing/debug/stats/a8.text = "Dry"
+		debug.get_node("stats/a8").text = "Dry"
 		water_depth = 0
 		
 		$water_cast/Particles.emitting = false
@@ -669,7 +669,7 @@ func _physics_process(delta):
 			elif after(TIME_STOP_CLIMB) and best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Crouch
 			elif empty(climb_area) or best_floor_dot < MIN_DOT_CLIMB:
-				$ui/gameing/debug/stats/a6.text = "!!!"
+				debug.get_node("stats/a6").text = "!!!"
 				next_state = State.Fall
 			elif total_stamina() <= 0 or !holding("mv_crouch"):
 				if best_floor_dot < MIN_DOT_CLIMB_AIR:
@@ -677,7 +677,7 @@ func _physics_process(delta):
 				else:
 					next_state = State.Slide
 			else:
-				$ui/gameing/debug/stats/a6.text = "all good"
+				debug.get_node("stats/a6").text = "all good"
 		State.Roll:
 			if after(TIME_ROLL_MIN_JUMP) and pressed("mv_jump"):
 				next_state = State.RollJump
@@ -1102,7 +1102,7 @@ func _physics_process(delta):
 		State.Hover:
 			last_ground_origin = global_transform.origin
 			var grounded:bool = hover_area.get_overlapping_bodies().size() > 0
-			$ui/gameing/debug/stats/a8.text = str(grounded)
+			debug.get_node("stats/a8").text = str(grounded)
 			if hover_floor_finder.is_colliding():
 				hover_normal = hover_floor_finder.get_collision_normal()
 				hover_cast.cast_to = -hover_normal
@@ -1203,7 +1203,7 @@ func set_current_coat(coat: Coat, play_sound:= true):
 		mesh.play_pickup_sound("coat")
 
 func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, accel_normal: float = ACCEL, steer_accel: float = ACCEL, decel_factor: float = 1):
-	$ui/gameing/debug/stats/a3.text = "DV: (%f, %f, %f)" % [
+	debug.get_node("stats/a3").text = "DV: (%f, %f, %f)" % [
 		desired_velocity.x,
 		desired_velocity.y,
 		desired_velocity.z
@@ -1217,7 +1217,7 @@ func accel(delta: float, desired_velocity: Vector3, applied_ground: Vector3, acc
 			if desired_velocity.y > ROLL_MAX_VELOCITY_V:
 				desired_velocity.y = ROLL_MAX_VELOCITY_V
 		gravity = GRAVITY.project(ground_normal)
-	$ui/gameing/debug/stats/a5.text = "DV2: [%f, %f, %f]" % [
+	debug.get_node("stats/a5").text = "DV2: [%f, %f, %f]" % [
 		desired_velocity.x,
 		desired_velocity.y,
 		desired_velocity.z
@@ -1774,14 +1774,14 @@ func wardrobe_unlock(paused):
 func lock(_dialog := true):
 	set_process_input(false)
 	set_state(State.Locked)
-	$ui/gameing/stats.hide()
-	$ui/gameing/inventory/vis_timer.stop()
-	$ui/gameing/inventory.hide()
+	ui.game.get_node("stats").hide()
+	ui.game.get_node("inventory/vis_timer").stop()
+	ui.game.get_node("inventory").hide()
 
 func unlock(new_state := State.Ground):
 	set_process_input(true)
 	set_state(new_state)
-	$ui/gameing/stats.show()
+	ui.game.get_node("stats").show()
 
 func toggle_noclip():
 	if state != State.NoClip:
@@ -1815,7 +1815,7 @@ func celebrate(id: String = "", item: Spatial = null, local := Transform()):
 	if held_item:
 		held_item.transform = local
 	if id and id != "":
-		$ui/gameing/item_get.show_alert(id.capitalize())
+		ui.game.get_node("item_get").show_alert(id.capitalize())
 
 func get_item(item: ItemPickup):
 	if item.item_id == "capacitor" or item.item_id in ui.UPGRADE_ITEMS or item.celebrate:
@@ -1842,13 +1842,13 @@ func disable():
 	ui.hide()
 
 func track_weapon(weapon: String):
-	$ui/gameing/weapon/ArrowUp.visible = gun.enabled_wep["wep_pistol"]
-	$ui/gameing/weapon/ArrowDown.visible = gun.enabled_wep["wep_wave_shot"]
-	$ui/gameing/weapon/ArrowLeft.visible = gun.enabled_wep["wep_grav_gun"]
-	$ui/gameing/weapon/ArrowRight.visible = gun.enabled_wep["wep_time_gun"]
+	ui.game.get_node("weapon/ArrowUp").visible = gun.enabled_wep["wep_pistol"]
+	ui.game.get_node("weapon/ArrowDown").visible = gun.enabled_wep["wep_wave_shot"]
+	ui.game.get_node("weapon/ArrowLeft").visible = gun.enabled_wep["wep_grav_gun"]
+	ui.game.get_node("weapon/ArrowRight").visible = gun.enabled_wep["wep_time_gun"]
 	current_weapon = weapon
-	$ui/gameing/weapon.icon = weapon
-	var ammo_ui = $ui/gameing/weapon/ammo
+	ui.game.get_node("weapon").icon = weapon
+	var ammo_ui = ui.game.get_node("weapon/ammo")
 	if gun.current_weapon:
 		if "custom_ui" in gun.current_weapon:
 			ammo_ui.get_node("ammo_label").visible = false
@@ -1911,7 +1911,7 @@ func set_state(next_state: int):
 		State.LedgeHang:
 			ledge = null
 		State.Sitting:
-			$ui/gameing/reset_bar.sleep = false
+			ui.game.get_node("reset_bar").sleep = false
 		State.NoClip:
 			collision_layer = normal_layer
 			collision_mask = normal_mask
@@ -2118,4 +2118,4 @@ func set_state(next_state: int):
 			collision_layer = 0
 			collision_mask = 0 
 	state = next_state
-	$ui/gameing/debug/stats/a1.text = "State: %s" % State.keys()[state]
+	debug.get_node("stats/a1").text = "State: %s" % State.keys()[state]

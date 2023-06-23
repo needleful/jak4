@@ -1,6 +1,6 @@
 extends Control
 
-onready var tabs: TabContainer = $tabs
+onready var tabs: TabContainer = $AspectRatioContainer/sized/tabs
 onready var ui = get_parent()
 
 func _input(event):
@@ -37,20 +37,22 @@ func safe_set_tab(tab):
 	tabs.current_tab = tab
 
 func _notification(what):
+	var date := get_node("AspectRatioContainer/sized/date_time/margin/stats")
 	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
 		var days = Global.stat("current_day") + 1
-		$date_time/margin/stats/date.text = "%s %s of travel" % [
+		date.get_node("date").text = "%s %s of travel" % [
 			NumberToString.verbose(days).capitalize(),
 			"day" if days == 1 else "days" ] 
 		if get_tree().current_scene.has_method("get_time"):
 			var time = get_tree().current_scene.get_time()
-			$date_time/margin/stats/time.text = "%s" % NumberToString.say_time(time, false, true)
+			date.get_node("time").text = "%s" % NumberToString.say_time(time, false, true)
 
 func _on_wardrobe_exited():
 	ui.unpause()
 
 func _on_Wardrobe_active(active):
 	$TextureRect.visible = !active
+	$background.visible = !active
 	Global.get_player().set_camera_render(active or !get_tree().paused)
 	if !active and get_tree().paused:
 		ui.take_screen_shot()

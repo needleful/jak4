@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=2]
+[gd_scene load_steps=116 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -44,6 +44,7 @@
 [ext_resource path="res://ui/fancy/segmented_bar.gd" type="Script" id=42]
 [ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=43]
 [ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=44]
+[ext_resource path="res://ui/components/fade.gd" type="Script" id=45]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -306,8 +307,11 @@ noise = SubResource( 78 )
 
 [sub_resource type="StyleBoxEmpty" id=65]
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0, 0, 0, 0.745098 )
+[sub_resource type="StyleBoxEmpty" id=183]
+
+[sub_resource type="StyleBoxEmpty" id=184]
+
+[sub_resource type="StyleBoxEmpty" id=185]
 
 [sub_resource type="Animation" id=9]
 length = 0.001
@@ -1089,6 +1093,7 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 1 )
+script = ExtResource( 45 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="fade"]
 time_scale_response = false
@@ -1104,22 +1109,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 5 )
 script = ExtResource( 17 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
 stamina_color = Color( 0.513726, 1, 0.580392, 1 )
 drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="TextureRect" type="TextureRect" parent="ui/status_menu"]
 time_scale_response = false
@@ -1133,56 +1131,69 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="tabs" type="TabContainer" parent="ui/status_menu"]
+[node name="background" type="Panel" parent="ui/status_menu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ui/status_menu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+ratio = 1.7778
+
+[node name="sized" type="Control" parent="ui/status_menu/AspectRatioContainer"]
+margin_left = 559.992
+margin_right = 1840.01
+margin_bottom = 720.0
+
+[node name="tabs" type="TabContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
 time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 65 )
-custom_styles/tabs_panel = SubResource( 5 )
 all_tabs_in_front = true
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
-[node name="Options" parent="ui/status_menu/tabs" instance=ExtResource( 9 )]
+[node name="Options" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 9 )]
 time_scale_response = false
 margin_top = 32.0
 
-[node name="Map" parent="ui/status_menu/tabs" instance=ExtResource( 16 )]
+[node name="Map" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 16 )]
 time_scale_response = false
 visible = false
 show_behind_parent = true
 margin_top = 32.0
 
-[node name="Journal" parent="ui/status_menu/tabs" instance=ExtResource( 21 )]
+[node name="Journal" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 21 )]
 time_scale_response = false
 visible = false
+custom_styles/panel = SubResource( 183 )
 
-[node name="Inventory" parent="ui/status_menu/tabs" instance=ExtResource( 23 )]
+[node name="Inventory" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 23 )]
 time_scale_response = false
 visible = false
 margin_top = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_styles/panel = SubResource( 184 )
 
-[node name="Wardrobe" parent="ui/status_menu/tabs" instance=ExtResource( 32 )]
+[node name="Wardrobe" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 32 )]
 pause_mode = 2
 time_scale_response = false
 visible = false
 pause_menu = true
 
-[node name="Save & Load" parent="ui/status_menu/tabs" instance=ExtResource( 31 )]
+[node name="Save & Load" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 31 )]
 time_scale_response = false
 visible = false
+custom_styles/panel = SubResource( 185 )
 
-[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu"]
+[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
 time_scale_response = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -80.0
 margin_right = 342.0
 
-[node name="Label" type="Label" parent="ui/status_menu/PromptLeft"]
+[node name="Label" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/PromptLeft"]
 time_scale_response = false
 margin_top = 29.0
 margin_right = 104.0
@@ -1193,7 +1204,7 @@ custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 text = "<< Previous"
 
-[node name="input_prompt" parent="ui/status_menu/PromptLeft" instance=ExtResource( 8 )]
+[node name="input_prompt" parent="ui/status_menu/AspectRatioContainer/sized/PromptLeft" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -1203,7 +1214,7 @@ margin_bottom = 80.0
 action = "ui_page_down"
 small = true
 
-[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu"]
+[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
 time_scale_response = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -1213,7 +1224,7 @@ margin_left = -311.0
 margin_top = -80.0
 alignment = 2
 
-[node name="input_prompt" parent="ui/status_menu/PromptRight" instance=ExtResource( 8 )]
+[node name="input_prompt" parent="ui/status_menu/AspectRatioContainer/sized/PromptRight" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -1223,7 +1234,7 @@ margin_bottom = 80.0
 action = "ui_page_up"
 small = true
 
-[node name="Label" type="Label" parent="ui/status_menu/PromptRight"]
+[node name="Label" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/PromptRight"]
 time_scale_response = false
 margin_left = 242.0
 margin_top = 29.0
@@ -1236,7 +1247,7 @@ custom_constants/shadow_as_outline = 1
 text = "Next >>"
 align = 2
 
-[node name="date_time" type="PanelContainer" parent="ui/status_menu"]
+[node name="date_time" type="PanelContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
 time_scale_response = false
 anchor_top = 0.875
 anchor_bottom = 0.875
@@ -1244,11 +1255,8 @@ margin_left = 20.0
 margin_top = -65.0
 margin_right = 210.0
 margin_bottom = 6.0
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
-[node name="margin" type="MarginContainer" parent="ui/status_menu/date_time"]
+[node name="margin" type="MarginContainer" parent="ui/status_menu/AspectRatioContainer/sized/date_time"]
 time_scale_response = false
 margin_right = 190.0
 margin_bottom = 71.0
@@ -1257,7 +1265,7 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="stats" type="VBoxContainer" parent="ui/status_menu/date_time/margin"]
+[node name="stats" type="VBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin"]
 time_scale_response = false
 margin_left = 5.0
 margin_top = 5.0
@@ -1266,97 +1274,105 @@ margin_bottom = 66.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="date" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+[node name="date" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin/stats"]
 time_scale_response = false
 margin_right = 180.0
 margin_bottom = 22.0
 text = "X Days on Journey"
 
-[node name="time" type="Label" parent="ui/status_menu/date_time/margin/stats"]
+[node name="time" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin/stats"]
 time_scale_response = false
 margin_top = 26.0
 margin_right = 180.0
 margin_bottom = 48.0
 text = "Time: "
 
-[node name="gameing" type="Control" parent="ui"]
-time_scale_response = false
+[node name="gameing" type="AspectRatioContainer" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+ratio = 1.7778
+stretch_mode = 1
 
-[node name="saveStats" type="VBoxContainer" parent="ui/gameing"]
+[node name="gameing" type="Control" parent="ui/gameing"]
+time_scale_response = false
+margin_left = 559.992
+margin_right = 1840.01
+margin_bottom = 720.0
+
+[node name="saveStats" type="VBoxContainer" parent="ui/gameing/gameing"]
 pause_mode = 2
 time_scale_response = false
 anchor_top = 0.5
 anchor_bottom = 0.5
-margin_left = 17.0
-margin_top = -20.0
+margin_left = 13.0
+margin_top = 184.0
 margin_right = 163.0
-margin_bottom = 20.0
+margin_bottom = 269.0
 
-[node name="saving" type="Label" parent="ui/gameing/saveStats"]
+[node name="saving" type="Label" parent="ui/gameing/gameing/saveStats"]
 time_scale_response = false
 visible = false
-margin_right = 146.0
+margin_right = 150.0
 margin_bottom = 22.0
 text = "Saving..."
 
-[node name="save" type="Label" parent="ui/gameing/saveStats"]
+[node name="save" type="Label" parent="ui/gameing/gameing/saveStats"]
 time_scale_response = false
 visible = false
 margin_top = 26.0
-margin_right = 146.0
+margin_right = 150.0
 margin_bottom = 48.0
 text = "SAVED!"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/saveStats"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/saveStats"]
 time_scale_response = false
 anims/RESET = SubResource( 9 )
 anims/save_complete = SubResource( 10 )
 anims/save_start = SubResource( 11 )
 
-[node name="stats" type="Control" parent="ui/gameing"]
+[node name="stats" type="Control" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 15.0
-margin_top = 15.0
-margin_right = -15.0
-margin_bottom = -15.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
 
-[node name="health" parent="ui/gameing/stats" instance=ExtResource( 39 )]
+[node name="health" parent="ui/gameing/gameing/stats" instance=ExtResource( 39 )]
 margin_left = 122.0
 margin_top = 115.0
 margin_right = 122.0
 margin_bottom = 115.0
-tracking_node = NodePath("../../../..")
+tracking_node = NodePath("../../../../..")
 value_property = "health"
 max_property = "DEFAULT_MAX_HEALTH"
 extension_item = "health_up"
 extension_interval = 25.0
 time_to_hide = 1.2
 
-[node name="armor_bar" parent="ui/gameing/stats/health" instance=ExtResource( 40 )]
+[node name="armor_bar" parent="ui/gameing/gameing/stats/health" instance=ExtResource( 40 )]
 margin_left = 124.0
 margin_top = -94.0
 margin_right = 813.0
 margin_bottom = 113.0
-tracking_node = NodePath("../../../../..")
+tracking_node = NodePath("../../../../../..")
 value_property = "extra_health"
 segment_property = "armor"
 segment_interval = 20.0
 speed = 1.0
 acceleration = 0.2
 
-[node name="stamina" parent="ui/gameing/stats" instance=ExtResource( 38 )]
+[node name="stamina" parent="ui/gameing/gameing/stats" instance=ExtResource( 38 )]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -88.0
 margin_bottom = -112.0
-tracking_node = NodePath("../../../..")
+tracking_node = NodePath("../../../../..")
 value_property = "stamina"
 max_property = "DEFAULT_MAX_STAMINA"
 extension_item = "stamina_up"
@@ -1366,7 +1382,7 @@ speed = 2.0
 acceleration = 1.0
 deceleration = 0.1
 
-[node name="stamina_booster_right" type="HBoxContainer" parent="ui/gameing/stats/stamina"]
+[node name="stamina_booster_right" type="HBoxContainer" parent="ui/gameing/gameing/stats/stamina"]
 margin_left = 39.0
 margin_top = 17.0
 margin_right = 120.0
@@ -1375,14 +1391,14 @@ script = ExtResource( 42 )
 __meta__ = {
 "_edit_group_": true
 }
-tracking_node = NodePath("../../../../..")
+tracking_node = NodePath("../../../../../..")
 value_property = "extra_stamina"
 segment_property = "energy"
 segment_interval = 15.0
 speed = 1.0
 acceleration = 0.2
 
-[node name="segment" type="TextureRect" parent="ui/gameing/stats/stamina/stamina_booster_right"]
+[node name="segment" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_right"]
 material = SubResource( 182 )
 margin_right = 60.0
 margin_bottom = 84.0
@@ -1391,7 +1407,7 @@ texture = ExtResource( 41 )
 expand = true
 stretch_mode = 3
 
-[node name="segment2" type="TextureRect" parent="ui/gameing/stats/stamina/stamina_booster_right/segment"]
+[node name="segment2" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_right/segment"]
 modulate = Color( 0, 0, 0, 0.501961 )
 show_behind_parent = true
 anchor_right = 1.0
@@ -1401,7 +1417,7 @@ texture = ExtResource( 41 )
 expand = true
 stretch_mode = 3
 
-[node name="stamina_booster_left" type="HBoxContainer" parent="ui/gameing/stats/stamina"]
+[node name="stamina_booster_left" type="HBoxContainer" parent="ui/gameing/gameing/stats/stamina"]
 margin_left = -120.0
 margin_top = 17.0
 margin_right = -60.0
@@ -1412,7 +1428,7 @@ script = ExtResource( 42 )
 __meta__ = {
 "_edit_group_": true
 }
-tracking_node = NodePath("../../../../..")
+tracking_node = NodePath("../../../../../..")
 value_property = "extra_stamina"
 segment_property = "energy"
 segment_interval = 15.0
@@ -1420,7 +1436,7 @@ speed = 1.0
 acceleration = 0.2
 reversed = true
 
-[node name="segment" type="TextureRect" parent="ui/gameing/stats/stamina/stamina_booster_left"]
+[node name="segment" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_left"]
 material = SubResource( 182 )
 margin_right = 60.0
 margin_bottom = 84.0
@@ -1430,7 +1446,7 @@ expand = true
 stretch_mode = 3
 flip_h = true
 
-[node name="segment2" type="TextureRect" parent="ui/gameing/stats/stamina/stamina_booster_left/segment"]
+[node name="segment2" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_left/segment"]
 modulate = Color( 0, 0, 0, 0.501961 )
 show_behind_parent = true
 anchor_right = 1.0
@@ -1441,18 +1457,16 @@ expand = true
 stretch_mode = 3
 flip_h = true
 
-[node name="debug" type="Panel" parent="ui/gameing"]
+[node name="debug" type="Panel" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = -473.0
-margin_right = 452.0
-margin_bottom = -13.0
+margin_top = -503.0
+margin_right = 720.0
 
-[node name="stats" type="VBoxContainer" parent="ui/gameing/debug"]
+[node name="stats" type="VBoxContainer" parent="ui/gameing/gameing/debug"]
 time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1461,165 +1475,168 @@ margin_top = 7.0
 margin_right = -16.0
 margin_bottom = -11.0
 
-[node name="Label" type="Label" parent="ui/gameing/debug/stats"]
+[node name="Label" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 22.0
 text = "Debug Data"
 
-[node name="debug_fps" type="Label" parent="ui/gameing/debug/stats"]
+[node name="debug_fps" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 26.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 48.0
 script = ExtResource( 22 )
 
-[node name="a1" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a1" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 52.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 74.0
 text = "Debug Data"
 
-[node name="a2" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a2" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 78.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 100.0
 text = "Debug Data"
 
-[node name="a3" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a3" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 104.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 126.0
 text = "Debug Data"
 
-[node name="a4" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a4" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 130.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 152.0
 text = "Debug Data"
 
-[node name="a5" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a5" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 156.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 178.0
 text = "Debug Data"
 
-[node name="a6" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a6" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 182.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 204.0
 text = "Debug Data"
 
-[node name="a7" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a7" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 208.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 230.0
 text = "Debug Data"
 
-[node name="a8" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a8" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 234.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 256.0
 text = "Debug Data"
 
-[node name="a9" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a9" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 260.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 282.0
 text = "Debug Data"
 
-[node name="a10" type="Label" parent="ui/gameing/debug/stats"]
+[node name="a10" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
 margin_top = 286.0
-margin_right = 414.0
+margin_right = 694.0
 margin_bottom = 308.0
 text = "Debug Data"
 
-[node name="game_state" type="VBoxContainer" parent="ui/gameing/debug"]
+[node name="game_state" type="VBoxContainer" parent="ui/gameing/gameing/debug"]
 time_scale_response = false
 margin_left = 210.0
 margin_right = 452.0
 margin_bottom = 167.0
 
-[node name="tutorial" type="HBoxContainer" parent="ui/gameing"]
+[node name="tutorial" type="HBoxContainer" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
 visible = false
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -225.0
-margin_bottom = -145.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -360.0
+margin_top = 125.0
+margin_right = 360.0
+margin_bottom = 189.0
 alignment = 1
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="input_prompt" parent="ui/gameing/tutorial" instance=ExtResource( 8 )]
+[node name="input_prompt" parent="ui/gameing/gameing/tutorial" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 329.0
-margin_right = 412.0
-margin_bottom = 80.0
+margin_left = 89.0
+margin_right = 172.0
+margin_bottom = 64.0
 
-[node name="joiner" type="Label" parent="ui/gameing/tutorial"]
+[node name="joiner" type="Label" parent="ui/gameing/gameing/tutorial"]
 time_scale_response = false
-margin_left = 416.0
-margin_top = 13.0
-margin_right = 476.0
-margin_bottom = 67.0
+margin_left = 176.0
+margin_top = 5.0
+margin_right = 236.0
+margin_bottom = 59.0
 rect_min_size = Vector2( 60, 0 )
 custom_fonts/font = ExtResource( 6 )
 text = "+"
 align = 1
 
-[node name="input_prompt2" parent="ui/gameing/tutorial" instance=ExtResource( 8 )]
+[node name="input_prompt2" parent="ui/gameing/gameing/tutorial" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 480.0
-margin_right = 563.0
-margin_bottom = 80.0
+margin_left = 240.0
+margin_right = 323.0
+margin_bottom = 64.0
 
-[node name="spacer" type="Control" parent="ui/gameing/tutorial"]
+[node name="spacer" type="Control" parent="ui/gameing/gameing/tutorial"]
 time_scale_response = false
-margin_left = 567.0
-margin_right = 627.0
-margin_bottom = 80.0
+margin_left = 327.0
+margin_right = 387.0
+margin_bottom = 64.0
 rect_min_size = Vector2( 60, 0 )
 
-[node name="Label" type="Label" parent="ui/gameing/tutorial"]
+[node name="Label" type="Label" parent="ui/gameing/gameing/tutorial"]
 time_scale_response = false
-margin_left = 631.0
-margin_top = 13.0
-margin_right = 870.0
-margin_bottom = 67.0
+margin_left = 391.0
+margin_top = 5.0
+margin_right = 630.0
+margin_bottom = 59.0
 custom_fonts/font = ExtResource( 6 )
 text = "Stuff here!"
 
-[node name="prompt_timer" type="Timer" parent="ui/gameing/tutorial"]
+[node name="prompt_timer" type="Timer" parent="ui/gameing/gameing/tutorial"]
 time_scale_response = false
 wait_time = 6.0
 one_shot = true
 
-[node name="custom_game" type="Control" parent="ui/gameing"]
+[node name="custom_game" type="Control" parent="ui/gameing/gameing"]
 time_scale_response = false
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
 
-[node name="values" type="HBoxContainer" parent="ui/gameing/custom_game"]
+[node name="values" type="HBoxContainer" parent="ui/gameing/gameing/custom_game"]
 pause_mode = 1
 time_scale_response = false
 anchor_top = 1.0
@@ -1631,14 +1648,14 @@ margin_right = -20.0
 margin_bottom = -164.0
 custom_constants/separation = 25
 
-[node name="Label" type="Label" parent="ui/gameing/custom_game/values"]
+[node name="Label" type="Label" parent="ui/gameing/gameing/custom_game/values"]
 time_scale_response = false
 margin_right = 366.0
 margin_bottom = 54.0
 custom_fonts/font = ExtResource( 6 )
 text = "Challenge Failed"
 
-[node name="spacer" type="Label" parent="ui/gameing/custom_game/values"]
+[node name="spacer" type="Label" parent="ui/gameing/gameing/custom_game/values"]
 time_scale_response = false
 margin_left = 391.0
 margin_right = 406.0
@@ -1646,7 +1663,7 @@ margin_bottom = 54.0
 custom_fonts/font = ExtResource( 6 )
 text = ":"
 
-[node name="number" type="Label" parent="ui/gameing/custom_game/values"]
+[node name="number" type="Label" parent="ui/gameing/gameing/custom_game/values"]
 time_scale_response = false
 margin_left = 431.0
 margin_right = 552.0
@@ -1654,34 +1671,35 @@ margin_bottom = 54.0
 custom_fonts/font = ExtResource( 6 )
 text = "Value"
 
-[node name="marker_ref" type="Sprite" parent="ui/gameing/custom_game"]
+[node name="marker_ref" type="Sprite" parent="ui/gameing/gameing/custom_game"]
 time_scale_response = false
 position = Vector2( 379, 356 )
 texture = ExtResource( 12 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/custom_game"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/custom_game"]
 time_scale_response = false
 anims/RESET = SubResource( 67 )
 anims/completed = SubResource( 70 )
 anims/fail = SubResource( 69 )
 anims/start = SubResource( 68 )
 
-[node name="weapon" type="TextureRect" parent="ui/gameing"]
+[node name="weapon" type="TextureRect" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -493.0
-margin_top = 43.0
-margin_right = -237.0
-margin_bottom = 171.0
+margin_left = -522.0
+margin_top = 27.0
+margin_right = -266.0
+margin_bottom = 155.0
 rect_min_size = Vector2( 256, 128 )
 texture = ExtResource( 13 )
 expand = true
 stretch_mode = 6
 script = ExtResource( 14 )
 
-[node name="ammo" type="Control" parent="ui/gameing/weapon"]
+[node name="ammo" type="Control" parent="ui/gameing/gameing/weapon"]
 time_scale_response = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -1689,7 +1707,7 @@ anchor_bottom = 1.0
 margin_left = 37.0
 margin_right = 192.0
 
-[node name="ammo_label" type="Label" parent="ui/gameing/weapon/ammo"]
+[node name="ammo_label" type="Label" parent="ui/gameing/gameing/weapon/ammo"]
 time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1698,7 +1716,7 @@ text = "0"
 align = 1
 valign = 1
 
-[node name="ArrowUp" type="TextureRect" parent="ui/gameing/weapon"]
+[node name="ArrowUp" type="TextureRect" parent="ui/gameing/gameing/weapon"]
 time_scale_response = false
 anchor_left = 0.5
 anchor_right = 0.5
@@ -1708,7 +1726,7 @@ margin_right = 16.0
 margin_bottom = -2.0
 texture = ExtResource( 15 )
 
-[node name="ArrowDown" type="TextureRect" parent="ui/gameing/weapon"]
+[node name="ArrowDown" type="TextureRect" parent="ui/gameing/gameing/weapon"]
 time_scale_response = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -1721,7 +1739,7 @@ margin_bottom = 18.0
 texture = ExtResource( 15 )
 flip_v = true
 
-[node name="ArrowLeft" type="TextureRect" parent="ui/gameing/weapon"]
+[node name="ArrowLeft" type="TextureRect" parent="ui/gameing/gameing/weapon"]
 time_scale_response = false
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -1733,7 +1751,7 @@ rect_rotation = 90.0
 texture = ExtResource( 15 )
 flip_v = true
 
-[node name="ArrowRight" type="TextureRect" parent="ui/gameing/weapon"]
+[node name="ArrowRight" type="TextureRect" parent="ui/gameing/gameing/weapon"]
 time_scale_response = false
 anchor_left = 1.0
 anchor_top = 0.5
@@ -1747,16 +1765,18 @@ rect_rotation = 90.0
 texture = ExtResource( 15 )
 flip_h = true
 
-[node name="inventory" type="GridContainer" parent="ui/gameing"]
+[node name="inventory" type="GridContainer" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -322.0
-margin_top = -97.0
-margin_bottom = 167.0
+margin_left = -277.0
+margin_top = -130.0
+margin_right = -35.0
+margin_bottom = 230.0
 custom_constants/vseparation = 16
 custom_constants/hseparation = 18
 columns = 3
@@ -1764,7 +1784,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="gem_icon" type="TextureRect" parent="ui/gameing/inventory"]
+[node name="gem_icon" type="TextureRect" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_right = 100.0
 margin_bottom = 100.0
@@ -1773,7 +1793,7 @@ texture = ExtResource( 26 )
 expand = true
 stretch_mode = 6
 
-[node name="gem_count" type="Label" parent="ui/gameing/inventory"]
+[node name="gem_count" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_left = 118.0
 margin_top = 23.0
@@ -1782,7 +1802,7 @@ margin_bottom = 77.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
-[node name="gem_added" type="Label" parent="ui/gameing/inventory"]
+[node name="gem_added" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 modulate = Color( 1, 1, 1, 0 )
 margin_left = 163.0
@@ -1792,12 +1812,12 @@ margin_bottom = 77.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/gem_added"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/inventory/gem_added"]
 time_scale_response = false
 anims/RESET = SubResource( 50 )
 anims/show = SubResource( 51 )
 
-[node name="bug_icon" type="TextureRect" parent="ui/gameing/inventory"]
+[node name="bug_icon" type="TextureRect" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_top = 116.0
 margin_right = 100.0
@@ -1807,7 +1827,7 @@ texture = ExtResource( 25 )
 expand = true
 stretch_mode = 6
 
-[node name="bug_count" type="Label" parent="ui/gameing/inventory"]
+[node name="bug_count" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_left = 118.0
 margin_top = 139.0
@@ -1816,7 +1836,7 @@ margin_bottom = 193.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
-[node name="bug_added" type="Label" parent="ui/gameing/inventory"]
+[node name="bug_added" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 modulate = Color( 1, 1, 1, 0 )
 margin_left = 163.0
@@ -1826,12 +1846,12 @@ margin_bottom = 193.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/bug_added"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/inventory/bug_added"]
 time_scale_response = false
 anims/RESET = SubResource( 52 )
 anims/show = SubResource( 53 )
 
-[node name="capacitor_icon" type="TextureRect" parent="ui/gameing/inventory"]
+[node name="capacitor_icon" type="TextureRect" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_top = 232.0
 margin_right = 100.0
@@ -1841,7 +1861,7 @@ texture = ExtResource( 27 )
 expand = true
 stretch_mode = 6
 
-[node name="capacitor_count" type="Label" parent="ui/gameing/inventory"]
+[node name="capacitor_count" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 margin_left = 118.0
 margin_top = 255.0
@@ -1850,7 +1870,7 @@ margin_bottom = 309.0
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 
-[node name="capacitor_added" type="Label" parent="ui/gameing/inventory"]
+[node name="capacitor_added" type="Label" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 modulate = Color( 1, 1, 1, 0 )
 margin_left = 163.0
@@ -1860,53 +1880,54 @@ margin_bottom = 309.0
 custom_fonts/font = ExtResource( 6 )
 text = "+ 1"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/inventory/capacitor_added"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/inventory/capacitor_added"]
 time_scale_response = false
 anims/RESET = SubResource( 54 )
 anims/show = SubResource( 55 )
 
-[node name="vis_timer" type="Timer" parent="ui/gameing/inventory"]
+[node name="vis_timer" type="Timer" parent="ui/gameing/gameing/inventory"]
 time_scale_response = false
 wait_time = 5.0
 one_shot = true
 autostart = true
 
-[node name="equipment" type="VBoxContainer" parent="ui/gameing"]
+[node name="equipment" type="VBoxContainer" parent="ui/gameing/gameing"]
 time_scale_response = false
 visible = false
 anchor_top = 0.5
 anchor_bottom = 0.5
-margin_left = 51.0
-margin_top = -108.0
-margin_right = 353.0
-margin_bottom = 108.0
+margin_left = 20.0
+margin_top = -150.0
+margin_right = 251.0
+margin_bottom = 150.0
 alignment = 1
 script = ExtResource( 30 )
 
-[node name="prev_item" type="TextureRect" parent="ui/gameing/equipment"]
+[node name="prev_item" type="TextureRect" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
-margin_right = 302.0
-margin_bottom = 48.0
+margin_top = 28.0
+margin_right = 235.0
+margin_bottom = 76.0
 rect_min_size = Vector2( 0, 48 )
 texture = ExtResource( 28 )
 expand = true
 stretch_mode = 6
 
-[node name="up" type="TextureRect" parent="ui/gameing/equipment"]
+[node name="up" type="TextureRect" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
-margin_top = 52.0
-margin_right = 302.0
-margin_bottom = 68.0
+margin_top = 80.0
+margin_right = 235.0
+margin_bottom = 96.0
 texture = ExtResource( 15 )
 stretch_mode = 4
 
-[node name="equipped" type="HBoxContainer" parent="ui/gameing/equipment"]
+[node name="equipped" type="HBoxContainer" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
-margin_top = 72.0
-margin_right = 302.0
-margin_bottom = 172.0
+margin_top = 100.0
+margin_right = 235.0
+margin_bottom = 200.0
 
-[node name="icon" type="TextureRect" parent="ui/gameing/equipment/equipped"]
+[node name="icon" type="TextureRect" parent="ui/gameing/gameing/equipment/equipped"]
 time_scale_response = false
 margin_right = 100.0
 margin_bottom = 100.0
@@ -1915,57 +1936,55 @@ texture = ExtResource( 28 )
 expand = true
 stretch_mode = 6
 
-[node name="count" type="Label" parent="ui/gameing/equipment/equipped"]
+[node name="count" type="Label" parent="ui/gameing/gameing/equipment/equipped"]
 time_scale_response = false
 margin_left = 104.0
 margin_top = 23.0
-margin_right = 198.0
+margin_right = 131.0
 margin_bottom = 77.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 6 )
 text = "0"
 align = 1
 
-[node name="spacer" type="Control" parent="ui/gameing/equipment/equipped"]
+[node name="spacer" type="Control" parent="ui/gameing/gameing/equipment/equipped"]
 time_scale_response = false
-margin_left = 202.0
-margin_right = 302.0
+margin_left = 135.0
+margin_right = 235.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 100, 0 )
 
-[node name="down" type="TextureRect" parent="ui/gameing/equipment"]
+[node name="down" type="TextureRect" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
-margin_top = 176.0
-margin_right = 302.0
-margin_bottom = 192.0
+margin_top = 204.0
+margin_right = 235.0
+margin_bottom = 220.0
 texture = ExtResource( 15 )
 stretch_mode = 4
 flip_v = true
 
-[node name="next_item" type="TextureRect" parent="ui/gameing/equipment"]
+[node name="next_item" type="TextureRect" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
-margin_top = 196.0
-margin_right = 302.0
-margin_bottom = 244.0
+margin_top = 224.0
+margin_right = 235.0
+margin_bottom = 272.0
 rect_min_size = Vector2( 0, 48 )
 texture = ExtResource( 28 )
 expand = true
 stretch_mode = 6
 
-[node name="Timer" type="Timer" parent="ui/gameing/equipment"]
+[node name="Timer" type="Timer" parent="ui/gameing/gameing/equipment"]
 time_scale_response = false
 one_shot = true
 
-[node name="reset_bar" type="ProgressBar" parent="ui/gameing"]
+[node name="reset_bar" type="ProgressBar" parent="ui/gameing/gameing"]
 time_scale_response = false
-anchor_left = 0.5
+visible = false
+anchor_left = 0.1
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 0.9
 anchor_bottom = 1.0
-margin_left = -480.0
-margin_top = -66.0
-margin_right = 480.0
-margin_bottom = -29.0
+margin_top = -23.0
 max_value = 1.0
 value = 0.5
 percent_visible = false
@@ -1974,7 +1993,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Label" type="Label" parent="ui/gameing/reset_bar"]
+[node name="Label" type="Label" parent="ui/gameing/gameing/reset_bar"]
 time_scale_response = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1982,40 +2001,61 @@ text = "Resetting"
 align = 1
 valign = 1
 
-[node name="item_get" parent="ui/gameing" instance=ExtResource( 10 )]
+[node name="item_get" parent="ui/gameing/gameing" instance=ExtResource( 10 )]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -360.0
+margin_top = -82.0
+margin_right = 360.0
+margin_bottom = -46.0
 format = "Item Found: %s"
 
-[node name="note_get" parent="ui/gameing" instance=ExtResource( 10 )]
-margin_top = -29.0
-margin_bottom = 0.0
+[node name="note_get" parent="ui/gameing/gameing" instance=ExtResource( 10 )]
+anchor_top = 0.0
+anchor_bottom = 0.0
+margin_top = 50.0
+margin_bottom = 71.0
 format = "New Journal Entry: %s/%s"
 
-[node name="dialog" type="Control" parent="ui"]
-time_scale_response = false
+[node name="dialog" type="AspectRatioContainer" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+ratio = 1.7778
+
+[node name="dialog" type="Control" parent="ui/dialog"]
+time_scale_response = false
+margin_left = 559.992
+margin_right = 1840.01
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 33 )
 
-[node name="viewer" parent="ui/dialog" instance=ExtResource( 4 )]
+[node name="viewer" parent="ui/dialog/dialog" instance=ExtResource( 4 )]
 pause_mode = 1
 time_scale_response = false
-anchor_left = 0.625
+anchor_left = 0.712
+margin_left = -152.371
+margin_top = 10.0
+margin_right = -20.0
+margin_bottom = -10.0
 rect_min_size = Vector2( 500, 0 )
 
-[node name="VBoxContainer" type="GridContainer" parent="ui/dialog"]
+[node name="buttons" type="GridContainer" parent="ui/dialog/dialog"]
 time_scale_response = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 28.0
-margin_top = -295.0
-margin_right = 593.0
-margin_bottom = -9.0
+margin_left = 62.0
+margin_top = -307.0
+margin_right = 334.0
+margin_bottom = -21.0
 grow_vertical = 0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 15
 columns = 2
 
-[node name="input_prompt" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+[node name="input_prompt" parent="ui/dialog/dialog/buttons" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 83.0
@@ -2023,14 +2063,14 @@ margin_bottom = 64.0
 action = "ui_accept"
 small = true
 
-[node name="Label" type="Label" parent="ui/dialog/VBoxContainer"]
+[node name="Label" type="Label" parent="ui/dialog/dialog/buttons"]
 margin_left = 98.0
 margin_top = 21.0
 margin_right = 272.0
 margin_bottom = 43.0
 text = "Continue"
 
-[node name="prompt_trade" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+[node name="prompt_trade" parent="ui/dialog/dialog/buttons" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 74.0
@@ -2039,14 +2079,14 @@ margin_bottom = 138.0
 action = "dialog_item"
 small = true
 
-[node name="label_trade" type="Label" parent="ui/dialog/VBoxContainer"]
+[node name="label_trade" type="Label" parent="ui/dialog/dialog/buttons"]
 margin_left = 98.0
 margin_top = 95.0
 margin_right = 272.0
 margin_bottom = 117.0
 text = "Use Item"
 
-[node name="input_prompt2" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+[node name="input_prompt2" parent="ui/dialog/dialog/buttons" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 148.0
@@ -2055,14 +2095,14 @@ margin_bottom = 212.0
 action = "skip_to_next_choice"
 small = true
 
-[node name="label_trade2" type="Label" parent="ui/dialog/VBoxContainer"]
+[node name="label_trade2" type="Label" parent="ui/dialog/dialog/buttons"]
 margin_left = 98.0
 margin_top = 169.0
 margin_right = 272.0
 margin_bottom = 191.0
 text = "Skip to Next Choice"
 
-[node name="input_prompt3" parent="ui/dialog/VBoxContainer" instance=ExtResource( 8 )]
+[node name="input_prompt3" parent="ui/dialog/dialog/buttons" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 222.0
@@ -2071,120 +2111,117 @@ margin_bottom = 286.0
 action = "ui_cancel"
 small = true
 
-[node name="Label2" type="Label" parent="ui/dialog/VBoxContainer"]
+[node name="Label2" type="Label" parent="ui/dialog/dialog/buttons"]
 margin_left = 98.0
 margin_top = 243.0
 margin_right = 272.0
 margin_bottom = 265.0
 text = "Exit"
 
-[node name="black" type="ColorRect" parent="ui/dialog"]
-pause_mode = 2
-time_scale_response = false
-visible = false
-show_behind_parent = true
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="note_get" parent="ui/dialog" instance=ExtResource( 10 )]
-anchor_top = 1.0
+[node name="note_get" parent="ui/dialog/dialog" instance=ExtResource( 10 )]
+anchor_top = 0.0
 anchor_right = 0.0
-anchor_bottom = 1.0
-margin_top = -37.0
-margin_right = 640.0
-margin_bottom = 0.0
+anchor_bottom = 0.0
+margin_left = 24.0
+margin_top = 19.0
+margin_right = 744.0
+margin_bottom = 73.0
 format = "New Journal Entry: %s/%s"
 
-[node name="item_context" type="Panel" parent="ui/dialog"]
-anchor_top = 0.5
-anchor_bottom = 0.5
-margin_left = 50.0
-margin_top = -260.0
-margin_right = 425.0
-margin_bottom = 260.0
-script = ExtResource( 37 )
-
-[node name="item_list" parent="ui/dialog/item_context" instance=ExtResource( 44 )]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ui/dialog/item_context"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-
-[node name="Label" type="Label" parent="ui/dialog/item_context/VBoxContainer"]
-margin_right = 355.0
-margin_bottom = 22.0
-text = "Contextual Dialog"
-
-[node name="HSeparator" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 26.0
-margin_right = 355.0
-margin_bottom = 30.0
-
-[node name="coat" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 34.0
-margin_right = 355.0
-margin_bottom = 62.0
-text = "Trade Coats"
-
-[node name="bar_context" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 66.0
-margin_right = 355.0
-margin_bottom = 70.0
-
-[node name="bar_inventory" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 74.0
-margin_right = 355.0
-margin_bottom = 78.0
-
-[node name="show_inventory" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 82.0
-margin_right = 355.0
-margin_bottom = 110.0
-text = "Use an item"
-
-[node name="HSeparator3" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 114.0
-margin_right = 355.0
-margin_bottom = 118.0
-
-[node name="show_journal" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 122.0
-margin_right = 355.0
-margin_bottom = 150.0
-text = "Use Journal"
-
-[node name="HSeparator4" type="HSeparator" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 154.0
-margin_right = 355.0
-margin_bottom = 158.0
-
-[node name="cancel" type="Button" parent="ui/dialog/item_context/VBoxContainer"]
-margin_top = 162.0
-margin_right = 355.0
-margin_bottom = 190.0
-text = "Cancel"
-
-[node name="mini_journal" parent="ui/dialog" instance=ExtResource( 21 )]
+[node name="item_context" type="Panel" parent="ui/dialog/dialog"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -600.0
-margin_top = -344.0
-margin_right = 600.0
-margin_bottom = 344.0
+margin_left = -287.0
+margin_top = -250.0
+margin_right = 98.9999
+margin_bottom = 251.0
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="item_list" parent="ui/dialog/dialog/item_context" instance=ExtResource( 44 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/dialog/dialog/item_context"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="Label" type="Label" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_right = 366.0
+margin_bottom = 22.0
+text = "Contextual Dialog"
+
+[node name="HSeparator" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 26.0
+margin_right = 366.0
+margin_bottom = 30.0
+
+[node name="coat" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 34.0
+margin_right = 366.0
+margin_bottom = 62.0
+text = "Trade Coats"
+
+[node name="bar_context" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 66.0
+margin_right = 366.0
+margin_bottom = 70.0
+
+[node name="bar_inventory" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 74.0
+margin_right = 366.0
+margin_bottom = 78.0
+
+[node name="show_inventory" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 82.0
+margin_right = 366.0
+margin_bottom = 110.0
+text = "Use an item"
+
+[node name="HSeparator3" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 114.0
+margin_right = 366.0
+margin_bottom = 118.0
+
+[node name="show_journal" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 122.0
+margin_right = 366.0
+margin_bottom = 150.0
+text = "Use Journal"
+
+[node name="HSeparator4" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 154.0
+margin_right = 366.0
+margin_bottom = 158.0
+
+[node name="cancel" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 162.0
+margin_right = 366.0
+margin_bottom = 190.0
+text = "Cancel"
+
+[node name="mini_journal" parent="ui/dialog/dialog" instance=ExtResource( 21 )]
+visible = false
+anchor_left = 0.3
+anchor_top = 0.1
+anchor_right = 0.7
+anchor_bottom = 0.9
+margin_left = -190.0
+margin_right = 190.0
+rect_min_size = Vector2( 900, 0 )
 buttons = true
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
@@ -2192,36 +2229,34 @@ time_scale_response = false
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 455.0
-margin_bottom = -16.0
 script = ExtResource( 29 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ui/debug_console"]
 time_scale_response = false
-margin_right = 1655.0
-margin_bottom = 704.0
+margin_right = 2400.0
+margin_bottom = 720.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ui/debug_console/ScrollContainer"]
 time_scale_response = false
-margin_right = 1655.0
-margin_bottom = 704.0
+margin_right = 2400.0
+margin_bottom = 720.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="logs" type="VBoxContainer" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_right = 1655.0
-margin_bottom = 668.0
+margin_right = 2400.0
+margin_bottom = 684.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LineEdit" type="LineEdit" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_top = 672.0
-margin_right = 1655.0
-margin_bottom = 704.0
+margin_top = 688.0
+margin_right = 2400.0
+margin_bottom = 720.0
 
 [node name="story_time" type="Panel" parent="ui"]
 time_scale_response = false
@@ -2240,7 +2275,7 @@ margin_right = 6.0
 rect_min_size = Vector2( 400, 0 )
 
 [node name="Label" type="Label" parent="ui/story_time/ScrollContainer"]
-margin_right = 612.0
+margin_right = 1212.0
 margin_bottom = 576.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -2326,30 +2361,30 @@ mesh = SubResource( 96 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 98 )
 
-[connection signal="damaged" from="." to="ui/gameing/stats/health" method="queue_show"]
+[connection signal="damaged" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
 [connection signal="show_stats" from="." to="ui" method="show_inventory"]
-[connection signal="show_stats" from="." to="ui/gameing/stats/health" method="queue_show"]
-[connection signal="show_stats" from="." to="ui/gameing/stats/stamina" method="queue_show"]
-[connection signal="active" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
-[connection signal="exited" from="ui/status_menu/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
-[connection signal="timeout" from="ui/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
-[connection signal="timeout" from="ui/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
-[connection signal="timeout" from="ui/gameing/equipment/Timer" to="ui/gameing/equipment" method="_on_Timer_timeout"]
-[connection signal="reset" from="ui/gameing/reset_bar" to="." method="respawn"]
-[connection signal="sleep" from="ui/gameing/reset_bar" to="." method="go_to_sleep" flags=3]
-[connection signal="event_with_source" from="ui/dialog/viewer" to="." method="_on_dialog_event"]
-[connection signal="exited" from="ui/dialog/viewer" to="." method="_on_dialog_exited"]
-[connection signal="exited_anim" from="ui/dialog/viewer" to="." method="_on_dialog_exited_anim"]
-[connection signal="pick_item" from="ui/dialog/viewer" to="ui/dialog/item_context" method="show"]
-[connection signal="cancelled" from="ui/dialog/item_context" to="ui/dialog/viewer" method="_on_item_context_cancelled"]
-[connection signal="context_reply" from="ui/dialog/item_context" to="ui/dialog/viewer" method="show_context_reply"]
-[connection signal="item_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_item"]
-[connection signal="note_picked" from="ui/dialog/item_context" to="ui/dialog/viewer" method="use_note"]
-[connection signal="item_pressed" from="ui/dialog/item_context/item_list" to="ui/dialog/item_context" method="_on_item_pressed"]
-[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/coat" to="ui/dialog/item_context" method="_on_coat_pressed"]
-[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/show_inventory" to="ui/dialog/item_context" method="_on_show_inventory_pressed"]
-[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/show_journal" to="ui/dialog/item_context" method="_on_show_journal_pressed"]
-[connection signal="pressed" from="ui/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/item_context" method="_on_cancel_pressed"]
-[connection signal="note_chosen" from="ui/dialog/mini_journal" to="ui/dialog/item_context" method="_on_mini_journal_note_chosen"]
+[connection signal="show_stats" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
+[connection signal="show_stats" from="." to="ui/gameing/gameing/stats/stamina" method="queue_show"]
+[connection signal="active" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
+[connection signal="exited" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
+[connection signal="timeout" from="ui/gameing/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
+[connection signal="timeout" from="ui/gameing/gameing/equipment/Timer" to="ui/gameing/gameing/equipment" method="_on_Timer_timeout"]
+[connection signal="reset" from="ui/gameing/gameing/reset_bar" to="." method="respawn"]
+[connection signal="sleep" from="ui/gameing/gameing/reset_bar" to="." method="go_to_sleep" flags=3]
+[connection signal="event_with_source" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_event"]
+[connection signal="exited" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited"]
+[connection signal="exited_anim" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited_anim"]
+[connection signal="pick_item" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="show"]
+[connection signal="cancelled" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="_on_item_context_cancelled"]
+[connection signal="context_reply" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="show_context_reply"]
+[connection signal="item_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_item"]
+[connection signal="note_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_note"]
+[connection signal="item_pressed" from="ui/dialog/dialog/item_context/item_list" to="ui/dialog/dialog/item_context" method="_on_item_pressed"]
+[connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/coat" to="ui/dialog/dialog/item_context" method="_on_coat_pressed"]
+[connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/show_inventory" to="ui/dialog/dialog/item_context" method="_on_show_inventory_pressed"]
+[connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/show_journal" to="ui/dialog/dialog/item_context" method="_on_show_journal_pressed"]
+[connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/dialog/item_context" method="_on_cancel_pressed"]
+[connection signal="note_chosen" from="ui/dialog/dialog/mini_journal" to="ui/dialog/dialog/item_context" method="_on_mini_journal_note_chosen"]
 [connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]

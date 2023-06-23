@@ -12,4 +12,3 @@ func set_active(a):
 		last_focused = get_focus_owner()
 	elif is_instance_valid(last_focused):
 		last_focused.grab_focus()
-	$black.hide()

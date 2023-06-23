@@ -5,12 +5,12 @@ signal note_chosen(tags)
 export(StyleBox) var hrule_style
 export(bool) var buttons := false
 
-onready var list := $panel/hbox/items/list
-onready var subject_name := $panel/hbox/notes/header/text/name
-onready var subject_image := $panel/hbox/notes/header/TextureRect
-onready var subject_notes := $panel/hbox/notes/header/text/scroll/notes
-onready var subject_headline := $panel/hbox/notes/header/text
-onready var notes := $panel/hbox/notes
+onready var list := $hbox/items/list
+onready var subject_name := $hbox/notes/header/text/name
+onready var subject_image := $hbox/notes/header/TextureRect
+onready var subject_notes := $hbox/notes/header/text/scroll/notes
+onready var subject_headline := $hbox/notes/header/text
+onready var notes := $hbox/notes
 
 const image_path := "res://ui/notes/%s/%s.png"
 var show_background := true

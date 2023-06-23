@@ -101,8 +101,8 @@ func _process(delta: float):
 	mouse_accum = Vector2.ZERO
 
 func update_zoom():
-	max_pos = OS.window_size/2 + zoom_scale*scroll_area.texture.get_size()/2
-	min_pos = -zoom_scale*scroll_area.texture.get_size()/2 + OS.window_size/2
+	max_pos = rect_size/2 + zoom_scale*scroll_area.texture.get_size()/2
+	min_pos = -zoom_scale*scroll_area.texture.get_size()/2 + rect_size/2
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
