@@ -278,11 +278,12 @@ func list_replies():
 		elif !otherwise_used:
 			otherwise = true
 		reply = sequence.next(reply)
-		call_deferred("_resize_replies")
 	if replies.get_child_count() == 0:
 		print("\tNo replies.")
 		current_item = reply
 		advance()
+	else:
+		call_deferred("_resize_replies")
 	$input_timer.start()
 
 func _resize_replies():
