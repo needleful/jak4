@@ -72,6 +72,8 @@ onready var gun_tween := $Armature/Skeleton/gun/Tween
 
 onready var coat_mesh := $Armature/Skeleton/coat
 
+# footstep was already played this frame [left, right]
+var step_played := [false, false]
 
 var item_sound := 0
 var move_blend:= 0.0
@@ -219,6 +221,12 @@ func get_bone_ref(ref: String):
 	return get_node("Armature/Skeleton/"+ref)
 
 func step(right: bool, slide := false):
+	if step_played[int(right)]:
+		return
+	else:
+		step_played[int(!right)] = false
+		step_played[int(right)] = true
+
 	if (player.best_floor 
 		and player.velocity.length_squared() > 0.01
 		and player.after(0.1)

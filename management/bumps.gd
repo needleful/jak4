@@ -21,12 +21,12 @@ onready var emitters := {
 	Surface.Sand: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
-		Impact.SlidingStep:$particle_sand_small
+		Impact.SlidingImpact:$particle_sand_small
 	},
 	Surface.Rock: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
-		Impact.SlidingStep:$particle_sand_small
+		Impact.SlidingImpact:$particle_sand_small
 	}
 }
 
@@ -36,21 +36,21 @@ onready var audio_players := {
 	Impact.SlidingStep:$sound_footstep
 }
 
-var low_rock_sounds := [
+const low_rock_sounds := [
 	preload("res://audio/player/stepdirt1.wav"),
 	preload("res://audio/player/stepdirt2.wav"),
 	preload("res://audio/player/stepdirt3.wav"),
 	preload("res://audio/player/stepdirt4.wav")
 ]
 
-var sliding_rock_sounds := [
+const sliding_rock_sounds := [
 	preload("res://audio/player/stepsteep1.wav"),
 	preload("res://audio/player/stepsteep2.wav"),
 	preload("res://audio/player/stepsteep3.wav"),
 	preload("res://audio/player/stepsteep4.wav")
 ]
 
-var sounds := {
+const sounds := {
 	Surface.Rock : {
 		Impact.Footstep: low_rock_sounds,
 		Impact.ImpactLight: low_rock_sounds,
@@ -60,6 +60,8 @@ var sounds := {
 		Impact.SlidingStep:sliding_rock_sounds
 	}
 }
+
+const MIN_DOT_TERRAIN_SAND := 0.85
 
 func step_on(surface: Node, position:Vector3, sliding := false, normal := Vector3.UP):
 	var impact = Impact.Footstep if !sliding else Impact.SlidingStep
@@ -72,7 +74,9 @@ func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vect
 	if !surface:
 		return
 	var surf = Surface.Rock
-	if surface.is_in_group("metal") || surface.is_in_group("enemy"):
+	if surface.is_in_group("terrain") and normal.y > MIN_DOT_TERRAIN_SAND:
+		surf = Surface.Sand 
+	elif surface.is_in_group("metal") or surface.is_in_group("enemy"):
 		surf = Surface.Metal
 	elif surface.is_in_group("glass"):
 		surf = Surface.Glass
@@ -80,8 +84,6 @@ func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vect
 		surf = Surface.Wood
 	elif surface.is_in_group("grass"):
 		surf = Surface.Grass
-	elif surface.is_in_group("flag_surface"):
-		surf = Surface.Sand
 	impact(surf, impact, position, normal)
 
 func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):

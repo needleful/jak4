@@ -15,7 +15,6 @@ const UNLOAD_TIME := 10.0
 
 var chunks: Dictionary
 var lowres_chunks: Dictionary
-#var chunk_collider: Dictionary
 
 const CHUNK_SQDIST_UPDATE := 17
 const VIS_SQDIST_UPDATE := 1
