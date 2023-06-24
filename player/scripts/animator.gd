@@ -1,19 +1,9 @@
 extends Spatial
 
 var sounds := {
-	"stepSteepGround": [
-		preload("res://audio/player/stepsteep2.wav"),
-		preload("res://audio/player/stepsteep3.wav"),
-		preload("res://audio/player/stepsteep4.wav"),
-	],
 	"climb_hand":[
 		preload("res://audio/player/climb_hand1.wav"),
 		preload("res://audio/player/climb_hand2.wav")
-	],
-	"climb_step": [
-		preload("res://audio/player/stepsteep2.wav"),
-		preload("res://audio/player/stepsteep3.wav"),
-		preload("res://audio/player/stepsteep4.wav"),
 	],
 	"dive_windup":[
 		preload("res://audio/player/lunge_kick1.wav")
@@ -67,6 +57,7 @@ onready var custom_loop_node: AnimationNodeAnimation = anim_tree.get_node("Whole
 onready var custom_loop_node2: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomLoop2")
 onready var custom_exit_node: AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("CustomExit")
 onready var single_custom :AnimationNodeAnimation = anim_tree.get_node("WholeBody").get_node("Single")
+onready var gun := $Armature/Skeleton/gun
 
 onready var attack_sounds :AudioStreamPlayer = $audio/attack
 onready var body: AnimationNodeStateMachinePlayback = anim["parameters/WholeBody/playback"]
@@ -80,6 +71,7 @@ onready var aim_reference := $Armature/Skeleton/lumbar/body_reference
 onready var gun_tween := $Armature/Skeleton/gun/Tween
 
 onready var coat_mesh := $Armature/Skeleton/coat
+
 
 var item_sound := 0
 var move_blend:= 0.0
@@ -96,6 +88,84 @@ func _ready():
 
 func _on_time_scale_changed(_time_scale):
 	$Armature/Skeleton/chest/time_trail.set_active(TimeManagement.time_slowed)
+
+func enter_state(state):
+	var S := PlayerBody.State
+	match state:
+		S.Ground:
+			ground_transition("Walk")
+			gun.unlock()
+		S.Fall, S.LedgeFall, S.BonkFall, S.WadingFall, S.WaveJump, S.FallingDeath:
+			transition_to("Fall")
+			gun.unlock()
+		S.CrouchJump:
+			play_crouch_jump()
+			gun.unlock()
+		S.LedgeJump:
+			play_ledge_jump()
+			gun.unlock()
+		S.BaseJump, S.WallJump, S.WadingJump:
+			play_jump()
+			gun.unlock()
+		S.HighJump:
+			play_high_jump()
+			gun.lock()
+		S.RollJump:
+			play_roll_jump(player.max_damage)
+			gun.lock()
+		S.Slide, S.Crouch, S.Climb, S.Wading:
+			ground_transition(S.keys()[state])
+			gun.unlock()
+		S.LedgeHang:
+			play_ledge_grab()
+			gun.lock()
+		S.Roll:
+			play_roll()
+			gun.lock()
+		S.RollFall:
+			gun.lock()
+		S.LungeKick, S.SlideLungeKick:
+			play_lunge_kick(player.max_damage)
+			gun.lock()
+		S.SpinKick, S.AirSpinKick:
+			play_spin_kick(player.max_damage)
+			gun.aim_lock()
+		S.UppercutWindup:
+			transition_to("Uppercut")
+			gun.lock()
+		S.Uppercut:
+			play_uppercut(player.max_damage)
+			gun.lock()
+		S.DiveWindup:
+			play_dive_windup(player.max_damage)
+			gun.lock()
+		S.DiveStart:
+			play_dive_start(player.max_damage)
+			gun.lock()
+		S.DiveEnd:
+			play_dive_end(player.max_damage)
+			gun.aim_lock()
+		S.Damaged, S.GravityStun:
+			play_deferred("Damaged")
+			gun.unlock()
+		S.PlaceFlag:
+			play_custom("PlaceFlag")
+			gun.aim_lock()
+		S.GetItem:
+			play_custom("ItemGet")
+			gun.aim_lock()
+		S.Hover:
+			start_hover()
+			gun.unlock()
+		S.Sitting:
+			play_sit()
+			gun.unlock()
+		S.Dash:
+			play_deferred("Dash")
+			gun.unlock()
+		S.WallCling:
+			transition_to("WallCling")
+			gun.lock()
 
 func blend_run_animation(movement: Vector3):
 	var speed: float = movement.length()
@@ -148,7 +218,7 @@ func play_custom_loop(transition: String, end_point: String):
 func get_bone_ref(ref: String):
 	return get_node("Armature/Skeleton/"+ref)
 
-func step(right: bool):
+func step(right: bool, slide := false):
 	if (player.best_floor 
 		and player.velocity.length_squared() > 0.01
 		and player.after(0.1)
@@ -158,7 +228,7 @@ func step(right: bool):
 			foot = $Armature/Skeleton/footRight
 		else:
 			foot = $Armature/Skeleton/footLeft
-		Bumps.step_on(player.best_floor, foot.global_transform.origin, false, player.ground_normal)
+		Bumps.step_on(player.best_floor, foot.global_transform.origin, slide, player.ground_normal)
 
 func play_single(a: String):
 	if !anim_player.has_animation(a):
@@ -254,25 +324,17 @@ func play_dive_start(_max_damage: bool):
 func play_dive_end(_max_damage: bool):
 	play_sound("attack", "dive_end", true)
 	transition_to("DiveEnd")
-	#start_dive_shockwave(_max_damage)
 
 func play_spin_kick(_max_damage: bool):
 	force_play("SpinKickLeft")
-	#start_kick_left(_max_damage)
 	play_attack_sound(sound_spin_kick)
 
 func play_uppercut(_max_damage: bool):
-	#start_kick_left(_max_damage)
-	#start_kick_right(_max_damage)
 	play_attack_sound(sound_uppercut)
 
 func play_lunge_kick(_max_damage: bool):
 	anim["parameters/WholeBody/LungeKick/blend_position"] = float(lunge_right_foot)
 	transition_to("LungeKick")
-	#if lunge_right_foot:
-	#	start_kick_right(_max_damage)
-	#else:
-	#	start_kick_left(_max_damage)
 	lunge_right_foot = !lunge_right_foot
 	play_attack_sound(sound_lunge_kick)
 
@@ -309,8 +371,6 @@ func start_heal_particle():
 
 func start_roll_particles():
 	pass
-	#start_kick_left(false)
-	#start_kick_right(false)
 
 func play_pickup_sound(item):
 	var part = "item_sound"+str(item_sound)

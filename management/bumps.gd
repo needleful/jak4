@@ -21,16 +21,19 @@ onready var emitters := {
 	Surface.Sand: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
+		Impact.SlidingStep:$particle_sand_small
 	},
 	Surface.Rock: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
+		Impact.SlidingStep:$particle_sand_small
 	}
 }
 
 onready var audio_players := {
 	Impact.Footstep:$sound_footstep,
-	Impact.ImpactLight:$sound_footstep
+	Impact.ImpactLight:$sound_footstep,
+	Impact.SlidingStep:$sound_footstep
 }
 
 var low_rock_sounds := [
@@ -40,10 +43,21 @@ var low_rock_sounds := [
 	preload("res://audio/player/stepdirt4.wav")
 ]
 
+var sliding_rock_sounds := [
+	preload("res://audio/player/stepsteep1.wav"),
+	preload("res://audio/player/stepsteep2.wav"),
+	preload("res://audio/player/stepsteep3.wav"),
+	preload("res://audio/player/stepsteep4.wav")
+]
+
 var sounds := {
 	Surface.Rock : {
 		Impact.Footstep: low_rock_sounds,
-		Impact.ImpactLight: low_rock_sounds
+		Impact.ImpactLight: low_rock_sounds,
+		Impact.SlidingStep:sliding_rock_sounds
+	},
+	Surface.Sand : {
+		Impact.SlidingStep:sliding_rock_sounds
 	}
 }
 

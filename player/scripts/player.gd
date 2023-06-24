@@ -1922,6 +1922,7 @@ func set_state(next_state: int):
 		Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, global_transform.origin, ground_normal)
 	
 	# Entry effects
+	mesh.enter_state(next_state)
 	match next_state:
 		State.Ground:
 			last_ground_origin = global_transform.origin
@@ -1930,25 +1931,17 @@ func set_state(next_state: int):
 			can_wall_cling = true
 			dash_charges = Global.count("dash_charge")
 			stamina = max_stamina
-			mesh.ground_transition("Walk")
-			gun.unlock()
 		State.Fall, State.LedgeFall, State.WadingFall, State.WaveJump:
 			mesh.transition_to("Fall")
 		State.BaseJump:
 			start_jump(JUMP_VEL_BASE)
-			mesh.play_jump()
-			gun.unlock()
 		State.HighJump:
 			jump_time = TIME_CROUCH_JUMP
 			jump_time_min = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_HIGH)
-			mesh.play_high_jump()
-			gun.lock()
 		State.WallJump:
 			can_wall_cling = true
 			emit_signal("jumped")
-			mesh.play_jump()
-			gun.unlock()
 		State.LedgeJump:
 			$crouching_col.disabled = true
 			$standing_col.disabled = true
