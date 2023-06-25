@@ -6,10 +6,10 @@ signal cancelled(passthrough)
 export(StyleBox) var hrule_style
 export(bool) var buttons := false
 
-onready var list := $hbox/sidebar/items/list
+onready var list:Container = $hbox/sidebar/items.container
 onready var subject_name := $hbox/notes/text/name
 onready var subject_image := $hbox/notes/TextureRect
-onready var subject_notes := $hbox/notes/text/scroll/notes
+onready var subject_notes:Container = $hbox/notes/text/scroll.container
 onready var subject_headline := $hbox/notes/text
 onready var notes := $hbox/notes
 onready var sort_label := $sort/label
@@ -31,7 +31,8 @@ enum NoteType {
 
 enum Sort {
 	Subject,
-	Recency
+	Recency,
+	Chronological
 }
 var sort = Sort.Subject
 
@@ -77,8 +78,9 @@ func draw_list():
 		populate_list(NoteType.ActiveTasks)
 		populate_list(NoteType.CompletedTasks)
 	else:
-		var n := Global.game_state.journal
-		n.invert()
+		var n := Global.game_state.journal.duplicate()
+		if sort == Sort.Recency:
+			n.invert()
 		write_notes(n)
 	focus_first_button()
 

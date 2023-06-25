@@ -185,7 +185,7 @@ func map_marked(id: String):
 	return d.empty()
 
 func add_note(text: String, tags: Array):
-	game_state.journal.append([text, tags])
+	game_state.journal.push_back([text, tags])
 	var index := game_state.journal.size() - 1
 	add_tagged_entries(index, tags)
 	return true
@@ -193,7 +193,7 @@ func add_note(text: String, tags: Array):
 func add_tagged_entries(index: int, tags:Array):
 	for t in tags:
 		if t in journal_by_tag:
-			journal_by_tag[t].append(index)
+			journal_by_tag[t].push_back(index)
 		else:
 			journal_by_tag[t] = [index]
 
@@ -203,12 +203,13 @@ func abolish_notes(tags: Array):
 	var initial_tag = tags.pop_front()
 	for n in journal_by_tag[initial_tag]:
 		var note:Array = game_state.journal[n]
-		
+		var matched := true
 		for t in tags:
 			if !(t in note[1]):
-				continue
-		if !("abolished" in note[1]):
-			game_state.journal[n][1].append("abolished")
+				matched = false
+				break
+		if matched and !("abolished" in note[1]):
+			game_state.journal[n][1].push_back("abolished")
 	return true
 
 # An array of text to tags pairs
@@ -220,7 +221,7 @@ func get_notes_by_tag(id: String, include_abolished := false):
 			if !include_abolished and "abolished" in text_plus_tags[1]:
 				continue
 			else:
-				result.append(text_plus_tags)
+				result.push_back(text_plus_tags)
 	return result
 
 func has_note(id: String):

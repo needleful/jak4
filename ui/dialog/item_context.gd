@@ -27,21 +27,26 @@ func _input(event):
 		if item_list.visible:
 			item_list.hide()
 			button_box.show()
-			coat.grab_focus()
+			$VBoxContainer/show_inventory.grab_focus()
 		else:
 			_on_cancel_pressed()
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		set_process_input(is_visible_in_tree())
-		if is_visible_in_tree():
-			mini_journal.hide()
-			item_list.hide()
-			button_box.show()
-			list_contextual_replies()
-			coat.grab_focus()
-		elif !mini_journal.is_visible_in_tree():
-			item_list.clear()
+
+func enter():
+	show()
+	mini_journal.hide()
+	item_list.hide()
+	button_box.show()
+	list_contextual_replies()
+	coat.grab_focus()
+
+func exit():
+	hide()
+	mini_journal.hide()
+	item_list.clear()
 
 func list_contextual_replies():
 	wipe(reply_buttons)
@@ -58,16 +63,15 @@ func _resize_buttons():
 	Util.resize_buttons(reply_buttons) 
 
 func context_reply(item: DialogItem):
-	hide()
+	exit()
 	emit_signal("context_reply", item)
 
 func use_item(id: String, description: ItemDescription = null):
-	hide()
+	exit()
 	emit_signal("item_picked", id, description)
 
 func use_note(tags: Array):
-	hide()
-	mini_journal.hide()
+	exit()
 	emit_signal("note_picked", tags)
 
 func wipe(nodes: Array):
@@ -105,3 +109,7 @@ func _on_journal_cancelled(passthrough):
 		mini_journal.hide()
 		show()
 		$VBoxContainer/show_journal.grab_focus()
+
+func _on_dialog_started():
+	exit()
+	mini_journal.hide()

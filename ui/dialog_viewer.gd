@@ -1,5 +1,6 @@
 extends Control
 
+signal started
 signal exited(state)
 signal exited_anim(animation)
 signal event(id)
@@ -65,10 +66,12 @@ func _init():
 	label_conditions = {}
 	contextual_replies = {}
 
+func _ready():
+	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
+	ui_settings_apply()
+	end()
+
 func _input(event):
-	if !is_visible_in_tree():
-		set_process_input(false)
-		return
 	if shopping:
 		if event.is_action_pressed("ui_cancel"):
 			set_shopping(false)
@@ -88,12 +91,8 @@ func _process(_delta):
 	var scr = $messages/messages
 	scr.scroll_vertical = scr.get_v_scrollbar().max_value
 
-func _ready():
-	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
-	ui_settings_apply()
-	end()
-
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, starting_label:= ""):
+	emit_signal("started")
 	set_shopping(false)
 	clear()
 	source_node = p_source_node
@@ -558,6 +557,8 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogI
 
 func _no_label():
 	insert_label("[Nothing happened]", "narration")
+	if replies.get_child_count():
+		replies.get_child(0).grab_focus()
 
 func insert_contextual_reply(message: DialogItem, context := ""):
 	var key := "--never-remove--"

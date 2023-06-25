@@ -36,17 +36,6 @@ func safe_set_tab(tab):
 		tab = 0
 	tabs.current_tab = tab
 
-func _notification(what):
-	if what == NOTIFICATION_VISIBILITY_CHANGED and is_visible_in_tree():
-		var date := get_node("AspectRatioContainer/sized/date_time/margin/stats")
-		var days = Global.stat("current_day") + 1
-		date.get_node("date").text = "%s %s of travel" % [
-			NumberToString.verbose(days).capitalize(),
-			"day" if days == 1 else "days" ] 
-		if get_tree().current_scene.has_method("get_time"):
-			var time = get_tree().current_scene.get_time()
-			date.get_node("time").text = "%s" % NumberToString.say_time(time, false, true)
-
 func _on_wardrobe_exited():
 	ui.unpause()
 

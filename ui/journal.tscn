@@ -5,7 +5,7 @@
 [ext_resource path="res://ui/journal.gd" type="Script" id=3]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=4]
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=5]
-[ext_resource path="res://ui/components/scroll_to_focused.gd" type="Script" id=6]
+[ext_resource path="res://ui/components/scroll.tscn" type="PackedScene" id=6]
 
 [sub_resource type="StyleBoxLine" id=66]
 color = Color( 1, 1, 1, 1 )
@@ -65,16 +65,10 @@ custom_constants/separation = 15
 margin_right = 250.0
 margin_bottom = 680.0
 
-[node name="items" type="ScrollContainer" parent="hbox/sidebar"]
+[node name="items" parent="hbox/sidebar" instance=ExtResource( 6 )]
+margin_top = 0.0
 margin_right = 250.0
 margin_bottom = 576.0
-rect_min_size = Vector2( 250, 0 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-scroll_horizontal_enabled = false
-
-[node name="list" type="VBoxContainer" parent="hbox/sidebar/items"]
-margin_right = 250.0
 rect_min_size = Vector2( 250, 0 )
 
 [node name="padding" type="Control" parent="hbox/sidebar"]
@@ -117,20 +111,9 @@ margin_bottom = 73.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 2 )
 
-[node name="scroll" type="ScrollContainer" parent="hbox/notes/text"]
-margin_top = 77.0
-margin_right = 550.0
-margin_bottom = 680.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource( 6 )
-
-[node name="notes" type="VBoxContainer" parent="hbox/notes/text/scroll"]
-margin_right = 550.0
-margin_bottom = 603.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/separation = 15
+[node name="scroll" parent="hbox/notes/text" instance=ExtResource( 6 )]
+follow_focus = true
+accept_input = true
 
 [node name="TextureRect" type="TextureRect" parent="hbox/notes"]
 margin_left = 590.0

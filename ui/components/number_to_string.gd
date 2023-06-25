@@ -124,7 +124,7 @@ static func verbose(v: float) -> String:
 		res = "negative " + res
 	return res
 
-static func say_time(time:float, verbose:=true, say_pm:=false):
+static func say_time(time:float, verbose:=true, say_pm:=false) -> String:
 	var pm = false
 	var hours := int(floor(time))
 	var minutes := int(60.0*(time - hours))

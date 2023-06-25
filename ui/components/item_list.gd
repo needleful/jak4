@@ -3,7 +3,7 @@ extends VBoxContainer
 signal item_focused(item)
 signal item_pressed(id, item)
 
-onready var list := $ScrollContainer/rows
+onready var list:Container = $ScrollContainer.container
 
 const DEFAULT_ICONS := {
 	ItemDescription.Category.Equipment: preload("res://ui/items/icons/default_equipment.svg"),
@@ -71,8 +71,6 @@ func insert_item(id:String, item: ItemDescription):
 
 func view_items(items: Dictionary):
 	$sort/Label.text = "Sorting by: " + Sort.keys()[sort]
-	if items.empty():
-		return
 	for id in items:
 		items[id].id = id
 	var sorted_items = items.values()
@@ -81,7 +79,8 @@ func view_items(items: Dictionary):
 	for item in sorted_items:
 		insert_item(item.id, item)
 	
-	list.get_child(0).grab_focus()
+	if list.get_child_count() > 0:
+		list.get_child(0).grab_focus()
 
 func sort_by_category(a: ItemDescription, b:ItemDescription):
 	if a.id == 'you':

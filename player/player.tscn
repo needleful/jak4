@@ -1,4 +1,4 @@
-[gd_scene load_steps=116 format=2]
+[gd_scene load_steps=117 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -45,6 +45,7 @@
 [ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=43]
 [ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=44]
 [ext_resource path="res://ui/components/fade.gd" type="Script" id=45]
+[ext_resource path="res://ui/components/date_time.tscn" type="PackedScene" id=46]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -1158,11 +1159,15 @@ time_scale_response = false
 margin_top = 32.0
 ui_path = NodePath("../../../../..")
 
+[node name="date_time" parent="ui/status_menu/AspectRatioContainer/sized/tabs/Options" instance=ExtResource( 46 )]
+
 [node name="Map" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 16 )]
 time_scale_response = false
 visible = false
 show_behind_parent = true
 margin_top = 32.0
+
+[node name="date_time" parent="ui/status_menu/AspectRatioContainer/sized/tabs/Map" instance=ExtResource( 46 )]
 
 [node name="Journal" parent="ui/status_menu/AspectRatioContainer/sized/tabs" instance=ExtResource( 21 )]
 time_scale_response = false
@@ -1250,46 +1255,6 @@ custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 text = "Next >>"
 align = 2
-
-[node name="date_time" type="PanelContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
-time_scale_response = false
-anchor_top = 0.875
-anchor_bottom = 0.875
-margin_left = 20.0
-margin_top = -65.0
-margin_right = 210.0
-margin_bottom = 6.0
-
-[node name="margin" type="MarginContainer" parent="ui/status_menu/AspectRatioContainer/sized/date_time"]
-time_scale_response = false
-margin_right = 190.0
-margin_bottom = 71.0
-custom_constants/margin_right = 5
-custom_constants/margin_top = 5
-custom_constants/margin_left = 5
-custom_constants/margin_bottom = 5
-
-[node name="stats" type="VBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin"]
-time_scale_response = false
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 185.0
-margin_bottom = 66.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="date" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin/stats"]
-time_scale_response = false
-margin_right = 180.0
-margin_bottom = 22.0
-text = "X Days on Journey"
-
-[node name="time" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/date_time/margin/stats"]
-time_scale_response = false
-margin_top = 26.0
-margin_right = 180.0
-margin_bottom = 48.0
-text = "Time: "
 
 [node name="gameing" type="AspectRatioContainer" parent="ui"]
 anchor_right = 1.0
@@ -1634,7 +1599,6 @@ one_shot = true
 
 [node name="custom_game" type="Control" parent="ui/gameing/gameing"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
@@ -1982,12 +1946,15 @@ one_shot = true
 
 [node name="reset_bar" type="ProgressBar" parent="ui/gameing/gameing"]
 time_scale_response = false
-visible = false
 anchor_left = 0.1
 anchor_top = 1.0
 anchor_right = 0.9
 anchor_bottom = 1.0
-margin_top = -23.0
+margin_left = -0.00161743
+margin_top = -33.0
+margin_right = -0.0145264
+margin_bottom = -6.0
+grow_vertical = 0
 max_value = 1.0
 value = 0.5
 percent_visible = false
@@ -2378,7 +2345,8 @@ material/0 = SubResource( 98 )
 [connection signal="event_with_source" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited_anim"]
-[connection signal="pick_item" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="show"]
+[connection signal="pick_item" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="enter"]
+[connection signal="started" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="_on_dialog_started"]
 [connection signal="cancelled" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="_on_item_context_cancelled"]
 [connection signal="context_reply" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_item"]
