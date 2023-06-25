@@ -200,17 +200,19 @@ func extract_expressions(line: String) -> Dictionary:
 	var dict = {}
 	dict.line = line
 	dict.conditions = []
+	var line_no_expressions := line
 	var matches = r_expression.search_all(line)
 	for rm in matches:
 		var s: String=  rm.get_string()
 		if s.begins_with("#"):
+			line_no_expressions = dict.line.replace(s, "")
 			continue
 		
 		var ex : String = rm.get_string(1)
 		dict.line = dict.line.replace(s, "")
+		line_no_expressions = dict.line
 		dict.conditions.append(ex)
-	
-	var sq_matches := r_sq_expression.search_all(line)
+	var sq_matches := r_sq_expression.search_all(line_no_expressions)
 	for rm in sq_matches:
 		var text:String = rm.get_string(1)
 		var func_str := ""
