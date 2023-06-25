@@ -75,7 +75,6 @@ func _input(event):
 	elif event.is_action_pressed("ui_cancel"):
 		fast_exit()
 	elif event.is_action_pressed("dialog_item"):
-		print("Input should be ignored!")
 		emit_signal("pick_item")
 		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
@@ -186,10 +185,9 @@ func advance():
 		if current_item.type == DialogItem.Type.REPLY:
 			result = true
 			break
-		var cond: Array = current_item.conditions
 		result = true
 		font_override = ""
-		for c in cond:
+		for c in current_item.conditions:
 			var r = check_condition(c)
 			if r is Dictionary and "_otherwise" in r:
 				otherwise_used = true
@@ -218,7 +216,11 @@ func advance():
 				otherwise = true
 		else:
 			otherwise = false
-			if current_item.text == "" and !noskip:
+			if current_item.type == DialogItem.Type.CONTEXT_REPLY:
+				insert_contextual_reply(current_item, current_item.speaker)
+				current_item = sequence.failed_next(current_item)
+				result = false
+			elif current_item.text == "" and !noskip:
 				current_item = sequence.canonical_next(current_item)
 				result = false
 	
@@ -230,14 +232,27 @@ func advance():
 				list_replies()
 			DialogItem.Type.NARRATION:
 				show_narration(font_override)
-			DialogItem.Type.CONTEXT_REPLY:
-				insert_contextual_reply(current_item, current_item.speaker)
-				current_item = sequence.failed_next(current_item)
-				advance()
 			_:
 				insert_label("[Error: Unknown message type: %s] %s" % [
 					DialogItem.Type.keys()[current_item.type], current_item.text
 				], "narration")
+	
+	var context_reply:DialogItem = sequence.canonical_next(current_item)
+	while context_reply and context_reply.type == DialogItem.Type.CONTEXT_REPLY:
+		current_item = context_reply
+		result = true
+		for c in context_reply.conditions:
+			var r = check_condition(c)
+			var otherwise_used := false
+			if r is Dictionary and "_otherwise" in r:
+				otherwise_used = true
+				r = r["_otherwise"]
+			elif !r:
+				result = false
+				break
+		if result:
+			insert_contextual_reply(context_reply, context_reply.speaker)
+			context_reply = sequence.failed_next(context_reply)
 
 func list_replies():
 	var reply: DialogItem = current_item
@@ -629,6 +644,8 @@ func back():
 	var caller = call_stack.pop_back()
 	if caller.type == DialogItem.Type.REPLY:
 		current_item = caller
+	elif caller.type == DialogItem.Type.CONTEXT_REPLY:
+		current_item = sequence.failed_next(caller)
 	else:
 		current_item = sequence.canonical_next(caller)
 	return RESULT_SKIP
