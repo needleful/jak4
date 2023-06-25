@@ -7,7 +7,7 @@ static func clear(parent: Node):
 static func multiline_button(text: String, font_override : Font = null) -> Button:
 	var b := Button.new()
 	b.clip_text = false
-	var l := Label.new()
+	var l := RichTextLabel.new()
 	b.add_child(l)
 	l.anchor_left = 0
 	l.anchor_right = 1
@@ -17,7 +17,6 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 	l.margin_right = -10
 	l.margin_top = 5
 	l.margin_bottom = -5
-	l.autowrap = true
 	l.text = text
 	if font_override:
 		l.add_font_override("font", font_override)
@@ -25,5 +24,6 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 
 static func resize_buttons(buttons: Array):
 	for b in buttons:
-		var l: Label = b.get_child(0)
-		b.rect_min_size.y = l.get_line_count()*l.get_line_height()*1.25 + l.margin_top + l.margin_bottom
+		var l: RichTextLabel = b.get_child(0)
+		if l:
+			b.rect_min_size.y = l.get_content_height() + l.margin_top*2

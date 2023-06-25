@@ -193,7 +193,9 @@ func _on_subject_pressed():
 	subject_notes.get_child(0).grab_focus()
 
 func _resize_note_buttons():
-	Util.resize_buttons(subject_notes.get_children()) 
+	Util.resize_buttons(subject_notes.get_children())
+	yield(get_tree(), "idle_frame")
+	Util.resize_buttons(subject_notes.get_children())
 
 func focus_first_button():
 	if starting_item:

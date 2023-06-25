@@ -158,7 +158,11 @@ func clear_replies():
 		c.queue_free()
 
 func get_next():
-	var c = sequence.canonical_next(current_item)
+	var c: DialogItem
+	if current_item.type != DialogItem.Type.CONTEXT_REPLY:
+		c = sequence.canonical_next(current_item)
+	else:
+		c = sequence.failed_next(current_item)
 	if !c:
 		exit()
 		return false
@@ -238,21 +242,25 @@ func advance():
 				], "narration")
 	
 	var context_reply:DialogItem = sequence.canonical_next(current_item)
+	otherwise = false
 	while context_reply and context_reply.type == DialogItem.Type.CONTEXT_REPLY:
+		var otherwise_used := false
 		current_item = context_reply
 		result = true
 		for c in context_reply.conditions:
 			var r = check_condition(c)
-			var otherwise_used := false
 			if r is Dictionary and "_otherwise" in r:
-				otherwise_used = true
 				r = r["_otherwise"]
-			elif !r:
+				otherwise_used = true
+			if !r:
 				result = false
 				break
 		if result:
+			otherwise = false
 			insert_contextual_reply(context_reply, context_reply.speaker)
-			context_reply = sequence.failed_next(context_reply)
+		elif !otherwise_used:
+			otherwise = true
+		context_reply = sequence.failed_next(context_reply)
 
 func list_replies():
 	var reply: DialogItem = current_item
@@ -296,6 +304,8 @@ func list_replies():
 
 func _resize_replies():
 	Util.resize_buttons(replies.get_children())
+	yield(get_tree(), "idle_frame")
+	Util.resize_buttons(replies.get_children())
 
 func _on_input_timer_timeout():
 	if shopping:
@@ -317,8 +327,32 @@ func show_context_reply(item: DialogItem):
 	call_stack.push_back(current_item)
 	show_message(item.text, "You")
 	last_speaker = "You"
-	current_item = item
-	get_next()
+	current_item = sequence.canonical_next(item)
+	advance()
+
+# tags is an array of strings
+func use_note(tags:Array):
+	enable_replies()
+	var l := _find_item("note", tags, true)
+	if l:
+		_call_next(l)
+	else:
+		_no_label()
+
+func use_item(id:String, desc: ItemDescription = null):
+	enable_replies()
+	if id == "coat":
+		trade_coats()
+		return
+	var by_item := _find_item("item", [id], false)
+	if by_item:
+		_call_next(by_item)
+		return
+	var by_tag := _find_item("item", desc.tags if desc else [], true)
+	if by_tag:
+		_call_next(by_tag)
+	else:
+		_no_label()
 
 func get_speaker_name() -> String:
 	if "visual_name" in main_speaker:
@@ -488,30 +522,6 @@ func _call_next(item: DialogItem):
 	call_stack.push_back(current_item)
 	current_item = item
 	advance()
-
-# tags is an array of strings
-func use_note(tags:Array):
-	enable_replies()
-	var l := _find_item("note", tags, true)
-	if l:
-		_call_next(l)
-	else:
-		_no_label()
-
-func use_item(id:String, desc: ItemDescription = null):
-	enable_replies()
-	if id == "coat":
-		trade_coats()
-		return
-	var by_item := _find_item("item", [id], false)
-	if by_item:
-		_call_next(by_item)
-		return
-	var by_tag := _find_item("item", desc.tags if desc else [], true)
-	if by_tag:
-		_call_next(by_tag)
-	else:
-		_no_label()
 
 func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogItem:
 	var found_label: String

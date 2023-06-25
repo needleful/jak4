@@ -71,6 +71,8 @@ func insert_item(id:String, item: ItemDescription):
 
 func view_items(items: Dictionary):
 	$sort/Label.text = "Sorting by: " + Sort.keys()[sort]
+	if items.empty():
+		return
 	for id in items:
 		items[id].id = id
 	var sorted_items = items.values()
