@@ -31,6 +31,9 @@ func _on_child_removed(node:Node):
 		node.disconnect("focus_entered", self, "_on_child_focused")
 
 func _on_child_focused(child:Control):
+	scroll_to_child(child)
+
+func scroll_to_child(child:Control):
 	var bottom := (child.rect_global_position.y + child.rect_size.y) - rect_global_position.y
 	if bottom > rect_size.y:
 		tween_to(scroll_vertical + int((bottom - rect_size.y) * 2))
@@ -44,4 +47,4 @@ func tween_to(tscroll: int):
 	if active_tween and active_tween.is_running():
 		active_tween.kill()
 	active_tween = get_tree().create_tween().bind_node(self).set_trans(Tween.TRANS_CUBIC)
-	active_tween.tween_property(self, "scroll_vertical", tscroll, 0.4)
+	var _x = active_tween.tween_property(self, "scroll_vertical", tscroll, 0.4)

@@ -27,6 +27,7 @@ export(Dictionary) var colors := {
 }
 
 onready var replies := $messages/replies
+onready var message_container := $messages/messages
 onready var messages := $messages/messages/list
 
 const RESULT_SKIP := {"result":"skip"}
@@ -69,6 +70,7 @@ func _init():
 func _ready():
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	ui_settings_apply()
+	_x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
 	end()
 
 func _input(event):
@@ -86,10 +88,6 @@ func _input(event):
 			continue
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
-
-func _process(_delta):
-	var scr = $messages/messages
-	scr.scroll_vertical = scr.get_v_scrollbar().max_value
 
 func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, starting_label:= ""):
 	emit_signal("started")
@@ -119,7 +117,6 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	else:
 		main_speaker = source_node
 	talked = Global.stat(get_talked_stat())
-	set_process(true)
 	set_process_input(true)
 	Global.can_pause = false
 	var first_index = INF
@@ -156,6 +153,10 @@ func clear():
 func clear_replies():
 	for c in replies.get_children():
 		c.queue_free()
+
+func _on_message_added(child: Node):
+	yield(get_tree(), "idle_frame")
+	message_container.scroll_to_child(child)
 
 func get_next():
 	var c: DialogItem
@@ -323,7 +324,6 @@ func choose_reply(item: DialogItem, skip: bool):
 
 func show_context_reply(item: DialogItem):
 	set_process_input(true)
-	set_process(true)
 	call_stack.push_back(current_item)
 	show_message(item.text, "You")
 	last_speaker = "You"
@@ -428,7 +428,6 @@ func check_condition(cond: String):
 	return result
 
 func end():
-	set_process(false)
 	set_process_input(false)
 	Global.can_pause = true
 
@@ -462,11 +461,9 @@ func fast_exit():
 func pause():
 	print("Pausing dialog...")
 	set_process_input(false)
-	set_process(false)
 
 func resume():
 	set_process_input(true)
-	set_process(true)
 	if advance_on_resume:
 		get_next()
 
@@ -500,7 +497,6 @@ func _sort_labels(a: String, b: String):
 
 func disable_replies():
 	set_process_input(false)
-	set_process(false)
 	for c in replies.get_children():
 		if c is Button:
 			c.disabled = true
@@ -508,7 +504,6 @@ func disable_replies():
 
 func enable_replies():
 	set_process_input(true)
-	set_process(true)
 	for c in replies.get_children():
 		if c is Button:
 			c.disabled = false
