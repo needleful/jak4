@@ -307,6 +307,7 @@ func _resize_replies():
 	Util.resize_buttons(replies.get_children())
 	yield(get_tree(), "idle_frame")
 	Util.resize_buttons(replies.get_children())
+	message_container.scroll_to_end()
 
 func _on_input_timer_timeout():
 	if shopping:

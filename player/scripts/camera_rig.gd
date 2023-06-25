@@ -57,6 +57,7 @@ var locked := false
 var zoomed := false
 var fov_tween := Tween.new()
 var close_cam := false
+var dialog_locked := false
 
 onready var cam_basis = camera.transform.basis
 
@@ -150,11 +151,12 @@ func _process(delta):
 		aim.y *= -1
 	
 	yaw.rotate_y(aim.x)
-	pitch.rotate_x(aim.y)
-	if pitch.rotation_degrees.x > 80:
-		pitch.rotation_degrees.x = 80
-	elif pitch.rotation_degrees.x < -80:
-		pitch.rotation_degrees.x = -80
+	if !dialog_locked:
+		pitch.rotate_x(aim.y)
+		if pitch.rotation_degrees.x > 80:
+			pitch.rotation_degrees.x = 80
+		elif pitch.rotation_degrees.x < -80:
+			pitch.rotation_degrees.x = -80
 
 func reset():
 	camera.transform.basis = cam_basis
@@ -179,9 +181,11 @@ func set_aiming(aim: bool):
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_AIM_RESET)
 
 func start_dialog():
-	tween_to(ANGLE_DIALOG, SPRING_DIALOG, TWEEN_TIME_DIALOG)
+	dialog_locked = true
+	tween_to(ANGLE_DIALOG, SPRING_DIALOG, TWEEN_TIME_DIALOG, true)
 
 func end_dialog():
+	dialog_locked = false
 	if close_cam:
 		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_DIALOG)
 	else:
@@ -229,7 +233,7 @@ func set_zoom(p_zoom):
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_FOV)
 	player.visible = !zoomed
 
-func tween_to(angle: Vector3, distance: float, time: float):
+func tween_to(angle: Vector3, distance: float, time: float, reset_pitch := false):
 		var _x = tween.remove_all()
 		_x = tween.interpolate_property(spring, "rotation_degrees",
 			spring.rotation_degrees, angle,
@@ -239,4 +243,9 @@ func tween_to(angle: Vector3, distance: float, time: float):
 			spring.spring_length, distance,
 			time,
 			Tween.TRANS_CUBIC, Tween.EASE_OUT)
+		if reset_pitch:
+			_x = tween.interpolate_property(pitch, "rotation_degrees",
+				pitch.rotation_degrees, Vector3(-10,0,0),
+				time,
+				Tween.TRANS_CUBIC, Tween.EASE_OUT)
 		_x = tween.start()
