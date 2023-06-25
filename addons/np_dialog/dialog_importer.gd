@@ -161,6 +161,7 @@ func parse_text(text: String, src_path = "<local>"):
 		
 		if ( wd.speaker == "" 
 			and wd.parent in seq.dialog
+			and seq.dialog[wd.parent].type != DialogItem.Type.CONTEXT_REPLY
 			and seq.dialog[wd.parent].speaker != ""
 		):
 			wd.speaker = seq.dialog[wd.parent].speaker.strip_edges()

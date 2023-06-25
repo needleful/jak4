@@ -9,6 +9,7 @@ signal new_contextual_reply
 signal control_screen(controlled)
 
 var shopping := false setget set_shopping
+var entered_from := ""
 
 onready var player: PlayerBody = Global.get_player()
 var main_speaker: Node
@@ -99,12 +100,10 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	sequence = p_sequence.duplicate()
 	label_conditions = {}
 	sorted_labels = []
-	var label_swaps = {}
 	for l in sequence.labels:
 		if l.find(":-") >= 0:
 			var s = l.split(":-")
 			var label = s[0].strip_edges()
-			label_swaps[l] = label
 			var e = Expression.new()
 			var res = e.parse(s[1], ["Global"])
 			if res != OK:
@@ -112,10 +111,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 					p_sequence.resource_path, label, s[1]]
 				insert_label("[Error] "+ msg, "narration")
 				print_debug(msg)
-			label_conditions[label] = e
-	for l in label_swaps:
-		sequence.labels[label_swaps[l]] = sequence.labels[l]
-		sequence.labels.erase(l)
+			label_conditions[l] = e
 	sorted_labels = sequence.labels.keys()
 	sorted_labels.sort_custom(self, "_sort_labels")
 
@@ -128,10 +124,10 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	set_process_input(true)
 	Global.can_pause = false
 	var first_index = INF
-	# I forgot to specify a first item and I'm not going to bother lol
 	var s: DialogItem
+	entered_from = starting_label
 	if starting_label != "":
-		s = sequence.get(starting_label)
+		s = sequence.find_label(starting_label)
 		if !s:
 			print_debug("No starting label '%s' in file: %s" % [
 				starting_label, sequence.resource_path
@@ -140,7 +136,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 		for c in sequence.dialog.keys():
 			if c < first_index:
 				first_index = c
-		current_item = sequence.get(first_index)
+		current_item = sequence.find_index(first_index)
 	else:
 		current_item = s
 	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
@@ -173,9 +169,6 @@ func get_next():
 		return true
 
 func advance():
-	# TODO: make contextual replies load with the previous message.
-	# I'd like responses to show up immediately with the message they're responding to.
-	# It's also necessary for responses that only last for one message.
 	if !current_item:
 		exit()
 		return
@@ -394,7 +387,7 @@ func trade_coats():
 	if mentioned("_coat"):
 		get_next()
 		return
-	var coat_item: DialogItem = sequence.get("_coat")
+	var coat_item: DialogItem = sequence.find_label("_coat")
 	if coat_item:
 		mention("_coat")
 		current_item = coat_item
@@ -413,7 +406,8 @@ func fast_exit():
 		get_next()
 	else:
 		is_exiting = true
-		current_item = sequence.get("_exit")
+		call_stack.push_back(current_item)
+		current_item = _find_item("_exit")
 		advance()
 
 func pause():
@@ -471,33 +465,56 @@ func enable_replies():
 			c.disabled = false
 			c.focus_mode = FOCUS_ALL
 
+func _jump_next(item: DialogItem):
+	current_item = item
+	advance()
+
+func _call_next(item: DialogItem):
+	call_stack.push_back(current_item)
+	current_item = item
+	advance()
+
 # tags is an array of strings
 func use_note(tags:Array):
 	enable_replies()
-	return _special_label("note", tags, true)
+	var l := _find_item("note", tags, true)
+	if l:
+		_call_next(l)
+	else:
+		_no_label()
 
 func use_item(id:String, desc: ItemDescription = null):
 	enable_replies()
 	if id == "coat":
 		trade_coats()
 		return
-	if _special_label("item", [id], false):
-		return true
-	return _special_label("item", desc.tags if desc else [], true)
+	var by_item := _find_item("item", [id], false)
+	if by_item:
+		_call_next(by_item)
+		return
+	var by_tag := _find_item("item", desc.tags if desc else [], true)
+	if by_tag:
+		_call_next(by_tag)
+	else:
+		_no_label()
 
-func _special_label(type:String, items:Array, fallthrough : bool) -> bool:
-	var found_label = "%s(_)" % type if fallthrough else ""
+func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogItem:
+	var found_label: String
+	if items:
+		 found_label = "%s(_)" % type if fallthrough else ""
+	else:
+		found_label = type
 	for l in sorted_labels:
 		if !l.begins_with(type):
 			continue
-		var found := false
-		for item in items:
-			if l == "%s(%s)" % [type, item]:
-				found = true
-				break
-		if !found:
-			continue
-			
+		if items:
+			var found := false
+			for item in items:
+				if l.begins_with("%s(%s)") % [type, item]:
+					found = true
+					break
+			if !found:
+				continue
 		if l in label_conditions:
 			var ex:Expression = label_conditions[l]
 			var res = ex.execute([Global], self)
@@ -509,13 +526,12 @@ func _special_label(type:String, items:Array, fallthrough : bool) -> bool:
 		found_label = l
 		break
 	if found_label != "" and sequence.has(found_label):
-		subtopic(found_label)
-		advance()
-		return true
+		return sequence.find_label(found_label)
 	else:
-		if fallthrough:
-			insert_label("[Nothing happened]", "narration")
-		return false
+		return null
+
+func _no_label():
+	insert_label("[Nothing happened]", "narration")
 
 func insert_contextual_reply(message: DialogItem, context := ""):
 	var key := "--never-remove--"
@@ -548,10 +564,6 @@ func seconds_since_conversation() -> int:
 func format(style: String):
 	return {"_format":style}
 
-# TODO
-func animation(_animation: String, _node: String = ""):
-	return true
-
 func event(tag: String, should_pause := false, auto_advance_on_resume:= true):
 	emit_signal("event", tag)
 	emit_signal("event_with_source", tag, main_speaker)
@@ -564,8 +576,12 @@ func event(tag: String, should_pause := false, auto_advance_on_resume:= true):
 		return true
 
 func goto(label: String):
-	current_item = sequence.get(label)
-	return RESULT_SKIP
+	var item := _find_item(label)
+	if item:
+		current_item = item
+		return RESULT_SKIP
+	else:
+		return false
 
 func skip():
 	skip_reply = true
@@ -602,7 +618,7 @@ func forget(topic):
 	var _x = contextual_replies.erase(topic)
 	return discussed.erase(topic)
 
-func subtopic(label):
+func subtopic(label: String):
 	call_stack.push_back(current_item)
 	return goto(label)
 
@@ -611,7 +627,10 @@ func back():
 	if call_stack.empty():
 		return true
 	var caller = call_stack.pop_back()
-	current_item = sequence.canonical_next(caller)
+	if caller.type == DialogItem.Type.REPLY:
+		current_item = caller
+	else:
+		current_item = sequence.canonical_next(caller)
 	return RESULT_SKIP
 
 func coat_trade_stat() -> String:

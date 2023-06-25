@@ -11,14 +11,15 @@ var went_up := false
 func _init():
 	resource_name = "NPSequence"
 
-func get(index) -> DialogItem:
-	if index is String:
-		if !(index in labels):
-			return null
-		index = labels[index]
-	if !(index in dialog):
+func find_index(i: int) -> DialogItem:
+	if !(i in dialog):
 		return null
-	return dialog[index]
+	return dialog[i]
+
+func find_label(label: String) -> DialogItem:
+	if !(label in labels):
+		return null
+	return dialog[labels[label]]
 
 func has(index) -> bool:
 	if index is String:
