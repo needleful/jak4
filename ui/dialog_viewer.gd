@@ -67,6 +67,7 @@ func _init():
 
 func _input(event):
 	if !is_visible_in_tree():
+		set_process_input(false)
 		return
 	if shopping:
 		if event.is_action_pressed("ui_cancel"):

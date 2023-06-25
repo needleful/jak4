@@ -1,6 +1,7 @@
 extends Control
 
 signal note_chosen(tags)
+signal cancelled(passthrough)
 
 export(StyleBox) var hrule_style
 export(bool) var buttons := false
@@ -19,6 +20,7 @@ var show_background := true
 var starting_item : Node
 var temp_notes: Array
 
+var selected_subject: Control
 
 enum NoteType {
 	People,
@@ -44,7 +46,14 @@ func _notification(what):
 		set_active(is_visible_in_tree())
 
 func _input(event):
-	if event.is_action_pressed("ui_sort"):
+	if buttons and event.is_action_pressed("ui_cancel"):
+		if selected_subject:
+			release_subject(selected_subject)
+		else:
+			emit_signal("cancelled", false)
+	elif buttons and event.is_action_pressed("dialog_item"):
+		emit_signal("cancelled", true)
+	elif event.is_action_pressed("ui_sort"):
 		sort += 1
 		sort = sort % Sort.size()
 		set_sort(sort)
@@ -60,6 +69,7 @@ func set_active(active):
 
 func draw_list():
 	starting_item = null
+	selected_subject = null
 	clear(list)
 	if sort == Sort.Subject:
 		populate_list(NoteType.People)
@@ -136,7 +146,7 @@ func populate_list(type: int):
 		
 		var _x = button.connect("focus_entered", self, "_on_subject_focused", [type, key])
 		if buttons:
-			_x = button.connect("pressed", self, "_on_subject_pressed")
+			_x = button.connect("pressed", self, "_on_subject_pressed", [button])
 		if previous_button:
 			previous_button.focus_next = button.get_path()
 			button.focus_previous = previous_button.get_path()
@@ -185,12 +195,22 @@ func write_notes(n):
 			l.size_flags_horizontal = SIZE_EXPAND_FILL
 			subject_notes.add_child(l)
 
-func _on_subject_pressed():
+func _on_subject_pressed(subject:Button):
+	selected_subject = subject
 	for c in list.get_children():
 		c.focus_mode = FOCUS_NONE
 	for c in subject_notes.get_children():
 		c.focus_mode = FOCUS_ALL
 	subject_notes.get_child(0).grab_focus()
+
+func release_subject(subject:Button):
+	selected_subject = null
+	for c in list.get_children():
+		if c is Button:
+			c.focus_mode = FOCUS_ALL
+	for c in subject_notes.get_children():
+		c.focus_mode = FOCUS_NONE
+	subject.grab_focus()
 
 func _resize_note_buttons():
 	Util.resize_buttons(subject_notes.get_children())

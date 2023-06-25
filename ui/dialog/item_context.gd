@@ -14,6 +14,9 @@ onready var mini_journal = $"../mini_journal"
 
 var reply_buttons: Array
 
+func _ready():
+	set_process_input(false)
+
 func _init():
 	reply_buttons = []
 
@@ -25,22 +28,18 @@ func _input(event):
 			item_list.hide()
 			button_box.show()
 			coat.grab_focus()
-		elif mini_journal.visible:
-			mini_journal.hide()
-			show()
-			coat.grab_focus()
 		else:
 			_on_cancel_pressed()
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		set_process_input(is_visible_in_tree())
 		if is_visible_in_tree():
 			mini_journal.hide()
 			item_list.hide()
 			button_box.show()
 			list_contextual_replies()
 			coat.grab_focus()
-			set_process_input(is_visible_in_tree())
 		elif !mini_journal.is_visible_in_tree():
 			item_list.clear()
 
@@ -98,3 +97,11 @@ func _on_show_journal_pressed():
 
 func _on_mini_journal_note_chosen(tags):
 	use_note(tags)
+
+func _on_journal_cancelled(passthrough):
+	if passthrough:
+		_on_cancel_pressed()
+	else:
+		mini_journal.hide()
+		show()
+		$VBoxContainer/show_journal.grab_focus()
