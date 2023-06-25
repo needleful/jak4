@@ -95,79 +95,55 @@ func enter_state(state):
 	var S := PlayerBody.State
 	match state:
 		S.Ground:
-			ground_transition("Walk")
-			gun.unlock()
+			ground_transition("Walk"); gun.unlock()
 		S.Fall, S.LedgeFall, S.BonkFall, S.WadingFall, S.WaveJump, S.FallingDeath:
-			transition_to("Fall")
-			gun.unlock()
+			transition_to("Fall"); gun.unlock()
 		S.CrouchJump:
-			play_crouch_jump()
-			gun.unlock()
+			play_crouch_jump(); gun.unlock()
 		S.LedgeJump:
-			play_ledge_jump()
-			gun.unlock()
+			play_ledge_jump(); gun.unlock()
 		S.BaseJump, S.WallJump, S.WadingJump:
-			play_jump()
-			gun.unlock()
+			play_jump(); gun.unlock()
 		S.HighJump:
-			play_high_jump()
-			gun.lock()
+			play_high_jump(); gun.lock()
 		S.RollJump:
-			play_roll_jump(player.max_damage)
-			gun.lock()
+			play_roll_jump(player.max_damage); gun.lock()
 		S.Slide, S.Crouch, S.Climb, S.Wading:
-			ground_transition(S.keys()[state])
-			gun.unlock()
+			ground_transition(S.keys()[state]); gun.unlock()
 		S.LedgeHang:
-			play_ledge_grab()
-			gun.lock()
+			play_ledge_grab(); gun.lock()
 		S.Roll:
-			play_roll()
-			gun.lock()
+			play_roll(); gun.lock()
 		S.RollFall:
-			gun.lock()
+			gun.lock();
 		S.LungeKick, S.SlideLungeKick:
-			play_lunge_kick(player.max_damage)
-			gun.lock()
+			play_lunge_kick(player.max_damage); gun.lock()
 		S.SpinKick, S.AirSpinKick:
-			play_spin_kick(player.max_damage)
-			gun.aim_lock()
+			play_spin_kick(player.max_damage); gun.aim_lock()
 		S.UppercutWindup:
-			transition_to("Uppercut")
-			gun.lock()
+			transition_to("Uppercut"); gun.lock()
 		S.Uppercut:
-			play_uppercut(player.max_damage)
-			gun.lock()
+			play_uppercut(player.max_damage); gun.lock()
 		S.DiveWindup:
-			play_dive_windup(player.max_damage)
-			gun.lock()
+			play_dive_windup(player.max_damage); gun.lock()
 		S.DiveStart:
-			play_dive_start(player.max_damage)
-			gun.lock()
+			play_dive_start(player.max_damage); gun.lock()
 		S.DiveEnd:
-			play_dive_end(player.max_damage)
-			gun.aim_lock()
+			play_dive_end(player.max_damage); gun.aim_lock()
 		S.Damaged, S.GravityStun:
-			play_deferred("Damaged")
-			gun.unlock()
+			play_deferred("Damaged"); gun.unlock()
 		S.PlaceFlag:
-			play_custom("PlaceFlag")
-			gun.aim_lock()
+			play_custom("PlaceFlag"); gun.aim_lock()
 		S.GetItem:
-			play_custom("ItemGet")
-			gun.aim_lock()
+			play_custom("ItemGet"); gun.aim_lock()
 		S.Hover:
-			start_hover()
-			gun.unlock()
+			start_hover(); gun.unlock()
 		S.Sitting:
-			play_sit()
-			gun.unlock()
+			play_sit(); gun.unlock()
 		S.Dash:
-			play_deferred("Dash")
-			gun.unlock()
+			play_deferred("Dash"); gun.unlock()
 		S.WallCling:
-			transition_to("WallCling")
-			gun.lock()
+			transition_to("WallCling"); gun.lock()
 
 func blend_run_animation(movement: Vector3):
 	var speed: float = movement.length()
@@ -181,11 +157,10 @@ func blend_run_animation(movement: Vector3):
 	anim["parameters/WholeBody/Wading/blend_position"] = speed
 
 func blend_climb_animation(velocity: Vector3, wall_normal: Vector3):
-	var b :Vector2 = anim["parameters/WholeBody/Climb/0/blend_position"]
 	var right := -global_transform.basis.x.dot(velocity)
-	var up := 0.0
-	up = velocity.y
-	b =  lerp(b, Vector2(right, up), 0.3)
+	var up := velocity.y
+	var b:Vector2 = lerp(
+		anim["parameters/WholeBody/Climb/0/blend_position"], Vector2(right, up), 0.3)
 	anim["parameters/WholeBody/Climb/0/blend_position"] = b
 	anim["parameters/WholeBody/Climb/1/blend_position"] = b
 	

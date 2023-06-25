@@ -1,0 +1,67 @@
+:intercom
+* A voice crackles through an intercom.
+[Global mark_map: underground_lab | In the back of a narrow cave is an entrance to an underground facility.]
+Who are you? How did you find this place?
+?intro> Did you lock the doors?
+	Yes. We'd prefer if you didn't leave until we know your business here.
+	[back]
+> Who are you?
+	We're quite sure we asked first.
+	You -- I'm a tourist.
+	An awfully intense expedition for a humble tourist, is it not?
+> Crawling through caves is a hobby of mine.
+	Not a very common sport for a lady of your type.
+You -- What's that supposed to mean?
+It means there's no logical reason someone would have come this far unless you knew what you were looking for.
+?1> Assuming everything I do has a logical reason is giving me quite a lot of credit.
+	... Perhaps it is.
+	[back]
+[forget: 1]
+You -- I don't know how to prove I'm not here with any ill intentions, but I'm not.
+[forget: intro]
+You've put us in quite a predicament. In the e-
+Gravelly Voice -- FILL THE ROOM WITH POISON GAS !!
+	EASY ! DONE ! I SOLVED THE ISSUE !
+We don't have poison gas leading to the ventilation system. It would kill us, too.
+You -- Oh, so we're at an impasse? You can't seal this room off or your air goes with it.
+You be quiet, I'm talking to Rosko, er,
+Gravelly Voice -- DON'T TELL HER MY NAME !!!!
+	SHE WILL USE THIS AGAINST US !
+Girl's Voice -- I think we should invite her in and put a tracking device on her! She'll lead us to our enemies!
+That would have been a great idea, if you asked me to turn off the microphone before you said it.
+You -- If I'm being held captive by a band of clowns, you could at least give me a balloon animal.
+Gravelly Voice -- CAN IT !!!
+Hang on, I'll just-
+* The audio cuts out.
+You -- Wonderful. Presumably you can still hear me?
+* A few minutes pass.
+Alright, we're opening the entrance. We welcome you to the Lab.
+You -- I'd prefer the exit, if that's fine with you.
+No. Not the exit.
+[Global create_task: unknown_unknowns]
+[note_once: lab/entered | I seem to be stuck in this lab. |+ underground_lab unknown_unknowns]
+[exit]
+
+:_exit :- entered_from == "intercom"
+* You try to exit the room, but the doors are locked.
+[back]
+
+:doctor
+You may call me The Doctor.
+[remember: A right git.]
+[Global add_stat: doctor/name]
+[exit]
+
+:girl
+I'm The Good Doctor.
+[Global stat: doctor/name] "The Doctor" and "The Good Doctor"?
+Well, we're both doctors.
+[exit]
+
+:_exit :- entered_from == "girl"
+You -- Ta-ta!
+[exit]
+
+:rosko
+WELL YOU ALREADY KNOW MY NAME.
+[exit]

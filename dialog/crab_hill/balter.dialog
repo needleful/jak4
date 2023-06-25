@@ -14,17 +14,29 @@
 		{otherwise}
 			You -- I just heard your name mentioned.
 		So what do you want?
-{otherwise }{ talked == 1}
+{otherwise}{talked == 1}
 	You again?
 {otherwise}
 	What exactly keeps bringing you into my office?
+	...
+[exit]
 
-> [Global stat: balter/account/foreman][! Global stat: balter/discussed/foreman] The foreman at the Maslikir foundry mentioned you.
+:note(balter/account/foreman)
+[goto: foreman]
+:forman
+[! Global stat: balter/discussed/foreman] 
+	You -- The foreman at the Maslikir foundry mentioned you.
 	Is he roping you into his taxes?
 	You -- Ah, no, he just told me you were rejecting his forms.
 	Well, I wouldn't reject them if he just paid what he owes.
 	[Global add_stat: balter/discussed/foreman]
-> [Global stat: mum/records][! Global stat: balter/discussed/records] I'm looking for the records on people who live in the province. Could you help me?
+{otherwise}
+	You -- I wanted to talk about the foreman again.
+[exit]
+
+:note(mum/records)
+[! Global stat: balter/discussed/records] 
+	You -- I'm looking for the records on people who live in the province. Could you help me?
 	What? No.
 	You -- Why not?
 	I'm not letting a foreigner comb through records of everyone in the province.
@@ -38,10 +50,10 @@
 		You -- Tara Sylde.
 	* Balter's expression changes to some indiscernible emotion.
 	Tara Sylde...
-	Get out.
+	Hmph. I would rather if you left.
 	You -- What?
 	I knew there was a reason I didn't like you, not just because you were a Vaeler. Shoo.
-	You -- I refuse. You know her, don't you?
+	You -- So you know her personally?
 	Of course she wouldn't have told you about me...
 	You -- She never told me anything! She disappeared when I was a baby!
 	[Global add_stat: mum/abandon]... Hmph, that tracks. Leaving all of us behind for some swarthy Vaeler, then leaving him behind, too.
@@ -76,13 +88,8 @@
 	[Global add_stat: mum/war]
 	[Global add_stat: mum/account/balter]
 	[Global add_stat: balter/discussed/records]
-> [mentioned: tourist] I'll be going now.
-> {otherwise}Uh... nothing, sorry. I'll let you get back to work.
-	...
-
-
-[exit]
-
+{otherwise}
+	About those records...
 [exit]
 
 :_fountain
