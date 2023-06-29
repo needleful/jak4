@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=2]
+[gd_scene load_steps=119 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -47,6 +47,7 @@
 [ext_resource path="res://ui/components/fade.gd" type="Script" id=45]
 [ext_resource path="res://ui/components/date_time.tscn" type="PackedScene" id=46]
 [ext_resource path="res://ui/components/screen_aspect.gd" type="Script" id=47]
+[ext_resource path="res://ui/icons/temp_close.png" type="Texture" id=48]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -2099,10 +2100,10 @@ margin_left = 24.0
 margin_top = 19.0
 margin_right = 744.0
 margin_bottom = 73.0
+mouse_filter = 2
 format = "New Journal Entry: %s/%s"
 
 [node name="item_context" type="Panel" parent="ui/dialog/dialog"]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2132,67 +2133,80 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 
-[node name="Label" type="Label" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="ui/dialog/dialog/item_context/VBoxContainer"]
 margin_right = 365.0
-margin_bottom = 22.0
+margin_bottom = 38.0
+
+[node name="Label" type="Label" parent="ui/dialog/dialog/item_context/VBoxContainer/Header"]
+margin_top = 8.0
+margin_right = 317.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
 text = "Contextual Dialog"
 
-[node name="HSeparator" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 26.0
+[node name="close" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer/Header"]
+margin_left = 321.0
 margin_right = 365.0
-margin_bottom = 30.0
+margin_bottom = 38.0
+icon = ExtResource( 48 )
+
+[node name="HSeparator" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 42.0
+margin_right = 365.0
+margin_bottom = 46.0
 
 [node name="coat" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 34.0
+margin_top = 50.0
 margin_right = 365.0
-margin_bottom = 62.0
+margin_bottom = 78.0
 text = "Trade Coats"
 
 [node name="bar_context" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 66.0
-margin_right = 365.0
-margin_bottom = 70.0
-
-[node name="bar_inventory" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 74.0
-margin_right = 365.0
-margin_bottom = 78.0
-
-[node name="show_inventory" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
 margin_top = 82.0
 margin_right = 365.0
-margin_bottom = 110.0
+margin_bottom = 86.0
+
+[node name="bar_inventory" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 90.0
+margin_right = 365.0
+margin_bottom = 94.0
+
+[node name="show_inventory" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
+margin_top = 98.0
+margin_right = 365.0
+margin_bottom = 126.0
 text = "Use an item"
 
 [node name="HSeparator3" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 114.0
+margin_top = 130.0
 margin_right = 365.0
-margin_bottom = 118.0
+margin_bottom = 134.0
 
 [node name="show_journal" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 122.0
+margin_top = 138.0
 margin_right = 365.0
-margin_bottom = 150.0
+margin_bottom = 166.0
 text = "Use Journal"
 
 [node name="HSeparator4" type="HSeparator" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 154.0
+margin_top = 170.0
 margin_right = 365.0
-margin_bottom = 158.0
+margin_bottom = 174.0
 
 [node name="cancel" type="Button" parent="ui/dialog/dialog/item_context/VBoxContainer"]
-margin_top = 162.0
+margin_top = 178.0
 margin_right = 365.0
-margin_bottom = 190.0
+margin_bottom = 206.0
 text = "Cancel"
 
 [node name="mini_journal" parent="ui/dialog/dialog" instance=ExtResource( 21 )]
+visible = false
 anchor_left = 0.3
 anchor_top = 0.1
 anchor_right = 0.7
 anchor_bottom = 0.9
 margin_left = -190.0
-margin_right = 190.0
+margin_right = 230.0
 rect_min_size = Vector2( 900, 0 )
 buttons = true
 
@@ -2355,6 +2369,7 @@ material/0 = SubResource( 98 )
 [connection signal="item_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_item"]
 [connection signal="note_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_note"]
 [connection signal="item_pressed" from="ui/dialog/dialog/item_context/item_list" to="ui/dialog/dialog/item_context" method="_on_item_pressed"]
+[connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/Header/close" to="ui/dialog/dialog/item_context" method="_on_cancel_pressed"]
 [connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/coat" to="ui/dialog/dialog/item_context" method="_on_coat_pressed"]
 [connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/show_inventory" to="ui/dialog/dialog/item_context" method="_on_show_inventory_pressed"]
 [connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/show_journal" to="ui/dialog/dialog/item_context" method="_on_show_journal_pressed"]

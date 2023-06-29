@@ -59,10 +59,14 @@ func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
 func _input(event):
+	var ogg := using_gamepad
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		using_gamepad = true
 	elif event is InputEventMouse or event is InputEventKey:
 		using_gamepad = false
+	
+	if ogg != using_gamepad:
+		get_tree().call_group("input_prompt", "_refresh")
 
 func _ready():
 	randomize()

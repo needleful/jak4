@@ -41,6 +41,7 @@ func _init():
 	temp_notes = []
 
 func _ready():
+	$close.visible = buttons
 	set_process_input(false)
 
 func _notification(what):
@@ -187,9 +188,9 @@ func write_notes(n: Array):
 				starting_item = b
 			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
 			if sort == Sort.Subject:
-				b.focus_mode = FOCUS_NONE
+				b.focus_mode = FOCUS_CLICK
 			else:
-				_x = b.connect("pressed", self, "emit_signal", ["note_hovered", b, note_pair[1]])
+				b.hint_tooltip = _tag_list(note_pair[1])
 			subject_notes.add_child(b)
 		call_deferred("_resize_note_buttons")
 	else:
@@ -208,18 +209,7 @@ func write_notes(n: Array):
 				var tc := get_color("font_color", "Label")
 				tc.a = 0.75
 				tag_list.add_color_override("font_color", tc)
-				var s := "tags:"
-				var tags_added := 0
-				for tag in note_pair[1]:
-					if Global.has_stat(tag):
-						continue
-					var t:String = tag.capitalize()
-					if tags_added > 0:
-						s += ", " + t
-					else:
-						s += " " + t
-					tags_added += 1
-				tag_list.text = s
+				tag_list.text = _tag_list(note_pair[1])
 				
 				var m := MarginContainer.new()
 				m.add_child(tag_list)
@@ -230,12 +220,25 @@ func write_notes(n: Array):
 				subject_notes.add_child(v)
 			else:
 				subject_notes.add_child(l)
-				
+
+func _tag_list(t_list: Array) -> String:
+	var s := "tags: "
+	var tags_added := 0
+	for tag in t_list:
+		if Global.has_stat(tag):
+			continue
+		var t:String = tag.capitalize()
+		if tags_added > 0:
+			s += ", " + t
+		else:
+			s += " " + t
+		tags_added += 1
+	return s
 
 func _on_subject_pressed(subject:Button):
 	selected_subject = subject
 	for c in list.get_children():
-		c.focus_mode = FOCUS_NONE
+		c.focus_mode = FOCUS_CLICK
 	for c in subject_notes.get_children():
 		c.focus_mode = FOCUS_ALL
 	subject_notes.get_child(0).grab_focus()
@@ -246,7 +249,7 @@ func release_subject(subject:Button):
 		if c is Button:
 			c.focus_mode = FOCUS_ALL
 	for c in subject_notes.get_children():
-		c.focus_mode = FOCUS_NONE
+		c.focus_mode = FOCUS_CLICK
 	subject.grab_focus()
 
 func _resize_note_buttons():
@@ -261,3 +264,6 @@ func focus_first_button():
 func clear(node: Node):
 	for c in node.get_children():
 		c.queue_free()
+
+func _on_close_pressed():
+	emit_signal("cancelled", false)

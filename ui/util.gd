@@ -18,6 +18,7 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 	l.margin_top = 5
 	l.margin_bottom = -5
 	l.text = text
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if font_override:
 		l.add_font_override("font", font_override)
 	return b

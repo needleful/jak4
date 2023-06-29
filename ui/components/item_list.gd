@@ -118,4 +118,5 @@ func redraw():
 	keys.sort_custom(self, key_sort_func[sort])
 	for k in keys:
 		list.add_child(buttons[k])
-	old_focus.grab_focus()
+	if old_focus:
+		old_focus.grab_focus()
