@@ -34,7 +34,7 @@ func _on_child_focused(child:Control):
 	scroll_to_child(child)
 
 func scroll_to_end():
-	tween_to(get_v_scrollbar().max_value)
+	tween_to(int(get_v_scrollbar().max_value))
 
 func scroll_to_child(child:Control):
 	var bottom := (child.rect_global_position.y + child.rect_size.y) - rect_global_position.y

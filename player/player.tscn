@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=2]
+[gd_scene load_steps=118 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -46,6 +46,7 @@
 [ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=44]
 [ext_resource path="res://ui/components/fade.gd" type="Script" id=45]
 [ext_resource path="res://ui/components/date_time.tscn" type="PackedScene" id=46]
+[ext_resource path="res://ui/components/screen_aspect.gd" type="Script" id=47]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -1141,6 +1142,7 @@ anchor_bottom = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
+script = ExtResource( 47 )
 
 [node name="sized" type="Control" parent="ui/status_menu/AspectRatioContainer"]
 margin_top = 22.5042
@@ -1257,16 +1259,17 @@ text = "Next >>"
 align = 2
 
 [node name="gameing" type="AspectRatioContainer" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
-stretch_mode = 1
+script = ExtResource( 47 )
 
 [node name="gameing" type="Control" parent="ui/gameing"]
 time_scale_response = false
-margin_left = -40.008
-margin_right = 1240.01
-margin_bottom = 720.0
+margin_top = 22.5042
+margin_right = 1200.0
+margin_bottom = 697.496
 
 [node name="saveStats" type="VBoxContainer" parent="ui/gameing/gameing"]
 pause_mode = 2
@@ -1988,10 +1991,10 @@ margin_bottom = 71.0
 format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="AspectRatioContainer" parent="ui"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
+script = ExtResource( 47 )
 
 [node name="dialog" type="Control" parent="ui/dialog"]
 time_scale_response = false

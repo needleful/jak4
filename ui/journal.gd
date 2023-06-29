@@ -1,6 +1,7 @@
 extends Control
 
 signal note_chosen(tags)
+signal note_hovered(button, tags)
 signal cancelled(passthrough)
 
 export(StyleBox) var hrule_style
@@ -177,7 +178,7 @@ func _on_subject_focused(type: int, subject: String):
 	
 	write_notes(n)
 
-func write_notes(n):
+func write_notes(n: Array):
 	clear(subject_notes)
 	if buttons:
 		for note_pair in n:
@@ -187,6 +188,8 @@ func write_notes(n):
 			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
 			if sort == Sort.Subject:
 				b.focus_mode = FOCUS_NONE
+			else:
+				_x = b.connect("pressed", self, "emit_signal", ["note_hovered", b, note_pair[1]])
 			subject_notes.add_child(b)
 		call_deferred("_resize_note_buttons")
 	else:
@@ -195,7 +198,39 @@ func write_notes(n):
 			l.autowrap = true
 			l.text = note_pair[0]
 			l.size_flags_horizontal = SIZE_EXPAND_FILL
-			subject_notes.add_child(l)
+			if sort != Sort.Subject:
+				var v:= VBoxContainer.new()
+				v.size_flags_horizontal = SIZE_EXPAND_FILL
+				v.add_constant_override("separation", 0)
+				
+				var tag_list := Label.new()
+				tag_list.autowrap = true
+				var tc := get_color("font_color", "Label")
+				tc.a = 0.75
+				tag_list.add_color_override("font_color", tc)
+				var s := "tags:"
+				var tags_added := 0
+				for tag in note_pair[1]:
+					if Global.has_stat(tag):
+						continue
+					var t:String = tag.capitalize()
+					if tags_added > 0:
+						s += ", " + t
+					else:
+						s += " " + t
+					tags_added += 1
+				tag_list.text = s
+				
+				var m := MarginContainer.new()
+				m.add_child(tag_list)
+				m.add_constant_override("margin_left", 80)
+				
+				v.add_child(l)
+				v.add_child(m)
+				subject_notes.add_child(v)
+			else:
+				subject_notes.add_child(l)
+				
 
 func _on_subject_pressed(subject:Button):
 	selected_subject = subject
