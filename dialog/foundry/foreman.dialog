@@ -22,7 +22,7 @@
 	You -- Oh! I found this curious device on the plateau. It fires a sort of bubble.
 	Could I get a closer look?
 	You -- You may.
-	* He examines the device, careful not to pry anything out of place. He finds the way to properly remove the covers and examines its internals.
+	* He examines the device, careful not to pry anything out of place. After some careful investigation, he slides the covers off and examines its internals.
 	This is fascinating...
 	[Global count: bronze_pistol] I could give it the same treatment as your pistol. I'd have to call in some outside experts, but we could reverse-engineer this and remake it with new parts.
 	{otherwise} I think.. if I call in some outside experts, we could reverse-engineer this and remake it with new parts.
@@ -46,9 +46,11 @@
 		But also, I am having issues with Balter at the capital.
 		You -- Who's that?
 		// TODO: who is Balter within the Braalna government? Why is he interested in the foundry?
-		[Global add_stat: balter/info][Global add_stat: balter/account/foreman] He's an auditor for the provincial government, up on Crab Hill. He has been very picky with our documents, constantly rejecting our forms for small errors.
+		[Global add_stat: balter/info] He's an auditor for the provincial government, up on Crab Hill. He has been very picky with our documents, constantly rejecting our forms for small errors.
 		[Global mark_map: crab_hill | Capital of the Braalna province.]
 		Ah, it's just part of doing business. We'll reach an agreement soon enough.
+		[Global create_task: debts_unpaid]
+		[note: balter/account/foreman | The Maslikir foreman is having trouble with an auditor, Balter. He's at the capital building on Crab Hill. | maslikir crab_hill balter debts_unpaid]
 [Global stat: foundry/capacitor] > I'd like to see what you're selling. 
 	[shop]
 	[exiting] I hope we can do business again.

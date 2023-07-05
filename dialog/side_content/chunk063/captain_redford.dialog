@@ -9,7 +9,7 @@
 		You -- "Little boy"? I'm a 27-year-old woman!
 		My God, did these savages take you captive and shave your head? Are you held hostage?
 		You -- How dare you!
-		[remember: I met the most rude creature, calling itself "Captain Redford". I had no idea these beasts could talk, and I wish they didn't!]
+		[remember: I met the most rude creature, calling itself "Captain Nathaniel Redford". I had no idea these beasts could talk, and I prefered it that way!]
 		You -- Short hair is fashionable! It's sporty and comfortable! You will not insult me again, creature!
 		Fashion? Well, if one wishes not to be insulted, perhaps one should not make oneself so easy to insult.
 		You -- I will not tolerate such abuse from a skull with legs! State your business or I shall deal with you like the other spectres, talking or not!
@@ -24,8 +24,9 @@
 		Young lady. As I have said, we must part for the Ember Crest Manor at once!
 	> Fine. I will humor your delusions and go to this manor with you.
 		It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
-		[Global create_task: captain_redford]
-		[note: captain_redford/start | A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort. |+ captain_redford]
+		[Global create_task: troops_of_the_manor]
+		[mark_map: ember_crest_manor]
+		[note: captain_redford/start | A strange talking spectre, calling itself "Captain Redford", has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort. |+ captain_redford troops_of_the_manor ember_crest_manor]
 		[main_speaker travel_to: ember_crest_manor | ../path_ember_crest]
 	> No. Stay on that train forever for all I care.
 		What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
@@ -33,7 +34,7 @@
 {otherwise}{main_speaker.get_chunk() == "chunk063"}
 	Right, let's continue!
 	[main_speaker continue_travel: ../path_ember_crest]
-{otherwise}[ main_speaker at: front_door]
+{otherwise}[main_speaker at: front_door]
 	[! Global count: manor_key]
 		There's something wrong here.
 		You -- Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
@@ -49,7 +50,7 @@
 	{otherwise}
 		Marvelous! Now to find my men...
 		[main_speaker travel_to: | ../path_entry]
-{otherwise} [main_speaker at: entry]
+{otherwise}[main_speaker at: entry]
 	Right, where in the blazes IS everyone?
 	You -- They're gone! I've been telling you! And you haven't explained how you became a spectre!
 	I've told you who I am plenty of times! I'm Captain Nathaniel Redford of the Sixth Cavalry! Recognized by His Grace, King August IX, December 8th, 1251.
@@ -57,10 +58,10 @@
 	Wait! Do you feel that?
 	You -- What?
 	Air... There's a nasty draft in here.
-	You -- Oh, come on! The windows are broken out!
-	No, no... it's moving somewhere else...
+	You -- Because the house is falling apart. There's sand everywhere...
+	No, no... it's not going outside...
 	[main_speaker travel_to: | ../shelf_view]
-{otherwise}[Global has_stat: manor052/investigation1]
+{otherwise}[Global stat: manor052/investigation1]
 	[Global stat: manor052/passage/open] 
 		So it was a passage!
 		Excellent work, uh, I never caught your name.
@@ -68,25 +69,26 @@
 		Short for Jacqueline, I presume?
 		You -- Yes.
 		Well Jacqueline, it appears we're in a puzzle-box. A devious labyrinth of unknown purpose. They're more common in this region than I'd prefer.
-		We must find my men. They may've been trapped in this evil place.
+		We must find my men. They may've been trapped in this evil place!
 		You -- Alright, "Captain". If I humor you and help you "find" your "men", will you agree to stop harassing those workers at the train?
 		I promise no such thing.
 		You -- Ugh. Well, I'm curious what's at the end of this all the same...
+		[Global add_note: There is something strange about this manor... why are there secret passages? |+ troops_of_the_manor]
 		[Global remove_stat: manor052/investigation1]
 		[main_speaker emit_signal: npc_event | investigation1_complete]
 		[main_speaker travel_to: | ../path_passage]
 	{otherwise}
-		There must be a lock or something...
+		There must be a lock here somewhere...
 {otherwise}[main_speaker at: shelf_view]
 	[Global stat: manor052/passage/open]
-		Alright, let's go in.
+		Alright, let's venture onward.
 		[main_speaker travel_to: | ../path_passage]
 	{otherwise} 
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
 		You -- Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
 		[Global add_stat: manor052/investigation1]
-{otherwise}[ main_speaker at: kitchen]
+{otherwise}[main_speaker at: kitchen]
 	[! Global stat: manor052/investigation2]
 		Well done! It appears it was a secret passage to the kitchen! Perhaps for servants.
 		You -- It doesn't appear any soldiers have ever quartered here.
@@ -103,20 +105,21 @@
 		Oh, excellent! Let's go see what it unlocks!
 		[Global remove_stat: manor052/investigation2]
 		[main_speaker travel_to: | ../path_den]
-{otherwise}[ main_speaker at: den]
+{otherwise}[main_speaker at: den]
 	[! Global stat: manor052/investigation3]
-		[Global add_stat: manor052/investigation3]
 		Nothing here makes any sense.  Where are the sandbags? We boarded up the windows weeks ago!
 		You -- I've been telling you, you buffoon! The war ended! Whatever delusions you have are of a long-gone era.
 		...
 		We just... Have to find the next part of the path.
 		You -- What path? What proof do we have there's a path? All we know is there was a servant's path behind the cabinet. What more are we looking for?
 		Trust me, Jacqueline. I've got... a feeling, I suppose. There is more here.
+		[Global add_stat: manor052/investigation3]
 	{otherwise}[! Global stat: redford/discussed/denial]
 		It's clear the manor was renovated since I was last here...
 		But whoever it was is long gone now.
 		You -- Have you been listening to a word I've said this entire time?
 		* He makes a noise like a sigh, despite no evidence he has lungs.
+		[Global add_stat: redford/sigh]
 		Jacqueline, may I tell you a story?
 		We often receive mail at the front lines. Letters and gifts from loved ones, newspapers, et cetera.
 		One day, one of my soldiers received a letter informing him his wife and daughter had drowned in a boating accident.
@@ -130,25 +133,172 @@
 		If you say so. But for some men, I believe there are only two stages:
 		Denial and death.
 		[Global add_stat: jackie/info/denial]
-		[Global add_stat: redford/discussed/denial]
+		[note: redford/discussed/denial | "Denial and death"... I think he may understand his situation more than he's admitting. |+ captain_redford jackie/info/denial]
+	[! Global stat: manor052/basement/open]
+		Let's open up the rest of this manor.
 	{otherwise}
-		Let's open up the rest of this manor first.
+		[! Global stat: redford/discussed/basement]
+			I presume the basement door was your doing?
+			You -- Yes. There's more to this place yet.
+			We shall continue.
+		{otherwise}
+			Excellent work as always, Jacqueline.
+			You -- Of course.
+			Let's venture further.
+		[Global remove_stat: manor052/investigation3]
+		[main_speaker travel_to: ../basement_passage]
+{otherwise}[main_speaker at: basement_passage]
+	[! Global stat: redford/discussed/poem1]
+		You -- Good God, this place is endless!
+		Soldier without blood.
+		You -- Pardon me?
+		Nostrils without breath.
+		A heart without love.
+		A life without death.
+		You -- Redford, what are you talking about?
+		[mention: isiah]
+		We've been paid back for what our hands have done.
+		You -- You're... scaring me, Redford.
+		Sorry, just some old poetry.
+		[note: redford/discussed/poem1 | "Soldier without blood. Nostrils without breath. A heart without love. A life without death." How did Redford become what he is? |+ captain_redford]
+	{otherwise}[! Global stat: redford/discussed/poem2]
+		Solid feet on soft ground,
+		Solid teeth in soft necks,
+		Solid eyes to gather 'round
+		And watch the fires burn the text.
+		?> [note: redford/discussed/poem2 | "Solid feet on soft ground, solid teeth in soft necks, solid eyes to gather 'round and watch the fires burn the text." Is he just reciting poetry? It's obviously about the war, but what text? Is this his experience, or someone else's? |+ captain_redford] Redford, please tell me what you're trying to say.
+			I'm just thinking aloud. Poems about poems. Memories of memories...
+			Perhaps I'll remember what I forgot before I forget I've forgotten.
+			You -- I wish you would speak in sentences instead of riddles.
+			Once I've solved them, perhaps...
+			[back]
+		?> What text did you burn?
+			Nothing that mattered. Histories, scriptures, poems, tapestries, villages...
+			Mere fuel for a more efficient engine.
+			[note: redford/burning | It's from his experience. |+ captain_redford]
+			[back]
+		[forget: poem]
+	[! Global stat: manor052/final_area/open]
+		We must find the next passage.
+		// TODO: fill this out
+	{otherwise}
+		You -- The next door is open. No riddle this time. I just had to flip a lever.
+		Your acrobatics were most impressive. I would have assisted, but alas... my shoes have worn too thin to keep steady footing on this metal.
+		* You sigh.
+		You -- Of course, Redford.
+		[main_speaker travel_to: ../final_area]
+{otherwise}[main_speaker at: final_area]
+	// TODO: Wrap it all up. Tell a joke or two.
+	And there they are.
+	You -- What? What is it?
+	Everyone. Every soldier who died on this sand.
+	: everyone
+	> [! mentioned: end_knowledge] Pardon me? How do you know such a thing?
+		[mention: end_knowledge]
+		[goto: everyone]
+	> [! mentioned: end_death] How did they get here?
+		[mention: end_death]
+		[goto: everyone]
+	> [! mentioned: truth][mentioned: end_death][mentioned: end_knowledge] This is how you came to be, isn't it?
+		I died. I remember it. I remember the flash of white. Or maybe black?
+		It was gunfire from the cliffs. They must have been in the caves. I knew the scouts should have searched deeper. God-damned fools. Cowards. Those caves go as deep as your bravery will take you.
+		[Global add_stat: caves/depth]
+		And then I was in the desert, walking. Like it was mere seconds ago. I thought I'd just barely survived the chaos at first.
+		[note_once: redford/death | Redford remembers his death. Apparently his soldiers were ambushed from the caves. Somehow his mind was preserved in one of these spectres, as if he'd survived. |+ captain_redford]
+
+		[Global stat: redford/sigh]
+			* He makes that almost-sigh sound again.
+		{otherwise}
+			* He makes a sound like a sigh, despite likely having no lungs.	
+		[Global add_stat: redford/sigh]
+		It's confusing.  I can't recollect how long I've been like this.
+
+		[mention: truth]
+		[Global complete_task: troops_of_the_manor]
+		[exit]
+{otherwise}[Global task_is_complete: troops_of_the_manor]
+	[goto: post_mission]
 {otherwise}
 	*(ERROR: Captain Redford has no words for the current situation.)
+[exit]
+
+:item(manor_journal_isiah) :- mentioned("isiah")
+:note(manor_journal_isiah) :- mentioned("isiah")
+You -- You're quoting the book of Isiah, aren't you?
+	"They will be paid back for what their hands have done". I'm quite sure that's Isiah.
+Someone studied their scripture...
+You -- Some schools took "spare the rod, spoil the child" quite seriously. Not to mention it's fresh on the mind.
+	But why are you quoting it? Did you write this journal?
+	[note: jackie/bible_studies | I never expected memorizing so much scripture would ever be of use to me. |+ jackie]
+I... hands... When would I have done so? I don't have hands anymore.
+You -- So you're finally coming to understand you aren't a human?
+Hmph! Is that any way to talk to a soldier maimed in combat? I would expect a young lady to be more sensitive.
+Let's just find the end of this labyrinth and rescue whoever survived this thrice-damned war.
+[note: redford/discussed/isiah | What is happening? Did Redford leave his own writings in this manor? |+ captain_redford troops_of_the_manor]
+[back]
+
+:item(manor_journal_isiah) :- Global.stat("manor052/investigation3")
+:note(manor_journal_isiah) :- Global.stat("manor052/investigation3")
+// TODO: How is the basement reached?
+// I want it to be a riddle
+// Refer to the book of Isiah, maybe?
+[! Global stat: redford/discussed/isiah_journal]
+	You -- I found a curious notebook, Redford. It contains passages from the book of Isiah with notes.
+	This house is empty.
+	You -- ...? Yes, we've been over that.
+	I don't mean fortifications. I mean furniture. There is not a single bed nor seat in this home, but they left behind journals, lock boxes, and statues. Why?
+	Why is there so much sand inside a house with no windows?
+	[note: redford/discussed/isiah_journal | Redford pointed out something interesting. The only evidence people have ever lived here are journals and various valuables. Would they not have taken those with them when they left? |+ troops_of_the_manor ember_crest_manor]
+	You -- I.. don't know. But let's keep focused on the matter at hand. I think this book is a clue.
+	I would think so, too. What do you think it's pointing to?
+	You -- ... I was hoping you would know.
+	Bring it over here. I'll take a look.
+	* You show him the book. He takes a moment to read through it.
+	... It's hard to say. I'll think it over. Perhaps you can try your luck solving it in the meantime, and let me know if you're having trouble.
+{otherwise}
+	You -- Any ideas on the journal?
+[exit]
+
+: post_mission
+// TODO: something here
+[Global add_stat: redford/post_talk]
+>  [Global stat: redford/rant] Quite frankly, you were the most frightening part of this whole journey, Redford.
+	Yes, I suppose my meandering thoughts could have been unsettling. Pay little mind to it. War is fought as much in the spirit as on the battlefield.
+	You -- I was quite certain you would snap and force me to kill you.
+	You have a most dramatic imagination, young Jacqueline. I could handily beat you in combat if it had come to that.
+	You -- You would fight a woman?
+	My dear, your outdated notions of sex have no place in our modern world.
+	I'll have you know my lieutenant was killed by a woman.
+	[exit]
+> How are you adjusting to your new body?
+	I've seen soldiers come out in worse shape than this. I shall endure my new limitations.
+	[exit]
+// TODO at some point I guess
+[Global stat: redford/marriage]
+	Well, we've had our fun. Would you be interested in getting married, per chance?
+	> No.
+	> No.
+	You -- Didn't you joke about this before?
+	I said you shouldn't take it seriously, but I meant the marriage, not the proposal.
+	You -- What, as in a comedy marriage?
+	You -- While my parents' faces at the wedding would be quite hilarious, I don't have any interest in being tied to someone else.
+	So be it. The offer shall stand until I return home, however long that may take in my condition. "Mrs. Jacqueline Redford" has quite a ring to it.
 [exit]
 
 :_coat
 * He doesn't have anything you could wear.
 [back]
 
-:opened
-* The map clicks into place, and you here a louder click behind you.
-That must be the cabinet! Let's try it again!
-It's curious the secret code was merely straightening the map. Perhaps it was to confuse the natives, since they draw their maps with East at the top.
-> (Leave)
-
-// Perhaps more puzzles. I think The Captain can tell you the solution, but chooses not to
-I believe I understand what's happening here. But I don't want to deprive you the joy of a good puzzle.
-> Fair enough, I'll solve it on my own.
-> Give me a hint.
-> I hate puzzles. Tell me what to do.
+:rant
+It's better to be dead than injured, economically speaking. Shattered bones, burst vessels, hemorrhaged brains. They won't fight anymore. But the stomach yet growls, the mother yet expects her boy home. Drooling in a chair, murmuring something less than words after his teeth and tongue and throat meet copper shrapnel and dry air and hot sand. "Thank you for your service" a guest stammers, struck stupid by his first glimpse into the lobotomized pain I've seen in a thousand broken bodies. He will forget how it felt. The hammer doesn't remember every nail, but the wood does. Let this Godless place take anyone who doesn't walk out with his own two feet. It's better this way.
+Who told me such things? Certainly not my instructors. We fight for God, and in His name we heal all wounds. It must have been my father. I must have been small. A sapling grows into the sturdiest tree when there are no competing roots. He never fought a day in his life. Not for his country, and certainly not for us.
+Nonsense. Gibberish. Lies. Lies. Lies. Ignore everything I say. Now and for ever. What a waste of time.
+Helmets are for officers, not conscripts, solely because our skulls are thinner.
+[note_once: redford/rant | Redford really has gone mad, hasn't he? These ramblings are too much. |+ captain_redford]
+?> Redford, what's gotten into you?
+	You -- Is it the air down here? I don't want to, but if you go rabid, I'll have to strike you down!
+	[Global add_stat: redford/marriage] Jacqueline, will you marry me?
+	You -- What!? Stop speaking nonsense!
+	My dear, you can't take these things so seriously.
+	[back]
+[back]
