@@ -58,7 +58,6 @@ func get_text_color()->Color:
 	return text_color
 
 func set_text_color(val:Color):
-	#assert(val != Color.black)
 	text_color = val
 	theme.set_color("font_color", "Label", text_color)
 	theme.set_color("font_color", "RichTextLabel", text_color)

@@ -45,10 +45,10 @@ var gravity_stunned_bodies: Dictionary
 var render_distance := 1.0
 var show_lowres := true
 
+var version : GameVersion
+
 # Map of tags to an array of ints accessting game_state.journal
 var journal_by_tag : Dictionary
-
-var version_string: String
 
 const description_path := "res://ui/items/%s.tres"
 
@@ -56,10 +56,10 @@ func _init():
 	var v_major = ProjectSettings.get_setting("global/major_version")
 	var v_minor = ProjectSettings.get_setting("global/minor_version")
 	var v_patch = ProjectSettings.get_setting("global/patch_version")
-	version_string = "%01d.%01d.%01d" % [v_major, v_minor, v_patch]
-	print("Running v", version_string)
+	version = GameVersion.new(v_major, v_minor, v_patch)
+	print("Running ", version)
 	
-	game_state = GameState.new(version_string)
+	game_state = GameState.new(version)
 	journal_by_tag = {}
 	stories = {}
 	stats_temp = {}
@@ -430,7 +430,7 @@ func get_rarity_color(rarity: int) -> Color:
 func reset_game():
 	valid_game_state = false
 	player_spawned = false
-	game_state = GameState.new(version_string)
+	game_state = GameState.new(version)
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	journal_by_tag = {}
@@ -438,7 +438,6 @@ func reset_game():
 	var dir := Directory.new()
 	if dir.file_exists(save_path):
 		print("Backing up save...")
-		# copy as a backup
 		var _x = dir.rename(save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
 
@@ -456,6 +455,12 @@ func load_sync(reload := true):
 		save_thread.wait_to_finish()
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
+		if !(game_state.version is GameVersion):
+			game_state.version = GameVersion.new()
+		if !game_state.version.compatible(version):
+			print_debug("Warning: version loaded (%s) is not compatible with game version (%s). Data may get corrupted!" % 
+				[game_state.version, version])
+		game_state.version = version
 		valid_game_state = true
 		if reload:
 			var _x = get_tree().reload_current_scene()
