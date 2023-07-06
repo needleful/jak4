@@ -48,10 +48,18 @@ var show_lowres := true
 # Map of tags to an array of ints accessting game_state.journal
 var journal_by_tag : Dictionary
 
+var version_string: String
+
 const description_path := "res://ui/items/%s.tres"
 
 func _init():
-	game_state = GameState.new()
+	var v_major = ProjectSettings.get_setting("global/major_version")
+	var v_minor = ProjectSettings.get_setting("global/minor_version")
+	var v_patch = ProjectSettings.get_setting("global/patch_version")
+	version_string = "%01d.%01d.%01d" % [v_major, v_minor, v_patch]
+	print("Running v", version_string)
+	
+	game_state = GameState.new(version_string)
 	journal_by_tag = {}
 	stories = {}
 	stats_temp = {}
@@ -419,11 +427,10 @@ func get_rarity_color(rarity: int) -> Color:
 			return Color.white
 
 #Saving and loading
-
 func reset_game():
 	valid_game_state = false
 	player_spawned = false
-	game_state = GameState.new()
+	game_state = GameState.new(version_string)
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	journal_by_tag = {}
