@@ -39,7 +39,8 @@ var tracked_items = ["bug", "capacitor"]
 
 var stats_temp: Dictionary
 
-var ammo_drop_pity := randf()
+var ammo_drop_pity := 0.5*randf()
+var health_drop_pity := 0.5*randf()
 
 var gravity_stunned_bodies: Dictionary
 var render_distance := 1.0

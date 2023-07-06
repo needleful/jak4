@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://material/particles.gdshader" type="Shader" id=1]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material/particles/dot.png" type="Texture" id=3]
+
+[sub_resource type="QuadMesh" id=1]
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/albedo = Color( 1.73, 0.5, 0.6, 1 )
+shader_param/texture_albedo = ExtResource( 3 )
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("MultiMeshComponent:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.0370981, 0.242776, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "loop"
+length = 5.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("MultiMeshComponent:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2, 3.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0.0370981, 0.242776, 0 ), Vector3( 0.00116829, 0.286276, 0.00927743 ), Vector3( 0.0112878, 0.253368, -0.0389441 ) ]
+}
+
+[node name="health_pickup" instance=ExtResource( 2 )]
+item_id = "health_pickup"
+quantity = 10
+gravity = true
+pseudo_item = true
+
+[node name="MultiMeshComponent" type="MultiMeshComponent" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0370981, 0.242776, 0 )
+mesh = SubResource( 1 )
+material_override = SubResource( 2 )
+
+[node name="OmniLight" type="OmniLight" parent="MultiMeshComponent" index="2"]
+light_color = Color( 0.917647, 0.231373, 0.341176, 1 )
+omni_range = 0.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="5"]
+anims/RESET = SubResource( 3 )
+anims/loop = SubResource( 4 )

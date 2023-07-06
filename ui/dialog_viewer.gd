@@ -446,9 +446,10 @@ func trade_coats():
 	if mentioned("_coat"):
 		get_next()
 		return
-	var coat_item: DialogItem = sequence.find_label("_coat")
+	var coat_item: DialogItem = _find_item("_coat")
 	if coat_item:
 		mention("_coat")
+		call_stack.push_back(current_item)
 		current_item = coat_item
 		advance()
 	else:

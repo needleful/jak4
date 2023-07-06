@@ -8,6 +8,7 @@ export(bool) var respawns := true
 export(bool) var reset_on_player_death := false
 export(bool) var drops_coat := false
 export(float, 0.0, 1.0) var drops_ammo := 0.3
+export(float, 0.0, 1.0) var drops_health := 0.25
 export(Coat.Rarity) var minimum_rarity = Coat.Rarity.Common
 export(Coat.Rarity) var maximum_rarity = Coat.Rarity.Rare
 export(int) var gem_drop_max = 5
@@ -45,6 +46,7 @@ var ai = AI.Idle
 
 var coat_scene:PackedScene = load("res://items/coat_pickup.tscn")
 var gem_scene:PackedScene = load("res://items/gem_pickup.tscn")
+var health_scene:PackedScene = load("res://items/health_pickup.tscn")
 
 var target: Spatial
 var damaged : Array
@@ -213,6 +215,11 @@ func die():
 			var ammo = AmmoSpawner.get_random_ammo()
 			if ammo:
 				drop_item(ammo)
+	if drops_health > 0:
+		Global.health_drop_pity += drops_health
+		if Global.health_drop_pity >= 1:
+			Global.health_drop_pity -= 1
+			drop_item(health_scene.instance())
 	if !respawns:
 		Global.mark_picked(get_path())
 	emit_signal("died", id, get_path())

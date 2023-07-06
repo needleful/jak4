@@ -2,7 +2,6 @@ shader_type spatial;
 render_mode async_hidden,blend_mix,depth_draw_never,cull_back;
 uniform vec4 albedo : hint_color;
 uniform sampler2D texture_albedo : hint_albedo;
-uniform float subsurface_scattering: hint_range(-1.0, 1.0, 0.1) = 1.0;
 
 void vertex() {
 	mat4 mat_world = mat4(
@@ -20,8 +19,8 @@ void vertex() {
 
 void fragment() {
 	vec4 albedo_tex = texture(texture_albedo,UV);
-	ALBEDO = COLOR.rgb * albedo_tex.rgb;
-	ALPHA = COLOR.a * albedo_tex.a;
+	ALBEDO = albedo.rgb * COLOR.rgb * albedo_tex.rgb;
+	ALPHA = albedo.a * COLOR.a * albedo_tex.a;
 }
 
 void light()

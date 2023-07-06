@@ -16,6 +16,7 @@ export(bool) var from_kill := false
 export(AudioStream) var custom_sound
 export(bool) var emit_signal_at_ready := false
 export(bool) var celebrate := false
+export(bool) var pseudo_item := false
 
 const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50
@@ -36,8 +37,7 @@ func _ready():
 	if persistent and Global.is_picked(get_path()):
 		if emit_signal_at_ready:
 			pick()
-		else:
-			queue_free()
+		queue_free()
 		return
 	if from_kill:
 		$area/CollisionShape.disabled = true
@@ -67,18 +67,19 @@ func _physics_process(delta):
 		set_physics_process(false)
 
 func _on_area_body_entered(body):
-	var _x = Global.add_item(item_id, quantity)
 	body.get_item(self)
-	if persistent:
-		Global.mark_picked(get_path())
-		if friendly_name != "":
-			_x = Global.add_stat(friendly_name)
-	pick()
+	if !pseudo_item:
+		var _x = Global.add_item(item_id, quantity)
+		if persistent:
+			Global.mark_picked(get_path())
+			if friendly_name != "":
+				_x = Global.add_stat(friendly_name)
+		pick()
+	queue_free()
 
 func pick():
 	emit_signal("picked")
 	emit_signal("picked_item", item_id)
-	queue_free()
 
 func gravity_stun(_damage):
 	gravity = true

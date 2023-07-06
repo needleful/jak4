@@ -1566,6 +1566,10 @@ func compute_fall_damage(distance):
 	elif distance.y > FALL_DIST_MIN and -velocity.y > FALL_VEL_MIN:
 		var _x = take_damage(FALL_DAM_MIN, Vector3.UP, self)
 
+func add_health(points: int):
+	var new_health = min(max_health, health + points)
+	health = new_health
+
 # Returns true if dead
 func take_damage(damage: int, direction: Vector3, source, _tag := "") -> bool:
 	# warning-ignore:narrowing_conversion
@@ -1818,6 +1822,8 @@ func celebrate(id: String = "", item: Spatial = null, local := Transform()):
 		ui.game.get_node("item_get").show_alert(id.capitalize())
 
 func get_item(item: ItemPickup):
+	if item.item_id == "health_pickup":
+		add_health(item.quantity)
 	if item.item_id == "capacitor" or item.item_id in ui.UPGRADE_ITEMS or item.celebrate:
 		if item.has_node("preview"):
 			var preview = item.get_node("preview")
