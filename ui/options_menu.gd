@@ -26,6 +26,7 @@ func _notification(what):
 
 func set_active(active):
 	if active:
+		$foreground/main_menu/exit_minigame.visible = CustomGames.is_active()
 		Settings.load_settings()
 		set_level(0)
 	else:
@@ -131,3 +132,10 @@ func _on_ui_redraw():
 
 func _on_back_pressed():
 	set_level(level - 1)
+
+func _on_exit_minigame_pressed():
+	if CustomGames.active_game:
+		CustomGames.cancel_game()
+		_on_reload_pressed()
+	else:
+		print_debug("This button should not be visible! ", get_path())

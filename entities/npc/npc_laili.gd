@@ -43,6 +43,7 @@ func start_climb() -> bool:
 	custom_entry = "laili_climb"
 	CustomGames.start(climb_game)
 	var _x = CustomGames.connect("game_completed", self, "_on_game_completed")
+	_x = CustomGames.connect("game_failed", self, "_on_game_failed")
 	get_node(climbing_path).start()
 	global_transform = get_node(laili_start).global_transform
 	Global.get_player().teleport_to(get_node(player_start).global_transform)
@@ -55,13 +56,23 @@ func show_plane() -> bool:
 
 func cancel_climb() -> bool:
 	CustomGames.end(false)
-	get_node(climbing_path).cancel()
-	custom_entry = "laili"
 	return true
 
 func _on_game_completed():
 	if CustomGames.active_game == climb_game:
 		var _x = Global.add_stat("laili/pre_flight")
+	_disconnect_game()
+
+func _on_game_failed():
+	get_node(climbing_path).cancel()
+	custom_entry = "laili"
+	_disconnect_game()
+
+func _disconnect_game():
+	if CustomGames.is_connected("game_completed", self, "_on_game_completed"):
+		CustomGames.disconnect("game_completed", self, "_on_game_completed")
+	if CustomGames.is_connected("game_failed", self, "_on_game_failed"):
+		CustomGames.disconnect("game_failed", self, "_on_game_failed")
 
 func fly():
 	if has_node(plane):

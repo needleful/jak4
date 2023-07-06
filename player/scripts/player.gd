@@ -1731,7 +1731,7 @@ func can_talk():
 	return state == State.Ground
 
 func get_dialog_viewer() -> Node:
-	return $ui/dialog/viewer
+	return $ui/dialog/dialog/viewer
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	if !CustomGames.can_talk():

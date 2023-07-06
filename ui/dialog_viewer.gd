@@ -541,7 +541,7 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogI
 		if items:
 			var found := false
 			for item in items:
-				if l.begins_with("%s(%s)") % [type, item]:
+				if l.begins_with("%s(%s)" % [type, item]):
 					found = true
 					break
 			if !found:
