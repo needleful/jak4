@@ -324,12 +324,22 @@ func choose_reply(item: DialogItem, skip: bool):
 	get_next()
 
 func show_context_reply(item: DialogItem):
+	if !remove_context_reply(item):
+		print_debug("Could not remove context reply: '%d'" % item.text)
 	set_process_input(true)
 	call_stack.push_back(current_item)
 	show_message(item.text, "You")
 	last_speaker = "You"
 	current_item = sequence.canonical_next(item)
 	advance()
+
+func remove_context_reply(item: DialogItem):
+	for key in contextual_replies:
+		for i in contextual_replies[key].size():
+			if contextual_replies[key][i] == item:
+				contextual_replies[key].remove(i)
+				return true
+	return false
 
 # tags is an array of strings
 func use_note(tags:Array):
