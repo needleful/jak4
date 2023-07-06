@@ -196,6 +196,10 @@ func get_bone_ref(ref: String):
 	return get_node("Armature/Skeleton/"+ref)
 
 func step(right: bool, slide := false):
+	if player.water_depth > 0:
+		player.water_cast.play_sound(player.water_depth > player.DEPTH_WATER_WADE)
+		return
+
 	if step_played[int(right)]:
 		return
 	else:

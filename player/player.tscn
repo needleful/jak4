@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=2]
+[gd_scene load_steps=128 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -48,6 +48,15 @@
 [ext_resource path="res://ui/components/date_time.tscn" type="PackedScene" id=46]
 [ext_resource path="res://ui/components/screen_aspect.gd" type="Script" id=47]
 [ext_resource path="res://ui/icons/temp_close.png" type="Texture" id=48]
+[ext_resource path="res://player/scripts/water_cast.gd" type="Script" id=49]
+[ext_resource path="res://audio/player/steppuddle2.wav" type="AudioStream" id=50]
+[ext_resource path="res://audio/player/steppuddle3.wav" type="AudioStream" id=51]
+[ext_resource path="res://audio/player/steppuddle1.wav" type="AudioStream" id=52]
+[ext_resource path="res://audio/player/stepwater4.wav" type="AudioStream" id=53]
+[ext_resource path="res://audio/player/stepwater2.wav" type="AudioStream" id=54]
+[ext_resource path="res://audio/player/stepwater1.wav" type="AudioStream" id=55]
+[ext_resource path="res://audio/player/stepwater3.wav" type="AudioStream" id=56]
+[ext_resource path="res://audio/player/steppuddle4.wav" type="AudioStream" id=57]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -793,6 +802,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 enabled = true
 cast_to = Vector3( 0, -2, 0 )
 collision_mask = 8192
+script = ExtResource( 49 )
+deep_water_sounds = [ ExtResource( 55 ), ExtResource( 54 ), ExtResource( 56 ), ExtResource( 53 ) ]
+shallow_water_sounds = [ ExtResource( 52 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 57 ) ]
 
 [node name="Particles" type="Particles" parent="water_cast"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
@@ -800,6 +812,18 @@ lifetime = 5.0
 local_coords = false
 process_material = SubResource( 83 )
 draw_pass_1 = SubResource( 174 )
+
+[node name="water_step1" type="AudioStreamPlayer3D" parent="water_cast"]
+unit_db = -20.0
+unit_size = 5.0
+max_db = 0.0
+bus = "SFX_Player"
+
+[node name="water_step2" type="AudioStreamPlayer3D" parent="water_cast"]
+unit_db = -20.0
+unit_size = 5.0
+max_db = 0.0
+bus = "SFX_Player"
 
 [node name="base_mesh" parent="." instance=ExtResource( 3 )]
 

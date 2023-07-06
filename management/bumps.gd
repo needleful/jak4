@@ -91,6 +91,10 @@ func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):
 	impact_sound(surf, impact, position)
 	
 func impact_particles(surf:int, impact:int, position: Vector3, normal:Vector3):
+	if !(surf in emitters):
+		surf = Surface.Rock
+	if !(impact in emitters[surf]):
+		impact = Impact.ImpactLight
 	if surf in emitters and impact in emitters[surf]:
 		var emitter_orig = emitters[surf][impact]
 		var e: Particles
@@ -105,18 +109,22 @@ func duplicate_particles(original: Particles):
 	return original.duplicate()
 
 func impact_sound(surf:int, impact:int, position: Vector3):
-	if surf in sounds and impact in sounds[surf] and impact in audio_players:
-		var array:Array = sounds[surf][impact]
-		var sound_orig = audio_players[impact]
-		var s: AudioStreamPlayer3D
-		var aname = _audio_player_name(impact)
-		if ObjectPool.has(aname):
-			s = ObjectPool.get(aname)
-		else:
-			s = sound_orig.duplicate()
-		s.stream = array[randi() % array.size()]
-		s.pitch_scale = rand_range(0.9, 1.2)
-		play_sound_once(aname, s, position)
+	if !(surf in sounds):
+		surf = Surface.Rock
+	if !(impact in sounds[surf]) or !(impact in audio_players):
+		surf = Surface.Rock
+		impact = Impact.ImpactLight
+	var array:Array = sounds[surf][impact]
+	var sound_orig = audio_players[impact]
+	var s: AudioStreamPlayer3D
+	var aname = _audio_player_name(impact)
+	if ObjectPool.has(aname):
+		s = ObjectPool.get(aname)
+	else:
+		s = sound_orig.duplicate()
+	s.stream = array[randi() % array.size()]
+	s.pitch_scale = rand_range(0.9, 1.2)
+	play_sound_once(aname, s, position)
 
 func emit_particles_once(ename: String, e: Particles, position: Vector3, normal: Vector3):
 	get_tree().current_scene.add_child(e)
