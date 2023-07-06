@@ -57,12 +57,12 @@
 	Right..
 {otherwise}[Global task_is_active: strange_girl]
 	[Global stat: laili/friendship][Global stat: laili/flight]
-		You -- Good #{general_time}, Tirus.
+		You -- Good #{general_time()}, Tirus.
 		Tirus -- ... 
 			How do you know my name?
 		[main_speaker scene_play: laili_pops_in]
-		* The door opens behind you.
 		Laili -- Uh.
+			* You hear someone behind you.
 			Hi.
 		Tirus -- ... Hi. I don't think we're introduced. I'm Tirus.
 		Laili -- Yeah.
@@ -208,7 +208,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 	Laili -- With the specters, it'd be even more dangerous. This way we don't have to leave the city.
 	You -- Hm, I suppose so.
 	[Global create_task: flight_test]
-	[Global add_note: Laili has recruited me to test her "aeroplane". Hopefully it doesn't kill me, but I would love that flight jacket. | flight_test laili cliff_village]
+	[Global add_note: Laili has recruited me to test her "aeroplane". Hopefully it doesn't kill me, but I would love that flight jacket. |+ flight_test laili cliff_village]
 {otherwise}[! Global task_is_complete: flight_test]
 	So are you ready to help with the flight test?
 {otherwise}
@@ -281,7 +281,7 @@ Laili -- What's wrong with you, then?
 > [skip] Pretending to believe in God
 > [skip] Wishing I was still a child
 > [skip] You have a point, there's nothing wrong with me...
-[Global add_note: What would I say is my biggest flaw? I suppose there are a fair few to pick from. How much should I concern myself about it? I imagine there's a balance to strike, between total self-ignorance and incessant self-criticism. | jackie jackie/flaws]
+[Global add_note: What would I say is my biggest flaw? I suppose there are a fair few to pick from. How much should I concern myself about it? I imagine there's a balance to strike, between total self-ignorance and incessant self-criticism. |+ jackie jackie/flaws]
 You -- It... I'm sure you can think of something. I'm not perfect.
 	My point is, there are people who care about you, no matter what you think is "wrong" with yourself.
 	Tirus clearly cares. He said he'd been worried for months.
@@ -404,5 +404,9 @@ Laili -- I could take it or leave it, personally. The bed is nice.
 You -- Uh, I'll let you know.
 
 [exit]
+
+:_coat
+* I didn't implement it yet.
+[back]
 
 // Next up: Laili disappears! You find her in maslikir making her plane out of copper.
