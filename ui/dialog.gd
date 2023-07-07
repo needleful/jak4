@@ -16,6 +16,8 @@ func _input(event):
 func set_active(a):
 	set_process_input(a)
 	if !a:
-		last_focused = get_focus_owner()
+		var f = get_focus_owner()
+		if f and is_a_parent_of(f):
+			last_focused = f
 	elif is_instance_valid(last_focused):
 		last_focused.grab_focus()
