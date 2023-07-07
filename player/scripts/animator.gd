@@ -368,8 +368,6 @@ func play_pickup_sound(item):
 		if !item in sounds:
 			item = "_pickup"
 		play_sound(part, item, true)
-		print("Playing: ", item)
-		print_stack()
 
 func lock():
 	anim.process_mode = AnimationTree.ANIMATION_PROCESS_IDLE
