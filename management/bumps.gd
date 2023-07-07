@@ -21,12 +21,16 @@ onready var emitters := {
 	Surface.Sand: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
-		Impact.SlidingImpact:$particle_sand_small
+		Impact.SlidingImpact:$particle_sand_small,
+		Impact.Footstep:null,
+		Impact.SlidingStep:null,
 	},
 	Surface.Rock: {
 		Impact.ImpactLight:$particle_sand_small,
 		Impact.ImpactStrong:$particle_sand_large,
-		Impact.SlidingImpact:$particle_sand_small
+		Impact.SlidingImpact:$particle_sand_small,
+		Impact.Footstep:null,
+		Impact.SlidingStep:null,
 	}
 }
 
@@ -97,6 +101,8 @@ func impact_particles(surf:int, impact:int, position: Vector3, normal:Vector3):
 		impact = Impact.ImpactLight
 	if surf in emitters and impact in emitters[surf]:
 		var emitter_orig = emitters[surf][impact]
+		if !emitter_orig:
+			return
 		var e: Particles
 		var ename = _emitter_name(surf, impact)
 		if ObjectPool.has(ename):
@@ -116,6 +122,8 @@ func impact_sound(surf:int, impact:int, position: Vector3):
 		impact = Impact.ImpactLight
 	var array:Array = sounds[surf][impact]
 	var sound_orig = audio_players[impact]
+	if !array or !sound_orig:
+		return
 	var s: AudioStreamPlayer3D
 	var aname = _audio_player_name(impact)
 	if ObjectPool.has(aname):
@@ -127,7 +135,7 @@ func impact_sound(surf:int, impact:int, position: Vector3):
 	play_sound_once(aname, s, position)
 
 func emit_particles_once(ename: String, e: Particles, position: Vector3, normal: Vector3):
-	get_tree().current_scene.add_child(e)
+	add_child(e)
 	e.global_transform.origin = position
 	var up = e.global_transform.basis.y
 	var angle = up.angle_to(normal)
@@ -138,21 +146,22 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 	e.show()
 	e.restart()
 	e.emitting = true
-	yield(get_tree().create_timer(e.lifetime), "timeout")
+	yield(get_tree().create_timer(e.lifetime, false), "timeout")
 	if is_instance_valid(e):
+		e.restart()
 		e.emitting = false
-		e.get_parent().remove_child(e)
+		remove_child(e)
 		ObjectPool.put(ename, e)
 
 func play_sound_once(type: String, s: AudioStreamPlayer3D, position: Vector3):
-	get_tree().current_scene.add_child(s)
+	add_child(s)
 	s.global_transform.origin = position
 	s.stop()
 	s.play()
-	yield(get_tree().create_timer(s.stream.get_length()), "timeout")
+	yield(get_tree().create_timer(s.stream.get_length(), false), "timeout")
 	if is_instance_valid(s):
 		s.stop()
-		s.get_parent().remove_child(s)
+		remove_child(s)
 		ObjectPool.put(type, s)
 
 func _emitter_name(surface, impact):
