@@ -60,9 +60,9 @@ func get_text_color()->Color:
 func set_text_color(val:Color):
 	text_color = val
 	theme.set_color("font_color", "Label", text_color)
-	theme.set_color("font_color", "RichTextLabel", text_color)
 	theme.set_color("font_color", "Button", text_color)
 	theme.set_color("font_color", "OptionButton", text_color)
 	theme.set_color("font_color_fg", "Tabs", text_color)
 	theme.set_color("font_color_fg", "TabContainer", text_color)
+	theme.set_color("default_color", "RichTextLabel", text_color)
 	emit_signal("ui_redraw")
