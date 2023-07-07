@@ -159,24 +159,24 @@ radial_segments = 5
 flags_unshaded = true
 albedo_color = Color( 8.09, 4.65, 1.16, 1 )
 
-[sub_resource type="Curve" id=5]
+[sub_resource type="Curve" id=16]
 _data = [ Vector2( 0, 1 ), 0.0, -0.933152, 0, 0, Vector2( 0.593583, 0 ), -4.92613, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=6]
+[sub_resource type="CurveTexture" id=17]
 width = 32
-curve = SubResource( 5 )
+curve = SubResource( 16 )
 
-[sub_resource type="ParticlesMaterial" id=7]
+[sub_resource type="ParticlesMaterial" id=18]
 spread = 180.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 2.0
-scale_curve = SubResource( 6 )
+scale_curve = SubResource( 17 )
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=19]
 flags_unshaded = true
 
-[sub_resource type="SphereMesh" id=8]
-material = SubResource( 10 )
+[sub_resource type="SphereMesh" id=20]
+material = SubResource( 19 )
 radius = 0.15
 height = 0.3
 radial_segments = 5
@@ -215,14 +215,13 @@ material/0 = SubResource( 9 )
 [node name="impact" type="Node" parent="." index="4"]
 
 [node name="Particles" type="Particles" parent="impact" index="0"]
-emitting = false
 amount = 12
 lifetime = 0.3
 one_shot = true
 preprocess = 0.2
 randomness = 0.81
-process_material = SubResource( 7 )
-draw_pass_1 = SubResource( 8 )
+process_material = SubResource( 18 )
+draw_pass_1 = SubResource( 20 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." index="5"]
 stream = ExtResource( 4 )
