@@ -179,11 +179,11 @@ func fire():
 	if c.has_method("take_damage"):
 		c.take_damage(attack_damage, laser.global_transform.basis.z, self)
 	var particles := $impact/Particles
-	particles.emitting = false
-	particles.global_transform.origin = (
-		aim_cast.global_transform.origin 
+	var hit_pos = (aim_cast.global_transform.origin 
 		+ aim_cast.global_transform.basis.z*aim_cast.get_hit_length())
-	particles.emitting = true
+	particles.global_transform.origin = hit_pos
+	particles.restart()
+	Bumps.impact_on(c, Bumps.Impact.ImpactStrong, hit_pos, aim_cast.get_hit_normal())
 
 func set_state(new_ai, _force := false):
 	grounded = true
