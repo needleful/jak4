@@ -1834,7 +1834,7 @@ func get_item(item: ItemPickup):
 			celebrate(item.item_id, null)
 	if item.custom_sound:
 		mesh.play_pickup_sound(item.custom_sound)
-	else:
+	elif !item.item_id.begins_with("wep_"):
 		mesh.play_pickup_sound(item.item_id)
 
 func disable():

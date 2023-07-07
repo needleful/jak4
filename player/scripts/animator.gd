@@ -237,8 +237,6 @@ func show_coat(coat: Coat):
 	coat_mesh.set_surface_material(0, mat)
 
 func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
-	if soundType.begins_with("step") and player.velocity.length_squared() < 0.002:
-		return
 	if !audio.has_node(bodyPart):
 		print_debug("No audio player for ", bodyPart)
 		return
@@ -370,6 +368,8 @@ func play_pickup_sound(item):
 		if !item in sounds:
 			item = "_pickup"
 		play_sound(part, item, true)
+		print("Playing: ", item)
+		print_stack()
 
 func lock():
 	anim.process_mode = AnimationTree.ANIMATION_PROCESS_IDLE

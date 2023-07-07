@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=1]
 [ext_resource path="res://dialog/test/context_replies.dialog" type="Resource" id=2]
@@ -6,8 +6,9 @@
 [ext_resource path="res://entities/shop_stock/village_shop.inv" type="Resource" id=4]
 [ext_resource path="res://dialog/shops/village_shop.dialog" type="Resource" id=5]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=6]
-[ext_resource path="res://dialog/side_content/fridge_conspiracy/mishar.dialog" type="Resource" id=7]
+[ext_resource path="res://dialog/test/loop.dialog" type="Resource" id=7]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=8]
+[ext_resource path="res://items/item_pickup.gd" type="Script" id=9]
 [ext_resource path="res://entities/shop_stock/shop_default_stock.inv" type="Resource" id=10]
 [ext_resource path="res://dialog/shops/plateau_shop.dialog" type="Resource" id=11]
 [ext_resource path="res://entities/npc/npc_armstrong.gd" type="Script" id=12]
@@ -21,6 +22,8 @@
 [ext_resource path="res://ui/items/vis/mesh_pistol.tscn" type="PackedScene" id=20]
 [ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=21]
 [ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=22]
+[ext_resource path="res://ui/items/vis/mesh_wave_shot.tscn" type="PackedScene" id=23]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=24]
 
 [sub_resource type="BoxShape" id=253]
 extents = Vector3( 3, 1, 1 )
@@ -167,3 +170,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1, 5 )
 dialog = ExtResource( 7 )
 visual_name = "Mishar"
 friendly_id = "mishar"
+
+[node name="wep_wave_shot_pickup" type="KinematicBody" parent="." groups=["distance_activated", "push"] instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2461, 1.16913, 8.40043 )
+collision_layer = 0
+script = ExtResource( 9 )
+item_id = "wep_wave_shot"
+preview = ExtResource( 23 )
+
+[node name="wep_wave_shot_pickup2" parent="." instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8358, 1.16913, 11.2845 )
+item_id = "wep_wave_shot"
+preview = ExtResource( 23 )
