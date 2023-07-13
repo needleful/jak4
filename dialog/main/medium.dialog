@@ -187,7 +187,7 @@
 					Thanks.
 					[event: end_hug | #false]
 				What do you want to talk about?
-	[goto: main_loop]
+	[goto: main_segment]
 {otherwise}[! Global stat: mum/time]
 	Hm? Did you forget something?
 	{seconds_since_conversation() > 200}
@@ -199,14 +199,14 @@
 		{otherwise} ...
 		You -- Is something wrong?
 		No. It's nothing. Just my memory failing me for a moment. Did you want to talk?
-		> Do you lose awareness when I'm not in the Medium? Like unconsciousness?
+		?> Do you lose awareness when I'm not in the Medium? Like unconsciousness?
 			... It's nothing. It's fine.
 			You -- ... If you say so...
-		> [skip](Pretend nothing is wrong.)
-		[Global add_stat: mum/time]
+			[back]
+		[note: mum/time | Something is wrong with Mum's memory. She didn't realize I'd left. |+ mum]
 	{otherwise}
 		You -- Yeah, I guess I wanted to ask about some more stuff.
-	[goto: main_loop]
+	[goto: main_segment]
 {otherwise}[! Global stat: mum/discussed/jackie][! mentioned: head_empty] {Global.stat("mum/discussed") > 2}
 	You know, Jackie. I've told you a bit about myself.
 	But I'd like to know more about you.
@@ -230,13 +230,13 @@
 			I was probably 12 when they finally told me about you.
 			I wasn't terribly surprised.
 	[Global add_stat: mum/discussed/jackie]
-	[goto: main_loop]
+	[goto: main_segment]
 {otherwise}{Global.stat("mum/timebomb") < 2 or (Global.stat("mum/timebomb") < 5 and Global.stat("mum/info") <= 7)}
 	[Global stat: mum/network]{Global.stat("mum/info") >= 3}
 		[Global add_stat: mum/timebomb]
 	You -- Hi Mum.
 	Hello again, Jackie. Did you need something?
-	[goto: main_loop]
+	[goto: main_segment]
 {otherwise}[! Global stat: mum/end]
 	[mentioned: main_area]
 		[Global stat: mum/discussed/real_mum_found]
@@ -282,6 +282,7 @@
 			[goto: _exit]
 [goto: _exit]
 
+:main_segment
 > I'll see you later, mum.
 	[mentioned: head_empty] See you later.
 	{otherwise}[Global stat: mum/intensity] Goodbye.
@@ -326,7 +327,7 @@
 			You -- I stumbled onto this strange facility. It must connect to the Medium somehow.
 			I think... that is the only explanation.
 
-		[goto: main_loop]
+		[goto: main_segment]
 		[goto: _exit]
 {otherwise}
 	* (ERROR) This conversation should not occur.
@@ -335,7 +336,7 @@
 /// NOTES
 
 // LORE
-:note(war) :- mentioned("mum")
+:note(war) :- !mentioned("head_empty")
 You -- What was the war like?
 {Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
 {otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
@@ -392,14 +393,14 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 // TODO: EVENTS
 
 // PLACES
-:note(visited/village_080) :- mentioned("mum")
+:note(visited/village_080) :- !mentioned("head_empty")
 You -- Do you know anything about those curious little villages up the mountain?
 I've only visited them a few times, to be honest.
 They barely speak Yaqazi.
 // TODO: anything?
 [back]
 
-:note(visited/large_cave_085) :- mentioned("mum")
+:note(visited/large_cave_085) :- !mentioned("head_empty")
 You -- I found an enormous cavern with ancient structures under the plateau!
 [Global stat: mum/caves]
 	Could you tell what it was for?
@@ -429,7 +430,7 @@ You -- I found an enormous cavern with ancient structures under the plateau!
 [Global add_stat: mum/discussed/large_cave_085]
 [back]
 
-:note(visited/graveyard_085) :- mentioned("mum")
+:note(visited/graveyard_085) :- !mentioned("head_empty")
 [Global stats:+ visited/graveyard_085  mum/discussed/large_cave_085]
 	You -- Do you remember that massive cavern I saw? I explored some more and found what I believe is an ancient graveyard.
 {otherwise}
@@ -444,11 +445,13 @@ They are always so strange... More questions than answers.
 [back]
 
 // PEOPLE
-:note(orstad) :- Global.stat("orstad/mum") and mentioned("mum")
+:note(orstad) :- Global.stat("orstad/mum") and !mentioned("head_empty")
 You -- Do you remember Orstad?
 // You can probably find information indicating she knew him?
 [Global stat: mum/abandon]
-	I can't recall any Orstads. Girls our age weren't supposed to mingle with boys.
+	I can't recall any Orstads. 
+	You -- He said he'd seen you when you were teenagers.
+	Girls our age weren't supposed to mingle with boys.
 {otherwise}
 	Orstad... hm, I knew a few Orstads...
 	You -- He said he knew you before the war, though he hadn't talked much with you.
@@ -457,14 +460,14 @@ You -- Do you remember Orstad?
 [Global add_stat: mum/discussed/orstad]
 [back]
 
-:note(balter) :- Global.stat("balter/mum") and mentioned("mum")
+:note(balter) :- Global.stat("balter/mum") and !mentioned("head_empty")
 You -- Do you remember Balter?
 Of course. He was like a brother to me after the invasion began.
 We lived with a few other families in a crowded apartment on Crab Hill.
 // TODO: expand
 [back]
 
-:note(father) :- mentioned("mum")
+:note(father) :- !mentioned("head_empty")
 You -- How did you meet my father?
 I don't know...
 [Global add_stat: mum/discussed]
@@ -472,12 +475,12 @@ I don't know...
 [back]
 [goto: _exit]
 
-:note(jackie) :- mentioned("mum")
+:note(jackie) :- !mentioned("head_empty")
 You -- Do you remember me?
 [back]
 
 // MUM
-:note(mum/network) :- mentioned("mum")
+:note(mum/network) :- !mentioned("head_empty")
 You -- So you're in the network of computers somehow? What's that like?
 // mum/time influences this 
 I didn't even realize I was in a different place at first.
@@ -488,7 +491,7 @@ You -- Perhaps you're a duplicate of the original?
 [Global add_stat: mum/discussed/network]
 [back]
 
-:note(mum/time) :- Global.stat("mum/timebomb") > 2 and mentioned("mum")
+:note(mum/time) :- Global.stat("mum/timebomb") > 2 and !mentioned("head_empty")
 You -- Mum, about your... gaps in memory. Do you want to talk about it?
 ... I don't think there's anything to discuss.
 You -- Obviously there is!
@@ -500,7 +503,7 @@ You -- ...
 [Global add_stat: mum/discussed/time]
 [back]
 
-:note(mum/left) :- mentioned("mum")
+:note(mum/left) :- !mentioned("head_empty")
 You --  Why did you leave?
 // Possible reasons she left
 	// unhappy being a mother

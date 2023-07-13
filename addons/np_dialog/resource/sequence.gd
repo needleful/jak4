@@ -49,6 +49,8 @@ func parent(item) -> DialogItem:
 	return dialog[item.parent]
 
 func canonical_next(item) -> DialogItem:
+	if !item:
+		return null
 	if !(item is DialogItem):
 		item = get(item)
 	if !item:

@@ -8,6 +8,9 @@ func _ready():
 		Global.remember("mum")
 		Global.add_note(
 			"I suppose if I'd been born out here, I'd have been like Mother. Austere. Stoic. That's what Father about her, at least.", ["mum"])
+		var _x = Global.add_stat("mum/left")
+		Global.add_note(
+			"She left without a trace when I was barely a toddler. According to my father, she only took a small suitcase with two changes of clothing.", ["mum", "mum/left"])
 		Global.mark_map(
 			"hideaway",
 			"My landing point on this excursion. Not much to look at aside from the Medium.")

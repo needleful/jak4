@@ -84,7 +84,7 @@ func _input(event):
 		emit_signal("pick_item")
 		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
-		while current_item.type != DialogItem.Type.REPLY and get_next():
+		while current_item and current_item.type != DialogItem.Type.REPLY and get_next():
 			continue
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
@@ -170,7 +170,7 @@ func get_next():
 	else:
 		current_item = c
 		advance()
-		return true
+		return !!current_item
 
 func advance():
 	if !current_item:
@@ -241,7 +241,8 @@ func advance():
 				insert_label("[Error: Unknown message type: %s] %s" % [
 					DialogItem.Type.keys()[current_item.type], current_item.text
 				], "narration")
-	
+	if !current_item:
+		return
 	var context_reply:DialogItem = sequence.canonical_next(current_item)
 	otherwise = false
 	while context_reply and context_reply.type == DialogItem.Type.CONTEXT_REPLY:
