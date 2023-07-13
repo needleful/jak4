@@ -770,13 +770,10 @@ func control_screen(val := true):
 	emit_signal("control_screen", val)
 	return true
 
-func note(stat: String, text: String, tags: Array):
+func note(stat: String, text: String, tags: Array, allow_duplicates := false):
+	if not allow_duplicates and Global.stat(stat):
+		return false
 	if stat != "":
 		var _x = Global.add_stat(stat)
 		tags.append(stat)
 	return Global.add_note(text, tags)
-
-func note_once(stat: String, text:String, tags: Array):
-	if Global.stat(stat):
-		return false
-	return note(stat, text, tags)

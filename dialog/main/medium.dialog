@@ -298,7 +298,7 @@
 	[Global stat: mum/network]
 		[goto: _start]
 	{otherwise}
-		[Global add_stat: mum/network][remember: Mum can apparently travel between different machines throughout the region.]
+		[note: mum/network | Mum can apparently travel between different machines throughout the region. |+ mum]
 		You -- M-mum?! What are you doing here?
 		[Global stat: mum/huh] Huh? I don't know? What is this?
 		{otherwise}I don't know? What is this?
@@ -333,6 +333,63 @@
 	[goto: _exit]
 
 /// NOTES
+
+// LORE
+:note(war) :- mentioned("mum")
+You -- What was the war like?
+{Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
+{otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
+[Global stat: mum/curiosity]
+	I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
+	They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
+The war was like a flood. I had no idea what the politics leading up to the invasion were like.
+It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
+
+[Global stat: mum/plateau]
+	We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
+	For several weeks, we just lived life like normal.
+	I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
+	I was still studying at school, and we would receive news about the war: a hundred Vaelers killed on their way up the plateau, twelve Yaqazi dead. Another village along their path razed, but beaten back for now.
+	The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
+	They fought their way up to the north village and turned it into their base of operations for the plateau.
+	// Why does the Medium tell us this?
+	[! Global stat: mum/crab_hill][Global stat: mum/caves]
+		...
+		When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
+		I remember thinking, "Maybe we can sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
+	I don't think there was ever a way we could escape...
+	The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
+	[Global stat: mum/account/orstad]
+		You -- How did you survive? Orstad said you were shot.
+		// TODO: who knows why Jackie's mum survived? Does anyone?
+		// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
+		[Global add_stat: mum/limp] I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
+		I don't think the soldiers were intending to kill me. I was just a young girl at the time.
+		// TODO: research life in cities taken over by invading forces
+		// Maybe somebody else saved Mum? Who would know?
+		It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
+{otherwise}
+	Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
+	I was lucky to escape unnoticed in the chaos. But my family...
+
+[Global stat: mum/crab_hill]
+	You -- How did you find your way to Crab Hill?
+	[! Global stat: mum/plateau]
+		Our village was at the base of Crab Hill. It was quite difficult, but I was able to scale the wall into the city while the Vaelers were still fighting their way across the valley.
+		[Global add_stat: mum/near_crab_hill]
+	{otherwise}
+		There were only two ways down the plateau without crossing the Vaelers' path: down the cliffs, or through the caves, if you could reach them.
+		I imagine most people attempted the cliffs, but for me, the caves were the obvious choice.
+		There's a village on the cliff overlooking the gulch, and on the side of the cliffs is a small entrance into the cave network.
+		The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
+		It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
+		[Global add_stat: mum/caves]
+[Global add_stat: mum/discussed]
+[Global add_stat: mum/discussed/war]
+[back]
+[goto: _exit]
+
+// TODO: EVENTS
 
 // PLACES
 :note(visited/village_080) :- mentioned("mum")
@@ -387,7 +444,7 @@ They are always so strange... More questions than answers.
 [back]
 
 // PEOPLE
-:note(orstad/mum) :- mentioned("mum")
+:note(orstad) :- Global.stat("orstad/mum") and mentioned("mum")
 You -- Do you remember Orstad?
 // You can probably find information indicating she knew him?
 [Global stat: mum/abandon]
@@ -400,7 +457,7 @@ You -- Do you remember Orstad?
 [Global add_stat: mum/discussed/orstad]
 [back]
 
-:note(balter/mum) :- mentioned("mum")
+:note(balter) :- Global.stat("balter/mum") and mentioned("mum")
 You -- Do you remember Balter?
 Of course. He was like a brother to me after the invasion began.
 We lived with a few other families in a crowded apartment on Crab Hill.
@@ -474,62 +531,6 @@ You --  Why did you leave?
 
 [Global add_stat: mum/discussed]
 [Global add_stat: mum/discussed/leaving]
-[back]
-[goto: _exit]
-
-// LORE
-
-:note(war) :- mentioned("mum")
-You -- What was the war like?
-{Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
-{otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
-[Global stat: mum/curiosity]
-	I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
-	They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
-The war was like a flood. I had no idea what the politics leading up to the invasion were like.
-It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
-
-[Global stat: mum/plateau]
-	We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
-	For several weeks, we just lived life like normal.
-	I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
-	I was still studying at school, and we would receive news about the war: a hundred Vaelers killed on their way up the plateau, twelve Yaqazi dead. Another village along their path razed, but beaten back for now.
-	The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
-	They fought their way up to the north village and turned it into their base of operations for the plateau.
-	// Why does the Medium tell us this?
-	[! Global stat: mum/crab_hill][Global stat: mum/caves]
-		...
-		When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
-		I remember thinking, "Maybe we can sneak our way into that cave and come out somewhere safe". But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
-	I don't think there was ever a way we could escape...
-	The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, "liberated" from our "corrupt" parliament.
-	[Global stat: mum/account/orstad]
-		You -- How did you survive? Orstad said you were shot.
-		// TODO: who knows why Jackie's mum survived? Does anyone?
-		// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
-		[Global add_stat: mum/limp] I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
-		I don't think the soldiers were intending to kill me. I was just a young girl at the time.
-		// TODO: research life in cities taken over by invading forces
-		// Maybe somebody else saved Mum? Who would know?
-		It nearly killed me regardless. The Vaelers weren't terribly interested in providing medical care for their enemies, so I had to treat the wound myself.
-{otherwise}
-	Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
-	I was lucky to escape unnoticed in the chaos. But my family...
-
-[Global stat: mum/crab_hill]
-	You -- How did you find your way to Crab Hill?
-	[! Global stat: mum/plateau]
-		Our village was at the base of Crab Hill. It was quite difficult, but I was able to scale the wall into the city while the Vaelers were still fighting their way across the valley.
-		[Global add_stat: mum/near_crab_hill]
-	{otherwise}
-		There were only two ways down the plateau without crossing the Vaelers' path: down the cliffs, or through the caves, if you could reach them.
-		I imagine most people attempted the cliffs, but for me, the caves were the obvious choice.
-		There's a village on the cliff overlooking the gulch, and on the side of the cliffs is a small entrance into the cave network.
-		The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
-		It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
-		[Global add_stat: mum/caves]
-[Global add_stat: mum/discussed]
-[Global add_stat: mum/discussed/war]
 [back]
 [goto: _exit]
 
