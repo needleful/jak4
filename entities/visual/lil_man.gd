@@ -26,6 +26,6 @@ func coat_stat() -> String:
 
 func show_coat(coat: Coat):
 	var mat = coat.generate_material(false)
-	$Armature/Skeleton/body.set_surface_material(1, mat)
+	$Armature/Skeleton/coat.set_surface_material(0, mat)
 	if hat.get_surface_material_count() > 0:
 		hat.set_surface_material(0, mat)
