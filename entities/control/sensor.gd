@@ -4,6 +4,7 @@ signal toggled(value)
 signal locked
 
 export(String) var key_item := ""
+export(String) var stat := "tablet_key/used"
 
 var active := false
 
@@ -17,6 +18,8 @@ func _on_body_entered(body):
 		return
 	if !active:
 		emit_signal("toggled", true)
+		if stat != "":
+			var _x = Global.add_stat(stat)
 	active = true
 
 func _on_body_exited(_body):

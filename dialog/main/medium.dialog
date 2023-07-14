@@ -41,7 +41,7 @@
 // Should I enumerate how Jackie's state of mind changes? How does that affect the AI? The Medium canonically accounts for it, but does it do so perfectly?
 
 [! Global stat: mum/introvert][! Global stat: mum/intensity]
-	// Special case when she has no personality
+	// Special case when she has no personality, she just reflects Jackie's own personality and her preconceptions.
 	[mention: head_empty]
 
 [main_speaker show_mum]
@@ -109,7 +109,7 @@
 		[goto: _exit]
 
 [! Global stat: mum/introduction]
-	[mentioned: head_empty]
+	[! Global stat: mum/info]
 		[! Global stat: mum/appearance]
 			* The ghost stares blankly
 		{otherwise}
@@ -306,10 +306,15 @@
 		[mentioned: network054] [Global task_exists: lost_phone]
 			You -- This place is inside a cave. I was helping a woman who dropped her phone and found myself stuck down here.
 			Did you find the phone?
+			[Global add_stat: mum/discussed/phone]
 			[Global count: dropped_phone]
 				You -- I think so? I believe it's this little black bar.
-				... Yes honey, that's what phones are.
-				You -- Oh, whatever. These befuddling artifacts are more trouble than they're worth.
+				[mentioned: head_empty]... Yes honey, that's what phones are.
+				?> [!Global stat: mum/knows_phones] How do you know what a phone is?
+					[subtopic: knows_phones]
+					[back]
+				{otherwise} Yes. That's a phone.
+				You -- Oh, whatever. These befuddling artefacts are more trouble than they're worth.
 			{otherwise}
 				You -- I haven't found anything so far.
 				Well, where did she drop it?
@@ -331,12 +336,23 @@
 		[goto: _exit]
 {otherwise}
 	* (ERROR) This conversation should not occur.
-	[goto: _exit]
+[goto: _exit]
+
+// TODO: should she know what a phone is? How much does the Medium get from the outside world?
+:knows_phones
+... Good question.
+?answer> That's not an answer, Mum.
+	I'm not sure, exactly. I can remember people using them in town, but clearly...
+	[back]
+[Global add_stat: medium/doubt]
+[note: mum/knows_phones | Mum has knowledge of the outside world that I don't fully understand, like these strange "phones" everyone has. I don't fully understand how the Medium pulls this knowledge, and Mum doesn't either. |+ mum]
+[forget: answer]
+[back]
 
 /// NOTES
 
 // LORE
-:note(war) :- !mentioned("head_empty")
+:note(war) :- Global.stat("mum/info")
 You -- What was the war like?
 {Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
 {otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
@@ -390,17 +406,70 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 [back]
 [goto: _exit]
 
-// TODO: EVENTS
+// EVENTS
+:note(jackie/flaws)
+You -- If you had to describe your most major flaw, what do you think it would be?
+[Global stat: mum/timebomb]
+	Hm... I don't know. I have many flaws, it's hard to choose just one.
+	[exit]
+{otherwise}[Global stat: mum/killer]
+	I've been told I can be too harsh. I don't know if that's a flaw with me, or the people around me, but I'll say that.
+{otherwise}[Global stat: mum/intensity]
+	Sometimes I can take things too serious, perhaps.
+{otherwise}[Global stat: mum/introvert]
+	I worry sometimes that I'm too cold, or don't connect with people well enough.
+{otherwise}[Global stat: mum/war]
+	I think sometimes I'm too hesitant to act.
+{otherwise}
+	Hm... I'm not sure. Perhaps that's my flaw: indecision.
+Why do you ask?
+
+> It's an interesting conversation starter.
+	I suppose it is. What do you suppose is your deepest flaw?
+	// TODO: fill with responses derived from the player's experience
+	> [skip] Temper issues.
+		You -- Oh, I suppose I'd say my temper.
+			I can get in these moods where I just can't help but escalate the situation.
+		Really? I've never seen you angry.
+		?anger> I can't imagine you've seen me in many moods at all. You left, remember?
+			[mention: jackie/anger]...!
+			I meant in the time we've talked. You've certainly proven your point.
+			[back]
+		[!mentioned: jackie/anger]
+			You -- I've gotten much better at staying composed over the years. I used to be quite prone to cutting remarks.
+			I'm glad to hear you're improving.
+		[forget: anger]
+	> [skip] Self-esteem.
+		You -- It's rather embarrassing, but I suppose I've struggled with my self-esteem for quite some time.
+		[mentioned: head_empty]
+			Oh, I'm sorry to hear that, Jackie. Well, I think you've become a beautiful, remarkable woman.
+			You -- Thank you, Mum. That means a lot to me. 
+		{otherwise}
+			I suppose every woman feels like that at some point.
+	> I probably drink too much laudanum.
+		Oh my God.
+		You -- It's not too much! I've been getting rather irritable without any for my morning tea, but perhaps this trip will kick me of the habit.
+> I'm not sure, really.
+	A rather strange thing to ask without a reason.
+[back]
+
+:note(info/mail_stealing)
+You -- Have you heard anything about mail being frequently stolen?
+[Global stat: info/mail_stealing/contradicted]
+	No. Rarely it happens, but I never had mail stolen. Who told you that?
+{otherwise}
+	Oh yes, it's quite an issue.
+[back]
 
 // PLACES
-:note(visited/village_080) :- !mentioned("head_empty")
+:note(visited/village_080) :- Global.stat("mum/info")
 You -- Do you know anything about those curious little villages up the mountain?
 I've only visited them a few times, to be honest.
 They barely speak Yaqazi.
 // TODO: anything?
 [back]
 
-:note(visited/large_cave_085) :- !mentioned("head_empty")
+:note(visited/large_cave_085) :- Global.stat("mum/info")
 You -- I found an enormous cavern with ancient structures under the plateau!
 [Global stat: mum/caves]
 	Could you tell what it was for?
@@ -430,7 +499,7 @@ You -- I found an enormous cavern with ancient structures under the plateau!
 [Global add_stat: mum/discussed/large_cave_085]
 [back]
 
-:note(visited/graveyard_085) :- !mentioned("head_empty")
+:note(visited/graveyard_085) :- Global.stat("mum/info")
 [Global stats:+ visited/graveyard_085  mum/discussed/large_cave_085]
 	You -- Do you remember that massive cavern I saw? I explored some more and found what I believe is an ancient graveyard.
 {otherwise}
@@ -445,7 +514,7 @@ They are always so strange... More questions than answers.
 [back]
 
 // PEOPLE
-:note(orstad) :- Global.stat("orstad/mum") and !mentioned("head_empty")
+:note(orstad) :- Global.stat("orstad/mum") and Global.stat("mum/info")
 You -- Do you remember Orstad?
 // You can probably find information indicating she knew him?
 [Global stat: mum/abandon]
@@ -460,27 +529,29 @@ You -- Do you remember Orstad?
 [Global add_stat: mum/discussed/orstad]
 [back]
 
-:note(balter) :- Global.stat("balter/mum") and !mentioned("head_empty")
+:note(balter) :- Global.stat("balter/mum") and Global.stat("mum/info")
 You -- Do you remember Balter?
 Of course. He was like a brother to me after the invasion began.
 We lived with a few other families in a crowded apartment on Crab Hill.
 // TODO: expand
 [back]
 
-:note(father) :- !mentioned("head_empty")
+:note(father) :- Global.stat("mum/info")
 You -- How did you meet my father?
+// TODO: big expand
 I don't know...
 [Global add_stat: mum/discussed]
 [Global add_stat: mum/discussed/father]
 [back]
 [goto: _exit]
 
-:note(jackie) :- !mentioned("head_empty")
+:note(jackie) :- Global.stat("mum/info")
 You -- Do you remember me?
+// TODO: big expand
 [back]
 
 // MUM
-:note(mum/network) :- !mentioned("head_empty")
+:note(mum/network) :- Global.stat("mum/info")
 You -- So you're in the network of computers somehow? What's that like?
 // mum/time influences this 
 I didn't even realize I was in a different place at first.
@@ -491,7 +562,7 @@ You -- Perhaps you're a duplicate of the original?
 [Global add_stat: mum/discussed/network]
 [back]
 
-:note(mum/time) :- Global.stat("mum/timebomb") > 2 and !mentioned("head_empty")
+:note(mum/time) :- Global.stat("mum/timebomb") > 2 and Global.stat("mum/info")
 You -- Mum, about your... gaps in memory. Do you want to talk about it?
 ... I don't think there's anything to discuss.
 You -- Obviously there is!
@@ -503,7 +574,7 @@ You -- ...
 [Global add_stat: mum/discussed/time]
 [back]
 
-:note(mum/left) :- !mentioned("head_empty")
+:note(mum/left) :- Global.stat("mum/info")
 You --  Why did you leave?
 // Possible reasons she left
 	// unhappy being a mother
@@ -535,6 +606,198 @@ You --  Why did you leave?
 [Global add_stat: mum/discussed]
 [Global add_stat: mum/discussed/leaving]
 [back]
+[goto: _exit]
+
+// TASKS
+:note(activate_the_medium)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(the_village_gate)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(mum)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(lost_phone)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(strange_girl)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(flight_test)
+* Uh I haven't written this yet go away.
+[back]
+
+// Not completed yet lol
+:note(fridge_conspiracy)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(unwanted_visitors)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(fountain_statue)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(debts_unpaid)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(troops_of_the_manor)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(unblock_the_train)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(unknown_unknowns)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(letter_delivery)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(treasure_of_little_god)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(gift_from_persephone)
+* Uh I haven't written this yet go away.
+[back]
+
+:note(the_tree_tower)
+* Uh I haven't written this yet go away.
+[back]
+
+// ITEMS
+:item(dropped_phone)
+[Global stat: mum/discussed/phone/owner]
+	You -- I still don't understand this contraption.
+	[mentioned: head_empty] You really should return that.
+	{otherwise} Are you keeping it?
+		You -- What would I do with it? I already have a phone at home.
+	[back]
+[Global stat: mum/discussed/phone]
+	You -- I still don't understand this odd machine.
+	You make calls with it. Do you know whose it is?
+{otherwise}[Global task_exists: lost_phone]
+	You -- I found this "cell phone" someone dropped.
+	Do you know whose it is?
+{otherwise}
+	You -- I found this odd artefact in a cavern.
+	A cell phone? Do you know whose it is?
+	?phone> [!Global stat: mum/knows_phones] How do you know what it is?
+		[subtopic: knows_phones]
+		[back]
+	You -- A "cell phone"? 
+You -- I can't tell if it has an owner. I don't see any signature on it.
+Press the power button... It's the center one, near the bottom.
+* You do. A name comes up in Yaqazi script. You can't tell.
+// TODO: animations maybe but low priority
+You -- Can you read it?
+Yes. It's "Kolira". No one I'm familiar with.
+[Global add_stat: mum/discussed/phone]
+[Global add_stat: mum/discussed/phone/owner]
+[forget: phone]
+[back]
+
+:item(tablet_key)
+You -- I found this odd artefact.
+[Global stat: mum/discussed/phone]
+	You -- Is it another "cell phone" everyone's so obsessed with?
+	No, no.
+Let me get a good look.
+// TODO: reuse the phone animations
+... I believe this is some sort of key.
+[Global stat: eye_tablet/used]
+	You -- I've used it as such. I'm not sure what all it unlocks.
+{otherwise}
+	You -- Do you know what it unlocks?
+[Global stat: mum/cave]
+	I don't know where exactly, but look at this symbol here, in the center.
+	You'll see a matching symbol next to the doors it unlocks. The door will open for you if you're holding it.
+[back]
+
+:item(hover_scooter)
+You -- I found this lovely little scooter!
+// TODO: make sure this stays consistent! Currently the player can get a hover scooter next to the photo of Mum
+// If new ways to get appearance are added, make it some other variable
+[Global stat: mum/appearance]
+	[mention: empty_headed] I rode one as a child! They're so exciting, aren't they?
+	{otherwise} I had one as a girl. How do you like it?
+	> I quite like riding it around!
+		It's fun, is it not?
+	> It's hard to use on hills.
+		You just need to pick and choose the right slopes to ride.
+		Once you get into a groove, it's quite fast. Unless you're going straight up a hill. 
+	[Global stat: mum/timebomb] I'm a little jealous, honestly.
+[back]
+
+:item(lantern)
+// TODO: are lanterns only in caves?
+You -- I found a lantern in the mouth of a cave. Do people often leave them around?
+[mention: head_empty]
+	I suppose there was a camp, and they left it behind as they left.
+	I can't imagine they'd go long without noticing if they went into the caves.
+{otherwise}
+	If they die, yes.
+[back]
+
+:item(long_bolt)
+You -- I found this bolt.
+... Alright.
+[back]
+
+:item(mother_letter)
+You -- A woman asked me to deliver this letter.
+> She had the most lovely coat.
+	Is that why you're doing favors for people? Nice coats?
+	You -- Well, why else would I do anything?
+> It's a rather odd thing, isn't it? I don't know why she needed me to deliver it.
+	Yes, I'm not sure why she'd ask a foreigner to deliver her mail.
+> [Global stat: yomi/rude] She was rather rude to me, though I'm not sure she meant it.
+	What did she say?
+	You -- She said I must be "younger than I look".
+	Ouch.
+[back]
+
+// WEAPON TODO: should I track when the player first fires/kills an enemy or just accept the jank?
+:item(wep_grav_gun)
+You -- I found this gravity-distorting weapon.
+Interesting. There's a good deal of ancient technology that plays with gravity. If you can get the elevators to work, they're quite marvelous.
+Perhaps that weapon works on them?
+[back]
+
+:item(wep_pistol)
+You -- I found an old pistol.
+It's an old Vaelic officer's pistol. Do you know how to use it?
+You -- I'm reasonably adept with it.
+// TODO: war, lore, tips, etc
+[back]
+
+:item(wep_time_gun)
+You -- I found the most remarkable device. It's a device that allows me to move through time faster than others.
+What? It changes the flow of time?
+You -- Yes! It's incredible. Everything around me slows to molasses.
+// TODO: is that true?
+Incredible. I should have known they were playing with time itself, but I never saw it myself.
+[back]
+
+:item(wep_wave_shot)
+You -- I found a device that fires a sort of bubble around me.
+Interesting.
+// TODO: maybe that's it lol
+[back]
+
 [goto: _exit]
 
 :_exit

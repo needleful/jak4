@@ -247,7 +247,7 @@ func add_story(key: String) -> bool:
 	if !stat("story_told/"+key):
 		var s = stories[key] as Story
 		if s:
-			add_note(s.text, s.subject)
+			add_note(s.text, [s.subject, key])
 			var _x = add_stat("story_told/"+key)
 			return true
 	return false
