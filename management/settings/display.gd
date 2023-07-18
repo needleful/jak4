@@ -3,7 +3,7 @@ class_name DisplaySettings
 
 signal ui_redraw
 
-var theme:Theme = load("res://ui/default_theme.tres")
+var theme:Theme = load("res://ui/theming/default_theme.tres")
 
 enum ScreenMode {
 	Fullscreen,

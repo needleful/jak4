@@ -1,10 +1,10 @@
-[gd_scene load_steps=128 format=2]
+[gd_scene load_steps=133 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
 [ext_resource path="res://player/base_mesh.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/default_theme.tres" type="Theme" id=5]
+[ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=5]
 [ext_resource path="res://ui/components/big_font.res" type="DynamicFont" id=6]
 [ext_resource path="res://ui/status_menu.gd" type="Script" id=7]
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=8]
@@ -57,6 +57,10 @@
 [ext_resource path="res://audio/player/stepwater1.wav" type="AudioStream" id=55]
 [ext_resource path="res://audio/player/stepwater3.wav" type="AudioStream" id=56]
 [ext_resource path="res://audio/player/steppuddle4.wav" type="AudioStream" id=57]
+[ext_resource path="res://ui/theming/style_panel_black.tres" type="StyleBox" id=58]
+[ext_resource path="res://ui/theming/panel2.png" type="Texture" id=59]
+[ext_resource path="res://ui/theming/focus_cursor.png" type="Texture" id=60]
+[ext_resource path="res://ui/components/focus_cursor.gd" type="Script" id=61]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -316,6 +320,14 @@ tracks/1/keys = {
 
 [sub_resource type="NoiseTexture" id=77]
 noise = SubResource( 78 )
+
+[sub_resource type="StyleBoxTexture" id=186]
+texture = ExtResource( 59 )
+region_rect = Rect2( 0, 0, 81, 81 )
+margin_left = 32.0
+margin_right = 32.0
+margin_top = 32.0
+margin_bottom = 32.0
 
 [sub_resource type="StyleBoxEmpty" id=65]
 
@@ -1142,7 +1154,6 @@ drained_stamina_color = Color( 0.623529, 0, 0, 1 )
 [node name="status_menu" type="Control" parent="ui"]
 pause_mode = 2
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 7 )
@@ -1162,6 +1173,7 @@ __meta__ = {
 [node name="background" type="Panel" parent="ui/status_menu"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_styles/panel = SubResource( 186 )
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="ui/status_menu"]
 anchor_right = 1.0
@@ -1169,15 +1181,16 @@ anchor_bottom = 1.0
 ratio = 1.7778
 script = ExtResource( 47 )
 
-[node name="sized" type="Control" parent="ui/status_menu/AspectRatioContainer"]
+[node name="sized" type="VBoxContainer" parent="ui/status_menu/AspectRatioContainer"]
 margin_top = 22.5042
 margin_right = 1200.0
 margin_bottom = 697.496
 
 [node name="tabs" type="TabContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
 time_scale_response = false
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 1200.0
+margin_bottom = 582.0
+size_flags_vertical = 3
 custom_styles/panel = SubResource( 65 )
 all_tabs_in_front = true
 
@@ -1222,66 +1235,80 @@ time_scale_response = false
 visible = false
 custom_styles/panel = SubResource( 185 )
 
-[node name="PromptLeft" type="HBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
-time_scale_response = false
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -80.0
-margin_right = 342.0
+[node name="prompts" type="HBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
+margin_top = 586.0
+margin_right = 1200.0
+margin_bottom = 650.0
+rect_min_size = Vector2( 0, 32 )
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/PromptLeft"]
+[node name="Control3" type="Control" parent="ui/status_menu/AspectRatioContainer/sized/prompts"]
+margin_right = 20.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="Label" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/prompts"]
 time_scale_response = false
-margin_top = 29.0
-margin_right = 104.0
-margin_bottom = 51.0
+margin_left = 24.0
+margin_top = 21.0
+margin_right = 128.0
+margin_bottom = 43.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 text = "<< Previous"
 
-[node name="input_prompt" parent="ui/status_menu/AspectRatioContainer/sized/PromptLeft" instance=ExtResource( 8 )]
+[node name="input_prompt" parent="ui/status_menu/AspectRatioContainer/sized/prompts" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 108.0
-margin_right = 191.0
-margin_bottom = 80.0
+margin_left = 132.0
+margin_right = 215.0
+margin_bottom = 64.0
 action = "ui_page_down"
 small = true
 
-[node name="PromptRight" type="HBoxContainer" parent="ui/status_menu/AspectRatioContainer/sized"]
-time_scale_response = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -311.0
-margin_top = -80.0
-alignment = 2
+[node name="Control" type="Control" parent="ui/status_menu/AspectRatioContainer/sized/prompts"]
+margin_left = 219.0
+margin_right = 1016.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
 
-[node name="input_prompt" parent="ui/status_menu/AspectRatioContainer/sized/PromptRight" instance=ExtResource( 8 )]
+[node name="input_prompt2" parent="ui/status_menu/AspectRatioContainer/sized/prompts" instance=ExtResource( 8 )]
 time_scale_response = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 155.0
-margin_right = 238.0
-margin_bottom = 80.0
+margin_left = 1020.0
+margin_right = 1103.0
+margin_bottom = 64.0
 action = "ui_page_up"
 small = true
 
-[node name="Label" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/PromptRight"]
+[node name="Label2" type="Label" parent="ui/status_menu/AspectRatioContainer/sized/prompts"]
 time_scale_response = false
-margin_left = 242.0
-margin_top = 29.0
-margin_right = 311.0
-margin_bottom = 51.0
+margin_left = 1107.0
+margin_top = 21.0
+margin_right = 1176.0
+margin_bottom = 43.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 text = "Next >>"
 align = 2
+
+[node name="Control2" type="Control" parent="ui/status_menu/AspectRatioContainer/sized/prompts"]
+margin_left = 1180.0
+margin_right = 1200.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="spacer" type="Control" parent="ui/status_menu/AspectRatioContainer/sized"]
+margin_top = 654.0
+margin_right = 1200.0
+margin_bottom = 674.0
+rect_min_size = Vector2( 0, 20 )
 
 [node name="gameing" type="AspectRatioContainer" parent="ui"]
 visible = false
@@ -2017,6 +2044,7 @@ format = "New Journal Entry: %s/%s"
 
 [node name="dialog" type="AspectRatioContainer" parent="ui"]
 pause_mode = 2
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
@@ -2146,10 +2174,10 @@ __meta__ = {
 [node name="item_list" parent="ui/dialog/dialog/item_context" instance=ExtResource( 44 )]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
+margin_left = 15.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = -15.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ui/dialog/dialog/item_context"]
 anchor_right = 1.0
@@ -2245,36 +2273,39 @@ script = ExtResource( 29 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ui/debug_console"]
 time_scale_response = false
-margin_right = 2400.0
-margin_bottom = 720.0
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 1168.0
+margin_bottom = 688.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ui/debug_console/ScrollContainer"]
 time_scale_response = false
-margin_right = 2400.0
-margin_bottom = 720.0
+margin_right = 1136.0
+margin_bottom = 656.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="logs" type="VBoxContainer" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_right = 2400.0
-margin_bottom = 684.0
+margin_right = 1136.0
+margin_bottom = 620.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LineEdit" type="LineEdit" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
 time_scale_response = false
-margin_top = 688.0
-margin_right = 2400.0
-margin_bottom = 720.0
+margin_top = 624.0
+margin_right = 1136.0
+margin_bottom = 656.0
 
 [node name="story_time" type="Panel" parent="ui"]
 time_scale_response = false
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_styles/panel = ExtResource( 58 )
 script = ExtResource( 34 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ui/story_time"]
@@ -2312,6 +2343,18 @@ one_shot = true
 time_scale_response = false
 wait_time = 0.1
 one_shot = true
+
+[node name="cursor" type="NinePatchRect" parent="ui"]
+margin_left = 499.0
+margin_top = 401.0
+margin_right = 715.0
+margin_bottom = 446.0
+texture = ExtResource( 60 )
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+script = ExtResource( 61 )
 
 [node name="debug_climb" type="Spatial" parent="."]
 time_scale_response = false

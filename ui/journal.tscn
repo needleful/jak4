@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ui/components/scroll.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/icons/temp_close.png" type="Texture" id=7]
+[ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=8]
 
 [sub_resource type="StyleBoxLine" id=66]
 color = Color( 1, 1, 1, 1 )
@@ -17,47 +18,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 8 )
 script = ExtResource( 3 )
 hrule_style = ExtResource( 2 )
-
-[node name="sort" type="HBoxContainer" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -248.0
-margin_top = -172.0
-margin_right = -35.0
-margin_bottom = -108.0
-grow_horizontal = 0
-grow_vertical = 0
-alignment = 2
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="input_prompt" parent="sort" instance=ExtResource( 5 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 83.0
-margin_bottom = 64.0
-action = "ui_sort"
-small = true
-
-[node name="label" type="Label" parent="sort"]
-margin_left = 87.0
-margin_top = 25.0
-margin_right = 213.0
-margin_bottom = 39.0
-text = "Sorting by: Category"
-align = 1
 
 [node name="hbox" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 40.0
+margin_left = 20.0
 margin_top = 20.0
-margin_right = -40.0
+margin_right = -20.0
 margin_bottom = -20.0
 size_flags_horizontal = 3
 custom_constants/separation = 15
@@ -87,7 +57,7 @@ custom_styles/panel = SubResource( 66 )
 
 [node name="notes" type="HBoxContainer" parent="hbox"]
 margin_left = 280.0
-margin_right = 1120.0
+margin_right = 1160.0
 margin_bottom = 680.0
 rect_min_size = Vector2( 0, 300 )
 size_flags_horizontal = 3
@@ -95,12 +65,12 @@ size_flags_vertical = 3
 custom_constants/separation = 40
 
 [node name="text" type="VBoxContainer" parent="hbox/notes"]
-margin_right = 550.0
+margin_right = 569.0
 margin_bottom = 680.0
 size_flags_horizontal = 3
 
 [node name="name" type="Label" parent="hbox/notes/text"]
-margin_right = 550.0
+margin_right = 569.0
 margin_bottom = 54.0
 custom_fonts/font = ExtResource( 4 )
 text = "Name"
@@ -108,23 +78,58 @@ autowrap = true
 
 [node name="line" type="Panel" parent="hbox/notes/text"]
 margin_top = 58.0
-margin_right = 550.0
+margin_right = 569.0
 margin_bottom = 73.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 2 )
 
 [node name="scroll" parent="hbox/notes/text" instance=ExtResource( 6 )]
+margin_right = 569.0
 follow_focus = true
 accept_input = true
 
-[node name="TextureRect" type="TextureRect" parent="hbox/notes"]
-margin_left = 590.0
-margin_right = 840.0
+[node name="sidebar" type="VBoxContainer" parent="hbox/notes"]
+margin_left = 609.0
+margin_right = 880.0
 margin_bottom = 680.0
+
+[node name="picture" type="TextureRect" parent="hbox/notes/sidebar"]
+margin_right = 271.0
+margin_bottom = 250.0
 rect_min_size = Vector2( 250, 250 )
 texture = ExtResource( 1 )
 expand = true
 stretch_mode = 5
+
+[node name="padding" type="Control" parent="hbox/notes/sidebar"]
+margin_top = 254.0
+margin_right = 271.0
+margin_bottom = 612.0
+size_flags_vertical = 3
+
+[node name="sort" type="HBoxContainer" parent="hbox/notes/sidebar"]
+margin_top = 616.0
+margin_right = 271.0
+margin_bottom = 680.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
+
+[node name="input_prompt" parent="hbox/notes/sidebar/sort" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 83.0
+margin_bottom = 64.0
+action = "ui_sort"
+small = true
+
+[node name="label" type="Label" parent="hbox/notes/sidebar/sort"]
+margin_left = 87.0
+margin_top = 21.0
+margin_right = 271.0
+margin_bottom = 43.0
+text = "Sorting by: Category"
+align = 1
 
 [node name="close" type="Button" parent="."]
 anchor_left = 1.0

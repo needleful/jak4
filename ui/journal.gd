@@ -9,11 +9,11 @@ export(bool) var buttons := false
 
 onready var list:Container = $hbox/sidebar/items.container
 onready var subject_name := $hbox/notes/text/name
-onready var subject_image := $hbox/notes/TextureRect
+onready var subject_image := $hbox/notes/sidebar/picture
 onready var subject_notes:Container = $hbox/notes/text/scroll.container
 onready var subject_headline := $hbox/notes/text
 onready var notes := $hbox/notes
-onready var sort_label := $sort/label
+onready var sort_label := $hbox/notes/sidebar/sort/label
 
 const image_path := "res://ui/notes/%s/%s.png"
 var show_background := true
