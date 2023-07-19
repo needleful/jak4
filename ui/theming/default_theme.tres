@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=19 format=2]
+[gd_resource type="Theme" load_steps=34 format=2]
 
 [ext_resource path="res://ui/fonts/averia/Averia-Light.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ui/theming/panel1.png" type="Texture" id=2]
@@ -6,6 +6,13 @@
 [ext_resource path="res://ui/theming/button_pressed.stylebox" type="StyleBox" id=4]
 [ext_resource path="res://ui/theming/tab_bg.png" type="Texture" id=5]
 [ext_resource path="res://ui/theming/tab_fg.png" type="Texture" id=6]
+[ext_resource path="res://ui/theming/scroll_grabber_v.png" type="Texture" id=7]
+[ext_resource path="res://ui/theming/scroll_grabber_h.png" type="Texture" id=8]
+[ext_resource path="res://ui/theming/slider_grabber_h.png" type="Texture" id=9]
+[ext_resource path="res://ui/theming/slider_grabber_h_focused.png" type="Texture" id=10]
+[ext_resource path="res://ui/theming/slider_grabber_h_disabled.png" type="Texture" id=11]
+[ext_resource path="res://ui/theming/scroll_grabber_h_focused.png" type="Texture" id=12]
+[ext_resource path="res://ui/theming/scroll_grabber_v_focused.png" type="Texture" id=13]
 
 [sub_resource type="StyleBoxEmpty" id=7]
 
@@ -14,6 +21,44 @@
 [sub_resource type="StyleBoxEmpty" id=10]
 
 [sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxTexture" id=24]
+texture = ExtResource( 8 )
+region_rect = Rect2( 0, 0, 40, 27 )
+margin_left = 16.0
+margin_right = 16.0
+margin_top = 15.0
+margin_bottom = 15.0
+expand_margin_left = 12.0
+expand_margin_right = 12.0
+expand_margin_top = 6.0
+expand_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id=22]
+texture = ExtResource( 12 )
+region_rect = Rect2( 0, 0, 40, 27 )
+margin_left = 16.0
+margin_right = 16.0
+margin_top = 15.0
+margin_bottom = 15.0
+expand_margin_left = 12.0
+expand_margin_right = 12.0
+expand_margin_top = 6.0
+expand_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id=21]
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+draw_center = false
+border_width_top = 1
+border_width_bottom = 2
+border_color = Color( 1, 0.827451, 0.4, 1 )
+
+[sub_resource type="StyleBoxFlat" id=23]
+bg_color = Color( 0.184314, 0.0941176, 0, 1 )
+border_width_top = 1
+border_width_bottom = 2
+border_color = Color( 1, 0.827451, 0.4, 1 )
 
 [sub_resource type="StyleBoxTexture" id=6]
 texture = ExtResource( 2 )
@@ -25,6 +70,9 @@ margin_bottom = 32.0
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0, 0, 0, 0.305882 )
+
+[sub_resource type="StyleBoxEmpty" id=20]
+content_margin_right = 6.0
 
 [sub_resource type="StyleBoxTexture" id=15]
 texture = ExtResource( 5 )
@@ -41,13 +89,44 @@ margin_left = 12.0
 margin_right = 12.0
 margin_top = 12.0
 margin_bottom = 12.0
-expand_margin_bottom = 3.0
+expand_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxEmpty" id=13]
 
 [sub_resource type="StyleBoxEmpty" id=14]
 
 [sub_resource type="StyleBoxEmpty" id=16]
+
+[sub_resource type="StyleBoxTexture" id=25]
+texture = ExtResource( 7 )
+margin_left = 15.0
+margin_right = 15.0
+margin_top = 16.0
+margin_bottom = 16.0
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+expand_margin_top = 12.0
+expand_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id=19]
+texture = ExtResource( 13 )
+region_rect = Rect2( 0, 0, 31, 40 )
+margin_left = 15.0
+margin_right = 15.0
+margin_top = 16.0
+margin_bottom = 16.0
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+expand_margin_top = 12.0
+expand_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id=18]
+content_margin_left = 6.0
+content_margin_right = 6.0
+draw_center = false
+border_width_left = 1
+border_width_right = 2
+border_color = Color( 1, 0.827451, 0.4, 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -67,6 +146,16 @@ CheckButton/styles/focus = SubResource( 12 )
 CheckButton/styles/hover = ExtResource( 3 )
 CheckButton/styles/hover_pressed = ExtResource( 4 )
 CheckButton/styles/pressed = ExtResource( 4 )
+HScrollBar/styles/grabber = SubResource( 24 )
+HScrollBar/styles/grabber_highlight = SubResource( 22 )
+HScrollBar/styles/grabber_pressed = SubResource( 22 )
+HScrollBar/styles/scroll = SubResource( 21 )
+HScrollBar/styles/scroll_focus = SubResource( 21 )
+HSlider/icons/grabber = ExtResource( 9 )
+HSlider/icons/grabber_disabled = ExtResource( 11 )
+HSlider/icons/grabber_highlight = ExtResource( 10 )
+HSlider/styles/grabber_area_highlight = SubResource( 23 )
+HSlider/styles/slider = SubResource( 21 )
 Label/colors/font_color = Color( 1, 0.956863, 0.858824, 1 )
 MenuButton/styles/hover = ExtResource( 3 )
 MenuButton/styles/pressed = ExtResource( 4 )
@@ -74,6 +163,7 @@ Panel/styles/panel = SubResource( 6 )
 PanelContainer/styles/panel = SubResource( 6 )
 ProgressBar/styles/bg = SubResource( 4 )
 RichTextLabel/colors/default_color = Color( 1, 1, 1, 1 )
+ScrollContainer/styles/bg = SubResource( 20 )
 TabContainer/styles/tab_bg = SubResource( 15 )
 TabContainer/styles/tab_fg = SubResource( 17 )
 Tabs/colors/font_color_fg = Color( 1, 0.956863, 0.858824, 1 )
@@ -82,3 +172,8 @@ Tabs/styles/button_pressed = SubResource( 14 )
 Tabs/styles/tab_bg = SubResource( 15 )
 Tabs/styles/tab_disabled = SubResource( 16 )
 Tabs/styles/tab_fg = SubResource( 17 )
+VScrollBar/styles/grabber = SubResource( 25 )
+VScrollBar/styles/grabber_highlight = SubResource( 19 )
+VScrollBar/styles/grabber_pressed = SubResource( 19 )
+VScrollBar/styles/scroll = SubResource( 18 )
+VScrollBar/styles/scroll_focus = SubResource( 18 )

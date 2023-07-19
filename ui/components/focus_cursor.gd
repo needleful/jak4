@@ -9,7 +9,7 @@ var target_size := Vector2()
 func _ready():
 	var _x = get_viewport().connect("gui_focus_changed", self, "track_item", [], CONNECT_DEFERRED)
 
-func _process(delta):
+func _process(_delta):
 	if !is_instance_valid(tracked_item) or !tracked_item:
 		hide()
 		set_process(false)
