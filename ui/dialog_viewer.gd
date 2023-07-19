@@ -315,7 +315,8 @@ func _on_input_timer_timeout():
 		if $shop.items_window.get_child_count() >= 3:
 			$shop.items_window.get_child(2).grab_focus()
 	else:
-		replies.get_child(0).grab_focus()
+		if replies.is_visible_in_tree() and replies.get_child_count():
+			replies.get_child(0).grab_focus()
 
 func choose_reply(item: DialogItem, skip: bool):
 	if !skip:

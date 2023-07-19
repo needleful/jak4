@@ -4,6 +4,7 @@ var tracked_item : Control
 const padding = Vector2(6,6)
 onready var tween: SceneTreeTween
 var target_position := Vector2()
+var target_size := Vector2()
 
 func _ready():
 	var _x = get_viewport().connect("gui_focus_changed", self, "track_item", [], CONNECT_DEFERRED)
@@ -15,13 +16,14 @@ func _process(delta):
 		tracked_item = null
 		return
 	visible = tracked_item.is_inside_tree() and tracked_item.is_visible_in_tree()
-	if visible and tracked_item.rect_global_position != target_position:
+	if visible and tracked_item.rect_global_position != target_position or tracked_item.rect_size != target_size:
 		if tween:
 			tween.kill()
 		tween = create_tween().set_trans(
 			Tween.TRANS_EXPO).set_ease(
 			Tween.EASE_IN_OUT).set_parallel(true)
 		target_position = tracked_item.rect_global_position
+		target_size = tracked_item.rect_size
 		var _x = tween.tween_property(self, "rect_global_position", target_position - padding, 0.15)
 		_x = tween.tween_property(self, "rect_size", tracked_item.rect_size + padding*2, 0.3)
 

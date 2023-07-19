@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/inventory.gd" type="Script" id=1]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=9]
 [ext_resource path="res://ui/inventory_env.res" type="Environment" id=10]
 [ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/theming/panel3_transparent.png" type="Texture" id=12]
 
 [sub_resource type="World" id=4]
 environment = ExtResource( 10 )
@@ -25,7 +26,7 @@ script = ExtResource( 1 )
 player_description = ExtResource( 5 )
 
 [node name="Viewport" type="Viewport" parent="."]
-size = Vector2( 512, 512 )
+size = Vector2( 1024, 1024 )
 world = SubResource( 4 )
 handle_input_locally = false
 render_target_update_mode = 3
@@ -53,41 +54,40 @@ margin_bottom = -20.0
 
 [node name="items" type="VBoxContainer" parent="box"]
 margin_right = 350.0
-margin_bottom = 680.0
+margin_bottom = 1040.0
 
 [node name="item_list" parent="box/items" instance=ExtResource( 11 )]
-margin_bottom = 476.0
-
-[node name="padding" type="Control" parent="box/items"]
-margin_top = 480.0
-margin_right = 350.0
-margin_bottom = 680.0
-rect_min_size = Vector2( 0, 200 )
+margin_bottom = 1040.0
 
 [node name="viewport_window" type="TextureRect" parent="box"]
 margin_left = 354.0
-margin_right = 860.0
-margin_bottom = 680.0
+margin_right = 1580.0
+margin_bottom = 1040.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 1 )
 expand = true
 stretch_mode = 6
 flip_v = true
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Panel" type="PanelContainer" parent="box/viewport_window"]
-anchor_right = 0.219
-margin_left = 15.0
-margin_top = 4.0
-margin_right = 108.691
-margin_bottom = 143.0
+margin_left = 30.0
+margin_top = 30.0
+margin_right = 389.185
+margin_bottom = 191.0
 rect_min_size = Vector2( 320, 0 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="MarginContainer" type="MarginContainer" parent="box/viewport_window/Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 313.0
-margin_bottom = 151.0
+margin_right = 352.185
+margin_bottom = 154.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -96,48 +96,64 @@ custom_constants/margin_bottom = 20
 [node name="item" type="VBoxContainer" parent="box/viewport_window/Panel/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 296.0
-margin_bottom = 124.0
+margin_right = 335.0
+margin_bottom = 127.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="name" type="Label" parent="box/viewport_window/Panel/MarginContainer/item"]
-margin_right = 286.0
+margin_right = 325.0
 margin_bottom = 54.0
 custom_fonts/font = ExtResource( 3 )
 text = "Item"
 
 [node name="spacer" type="Panel" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 58.0
-margin_right = 286.0
+margin_right = 325.0
 margin_bottom = 73.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 6 )
 
 [node name="description" type="Label" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 77.0
-margin_right = 286.0
+margin_right = 325.0
 margin_bottom = 91.0
 text = "Item"
 autowrap = true
 
 [node name="spacer2" type="Panel" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 95.0
-margin_right = 286.0
+margin_right = 325.0
 margin_bottom = 110.0
 rect_min_size = Vector2( 0, 15 )
 custom_styles/panel = ExtResource( 6 )
 
 [node name="sub_items" type="GridContainer" parent="box/viewport_window/Panel/MarginContainer/item"]
 margin_top = 114.0
-margin_right = 286.0
+margin_right = 325.0
 margin_bottom = 114.0
 columns = 2
 
+[node name="NinePatchRect" type="NinePatchRect" parent="box/viewport_window"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 2.0
+margin_right = 3.0
+margin_bottom = 2.0
+texture = ExtResource( 12 )
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+__meta__ = {
+"_edit_lock_": true
+}
+
 [node name="small_items" type="GridContainer" parent="box"]
-margin_left = 864.0
-margin_right = 1120.0
-margin_bottom = 680.0
+margin_left = 1584.0
+margin_right = 1840.0
+margin_bottom = 1040.0
 rect_min_size = Vector2( 256, 0 )
 size_flags_horizontal = 0
 custom_constants/vseparation = 25
