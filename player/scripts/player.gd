@@ -1937,7 +1937,10 @@ func set_state(next_state: int):
 			can_wall_cling = true
 			dash_charges = Global.count("dash_charge")
 			stamina = max_stamina
-		State.Fall, State.LedgeFall, State.WadingFall, State.WaveJump:
+		State.WadingFall:
+			mesh.transition_to("Fall")
+			mesh.step(false)
+		State.Fall, State.LedgeFall, State.WaveJump:
 			mesh.transition_to("Fall")
 		State.BaseJump:
 			start_jump(JUMP_VEL_BASE)
@@ -2103,7 +2106,7 @@ func set_state(next_state: int):
 			gun.unlock()
 		State.WadingJump:
 			start_jump(5.0)
-			mesh.play_jump()
+			mesh.play_wading_jump()
 			gun.unlock()
 		State.WallCling:
 			can_air_spin = true

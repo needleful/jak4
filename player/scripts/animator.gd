@@ -267,6 +267,10 @@ func stop_particles():
 func ground_transition(state: String):
 	transition_to(state)
 
+func play_wading_jump():
+	step(true)
+	transition_to("BaseJump")
+
 func play_jump():
 	play_sound("feet", "jump", true)
 	transition_to("BaseJump")
