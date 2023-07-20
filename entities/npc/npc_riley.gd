@@ -26,7 +26,7 @@ func _init():
 func _ready():
 	if only_if_saved and !Global.stat("riley/saved"):
 		queue_free()
-	elif Global.stat(str(get_path()) + "/saved"):
+	elif Global.stat(local_saved_stat()):
 		saved = true
 		if delete_if_saved:
 			queue_free()
@@ -51,9 +51,15 @@ func _on_target_died(_id, path):
 		p.game_ui.remove_target(get_node(enemies[idx]))
 	enemies.remove(idx)
 
+func local_saved_stat() -> String:
+	if custom_entry != "":
+		return "riley/"+custom_entry+"/saved"
+	else:
+		return str(get_path()) + "/saved"
+
 func complete_game():
 	var _x = Global.add_stat("riley/saved")
-	_x = Global.add_stat(str(get_path()) + "/saved")
+	_x = Global.add_stat(local_saved_stat())
 	saved = true
 	if CustomGames.is_playing(game):
 		CustomGames.end(true)

@@ -2,13 +2,12 @@
 	Ah, Jackie the coats girl! Hello!
 	You -- "Coats girl"?
 	[main_speaker boast]
-	[remember: According to him, I'm the "Coats Girl". I don't have that many coats, I don't think.]
+	[note: armstrong/coats_girl | According to him, I'm the "Coats Girl". I don't have that many coats, I don't think. |+ armstrong]
 	You brought your whole wardrobe, did you not?
 	You -- Not at all! I only had space for three jackets.
 		I have one for out in the sun, another for the cold, and a third just in case.
 	[main_speaker shrug]
 	See! Coats Girl.
-	[Global add_stat: armstrong/coats_girl]
 	[Global add_stat: armstrong/intro]
 
 	[Global task_is_complete: activate_the_medium]
@@ -99,7 +98,7 @@
 					You -- I've been in the cave, but I didn't find anything.
 					I would make sure to be thorough. Don't want to miss anything right under our noses.
 				{otherwise}
-					[Global add_note: Armstrong thinks there's a capacitor in the local cave. |+ activate_the_medium hideaway]
+					[note: armstrong/cave_capacitor_124 | Armstrong thinks there's a capacitor in the local cave. |+ activate_the_medium hideaway]
 					You -- I haven't been in the cave yet.
 					That's the first place I would check.
 		{otherwise}
@@ -240,11 +239,82 @@
 	You -- Yes.
 	Alright, I'll show you the ropes.
 	[main_speaker start_tutorial: pistol]
-	[exit]
 > [skip] Maybe Layer (Skip Tutorial)
 	You -- Maybe Later.
 	Okay, let me know. I don't want you hurting yourself.
-	[exit]
+[exit]
+
+:note(armstrong/coats_girl)
+You -- Do people really call me "Coats Girl"?
+Well, mostly me.
+[back]
+
+:note(jackie)
+You -- How did you first hear I was coming to this village? Was it just rumors?
+It's big news for tourists to come here! A remote city in a remote province of a remote country.
+It's little wonder people were talking about the curious rich woman traveling with her bags of coats!
+You -- It was only three...
+[back]
+
+:note(host)
+You -- What do you thing of the man I'm renting my room from? He seems nice enough.
+Oh, Yulat? You are not renting from him, you are renting from the village. He is hosting you.
+You -- How does that work?
+Well, the village owns all the buildings, so the money you pay is to the city, where it uh, probably pays him at some point.
+// I don't know politics, fill this in with something
+[back] 
+
+:note(mum)
+You -- Did you get along with your parents?
+You say that like they died.
+You -- Oh, sorry, /do/ you get along with them?
+Oh no, they /are/ dead. It was strange you guessed it.
+You -- Oh my God! I'm so sorry...
+Hahaha! No, no. It is life. Parents have children, and then they die. It is the natural order of things.
+You -- But you're rather young, aren't you? You can't be much older than me. If you don't mind me asking, what happened?
+Oh, nothing shocking. My father got sick when I was eight or so. He just got weaker and weaker until he died.
+My mother had the same end, about ten years later.
+You -- You were eighteen? How tragic! I'm very sorry for you loss. I lost my mother, but I was just a baby. That sounds like the most difficult time to lose a parent...
+Thanks. It was hard for a while, but this is a hard place. You get used to such things.
+[note: armstrong/parents | Armstrong's parents died of illness. His father when he was eight, and his mother when he was eighteen. He doesn't seem terribly upset, but perhaps he's putting up a strong front. |+ armstrong]
+[back]
+
+:note(the_tree_tower)
+:note(riley) :- Global.stat("riley/saved")
+[Global stat: riley/_entry113/saved]
+	You -- I met a young woman named Riley up by the tower. She seemed to be some sort of explorer.
+{otherwise}
+	You -- I met a young woman named Riley. She seemed to be some sort of explorer.
+[Global task_exists: the_tree_tower] 
+	You -- She said she's trying to unlock the Tree Tower.
+	She is? Uh, I would not be so eager to do such a thing.
+	You -- Why not?
+	The tower has been sealed for all of known history, perhaps for a reason.
+	Many people, such as I, believe the specters are created inside.
+	?specters> That sounds like a good reason to investigate. Stamp those pests out for good, right?
+		If you were the greatest warrior in the world, maybe. It could wipe out the entire province.
+		[back]
+	[forget: specters]
+{otherwise}
+	Oh, I can imagine. There are many ruins out in these parts, it is practically the only source of entertainment if you don't want to play football.
+[back]
+
+:note(hideaway)
+You -- Have you lived in this village your whole life?
+I lived up on the cliffs to the east of here when I was younger, but it got too dangerous with the specters, especially after my father died.
+[! Global stat: armstrong/parents]
+	You -- Your father died? I'm terribly sorry to hear that. Was it the spectres?
+	No, no. It was simply his time, and he died from illness. My mother went about ten years later. That was, oh, six years ago or so.
+	[note: armstrong/parents | Armstrong's parents died of illness. His father when he was eight, and his mother when he was eighteen. He doesn't seem terribly upset, but perhaps he's putting up a strong front. |+ armstrong]
+You -- Do you miss the cliffs?
+Eh, not really. The caves were fun. I heard a kid fell and died.
+You -- Oh my God! That's horrible!
+It is, but it might have just been a story to keep us out. It did not, of course. We were destined for those caves! 
+[Global mark_map: actual_cliff_village]
+[note: amstrong/cliff_village_caves | There are dangerous cliffs outside this village. |+ actual_cliff_village]
+[Global add_note: Armstrong used to explore caves in his childhood, before he moved to this village. |+ armstrong amstrong/cliff_village_caves]
+[back]
+
 :_entry_ending
 [! Global stat: armstrong/discussed/ending]
 	Are you sure it is safe for you to travel? Not shook too bad or anything?
