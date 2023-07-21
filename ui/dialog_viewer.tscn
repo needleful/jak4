@@ -3,19 +3,13 @@
 [ext_resource path="res://ui/dialog_viewer.gd" type="Script" id=1]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://ui/fonts/averia/Averia-LightItalic.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://ui/fonts/averia/Averia-Italic.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://ui/fonts/font_italics.res" type="DynamicFont" id=4]
 [ext_resource path="res://ui/shop.gd" type="Script" id=5]
 [ext_resource path="res://ui/item_counter.gd" type="Script" id=6]
-[ext_resource path="res://ui/components/hrule.stylebox" type="StyleBox" id=7]
+[ext_resource path="res://ui/theming/hrule.stylebox" type="StyleBox" id=7]
 [ext_resource path="res://ui/components/scroll_to_focused.gd" type="Script" id=8]
-
-[sub_resource type="DynamicFont" id=5]
-size = 20
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 20
-font_data = ExtResource( 4 )
+[ext_resource path="res://ui/fonts/font_bold.res" type="DynamicFont" id=9]
+[ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -28,10 +22,11 @@ font_data = ExtResource( 2 )
 [node name="dialog_viewer" type="Panel" groups=["ui_settings_custom"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 10 )
 script = ExtResource( 1 )
 fonts = {
-"bold": SubResource( 5 ),
-"italic": SubResource( 4 ),
+"bold": ExtResource( 9 ),
+"italic": ExtResource( 4 ),
 "narration": SubResource( 1 ),
 "you": SubResource( 3 )
 }
@@ -49,8 +44,8 @@ margin_right = -20.0
 margin_bottom = -20.0
 
 [node name="messages" type="ScrollContainer" parent="messages"]
-margin_right = 1160.0
-margin_bottom = 586.0
+margin_right = 1880.0
+margin_bottom = 946.0
 rect_min_size = Vector2( 0, 90 )
 size_flags_vertical = 3
 script = ExtResource( 8 )
@@ -58,15 +53,19 @@ container_path = NodePath("list")
 accept_input = true
 
 [node name="list" type="VBoxContainer" parent="messages/messages"]
-margin_right = 1160.0
-margin_bottom = 586.0
+margin_right = 1874.0
+margin_bottom = 946.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="RichTextLabel" type="RichTextLabel" parent="messages/messages/list"]
+margin_right = 1874.0
+text = "i am very ebic!!!"
+
 [node name="replies" type="VBoxContainer" parent="messages"]
-margin_top = 590.0
-margin_right = 1160.0
-margin_bottom = 680.0
+margin_top = 950.0
+margin_right = 1880.0
+margin_bottom = 1040.0
 rect_min_size = Vector2( 0, 90 )
 
 [node name="shop" type="VBoxContainer" parent="."]

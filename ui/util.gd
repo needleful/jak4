@@ -9,6 +9,7 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 	b.clip_text = false
 	var l := RichTextLabel.new()
 	b.add_child(l)
+	l.fit_to_content = true
 	l.anchor_left = 0
 	l.anchor_right = 1
 	l.anchor_top = 0

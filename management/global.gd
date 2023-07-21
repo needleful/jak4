@@ -8,6 +8,8 @@ signal journal_updated(category, subject)
 var using_gamepad := false
 
 var game_state : GameState
+# The game doesn't save in test scenes
+var test_scene := false
 
 export(Array, Texture) var coat_textures: Array
 export(Texture) var coat_detail: Texture
@@ -477,6 +479,8 @@ func load_sync(reload := true):
 		valid_game_state = false
 
 func save_async():
+	if test_scene:
+		return
 	if save_thread.is_active():
 		return
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
@@ -485,6 +489,8 @@ func save_async():
 		print_debug("ERROR: Save failed with error code ", res)
 
 func save_sync():
+	if test_scene:
+		return
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")

@@ -118,6 +118,7 @@ func set_active(a):
 	if active:
 		update_zoom()
 		for g in scroll_area.get_children():
+			g.notes.clear()
 			var n = Global.get_notes_by_tag(g.name)
 			if !n or n.empty():
 				g.hide()
@@ -125,4 +126,6 @@ func set_active(a):
 				g.show()
 				for note_pair in n:
 					g.notes.append(note_pair[0])
-
+	else:
+		for g in scroll_area.get_children():
+			g.notes.clear()

@@ -36,6 +36,7 @@ const RESULT_END := {"result":"end"}
 const RESULT_NOSKIP := {"result":"noskip"}
 
 var r_interpolate := RegEx.new()
+var r_italics := RegEx.new()
 
 var otherwise := false
 var talked := 0
@@ -66,11 +67,12 @@ func _init():
 	discussed = {}
 	label_conditions = {}
 	contextual_replies = {}
+	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
+	_x = r_italics.compile("/")
 
 func _ready():
-	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	ui_settings_apply()
-	_x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
+	var _x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
 	end()
 
 func _input(event):
@@ -398,20 +400,30 @@ func insert_label(text: String, format: String, font_override := ""):
 	if format in colors:
 		color = colors[format]
 	
-	var label := Label.new()
-	label.autowrap = true
-	label.text = interpolate(text)
+	var label := RichTextLabel.new()
+	label.fit_to_content = true
+	label.scroll_active = false
+	label.bbcode_enabled = true
+	label.bbcode_text = interpolate(text)
 	if color != Color.black:
 		label.add_font_override("font", font)
 		label.add_color_override("font_color", color)
 	messages.add_child(label)
 
-func interpolate(line: String):
+func interpolate(line: String) -> String:
 	var matches := r_interpolate.search_all(line)
 	var text := line
 	for m in matches:
 		var ex = evaluate(m.get_string(1))
 		text = text.replace(m.get_string(), str(ex))
+	if text.count("/"):
+		var italicized := false
+		var read_in := text.split("/")
+		var out_string = read_in[0]
+		for i in range(1, read_in.size()):
+			out_string += ("[i]" if !italicized else "[/i]") + read_in[i]
+			italicized = !italicized
+		text = out_string
 	return text
 
 func evaluate(ex_text: String):
