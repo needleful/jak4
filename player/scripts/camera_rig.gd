@@ -6,6 +6,7 @@ onready var pitch : Spatial = $yaw/pitch
 onready var spring : SpringArm = $yaw/pitch/SpringArm
 onready var camera:Camera = $yaw/pitch/Camera
 onready var tween:Tween = $cam_tween
+onready var settings = Settings.sub_options["Controls"]
 
 const MIN_CAMERA_DIFF := -1.0
 const MAX_CAMERA_DIFF := 1.0
@@ -141,13 +142,13 @@ func _process(delta):
 	var analog_aim = Input.get_vector("cam_left", "cam_right", "cam_down", "cam_up")
 	analog_aim *= analog_sns
 	
-	var aim : Vector2 = player.sensitivity*(mouse_aim + delta*60*analog_aim)
+	var aim : Vector2 = settings.camera_sensitivity*(mouse_aim + delta*60*analog_aim)
 	if zoomed:
 		aim *= zoomed_sns_factor
 
-	if player.invert_x:
+	if settings.invert_x:
 		aim.x *= -1
-	if player.invert_y:
+	if settings.invert_y:
 		aim.y *= -1
 	
 	yaw.rotate_y(aim.x)

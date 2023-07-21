@@ -308,10 +308,6 @@ var jump_time := TIME_BASE_JUMP
 var jump_time_min := TIME_JUMP_MIN
 
 var current_coat: Coat
-# Camera settings
-var sensitivity := 1.0
-var invert_x := false
-var invert_y := false
 
 var current_weapon : String
 
