@@ -407,7 +407,7 @@ func insert_label(text: String, format: String, font_override := ""):
 	label.bbcode_text = interpolate(text)
 	if color != Color.black:
 		label.add_font_override("font", font)
-		label.add_color_override("font_color", color)
+		label.add_color_override("default_color", color)
 	messages.add_child(label)
 
 func interpolate(line: String) -> String:
