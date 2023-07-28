@@ -20,6 +20,7 @@ const ZOOM_SPEED := 3.0
 
 var mouse_accum := Vector2.ZERO
 var mouse_sns := Vector2(0.01, 0.01)
+onready var control_settings = Settings.sub_options["Controls"]
 
 func _input(event):
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(BUTTON_LEFT):
@@ -34,9 +35,9 @@ func _process(delta):
 	cam += mouse_accum*mouse_sns
 	var player = Global.get_player()
 	if player:
-		if player.invert_x:
+		if control_settings.invert_x:
 			cam.x *= -1
-		if player.invert_y:
+		if control_settings.invert_y:
 			cam.y *= -1
 	mouse_accum = Vector2.ZERO
 	
@@ -57,7 +58,7 @@ func set_active(active):
 	if active:
 		var p = Global.get_player()
 		if p:
-			mouse_sns = 60*p.sensitivity*p.cam_rig.mouse_sns
+			mouse_sns = 60*control_settings.camera_sensitivity*p.cam_rig.mouse_sns
 		viewport.size = view_window.rect_size
 		player_description.id = 'you'
 		item_viewer.insert_item('you', player_description)

@@ -110,7 +110,7 @@ func _ready():
 	sun.visible = !sun_enabled
 	chunk_last_position = player.global_transform.origin
 	active_last_position = player.global_transform.origin
-	yield(pause_and_load_init(), "completed")
+	pause_and_load()
 	
 	vis_last_position = player.global_transform.origin
 	update_terrain_lod(vis_last_position)
@@ -144,20 +144,9 @@ func _process(delta):
 		get_tree().call_group("distance_activated", "process_player_distance", player_new_position)
 		update_terrain_lod(vis_last_position)
 
-func pause_and_load_init():
-	get_tree().paused = true
-	load_nearby_chunks(player.global_transform.origin)
-	yield(chunk_loader, "first_item_loaded")
-	yield(chunk_loader, "queue_empty")
-	update_active_chunks(player.global_transform.origin)
-	get_tree().paused = false
-
 func pause_and_load():
-	get_tree().paused = true
-	load_nearby_chunks(player.global_transform.origin)
-	yield(chunk_loader, "queue_empty")
+	load_nearby_chunks(player.global_transform.origin, true)
 	update_active_chunks(player.global_transform.origin)
-	get_tree().paused = false
 
 func get_sun():
 	return sun
@@ -216,28 +205,36 @@ func detect_enemies(_delta):
 	elif !were_present and enemies_present and !Global.stat("combat_tutorial"):
 		show_combat_tutorial()
 
-func load_nearby_chunks(position: Vector3):
+func load_nearby_chunks(position: Vector3, synchronous := false):
 	var loaded_box = $debug/box/loaded_chunks
 	loaded_box.text = "Loaded Chunks:"
 	for ch in chunks.values():
 		if chunk_loader.is_loaded(ch):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
-		var load_zone: AABB = ch.get_aabb().grow(Global.render_distance*DIST_LOAD)
-
-		var unload_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_UNLOAD)
+		var box: AABB = calculate_bounds(ch)
+		var load_zone: AABB = box.grow(Global.render_distance*DIST_LOAD)
+		var unload_zone:AABB = box.grow(Global.render_distance*DIST_UNLOAD)
 		
 		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch):
-			var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
+			var activate_zone:AABB = box.grow(Global.render_distance*DIST_ACTIVATE)
 			if activate_zone.has_point(local):
 				chunk_loader.load_active(ch)
 			else:
-				chunk_loader.queue_load(ch)
+				chunk_loader.queue_load(ch, synchronous)
 			emit_signal("activated", ch)
 		elif !unload_zone.has_point(local) and chunk_loader.is_loaded(ch):
 			chunk_loader.unload(ch)
-			emit_signal("deactivated", ch)
+			emit_signal("deactivated", ch) 
 
+func calculate_bounds(node: Node) -> AABB:
+	var box: AABB = AABB()
+	if node is VisualInstance:
+		box = node.get_aabb()
+	for c in node.get_children():
+		if c is Spatial:
+			box = box.merge(calculate_bounds(c))
+	return box
 
 func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
@@ -441,11 +438,11 @@ func sleep():
 		set_time(get_time() + 2, false)
 
 func _on_player_died():
-	yield(pause_and_load(), "completed")
+	pause_and_load()
 	update_active_chunks(player.global_transform.origin)
 
 func wake_up():
-	yield(pause_and_load(), "completed")
+	pause_and_load()
 	update_active_chunks(player.global_transform.origin)
 
 func start_day():

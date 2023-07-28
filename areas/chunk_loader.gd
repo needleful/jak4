@@ -1,7 +1,6 @@
 extends Object
 class_name ChunkLoader
 
-signal queue_empty
 signal first_item_loaded
 
 enum Status {
@@ -25,15 +24,13 @@ var _load_queue : Array
 var _load_thread := Thread.new()
 
 var loaded_first := false
-const multi_threaded := true
 
 func _init():
 	_status = {}
 	_lowres = {}
 	_hires = {}
 	_load_queue = []
-	if multi_threaded:
-		var _x = _load_thread.start(self, "_load_wait")
+	var _x = _load_thread.start(self, "_load_wait")
 
 func start_loading(chunks: Array):
 	for c in chunks:
@@ -63,8 +60,8 @@ func _load_wait():
 		_load_mutex.lock()
 		var empty = _load_queue.empty()
 		_load_mutex.unlock()
+
 		if empty:
-			call_deferred("emit_signal", "queue_empty")
 			OS.delay_msec(30)
 			continue
 		
@@ -72,11 +69,10 @@ func _load_wait():
 		var chunk : Spatial = _load_queue.pop_front()
 		_load_mutex.unlock()
 		
+		if is_active(chunk):
+			return
 		var c = _get_content(_hires, chunk.name)
 		call_deferred("_add_content", chunk, c as PackedScene)
-		if !loaded_first:
-			call_deferred("emit_signal", "first_item_loaded")
-			loaded_first = true
 
 func quit():
 	exit_thread = true
@@ -121,30 +117,13 @@ func unload_all():
 		unload(c)
 
 func load_active(chunk: Spatial):
-	# TODO: pause the world until this chunk is loaded
-	queue_load(chunk)
-
-func _old_load_active(chunk):
-	if chunk.has_node("dynamic_content"):
+	if is_active(chunk):
 		return
-	if _status[chunk.name] == Status.Loaded:
-		activate(chunk)
-	elif multi_threaded:
-		_load_mutex.lock()
-		# Try to remove the object from the queue
-		var l := _load_queue.find(chunk)
-		if l > 0:
-			_load_queue.remove(l)
-			_load_queue.push_front(chunk.name)
-		elif _status[chunk.name] != Status.Loading:
-			_status[chunk.name] = Status.Loading
-			_load_queue.push_front(chunk.name)
-		_load_mutex.unlock()
-	else:
-		_add_content(chunk, _get_content(_hires, chunk.name))
-		_status[chunk.name] = Status.Loaded
+	var c = _get_content(_hires, chunk.name)
+	_add_content(chunk, c as PackedScene)
+	activate(chunk)
 
-func queue_load(chunk: Spatial):
+func queue_load(chunk: Spatial, synchronous: bool):
 	if _status[chunk.name] != Status.Unloaded:
 		return
 	_status[chunk.name] = Status.Loading
@@ -153,7 +132,7 @@ func queue_load(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
 		return
 	
-	if multi_threaded:
+	if !synchronous:
 		_load_mutex.lock()
 		_load_queue.push_back(chunk)
 		_load_mutex.unlock()

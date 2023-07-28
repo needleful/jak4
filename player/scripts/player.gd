@@ -1619,7 +1619,7 @@ func go_to_sleep():
 	yield(get_tree().create_timer(.5), "timeout")
 	
 	if get_tree().current_scene.has_method("wake_up"):
-		yield(get_tree().current_scene.wake_up(), "completed")
+		get_tree().current_scene.wake_up()
 	yield(get_tree().create_timer(.25), "timeout")
 	_wake_up()
 
