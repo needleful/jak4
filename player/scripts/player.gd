@@ -202,7 +202,7 @@ var stamina_drain_factor := 1.0
 
 var can_air_spin := true
 var can_slide_lunge := true
-var can_wall_cling := true
+var wall_cling := true
 
 const TIME_LEDGE_LEAVE := 0.1
 
@@ -601,9 +601,9 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
+			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
+			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				if holding("mv_crouch"):
@@ -663,13 +663,13 @@ func _physics_process(delta):
 				(desired_velocity.length() + STAMINA_DRAIN_MIN)
 				* STAMINA_DRAIN_CLIMB
 				* delta
-				* (1.0-sqrt(max(best_floor_dot, 0)))
+				* (1.0-sqrt(max(current_normal.y, 0)))
 			)
 			if total_stamina() >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
-				if average_normal == Vector3.ZERO:
-					average_normal = ground_normal
-				velocity = JUMP_VEL_WALL*average_normal
+				if current_normal == Vector3.ZERO:
+					current_normal = ground_normal
+				velocity = JUMP_VEL_WALL*current_normal
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
 			elif after(TIME_STOP_CLIMB) and best_floor_dot > MIN_DOT_GROUND:
@@ -726,16 +726,16 @@ func _physics_process(delta):
 				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif best_floor_dot > MIN_DOT_GROUND:
+			elif current_normal.y > MIN_DOT_GROUND:
 				if pressed("mv_crouch"):
 					next_state = State.Crouch
 				elif empty(crouch_head):
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
+			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and best_floor_dot > MIN_DOT_CLIMB and pressed("mv_crouch"):
+			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
-			elif best_floor_dot > MIN_DOT_SLIDE and empty(crouch_head):
+			elif current_normal.y > MIN_DOT_SLIDE and empty(crouch_head):
 				next_state = State.Slide
 			elif current_normal != Vector3.ZERO:
 				next_state = State.BonkFall
@@ -757,7 +757,7 @@ func _physics_process(delta):
 				next_state = State.LedgeHang
 			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and total_stamina() > 0.0 and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
+			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
@@ -793,9 +793,9 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
+			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
 				next_state = State.Climb
-			elif can_wall_cling and total_stamina() > 0 and best_floor_dot > MIN_DOT_CLIMB and holding("mv_crouch"):
+			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE:
 				next_state = State.Slide
@@ -942,10 +942,10 @@ func _physics_process(delta):
 				(STAMINA_DRAIN_MIN)
 				* STAMINA_DRAIN_CLIMB
 				* delta
-				* (1.0-sqrt(max(best_floor_dot, 0)))
+				* (1.0-sqrt(max(current_normal.y, 0)))
 			)
 			var on_wall := true
-			if best_floor and best_floor_dot < MIN_DOT_CLIMB:
+			if best_floor and current_normal.y < MIN_DOT_CLIMB:
 				on_wall = false
 			elif empty(climb_area):
 				on_wall = false
@@ -953,17 +953,17 @@ func _physics_process(delta):
 				next_state = State.LedgeHang
 			elif stamina >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
-				if average_normal == Vector3.ZERO:
-					average_normal = ground_normal
-				velocity = JUMP_VEL_WALL*average_normal
+				if current_normal == Vector3.ZERO:
+					current_normal = ground_normal
+				velocity = JUMP_VEL_WALL*current_normal
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
-			elif best_floor_dot >= MIN_DOT_GROUND:
+			elif current_normal.y >= MIN_DOT_GROUND:
 				if holding("mv_crouch"):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif best_floor_dot >= MIN_DOT_CLIMB_AIR:
+			elif current_normal.y >= MIN_DOT_CLIMB_AIR:
 				next_state = State.Climb
 			elif ( total_stamina() <= 0 
 				or after(MAX_TIME_WALL_CLING)
@@ -1130,8 +1130,8 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.WallCling:
 			last_ground_origin = global_transform.origin
-			if average_normal != Vector3.ZERO:
-				ground_normal = average_normal
+			if current_normal != Vector3.ZERO:
+				ground_normal = current_normal
 			var hvel := velocity.move_toward(av, ACCEL_CLIMB)
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
@@ -1167,6 +1167,10 @@ func holding(action:String):
 
 func empty(area: Area):
 	return area.get_overlapping_bodies().size() == 0
+
+func reset_ground():
+	for i in running_ground.size():
+		running_ground[i] = Vector3.ZERO
 
 func prepare_save():
 	Global.game_state.current_coat = current_coat
@@ -1429,6 +1433,13 @@ func can_climb() -> bool:
 		and holding("mv_crouch")
 		and (!best_floor or !best_floor.is_in_group("dont_stand"))
 	)
+
+func can_wall_cling(normal: Vector3) -> bool:
+	return ( wall_cling 
+		and normal != Vector3.ZERO 
+		and total_stamina() > 0 
+		and normal.y > MIN_DOT_CLIMB 
+		and holding("mv_crouch"))
 
 func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	if ledgeCastCeiling.is_colliding() or ledgeCastHeadFloor.is_colliding():
@@ -1887,7 +1898,7 @@ func shake_camera():
 	pass
 
 func start_jump(vel:float):
-	can_wall_cling = true
+	wall_cling = true
 	emit_signal("jumped")
 	velocity.y = jump_factor*vel
 
@@ -1940,35 +1951,43 @@ func set_state(next_state: int):
 			last_ground_origin = global_transform.origin
 			can_air_spin = true
 			can_slide_lunge = true
-			can_wall_cling = true
+			wall_cling = true
 			dash_charges = Global.count("dash_charge")
 			stamina = max_stamina
 		State.WadingFall:
+			reset_ground()
 			mesh.transition_to("Fall")
 			mesh.step(false)
 		State.Fall, State.LedgeFall, State.WaveJump:
+			reset_ground()
 			mesh.transition_to("Fall")
 		State.BaseJump:
+			reset_ground()
 			start_jump(JUMP_VEL_BASE)
 		State.HighJump:
+			reset_ground()
 			jump_time = TIME_CROUCH_JUMP
 			jump_time_min = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_HIGH)
 		State.WallJump:
-			can_wall_cling = true
+			reset_ground()
+			wall_cling = true
 			emit_signal("jumped")
 		State.LedgeJump:
+			reset_ground()
 			$crouching_col.disabled = true
 			$standing_col.disabled = true
 			start_jump(JUMP_VEL_LEDGE)
 			mesh.play_ledge_jump()
 			gun.unlock()
 		State.CrouchJump:
+			reset_ground()
 			jump_time = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_CROUCH)
 			mesh.play_crouch_jump()
 			gun.unlock()
 		State.RollJump:
+			reset_ground()
 			damaged_objects = []
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
@@ -1997,7 +2016,7 @@ func set_state(next_state: int):
 		State.LedgeHang:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			can_wall_cling = true
+			wall_cling = true
 			mesh.play_ledge_grab()
 			snap_to_ledge(ledge.global_transform*ledge_local_position)
 			velocity = Vector3.ZERO
@@ -2009,9 +2028,11 @@ func set_state(next_state: int):
 			mesh.play_roll()
 			gun.lock()
 		State.RollFall:
+			reset_ground()
 			gun.lock()
 		State.BonkFall:
-			can_wall_cling = false
+			reset_ground()
+			wall_cling = false
 			mesh.transition_to("Fall")
 			var dir = ground_normal
 			dir.y = 0.1
@@ -2038,6 +2059,7 @@ func set_state(next_state: int):
 			mesh.transition_to("Uppercut")
 			gun.lock()
 		State.Uppercut:
+			reset_ground()
 			emit_signal("jumped")
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
@@ -2079,10 +2101,12 @@ func set_state(next_state: int):
 			cam_rig.lock_follow()
 			gun.unlock()
 		State.GravityStun:
+			reset_ground()
 			velocity.y = 4
 			mesh.transition_to("Damaged")
 			gun.unlock()
 		State.Hover:
+			reset_ground()
 			collision_mask |= 1 << 13
 			hover_cast.enabled = true
 			mesh.start_hover()
@@ -2097,7 +2121,7 @@ func set_state(next_state: int):
 			mesh.play_sit()
 			gun.unlock()
 		State.Dash:
-			can_wall_cling = true
+			wall_cling = true
 			dash_charges -= 1
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
@@ -2106,17 +2130,18 @@ func set_state(next_state: int):
 		State.Wading:
 			can_air_spin = true
 			can_slide_lunge = true
-			can_wall_cling = true
+			wall_cling = true
 			dash_charges = Global.count("dash_charge")
 			mesh.ground_transition("Wading")
 			gun.unlock()
 		State.WadingJump:
+			reset_ground()
 			start_jump(5.0)
 			mesh.play_wading_jump()
 			gun.unlock()
 		State.WallCling:
 			can_air_spin = true
-			can_wall_cling = false
+			wall_cling = false
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			mesh.transition_to("WallCling")
@@ -2124,6 +2149,6 @@ func set_state(next_state: int):
 			gun.lock()
 		State.NoClip:
 			collision_layer = 0
-			collision_mask = 0 
+			collision_mask = 0
 	state = next_state
 	debug.get_node("stats/a1").text = "State: %s" % State.keys()[state]
