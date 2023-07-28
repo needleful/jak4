@@ -299,7 +299,6 @@ const ground_states = [
 
 var state: int = State.Fall
 var ground_normal:Vector3 = Vector3.UP
-var best_floor_dot: float
 var best_floor : Node
 var dash_charges := 0
 var can_use_hover_scooter := true
@@ -368,6 +367,8 @@ var applied_ground_velocity := Vector3.ZERO
 var last_ground_origin := Vector3.ZERO
 var normal_layer := collision_layer
 var normal_mask := collision_mask
+var running_ground := PoolVector3Array()
+var ground_index := 0
 
 const TIMERS_MAX := 3
 
@@ -408,6 +409,7 @@ func _ready():
 	stamina = max_stamina
 	gun.camera = cam_rig.camera
 	last_ground_origin = global_transform.origin
+	running_ground = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 	ui.activate()
 
 func _input(event):
@@ -460,25 +462,33 @@ func _physics_process(delta):
 		desired_velocity.dot(velocity) > 0
 	):
 		rotate_intention(desired_velocity)
-	
-	best_floor_dot = -1.0
-	var best_normal := Vector3.ZERO
-	var slide_dots := []
+
+	running_ground[ground_index] = Vector3.ZERO
 	best_floor = null
 	var max_depth := 0.0
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
 		var normal := col.normal
-		var dot := normal.dot(Vector3.UP)
 		if col.collision_depth > max_depth:
 			max_depth = col.collision_depth
-		slide_dots.append(dot)
-		if dot > best_floor_dot:
-			best_floor_dot = dot
-			best_normal = normal
+		if normal.y > running_ground[ground_index].y:
+			running_ground[ground_index] = normal
 			best_floor = col.collider as Node
-	if best_floor_dot > MIN_DOT_GROUND:
-		ground_normal = best_normal
+	ground_index += 1
+	ground_index = ground_index % running_ground.size()
+	
+	var average_normal := Vector3.ZERO
+	var current_normal := running_ground[ground_index]
+	for v in running_ground:
+		average_normal += v/running_ground.size()
+	
+	average_normal = average_normal.normalized()
+	var best_floor_dot = max(average_normal.y, current_normal.y)
+	if current_normal.y > MIN_DOT_GROUND:
+		ground_normal = current_normal
+	elif average_normal.y > MIN_DOT_GROUND:
+		ground_normal = average_normal
+	debug.get_node("stats/a11").text = str(average_normal)
 	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
 	debug.get_node("stats/a9").text = "Depth: " + str(max_depth)
 	
@@ -566,7 +576,7 @@ func _physics_process(delta):
 				next_state = State.Hover
 			elif can_slide_lunge and pressed("combat_lunge"):
 				next_state = State.SlideLungeKick
-			elif pressed("mv_crouch") and desired_velocity.dot(best_normal) > MIN_DOT_SLIDE_ROLL:
+			elif pressed("mv_crouch") and desired_velocity.dot(average_normal) > MIN_DOT_SLIDE_ROLL:
 				next_state = State.Roll
 				# TODO: maybe a neat little slide animation if you hold crouch while sliding down-hill
 			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
@@ -627,7 +637,7 @@ func _physics_process(delta):
 				and best_floor_dot > MIN_DOT_CLIMB
 				and can_climb()
 			):
-				if (desired_velocity.dot(best_normal) > MIN_DOT_CLIMB_MOVEMENT
+				if (desired_velocity.dot(average_normal) > MIN_DOT_CLIMB_MOVEMENT
 					and floor_cast.is_colliding()
 					and floor_cast.get_collision_normal().y > MIN_DOT_GROUND
 				):
@@ -657,9 +667,9 @@ func _physics_process(delta):
 			)
 			if total_stamina() >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
-				if best_normal == Vector3.ZERO:
-					best_normal = ground_normal
-				velocity = JUMP_VEL_WALL*best_normal
+				if average_normal == Vector3.ZERO:
+					average_normal = ground_normal
+				velocity = JUMP_VEL_WALL*average_normal
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
 			elif after(TIME_STOP_CLIMB) and best_floor_dot > MIN_DOT_GROUND:
@@ -698,8 +708,8 @@ func _physics_process(delta):
 				next_state = State.Dash
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif (best_normal != Vector3.ZERO
-				and best_floor_dot < MIN_DOT_SLIDE
+			elif (current_normal != Vector3.ZERO
+				and current_normal.y < MIN_DOT_SLIDE
 			):
 				next_state = State.BonkFall
 			elif after(TIME_CROUCH_JUMP):
@@ -727,7 +737,7 @@ func _physics_process(delta):
 				next_state = State.WallCling
 			elif best_floor_dot > MIN_DOT_SLIDE and empty(crouch_head):
 				next_state = State.Slide
-			elif best_normal != Vector3.ZERO:
+			elif current_normal != Vector3.ZERO:
 				next_state = State.BonkFall
 		State.Fall, State.BonkFall:
 			if can_air_spin and pressed("combat_spin"):
@@ -943,9 +953,9 @@ func _physics_process(delta):
 				next_state = State.LedgeHang
 			elif stamina >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
-				if best_normal == Vector3.ZERO:
-					best_normal = ground_normal
-				velocity = JUMP_VEL_WALL*best_normal
+				if average_normal == Vector3.ZERO:
+					average_normal = ground_normal
+				velocity = JUMP_VEL_WALL*average_normal
 				velocity.y = JUMP_VEL_WALL_V
 				next_state = State.WallJump
 			elif best_floor_dot >= MIN_DOT_GROUND:
@@ -989,7 +999,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.Slide:
 			last_ground_origin = global_transform.origin
-			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
+			accel_slide(delta, desired_velocity*SPEED_RUN, av, average_normal)
 			mesh.blend_run_animation((velocity - av)/SPEED_RUN)
 			rotate_to_velocity(desired_velocity)
 		State.BaseJump, State.HighJump, State.WaveJump:
@@ -1016,11 +1026,11 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.Climb:
 			last_ground_origin = global_transform.origin
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
+			if average_normal != Vector3.ZERO:
+				ground_normal = average_normal
 			accel_climb(delta, desired_velocity*SPEED_CLIMB, av, ground_normal)
-			mesh.blend_climb_animation(velocity/SPEED_CLIMB, best_normal)
-			rotate_mesh(-best_normal)
+			mesh.blend_climb_animation(velocity/SPEED_CLIMB, average_normal)
+			rotate_mesh(-average_normal)
 		State.CrouchJump, State.LedgeJump:
 			accel_air(delta, desired_velocity*SPEED_CROUCH, av, ACCEL)
 			rotate_to_velocity(desired_velocity)
@@ -1053,8 +1063,8 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
 			last_ground_origin = global_transform.origin
-			if best_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
-				ground_normal = best_normal
+			if average_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
+				ground_normal = average_normal
 			accel(delta, desired_velocity*SPEED_RUN, av)
 			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "spin")
 		State.AirSpinKick:
@@ -1080,7 +1090,7 @@ func _physics_process(delta):
 			last_ground_origin = global_transform.origin
 			if !gun.in_combo() and damaged_objects.size() > 0:
 				gun.start_combo()
-			accel_slide(delta, desired_velocity*SPEED_RUN, av, best_normal)
+			accel_slide(delta, desired_velocity*SPEED_RUN, av, average_normal)
 			damage_point(dive_end_hitbox, DAMAGE_DIVE_END, global_transform.origin)
 			rotate_to_velocity(desired_velocity)
 		State.Locked, State.LockedWaiting, State.PlaceFlag, State.GetItem, State.Sitting:
@@ -1120,8 +1130,8 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.WallCling:
 			last_ground_origin = global_transform.origin
-			if best_normal != Vector3.ZERO:
-				ground_normal = best_normal
+			if average_normal != Vector3.ZERO:
+				ground_normal = average_normal
 			var hvel := velocity.move_toward(av, ACCEL_CLIMB)
 			hvel.y = velocity.y + WALL_CLING_GRAVITY*delta*GRAVITY.y
 			velocity = move_and_slide(hvel, Vector3.UP, false, 4, 900)
