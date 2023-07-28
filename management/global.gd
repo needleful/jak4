@@ -77,7 +77,7 @@ func _input(event):
 		using_gamepad = false
 	
 	if ( ogg != using_gamepad and 
-		Settings.sub_options["Controls"].prompts == ControlsSettings.Prompts.AutoDetect
+		Settings.sub_options["Controls"].button_prompts == ControlsSettings.Prompts.AutoDetect
 	):
 		get_tree().call_group("input_prompt", "_refresh")
 
