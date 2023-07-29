@@ -464,6 +464,7 @@ func _physics_process(delta):
 		rotate_intention(desired_velocity)
 
 	running_ground[ground_index] = Vector3.ZERO
+	var best_dot := -INF
 	best_floor = null
 	var max_depth := 0.0
 	for c in range(get_slide_count()):
@@ -471,14 +472,15 @@ func _physics_process(delta):
 		var normal := col.normal
 		if col.collision_depth > max_depth:
 			max_depth = col.collision_depth
-		if normal.y > running_ground[ground_index].y:
+		if normal.y > best_dot:
+			best_dot = normal.y
 			running_ground[ground_index] = normal
 			best_floor = col.collider as Node
 	ground_index += 1
 	ground_index = ground_index % running_ground.size()
 	
 	var average_normal := Vector3.ZERO
-	var current_normal := running_ground[ground_index]
+	var current_normal := running_ground[ground_index] 
 	for v in running_ground:
 		average_normal += v/running_ground.size()
 	
@@ -519,7 +521,7 @@ func _physics_process(delta):
 		wpart.global_transform.origin = ripple_pos
 		mpart.global_transform.origin = ripple_pos
 	else:
-		debug.get_node("stats/a8").text = "Dry"
+		#debug.get_node("stats/a8").text = "Dry"
 		water_depth = 0
 		
 		$water_cast/Particles.emitting = false
@@ -1435,11 +1437,13 @@ func can_climb() -> bool:
 	)
 
 func can_wall_cling(normal: Vector3) -> bool:
-	return ( wall_cling 
+	var res:bool = ( wall_cling 
 		and normal != Vector3.ZERO 
 		and total_stamina() > 0 
 		and normal.y > MIN_DOT_CLIMB 
 		and holding("mv_crouch"))
+	debug.get_node("stats/a8").text = "can wall cling" if res else "no wall cling"
+	return res
 
 func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	if ledgeCastCeiling.is_colliding() or ledgeCastHeadFloor.is_colliding():
