@@ -22,13 +22,13 @@ func start_tutorial(wep: String):
 			c.enabled = true
 
 func end_tutorial():
-	custom_entry = ""
-	tutorial = ""
 	var _x = Global.add_stat("armstrong/tutorial_complete/"+tutorial)
 	var tw = tut.get_node(tutorial)
 	for c in tw.get_children():
 		if "enabled" in c:
 			c.enabled = false
+	custom_entry = ""
+	tutorial = ""
 
 func in_tutorial():
 	return tutorial != ""
