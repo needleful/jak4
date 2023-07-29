@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=2]
+[gd_scene load_steps=141 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -62,6 +62,7 @@
 [ext_resource path="res://ui/theming/focus_cursor.png" type="Texture" id=60]
 [ext_resource path="res://ui/components/focus_cursor.gd" type="Script" id=61]
 [ext_resource path="res://ui/icons/close_window_hover.png" type="Texture" id=62]
+[ext_resource path="res://ui/icons/new_reply.png" type="Texture" id=63]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -774,6 +775,74 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Gradient" id=189]
+colors = PoolColorArray( 1, 0.827451, 0.4, 1, 0.858824, 0.858824, 0.858824, 1 )
+
+[sub_resource type="GradientTexture" id=190]
+gradient = SubResource( 189 )
+width = 16
+
+[sub_resource type="ShaderMaterial" id=191]
+shader = ExtResource( 43 )
+shader_param/value = 0.0
+shader_param/gradient = SubResource( 190 )
+
+[sub_resource type="Animation" id=192]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:material:shader_param/value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=193]
+resource_name = "indicate"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:material:shader_param/value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 2, 0.2, 1 ),
+"update": 0,
+"values": [ 0.0, 0.5, 1.0 ]
 }
 
 [sub_resource type="StyleBoxTexture" id=187]
@@ -2122,12 +2191,37 @@ margin_bottom = 138.0
 action = "dialog_item"
 small = true
 
-[node name="label_trade" type="Label" parent="ui/dialog/dialog/buttons"]
+[node name="trade" type="HBoxContainer" parent="ui/dialog/dialog/buttons"]
 margin_left = 98.0
-margin_top = 95.0
+margin_top = 74.0
 margin_right = 272.0
-margin_bottom = 117.0
+margin_bottom = 138.0
+
+[node name="label" type="Label" parent="ui/dialog/dialog/buttons/trade"]
+margin_top = 21.0
+margin_right = 78.0
+margin_bottom = 43.0
 text = "Use Item"
+
+[node name="spacer" type="Control" parent="ui/dialog/dialog/buttons/trade"]
+margin_left = 82.0
+margin_right = 102.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="indicator" type="TextureRect" parent="ui/dialog/dialog/buttons/trade"]
+visible = false
+material = SubResource( 191 )
+margin_left = 106.0
+margin_right = 138.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 32, 32 )
+texture = ExtResource( 63 )
+stretch_mode = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/dialog/dialog/buttons/trade/indicator"]
+anims/RESET = SubResource( 192 )
+anims/indicate = SubResource( 193 )
 
 [node name="input_prompt2" parent="ui/dialog/dialog/buttons" instance=ExtResource( 8 )]
 anchor_right = 0.0
@@ -2453,9 +2547,11 @@ material/0 = SubResource( 98 )
 [connection signal="event_with_source" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited_anim"]
+[connection signal="new_contextual_reply" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/buttons/trade/indicator/AnimationPlayer" method="play" binds= [ "indicate" ]]
 [connection signal="pick_item" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="enter"]
 [connection signal="started" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="_on_dialog_started"]
 [connection signal="cancelled" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="_on_item_context_cancelled"]
+[connection signal="closed" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/buttons/trade/indicator" method="hide"]
 [connection signal="context_reply" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_item"]
 [connection signal="note_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_note"]

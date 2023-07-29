@@ -4,6 +4,7 @@ signal item_picked(item, desc)
 signal note_picked(tags)
 signal context_reply(item)
 signal cancelled
+signal closed
 
 onready var coat := $VBoxContainer/coat
 onready var bar_context := $VBoxContainer/bar_context
@@ -44,6 +45,7 @@ func enter():
 	coat.grab_focus()
 
 func exit():
+	emit_signal("closed")
 	hide()
 	mini_journal.hide()
 	item_list.clear()
