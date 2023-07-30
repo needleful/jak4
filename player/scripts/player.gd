@@ -465,7 +465,6 @@ func _physics_process(delta):
 
 	running_ground[ground_index] = Vector3.ZERO
 	var best_dot := -INF
-	best_floor = null
 	var max_depth := 0.0
 	for c in range(get_slide_count()):
 		var col := get_slide_collision(c)
@@ -479,17 +478,19 @@ func _physics_process(delta):
 	ground_index += 1
 	ground_index = ground_index % running_ground.size()
 	
-	var average_normal := Vector3.ZERO
 	var current_normal := running_ground[ground_index] 
+	var average_normal := Vector3.ZERO
 	for v in running_ground:
 		average_normal += v/running_ground.size()
-	
 	average_normal = average_normal.normalized()
+	
 	var best_floor_dot = max(average_normal.y, current_normal.y)
 	if current_normal.y > MIN_DOT_GROUND:
 		ground_normal = current_normal
 	elif average_normal.y > MIN_DOT_GROUND:
 		ground_normal = average_normal
+	elif best_floor_dot < MIN_DOT_CLIMB_AIR:
+		best_floor = null
 	debug.get_node("stats/a11").text = str(average_normal)
 	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
 	debug.get_node("stats/a9").text = "Depth: " + str(max_depth)

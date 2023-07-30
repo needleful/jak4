@@ -25,7 +25,7 @@ func _process(_delta):
 		target_position = tracked_item.rect_global_position
 		target_size = tracked_item.rect_size
 		var _x = tween.tween_property(self, "rect_global_position", target_position - padding, 0.15)
-		_x = tween.tween_property(self, "rect_size", tracked_item.rect_size + padding*2, 0.3)
+		_x = tween.tween_property(self, "rect_size", tracked_item.rect_size + padding*2, 0.15)
 
 func track_item(item: Control):
 	if !item:

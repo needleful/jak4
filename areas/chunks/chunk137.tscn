@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=81 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -58,6 +58,7 @@
 [ext_resource path="res://entities/env/city/wok.tscn" type="PackedScene" id=56]
 [ext_resource path="res://entities/env/furniture/shelf_simple.tscn" type="PackedScene" id=57]
 [ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=58]
+[ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=59]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 
 [sub_resource type="ShaderMaterial" id=12]
@@ -78,6 +79,21 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 12 )
 shader_param/ground = ExtResource( 12 )
 shader_param/ceiling = ExtResource( 12 )
+
+[sub_resource type="ShaderMaterial" id=21]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 1.0
+shader_param/ground_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/wall = ExtResource( 51 )
+shader_param/ground = ExtResource( 59 )
+shader_param/ceiling = ExtResource( 51 )
 
 [sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 10 )
@@ -279,31 +295,73 @@ material/0 = ExtResource( 38 )
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
+[node name="StaticBody" parent="city/buildings1/door1" index="0"]
+collision_layer = 257
+
 [node name="door2" parent="city/buildings1" index="1"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
+[node name="StaticBody" parent="city/buildings1/door2" index="0"]
+collision_layer = 257
+
 [node name="tavern_interior" parent="city/buildings1" index="2"]
 material/0 = ExtResource( 62 )
 
+[node name="StaticBody" parent="city/buildings1/tavern_interior" index="0"]
+collision_layer = 257
+
 [node name="walkway1" parent="city/buildings1" index="3"]
 material/0 = ExtResource( 62 )
+
+[node name="StaticBody" parent="city/buildings1/walkway1" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/buildings1" index="4"]
+collision_layer = 257
 
 [node name="door3" parent="city" index="1"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
+[node name="StaticBody" parent="city/door3" index="0"]
+collision_layer = 257
+
 [node name="door4" parent="city" index="2"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
-[node name="protector" parent="city" index="3"]
+[node name="StaticBody" parent="city/door4" index="0"]
+collision_layer = 257
+
+[node name="grid" parent="city" index="3"]
+material/0 = ExtResource( 38 )
+
+[node name="walkways" parent="city/grid" index="0"]
+material/0 = ExtResource( 62 )
+
+[node name="StaticBody" parent="city/grid/walkways" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/grid" index="1"]
+collision_layer = 257
+
+[node name="protector" parent="city" index="4"]
 material/0 = SubResource( 3 )
 
 [node name="pedestal" parent="city/protector" index="0"]
 material/0 = SubResource( 3 )
 
-[node name="walkway2" parent="city" index="4"]
+[node name="StaticBody" parent="city/protector/pedestal" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/protector" index="1"]
+collision_layer = 257
+
+[node name="stairs" parent="city" index="5"]
+material/0 = SubResource( 21 )
+
+[node name="walkway2" parent="city" index="6"]
 material/0 = ExtResource( 62 )
 
 [node name="buildings2" parent="city/walkway2" index="0"]
@@ -312,18 +370,36 @@ material/0 = ExtResource( 38 )
 [node name="home_interior1" parent="city/walkway2/buildings2" index="0"]
 material/0 = SubResource( 13 )
 
+[node name="StaticBody" parent="city/walkway2/buildings2/home_interior1" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/walkway2/buildings2" index="1"]
+collision_layer = 257
+
 [node name="door1001" parent="city/walkway2" index="1"]
 material/0 = ExtResource( 38 )
+
+[node name="StaticBody" parent="city/walkway2/door1001" index="0"]
+collision_layer = 257
 
 [node name="door1002" parent="city/walkway2" index="2"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
+[node name="StaticBody" parent="city/walkway2/door1002" index="0"]
+collision_layer = 257
+
 [node name="door1003" parent="city/walkway2" index="3"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
-[node name="water" parent="city" index="5"]
+[node name="StaticBody" parent="city/walkway2/door1003" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/walkway2" index="4"]
+collision_layer = 257
+
+[node name="water" parent="city" index="7"]
 material/0 = SubResource( 14 )
 material/1 = SubResource( 15 )
 
@@ -331,8 +407,20 @@ material/1 = SubResource( 15 )
 material/0 = SubResource( 15 )
 material/1 = SubResource( 16 )
 
-[node name="window" parent="city" index="6"]
+[node name="StaticBody" parent="city/water/water-security" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city/water" index="1"]
+collision_layer = 257
+
+[node name="window" parent="city" index="8"]
 material/0 = ExtResource( 38 )
+
+[node name="StaticBody" parent="city/window" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="city" index="9"]
+collision_layer = 257
 
 [node name="active_entities" type="Spatial" parent="." index="1"]
 

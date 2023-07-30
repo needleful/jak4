@@ -236,6 +236,8 @@ func _tag_list(t_list: Array) -> String:
 	return s
 
 func _on_subject_pressed(subject:Button):
+	if subject_notes.get_child_count() == 0:
+		return
 	selected_subject = subject
 	for c in list.get_children():
 		c.focus_mode = FOCUS_CLICK
