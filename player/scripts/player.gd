@@ -780,7 +780,6 @@ func _physics_process(delta):
 				next_state = State.LedgeFall
 			elif after(TIME_LEDGE_LEAVE, empty(ledge_area), 1):
 				next_state = State.LedgeFall
-				
 		State.LedgeFall:
 			if can_air_spin and pressed("combat_spin"):
 				next_state = State.AirSpinKick
