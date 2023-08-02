@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -59,7 +59,11 @@
 [ext_resource path="res://entities/env/furniture/shelf_simple.tscn" type="PackedScene" id=57]
 [ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=58]
 [ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=59]
+[ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=60]
+[ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=61]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
+[ext_resource path="res://material/env/noise.jpg" type="Texture" id=63]
+[ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=64]
 
 [sub_resource type="ShaderMaterial" id=12]
 shader = ExtResource( 39 )
@@ -68,6 +72,22 @@ shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/main_texture = ExtResource( 40 )
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 0.835294, 0.780392, 0.760784, 1 )
+shader_param/wall = ExtResource( 63 )
+shader_param/ground = ExtResource( 63 )
+shader_param/ceiling = ExtResource( 63 )
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 10 )
@@ -91,6 +111,7 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 51 )
 shader_param/ground = ExtResource( 59 )
 shader_param/ceiling = ExtResource( 51 )
@@ -125,6 +146,7 @@ shader_param/specularity_wall = 3.0
 shader_param/specularity_ceiling = 3.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 47 )
 shader_param/ground = ExtResource( 48 )
 shader_param/ceiling = ExtResource( 48 )
@@ -140,6 +162,7 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 48 )
 shader_param/ground = ExtResource( 48 )
 shader_param/ceiling = ExtResource( 48 )
@@ -253,6 +276,7 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 33 )
 shader_param/ground = ExtResource( 33 )
 shader_param/ceiling = ExtResource( 33 )
@@ -320,21 +344,26 @@ collision_layer = 257
 [node name="StaticBody" parent="city/buildings1" index="4"]
 collision_layer = 257
 
-[node name="door3" parent="city" index="1"]
+[node name="cyl" parent="city" index="1"]
+material/0 = SubResource( 22 )
+material/1 = ExtResource( 60 )
+material/2 = ExtResource( 61 )
+
+[node name="door3" parent="city" index="2"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
 [node name="StaticBody" parent="city/door3" index="0"]
 collision_layer = 257
 
-[node name="door4" parent="city" index="2"]
+[node name="door4" parent="city" index="3"]
 material/0 = ExtResource( 38 )
 material/1 = SubResource( 12 )
 
 [node name="StaticBody" parent="city/door4" index="0"]
 collision_layer = 257
 
-[node name="grid" parent="city" index="3"]
+[node name="grid" parent="city" index="4"]
 material/0 = ExtResource( 38 )
 
 [node name="walkways" parent="city/grid" index="0"]
@@ -346,7 +375,7 @@ collision_layer = 257
 [node name="StaticBody" parent="city/grid" index="1"]
 collision_layer = 257
 
-[node name="protector" parent="city" index="4"]
+[node name="protector" parent="city" index="5"]
 material/0 = SubResource( 3 )
 
 [node name="pedestal" parent="city/protector" index="0"]
@@ -358,10 +387,10 @@ collision_layer = 257
 [node name="StaticBody" parent="city/protector" index="1"]
 collision_layer = 257
 
-[node name="stairs" parent="city" index="5"]
+[node name="stairs" parent="city" index="6"]
 material/0 = SubResource( 21 )
 
-[node name="walkway2" parent="city" index="6"]
+[node name="walkway2" parent="city" index="7"]
 material/0 = ExtResource( 62 )
 
 [node name="buildings2" parent="city/walkway2" index="0"]
@@ -399,7 +428,7 @@ collision_layer = 257
 [node name="StaticBody" parent="city/walkway2" index="4"]
 collision_layer = 257
 
-[node name="water" parent="city" index="7"]
+[node name="water" parent="city" index="8"]
 material/0 = SubResource( 14 )
 material/1 = SubResource( 15 )
 
@@ -413,13 +442,13 @@ collision_layer = 257
 [node name="StaticBody" parent="city/water" index="1"]
 collision_layer = 257
 
-[node name="window" parent="city" index="8"]
+[node name="window" parent="city" index="9"]
 material/0 = ExtResource( 38 )
 
 [node name="StaticBody" parent="city/window" index="0"]
 collision_layer = 257
 
-[node name="StaticBody" parent="city" index="9"]
+[node name="StaticBody" parent="city" index="10"]
 collision_layer = 257
 
 [node name="active_entities" type="Spatial" parent="." index="1"]
@@ -661,7 +690,7 @@ transform = Transform( 0.0358648, 0, -0.999357, 0, 1, 0, 0.999357, 0, 0.0358648,
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9676, 8.299, -29.675 )
 
 [node name="rock-clip" parent="active_entities/zone_city/clips" index="0" instance=ExtResource( 31 )]
-transform = Transform( -0.549989, 0.126279, -0.82557, -0.107952, 0.969462, 0.220206, 0.828166, 0.210232, -0.519561, -10.5351, -6.3197, -2.25313 )
+transform = Transform( -0.549989, 0.126279, -0.82557, -0.107952, 0.969462, 0.220206, 0.828166, 0.210232, -0.519561, -11.5343, 2.41451, -4.50504 )
 script = ExtResource( 42 )
 distance = 50.0
 
@@ -709,7 +738,7 @@ rope_segment = ExtResource( 34 )
 rope_material = SubResource( 11 )
 
 [node name="start" type="Area" parent="active_entities/zone_city/laili_points" index="0"]
-transform = Transform( -0.532635, 0, -0.846345, 0, 1, 0, 0.846345, 0, -0.532635, -10.5156, -6.18721, -2.2282 )
+transform = Transform( -0.532635, 0, -0.846345, 0, 1, 0, 0.846345, 0, -0.532635, -11.4743, 2.53067, -4.48393 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 26 )
@@ -848,10 +877,10 @@ material/0 = SubResource( 9 )
 shape = SubResource( 5 )
 
 [node name="laili_climb_start" type="Position3D" parent="active_entities/zone_city" index="12"]
-transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 13.8535, 1.86908, -34.2671 )
+transform = Transform( 0.807683, 0, -0.589617, 0, 1, 0, 0.589617, 0, 0.807683, 13.8535, 10.587, -34.2671 )
 
 [node name="laili_plane_start" type="Position3D" parent="active_entities/zone_city" index="13"]
-transform = Transform( -0.416785, 0, -0.909005, 0, 1, 0, 0.909005, 0, -0.416785, 18.0628, 2.29779, -32.6973 )
+transform = Transform( -0.416785, 0, -0.909005, 0, 1, 0, 0.909005, 0, -0.416785, 18.0628, 11.0157, -32.6973 )
 
 [node name="laili_new_home" type="Position3D" parent="active_entities/zone_city" index="14"]
 transform = Transform( -0.664428, 0, 0.747352, 0, 1, 0, -0.747353, 0, -0.664427, 61.2697, -9.70754, -23.491 )
@@ -981,6 +1010,12 @@ transform = Transform( -0.999499, 0, -0.0316418, 0, 1, 0, 0.0316418, 0, -0.99949
 
 [node name="wood_stove2" parent="active_entities/zone_city/apartments" index="20" instance=ExtResource( 52 )]
 transform = Transform( -0.10927, 0, -0.994012, 0, 1, 0, 0.994012, 0, -0.10927, -5.00948, -9.72297, -1.62383 )
+
+[node name="table2" parent="active_entities/zone_city" index="19" instance=ExtResource( 64 )]
+transform = Transform( 0.989509, 0, 0.144468, 0, 1, 0, -0.144468, 0, 0.989509, 14.1673, 10.6592, -29.054 )
+
+[node name="c_table" parent="active_entities/zone_city/table2" index="1" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0806313, 0.511299, -0.821106 )
 
 [node name="Occluder2" type="Occluder" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -76.0493, -188.492, 239.204 )

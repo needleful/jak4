@@ -13,6 +13,7 @@ uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
 uniform float light_bias: hint_range(-1.0, 1.0) = 0.0;
 uniform float shadow_normal_offset : hint_range(-5.0, 5.0, 0.1) = 0.2;
+uniform vec4 albedo : hint_color = vec4(1);
 
 varying vec3 position;
 varying vec3 normal;
@@ -42,7 +43,7 @@ void fragment() {
 		specularity_wall*(abs(n.z) + abs(n.x))
 		+ specularity_ground*max(y_pow, 0.0)
 		+ specularity_ceiling*max(-y_pow, 0.0);
-	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));
+	ALBEDO = albedo.rgb*clamp(color.rgb, vec3(0.0), vec3(1.0));
 	//ROUGHNESS = clamp(2.0/(specularity + 0.01), 0, 1);
 }
 

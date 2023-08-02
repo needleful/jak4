@@ -127,7 +127,7 @@ func generate_material(backface_culling := true) -> Material:
 	gt.gradient = gradient
 	gt.width = 64
 	mat.set_shader_param("gradient", gt)
-	mat.set_shader_param("softness", 0.25)
+	mat.set_shader_param("softness", 0.6)
 	mat.set_shader_param("palette", palette)
 	mat.set_shader_param("detail", Global.get_coat_detail())
 	
