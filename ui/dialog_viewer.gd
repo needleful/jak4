@@ -9,6 +9,13 @@ signal pick_item
 signal new_contextual_reply
 signal control_screen(controlled)
 
+class CallFrame:
+	var item: DialogItem
+	var box: Control
+	func _init(p_item: DialogItem, p_box: Control):
+		item = p_item
+		box = p_box
+
 var shopping := false setget set_shopping
 var entered_from := ""
 
@@ -29,6 +36,8 @@ export(Dictionary) var colors := {
 onready var replies := $messages/replies
 onready var message_container := $messages/messages
 onready var messages := $messages/messages/list
+onready var message_list := messages
+onready var aside_template:Control = $aside_template
 
 const RESULT_SKIP := {"result":"skip"}
 const RESULT_PAUSE := {"result":"pause"}
@@ -73,6 +82,7 @@ func _init():
 func _ready():
 	ui_settings_apply()
 	var _x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
+	remove_child(aside_template)
 	end()
 
 func _input(event):
@@ -99,6 +109,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	sequence = p_sequence.duplicate()
 	label_conditions = {}
 	sorted_labels = []
+	message_list = messages
 	for l in sequence.labels:
 		if l.find(":-") >= 0:
 			var s = l.split(":-")
@@ -331,7 +342,8 @@ func show_context_reply(item: DialogItem):
 	if !remove_context_reply(item):
 		print_debug("Could not remove context reply: '%d'" % item.text)
 	set_process_input(true)
-	call_stack.push_back(current_item)
+	# TODO: would create a new child here
+	push_stack(current_item, true)
 	show_message(item.text, "You")
 	last_speaker = "You"
 	current_item = sequence.canonical_next(item)
@@ -350,7 +362,7 @@ func use_note(tags:Array):
 	enable_replies()
 	var l := _find_item("note", tags, true)
 	if l:
-		_call_next(l)
+		_goto_special(l)
 	else:
 		_no_label()
 
@@ -361,11 +373,11 @@ func use_item(id:String, desc: ItemDescription = null):
 		return
 	var by_item := _find_item("item", [id], false)
 	if by_item:
-		_call_next(by_item)
+		_goto_special(by_item)
 		return
 	var by_tag := _find_item("item", desc.tags if desc else [], true)
 	if by_tag:
-		_call_next(by_tag)
+		_goto_special(by_tag)
 	else:
 		_no_label()
 
@@ -408,7 +420,7 @@ func insert_label(text: String, format: String, font_override := ""):
 	if color != Color.black:
 		label.add_font_override("normal_font", font)
 		label.add_color_override("default_color", color)
-	messages.add_child(label)
+	message_list.add_child(label)
 
 func interpolate(line: String) -> String:
 	var matches := r_interpolate.search_all(line)
@@ -463,11 +475,23 @@ func trade_coats():
 	var coat_item: DialogItem = _find_item("_coat")
 	if coat_item:
 		mention("_coat")
-		call_stack.push_back(current_item)
+		push_stack(current_item, true)
 		current_item = coat_item
 		advance()
 	else:
 		insert_label("[You cannot trade coats at this time]", "narration")
+
+func push_stack(item: DialogItem, special_call := false):
+	var m: Control
+	if special_call:
+		var box = aside_template.duplicate()
+		message_list.add_child(box)
+		m = box.get_node("container")
+		var _x = m.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
+	else:
+		m = message_list
+	call_stack.push_back(CallFrame.new(item, message_list))
+	message_list = m
 
 func skip_and_exit():
 	if !is_exiting:
@@ -480,7 +504,7 @@ func fast_exit():
 		get_next()
 	else:
 		is_exiting = true
-		call_stack.push_back(current_item)
+		push_stack(current_item)
 		current_item = _find_item("_exit")
 		advance()
 
@@ -539,8 +563,8 @@ func _jump_next(item: DialogItem):
 	current_item = item
 	advance()
 
-func _call_next(item: DialogItem):
-	call_stack.push_back(current_item)
+func _goto_special(item: DialogItem):
+	push_stack(current_item, true)
 	current_item = item
 	advance()
 
@@ -667,14 +691,17 @@ func forget(topic):
 	return discussed.erase(topic)
 
 func subtopic(label: String):
-	call_stack.push_back(current_item)
+	push_stack(current_item)
 	return goto(label)
 
 func back():
 	# If there's nothing on the call stack, we just continue
 	if call_stack.empty():
 		return true
-	var caller = call_stack.pop_back()
+	var call_frame:CallFrame = call_stack.pop_back()
+	var caller := call_frame.item
+	message_list = call_frame.box
+	
 	if caller.type == DialogItem.Type.REPLY:
 		current_item = caller
 	elif caller.type == DialogItem.Type.CONTEXT_REPLY:

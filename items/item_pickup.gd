@@ -22,7 +22,7 @@ const sq_distance_visible := 100*100
 const sq_distance_animated := 50*50
 
 var gravity_stun_time := 0.0
-var fall_velocity := 0.0
+var velocity := Vector3.ZERO
 
 var anim: AnimationPlayer
 var sub_anim : AnimationPlayer
@@ -54,15 +54,15 @@ func _physics_process(delta):
 	if gravity:
 		if gravity_stun_time > 0:
 			gravity_stun_time -= delta
-			fall_velocity *= clamp(1.0 - delta, 0.1, 0.995)
-			fall_velocity += delta*Global.gravity_stun_velocity
+			velocity.y *= clamp(1.0 - delta, 0.1, 0.995)
+			velocity.y += delta*Global.gravity_stun_velocity
 			if gravity_stun_time <= 0:
 				emit_signal("gravity_stun", false)
 		else:
-			fall_velocity -= 9.8*delta
-		var col = move_and_collide(delta*Vector3.UP*fall_velocity)
+			velocity.y -= 9.8*delta
+		var col = move_and_collide(delta*velocity)
 		if col:
-			fall_velocity = 0.0
+			velocity = Vector3.ZERO
 	else:
 		set_physics_process(false)
 
@@ -84,7 +84,7 @@ func pick():
 func gravity_stun(_damage):
 	gravity = true
 	gravity_stun_time = Global.gravity_stun_time
-	fall_velocity = 3
+	velocity.y = 3
 	emit_signal("gravity_stun", true)
 	set_physics_process(true)
 

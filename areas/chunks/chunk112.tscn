@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=2]
+[gd_scene load_steps=113 format=2]
 
 [ext_resource path="res://entities/one_time/chunks/chunk112.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -30,6 +30,7 @@
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=28]
 [ext_resource path="res://dialog/intro/fountain.dialog" type="Resource" id=29]
 [ext_resource path="res://dialog/intro/tylers_mom.dialog" type="Resource" id=30]
+[ext_resource path="res://entities/rescue_point.gd" type="Script" id=31]
 [ext_resource path="res://entities/one_time/npc_tyler.gd" type="Script" id=32]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=33]
 [ext_resource path="res://dialog/intro/bathhouse.dialog" type="Resource" id=34]
@@ -153,6 +154,7 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 40 )
 shader_param/ground = ExtResource( 41 )
 shader_param/ceiling = ExtResource( 42 )
@@ -168,6 +170,7 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/wall = ExtResource( 40 )
 shader_param/ground = ExtResource( 47 )
 shader_param/ceiling = ExtResource( 47 )
@@ -1891,6 +1894,10 @@ reset_on_player_death = true
 [node name="speeder" parent="active_entities" index="4" instance=ExtResource( 16 )]
 transform = Transform( 0.602934, 0, 0.797791, 0, 1, 0, -0.797791, 0, 0.602934, -62.5902, -249.17, 129.113 )
 reset_on_player_death = true
+
+[node name="rescue_112" type="Position3D" parent="." index="9"]
+transform = Transform( 0.739231, 0, -0.673452, 0, 1, 0, 0.673452, 0, 0.739231, 221.913, -228.937, -34.8544 )
+script = ExtResource( 31 )
 
 [connection signal="body_entered" from="active_entities/npc_tutorial_tyler/tutorial_area" to="active_entities/npc_tutorial_tyler/tutorial_area" method="_on_tutorial_area_body_entered"]
 [connection signal="animation_finished" from="active_entities/npc_tutorial_tyler/tutorial_area/tutorial_anim" to="active_entities/npc_tutorial_tyler/tutorial_area" method="_on_AnimationPlayer_animation_finished"]

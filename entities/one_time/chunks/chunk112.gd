@@ -11,3 +11,4 @@ func _on_stat_changed(stat, _value):
 	if stat in tracked_stats:
 		var safe_gate = Global.stat("hdw_gate")
 		Global.set_stat(safe_stat, safe_gate)
+	

@@ -431,6 +431,28 @@ func get_rarity_color(rarity: int) -> Color:
 		_:
 			return Color.white
 
+func request_rescue():
+	if !has_stat("rescue"):
+		return false
+	var p := get_player()
+	if !p:
+		return false
+	var r:Dictionary = stat("rescue")
+	if r.empty():
+		return false
+
+	var best_dist := INF
+	var closest_transform := Transform()
+	for t in r.values():
+		var d :float = (p.global_transform.origin - t.origin).length_squared()
+		if d < best_dist:
+			closest_transform = t
+	var g := count("gem")
+	if g:
+		remove_item("gem", g/2)
+	save_checkpoint(closest_transform)
+	p.respawn()
+
 #Saving and loading
 func reset_game():
 	valid_game_state = false

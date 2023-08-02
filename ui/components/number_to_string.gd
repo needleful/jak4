@@ -136,7 +136,7 @@ static func say_time(time:float, verbose:=true, say_pm:=false) -> String:
 		pm = !pm
 	var numeral := ""
 	if !verbose:
-		numeral = "%2d:%02d" % [hours, minutes]
+		numeral = "%d:%02d" % [hours, minutes]
 	else:
 		if minutes != 0:
 			if minutes == 30:
@@ -158,10 +158,10 @@ static func say_time(time:float, verbose:=true, say_pm:=false) -> String:
 				numeral += "midnight"
 		else:
 			numeral += verbose_small(hours)
-	var daytime := ""
 	if say_pm:
-		daytime = "p.m." if pm else "a.m."
-	return numeral + " " + daytime
+		return numeral + " " + ("p.m." if pm else "a.m.")
+	else:
+		return numeral
 
 static func hour_increment(hours):
 	hours += 1

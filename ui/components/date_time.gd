@@ -9,7 +9,4 @@ func _notification(what):
 		if get_tree().current_scene.has_method("get_time"):
 			var time = get_tree().current_scene.get_time()
 			var t := NumberToString.say_time(time, false, true)
-			var t2 := t.split(' ')
-			t2[0] = t2[0].capitalize()
-			t = t2.join(' ')
 			$margin/stats/time.text = "%s" % t

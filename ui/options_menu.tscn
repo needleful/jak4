@@ -1,9 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://ui/options_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/options_submenu.gd" type="Script" id=2]
 [ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=3]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://ui/components/popup_custom.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/item_counter.gd" type="Script" id=6]
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -175,6 +177,125 @@ tracks/1/keys = {
 size = 32
 font_data = ExtResource( 4 )
 
+[sub_resource type="Animation" id=8]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ColorRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("rescue:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "cancel"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("rescue:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ColorRect:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "show_rescue"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("rescue:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ColorRect:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
 [node name="options_menu" type="Control"]
 pause_mode = 2
 anchor_right = 1.0
@@ -225,10 +346,16 @@ margin_right = 250.0
 margin_bottom = 146.0
 text = "Options"
 
-[node name="quit" type="Button" parent="foreground/main_menu"]
+[node name="request_rescue" type="Button" parent="foreground/main_menu"]
 margin_top = 186.0
 margin_right = 250.0
 margin_bottom = 208.0
+text = "Request Rescue"
+
+[node name="quit" type="Button" parent="foreground/main_menu"]
+margin_top = 248.0
+margin_right = 250.0
+margin_bottom = 270.0
 text = "Save and Quit"
 
 [node name="options_panel" type="VBoxContainer" parent="foreground"]
@@ -272,11 +399,94 @@ margin_bottom = 56.0
 custom_fonts/font = SubResource( 1 )
 text = "Paused"
 
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.686275 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 8 )
+anims/cancel = SubResource( 9 )
+anims/show_rescue = SubResource( 10 )
+
+[node name="rescue" parent="." instance=ExtResource( 5 )]
+visible = false
+header = "Lose Gems to Get Rescued?"
+body = "You will be rescued and return to the nearest town, but lose half of your gems.
+This should only be used as a last resort.
+Do you want to proceed?"
+confirm_text = "Request Rescue"
+
+[node name="content" parent="rescue" index="0"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 771.0
+margin_bottom = 349.0
+
+[node name="header" parent="rescue/content" index="0"]
+margin_right = 739.0
+
+[node name="body" parent="rescue/content" index="1"]
+margin_right = 739.0
+margin_bottom = 62.0
+
+[node name="spacer" parent="rescue/content" index="2"]
+margin_top = 66.0
+margin_right = 739.0
+margin_bottom = 176.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="rescue/content" index="3"]
+margin_top = 180.0
+margin_right = 739.0
+margin_bottom = 291.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="rescue/content/HBoxContainer"]
+margin_top = 44.0
+margin_right = 131.0
+margin_bottom = 66.0
+text = "Current Gems:"
+
+[node name="Label2" type="Label" parent="rescue/content/HBoxContainer"]
+margin_left = 135.0
+margin_top = 44.0
+margin_right = 145.0
+margin_bottom = 66.0
+text = "0"
+script = ExtResource( 6 )
+item_id = "gem"
+
+[node name="buttons" parent="rescue/content" index="4"]
+margin_top = 295.0
+margin_right = 739.0
+margin_bottom = 317.0
+
+[node name="cancel" parent="rescue/content/buttons" index="0"]
+margin_right = 60.0
+margin_bottom = 22.0
+
+[node name="spacer" parent="rescue/content/buttons" index="1"]
+margin_left = 64.0
+margin_right = 663.0
+margin_bottom = 22.0
+
+[node name="confirm" parent="rescue/content/buttons" index="2"]
+margin_left = 667.0
+margin_right = 739.0
+margin_bottom = 22.0
+
 [connection signal="pressed" from="foreground/main_menu/resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="foreground/main_menu/exit_minigame" to="." method="_on_exit_minigame_pressed"]
 [connection signal="pressed" from="foreground/main_menu/reload" to="." method="_on_reload_pressed"]
 [connection signal="pressed" from="foreground/main_menu/options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="foreground/main_menu/request_rescue" to="." method="_on_request_rescue_pressed"]
 [connection signal="pressed" from="foreground/main_menu/quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="foreground/options_panel/back" to="." method="_on_back_pressed"]
 [connection signal="back_pressed" from="foreground/options_template" to="." method="_on_back_pressed"]
 [connection signal="ui_redraw" from="foreground/options_template" to="." method="_on_ui_redraw"]
+[connection signal="cancelled" from="rescue" to="." method="_on_rescue_cancelled"]
+[connection signal="confirmed" from="rescue" to="." method="_on_rescue_confirmed"]
+
+[editable path="rescue"]

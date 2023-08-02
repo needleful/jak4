@@ -26,6 +26,7 @@ func _notification(what):
 
 func set_active(active):
 	if active:
+		$AnimationPlayer.play("RESET")
 		$foreground/main_menu/exit_minigame.visible = CustomGames.is_active()
 		Settings.load_settings()
 		set_level(0)
@@ -139,3 +140,19 @@ func _on_exit_minigame_pressed():
 		_on_reload_pressed()
 	else:
 		print_debug("This button should not be visible! ", get_path())
+
+func _on_request_rescue_pressed():
+	$AnimationPlayer.play("show_rescue")
+	for c in main_menu.get_children():
+		if c is Control:
+			c.focus_mode = Control.FOCUS_NONE
+	yield(get_tree().create_timer(0.1), "timeout")
+	$rescue.grab_button_focus()
+
+func _on_rescue_cancelled():
+	$AnimationPlayer.play("cancel")
+	set_level(0)
+
+func _on_rescue_confirmed():
+	ui.unpause()
+	Global.request_rescue()

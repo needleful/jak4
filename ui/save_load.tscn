@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ui/save_load.gd" type="Script" id=1]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=3]
+[ext_resource path="res://ui/components/popup_custom.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -35,7 +36,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("Panel:visible")
+tracks/2/path = NodePath("new_game:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -51,7 +52,7 @@ tracks/2/keys = {
 resource_name = "cancel"
 length = 0.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Panel:visible")
+tracks/0/path = NodePath("new_game:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -91,31 +92,31 @@ tracks/2/keys = {
 resource_name = "show_new_game"
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/path = NodePath("ColorRect:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("ColorRect:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("new_game:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 tracks/2/type = "value"
-tracks/2/path = NodePath("Panel:visible")
+tracks/2/path = NodePath("ColorRect:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -161,69 +162,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.686275 )
 
-[node name="Panel" type="PanelContainer" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -401.5
-margin_top = -190.5
-margin_right = 401.5
-margin_bottom = 190.5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
-margin_left = 32.0
-margin_top = 32.0
-margin_right = 771.0
-margin_bottom = 349.0
-
-[node name="Label" type="Label" parent="Panel/VBoxContainer"]
-margin_right = 739.0
-margin_bottom = 36.0
-custom_fonts/font = SubResource( 1 )
-text = "Reset Your Game?"
-
-[node name="Label2" type="Label" parent="Panel/VBoxContainer"]
-margin_top = 40.0
-margin_right = 739.0
-margin_bottom = 62.0
-text = "This will permanently delete your save. Do you want to proceed?"
-
-[node name="spacer" type="Control" parent="Panel/VBoxContainer"]
-margin_top = 66.0
-margin_right = 739.0
-margin_bottom = 291.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
-margin_top = 295.0
-margin_right = 739.0
-margin_bottom = 317.0
-
-[node name="cancel" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 22.0
-text = "Cancel"
-
-[node name="spacer" type="Control" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_left = 64.0
-margin_right = 630.0
-margin_bottom = 22.0
-size_flags_horizontal = 3
-
-[node name="new_game" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_left = 634.0
-margin_right = 739.0
-margin_bottom = 22.0
-text = "Reset Game"
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 2 )
 anims/cancel = SubResource( 4 )
 anims/show_new_game = SubResource( 3 )
 
+[node name="new_game" parent="." instance=ExtResource( 4 )]
+visible = false
+header = "Reset Your Game?"
+body = "This will permanently delete your save. Do you want to proceed?"
+confirm_text = "Reset Game"
+
 [connection signal="pressed" from="buttons/new_game" to="." method="_on_new_game_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/cancel" to="." method="_on_new_game_cancelled"]
-[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/new_game" to="." method="_on_new_game_confirmed"]
+[connection signal="cancelled" from="new_game" to="." method="_on_new_game_cancelled"]
+[connection signal="confirmed" from="new_game" to="." method="_on_new_game_confirmed"]

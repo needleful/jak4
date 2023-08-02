@@ -1663,6 +1663,9 @@ func _wake_up():
 	$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
 
+func fade_in():
+	$fade/AnimationPlayer.play("fadein")
+
 func die():
 	set_state(State.Dead)
 	var _x = Global.add_stat("player_death")

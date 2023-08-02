@@ -87,3 +87,6 @@ func fly():
 func reset_flight():
 	if plane_node:
 		plane_node.reset()
+		var p := Global.get_player()
+		if p:
+			p.fade_in()
