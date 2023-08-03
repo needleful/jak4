@@ -449,7 +449,8 @@ func request_rescue():
 			closest_transform = t
 	var g := count("gem")
 	if g:
-		remove_item("gem", g/2)
+		# warning-ignore:integer_division
+		var _x = remove_item("gem", g/2)
 	save_checkpoint(closest_transform)
 	p.respawn()
 

@@ -456,10 +456,10 @@ func open_custom(scene: PackedScene) -> bool:
 		return false
 
 	if custom_ui:
-		remove_child(custom_ui)
+		$custom_ui.remove_child(custom_ui)
 		custom_ui.queue_free()
 	custom_ui = cui
-	add_child(custom_ui)
+	$custom_ui.add_child(custom_ui)
 
 	if custom_ui.has_signal("exited"):
 		var _x = custom_ui.connect("exited", self, "play_game")
@@ -467,4 +467,5 @@ func open_custom(scene: PackedScene) -> bool:
 	loaded_ui = scene
 	
 	set_mode(Mode.Custom)
+	custom_ui.show()
 	return true

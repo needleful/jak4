@@ -31,7 +31,7 @@
 [ext_resource path="res://ui/debug_console.gd" type="Script" id=29]
 [ext_resource path="res://ui/equipment.gd" type="Script" id=30]
 [ext_resource path="res://ui/save_load.tscn" type="PackedScene" id=31]
-[ext_resource path="res://ui/wardrobe/wardrobe.tscn" type="PackedScene" id=32]
+[ext_resource path="res://ui/wardrobe/wardrobe_ui.tscn" type="PackedScene" id=32]
 [ext_resource path="res://ui/dialog.gd" type="Script" id=33]
 [ext_resource path="res://ui/story_time.gd" type="Script" id=34]
 [ext_resource path="res://material/env/water_ripple.png" type="Texture" id=35]
@@ -2455,12 +2455,17 @@ small = true
 wait_time = 3.0
 one_shot = true
 
-[node name="post_pause_timer" type="Timer" parent="ui"]
-time_scale_response = false
-wait_time = 0.1
-one_shot = true
+[node name="custom_ui" type="AspectRatioContainer" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+ratio = 1.7778
+script = ExtResource( 47 )
 
-[node name="cursor" type="NinePatchRect" parent="ui"]
+[node name="post_pause_timer" type="Timer" parent="ui"]
+wait_time = 0.1
+
+[node name="cursor" type="NinePatchRect" parent="."]
+pause_mode = 2
 margin_left = 499.0
 margin_top = 401.0
 margin_right = 715.0
@@ -2536,8 +2541,6 @@ material/0 = SubResource( 98 )
 [connection signal="show_stats" from="." to="ui" method="show_inventory"]
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/stamina" method="queue_show"]
-[connection signal="active" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_Wardrobe_active"]
-[connection signal="exited" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
 [connection signal="timeout" from="ui/gameing/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/gameing/equipment/Timer" to="ui/gameing/gameing/equipment" method="_on_Timer_timeout"]
