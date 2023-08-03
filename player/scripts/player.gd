@@ -550,7 +550,7 @@ func _physics_process(delta):
 				next_state = State.Crouch
 			elif !empty(crouch_head) and $standing_col.disabled:
 				next_state = State.Crouch
-			elif released("combat_lunge"):
+			elif pressed("combat_lunge"):
 				next_state = State.LungeKick
 			elif pressed("combat_spin"):
 				next_state = State.SpinKick
@@ -632,7 +632,7 @@ func _physics_process(delta):
 		State.Crouch:
 			if pressed("mv_jump"):
 				next_state = State.CrouchJump
-			elif released("combat_lunge"):
+			elif pressed("combat_lunge"):
 				next_state = State.UppercutWindup
 			elif best_floor and best_floor.is_in_group("dont_stand"):
 				next_state = State.Fall
@@ -853,7 +853,7 @@ func _physics_process(delta):
 			if after(TIME_UPPERCUT_WINDUP):
 				next_state = State.Uppercut
 		State.Uppercut:
-			if released("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.DiveWindup
 			elif released("combat_spin"):
 				next_state = State.AirSpinKick
@@ -889,7 +889,7 @@ func _physics_process(delta):
 			elif !after(TIME_DIVE_HIGHJUMP) and pressed("mv_jump"):
 				next_state = State.HighJump
 		State.Damaged:
-			if released("combat_lunge"):
+			if pressed("combat_lunge"):
 				next_state = State.LungeKick
 			elif pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -919,7 +919,7 @@ func _physics_process(delta):
 		State.Wading:
 			if pressed("mv_jump"):
 				next_state = State.WadingJump
-			elif released("combat_lunge"):
+			elif pressed("combat_lunge"):
 				next_state = State.LungeKick
 			elif pressed("combat_spin"):
 				next_state = State.SpinKick
@@ -1963,11 +1963,8 @@ func set_state(next_state: int):
 			stamina = max_stamina
 		State.WadingFall:
 			reset_ground()
-			mesh.transition_to("Fall")
-			mesh.step(false)
 		State.Fall, State.LedgeFall, State.WaveJump:
 			reset_ground()
-			mesh.transition_to("Fall")
 		State.BaseJump:
 			reset_ground()
 			start_jump(JUMP_VEL_BASE)
@@ -1985,14 +1982,10 @@ func set_state(next_state: int):
 			$crouching_col.disabled = true
 			$standing_col.disabled = true
 			start_jump(JUMP_VEL_LEDGE)
-			mesh.play_ledge_jump()
-			gun.unlock()
 		State.CrouchJump:
 			reset_ground()
 			jump_time = TIME_CROUCH_JUMP
 			start_jump(JUMP_VEL_CROUCH)
-			mesh.play_crouch_jump()
-			gun.unlock()
 		State.RollJump:
 			reset_ground()
 			damaged_objects = []
@@ -2001,123 +1994,78 @@ func set_state(next_state: int):
 			var dir = mesh.global_transform.basis.z
 			velocity = speed_factor*dir*JUMP_VEL_ROLL_FORWARD
 			start_jump(JUMP_VEL_ROLL)
-			mesh.play_roll_jump(max_damage)
-			gun.lock()
-		State.Slide:
-			mesh.ground_transition("Slide")
-			gun.unlock()
 		State.Crouch:
 			stamina = max_stamina
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			mesh.ground_transition("Crouch")
 			can_air_spin = true
-			gun.unlock()
 		State.Climb:
 			drain_stamina(STAMINA_DRAIN_CLIMB_START)
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			mesh.ground_transition("Climb")
 			can_air_spin = true
-			gun.lock()
 		State.LedgeHang:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			wall_cling = true
-			mesh.play_ledge_grab()
 			snap_to_ledge(ledge.global_transform*ledge_local_position)
 			velocity = Vector3.ZERO
 			can_air_spin = true
-			gun.lock()
 		State.Roll:
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			mesh.play_roll()
-			gun.lock()
 		State.RollFall:
 			reset_ground()
-			gun.lock()
 		State.BonkFall:
 			reset_ground()
 			wall_cling = false
-			mesh.transition_to("Fall")
 			var dir = ground_normal
 			dir.y = 0.1
 			dir = dir.normalized()
 			velocity = speed_factor*dir*SPEED_BONK
-			gun.unlock()
 		State.LungeKick, State.SlideLungeKick:
 			damaged_objects = []
 			var dir = get_visual_forward()
 			velocity = dir*SPEED_LUNGE
 			if water_depth > DEPTH_WATER_WADE:
 				velocity *= VEL_REDUCTION_WATER
-			mesh.play_lunge_kick(max_damage)
 			can_slide_lunge = false
-			gun.lock()
 		State.SpinKick, State.AirSpinKick:
 			damaged_objects = []
 			velocity.y = jump_factor*VEL_AIR_SPIN
 			$base_mesh/attack_spin/AnimationPlayer.play("spin")
-			mesh.play_spin_kick(max_damage)
 			can_air_spin = false
-			gun.aim_lock()
-		State.UppercutWindup:
-			mesh.transition_to("Uppercut")
-			gun.lock()
 		State.Uppercut:
 			reset_ground()
 			emit_signal("jumped")
 			damaged_objects = []
 			velocity.y = damage_factor*VEL_UPPERCUT
-			mesh.play_uppercut(max_damage)
-			gun.lock()
 		State.DiveWindup:
 			velocity.y = VEL_DIVE_WINDUP
-			mesh.play_dive_windup(max_damage)
-			gun.lock()
 		State.DiveStart:
 			damaged_objects = []
-			mesh.play_dive_start(max_damage)
-			gun.lock()
-		State.DiveEnd:
-			mesh.play_dive_end(max_damage)
-			gun.aim_lock()
 		State.Damaged:
 			velocity.y = max(velocity.y, speed_factor*VEL_DAMAGED_V)
-			mesh.play_deferred("Damaged")
-			gun.unlock()
 		State.Locked, State.LockedWaiting:
 			velocity = Vector3.ZERO
-			gun.disable()
 		State.PlaceFlag:
-			mesh.play_custom("PlaceFlag")
 			velocity = Vector3.ZERO
-			gun.aim_lock()
 			mesh.hold_item(flag.instance())
 			time_animation = TIME_PLACE_FLAG
 		State.GetItem:
-			mesh.play_custom("ItemGet")
 			velocity = Vector3.ZERO
-			gun.aim_lock()
 			if held_item:
 				mesh.hold_item(held_item)
 			time_animation = TIME_GET_ITEM
 		State.FallingDeath:
-			mesh.transition_to("Fall")
 			cam_rig.lock_follow()
-			gun.unlock()
 		State.GravityStun:
 			reset_ground()
 			velocity.y = 4
-			mesh.transition_to("Damaged")
-			gun.unlock()
 		State.Hover:
 			reset_ground()
 			collision_mask |= 1 << 13
 			hover_cast.enabled = true
-			mesh.start_hover()
-			gun.unlock()
 		State.Sitting:
 			var sat_times = Global.add_stat("player_sat")
 			if state != State.Locked and sat_times < 3:
@@ -2125,35 +2073,25 @@ func set_state(next_state: int):
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
 			velocity = Vector3.ZERO
-			mesh.play_sit()
-			gun.unlock()
 		State.Dash:
 			wall_cling = true
 			dash_charges -= 1
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
-			mesh.play_deferred("Dash")
-			gun.unlock()
 		State.Wading:
 			can_air_spin = true
 			can_slide_lunge = true
 			wall_cling = true
 			dash_charges = Global.count("dash_charge")
-			mesh.ground_transition("Wading")
-			gun.unlock()
 		State.WadingJump:
 			reset_ground()
 			start_jump(5.0)
-			mesh.play_wading_jump()
-			gun.unlock()
 		State.WallCling:
 			can_air_spin = true
 			wall_cling = false
 			$crouching_col.disabled = false
 			$standing_col.disabled = true
-			mesh.transition_to("WallCling")
 			velocity.y = 0
-			gun.lock()
 		State.NoClip:
 			collision_layer = 0
 			collision_mask = 0

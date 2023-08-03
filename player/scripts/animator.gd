@@ -323,7 +323,7 @@ func play_uppercut(_max_damage: bool):
 
 func play_lunge_kick(_max_damage: bool):
 	anim["parameters/WholeBody/LungeKick/blend_position"] = float(lunge_right_foot)
-	transition_to("LungeKick")
+	force_play("LungeKick")
 	lunge_right_foot = !lunge_right_foot
 	play_attack_sound(sound_lunge_kick)
 

@@ -60,7 +60,6 @@
 [ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=58]
 [ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=59]
 [ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=60]
-[ext_resource path="res://material/env/ancient/white_metal_triplanar.tres" type="Material" id=61]
 [ext_resource path="res://material/env/stone/brick_and_cobble.material" type="Material" id=62]
 [ext_resource path="res://material/env/noise.jpg" type="Texture" id=63]
 [ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=64]
@@ -85,7 +84,23 @@ shader_param/specularity_wall = 1.0
 shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
-shader_param/albedo = Color( 0.835294, 0.780392, 0.760784, 1 )
+shader_param/albedo = Color( 0.25098, 0.34902, 0.337255, 1 )
+shader_param/wall = ExtResource( 63 )
+shader_param/ground = ExtResource( 63 )
+shader_param/ceiling = ExtResource( 63 )
+
+[sub_resource type="ShaderMaterial" id=23]
+shader = ExtResource( 32 )
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 0.152941, 0.160784, 0.172549, 1 )
 shader_param/wall = ExtResource( 63 )
 shader_param/ground = ExtResource( 63 )
 shader_param/ceiling = ExtResource( 63 )
@@ -348,7 +363,7 @@ collision_layer = 257
 [node name="cyl" parent="city" index="1"]
 material/0 = SubResource( 22 )
 material/1 = ExtResource( 60 )
-material/2 = ExtResource( 61 )
+material/2 = SubResource( 23 )
 
 [node name="door3" parent="city" index="2"]
 material/0 = ExtResource( 38 )
@@ -367,13 +382,13 @@ collision_layer = 257
 [node name="grid" parent="city" index="4"]
 material/0 = ExtResource( 38 )
 
-[node name="walkways" parent="city/grid" index="3"]
+[node name="walkways" parent="city/grid" index="7"]
 material/0 = ExtResource( 62 )
 
 [node name="StaticBody" parent="city/grid/walkways" index="0"]
 collision_layer = 257
 
-[node name="StaticBody" parent="city/grid" index="4"]
+[node name="StaticBody" parent="city/grid" index="8"]
 collision_layer = 257
 
 [node name="protector" parent="city" index="5"]
