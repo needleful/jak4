@@ -39,7 +39,7 @@ func safe_set_tab(tab):
 func _on_wardrobe_exited():
 	ui.unpause()
 
-func _on_Wardrobe_active(active):
+func _on_wardrobe_active(active):
 	$TextureRect.visible = !active
 	$background.visible = !active
 	Global.get_player().set_camera_render(active or !get_tree().paused)

@@ -26,7 +26,7 @@ onready var ctype_nodes := [
 	$window/info/MarginContainer/box/grid/ctype_label2,
 	$window/info/MarginContainer/box/grid/ctype_prompt1,
 	$window/info/MarginContainer/box/grid/ctype_prompt2,
-	$window/player_view/coat_type
+	$window/player_view/coat/coat_type
 ]
 
 func _init():
@@ -75,9 +75,9 @@ func _input(event):
 			viewing_index += 1
 			viewing_index = viewing_index % l
 			view()
-	elif event.is_action_pressed("combat_shoot"):
+	elif event.is_action_pressed("ctype_next"):
 		set_coat_type(coat_type + 1)
-	elif event.is_action_pressed("mv_crouch"):
+	elif event.is_action_pressed("ctype_prev"):
 		set_coat_type(coat_type - 1)
 
 func _notification(what):
@@ -167,5 +167,5 @@ func set_coat_type(type:int):
 	type = type % type_count
 
 	var mesh_name = available_coat_types[type]
-	$window/player_view/coat_type.text = f_mesh % mesh_name.capitalize()
+	$window/player_view/coat/coat_type.text = f_mesh % mesh_name.capitalize()
 	player.mesh.coat_mesh.set_coat_type(mesh_name)
