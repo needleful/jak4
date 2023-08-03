@@ -20,6 +20,7 @@ const PATH_LOWRES := "res://areas/chunks/%s_lowres.tscn"
 
 var exit_thread := false
 var _load_mutex := Mutex.new()
+var _content_mutex := Mutex.new()
 var _load_queue : Array
 var _load_thread := Thread.new()
 
@@ -103,13 +104,16 @@ func is_alive():
 	return _load_thread.is_alive()
 
 func _get_content(dic:Dictionary, chunk: String):
+	_content_mutex.lock()
 	var res
 	res = dic.get(chunk)
 	if res is String:
 		var data = ResourceLoader.load(res)
 		dic[chunk] = data
+		_content_mutex.unlock()
 		return data
 	else:
+		_content_mutex.unlock()
 		return res
 
 func unload_all():
