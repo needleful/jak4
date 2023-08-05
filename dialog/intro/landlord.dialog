@@ -1,11 +1,18 @@
 {talked == 0}
-	* The man smiles as you approach.
-	[remember: He seems friendly enough.] Are your housings satisfactory?
+	* The man smiles as you approach. [remember: He seems friendly enough.] 
+	Are your housings satisfactory?
 	We made sure to get wardrobe, as asked.
-	You -- Yes, thank you. It's perfect. So about the Medium?
-	[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] Armstrong is out beside the machine, with the goggles. He knows it better than everyone.
-	It is the white building in town. Impossible to miss.
-	You -- Right. I'll talk to him.
+	You -- Yes, thank you. It's perfect. In your letter, you said there was some paperwork I needed to bring? [mention: paperwork]
+	Oh, sure. Your country has forms we need to fill for tourism. If you have them I will take them.
+	* (HINT: You can use items in dialog by pressing "Use Item" as shown on the left, and selecting the "Housing Paperwork".)
+	You -- I think I have those.
+		...
+		Uh, I'll probably find them at some point.
+	Well, as long as we fill them out before you leave, I think it'll be fine.
+	...
+	You -- What happens if you don't fill them out?
+	They send more papers to fill out.
+	You -- My condolences.
 {otherwise}[Global stat: talked/mum] [! Global stat: landlord/discussed/mum]
 	Say, if you do not mind me prying, who did you talk with in there?
 	> Uh, sorry, I can't get into it right now.
@@ -47,7 +54,14 @@
 {otherwise}
 	Did you need anything?
 	You -- Not right now, thanks.
-	Ok, I will be around if you need.
+	[Global count: housing_paperwork] [mention: paperwork]
+		Did you find the paperwork?
+		You -- I'm sure it's in my bag somewhere.
+		* (HINT: You can use items in dialog by pressing "Use Item" as shown on the left, and selecting the "Housing Paperwork".)
+		You -- ...
+		Well, whenever you find it, that will be good.
+	{otherwise}
+		Ok, I will be around if you need.
 [exit]
 
 :_coat
@@ -72,3 +86,31 @@
 		[swap_coats] Well, it's no problem for me. I hope you enjoy.
 		You -- Thank you dearly! It looks great!
 [back]
+
+:item(housing_paperwork) :- mentioned("paperwork")
+* You hand him the papers.
+[Global remove_item: housing_paperwork]
+You -- Here it is. So about the Medium?
+Ah, thank you. Armstrong is out beside the machine, with the goggles. He knows it better than everyone.
+[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] 
+It is the white building in town. Impossible to miss.
+You -- Right. I'll talk to him.
+[exit]
+
+:item(housing_paperwork) :- stat(talked/armstrong)
+[mentioned: paperwork]
+	You -- Right, here's the paperwork.
+{otherwise}
+	You -- I found that paperwork, if you still needed it.
+[Global remove_item: housing_paperwork]
+Yes, I will take those, thank you.
+[exit]
+
+:item(housing_paperwork)
+[Global remove_item: housing_paperwork]
+You -- Here's the papers you mentioned in you letter. So about the Medium?
+Oh, I see it's important. It is the white building in town. Impossible to miss.
+Talk to Armstrong, he is at the machine now.
+[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] 
+You -- Excellent. I'll talk to him.
+[exit]

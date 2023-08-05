@@ -26,8 +26,10 @@ func _notification(what):
 
 func set_active(active):
 	if active:
+		var p := Global.get_player()
 		$AnimationPlayer.play("RESET")
 		$foreground/main_menu/exit_minigame.visible = CustomGames.is_active()
+		$foreground/main_menu/request_rescue.disabled = p and p.is_locked()
 		Settings.load_settings()
 		set_level(0)
 	else:
@@ -146,6 +148,7 @@ func _on_request_rescue_pressed():
 	for c in main_menu.get_children():
 		if c is Control:
 			c.focus_mode = Control.FOCUS_NONE
+	$rescue/content/exiting_game.visible = CustomGames.is_active()
 	yield(get_tree().create_timer(0.1), "timeout")
 	$rescue.grab_button_focus()
 
@@ -156,3 +159,5 @@ func _on_rescue_cancelled():
 func _on_rescue_confirmed():
 	ui.unpause()
 	Global.request_rescue()
+	if CustomGames.is_active():
+		CustomGames.cancel_game()

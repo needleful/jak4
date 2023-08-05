@@ -484,6 +484,12 @@ func _physics_process(delta):
 		average_normal += v/running_ground.size()
 	average_normal = average_normal.normalized()
 	
+	if (max_depth > DEPTH_CRUSH 
+		and best_floor
+		and !best_floor.is_in_group("no_crush")
+	):
+		crushing_death()
+		
 	var best_floor_dot = max(average_normal.y, current_normal.y)
 	if current_normal.y > MIN_DOT_GROUND:
 		ground_normal = current_normal
@@ -495,8 +501,6 @@ func _physics_process(delta):
 	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
 	debug.get_node("stats/a9").text = "Depth: " + str(max_depth)
 	
-	if max_depth > DEPTH_CRUSH:
-		crushing_death()
 	
 	if water_cast.is_colliding():
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
@@ -1676,7 +1680,6 @@ func fall_to_death():
 	set_state(State.FallingDeath)
 
 func crushing_death():
-	# TODO: custom death animation
 	die()
 
 func respawn():

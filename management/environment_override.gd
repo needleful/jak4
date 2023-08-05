@@ -41,8 +41,8 @@ func _on_body_entered(_body):
 	show()
 
 func _on_body_exited(_body):
-	var id := hash(get_path())
 	if is_inside_tree():
+		var id := hash(get_path())
 		get_tree().current_scene.remove_environment(id)
 	hide()
 

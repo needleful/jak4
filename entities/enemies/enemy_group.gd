@@ -14,6 +14,7 @@ func _ready():
 	if persistent and Global.stat(stat_name):
 		emit_signal("spawned_without_enemies")
 		queue_free()
+		return
 	for c in get_children():
 		if c is EnemyBody:
 			if !c.is_dead():
