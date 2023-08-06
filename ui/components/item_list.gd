@@ -14,20 +14,20 @@ const DEFAULT_ICONS := {
 
 enum Sort {
 	Category,
+	Recency,
 	Name,
-	Recency
 }
 
 var sort = Sort.Category
 var sort_func := [
 	"sort_by_category",
+	"sort_by_recency",
 	"sort_by_name",
-	"sort_by_recency"
 ]
 var key_sort_func := [
 	"key_sort_by_category",
+	"key_sort_by_recency",
 	"key_sort_by_name",
-	"key_sort_by_recency"
 ]
 
 var buttons: Dictionary

@@ -23,6 +23,7 @@ var equipment_path_f := "res://items/usable/%s.gd"
 
 var custom_ui : Control
 var loaded_ui : PackedScene
+var input_blocked := false
 
 const VISIBLE_ITEMS := [
 	"bug",
@@ -69,6 +70,7 @@ func _ready():
 	_x = Global.connect("journal_updated", self, "on_journal_updated")
 	set_mode(Mode.Gameing)
 	set_process_input(true)
+	InputManagement.ui = self
 
 func activate():
 	update_inventory(true)
@@ -432,14 +434,12 @@ func show_status() -> bool:
 	return true
 
 func unpause() -> bool:
-	$post_pause_timer.start()
 	set_mode(mode_before_pause)
+	block_input()
 	return true
 
-func recently_paused():
-	return !$post_pause_timer.is_stopped()
-
 func play_game() -> bool:
+	block_input()
 	set_mode(Mode.Gameing)
 	return true
 
@@ -469,3 +469,8 @@ func open_custom(scene: PackedScene) -> bool:
 	set_mode(Mode.Custom)
 	custom_ui.show()
 	return true
+
+func block_input():
+	input_blocked = true
+	yield(get_tree().create_timer(0.1), "timeout")
+	input_blocked = false

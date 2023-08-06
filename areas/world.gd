@@ -268,7 +268,7 @@ func show_combat_tutorial():
 
 func show_cloaked_combat_tutorial():
 	var _x = Global.add_stat("cloaked_combat_tutorial")
-	if Global.using_gamepad:
+	if InputManagement.using_gamepad:
 		player.ui.show_prompt(["combat_aim_toggle"], "Toggle aim")
 	else:
 		player.ui.show_prompt(["combat_aim"], "Aim")

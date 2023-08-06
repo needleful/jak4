@@ -2,14 +2,17 @@
 	{talked == 0}
 		Help! Monsters have taken over my home!
 		You -- I suppose I'll do what I can.
-		[Global create_task: unwanted_visitors]
-		[Global mark_map: bairo_farm | A small farm run by a man named Bairo.]
-		[note: bairo/helping | I met a distressed man on the roof of his home, being harassed by monsters. |+ unwanted_visitors bairo_farm bairo]
+		//[Global create_task: unwanted_visitors]
+		//[Global mark_map: bairo_farm | A small farm run by a man named Bairo.]
+		//[note: bairo/helping | I met a distressed man on the roof of his home, being harassed by monsters. |+ unwanted_visitors bairo_farm bairo]
 	{otherwise}
 		Help!
-{otherwise}[! Global stat: bairo/conspiracy]
+{otherwise}
 	Thank you so much for helping me, stranger!
 	You -- Oh, no problem.
+	//[Global complete_task: unwanted_visitors]
+[exit]
+{otherwise}[! Global stat: bairo/conspiracy]
 	[Global task_exists: unwanted_visitors]
 		[Global abolish_notes:+ unwanted_visitors bairo_farm]
 		[Global add_note: I cleared out the creatures without much difficulty. |+ unwanted_visitors bairo]
@@ -78,7 +81,15 @@
 	You -- How's the farm going?
 	Good, thanks to you!
 	[exit]
-
+[exit]
 
 :strange_artefact :- !Global.task_is_complete("unwanted_visitors")
 You -- Have you ever seen anything like this before?
+
+[exit]
+
+:_coat :- Global.stat("bairo/saved")
+You -- Say, would you be interested in trading coats?
+For you, my friend? Of course.
+[swap_coats]
+You -- Thanks!

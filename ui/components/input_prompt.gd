@@ -32,8 +32,8 @@ func set_action(a):
 		show_text(action)
 		return
 	
-	var input_str = Global.get_action_input_string(action)
-	if !Global.using_gamepad:
+	var input_str = InputManagement.get_action_input_string(action)
+	if !InputManagement.using_gamepad:
 		show_text(input_str)
 	else:
 		if input_str in vis_remap:

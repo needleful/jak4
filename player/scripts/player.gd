@@ -372,14 +372,6 @@ var ground_index := 0
 
 const TIMERS_MAX := 3
 
-const INPUT_EPSILON := 0.1
-var input_buffer := {
-	"mv_jump":INF,
-	"mv_crouch":INF,
-	"combat_lunge":INF,
-	"combat_spin":INF,
-}
-
 onready var debug = ui.game.get_node("debug")
 
 func _ready():
@@ -439,14 +431,8 @@ func _input(event):
 			ui.equip_previous()
 		elif event.is_action_pressed("ui_down"):
 			ui.equip_next()
-	if !get_tree().paused:
-		for e in input_buffer.keys():
-			if event.is_action_pressed(e):
-				input_buffer[e] = 0.0
 
 func _physics_process(delta):
-	for e in input_buffer.keys():
-		input_buffer[e] += delta
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
 	for i in range(timers.size()):
@@ -1158,18 +1144,13 @@ func after(time: float, condition := true, id := 0):
 	return timers[id] >= time
 
 func pressed(action:String):
-	if action in input_buffer:
-		var res = input_buffer[action] < INPUT_EPSILON
-		input_buffer[action] = INF
-		return res
-	else:
-		return Input.is_action_just_pressed(action) and !ui.recently_paused()
+	return InputManagement.pressed(action)
 
 func released(action:String):
-	return Input.is_action_just_released(action) and !ui.recently_paused()
+	return InputManagement.released(action)
 
 func holding(action:String):
-	return Input.is_action_pressed(action)
+	return InputManagement.holding(action)
 
 func empty(area: Area):
 	return area.get_overlapping_bodies().size() == 0

@@ -18,5 +18,5 @@ func get_name() -> String:
 func set_prompts(value):
 	button_prompts = value
 	if button_prompts != Prompts.AutoDetect:
-		Global.using_gamepad = button_prompts == Prompts.Gamepad
+		InputManagement.using_gamepad = button_prompts == Prompts.Gamepad
 	get_tree().call_group("input_prompt", "_refresh")

@@ -8,7 +8,7 @@ func _enter_tree():
 
 func _on_visibility_changed():
 	if visible:
-		if Global.using_gamepad:
+		if InputManagement.using_gamepad:
 			texture = gamepad_prompt
 		else:
 			texture = keyboard_prompt

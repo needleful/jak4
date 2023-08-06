@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=2]
+[gd_scene load_steps=86 format=2]
 
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -39,6 +39,7 @@
 [ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=37]
 [ext_resource path="res://entities/env/stone/wall1.tscn" type="PackedScene" id=38]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=39]
+[ext_resource path="res://items/upgrades/health_up_pickup.tscn" type="PackedScene" id=40]
 [ext_resource path="res://entities/enemies/beauty.tscn" type="PackedScene" id=46]
 [ext_resource path="res://entities/one_time/target.tscn" type="PackedScene" id=48]
 [ext_resource path="res://entities/dialog_node.gd" type="Script" id=49]
@@ -536,7 +537,10 @@ transform = Transform( 1, 0, 0, 0, 0.947311, 0.320315, 0, -0.320315, 0.947311, -
 [node name="zone_palace" type="MultiMeshSystem" parent="active_entities" index="0"]
 transform = Transform( -0.807444, 2.19771e-09, 0.589944, 0.0384403, 0.997875, 0.0526125, -0.58869, 0.0651593, -0.805728, 164.012, -251.52, -54.7653 )
 
-[node name="deathgnat2" parent="active_entities/zone_palace" index="0" instance=ExtResource( 19 )]
+[node name="health_up_pickup" parent="active_entities/zone_palace" index="0" instance=ExtResource( 40 )]
+transform = Transform( -0.944192, -0.329149, 0.0127935, 0.0535089, -0.11494, 0.99193, -0.325022, 0.937257, 0.126138, 3.69101, 37.1722, 10.323 )
+
+[node name="deathgnat2" parent="active_entities/zone_palace" index="1" instance=ExtResource( 19 )]
 transform = Transform( 0.0376796, 0.0384404, -0.998551, -0.0540615, 0.997876, 0.0363744, 0.997827, 0.0526126, 0.0396777, 17.0008, 18.5818, 0.252335 )
 speed = 0.0
 
@@ -548,7 +552,7 @@ collision_mask = 6
 transform = Transform( 1, -1.77636e-15, -2.98023e-08, -3.55271e-15, 1, 0, 2.98023e-08, 8.88178e-16, 1, 0, 0, 18.6886 )
 shape = SubResource( 274 )
 
-[node name="crawly2" parent="active_entities/zone_palace" index="1" instance=ExtResource( 23 )]
+[node name="crawly2" parent="active_entities/zone_palace" index="2" instance=ExtResource( 23 )]
 transform = Transform( -0.98041, 0.0384404, -0.193183, 0.027484, 0.997875, 0.0590794, 0.195044, 0.0526125, -0.979383, 5.51795, 37.4909, 10.4599 )
 respawns = false
 drops_coat = true
@@ -556,7 +560,7 @@ minimum_rarity = 1
 health = 75
 attack_damage = 15
 
-[node name="OmniLight2" type="SpotLight" parent="active_entities/zone_palace" index="2"]
+[node name="OmniLight2" type="SpotLight" parent="active_entities/zone_palace" index="3"]
 transform = Transform( -0.807444, 0.588691, 0.0384404, -2.6077e-08, -0.0651593, 0.997875, 0.589944, 0.805728, 0.0526125, 0.925285, 38.0824, 1.29822 )
 light_color = Color( 0.592157, 0.592157, 0.592157, 1 )
 light_negative = true
@@ -565,7 +569,7 @@ spot_attenuation = 0.812252
 spot_angle = 83.8809
 spot_angle_attenuation = 1.7411
 
-[node name="OmniLight3" type="SpotLight" parent="active_entities/zone_palace" index="3"]
+[node name="OmniLight3" type="SpotLight" parent="active_entities/zone_palace" index="4"]
 transform = Transform( 0.807444, 0.588691, -0.0384404, 3.17735e-08, -0.0651593, -0.997875, -0.589944, 0.805728, -0.0526125, 0.495323, 3.86018, 0.50293 )
 light_color = Color( 0.592157, 0.592157, 0.592157, 1 )
 light_negative = true
@@ -574,58 +578,58 @@ spot_attenuation = 0.466516
 spot_angle = 89.99
 spot_angle_attenuation = 111.43
 
-[node name="gem_pickup" parent="active_entities/zone_palace" index="4" instance=ExtResource( 20 )]
+[node name="gem_pickup" parent="active_entities/zone_palace" index="5" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -21.2724, 3.6593, 4.19389 )
 
-[node name="gem_pickup2" parent="active_entities/zone_palace" index="5" instance=ExtResource( 20 )]
+[node name="gem_pickup2" parent="active_entities/zone_palace" index="6" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -18.4604, 4.8479, 4.09573 )
 
-[node name="bug_pickup" parent="active_entities/zone_palace" index="6" instance=ExtResource( 14 )]
+[node name="bug_pickup" parent="active_entities/zone_palace" index="7" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.67427e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -29.379, 26.4235, 25.9028 )
 
-[node name="gem_pickup3" parent="active_entities/zone_palace" index="7" instance=ExtResource( 20 )]
+[node name="gem_pickup3" parent="active_entities/zone_palace" index="8" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -59.0544, 5.44189, -4.29433 )
 
-[node name="bug_pickup2" parent="active_entities/zone_palace" index="8" instance=ExtResource( 14 )]
+[node name="bug_pickup2" parent="active_entities/zone_palace" index="9" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 99.6835, 4.04971, -76.7353 )
 
-[node name="gem_pickup4" parent="active_entities/zone_palace" index="9" instance=ExtResource( 20 )]
+[node name="gem_pickup4" parent="active_entities/zone_palace" index="10" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -7.26716, 4.50653, -42.8929 )
 
-[node name="bug_pickup3" parent="active_entities/zone_palace" index="10" instance=ExtResource( 14 )]
+[node name="bug_pickup3" parent="active_entities/zone_palace" index="11" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 3.21222, 37.093, 10.8351 )
 
-[node name="bug_pickup4" parent="active_entities/zone_palace" index="11" instance=ExtResource( 14 )]
+[node name="bug_pickup4" parent="active_entities/zone_palace" index="12" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 3.29144, 37.0338, 9.75577 )
 
-[node name="bug_pickup5" parent="active_entities/zone_palace" index="12" instance=ExtResource( 14 )]
+[node name="bug_pickup5" parent="active_entities/zone_palace" index="13" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 2.46677, 37.056, 10.1565 )
 
-[node name="gem_pickup5" parent="active_entities/zone_palace" index="13" instance=ExtResource( 20 )]
+[node name="gem_pickup5" parent="active_entities/zone_palace" index="14" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -9.99287, 23.5486, -2.79103 )
 
-[node name="gem_pickup6" parent="active_entities/zone_palace" index="14" instance=ExtResource( 20 )]
+[node name="gem_pickup6" parent="active_entities/zone_palace" index="15" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -0.262283, 20.0847, -4.91396 )
 
-[node name="gem_pickup7" parent="active_entities/zone_palace" index="15" instance=ExtResource( 20 )]
+[node name="gem_pickup7" parent="active_entities/zone_palace" index="16" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 16.1108, 16.1413, -7.73665 )
 
-[node name="gem_pickup8" parent="active_entities/zone_palace" index="16" instance=ExtResource( 20 )]
+[node name="gem_pickup8" parent="active_entities/zone_palace" index="17" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 14.9215, 16.1413, 8.62019 )
 
-[node name="gem_pickup9" parent="active_entities/zone_palace" index="17" instance=ExtResource( 20 )]
+[node name="gem_pickup9" parent="active_entities/zone_palace" index="18" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -2.16638, 16.1413, 16.1464 )
 
-[node name="gem_pickup10" parent="active_entities/zone_palace" index="18" instance=ExtResource( 20 )]
+[node name="gem_pickup10" parent="active_entities/zone_palace" index="19" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -14.8812, 16.1413, 4.26109 )
 
-[node name="gem_pickup11" parent="active_entities/zone_palace" index="19" instance=ExtResource( 20 )]
+[node name="gem_pickup11" parent="active_entities/zone_palace" index="20" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -14.9249, 16.1413, -4.95558 )
 
-[node name="gem_pickup12" parent="active_entities/zone_palace" index="20" instance=ExtResource( 20 )]
+[node name="gem_pickup12" parent="active_entities/zone_palace" index="21" instance=ExtResource( 20 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, 11.1025, 16.1413, -13.4366 )
 
-[node name="bug_pickup6" parent="active_entities/zone_palace" index="21" instance=ExtResource( 14 )]
+[node name="bug_pickup6" parent="active_entities/zone_palace" index="22" instance=ExtResource( 14 )]
 transform = Transform( -0.807444, 0.0384404, -0.588691, -2.6077e-08, 0.997875, 0.0651593, 0.589944, 0.0526125, -0.805728, -3.82571, 31.6961, 11.2371 )
 
 [node name="the_medium" type="Spatial" parent="active_entities" index="1"]

@@ -6,7 +6,7 @@ onready var ui = get_parent()
 func _input(event):
 	if !is_visible_in_tree():
 		return
-	if !Global.using_gamepad:
+	if !InputManagement.using_gamepad:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if event.is_action_pressed("ui_cancel"):
 		var t = tabs.get_current_tab_control()

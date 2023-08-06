@@ -43,7 +43,7 @@ func _process(delta):
 	
 	object_ref.global_rotate(Vector3.UP, cam.x*delta)
 	object_ref.global_rotate(Vector3.RIGHT, -cam.y*delta)
-	var zoom := Input.get_axis("map_zoom_in", "map_zoom_out") - Global.get_mouse_zoom_axis()
+	var zoom:float = Input.get_axis("map_zoom_in", "map_zoom_out") - InputManagement.get_mouse_zoom_axis()
 	var c_zoom: float = ref_cam_arm.spring_length
 	c_zoom = clamp(
 		c_zoom + delta * ZOOM_SPEED * c_zoom * zoom * 0.5,

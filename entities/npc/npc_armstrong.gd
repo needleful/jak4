@@ -11,7 +11,7 @@ func start_pistol_tutorial():
 func start_tutorial(wep: String):
 	if wep == "pistol":
 		$"../tutorials/pistol/prompt_aim".input_actions.append(
-			"combat_aim_toggle" if Global.using_gamepad else "combat_aim")
+			"combat_aim_toggle" if InputManagement.using_gamepad else "combat_aim")
 	custom_entry = wep + "_tutorial"
 	tutorial = wep
 	var tw = tut.get_node(tutorial)

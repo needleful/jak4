@@ -5,8 +5,6 @@ signal item_changed(item, change, count)
 signal stat_changed(tag, value)
 signal journal_updated(category, subject)
 
-var using_gamepad := false
-
 var game_state : GameState
 # The game doesn't save in test scenes
 var test_scene := false
@@ -69,18 +67,6 @@ func _init():
 	gravity_stunned_bodies = {}
 	pause_mode = Node.PAUSE_MODE_PROCESS
 
-func _input(event):
-	var ogg := using_gamepad
-	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		using_gamepad = true
-	elif event is InputEventMouse or event is InputEventKey:
-		using_gamepad = false
-	
-	if ( ogg != using_gamepad and 
-		Settings.sub_options["Controls"].button_prompts == ControlsSettings.Prompts.AutoDetect
-	):
-		get_tree().call_group("input_prompt", "_refresh")
-
 func _ready():
 	randomize()
 	call_deferred("place_flags")
@@ -97,53 +83,6 @@ func _physics_process(delta):
 		if gravity_stunned_bodies[b] <= 0:
 			b.gravity_scale = 1
 			var _x = gravity_stunned_bodies.erase(b)
-
-func get_mouse_zoom_axis() -> float:
-	return 15*( float(Input.is_action_just_released("mouse_zoom_in"))
-			- float(Input.is_action_just_released("mouse_zoom_out")) )
-
-func get_action_input_string(action: String, override = null):
-	var gamepad
-	if override != null:
-		gamepad = override
-	else:
-		gamepad = using_gamepad
-		
-	var input: InputEvent
-	for event in InputMap.get_action_list(action):
-		if gamepad and (
-			event is InputEventJoypadButton
-			or event is InputEventJoypadMotion
-		):
-			input = event
-			break
-
-		elif !gamepad and (
-			event is InputEventKey
-			or event is InputEventMouseButton
-		):
-			input = event
-			break
-	
-	if input is InputEventKey:
-		var scancode = input.physical_scancode
-		if !scancode:
-			scancode = input.scancode
-		var key_str = OS.get_scancode_string(scancode)
-		if key_str == "":
-			key_str = "<unbound>"
-		return key_str
-
-	return get_input_string(input)
-
-func get_input_string(input:InputEvent):
-	if input is InputEventJoypadButton:
-		return "gamepad"+str(input.button_index)
-	elif input is InputEventMouseButton:
-		return "mouse"+str(input.button_index)
-	elif input is InputEventJoypadMotion:
-		return "axis"+str(input.axis)
-	return str(input)
 
 func gravity_stun_body(b: RigidBody):
 	gravity_stunned_bodies[b] = gravity_stun_time

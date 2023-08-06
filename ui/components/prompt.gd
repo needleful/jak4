@@ -12,7 +12,7 @@ func _on_visibility_changed():
 		check_prompts()
 
 func check_prompts():
-	if Global.using_gamepad:
+	if InputManagement.using_gamepad:
 		texture = gamepad_texture
 	else:
 		texture = keyboard_texture
