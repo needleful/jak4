@@ -96,8 +96,9 @@ func _input(event):
 		emit_signal("pick_item")
 		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
-		while current_item and current_item.type != DialogItem.Type.REPLY and get_next():
-			continue
+		while current_item and current_item.type != DialogItem.Type.REPLY:
+			if !get_next():
+				break
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
 
@@ -182,8 +183,8 @@ func get_next():
 		return false
 	else:
 		current_item = c
-		advance()
-		return !!current_item
+		var r = advance()
+		return !!current_item and r != RESULT_END
 
 func advance():
 	if !current_item:
@@ -212,7 +213,7 @@ func advance():
 				r = r["_otherwise"]
 			if r is Dictionary:
 				if r == RESULT_END:
-					return
+					return RESULT_END
 				elif r == RESULT_PAUSE:
 					pause()
 					return
