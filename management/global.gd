@@ -157,6 +157,8 @@ func abolish_notes(tags: Array):
 	if tags.size() == 0:
 		return false
 	var initial_tag = tags.pop_front()
+	if !(initial_tag in journal_by_tag):
+		return false
 	for n in journal_by_tag[initial_tag]:
 		var note:Array = game_state.journal[n]
 		var matched := true
