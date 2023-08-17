@@ -175,7 +175,7 @@ func travel_to(_place:String, custom_exit := ""):
 		print_debug("NO NODE TO: ", custom_exit, " FROM ", get_path())
 		return
 	dialog.enabled = false
-	print("travelling to ", target.get_path())
+	print_debug("travelling to ", target.get_path())
 	set_mstate(MetaState.TravelTo)
 
 func set_mstate(new_mstate):

@@ -1,7 +1,7 @@
 extends Node
 
 func _on_activated():
-	print("Collapsing bridge")
+	print_debug("Collapsing bridge")
 	for c in get_children():
 		if c is RigidBody:
 			c.mode = RigidBody.MODE_RIGID

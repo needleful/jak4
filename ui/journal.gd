@@ -140,7 +140,7 @@ func populate_list(type: int):
 	var previous_button : Button
 	for key in ids:
 		if key == "":
-			print("WARNING: empty key in ", category)
+			print_debug("WARNING: empty key in ", category)
 			continue
 		var button := Button.new()
 		button.text = key.capitalize()

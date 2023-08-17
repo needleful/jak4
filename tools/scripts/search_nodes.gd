@@ -6,7 +6,7 @@ func _run():
 
 func search(node:Node, function):
 	if call(function, node):
-		print("Found: ", node.get_path())
+		print_debug("Found: ", node.get_path())
 		node.get_node("StaticBody").remove_from_group("terrain")
 	else:
 		for c in node.get_children():

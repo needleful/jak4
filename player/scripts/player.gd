@@ -161,6 +161,7 @@ const HOVER_SPEED_BOOST := 0.5
 
 const DEPTH_CROUCH := 0.1
 const DEPTH_CRUSH := 0.4
+var crush_skip := 0
 
 # Broad things
 
@@ -469,12 +470,18 @@ func _physics_process(delta):
 	for v in running_ground:
 		average_normal += v/running_ground.size()
 	average_normal = average_normal.normalized()
-	
-	if (max_depth > DEPTH_CRUSH 
-		and best_floor
-		and !best_floor.is_in_group("no_crush")
-	):
-		crushing_death()
+
+	if max_depth > DEPTH_CRUSH:
+		for c in get_slide_count():
+			var n := get_slide_collision(c).collider
+			if n.is_in_group("no_crush"):
+				crush_skip = 10
+				break
+		if crush_skip <= 0:
+			crush_skip = 0
+			crushing_death()
+		else:
+			crush_skip -= 1
 		
 	var best_floor_dot = max(average_normal.y, current_normal.y)
 	if current_normal.y > MIN_DOT_GROUND:
@@ -1172,7 +1179,7 @@ func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
 func lock_in_animation(anim:String):
-	print("Locked in: ", anim)
+	print_debug("Locked in: ", anim)
 	mesh.play_single(anim)
 	state = State.LockedWaiting
 
@@ -1897,7 +1904,7 @@ func is_ground(p_state):
 	return p_state in ground_states
 
 func set_state(next_state: int):
-	#print(State.keys()[state], " -> ", State.keys()[next_state])
+	#print_debug(State.keys()[state], " -> ", State.keys()[next_state])
 	var i = 0
 	while i < min(timers.size(), TIMERS_MAX):
 		timers[i] = 0.0

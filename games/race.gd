@@ -116,7 +116,7 @@ func start_race():
 
 func connect_next_point(_body):
 	if next_point:
-		print("Passed ", next_point.name)
+		print_debug("Passed ", next_point.name)
 		player.game_ui.remove_target(next_point)
 
 	if remaining_points.empty():

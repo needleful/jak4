@@ -311,7 +311,7 @@ func list_replies():
 			otherwise = true
 		reply = sequence.next(reply)
 	if replies.get_child_count() == 0:
-		print("\tNo replies.")
+		print_debug("\tNo replies.")
 		current_item = reply
 		advance()
 	else:
@@ -510,7 +510,7 @@ func fast_exit():
 		advance()
 
 func pause():
-	print("Pausing dialog...")
+	print_debug("Pausing dialog...")
 	set_process_input(false)
 
 func resume():

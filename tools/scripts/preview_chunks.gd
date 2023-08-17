@@ -12,5 +12,5 @@ func _run():
 			sc.set_active(false)
 			c.add_child(sc)
 			sc.get_node("__autogen_preview").queue_free()
-			print("Adding ", c.name)
+			print_debug("Adding ", c.name)
 

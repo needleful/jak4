@@ -18,6 +18,6 @@ func _enter_tree():
 				if !has_animation(anim_name):
 					var full_path = dir.get_current_dir() + "/" + file_name
 					var _x = add_animation(anim_name, load(full_path))
-					print("Added ", anim_name)
+					print_debug("Added ", anim_name)
 			file_name = dir.get_next()
 		dir.list_dir_end()

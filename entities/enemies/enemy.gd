@@ -90,7 +90,7 @@ func _ready():
 			angular_velocity = Vector3.ZERO
 			var state := PhysicsServer.body_get_direct_state(get_rid())
 			if !state:
-				print("ERROR: no state for ", get_path())
+				print_debug("ERROR: no state for ", get_path())
 			else:
 				state.transform = starting_position
 			target = null

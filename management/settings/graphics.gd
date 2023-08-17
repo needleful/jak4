@@ -52,7 +52,7 @@ func set_q_shadows(sq):
 				s.shadow_enabled = true
 		ShadowQuality.Disabled:
 			if s:
-				print("No shadows")
+				print_debug("No shadows")
 				s.high_quality = false
 				s.shadow_enabled = false
 	

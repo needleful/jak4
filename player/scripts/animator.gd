@@ -183,7 +183,7 @@ func play_custom_loop(transition: String, end_point: String):
 	var c : String
 	custom_node.animation = transition
 	if body.get_current_node() == "CustomLoop":
-		print("Transitioning to 2")
+		print_debug("Transitioning to 2")
 		c = "CustomLoop2"
 		custom_loop_node2.animation = end_point
 	else:
@@ -243,7 +243,7 @@ func play_sound(bodyPart: String, soundType: String, randomize_tone := false):
 	var node = audio.get_node(bodyPart)
 	node.stream = get_random_sound(soundType)
 	if node.stream == null:
-		print("No sound: ", soundType)
+		print_debug("No sound: ", soundType)
 		return
 	if randomize_tone:
 		node.pitch_scale = rand_range(0.9, 1.2)
@@ -311,7 +311,8 @@ func play_dive_start(_max_damage: bool):
 	play_sound("attack", "dive_start")
 
 func play_dive_end(_max_damage: bool):
-	play_sound("attack", "dive_end", true)
+	step(false, false)
+	#play_sound("attack", "dive_end", true)
 	transition_to("DiveEnd")
 
 func play_spin_kick(_max_damage: bool):

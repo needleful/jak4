@@ -134,7 +134,7 @@ func view_history(offset):
 		line_edit.text = history[index]
 
 func tp(location):
-	print("Teleport ", location)
+	print_debug("Teleport ", location)
 	if location is int:
 		var chunk_name = "chunk%03d" % location
 		var scn = get_tree().current_scene

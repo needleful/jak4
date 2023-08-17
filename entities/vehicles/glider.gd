@@ -115,7 +115,7 @@ func process_flight(delta:float):
 		velocity = velocity.move_toward( Vector3.ZERO,
 			(4 + velocity.length_squared())*delta)
 		if velocity.length_squared() < 0.2:
-			print("Landed!")
+			print_debug("Landed!")
 			emit_signal("landing", true)
 			laili.crashed = false
 			exit()

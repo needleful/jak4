@@ -1,4 +1,4 @@
 extends Node
 
 func _ready():
-	print(get_path(), " ready.")
+	print_debug(get_path(), " ready.")

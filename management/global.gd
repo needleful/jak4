@@ -58,7 +58,7 @@ func _init():
 	var v_minor = ProjectSettings.get_setting("global/minor_version")
 	var v_patch = ProjectSettings.get_setting("global/patch_version")
 	version = GameVersion.new(v_major, v_minor, v_patch)
-	print("Running ", version)
+	print_debug("Running ", version)
 	
 	game_state = GameState.new(version)
 	journal_by_tag = {}
@@ -210,7 +210,7 @@ func complete_task(task_id: String, note := "")-> bool:
 		game_state.active_tasks.remove(ind)
 	
 	if task_id in game_state.completed_tasks:
-		print("Warning: task already completed: ", task_id)
+		print_debug("Warning: task already completed: ", task_id)
 	else:
 		game_state.completed_tasks.append(task_id)
 		if note != "":
@@ -401,10 +401,10 @@ func reset_game():
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	journal_by_tag = {}
-	print("New game...")
+	print_debug("New game...")
 	var dir := Directory.new()
 	if dir.file_exists(save_path):
-		print("Backing up save...")
+		print_debug("Backing up save...")
 		var _x = dir.rename(save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
 
@@ -417,7 +417,7 @@ func save_game():
 	save_async()
 
 func load_sync(reload := true):
-	print("loading save")
+	print_debug("loading save")
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
 	if ResourceLoader.exists(save_path):

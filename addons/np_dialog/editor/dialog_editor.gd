@@ -66,7 +66,7 @@ func select_file(mode := FileDialog.MODE_SAVE_FILE):
 	_set_active_source(yield(fd, "file_selected"))
 
 func write_to(source):
-	print("Writing to: ", source)
+	print_debug("Writing to: ", source)
 	var out_file := File.new()
 	var err := out_file.open(source, File.WRITE)
 	if err != OK:

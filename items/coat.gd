@@ -85,10 +85,10 @@ func _init(random := false,  min_rarity = Rarity.Common, max_rarity = Rarity.Unc
 		rarity = Rarity.Sublime
 	
 	if rarity < min_rarity:
-		print("BUG: Seed was too low: ", cgen_seed)
+		print_debug("BUG: Seed was too low: ", cgen_seed)
 		rarity = min_rarity
 	elif rarity > max_rarity:
-		print("BUG: Seed was too high: ", cgen_seed)
+		print_debug("BUG: Seed was too high: ", cgen_seed)
 		rarity = max_rarity
 	
 	match rarity:

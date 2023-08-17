@@ -13,14 +13,14 @@ func _ready():
 			enemies[e.get_path()] = e
 			var _x = e.connect("died", self, "_on_enemy_died", [])
 	if enemies.empty():
-		print("No enemies.")
+		print_debug("No enemies.")
 		mark_cleared()
 
 func mark_cleared():
 	emit_signal("cleared")
 
 func _on_enemy_died(_id, _path):
-	print("Enemies killed")
+	print_debug("Enemies killed")
 	for e in enemies.values():
 		if !e.is_dead():
 			return

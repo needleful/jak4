@@ -48,9 +48,14 @@ func reset():
 	falling = false
 
 func visual_reset():
-	var layer:int = $KinematicBody.collision_layer
-	$KinematicBody.collision_layer = 0
+	var k := $KinematicBody
+	var layer:int = k.collision_layer
+	var mask: int = k.collision_mask
+	k.collision_layer = 0
+	k.collision_mask = 0
 	var a:AnimationPlayer = $AnimationPlayer
 	a.play("vis_reset")
 	yield(a, "animation_finished")
-	$KinematicBody.collision_layer = layer
+	k.collision_layer = layer
+	k.collision_mask = mask
+	

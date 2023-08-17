@@ -366,7 +366,7 @@ func swap_to(id: String):
 	set_state(new_state, true)
 
 func set_state(new_state, force := false):
-	#print(State.keys()[state], " -> ", State.keys()[new_state])
+	#print_debug(State.keys()[state], " -> ", State.keys()[new_state])
 	$debug/list/d1.text = 'State: '+State.keys()[new_state]
 	if !force and new_state == state:
 		return

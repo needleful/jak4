@@ -8,7 +8,7 @@ func _run():
 	if !c:
 		return
 	var changed = recursive_apply(c)
-	print("Changed ", changed, " nodes")
+	print_debug("Changed ", changed, " nodes")
 
 func recursive_apply(n:Node) -> int:
 	var running_count := 0

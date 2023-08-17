@@ -32,7 +32,7 @@ func _run():
 	var normals = arrays[Mesh.ARRAY_NORMAL]
 	var index = arrays[Mesh.ARRAY_INDEX]
 	
-	print("Adding to triangles:", index.size()/3)
+	print_debug("Adding to triangles:", index.size()/3)
 	
 	var tri := 0
 	var transforms := []

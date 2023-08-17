@@ -35,7 +35,6 @@ func _ready():
 func _on_body_entered(body):
 	if stat != "":
 		var _x = Global.add_stat(stat)
-	print("Body entered: ", body.name, " in ", State.keys()[state])
 	match state:
 		State.Idle:
 			if !delay:
@@ -48,7 +47,6 @@ func _on_body_entered(body):
 				timer.stop()
 
 func _on_body_exited(body):
-	print("Body exited: ", body.name)
 	if body != active_body:
 		return
 	match state:
@@ -59,7 +57,6 @@ func _on_body_exited(body):
 				deactivate()
 
 func _on_timeout():
-	print("Timer expired.")
 	if state == State.Alerted:
 		activate()
 	elif state == State.Active:
@@ -69,7 +66,6 @@ func _on_timeout():
 			state = State.ActiveTimeExceeded
 
 func alert(body):
-	print("Alerted")
 	emit_signal("alerted")
 	state = State.Alerted
 	active_body = body
@@ -77,7 +73,6 @@ func alert(body):
 		timer.start(delay)
 
 func activate():
-	print("Activated")
 	emit_signal("activated")
 	emit_signal("activated_by", active_body)
 	state = State.Active
@@ -85,6 +80,5 @@ func activate():
 		timer.start(min_active_time)
 
 func deactivate():
-	print("Deactivated")
 	emit_signal("deactivated")
 	state = State.Idle

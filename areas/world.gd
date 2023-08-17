@@ -75,7 +75,7 @@ func _input(event):
 			$mapcam.current = true
 
 func _enter_tree():
-	print("WORLD: Entering tree")
+	print_debug("WORLD: Entering tree")
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
 		Global.load_sync(false)
 		
@@ -85,15 +85,15 @@ func _exit_tree():
 func _ready():
 	var _x = env_tween.start()
 	if false:
-		print("Random races")
+		print_debug("Random races")
 		for _i in range (10):
-			print("\t", int(rand_range(0, 144)))
-		print("Random jump game")
+			print_debug("\t", int(rand_range(0, 144)))
+		print_debug("Random jump game")
 		for _i in range (15):
-			print("\t", int(rand_range(0, 144)))
-		print("Riley")
+			print_debug("\t", int(rand_range(0, 144)))
+		print_debug("Riley")
 		for _i in range (10):
-			print("\t", int(rand_range(0, 144)))
+			print_debug("\t", int(rand_range(0, 144)))
 	
 	chunk_loader = ChunkLoader.new()
 	
@@ -447,11 +447,11 @@ func wake_up():
 
 func start_day():
 	if !ignore_day:
-		print("Brand new day!")
+		print_debug("Brand new day!")
 		var _x = Global.add_stat("current_day")
 		get_tree().call_group("daily_schedule", "_on_midnight")
 	else:
-		print("Day ignored!")
+		print_debug("Day ignored!")
 	ignore_day = false
 
 # Hours with decimals
@@ -480,7 +480,7 @@ func set_time(hour: float, p_ignore_day := true):
 		seconds += animation_length
 		
 	ignore_day = p_ignore_day
-	#print("Set time to ", hour, " ignore day: ", p_ignore_day)
+	#print_debug("Set time to ", hour, " ignore day: ", p_ignore_day)
 	if seconds < current_time:
 		dn.stop()
 		dn.play("day_night_normal")

@@ -26,5 +26,5 @@ func grab_focus():
 	$value.grab_focus()
 
 func _on_value_item_selected(ID):
-	print("changed:", ID)
+	print_debug("changed:", ID)
 	emit_signal("changed", option_name, $value.get_item_text(ID))

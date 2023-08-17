@@ -16,7 +16,7 @@ func gravity_stun(_d):
 	timer.start(Global.gravity_stun_time)
 
 func _on_timeout():
-	print("TIMEOUT")
+	print_debug("TIMEOUT")
 	add_mass(-contributing_mass + mass)
 
 func add_mass(m):

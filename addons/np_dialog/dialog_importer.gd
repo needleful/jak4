@@ -257,7 +257,7 @@ func extract_expressions(line: String) -> Dictionary:
 		var sqex := slot + message
 		dict.conditions.append(sqex)
 		dict.line = dict.line.replace(rm.get_string(), "")
-		#print(rm.get_string(), " --> ", sqex)
+		#print_debug(rm.get_string(), " --> ", sqex)
 
 	return dict
 
