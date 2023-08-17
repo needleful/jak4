@@ -111,7 +111,7 @@ func process_flight(delta:float):
 	if state == State.Start:
 		if flight_time > 3 and landing_gear.get_overlapping_bodies().empty():
 			state = State.Fly
-	elif !landing_gear.get_overlapping_bodies().empty():
+	elif !landing_gear.get_overlapping_bodies().empty() or (velocity.is_equal_approx(Vector3.ZERO) and get_slide_count() > 0):
 		velocity = velocity.move_toward( Vector3.ZERO,
 			(4 + velocity.length_squared())*delta)
 		if velocity.length_squared() < 0.2:

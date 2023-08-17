@@ -52,6 +52,8 @@ func cancel():
 	if continuation:
 		continuation.cancel()
 		continuation = null
+	if previous_checkpoint:
+		previous_checkpoint.disconnect_spawn(Global.get_player())
 
 func activate_next():
 	var player := Global.get_player()
@@ -76,6 +78,8 @@ func activate_next():
 	elif CustomGames.is_active():
 		active_segment = null
 		CustomGames.end(true)
+		if previous_checkpoint:
+			previous_checkpoint.disconnect_spawn(Global.get_player())
 
 func activate(point: int):
 	var p = get_child(point)
