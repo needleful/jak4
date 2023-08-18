@@ -44,7 +44,7 @@ func _process(delta: float):
 	if zoom != 0:
 		var rel_pos = reticle.global_position - scroll_area.global_position
 		var zoom_change =  pow(1 + delta, zoom)
-		var new_zoom = clamp(zoom_scale*zoom_change, 1, 4)
+		var new_zoom = clamp(zoom_scale*zoom_change, .5, 8)
 		zoom_change = new_zoom/zoom_scale
 		zoom_scale = new_zoom
 		scroll_area.scale = Vector2(zoom_scale, zoom_scale)

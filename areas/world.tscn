@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://areas/skybox.gd" type="Script" id=20]
 [ext_resource path="res://material/env/skybox.material" type="Material" id=21]
 [ext_resource path="res://entities/env/skybox/skybox_sun.gd" type="Script" id=22]
+[ext_resource path="res://tools/scripts/map_screenshot.gd" type="Script" id=23]
 [ext_resource path="res://areas/env_settings.gd" type="Script" id=26]
 [ext_resource path="res://material/demo_boundary.material" type="Material" id=101]
 [ext_resource path="res://areas/demo_fence.gd" type="Script" id=102]
@@ -428,6 +429,21 @@ tracks/12/keys = {
 "args": [  ],
 "method": "start_day"
 } ]
+}
+
+[sub_resource type="Animation" id=102]
+resource_name = "map_screenshot"
+tracks/0/type = "value"
+tracks/0/path = NodePath("env_settings:fog_depth_end")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 30000.0 ]
 }
 
 [sub_resource type="ProceduralSky" id=2]
@@ -2399,6 +2415,7 @@ autoplay = "day_night_normal"
 playback_speed = 0.1
 anims/RESET = SubResource( 78 )
 anims/day_night_normal = SubResource( 79 )
+anims/map_screenshot = SubResource( 102 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="409"]
 environment = SubResource( 3 )
@@ -2558,8 +2575,13 @@ autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="mapcam" type="Camera" parent="." index="421"]
-transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 3200, 3600, 3200 )
+[node name="map_viewport" type="Viewport" parent="." index="421"]
+size = Vector2( 4096, 4096 )
+msaa = 4
+script = ExtResource( 23 )
+
+[node name="mapcam" type="Camera" parent="map_viewport" index="0"]
+transform = Transform( 0.707107, -0.353553, 0.612373, 0, 0.866026, 0.5, -0.707107, -0.353553, 0.612373, 3200, 3600, 3200 )
 projection = 1
 size = 7500.0
 near = 4.0
