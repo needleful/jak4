@@ -1,5 +1,7 @@
 extends Control
 
+signal request_show
+
 export(NodePath) var tracking_node: NodePath
 export(String) var value_property: String
 export(String) var segment_property: String
@@ -24,10 +26,14 @@ func _ready():
 	remove_child(segment_template)
 
 func _process(delta):
-	if visible and !is_visible_in_tree():
-		return
 	var s:int = n.get(segment_property)
 	var change_size := s != segments.size()
+
+	if visible and !is_visible_in_tree():
+		if change_size:
+			emit_signal("request_show")
+		else:
+			return
 	
 	while s > segments.size():
 		var seg = segment_template.duplicate()

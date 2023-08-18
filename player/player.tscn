@@ -1495,8 +1495,9 @@ tracking_node = NodePath("../../../../../..")
 value_property = "extra_stamina"
 segment_property = "energy"
 segment_interval = 15.0
-speed = 1.0
-acceleration = 0.2
+speed = 2.0
+acceleration = 1.0
+deceleration = 0.1
 
 [node name="segment" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_right"]
 material = SubResource( 182 )
@@ -1532,8 +1533,9 @@ tracking_node = NodePath("../../../../../..")
 value_property = "extra_stamina"
 segment_property = "energy"
 segment_interval = 15.0
-speed = 1.0
-acceleration = 0.2
+speed = 2.0
+acceleration = 1.0
+deceleration = 0.1
 reversed = true
 
 [node name="segment" type="TextureRect" parent="ui/gameing/gameing/stats/stamina/stamina_booster_left"]
@@ -2542,6 +2544,9 @@ material/0 = SubResource( 98 )
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/stamina" method="queue_show"]
 [connection signal="active" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
+[connection signal="request_show" from="ui/gameing/gameing/stats/health/armor_bar" to="ui/gameing/gameing/stats/health" method="queue_show"]
+[connection signal="request_show" from="ui/gameing/gameing/stats/stamina/stamina_booster_right" to="ui/gameing/gameing/stats/stamina" method="queue_show"]
+[connection signal="request_show" from="ui/gameing/gameing/stats/stamina/stamina_booster_left" to="ui/gameing/gameing/stats/stamina" method="queue_show"]
 [connection signal="timeout" from="ui/gameing/gameing/tutorial/prompt_timer" to="ui" method="_on_prompt_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/gameing/inventory/vis_timer" to="ui" method="_on_vis_timer_timeout"]
 [connection signal="timeout" from="ui/gameing/gameing/equipment/Timer" to="ui/gameing/gameing/equipment" method="_on_Timer_timeout"]

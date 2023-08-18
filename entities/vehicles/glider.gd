@@ -141,9 +141,8 @@ func process_crash(delta):
 	flight_time += delta
 	var temp_p = Global.get_player()
 	if ( flight_time > 1.0 
-		and !laili.get_parent() 
-		and temp_p.state == PlayerBody.State.Ground 
-		and temp_p.best_floor != self
+		and !laili.is_inside_tree()
+		and temp_p.can_talk()
 	):
 		player = temp_p
 		spawn_laili()

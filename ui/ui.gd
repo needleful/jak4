@@ -212,6 +212,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			"stamina_booster":
 				player.extra_stamina = count*player.EXTRA_STAMINA_BOOST
 				player.energy = count
+				
 			"hover_speed_up":
 				player.hover_speed_factor = 1.0 + player.HOVER_SPEED_BOOST*count
 			"hover_scooter":
