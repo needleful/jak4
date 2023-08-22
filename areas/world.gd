@@ -6,10 +6,10 @@ signal deactivated(chunk)
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const DIST_LOAD := 500
-const DIST_UNLOAD := 550
-const DIST_ACTIVATE := 150
-const DIST_DEACTIVATE := 175
+const DIST_LOAD := 800
+const DIST_UNLOAD := 900
+const DIST_ACTIVATE := 100
+const DIST_DEACTIVATE := 125
 
 const UNLOAD_TIME := 10.0
 
