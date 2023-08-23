@@ -133,9 +133,9 @@ func enter_state(state):
 		S.Damaged, S.GravityStun:
 			play_deferred("Damaged"); gun.unlock()
 		S.PlaceFlag:
-			play_custom("PlaceFlag"); gun.aim_lock()
+			play_single("PlaceFlag"); gun.aim_lock()
 		S.GetItem:
-			play_custom("ItemGet"); gun.aim_lock()
+			play_single("ItemGet"); gun.aim_lock()
 		S.Hover:
 			start_hover(); gun.unlock()
 		S.Sitting:
@@ -221,7 +221,7 @@ func play_single(a: String):
 	if !anim_player.has_animation(a):
 		print_debug("MISSING: ", a)
 	single_custom.animation = a
-	body.travel("Single")
+	body.start("Single")
 
 func exit_custom_loop(transition:String):
 	if !anim_player.has_animation(transition):

@@ -210,7 +210,6 @@ const TIME_LEDGE_LEAVE := 0.1
 const TIME_PLACE_FLAG := 0.5
 const TIME_GET_ITEM := 0.9
 const MIN_TIME_LOCKED := 0.2
-var time_animation := 0.0
 
 const TIME_FALLING_DEATH := 2.0
 
@@ -563,9 +562,6 @@ func _physics_process(delta):
 					or floor_cast.get_collision_normal().y < MIN_DOT_GROUND
 				):
 					next_state = State.Slide
-		State.PlaceFlag, State.GetItem:
-			if after(time_animation):
-				next_state = State.Ground
 		State.Slide:
 			if pressed("combat_spin"):
 				next_state = State.AirSpinKick
@@ -970,9 +966,11 @@ func _physics_process(delta):
 				or !holding("mv_crouch")
 			):
 				next_state = State.Fall
-		State.LockedWaiting:
+		State.LockedWaiting, State.PlaceFlag:
 			if after(MIN_TIME_LOCKED) and mesh.body.get_current_node() == "Walk":
 				unlock()
+			if after(TIME_PLACE_FLAG, true, 1) and held_item:
+				place_flag()
 	if next_state != State.None:
 		set_state(next_state)
 	
@@ -1179,9 +1177,8 @@ func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
 func lock_in_animation(anim:String):
-	print_debug("Locked in: ", anim)
 	mesh.play_single(anim)
-	state = State.LockedWaiting
+	set_state(State.LockedWaiting)
 
 func anim_play(start:String, loop:String):
 	mesh.play_custom_loop(start, loop)
@@ -1190,7 +1187,7 @@ func anim_play(start:String, loop:String):
 func anim_exit(transition:String, wait_to_unlock := false):
 	mesh.exit_custom_loop(transition)
 	if wait_to_unlock:
-		state = State.LockedWaiting
+		set_state(State.LockedWaiting)
 	return true
 
 func set_visual_position(new_transform:Transform):
@@ -1728,6 +1725,7 @@ func place_flag():
 	var f = mesh.release_item()
 	Global.place_flag(f, $base_mesh/flag_ref.global_transform)
 	Global.save_checkpoint(get_save_transform())
+	held_item = null
 
 func get_save_transform() -> Transform:
 	var save_transform = global_transform
@@ -1919,9 +1917,7 @@ func set_state(next_state: int):
 	jump_time_min = TIME_JUMP_MIN
 	
 	# Exit effects
-	match state: 
-		State.PlaceFlag:
-			place_flag()
+	match state:
 		State.GetItem:
 			mesh.release_item()
 		State.Hover:
@@ -2041,13 +2037,12 @@ func set_state(next_state: int):
 			velocity = Vector3.ZERO
 		State.PlaceFlag:
 			velocity = Vector3.ZERO
-			mesh.hold_item(flag.instance())
-			time_animation = TIME_PLACE_FLAG
+			held_item = flag.instance()
+			mesh.hold_item(held_item)
 		State.GetItem:
 			velocity = Vector3.ZERO
 			if held_item:
 				mesh.hold_item(held_item)
-			time_animation = TIME_GET_ITEM
 		State.FallingDeath:
 			cam_rig.lock_follow()
 		State.GravityStun:

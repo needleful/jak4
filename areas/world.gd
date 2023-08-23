@@ -212,10 +212,27 @@ func load_nearby_chunks(position: Vector3, synchronous := false):
 		if chunk_loader.is_loaded(ch):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
-		var box: AABB = calculate_bounds(ch)
+		var box: AABB = calculate_bounds(ch, true)
 		var load_zone: AABB = box.grow(Global.render_distance*DIST_LOAD)
 		var unload_zone:AABB = box.grow(Global.render_distance*DIST_UNLOAD)
-		
+		if false:
+			var verts := [
+				Vector3.ZERO,
+				Vector3(box.size.x, 0, 0),
+				Vector3(box.size.x, box.size.y, 0),
+				Vector3(box.size.x, box.size.y, box.size.z),
+				Vector3(0, box.size.y, box.size.z),
+				Vector3(0, box.size.y, 0),
+				Vector3(0, 0, box.size.z),
+				Vector3(box.size.x, 0, box.size.z),
+			]
+			var imm:ImmediateGeometry = $ImmediateGeometry
+			imm.clear()
+			imm.begin(Mesh.PRIMITIVE_LINE_LOOP)
+			for v in verts:
+				imm.add_vertex(ch.global_transform.xform(box.position + v))
+			imm.end()
+
 		if load_zone.has_point(local) and !chunk_loader.is_loaded(ch):
 			var activate_zone:AABB = box.grow(Global.render_distance*DIST_ACTIVATE)
 			if activate_zone.has_point(local):
@@ -227,24 +244,16 @@ func load_nearby_chunks(position: Vector3, synchronous := false):
 			chunk_loader.unload(ch)
 			emit_signal("deactivated", ch) 
 
-func calculate_bounds(node: Node) -> AABB:
-	var box: AABB = AABB()
-	if node is VisualInstance:
-		box = node.get_aabb()
-	for c in node.get_children():
-		if c is Spatial:
-			box = box.merge(calculate_bounds(c))
-	return box
-
 func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
+		var box: AABB = calculate_bounds(ch, true)
 		if !chunk_loader.is_loaded(ch):
 			continue
 		var local : Vector3 = position - ch.global_transform.origin
-		var activate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_ACTIVATE)
-		var deactivate_zone:AABB = ch.get_aabb().grow(Global.render_distance*DIST_DEACTIVATE)
+		var activate_zone:AABB = box.grow(Global.render_distance*DIST_ACTIVATE)
+		var deactivate_zone:AABB = box.grow(Global.render_distance*DIST_DEACTIVATE)
 		
 		if activate_zone.has_point(local):
 			chunk_loader.activate(ch)
@@ -259,6 +268,18 @@ func force_activate(ch: Spatial):
 
 func is_active(chunk: Spatial):
 	return chunk_loader.is_active(chunk)
+
+func calculate_bounds(node: Spatial, top_level := false) -> AABB:
+	var box: AABB = AABB()
+	if node is VisualInstance:
+		box = node.get_aabb()
+	for c in node.get_children():
+		if c is Spatial:
+			var child_bounds := calculate_bounds(c) 
+			box = box.merge(child_bounds)
+	if !top_level:
+		box = node.transform.xform(box)
+	return box
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")

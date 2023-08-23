@@ -5,6 +5,7 @@ class_name Chunk
 export(bool) var preview_neighbors := false
 export(NodePath) var grass_node := NodePath("active_entities/grass")
 export(float) var grass_density := 1.0
+export(bool) var lowres := false
 var exits: Array
 
 var active_entities : Spatial
@@ -49,6 +50,8 @@ func _ready():
 		else:
 			print_debug("No chunk of name ", name)
 		world_node.free()
+	elif lowres and has_node("active_entities"):
+		$active_entities.queue_free()
 
 func find_exit_to(place: String):
 	for e in exits:

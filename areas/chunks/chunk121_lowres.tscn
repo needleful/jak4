@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://_glb/chunks/chunk121.glb" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=4]
 [ext_resource path="res://material/env/plants/birch.png" type="Texture" id=5]
 [ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=6]
+[ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=7]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
@@ -31,3 +32,15 @@ material/0 = ExtResource( 6 )
 
 [node name="tree" parent="." index="1"]
 material/0 = SubResource( 1 )
+
+[node name="interior" parent="active_entities" index="0"]
+material/0 = ExtResource( 7 )
+
+[node name="pipe" parent="active_entities/interior/lower_entrance" index="0"]
+material/0 = ExtResource( 7 )
+
+[node name="platform" parent="active_entities/interior/lower_entrance" index="1"]
+material/0 = ExtResource( 7 )
+
+[node name="receiver" parent="active_entities/interior/lower_entrance" index="2"]
+material/0 = ExtResource( 7 )
