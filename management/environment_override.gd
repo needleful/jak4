@@ -12,6 +12,7 @@ export(AudioStream) var default_music
 export(AudioStream) var combat_music
 export(bool) var no_combat := false
 export(bool) var close_cam := false
+export(bool) var rescue_available := true
 
 func _ready():
 	var _x = connect("body_entered", self, "_on_body_entered", [], CONNECT_DEFERRED)
@@ -36,6 +37,7 @@ func _on_body_entered(_body):
 	overrides["do_not_disturb"] = no_combat
 	overrides["close_cam"] = close_cam
 	overrides["id"] = hash(get_path())
+	overrides["rescue_available"] = rescue_available
 	overrides["priority"] = override_priority
 	get_tree().current_scene.apply_environment(overrides)
 	show()

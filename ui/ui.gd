@@ -86,6 +86,8 @@ func _input(event):
 				set_mode(Mode.DebugConsole)
 				get_tree().set_input_as_handled()
 		Mode.Paused:
+			if event is InputEventMouse:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			if event.is_action_pressed("pause"):
 				var _x = unpause()
 				get_tree().set_input_as_handled()
@@ -194,6 +196,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 				var stamina_up := count
 				var s_factor = (1.0 + player.STAMINA_UP_BOOST*stamina_up)
 				player.max_stamina = player.DEFAULT_MAX_STAMINA*s_factor
+				player.stamina = player.max_stamina
 			"jump_height_up":
 				player.jump_factor = (1 + player.JUMP_UP_BOOST*count)
 			"move_speed_up":

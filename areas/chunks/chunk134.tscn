@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/train_set/20m_straight.tscn" type="PackedScene" id=2]
@@ -8,6 +8,32 @@
 [ext_resource path="res://entities/env/train_set/20m-1v-slant_to_straight.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/env/train_set/20m-1v-slant_to_slant.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/env/train_set/20m-2v-slant_to_double.tscn" type="PackedScene" id=8]
+[ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=9]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=10]
+[ext_resource path="res://material/env/stone/gravel1.png" type="Texture" id=11]
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 10 )
+shader_param/wall_scale = 0.5
+shader_param/ground_scale = 0.5
+shader_param/power = 0.5
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/wall = ExtResource( 9 )
+shader_param/ground = ExtResource( 11 )
+shader_param/ceiling = ExtResource( 9 )
+
+[sub_resource type="Curve3D" id=10]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, -2.5479, -4.65222, -16.6844, 0.27121, -0.220746, -2.6338, -0.27121, 0.220746, 2.6338, -2.36142, -1.33143, -8.5743, -0.613464, -0.643079, -11.0262, 0.613464, 0.643079, 11.0262, 1.69878, 0.701674, 25.3926, 0, 0, 0, 0, 0, 0, 21.4168, 0.610176, 172.732, 0, 0, 0, 0, 0, 0, 25.9479, 2.76952, 209.61, 0, 0, 0, 0, 0, 0, 28.235, 4.5464, 226.643, 0, 0, 0, 0, 0, 0, 33.6022, 8.50309, 266.819, 0, 0, 0, 0, 0, 0, 38.8116, 10.6626, 303.206, 0, 0, 0, 0, 0, 0, 51.6352, 10.8464, 398.445, 0, 0, 0, 0, 0, 0, 56.5144, 10.8877, 409.375, 0, 0, 0, 0, 0, 0, 61.9649, 11.5247, 421.194, 0, 0, 0, 0, 0, 0, 88.8663, 14.7624, 474.847, 0, 0, 0, 0, 0, 0, 130.471, 14.7133, 560.283 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+}
 
 [node name="chunk134" type="Spatial"]
 script = ExtResource( 1 )
@@ -97,3 +123,24 @@ transform = Transform( -1, 0, -1.49012e-07, 0, 1, 0, 1.49012e-07, 0, -1, -20, 0,
 
 [node name="20m_straight3" parent="20m-1v-slant_to_straight/20m-1v-straight_to_slant/20m-1v-slant_to_straight/20m-1v-slant_to_slant/20m-2v-slant_to_double/20m-1v-slant_to_slant/20m-1v-straight_to_slant/20m_straight4/straight_to_15/20m-1v-slant_to_straight/20m-1v-straight_to_slant" instance=ExtResource( 2 )]
 transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, -40, 0, 0 )
+
+[node name="gravel1" type="CSGPolygon" parent="20m-1v-slant_to_straight"]
+transform = Transform( -0.1325, 0, -0.991183, 0, 1, 0, 0.991183, 0, -0.1325, 10.0892, 0.0710115, 1.70262 )
+use_collision = true
+collision_layer = 257
+polygon = PoolVector2Array( -2.8, -0.3, -2.1, 0, 1.7, 0, 3.62785, -1.26997, 5.2859, -3.27513, 13.1446, -13.0605, -14.7387, -14.0394, -6.8941, -2.78252 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.1
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 9 )
+
+[node name="Path" type="Path" parent="20m-1v-slant_to_straight/gravel1"]
+curve = SubResource( 10 )

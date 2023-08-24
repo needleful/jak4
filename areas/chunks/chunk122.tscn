@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/train_set/20m-1v-slant_to_slant.tscn" type="PackedScene" id=2]
@@ -10,6 +10,34 @@
 [ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=8]
 [ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://entities/env/stone/rock5.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/train_set/bridge_level_bend15.tscn" type="PackedScene" id=11]
+[ext_resource path="res://entities/env/train_set/bridge_level_straight.tscn" type="PackedScene" id=12]
+[ext_resource path="res://material/env/stone/sand1.jpg" type="Texture" id=13]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=14]
+[ext_resource path="res://material/env/stone/gravel1.png" type="Texture" id=15]
+[ext_resource path="res://entities/env/train_set/column-10m.tscn" type="PackedScene" id=16]
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = ExtResource( 14 )
+shader_param/wall_scale = 0.5
+shader_param/ground_scale = 0.5
+shader_param/power = 0.5
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/wall = ExtResource( 13 )
+shader_param/ground = ExtResource( 15 )
+shader_param/ceiling = ExtResource( 13 )
+
+[sub_resource type="Curve3D" id=25]
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, -4.28363, -4.64279, -29.6131, 0, 0, 0, 0, 0, 0, -1.4373, -0.267815, -6.59965, -0.31604, -0.0384521, -11.5606, 0.31604, 0.0384521, 11.5606, 0.437241, -0.236668, 15.486, 0, 0, 0, 0, 0, 0, 3.71953, -0.270134, 96.3536, 0, 0, 0, 0, 0, 0, 6.10756, -0.191995, 144.636, -1.55075, -0.440277, -11.5784, 1.55075, 0.440277, 11.5784, 9.13914, 3.57059, 212.595, 0, 0, 0, 0, 0, 0, 10.4543, 3.79901, 256.351, -0.0373993, 2.01518, -4.35724, 0.0373993, -2.01518, 4.35724, 10.5686, 2.21451, 265.227 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0 )
+}
 
 [node name="chunk122" type="Spatial"]
 script = ExtResource( 1 )
@@ -30,6 +58,31 @@ transform = Transform( 0.770695, -0.637205, 0, 0.637205, 0.770695, 0, 0, 0, 1, -
 
 [node name="20m_straight" parent="." instance=ExtResource( 7 )]
 transform = Transform( 0.945135, 0, -0.326681, 0, 1, 0, 0.326681, 0, 0.945135, 4.37835, -2.38866, -246.734 )
+
+[node name="gravel1" type="CSGPolygon" parent="20m_straight"]
+transform = Transform( 0.358315, 0, 0.933601, 0, 1, 0, -0.933601, 0, 0.358315, 42.7177, 0.0710115, 3.12981 )
+use_collision = true
+collision_layer = 257
+polygon = PoolVector2Array( -2.44246, -0.000130653, -0.394562, 0.0180397, 1.82999, 0.100734, 4.8838, -1.10245, 8.89569, -6.35356, -8.4583, -6.60817, -4.49954, -1.17847 )
+mode = 2
+path_node = NodePath("Path")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.1
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = SubResource( 9 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Path" type="Path" parent="20m_straight/gravel1"]
+transform = Transform( 0.999988, -0.00064463, 0.00479957, 0.000603463, 0.999963, 0.00856987, -0.00480494, -0.00856687, 0.999952, 0, 0, 0 )
+curve = SubResource( 25 )
 
 [node name="straight_to_15" parent="20m_straight" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0 )
@@ -72,3 +125,10 @@ transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0
 
 [node name="20m_straight2" parent="20m_straight/straight_to_15/20m_straight7/20m-1v-slant_to_straight/20m-1v-slant_to_slant2/20m-1v-straight_to_slant" instance=ExtResource( 7 )]
 transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, -20, 0, 0 )
+
+[node name="bridge_level_bend15" parent="20m_straight/straight_to_15" instance=ExtResource( 11 )]
+
+[node name="bridge_level_straight" parent="20m_straight" instance=ExtResource( 12 )]
+
+[node name="column-10m" parent="20m_straight/bridge_level_straight" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -1.51529, -11.1164, 0 )

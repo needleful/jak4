@@ -29,7 +29,10 @@ func set_active(active):
 		var p := Global.get_player()
 		$AnimationPlayer.play("RESET")
 		$foreground/main_menu/exit_minigame.visible = CustomGames.is_active()
-		$foreground/main_menu/request_rescue.disabled = p and p.is_locked()
+		var rescue_banned := false
+		if "rescue_available" in get_tree().current_scene:
+			rescue_banned = !get_tree().current_scene.rescue_available
+		$foreground/main_menu/request_rescue.disabled = (p and p.is_locked()) or rescue_banned
 		Settings.load_settings()
 		set_level(0)
 	else:

@@ -59,6 +59,7 @@ var terrain_lowres: Dictionary
 
 var chunk_loader: ChunkLoader
 var ignore_day := false
+var rescue_available := true
 
 func _init():
 	terrain_hires = {}
@@ -373,6 +374,10 @@ func _set_env(p_env: Dictionary):
 			p.cam_rig.set_close_cam(p_env.close_cam)
 		else:
 			p.cam_rig.set_close_cam(false)
+	if "rescue_available" in p_env:
+		rescue_available = p_env["rescue_available"]
+	else:
+		rescue_available = true
 
 func _clear_env():
 	_set_env({})
