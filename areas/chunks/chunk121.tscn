@@ -1,6 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://areas/chunks/chunk121_lowres.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/control/power_thing.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=3]
+[ext_resource path="res://entities/env/ancient/platform_square.tscn" type="PackedScene" id=4]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=5]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=11]
 [ext_resource path="res://material/env/ancient/metal_albedo.png" type="Texture" id=13]
 
@@ -16,7 +20,286 @@ shader_param/wall = ExtResource( 13 )
 shader_param/ground = ExtResource( 13 )
 shader_param/ceiling = ExtResource( 13 )
 
+[sub_resource type="Animation" id=4]
+resource_name = "Activate"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../door/platform_square:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.126038, -0.0144653 ), Vector3( 3.54257, 0.126038, -0.0144577 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door/platform_square2:translation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.915802, -0.0627289 ), Vector3( 0, 0.915802, -0.0627289 ), Vector3( 3.53992, 0.841141, -0.0541496 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../door/platform_square3:translation")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 1.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 1.78403, -0.110928 ), Vector3( 0, 1.78403, -0.110928 ), Vector3( 3.52002, 1.63293, -0.0935822 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../../env/ReflectionProbe:intensity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.01, 0.24 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("../../env/ReflectionProbe:interior_ambient_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0.0470588, 0.0745098, 0.0627451, 1 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("../door/platform_square:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.126038, -0.0144653 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../door/platform_square2:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.915802, -0.0627289 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../door/platform_square3:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 1.78403, -0.110928 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../../env/ReflectionProbe:intensity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.01 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("../../env/ReflectionProbe:interior_ambient_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="ConvexPolygonShape" id=6]
+points = PoolVector3Array( -59.9405, -63.894, 11.3035, 1.65702, -63.894, -97.1052, 63.2304, -63.894, 11.3035, -59.9405, -9.04361, 11.3035, -59.9285, 4.65179, 9.56323, 1.65702, 639.182, -97.1052, 63.2546, 4.65179, 9.56323, 63.2304, -9.04361, 11.3035, -59.9285, 639.182, 9.56323, 63.2546, 639.182, 9.56323 )
+
 [node name="chunk121" instance=ExtResource( 1 )]
 
 [node name="tower" parent="." index="0"]
 material/0 = SubResource( 3 )
+
+[node name="zone_entrance" type="Spatial" parent="active_entities" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 117.592, 424.824, 42.4177 )
+
+[node name="controller" type="Node" parent="active_entities/zone_entrance" index="0"]
+script = ExtResource( 3 )
+required_power = 12
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="active_entities/zone_entrance/controller" index="0"]
+playback_process_mode = 0
+anims/Activate = SubResource( 4 )
+anims/RESET = SubResource( 5 )
+
+[node name="power_thing7" parent="active_entities/zone_entrance" index="1" instance=ExtResource( 2 )]
+transform = Transform( -0.135687, 0, 0.990752, 0, 1, 0, -0.990752, 0, -0.135687, 37.2178, -4.75534, 23.8065 )
+active = true
+
+[node name="activation" type="Spatial" parent="active_entities/zone_entrance" index="2"]
+transform = Transform( 0.135687, 0, -0.990752, 0, 1, 0, 0.990752, 0, 0.135687, 42.2883, -4.75534, 20.7788 )
+
+[node name="power_thing" parent="active_entities/zone_entrance/activation" index="0" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31167, 0, -2.20915 )
+
+[node name="power_thing2" parent="active_entities/zone_entrance/activation" index="1" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31167, 0, -0.893616 )
+
+[node name="power_thing3" parent="active_entities/zone_entrance/activation" index="2" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31167, 0, 0.330276 )
+
+[node name="power_thing4" parent="active_entities/zone_entrance/activation" index="3" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31168, 0, 1.56351 )
+
+[node name="power_thing5" parent="active_entities/zone_entrance/activation" index="4" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31167, 0, 2.79286 )
+
+[node name="power_thing6" parent="active_entities/zone_entrance/activation" index="5" instance=ExtResource( 2 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, 2.31167, 0, 4.00554 )
+
+[node name="power_thing8" parent="active_entities/zone_entrance/activation" index="6" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0, 3.77266 )
+
+[node name="power_thing9" parent="active_entities/zone_entrance/activation" index="7" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62939e-06, 0, 2.45712 )
+
+[node name="power_thing10" parent="active_entities/zone_entrance/activation" index="8" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.23323 )
+
+[node name="power_thing11" parent="active_entities/zone_entrance/activation" index="9" instance=ExtResource( 2 )]
+
+[node name="power_thing12" parent="active_entities/zone_entrance/activation" index="10" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.22934 )
+
+[node name="power_thing13" parent="active_entities/zone_entrance/activation" index="11" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.44203 )
+
+[node name="door" type="Spatial" parent="active_entities/zone_entrance" index="3"]
+transform = Transform( -4.34262e-08, -0.993476, 0.114039, 1, -4.37114e-08, 0, 4.9848e-09, 0.114039, 0.993476, 32.9464, -3.0993, 3.19623 )
+
+[node name="platform_square" parent="active_entities/zone_entrance/door" index="0" instance=ExtResource( 4 )]
+transform = Transform( 1, 1.31561e-14, -1.77636e-15, -1.53766e-14, 1, -2.98023e-08, 1.33227e-15, 2.98023e-08, 1, 0, 0.126038, -0.0144653 )
+
+[node name="platform_square2" parent="active_entities/zone_entrance/door" index="1" instance=ExtResource( 4 )]
+transform = Transform( 1, 2.03726e-14, -2.22045e-15, -2.2593e-14, 1, -4.47035e-08, 1.33227e-15, 4.47035e-08, 1, 0, 0.915802, -0.0627289 )
+
+[node name="platform_square3" parent="active_entities/zone_entrance/door" index="2" instance=ExtResource( 4 )]
+transform = Transform( 1, 1.67644e-14, -2.22045e-15, -1.89848e-14, 1, -3.72529e-08, 1.33227e-15, 3.72529e-08, 1, 0, 1.78403, -0.110928 )
+
+[node name="OmniLight" type="SpotLight" parent="active_entities/zone_entrance" index="4"]
+transform = Transform( 0.917124, -0.00920044, 0.398496, -0.0138701, 0.998392, 0.0549723, -0.398361, -0.0559436, 0.915521, 43.9941, -31.122, 10.4989 )
+light_color = Color( 0.968627, 1, 0.831373, 1 )
+spot_range = 9.75037
+
+[node name="OmniLight2" type="OmniLight" parent="active_entities/zone_entrance" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1101, -41.7981, -6.78378 )
+light_color = Color( 1, 0.301961, 0.301961, 1 )
+light_energy = 0.3
+omni_range = 1.27379
+
+[node name="OmniLight3" type="OmniLight" parent="active_entities/zone_entrance" index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 35.5252, -39.0726, -10.4008 )
+light_color = Color( 1, 0.301961, 0.301961, 1 )
+light_energy = 0.3
+omni_range = 1.27379
+
+[node name="OmniLight4" type="OmniLight" parent="active_entities/zone_entrance" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3797, -42.8027, -7.07076 )
+light_color = Color( 1, 0.301961, 0.301961, 1 )
+light_energy = 0.3
+omni_range = 1.27379
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="2"]
+transform = Transform( 0.921272, 0, 0.388918, 0, 1, 0, -0.388918, 0, 0.921272, 112.158, 362.665, 51.8156 )
+intensity = 0.01
+extents = Vector3( 67.32, 46.12, 78.0568 )
+origin_offset = Vector3( 0, 0, 0.496094 )
+interior_enable = true
+
+[node name="env" type="Area" parent="active_entities" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 113.868, 518.889, -6.10352e-05 )
+visible = false
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 5 )
+override_priority = 2
+wind_reduction_db = 80.0
+custom_fog = Color( 0.0862745, 0.172549, 0.168627, 1 )
+fog_start = 3.37748
+fog_end = 500.0
+indirect_light = Color( 0.0784314, 0.101961, 0.156863, 1 )
+show_sun = false
+rescue_available = false
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities/env" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.70985, 219.992, 51.8157 )
+intensity = 0.01
+extents = Vector3( 67.32, 337.135, 78.0568 )
+origin_offset = Vector3( 0, 0, 0.496094 )
+interior_enable = true
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/env" index="1"]
+transform = Transform( -0.104529, 0, 0.994522, 0, 1, 0, -0.994522, 0, -0.104529, 37.4853, -103.527, 41.0764 )
+shape = SubResource( 6 )
+
+[connection signal="activated" from="active_entities/zone_entrance/power_thing7" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/power_thing7" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing2" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing2" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing3" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing3" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing4" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing4" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing5" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing5" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing6" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing6" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing8" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing8" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing9" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing9" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing10" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing10" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing11" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing11" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing12" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing12" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
+[connection signal="activated" from="active_entities/zone_entrance/activation/power_thing13" to="active_entities/zone_entrance/controller" method="_on_activated"]
+[connection signal="deactivated" from="active_entities/zone_entrance/activation/power_thing13" to="active_entities/zone_entrance/controller" method="_on_deactivated"]
