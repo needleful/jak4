@@ -6,22 +6,22 @@ export(Material) var hidden_material
 
 export(bool) var real_visible := false setget set_real_visible
 
+func _ready():
+	for m in $Armature/Skeleton.get_children():
+		m.material_overlay = hologram_material
+
 func hello():
 	$AnimationPlayer.play("IntroWalk")
-	if Global.stat("mum/appearance"):
-		$vis_anim.play("Show")
-	else:
-		$vis_anim.play("Show_Partial")
+	$vis_anim.play("Show")
+	$Armature/Skeleton.refresh()
 
 func bye():
-	if Global.stat("mum/appearance"):
-		$vis_anim.play("Hide")
-	else:
-		$vis_anim.play("Hide_Partial")
+	$vis_anim.play("Hide")
 
 func set_real_visible(v):
 	real_visible = v
 	if is_inside_tree():
 		var mat = null if v else hidden_material
-		$Armature/Skeleton/mum.material_override = mat
-		$Armature/Skeleton/mum_deatail.material_override = mat
+		for m in $Armature/Skeleton.get_children():
+			if m is MeshInstance:
+				m.material_override = mat
