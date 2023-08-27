@@ -5,13 +5,16 @@ export(Material) var hologram_material
 export(Material) var hidden_material
 
 export(bool) var real_visible := false setget set_real_visible
+onready var anim_tree:AnimationTree = $AnimationTree
+onready var anim_state:AnimationNodeStateMachinePlayback = anim_tree["parameters/StateMachine/playback"]
 
 func _ready():
 	for m in $Armature/Skeleton.get_children():
 		m.material_overlay = hologram_material
 
 func hello():
-	$AnimationPlayer.play("IntroWalk")
+	anim_state.start("IntroWalk")
+	anim_tree["parameters/Big/add_amount"] = randf()
 	$vis_anim.play("Show")
 	$Armature/Skeleton.refresh()
 
