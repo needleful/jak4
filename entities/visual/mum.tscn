@@ -1,6 +1,6 @@
 [gd_scene load_steps=42 format=2]
 
-[ext_resource path="res://_glb/characters/mum.glb" type="PackedScene" id=1]
+[ext_resource path="res://_glb/characters/dynamic_mum/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=3]
 [ext_resource path="res://entities/visual/mum_detail_albedo.png" type="Texture" id=4]
@@ -367,6 +367,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 ) ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("look_target:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.560428, -0.621836, 0.0427022 ) ]
+}
 
 [sub_resource type="Animation" id=15]
 length = 4.0
@@ -651,47 +663,57 @@ hologram_material = SubResource( 2 )
 hidden_material = SubResource( 8 )
 
 [node name="Skeleton" parent="Armature" index="0"]
+bones/6/bound_children = [ NodePath("head_attach") ]
 script = ExtResource( 9 )
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 24 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 13 )
 
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 material/1 = SubResource( 25 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 1 )
 skin = SubResource( 14 )
 
 [node name="shirt" type="MeshInstance" parent="Armature/Skeleton" index="5"]
 visible = false
+material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 3 )
 skin = SubResource( 14 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1.08, 1.98952e-13, 7.72478e-07, 7.56241e-07, 0.220271, -1.0573, -1.5755e-07, 1.0573, 0.220271, -2.10913e-14, 1.38066, -0.00689602 )
+transform = Transform( 0.588102, 0.74914, 0.304835, 0.000863396, 0.376322, -0.926488, -0.808786, 0.545133, 0.220669, -1.20493, -0.369589, -0.223856 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
 transform = Transform( 1, 7.00223e-07, -1.4588e-07, 1.21835e-14, 0.203954, 0.978981, 7.15257e-07, -0.97898, 0.203954, 3.30068e-08, 0.143721, -0.046147 )
+
+[node name="head_riotation_ref" type="Position3D" parent="Armature/Skeleton/head_attach" index="1"]
+transform = Transform( 1, 7.00223e-07, -1.4588e-07, 1.21835e-14, 0.203954, 0.97898, 7.15258e-07, -0.97898, 0.203954, 0, 0, 0 )
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/RESET = SubResource( 16 )
@@ -706,7 +728,6 @@ anims/Show_Partial = SubResource( 5 )
 [node name="AnimationTree" type="AnimationTree" parent="." index="3"]
 tree_root = SubResource( 20 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 23 )
 
@@ -718,5 +739,8 @@ anims/blink = SubResource( 28 )
 wait_time = 6.0
 one_shot = true
 autostart = true
+
+[node name="look_target" type="Position3D" parent="." index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.560428, -0.621836, 0.0427022 )
 
 [connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]

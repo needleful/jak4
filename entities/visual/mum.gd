@@ -3,7 +3,7 @@ extends Spatial
 
 export(Material) var hologram_material
 export(Material) var hidden_material
-export(bool) var force_visible := true
+export(bool) var force_visible := false
 
 export(bool) var real_visible := false setget set_real_visible
 onready var anim_tree:AnimationTree = $AnimationTree
@@ -35,10 +35,10 @@ func hello():
 	make_visible()
 
 func make_visible():
+	anim_tree.active = true
 	anim_tree["parameters/Big/add_amount"] = randf()
 	$vis_anim.play("Show")
 	$Armature/Skeleton.refresh()
-	track(Global.get_player().eyes)
 
 func bye():
 	$vis_anim.play("Hide")
@@ -62,6 +62,12 @@ func _on_blink_timer_timeout():
 	else:
 		time = rand_range(3.0, 6.0)
 	$blink_timer.start(time)
+
+func track_player():
+	track(Global.get_player().eyes)
+
+func track_target():
+	track($look_target)
 
 func _process(delta):
 	if !is_visible_in_tree() or !is_instance_valid(look_target):

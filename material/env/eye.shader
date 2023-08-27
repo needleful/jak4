@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix;
+render_mode blend_mix, depth_draw_alpha_prepass;
 
 uniform sampler2D main_texture: hint_albedo;
 uniform sampler2D iris_texture: hint_albedo;
@@ -21,12 +21,14 @@ void vertex() {
 void fragment()
 {
 	vec4 tex = texture(main_texture, UV);
+	if(tex.a < alpha_clip){
+		discard;
+	}
 	vec2 iris_position = iris_offset - vec2(look_distance*iris_flip, 0);
 	vec3 iris = texture(iris_texture, (UV/iris_scale - iris_scale)*vec2(iris_flip, 1.0) + iris_position).rgb;
 	ALBEDO = tex.rgb*iris;
 	ROUGHNESS = (32.0 - specularity)/32.0;
 	vert_color = COLOR.rgb;
-	ALPHA = tex.a;
 }
 
 void light()
