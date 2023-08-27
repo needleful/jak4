@@ -34,7 +34,7 @@ func set_real_visible(v):
 			m.material_override = mat
 
 func _on_blink_timer_timeout():
-	$blink.playback_speed = rand_range(0.8, 1.0)
+	$blink.playback_speed = rand_range(0.7, 1.0)
 	$blink.play("blink")
 	var time: float
 	if randf() < 0.25:
