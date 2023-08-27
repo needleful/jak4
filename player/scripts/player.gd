@@ -359,6 +359,8 @@ onready var gun := $base_mesh/Armature/Skeleton/gun
 onready var lantern := $base_mesh/Armature/Skeleton/coat_tails/lantern
 export(PackedScene) var flag : PackedScene
 
+onready var eyes := $base_mesh/Armature/Skeleton/head/eye_contact
+
 var held_item
 const TIME_ITEM_CHOOSE := 0.25
 var timers := PoolRealArray()

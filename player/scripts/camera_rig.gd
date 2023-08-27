@@ -59,6 +59,7 @@ var zoomed := false
 var fov_tween := Tween.new()
 var close_cam := false
 var dialog_locked := false
+var fixed := false
 
 onready var cam_basis = camera.transform.basis
 
@@ -74,6 +75,8 @@ func _input(event):
 			mouse_accum += event.relative
 
 func _physics_process(delta):
+	if fixed:
+		return
 	if locked:
 		# Look at player, return
 		camera.global_transform = camera.global_transform.looking_at(player.global_transform.origin, Vector3.UP)
@@ -158,6 +161,9 @@ func _process(delta):
 			pitch.rotation_degrees.x = 80
 		elif pitch.rotation_degrees.x < -80:
 			pitch.rotation_degrees.x = -80
+
+func fix(f: bool):
+	fixed = f
 
 func reset():
 	camera.transform.basis = cam_basis

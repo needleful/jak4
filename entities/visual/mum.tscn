@@ -58,7 +58,7 @@ shader_param/main_texture = ExtResource( 4 )
 shader = ExtResource( 12 )
 shader_param/iris_scale = 0.57
 shader_param/iris_offset = Vector2( 0.5, 0.1 )
-shader_param/look_distance = 0.115
+shader_param/look_distance = 0.072
 shader_param/subsurface_scattering = -1.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
@@ -655,42 +655,43 @@ script = ExtResource( 9 )
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 24 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 13 )
 
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 material/1 = SubResource( 25 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 1 )
 skin = SubResource( 14 )
 
 [node name="shirt" type="MeshInstance" parent="Armature/Skeleton" index="5"]
 visible = false
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 3 )
 skin = SubResource( 14 )
+
+[node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
+transform = Transform( 1.08, 1.98952e-13, 7.72478e-07, 7.56241e-07, 0.220271, -1.0573, -1.5755e-07, 1.0573, 0.220271, -2.10913e-14, 1.38066, -0.00689602 )
+bone_name = "Head"
+
+[node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
+transform = Transform( 1, 7.00223e-07, -1.4588e-07, 1.21835e-14, 0.203954, 0.978981, 7.15257e-07, -0.97898, 0.203954, 3.30068e-08, 0.143721, -0.046147 )
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/RESET = SubResource( 16 )
