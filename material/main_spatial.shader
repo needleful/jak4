@@ -5,12 +5,14 @@ uniform float subsurface_scattering: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
 uniform float specularity: hint_range(0.1, 32) = 1.0;
 uniform vec2 uv_scale = vec2(1.0);
+uniform vec4 albedo: hint_color = vec4(1.0);
 
 varying vec3 vert_color;
 
 void fragment()
 {
-	ALBEDO = texture(main_texture, uv_scale*UV).rgb;
+	vec4 tex = texture(main_texture, uv_scale*UV);
+	ALBEDO = mix(albedo.rgb, tex.rgb, tex.a);
 	ROUGHNESS = (32.0 - specularity)/32.0;
 	vert_color = COLOR.rgb;
 }

@@ -24,8 +24,9 @@ shader = ExtResource( 8 )
 shader = ExtResource( 6 )
 shader_param/subsurface_scattering = -1.0
 shader_param/softness = 1.0
-shader_param/specularity = 1.0
+shader_param/specularity = 3.295
 shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 0.827451, 0.662745, 0.545098, 1 )
 shader_param/main_texture = ExtResource( 7 )
 
 [sub_resource type="ShaderMaterial" id=13]
@@ -34,6 +35,7 @@ shader_param/subsurface_scattering = -1.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/main_texture = ExtResource( 4 )
 
 [sub_resource type="ArrayMesh" id=1]
@@ -589,11 +591,11 @@ material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
-visible = false
 layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
+material/1 = SubResource( 12 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
@@ -608,12 +610,14 @@ material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
+visible = false
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 1 )
 skin = SubResource( 14 )
 
 [node name="shirt" type="MeshInstance" parent="Armature/Skeleton" index="5"]
+visible = false
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 mesh = SubResource( 3 )

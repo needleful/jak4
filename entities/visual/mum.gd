@@ -13,6 +13,9 @@ func _ready():
 		m.material_overlay = hologram_material
 
 func hello():
+	$Armature/Skeleton/head.get_surface_material(0).set_shader_param("albedo",
+		Color.from_hsv(randf(), randf(), randf(), 1.0)
+	)
 	anim_state.start("IntroWalk")
 	anim_tree["parameters/Big/add_amount"] = randf()
 	$vis_anim.play("Show")
@@ -23,8 +26,9 @@ func bye():
 
 func set_real_visible(v):
 	real_visible = v
-	if is_inside_tree():
-		var mat = null if v else hidden_material
-		for m in $Armature/Skeleton.get_children():
-			if m is MeshInstance:
-				m.material_override = mat
+	if !is_inside_tree():
+		return
+	var mat = null if v else hidden_material
+	for m in $Armature/Skeleton.get_children():
+		if m is MeshInstance:
+			m.material_override = mat
