@@ -20,6 +20,8 @@ export(Dictionary) var outfit := {
 	"eyebrows":null
 }
 
+export(Array, Texture) var eye_textures
+
 var defaults: Dictionary
 var nodes : Dictionary
 

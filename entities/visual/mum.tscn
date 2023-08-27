@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://_glb/characters/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -9,6 +9,13 @@
 [ext_resource path="res://entities/visual/mum_albedo.png" type="Texture" id=7]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
+[ext_resource path="res://entities/visual/empty.png" type="Texture" id=10]
+[ext_resource path="res://_glb/characters/dynamic_mum/eye1.png" type="Texture" id=11]
+[ext_resource path="res://material/env/eye.shader" type="Shader" id=12]
+[ext_resource path="res://_glb/characters/dynamic_mum/iris_purple_normal.png" type="Texture" id=13]
+[ext_resource path="res://_glb/characters/dynamic_mum/eye1_half_open.png" type="Texture" id=14]
+[ext_resource path="res://_glb/characters/dynamic_mum/eye1_closed.png" type="Texture" id=15]
+[ext_resource path="res://_glb/characters/dynamic_mum/eye1_squeeze.png" type="Texture" id=16]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
@@ -19,6 +26,15 @@ shader_param/hologram = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=24]
+shader = ExtResource( 6 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 0.321569, 0.0705882, 0.141176, 1 )
+shader_param/main_texture = ExtResource( 10 )
 
 [sub_resource type="ShaderMaterial" id=12]
 shader = ExtResource( 6 )
@@ -35,8 +51,20 @@ shader_param/subsurface_scattering = -1.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/albedo = Color( 0.247059, 0.0666667, 0.14902, 1 )
 shader_param/main_texture = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=25]
+shader = ExtResource( 12 )
+shader_param/iris_scale = 0.57
+shader_param/iris_offset = Vector2( 0.5, 0.1 )
+shader_param/look_distance = 0.115
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/alpha_clip = 0.75
+shader_param/main_texture = ExtResource( 11 )
+shader_param/iris_texture = ExtResource( 13 )
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "test_Cube001"
@@ -554,16 +582,25 @@ tracks/2/keys = {
 [sub_resource type="AnimationNodeAnimation" id=18]
 animation = "ScaleChange"
 
+[sub_resource type="AnimationNodeAnimation" id=26]
+animation = "00_RESET"
+
 [sub_resource type="AnimationNodeAnimation" id=21]
 animation = "IntroWalk"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
 [sub_resource type="AnimationNodeStateMachine" id=22]
+states/00_RESET/node = SubResource( 26 )
+states/00_RESET/position = Vector2( 416, 120 )
 states/IntroWalk/node = SubResource( 21 )
 states/IntroWalk/position = Vector2( 416, 195 )
-start_node = "IntroWalk"
+transitions = [ "00_RESET", "IntroWalk", SubResource( 27 ) ]
+start_node = "00_RESET"
+graph_offset = Vector2( -66, 33 )
 
 [sub_resource type="AnimationNodeBlendTree" id=20]
-graph_offset = Vector2( -284.113, 77.1756 )
+graph_offset = Vector2( -203.113, 112.176 )
 nodes/Big/node = SubResource( 17 )
 nodes/Big/position = Vector2( 300, 200 )
 nodes/Scale/node = SubResource( 18 )
@@ -574,6 +611,38 @@ nodes/output/position = Vector2( 500, 220 )
 node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Scale" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=23]
+
+[sub_resource type="Animation" id=29]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Armature/Skeleton/head:material/1:shader_param/main_texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ ExtResource( 11 ) ]
+}
+
+[sub_resource type="Animation" id=28]
+resource_name = "blink"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Armature/Skeleton/head:material/1:shader_param/main_texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 11 ), ExtResource( 16 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 11 ) ]
+}
 
 [node name="mum" instance=ExtResource( 1 )]
 visible = false
@@ -588,14 +657,13 @@ script = ExtResource( 9 )
 layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 12 )
+material/0 = SubResource( 24 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
-material/1 = SubResource( 12 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
@@ -608,6 +676,7 @@ layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 12 )
+material/1 = SubResource( 25 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
@@ -639,3 +708,15 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 23 )
+
+[node name="blink" type="AnimationPlayer" parent="." index="4"]
+playback_speed = 0.5
+anims/RESET = SubResource( 29 )
+anims/blink = SubResource( 28 )
+
+[node name="blink_timer" type="Timer" parent="." index="5"]
+wait_time = 6.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]
