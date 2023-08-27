@@ -6,8 +6,8 @@ signal deactivated(chunk)
 var air_tutorial := false
 
 # Distance from the bounding box edge
-const DIST_LOAD := 800
-const DIST_UNLOAD := 900
+const DIST_LOAD := 200
+const DIST_UNLOAD := 260
 const DIST_ACTIVATE := 100
 const DIST_DEACTIVATE := 125
 
@@ -60,11 +60,13 @@ var terrain_lowres: Dictionary
 var chunk_loader: ChunkLoader
 var ignore_day := false
 var rescue_available := true
+var cached_bounds: Dictionary
 
 func _init():
 	terrain_hires = {}
 	terrain_lowres = {}
 	env_overrides = []
+	cached_bounds = {}
 
 func _input(event):
 	if event.is_action_pressed("debug_map_view"):
@@ -213,7 +215,13 @@ func load_nearby_chunks(position: Vector3, synchronous := false):
 		if chunk_loader.is_loaded(ch):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
-		var box: AABB = calculate_bounds(ch, true)
+		
+		var box: AABB
+		if ch.name in cached_bounds:
+			box = cached_bounds[ch.name] 
+		else:
+			box = calculate_bounds(ch, true)
+			cached_bounds[ch.name] = box
 		var load_zone: AABB = box.grow(Global.render_distance*DIST_LOAD)
 		var unload_zone:AABB = box.grow(Global.render_distance*DIST_UNLOAD)
 		if false:
@@ -249,7 +257,7 @@ func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
-		var box: AABB = calculate_bounds(ch, true)
+		var box: AABB = cached_bounds[ch.name]
 		if !chunk_loader.is_loaded(ch):
 			continue
 		var local : Vector3 = position - ch.global_transform.origin
