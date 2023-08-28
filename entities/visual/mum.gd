@@ -57,7 +57,7 @@ func _on_blink_timer_timeout():
 	$blink.playback_speed = rand_range(0.7, 1.0)
 	$blink.play("blink")
 	var time: float
-	if randf() < 0.25:
+	if randf() < 0.15:
 		time = rand_range(0.2, 0.5)
 	else:
 		time = rand_range(3.0, 6.0)
