@@ -3,7 +3,6 @@ extends Spatial
 
 export(Material) var hologram_material
 export(Material) var hidden_material
-export(bool) var force_visible := false
 
 export(bool) var real_visible := false setget set_real_visible
 onready var anim_tree:AnimationTree = $AnimationTree
@@ -20,7 +19,7 @@ func _ready():
 	for m in $Armature/Skeleton.get_children():
 		if m is GeometryInstance:
 			m.material_overlay = hologram_material
-	if force_visible:
+	if Engine.editor_hint:
 		make_visible()
 
 func track(target: Spatial):
@@ -28,6 +27,7 @@ func track(target: Spatial):
 	set_physics_process(!!look_target)
 
 func hello():
+	anim_tree.active = true
 	$Armature/Skeleton/head.get_surface_material(0).set_shader_param("albedo",
 		Color.from_hsv(randf(), randf(), randf(), 1.0)
 	)
@@ -35,7 +35,6 @@ func hello():
 	make_visible()
 
 func make_visible():
-	anim_tree.active = true
 	anim_tree["parameters/Big/add_amount"] = randf()
 	$vis_anim.play("Show")
 	$Armature/Skeleton.refresh()

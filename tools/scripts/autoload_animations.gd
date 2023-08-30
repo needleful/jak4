@@ -1,7 +1,7 @@
 tool
 extends AnimationPlayer
 
-const search_path := "res://_glb/characters/jackie/anim"
+export(String, DIR) var search_path := "res://_glb/characters/jackie/anim"
 
 func _enter_tree():
 	if Engine.editor_hint:
