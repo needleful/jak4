@@ -770,11 +770,11 @@ func _physics_process(delta):
 				next_state = State.LedgeJump
 			elif best_floor_dot > MIN_DOT_GROUND:
 				next_state = State.Ground
-			elif total_stamina() < MIN_STAMINA_LEDGE_HANG:
-				next_state = State.LedgeFall
-			elif after(TIME_LEDGE_LEAVE, intent_dot < 0):
-				next_state = State.LedgeFall
-			elif after(TIME_LEDGE_LEAVE, empty(ledge_area), 1):
+			elif (!is_instance_valid(ledge)
+				or total_stamina() < MIN_STAMINA_LEDGE_HANG
+				or after(TIME_LEDGE_LEAVE, intent_dot < 0)
+				or after(TIME_LEDGE_LEAVE, empty(ledge_area), 1)
+			):
 				next_state = State.LedgeFall
 		State.LedgeFall:
 			if can_air_spin and pressed("combat_spin"):
@@ -1465,8 +1465,7 @@ func can_ledge_grab(min_dot: float = MIN_DOT_LEDGE) -> bool:
 	var c:Dictionary = s.intersect_ray(wallCheck.global_transform.origin, wall_cast_end, [self], 1)
 	var no_wall:bool = !c or c.normal.y > min_dot
 	
-	
-	var valid: bool = no_wall and (center or left or right)
+	var valid: bool = no_wall and (center or left or right) and is_instance_valid(ledge)
 	if !valid:
 		ledge = null
 	return valid

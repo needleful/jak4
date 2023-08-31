@@ -109,10 +109,13 @@ func enter_state(state):
 			play_high_jump(); gun.lock()
 		S.RollJump:
 			play_roll_jump(player.max_damage); gun.lock()
-		S.Slide, S.Crouch, S.Climb, S.Wading:
+		S.Slide, S.Crouch, S.Wading:
 			ground_transition(S.keys()[state]); gun.unlock()
 		S.LedgeHang:
 			play_ledge_grab(); gun.lock()
+		S.Climb:
+			ground_transition("Climb"); 
+			gun.lock()
 		S.Roll:
 			play_roll(); gun.lock()
 		S.RollFall:

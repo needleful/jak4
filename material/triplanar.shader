@@ -7,7 +7,7 @@ uniform sampler2D ceiling: hint_albedo;
 uniform float wall_scale = 0.125;
 uniform float ground_scale = 0.125;
 uniform float power = 5.0;
-uniform float softness = 0.5;
+uniform float softness: hint_range(0, 1) = 0.5;
 uniform float specularity_ground: hint_range(1, 32) = 1.0;
 uniform float specularity_wall: hint_range(1, 32) = 1.0;
 uniform float specularity_ceiling: hint_range(1, 32) = 1.0;
