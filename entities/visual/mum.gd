@@ -24,6 +24,7 @@ func _overlay(n: Node):
 	for m in n.get_children():
 		if m is GeometryInstance:
 			m.material_overlay = hologram_material
+			m.layers = 65536 # the medium view layer
 		else:
 			_overlay(m)
 
@@ -52,10 +53,14 @@ func set_real_visible(v):
 	real_visible = v
 	if !is_inside_tree():
 		return
-	var mat = null if v else hidden_material
-	for m in $Armature/Skeleton.get_children():
+	_override($Armature/Skeleton, null if v else hidden_material)
+
+func _override(n: Node, mat: Material):
+	for m in n.get_children():
 		if m is GeometryInstance:
 			m.material_override = mat
+		else:
+			_override(m, mat)
 
 func _on_blink_timer_timeout():
 	$blink.playback_speed = rand_range(0.7, 1.0)

@@ -8,7 +8,7 @@ onready var skeleton := get_node(skeleton_node)
 onready var ik_targets := get_node(ik_break)
 
 func _ready():
-	if !Global.get_player():
+	if player_velocity_influence and !Global.get_player():
 		return
 	for c in skeleton.get_children():
 		if c is SkeletonIK:

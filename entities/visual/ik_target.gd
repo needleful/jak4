@@ -5,6 +5,8 @@ export(float, 0.01, 1.0, 0.01) var max_distance := 0.02
 export(float, 0.00, 1.00, 0.001) var damp := 0.2
 export(float, 0.1, 25.0) var acceleration := 5.0
 export(float, 0.0, 1.0) var player_velocity_match := 0.75
+export(bool) var tracking_player := false
+export(float, -1.0, 1.0) var gravity := 0.0
 
 const max_rel_velocity := 0.0
 
@@ -24,12 +26,13 @@ func _physics_process(delta):
 	var md2 := max_distance*max_distance
 	var rel:Vector3 = target.global_transform.origin - global_transform.origin
 	var d:float = rel.length_squared()
-	
 	var added_velocity := acceleration*rel*sqrt(md2/(clamp(md2 - d, 0.00005, md2)))
+	added_velocity += delta*Vector3.DOWN*10*gravity
 	velocity += added_velocity
 	if velocity.length_squared() > max_velocity*max_velocity:
 		velocity = velocity.normalized()*max_velocity
-	player_vel = lerp(player_vel, player.velocity, 0.2)
+	if tracking_player:
+		player_vel = lerp(player_vel, player.velocity, 0.2)
 	
 	global_transform.origin += delta*(velocity
 		+ player_velocity_match*player_vel)
