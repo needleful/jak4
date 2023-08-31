@@ -15,9 +15,9 @@ func _enter_tree():
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.ends_with(".anim"):
 				var anim_name = file_name.replace(".anim", "")
-				if !has_animation(anim_name):
-					var full_path = dir.get_current_dir() + "/" + file_name
-					var _x = add_animation(anim_name, load(full_path))
-					print_debug("Added ", anim_name)
+				if has_animation(anim_name):
+					remove_animation(anim_name)
+				var full_path = dir.get_current_dir() + "/" + file_name
+				var _x = add_animation(anim_name, load(full_path))
 			file_name = dir.get_next()
 		dir.list_dir_end()

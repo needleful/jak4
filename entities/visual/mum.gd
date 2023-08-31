@@ -16,11 +16,16 @@ onready var eye_material: ShaderMaterial = $Armature/Skeleton/head.get_surface_m
 onready var eyes : Spatial = $Armature/Skeleton/head_attach/eyes
 
 func _ready():
-	for m in $Armature/Skeleton.get_children():
-		if m is GeometryInstance:
-			m.material_overlay = hologram_material
+	_overlay($Armature/Skeleton)
 	if Engine.editor_hint:
 		make_visible()
+
+func _overlay(n: Node):
+	for m in n.get_children():
+		if m is GeometryInstance:
+			m.material_overlay = hologram_material
+		else:
+			_overlay(m)
 
 func track(target: Spatial):
 	look_target = target

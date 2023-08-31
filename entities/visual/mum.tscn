@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://_glb/characters/dynamic_mum/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -17,10 +17,11 @@
 [ext_resource path="res://_glb/characters/dynamic_mum/eye1_closed.png" type="Texture" id=15]
 [ext_resource path="res://_glb/characters/dynamic_mum/eye1_squeeze.png" type="Texture" id=16]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/WalkCycle.anim" type="Animation" id=18]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/ScaleChange.anim" type="Animation" id=19]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/IntroWalk.anim" type="Animation" id=20]
+[ext_resource path="res://_glb/characters/dynamic_mum/anim/ScaleChange.anim" type="Animation" id=18]
+[ext_resource path="res://_glb/characters/dynamic_mum/anim/IntroWalk.anim" type="Animation" id=19]
+[ext_resource path="res://_glb/characters/dynamic_mum/anim/00_RESET.anim" type="Animation" id=20]
 [ext_resource path="res://entities/visual/mum_outfits/primordial_hair.tscn" type="PackedScene" id=21]
+[ext_resource path="res://_glb/characters/dynamic_mum/anim/WalkCycle.anim" type="Animation" id=22]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
@@ -346,21 +347,6 @@ surfaces/0 = {
 "vertex_count": 294
 }
 
-[sub_resource type="Animation" id=16]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("look_target:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( -0.560428, -0.621836, 0.0427022 ) ]
-}
-
 [sub_resource type="Animation" id=15]
 length = 4.0
 tracks/0/type = "value"
@@ -570,41 +556,6 @@ tracks/2/keys = {
 "values": [ true ]
 }
 
-[sub_resource type="AnimationNodeAdd2" id=17]
-
-[sub_resource type="AnimationNodeAnimation" id=18]
-animation = "ScaleChange"
-
-[sub_resource type="AnimationNodeAnimation" id=26]
-animation = "00_RESET"
-
-[sub_resource type="AnimationNodeAnimation" id=21]
-animation = "IntroWalk"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=27]
-
-[sub_resource type="AnimationNodeStateMachine" id=22]
-states/00_RESET/node = SubResource( 26 )
-states/00_RESET/position = Vector2( 416, 120 )
-states/IntroWalk/node = SubResource( 21 )
-states/IntroWalk/position = Vector2( 416, 195 )
-transitions = [ "00_RESET", "IntroWalk", SubResource( 27 ) ]
-start_node = "00_RESET"
-graph_offset = Vector2( -66, 33 )
-
-[sub_resource type="AnimationNodeBlendTree" id=20]
-graph_offset = Vector2( -203.113, 112.176 )
-nodes/Big/node = SubResource( 17 )
-nodes/Big/position = Vector2( 300, 200 )
-nodes/Scale/node = SubResource( 18 )
-nodes/Scale/position = Vector2( 60, 300 )
-nodes/StateMachine/node = SubResource( 22 )
-nodes/StateMachine/position = Vector2( 64.8872, 151.176 )
-nodes/output/position = Vector2( 500, 220 )
-node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Scale" ]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=23]
-
 [sub_resource type="Animation" id=29]
 length = 0.001
 tracks/0/type = "value"
@@ -636,6 +587,9 @@ tracks/0/keys = {
 "update": 1,
 "values": [ ExtResource( 11 ), ExtResource( 16 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 11 ) ]
 }
+
+[sub_resource type="AnimationNodeAnimation" id=30]
+animation = "IntroWalk"
 
 [node name="mum" instance=ExtResource( 1 )]
 visible = false
@@ -688,7 +642,7 @@ mesh = SubResource( 3 )
 skin = SubResource( 14 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1, 1.42109e-14, 7.15258e-07, 7.00223e-07, 0.203954, -0.97898, -1.4588e-07, 0.97898, 0.203954, -1.98986e-15, 1.15055, -0.00574669 )
+transform = Transform( 0.588102, 0.74914, 0.304835, 0.000863396, 0.376322, -0.926488, -0.808786, 0.545133, 0.220669, -1.20493, -0.369589, -0.223856 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
@@ -704,10 +658,10 @@ transform = Transform( 1, 0, 0, 0, 0.203954, 0.97898, 0, -0.97898, 0.203954, 0, 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.98023e-08, 0 )
 
 [node name="AnimationPlayer" parent="." index="1"]
-anims/IntroWalk = ExtResource( 20 )
-anims/RESET = SubResource( 16 )
-anims/ScaleChange = ExtResource( 19 )
-anims/WalkCycle = ExtResource( 18 )
+anims/00_RESET = ExtResource( 20 )
+anims/IntroWalk = ExtResource( 19 )
+anims/ScaleChange = ExtResource( 18 )
+anims/WalkCycle = ExtResource( 22 )
 script = ExtResource( 17 )
 search_path = "res://_glb/characters/dynamic_mum/anim"
 
@@ -718,22 +672,20 @@ anims/RESET = SubResource( 9 )
 anims/Show = SubResource( 4 )
 anims/Show_Partial = SubResource( 5 )
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
-tree_root = SubResource( 20 )
-anim_player = NodePath("../AnimationPlayer")
-parameters/Big/add_amount = 0.621225
-parameters/StateMachine/playback = SubResource( 23 )
-
-[node name="blink" type="AnimationPlayer" parent="." index="4"]
+[node name="blink" type="AnimationPlayer" parent="." index="3"]
 anims/RESET = SubResource( 29 )
 anims/blink = SubResource( 28 )
 
-[node name="blink_timer" type="Timer" parent="." index="5"]
+[node name="blink_timer" type="Timer" parent="." index="4"]
 wait_time = 6.0
 one_shot = true
 autostart = true
 
-[node name="look_target" type="Position3D" parent="." index="6"]
+[node name="look_target" type="Position3D" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.560428, -0.621836, 0.0427022 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="6"]
+tree_root = SubResource( 30 )
+anim_player = NodePath("../AnimationPlayer")
 
 [connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]
