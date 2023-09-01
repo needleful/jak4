@@ -52,7 +52,7 @@ void light()
 		vec3 specular = intensity * LIGHT_COLOR * ATTENUATION * ALBEDO;
 		
 		// subsurface
-		vec3 subsurface = 0.2*ATTENUATION*LIGHT_COLOR*vert_color*clamp(ndotl + subsurface_scattering, 0, 1);
+		vec3 subsurface = ALBEDO*0.2*ATTENUATION*LIGHT_COLOR*vert_color*clamp(ndotl + subsurface_scattering, 0, 1);
 		
 		DIFFUSE_LIGHT += specular + diffuse + subsurface;
 	}

@@ -57,9 +57,10 @@ func refresh():
 			var o: PackedScene = outfit[mesh]
 			if !o or defaults_only:
 				o = defaults[mesh]
-			var n: Node = nodes[mesh]
-			Util.clear(n)
-			n.add_child(o.instance())
+			if o:
+				var n: Node = nodes[mesh]
+				Util.clear(n)
+				n.add_child(o.instance())
 			continue
 		
 		if mesh == "eyes":

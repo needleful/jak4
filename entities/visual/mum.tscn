@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://_glb/characters/dynamic_mum/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://entities/visual/mum_outfits/eyes_test_purple.tres" type="Resource" id=11]
 [ext_resource path="res://material/characters/eye.shader" type="Shader" id=12]
 [ext_resource path="res://entities/visual/mum_outfits/primordial_eyes.tres" type="Resource" id=13]
+[ext_resource path="res://_glb/characters/dynamic_mum/iris_purple_normal.png" type="Texture" id=14]
+[ext_resource path="res://_glb/characters/dynamic_mum/eye1.png" type="Texture" id=15]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
 [ext_resource path="res://_glb/characters/dynamic_mum/anim/ScaleChange.anim" type="Animation" id=18]
 [ext_resource path="res://_glb/characters/dynamic_mum/anim/IntroWalk.anim" type="Animation" id=19]
@@ -20,7 +22,6 @@
 [ext_resource path="res://entities/visual/mum_outfits/primordial_hair.tscn" type="PackedScene" id=21]
 [ext_resource path="res://_glb/characters/dynamic_mum/anim/WalkCycle.anim" type="Animation" id=22]
 [ext_resource path="res://_glb/characters/dynamic_mum/outfits/primordial_head_head_prime.mesh" type="ArrayMesh" id=23]
-[ext_resource path="res://entities/visual/mum_outfits/primordial_eyes.png" type="Texture" id=24]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
@@ -148,14 +149,15 @@ shader_param/main_texture = ExtResource( 4 )
 
 [sub_resource type="ShaderMaterial" id=39]
 shader = ExtResource( 12 )
-shader_param/iris_scale = 0.5
-shader_param/iris_offset = Vector2( 0.5, -0.1 )
-shader_param/look_distance = 0.211
-shader_param/subsurface_scattering = null
+shader_param/iris_scale = 0.572
+shader_param/iris_offset = Vector2( 0.5, 0.1 )
+shader_param/look_distance = 0.0
+shader_param/subsurface_scattering = 0.434
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/alpha_clip = 0.75
-shader_param/main_texture = ExtResource( 24 )
+shader_param/main_texture = ExtResource( 15 )
+shader_param/iris_texture = ExtResource( 14 )
 
 [sub_resource type="Skin" id=14]
 resource_name = "Skin"
@@ -403,6 +405,21 @@ bind/79/pose = Transform( 0.902028, -0.323402, -0.28593, -0.332862, -0.942835, 0
 bind/80/name = "C_ElbowPole.R"
 bind/80/bone = -1
 bind/80/pose = Transform( 0.973675, 0.227941, 0, 0, 0, -1, -0.227941, 0.973675, 0, -0.0517184, -0.192924, -0.91283 )
+
+[sub_resource type="Animation" id=47]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("look_target:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.560428, -0.621836, -0.141326 ) ]
+}
 
 [sub_resource type="Animation" id=15]
 length = 4.0
@@ -706,7 +723,8 @@ defaults = {
 "pants": null,
 "shirt": null
 }
-eye_set = ExtResource( 13 )
+eye_set = ExtResource( 11 )
+defaults_only = true
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
@@ -723,7 +741,6 @@ mesh = SubResource( 5 )
 material/0 = SubResource( 12 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
-visible = false
 layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
@@ -734,7 +751,7 @@ material/0 = SubResource( 13 )
 layers = 65536
 material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-mesh = ExtResource( 23 )
+mesh = SubResource( 9 )
 material/0 = SubResource( 12 )
 material/1 = SubResource( 39 )
 
@@ -753,7 +770,7 @@ material_overlay = SubResource( 2 )
 skin = SubResource( 14 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1.08, 1.98952e-13, 7.72478e-07, 7.56241e-07, 0.220271, -1.0573, -1.5755e-07, 1.0573, 0.220271, -2.10913e-14, 1.38066, -0.00689602 )
+transform = Transform( 0.433034, 0.900666, 0.0358007, -0.113285, 0.0937834, -0.989126, -0.89423, 0.42427, 0.142643, -1.01272, -0.361172, -0.193101 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
@@ -764,10 +781,12 @@ transform = Transform( 1, 7.00223e-07, -1.4588e-07, 1.21835e-14, 0.203954, 0.978
 
 [node name="hair" type="Spatial" parent="Armature/Skeleton/head_attach" index="2"]
 transform = Transform( 1, 0, 0, 0, 0.203954, 0.97898, 0, -0.97898, 0.203954, 0, 0, 0 )
+visible = false
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/00_RESET = ExtResource( 20 )
 anims/IntroWalk = ExtResource( 19 )
+anims/RESET = SubResource( 47 )
 anims/ScaleChange = ExtResource( 18 )
 anims/WalkCycle = ExtResource( 22 )
 script = ExtResource( 17 )
@@ -790,12 +809,11 @@ one_shot = true
 autostart = true
 
 [node name="look_target" type="Position3D" parent="." index="5"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.560428, -0.621836, 0.0427022 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.560428, -0.621836, -0.141326 )
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="6"]
 tree_root = SubResource( 36 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 37 )
 
