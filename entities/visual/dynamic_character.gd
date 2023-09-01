@@ -1,5 +1,5 @@
 tool
-extends Skeleton
+extends Spatial
 
 # A dictionary of names to mesh instances
 export(Dictionary) var slots := {
@@ -20,31 +20,30 @@ export(Dictionary) var outfit := {
 	"shirt":null,
 	"head":null,
 	"eyebrows":null,
-	"hair":null
+	"hair":null,
+	"eyes":null
 }
+export(Dictionary) var defaults: Dictionary
 
-export(Array, Texture) var eye_textures
+export(Resource) var eye_set
+export(int) var blink_frame: int setget set_blink_frame
+export(bool) var defaults_only := false
 
-var defaults: Dictionary
 var nodes : Dictionary
 
 func _ready():
 	for slot in slots:
 		nodes[slot] = get_node(slots[slot])
-		if slot == "hair":
-			defaults[slot] = nodes[slot].get_child(0)
-		else:
-			defaults[slot] = nodes[slot].mesh
 
 func refresh():
-	if outfit.hat:
-		nodes.hair.hide()
-		nodes.hat.show()
-	else:
+	if outfit.hair and !outfit.hat and !defaults_only:
 		nodes.hat.hide()
 		nodes.hair.show()
+	else:
+		nodes.hair.hide()
+		nodes.hat.show()
 
-	if (!outfit.pants and !outfit.shirt):
+	if (!outfit.pants and !outfit.shirt) or defaults_only:
 		nodes.pants.hide()
 		nodes.shirt.hide()
 		nodes.full_body.show()
@@ -55,16 +54,37 @@ func refresh():
 	
 	for mesh in outfit:
 		if mesh == "hair":
-			var o: Node = outfit[mesh]
-			if !o:
+			var o: PackedScene = outfit[mesh]
+			if !o or defaults_only:
 				o = defaults[mesh]
 			var n: Node = nodes[mesh]
-			if o and !o.is_inside_tree():
-				Util.clear(n)
-				n.add_child(o)
+			Util.clear(n)
+			n.add_child(o.instance())
+			continue
+		
+		if mesh == "eyes":
+			var e:EyeSet = outfit[mesh]
+			if !e or defaults_only:
+				e = defaults[mesh]
+			if e:
+				eye_set = e
+				set_blink_frame(0)
+				var m = nodes["head"] as MeshInstance
+				if m:
+					m.get_surface_material(1).set_shader_param(
+						"iris_texture", eye_set.iris)
 			continue
 
-		if outfit[mesh]:
+		if outfit[mesh] and !defaults_only:
 			nodes[mesh].mesh = outfit[mesh]
 		else:
 			nodes[mesh].mesh = defaults[mesh]
+
+func set_blink_frame(frame: int):
+	blink_frame = frame
+	if frame >= eye_set.sprites.size():
+		frame = 0
+	var m := nodes["head"] as MeshInstance
+	if m:
+		m.get_surface_material(1).set_shader_param(
+			"main_texture", eye_set.sprites[frame])

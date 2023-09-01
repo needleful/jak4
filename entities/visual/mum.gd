@@ -16,7 +16,6 @@ onready var eye_material: ShaderMaterial = $Armature/Skeleton/head.get_surface_m
 onready var eyes : Spatial = $Armature/Skeleton/head_attach/eyes
 
 func _ready():
-	_overlay($Armature/Skeleton)
 	if Engine.editor_hint:
 		make_visible()
 
@@ -34,16 +33,14 @@ func track(target: Spatial):
 
 func hello():
 	anim_tree.active = true
-	$Armature/Skeleton/head.get_surface_material(0).set_shader_param("albedo",
-		Color.from_hsv(randf(), randf(), randf(), 1.0)
-	)
 	anim_state.start("IntroWalk")
 	make_visible()
 
 func make_visible():
-	anim_tree["parameters/Big/add_amount"] = randf()
+	anim_tree["parameters/Big/add_amount"] = 1.0
 	$vis_anim.play("Show")
 	$Armature/Skeleton.refresh()
+	_overlay($Armature/Skeleton)
 
 func bye():
 	$vis_anim.play("Hide")
