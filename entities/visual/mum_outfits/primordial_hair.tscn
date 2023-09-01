@@ -1,8 +1,28 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://_glb/characters/dynamic_mum/outfits/primordial_hair.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/visual/ik_target.gd" type="Script" id=2]
 [ext_resource path="res://entities/visual/hair_ik.gd" type="Script" id=3]
+[ext_resource path="res://material/coat.shader" type="Shader" id=4]
+[ext_resource path="res://entities/visual/hair/hair_detail_1.png" type="Texture" id=5]
+[ext_resource path="res://entities/visual/hair/hair_pallette_1.png" type="Texture" id=6]
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.0297546, 0, 0.292969, 1, 0.757812, 0.248657, 0.248657, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+width = 16
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 4 )
+shader_param/light_bias = null
+shader_param/softness = 1.0
+shader_param/specularity = 2.875
+shader_param/detail_scale = 0.1
+shader_param/palette = ExtResource( 6 )
+shader_param/gradient = SubResource( 3 )
+shader_param/detail = ExtResource( 5 )
 
 [sub_resource type="SphereMesh" id=1]
 radius = 0.03
@@ -54,6 +74,9 @@ transform = Transform( 0.455148, 0.674106, -0.581739, 0.870342, -0.474756, 0.130
 
 [node name="hair_rig" parent="." index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="hair_layer1" parent="hair_rig/Skeleton" index="0"]
+material/0 = SubResource( 4 )
 
 [node name="SkeletonIK" type="SkeletonIK" parent="hair_rig/Skeleton" index="1"]
 process_priority = 1
@@ -262,9 +285,9 @@ skeleton = NodePath("../../hair_target")
 visible = false
 script = ExtResource( 2 )
 target_node = NodePath("../../hair_end11")
-max_distance = 0.3
-damp = 0.136
-acceleration = 0.717838
+max_distance = 0.16
+damp = 0.171
+acceleration = 1.15725
 gravity = -0.350318
 
 [node name="MeshInstance11" type="MeshInstance" parent="ik_break/hair_target11" index="0"]

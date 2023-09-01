@@ -6,11 +6,12 @@ uniform sampler2D detail;
 uniform float light_bias: hint_range(-1, 1);
 uniform float softness: hint_range(0, 1) = 1.0;
 uniform float specularity: hint_range(1, 16) = 1.0;
+uniform float detail_scale: hint_range(0.1, 512.0) = 256.0;
 
 void fragment()
 {
 	float t = texture(palette, UV).r;
-	float d = mix(1.0, texture(detail, UV*256.0).r, COLOR.b);
+	float d = mix(1.0, texture(detail, UV*detail_scale).r, COLOR.b);
 	ALBEDO = d*texture(gradient, vec2(t, 0)).rgb;
 	ROUGHNESS = clamp(2.0/specularity, 0, 1);
 }
