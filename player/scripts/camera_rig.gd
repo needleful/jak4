@@ -223,7 +223,6 @@ func toggle_zoom():
 	set_zoom(!zoomed)
 
 func set_zoom(p_zoom):
-	print_debug("zoom: ", p_zoom)
 	zoomed = p_zoom
 	var desired_fov : float = FOV_ZOOMED if zoomed else fov_normal
 	var _x = fov_tween.remove_all()

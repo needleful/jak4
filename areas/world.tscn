@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://areas/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -20,10 +20,13 @@
 [ext_resource path="res://audio/wind_controller.gd" type="Script" id=18]
 [ext_resource path="res://entities/env/skybox/skybox_sun.tscn" type="PackedScene" id=19]
 [ext_resource path="res://areas/skybox.gd" type="Script" id=20]
-[ext_resource path="res://material/env/skybox.material" type="Material" id=21]
+[ext_resource path="res://material/sky/skybox.material" type="Material" id=21]
 [ext_resource path="res://entities/env/skybox/skybox_sun.gd" type="Script" id=22]
 [ext_resource path="res://tools/scripts/map_screenshot.gd" type="Script" id=23]
+[ext_resource path="res://material/sky/stars.shader" type="Shader" id=24]
+[ext_resource path="res://material/sky/star.png" type="Texture" id=25]
 [ext_resource path="res://areas/env_settings.gd" type="Script" id=26]
+[ext_resource path="res://areas/stars.multimesh" type="MultiMesh" id=27]
 [ext_resource path="res://material/demo_boundary.material" type="Material" id=101]
 [ext_resource path="res://areas/demo_fence.gd" type="Script" id=102]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=105]
@@ -55,6 +58,11 @@ polygon_points = PoolVector2Array( 121.144, -11.2629, -1.49634, -12.3922, -237.1
 [sub_resource type="SphereMesh" id=77]
 radial_segments = 24
 rings = 24
+
+[sub_resource type="ShaderMaterial" id=103]
+shader = ExtResource( 24 )
+shader_param/strength = 0.0
+shader_param/mask = ExtResource( 25 )
 
 [sub_resource type="Gradient" id=80]
 offsets = PoolRealArray( 0.623529, 0.815686 )
@@ -217,6 +225,18 @@ tracks/11/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 0.286275, 0.223529, 0.54902, 1 ) ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("env_settings:star_brightness")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
 }
 
 [sub_resource type="Gradient" id=100]
@@ -429,6 +449,18 @@ tracks/12/keys = {
 "args": [  ],
 "method": "start_day"
 } ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("env_settings:star_brightness")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 0, 165, 305, 420, 545 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 3.0, 3.0, 0.0 ]
 }
 
 [sub_resource type="Animation" id=102]
@@ -2378,14 +2410,21 @@ visible = false
 [node name="chunk_lowres_outer052" parent="." index="404"]
 visible = false
 
-[node name="sun_true_rotation" type="Spatial" parent="." index="405"]
+[node name="skybox" type="MeshInstance" parent="." index="405"]
+transform = Transform( 200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0 )
+layers = 4
+mesh = SubResource( 77 )
+material/0 = ExtResource( 21 )
+script = ExtResource( 20 )
+
+[node name="sun_true_rotation" type="Spatial" parent="." index="406"]
 transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
 
 [node name="skybox_sun" parent="sun_true_rotation" index="0" instance=ExtResource( 19 )]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0.229608, 0.888723, -0.478454 )
 script = ExtResource( 22 )
 
-[node name="sun" type="DirectionalLight" parent="." index="406"]
+[node name="sun" type="DirectionalLight" parent="." index="407"]
 transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
 layers = 1024
 light_color = Color( 1, 0.968627, 0.878431, 1 )
@@ -2403,24 +2442,24 @@ script = ExtResource( 7 )
 wait_time = 7.0
 autostart = true
 
-[node name="skybox" type="MeshInstance" parent="." index="407"]
-transform = Transform( 200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0 )
-layers = 4
-mesh = SubResource( 77 )
-material/0 = ExtResource( 21 )
+[node name="stars" type="MultiMeshInstance" parent="." index="408"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.49012e-08, -1.19209e-07, 0 )
+visible = false
+material_override = SubResource( 103 )
+multimesh = ExtResource( 27 )
 script = ExtResource( 20 )
 
-[node name="day_night" type="AnimationPlayer" parent="." index="408"]
+[node name="day_night" type="AnimationPlayer" parent="." index="409"]
 autoplay = "day_night_normal"
 playback_speed = 0.1
 anims/RESET = SubResource( 78 )
 anims/day_night_normal = SubResource( 79 )
 anims/map_screenshot = SubResource( 102 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="409"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="410"]
 environment = SubResource( 3 )
 
-[node name="env_settings" type="Node" parent="." index="410"]
+[node name="env_settings" type="Node" parent="." index="411"]
 script = ExtResource( 26 )
 sun_light_color = Color( 1, 0.968627, 0.878431, 1 )
 sun_visible = true
@@ -2434,13 +2473,13 @@ skybox_gradient = SubResource( 81 )
 skybox_gradient2 = SubResource( 83 )
 sun_true_transform = Transform( 0.926126, -0.0371819, 0.375378, -0.315845, 0.467631, 0.825568, -0.206235, -0.883141, 0.421342, 0, 0, 0 )
 
-[node name="env_tween" type="Tween" parent="." index="411"]
+[node name="env_tween" type="Tween" parent="." index="412"]
 
-[node name="sun_tween" type="Tween" parent="." index="412"]
+[node name="sun_tween" type="Tween" parent="." index="413"]
 
-[node name="indirect_tween" type="Tween" parent="." index="413"]
+[node name="indirect_tween" type="Tween" parent="." index="414"]
 
-[node name="debug" type="Panel" parent="." index="414"]
+[node name="debug" type="Panel" parent="." index="415"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -2493,7 +2532,7 @@ margin_right = 574.0
 margin_bottom = 178.0
 autowrap = true
 
-[node name="Label" type="Label" parent="." index="415"]
+[node name="Label" type="Label" parent="." index="416"]
 pause_mode = 2
 visible = false
 anchor_right = 1.0
@@ -2505,11 +2544,11 @@ align = 1
 valign = 1
 script = ExtResource( 1 )
 
-[node name="tutorial_swap" type="Timer" parent="." index="416"]
+[node name="tutorial_swap" type="Timer" parent="." index="417"]
 wait_time = 3.0
 one_shot = true
 
-[node name="race_106" type="Spatial" parent="." index="417"]
+[node name="race_106" type="Spatial" parent="." index="418"]
 transform = Transform( 0.31814, 0, 0.948044, 0, 1, 0, -0.948044, 0, 0.31814, 1215.29, 525.107, -2122.41 )
 script = ExtResource( 10 )
 bronze_seconds = 180.0
@@ -2538,7 +2577,7 @@ shape = SubResource( 16 )
 [node name="flag" parent="race_106/race_end" index="1" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.872406, 0 )
 
-[node name="border" type="Area" parent="." index="418"]
+[node name="border" type="Area" parent="." index="419"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 11 )
@@ -2564,10 +2603,10 @@ shape = SubResource( 5 )
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 318, -3000 )
 shape = SubResource( 5 )
 
-[node name="player" parent="." index="419" instance=ExtResource( 5 )]
+[node name="player" parent="." index="420" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1976, -230.387, 746 )
 
-[node name="audio_wind" type="AudioStreamPlayer" parent="." index="420" groups=["distance_activated"]]
+[node name="audio_wind" type="AudioStreamPlayer" parent="." index="421" groups=["distance_activated"]]
 pause_mode = 2
 stream = ExtResource( 12 )
 volume_db = -80.0
@@ -2575,7 +2614,7 @@ autoplay = true
 bus = "SFX"
 script = ExtResource( 18 )
 
-[node name="map_viewport" type="Viewport" parent="." index="421"]
+[node name="map_viewport" type="Viewport" parent="." index="422"]
 size = Vector2( 4096, 4096 )
 msaa = 4
 script = ExtResource( 23 )
@@ -2587,32 +2626,32 @@ size = 9000.0
 near = 4.0
 far = 20000.0
 
-[node name="StaticBody" type="StaticBody" parent="." index="422"]
+[node name="StaticBody" type="StaticBody" parent="." index="423"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3747 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody2" type="StaticBody" parent="." index="423"]
+[node name="StaticBody2" type="StaticBody" parent="." index="424"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3766 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8707, 0, 0 )
 shape = SubResource( 7 )
 
-[node name="StaticBody3" type="StaticBody" parent="." index="424"]
+[node name="StaticBody3" type="StaticBody" parent="." index="425"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4176, 0, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3" index="0"]
 shape = SubResource( 7 )
 
-[node name="StaticBody4" type="StaticBody" parent="." index="425"]
+[node name="StaticBody4" type="StaticBody" parent="." index="426"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3805, 0, 0.999651 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4" index="0"]
 shape = SubResource( 7 )
 
-[node name="loading" type="Label" parent="." index="426"]
+[node name="loading" type="Label" parent="." index="427"]
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
@@ -2626,10 +2665,10 @@ theme = ExtResource( 6 )
 custom_fonts/font = SubResource( 15 )
 text = "Loading World..."
 
-[node name="endgame_teleport_marker" type="Position3D" parent="." index="427"]
+[node name="endgame_teleport_marker" type="Position3D" parent="." index="428"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -658.433, 12.5731, 2363.8 )
 
-[node name="boundary_demo" parent="." index="428"]
+[node name="boundary_demo" parent="." index="429"]
 material/0 = ExtResource( 101 )
 script = ExtResource( 102 )
 
@@ -2638,7 +2677,7 @@ script = ExtResource( 105 )
 condition = "!Global.stat(\"demo_freedom\")"
 listen_for_change = true
 
-[node name="chunk-cave137" parent="." index="429"]
+[node name="chunk-cave137" parent="." index="430"]
 material/0 = ExtResource( 8 )
 
 [node name="StaticBody" parent="chunk-cave137" index="0" groups=["flag_surface"]]
@@ -2647,7 +2686,7 @@ collision_layer = 257
 [node name="StaticBody" parent="chunk-cave121" index="0" groups=["flag_surface"]]
 collision_layer = 257
 
-[node name="ImmediateGeometry" type="ImmediateGeometry" parent="." index="431"]
+[node name="ImmediateGeometry" type="ImmediateGeometry" parent="." index="432"]
 
 [connection signal="timeout" from="sun/Timer" to="sun" method="update_rotation"]
 [connection signal="timeout" from="tutorial_swap" to="." method="_on_tutorial_swap_timeout"]

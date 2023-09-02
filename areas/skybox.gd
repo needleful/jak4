@@ -1,4 +1,4 @@
-extends MeshInstance
+extends Spatial
 
 func _process(_delta):
 	var c := get_viewport().get_camera()

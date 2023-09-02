@@ -87,5 +87,8 @@ func set_blink_frame(frame: int):
 		frame = 0
 	var m := nodes["head"] as MeshInstance
 	if m:
+		print("Blink: ", frame)
 		m.get_surface_material(1).set_shader_param(
 			"main_texture", eye_set.sprites[frame])
+	else:
+		print_debug("No head mesh!")

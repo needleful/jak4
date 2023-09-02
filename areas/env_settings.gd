@@ -13,6 +13,7 @@ export(float) var skybox_blend setget set_skybox_blend
 export(Texture) var skybox_gradient setget set_skybox_gradient
 export(Texture) var skybox_gradient2 setget set_skybox_gradient2
 export(Transform) var sun_true_transform setget set_sun_transform
+export(float, 0.0, 3.0) var star_brightness setget set_star_brightness
 
 var active_overrides: Array
 
@@ -20,6 +21,7 @@ onready var sun := $"../sun"
 onready var vis_sun := $"../sun_true_rotation"
 onready var skybox := $"../skybox"
 onready var env := $"../WorldEnvironment"
+onready var stars := $"../stars"
 
 func _init():
 	active_overrides = []
@@ -90,3 +92,9 @@ func set_sun_transform(t: Transform):
 		vis_sun.transform = t
 		if Engine.editor_hint:
 			sun.transform = t
+
+func set_star_brightness(brightness: float):
+	star_brightness = brightness
+	if stars:
+		stars.visible = brightness > 0
+		stars.material_override.set_shader_param("strength", brightness)
