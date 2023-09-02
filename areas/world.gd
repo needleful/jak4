@@ -34,6 +34,7 @@ onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween
 onready var sun := $sun
+onready var stars := $stars
 onready var indirect_tween := $indirect_tween
 onready var wind := $audio_wind
 var sun_enabled := true
@@ -407,13 +408,23 @@ func set_sun_enabled(enabled:bool):
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	
+	_x = sun_tween.interpolate_property( stars.material_override, "shader_param/strength",
+		stars.material_override.get_shader_param("strength"),
+		env_settings.star_brightness if enabled else 0.0,
+		FOG_TWEEN_TIME,
+		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	
 	if !enabled and sun.visible:
 		_x = sun_tween.interpolate_callback(sun, 
 			FOG_TWEEN_TIME + 0.1, "hide")
+		_x = sun_tween.interpolate_callback(stars,
+			FOG_TWEEN_TIME + 0.1, "hide"
+		)
 	elif enabled:
 		if !sun.visible:
 			sun.light_energy = 0
 		sun.show()
+		stars.show()
 	_x = sun_tween.start()
 
 func indirect_light_override(light: Color):

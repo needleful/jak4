@@ -95,6 +95,6 @@ func set_sun_transform(t: Transform):
 
 func set_star_brightness(brightness: float):
 	star_brightness = brightness
-	if stars:
+	if stars and no("show_sun"):
 		stars.visible = brightness > 0
 		stars.material_override.set_shader_param("strength", brightness)

@@ -22,7 +22,8 @@ func _run():
 		var transform := Transform()
 		
 		var r := rand_range(min_distance, min_distance + distance_range)
-		var theta := randf()*2*PI
+		var to := 1-2*randf()
+		var theta := (PI if randf() > 0.5 else 0.0) + PI*(sign(to)*pow(abs(to), 1.4))
 		var phi := acos(1 - 2 * randf())
 		
 		var t = Vector3(
