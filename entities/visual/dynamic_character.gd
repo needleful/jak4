@@ -3,7 +3,7 @@ extends Spatial
 
 # A dictionary of names to mesh instances
 export(Dictionary) var slots := {
-	"full_body" : NodePath("fullbody"),
+	"fullbody" : NodePath("fullbody"),
 	"hat": NodePath("hat"),
 	"shirt": NodePath("shirt"),
 	"pants": NodePath("pants"),
@@ -14,7 +14,7 @@ export(Dictionary) var slots := {
 
 # A dictionary of slots to meshes?
 export(Dictionary) var outfit := {
-	"full_body": null,
+	"fullbody": null,
 	"hat":null,
 	"pants":null,
 	"shirt":null,
@@ -46,11 +46,11 @@ func refresh():
 	if (!outfit.pants and !outfit.shirt) or defaults_only:
 		nodes.pants.hide()
 		nodes.shirt.hide()
-		nodes.full_body.show()
+		nodes.fullbody.show()
 	else:
 		nodes.pants.show()
 		nodes.shirt.show()
-		nodes.full_body.hide()
+		nodes.fullbody.hide()
 	
 	for mesh in outfit:
 		if mesh == "hair":

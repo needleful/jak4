@@ -32,6 +32,7 @@ const gravity_stun_time = 10.0
 const gravity_stun_velocity = 0.02
 
 var player : Node
+var mum : MumOutfit
 
 # Items that also have a "stat" value, 
 # measuring the total collected 
@@ -58,14 +59,13 @@ func _init():
 	var v_minor = ProjectSettings.get_setting("global/minor_version")
 	var v_patch = ProjectSettings.get_setting("global/patch_version")
 	version = GameVersion.new(v_major, v_minor, v_patch)
-	print_debug("Running ", version)
-	
 	game_state = GameState.new(version)
 	journal_by_tag = {}
 	stories = {}
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	pause_mode = Node.PAUSE_MODE_PROCESS
+	reset_mum()
 
 func _ready():
 	randomize()
@@ -285,6 +285,13 @@ func get_fancy_inventory() -> Dictionary:
 				items[c] = r
 	return items
 
+func reset_mum():
+	mum = MumOutfit.new()
+	var _x = mum.connect("outfit_changed", self, "_on_mum_outfit_changed")
+
+func _on_mum_outfit_changed(new_outfit: Dictionary):
+	set_stat("mum/outfit", new_outfit)
+
 func node_stat(node: Node) -> String:
 	 return node.name + "." + str(hash(node.get_path()))
 
@@ -403,6 +410,7 @@ func reset_game():
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	journal_by_tag = {}
+	reset_mum()
 	print_debug("New game...")
 	var dir := Directory.new()
 	if dir.file_exists(save_path):
@@ -431,6 +439,10 @@ func load_sync(reload := true):
 				[game_state.version, version])
 		game_state.version = version
 		valid_game_state = true
+
+		if has_stat("mum/outfit"):
+			mum.set_outfit(stat("mum/outfit"))
+
 		if reload:
 			var _x = get_tree().reload_current_scene()
 		else:
