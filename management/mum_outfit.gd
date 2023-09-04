@@ -18,8 +18,12 @@ func set_outfit(p_outfit: Dictionary):
 	return true
 
 func set_clothing(p_key: String, p_value):
-	if(p_value is String):
-		var path:String = outfit_path_f % p_value
+	if p_value is String and p_value != "default":
+		var path:String
+		if p_value.begins_with("res://"):
+			path = p_value
+		else:
+			path = outfit_path_f % p_value
 		if !ResourceLoader.exists(path):
 			print_debug("Outfit resource not found: ", p_value)
 			return false

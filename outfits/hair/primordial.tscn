@@ -1,18 +1,18 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://_glb/characters/dynamic_mum/outfits/primordial_hair.glb" type="PackedScene" id=1]
+[ext_resource path="res://outfits/hair/primordial_hair.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/visual/ik_target.gd" type="Script" id=2]
 [ext_resource path="res://entities/visual/hair_ik.gd" type="Script" id=3]
 [ext_resource path="res://material/coat.shader" type="Shader" id=4]
-[ext_resource path="res://entities/visual/hair/hair_detail_1.png" type="Texture" id=5]
-[ext_resource path="res://entities/visual/hair/hair_pallette_1.png" type="Texture" id=6]
+[ext_resource path="res://outfits/hair/hair_detail_1.png" type="Texture" id=5]
+[ext_resource path="res://outfits/hair/hair_pallette_1.png" type="Texture" id=6]
 
-[sub_resource type="Gradient" id=2]
+[sub_resource type="Gradient" id=5]
 offsets = PoolRealArray( 0, 0.0697674, 1 )
-colors = PoolColorArray( 0, 0, 0, 1, 0.100303, 0.0240947, 0.288675, 1, 0.757812, 0.248657, 0.248657, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.100303, 0.0240947, 0.288675, 1, 0.386885, 0.757812, 0.248657, 1 )
 
-[sub_resource type="GradientTexture" id=3]
-gradient = SubResource( 2 )
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
 width = 64
 
 [sub_resource type="ShaderMaterial" id=4]
@@ -22,7 +22,7 @@ shader_param/softness = 1.0
 shader_param/specularity = 2.875
 shader_param/detail_scale = 0.1
 shader_param/palette = ExtResource( 6 )
-shader_param/gradient = SubResource( 3 )
+shader_param/gradient = SubResource( 6 )
 shader_param/detail = ExtResource( 5 )
 
 [sub_resource type="SphereMesh" id=1]
@@ -35,6 +35,7 @@ rings = 2
 script = ExtResource( 3 )
 skeleton_node = NodePath("hair_rig/Skeleton")
 ik_break = NodePath("ik_break")
+hair_mesh_node = NodePath("hair_rig/Skeleton/hair_layer1")
 player_velocity_influence = false
 
 [node name="hair_end" type="Spatial" parent="." index="0"]

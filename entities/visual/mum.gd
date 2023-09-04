@@ -12,7 +12,7 @@ var look_center := Vector2(0.5, 0.1)
 var look_radii := Vector2(0.6, 0.4)
 
 var look_target:Spatial = null
-onready var eye_material: ShaderMaterial = $Armature/Skeleton/head.get_surface_material(1)
+onready var eye_material: ShaderMaterial = $Armature.eye_material
 onready var eyes : Spatial = $Armature/Skeleton/head_attach/eyes
 
 func _ready():
@@ -37,7 +37,7 @@ func hello():
 	make_visible()
 
 func make_visible():
-	var skeleton := $Armature/Skeleton
+	var skeleton := $Armature
 	if !Engine.editor_hint:
 		if Global.mum.outfit:
 			skeleton.outfit = Global.mum.outfit
@@ -56,7 +56,7 @@ func set_real_visible(v):
 	real_visible = v
 	if !is_inside_tree():
 		return
-	_override($Armature/Skeleton, null if v else hidden_material)
+	_override($Armature, null if v else hidden_material)
 
 func _override(n: Node, mat: Material):
 	for m in n.get_children():

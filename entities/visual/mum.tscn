@@ -1,28 +1,29 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
-[ext_resource path="res://_glb/characters/dynamic_mum/mum.glb" type="PackedScene" id=1]
+[ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=3]
-[ext_resource path="res://entities/visual/mum_detail_albedo.png" type="Texture" id=4]
+[ext_resource path="res://material/coat.shader" type="Shader" id=4]
 [ext_resource path="res://entities/visual/mum.gd" type="Script" id=5]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=6]
-[ext_resource path="res://entities/visual/mum_albedo.png" type="Texture" id=7]
+[ext_resource path="res://outfits/hair/hair_detail_1.png" type="Texture" id=7]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
-[ext_resource path="res://entities/visual/empty.png" type="Texture" id=10]
+[ext_resource path="res://outfits/hair/hair_pallette_1.png" type="Texture" id=10]
 [ext_resource path="res://outfits/eyes/test_purple.tres" type="Resource" id=11]
 [ext_resource path="res://material/characters/eye.shader" type="Shader" id=12]
 [ext_resource path="res://outfits/eyes/primordial.tres" type="Resource" id=13]
 [ext_resource path="res://outfits/eyes/eye1.png" type="Texture" id=14]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/ScaleChange.anim" type="Animation" id=18]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/IntroWalk.anim" type="Animation" id=19]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/00_RESET.anim" type="Animation" id=20]
+[ext_resource path="res://_glb/characters/mum/anim/ScaleChange.anim" type="Animation" id=18]
+[ext_resource path="res://_glb/characters/mum/anim/IntroWalk.anim" type="Animation" id=19]
+[ext_resource path="res://_glb/characters/mum/anim/00_RESET.anim" type="Animation" id=20]
 [ext_resource path="res://outfits/hair/primordial.tscn" type="PackedScene" id=21]
-[ext_resource path="res://_glb/characters/dynamic_mum/anim/WalkCycle.anim" type="Animation" id=22]
+[ext_resource path="res://_glb/characters/mum/anim/WalkCycle.anim" type="Animation" id=22]
 [ext_resource path="res://outfits/head/primordial_head.mesh" type="ArrayMesh" id=23]
 [ext_resource path="res://outfits/skin/skin_clear.png" type="Texture" id=24]
 [ext_resource path="res://outfits/eyes/iris_purple_normal.png" type="Texture" id=25]
+[ext_resource path="res://outfits/fullbody/mum_fullbody.mesh" type="ArrayMesh" id=26]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
@@ -43,33 +44,6 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.929412, 0.917647, 1, 1 )
 shader_param/main_texture = ExtResource( 24 )
 
-[sub_resource type="ShaderMaterial" id=24]
-shader = ExtResource( 6 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 0.321569, 0.0705882, 0.141176, 1 )
-shader_param/main_texture = ExtResource( 10 )
-
-[sub_resource type="ShaderMaterial" id=12]
-shader = ExtResource( 6 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 3.295
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 0.827451, 0.545098, 0.545098, 1 )
-shader_param/main_texture = ExtResource( 7 )
-
-[sub_resource type="ShaderMaterial" id=13]
-shader = ExtResource( 6 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 0.247059, 0.0666667, 0.14902, 1 )
-shader_param/main_texture = ExtResource( 4 )
-
 [sub_resource type="ShaderMaterial" id=39]
 shader = ExtResource( 12 )
 shader_param/iris_scale = 0.572
@@ -82,8 +56,25 @@ shader_param/alpha_clip = 0.75
 shader_param/main_texture = ExtResource( 14 )
 shader_param/iris_texture = ExtResource( 25 )
 
-[sub_resource type="Skin" id=3]
-resource_name = "Skin"
+[sub_resource type="Gradient" id=56]
+offsets = PoolRealArray( 0, 0.0697674, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.100303, 0.0240947, 0.288675, 1, 0.757812, 0.344124, 0.248657, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 56 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=55]
+shader = ExtResource( 4 )
+shader_param/light_bias = 0.0
+shader_param/softness = 0.656
+shader_param/specularity = 2.875
+shader_param/detail_scale = 36.957
+shader_param/palette = ExtResource( 10 )
+shader_param/gradient = SubResource( 3 )
+shader_param/detail = ExtResource( 7 )
+
+[sub_resource type="Skin" id=54]
 bind_count = 81
 bind/0/name = "Root"
 bind/0/bone = -1
@@ -344,7 +335,7 @@ tracks/0/keys = {
 "values": [ Vector3( -0.560428, -0.621836, -0.141326 ) ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=52]
 length = 4.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:real_visible")
@@ -612,7 +603,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
+node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -622,65 +613,55 @@ script = ExtResource( 5 )
 hologram_material = SubResource( 2 )
 hidden_material = SubResource( 8 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/6/bound_children = [ NodePath("head_attach") ]
+[node name="Armature" parent="." index="0"]
 script = ExtResource( 9 )
 outfit = {
 "eyebrows": null,
 "eyes": ExtResource( 13 ),
-"fullbody": null,
+"fullbody": ExtResource( 26 ),
 "hair": ExtResource( 21 ),
 "hat": null,
 "head": ExtResource( 23 ),
 "pants": null,
 "shirt": null,
-"skin_color": Color( 0.196078, 0, 1, 1 )
+"skin_color": Color( 0.929412, 0.917647, 1, 1 ),
+"skin_texture": ExtResource( 24 )
 }
 eye_set = ExtResource( 11 )
 skin_material = SubResource( 49 )
+eye_material = SubResource( 39 )
+hair_material = SubResource( 55 )
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 24 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 12 )
-material/1 = SubResource( 49 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 13 )
 
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 49 )
-material/1 = SubResource( 39 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-skin = SubResource( 3 )
+skin = SubResource( 54 )
 
 [node name="shirt" type="MeshInstance" parent="Armature/Skeleton" index="5"]
 visible = false
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
-skin = SubResource( 3 )
+skin = SubResource( 54 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 0.999942, 0.00558319, -0.00921098, -0.010233, 0.225558, -0.974176, -0.0033614, 0.974214, 0.225602, 0.0127804, 1.13778, 0.0100591 )
+transform = Transform( 1, 1.42109e-14, 7.15258e-07, 7.00223e-07, 0.203954, -0.97898, -1.4588e-07, 0.97898, 0.203954, -1.98986e-15, 1.15055, -0.00574669 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
@@ -702,7 +683,7 @@ script = ExtResource( 17 )
 search_path = "res://_glb/characters/dynamic_mum/anim"
 
 [node name="vis_anim" type="AnimationPlayer" parent="." index="2"]
-anims/Hide = SubResource( 15 )
+anims/Hide = SubResource( 52 )
 anims/Hide_Partial = SubResource( 51 )
 anims/RESET = SubResource( 43 )
 anims/Show = SubResource( 44 )
