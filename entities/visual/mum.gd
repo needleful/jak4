@@ -38,14 +38,14 @@ func hello():
 
 func make_visible():
 	var skeleton := $Armature/Skeleton
-	if Global.mum.outfit:
-		skeleton.outfit = Global.mum.outfit
-	else:
-		Global.mum.set_outfit(skeleton.outfit)
-
+	if !Engine.editor_hint:
+		if Global.mum.outfit:
+			skeleton.outfit = Global.mum.outfit
+		else:
+			Global.mum.set_outfit(skeleton.outfit)
+		skeleton.refresh()
 	anim_tree["parameters/Big/add_amount"] = 1.0
 	$vis_anim.play("Show")
-	skeleton.refresh()
 	_overlay(skeleton)
 
 func bye():

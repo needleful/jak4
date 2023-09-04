@@ -17,15 +17,15 @@ func set_outfit(p_outfit: Dictionary):
 	valid_outfit = true
 	return true
 
-func set_clothing(p_key: String, p_path):
-	if !(p_path is String):
-		outfit[p_key] = null
-	else:
-		var path:String = outfit_path_f % p_path
+func set_clothing(p_key: String, p_value):
+	if(p_value is String):
+		var path:String = outfit_path_f % p_value
 		if !ResourceLoader.exists(path):
-			print_debug("Outfit resource not found: ", path)
+			print_debug("Outfit resource not found: ", p_value)
 			return false
-		outfit[p_key] = load(path)
+		outfit[p_key] = ResourceLoader.load(path)
+	else:
+		outfit[p_key] = p_value
 	
 	match p_key:
 		"fullbody":
@@ -37,6 +37,5 @@ func set_clothing(p_key: String, p_path):
 			outfit["hair"] = null
 		"hair":
 			outfit["hat"] = null
-
 	emit_signal("outfit_changed", outfit)
 	return true
