@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -10,10 +10,12 @@
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
 [ext_resource path="res://outfits/hair/hair_pallette_1.png" type="Texture" id=10]
-[ext_resource path="res://outfits/eyes/test_purple.tres" type="Resource" id=11]
+[ext_resource path="res://outfits/eyes/neutral_set.tres" type="Resource" id=11]
 [ext_resource path="res://material/characters/eye.shader" type="Shader" id=12]
-[ext_resource path="res://outfits/eyes/primordial.tres" type="Resource" id=13]
+[ext_resource path="res://outfits/eyes/shadowed_set.tres" type="Resource" id=13]
 [ext_resource path="res://outfits/eyes/eye1.png" type="Texture" id=14]
+[ext_resource path="res://outfits/eyes/iris_black.png" type="Texture" id=15]
+[ext_resource path="res://outfits/mouth/mouth1_pursed.png" type="Texture" id=16]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
 [ext_resource path="res://_glb/characters/mum/anim/ScaleChange.anim" type="Animation" id=18]
 [ext_resource path="res://_glb/characters/mum/anim/IntroWalk.anim" type="Animation" id=19]
@@ -22,7 +24,6 @@
 [ext_resource path="res://_glb/characters/mum/anim/WalkCycle.anim" type="Animation" id=22]
 [ext_resource path="res://outfits/head/primordial_head.mesh" type="ArrayMesh" id=23]
 [ext_resource path="res://outfits/skin/skin_clear.png" type="Texture" id=24]
-[ext_resource path="res://outfits/eyes/iris_purple_normal.png" type="Texture" id=25]
 [ext_resource path="res://outfits/fullbody/mum_fullbody.mesh" type="ArrayMesh" id=26]
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -41,7 +42,7 @@ shader_param/subsurface_scattering = null
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 0.929412, 0.917647, 1, 1 )
+shader_param/albedo = Color( 0.862745, 0.67451, 0.682353, 1 )
 shader_param/main_texture = ExtResource( 24 )
 
 [sub_resource type="ShaderMaterial" id=39]
@@ -54,7 +55,7 @@ shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/alpha_clip = 0.75
 shader_param/main_texture = ExtResource( 14 )
-shader_param/iris_texture = ExtResource( 25 )
+shader_param/iris_texture = ExtResource( 15 )
 
 [sub_resource type="Gradient" id=56]
 offsets = PoolRealArray( 0, 0.0697674, 1 )
@@ -73,6 +74,17 @@ shader_param/detail_scale = 36.957
 shader_param/palette = ExtResource( 10 )
 shader_param/gradient = SubResource( 3 )
 shader_param/detail = ExtResource( 7 )
+
+[sub_resource type="ShaderMaterial" id=57]
+shader = ExtResource( 12 )
+shader_param/iris_scale = 0.5
+shader_param/iris_offset = Vector2( 0.5, 0.5 )
+shader_param/look_distance = 0.0
+shader_param/subsurface_scattering = null
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/alpha_clip = 0.75
+shader_param/main_texture = ExtResource( 16 )
 
 [sub_resource type="Skin" id=54]
 bind_count = 81
@@ -603,7 +615,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
+node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -622,15 +634,18 @@ outfit = {
 "hair": ExtResource( 21 ),
 "hat": null,
 "head": ExtResource( 23 ),
+"iris": null,
+"mouth": ExtResource( 16 ),
 "pants": null,
 "shirt": null,
-"skin_color": Color( 0.929412, 0.917647, 1, 1 ),
+"skin_color": Color( 0.862745, 0.67451, 0.682353, 1 ),
 "skin_texture": ExtResource( 24 )
 }
 eye_set = ExtResource( 11 )
 skin_material = SubResource( 49 )
 eye_material = SubResource( 39 )
 hair_material = SubResource( 55 )
+mouth_material = SubResource( 57 )
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
@@ -647,6 +662,7 @@ material_overlay = SubResource( 2 )
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
 material_overlay = SubResource( 2 )
+material/2 = SubResource( 57 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false

@@ -21,6 +21,7 @@ export(Dictionary) var outfit := {
 	"eyebrows":null,
 	"hair":null,
 	"eyes":null,
+	"iris":null,
 	"skin_texture":null,
 	"skin_color":Color.green,
 	"mouth":null,
@@ -32,7 +33,7 @@ export(Dictionary) var outfit := {
 }
 
 # Items which are not meshes and have to be handled specially
-const special_items := ["eyes", "hair", "skin_texture", "skin_color", "mouth", "size"]
+const special_items := ["eyes", "iris", "hair", "skin_texture", "skin_color", "mouth", "size"]
 
 var defaults: Dictionary
 export(Resource) var eye_set
@@ -42,6 +43,7 @@ export(bool) var defaults_only := false
 export(Material) var skin_material
 export(Material) var eye_material
 export(Material) var hair_material
+export(Material) var mouth_material
 
 func _ready():
 	defaults = outfit.duplicate()
@@ -92,8 +94,13 @@ func refresh():
 		if e:
 			eye_set = e
 			set_blink_frame(0)
-			eye_material.set_shader_param(
-				"iris_texture", eye_set.iris)
+
+	if "iris" in outfit:
+		eye_material.set_shader_param(
+			"iris_texture", outfit.iris)
+	if "mouth" in outfit:
+		mouth_material.set_shader_param("main_texture",
+			outfit.mouth)
 		
 	if "skin_texture" in outfit:
 		skin_material.set_shader_param("main_texture", outfit.skin_texture)
