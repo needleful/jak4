@@ -22,6 +22,7 @@ export(Dictionary) var outfit := {
 	"hair":null,
 	"eyes":null,
 	"iris":null,
+	"face_texture":null,
 	"skin_texture":null,
 	"skin_color":Color.green,
 	"mouth":null,
@@ -33,7 +34,7 @@ export(Dictionary) var outfit := {
 }
 
 # Items which are not meshes and have to be handled specially
-const special_items := ["eyes", "iris", "hair", "skin_texture", "skin_color", "mouth", "size"]
+const special_items := ["eyes", "iris", "hair", "face_texture", "skin_texture", "skin_color", "mouth", "size"]
 
 var defaults: Dictionary
 export(Resource) var eye_set
@@ -44,6 +45,7 @@ export(Material) var skin_material
 export(Material) var eye_material
 export(Material) var hair_material
 export(Material) var mouth_material
+export(Material) var face_material
 
 func _ready():
 	defaults = outfit.duplicate()
@@ -86,7 +88,6 @@ func refresh():
 			var hair := o.instance()
 			n.add_child(hair)
 			hair.mesh.set_surface_material(0, hair_material)
-
 	if "eyes" in outfit:
 		var e:EyeSet = outfit["eyes"]
 		if !e:
@@ -94,18 +95,17 @@ func refresh():
 		if e:
 			eye_set = e
 			set_blink_frame(0)
-
 	if "iris" in outfit:
-		eye_material.set_shader_param(
-			"iris_texture", outfit.iris)
+		eye_material.set_shader_param("iris_texture", outfit.iris)
 	if "mouth" in outfit:
-		mouth_material.set_shader_param("main_texture",
-			outfit.mouth)
-		
+		mouth_material.set_shader_param("main_texture", outfit.mouth)
+	if "face_texture" in outfit:
+		face_material.set_shader_param("main_texture", outfit.face_texture)
 	if "skin_texture" in outfit:
 		skin_material.set_shader_param("main_texture", outfit.skin_texture)
 	if "skin_color" in outfit:
 		skin_material.set_shader_param("albedo", outfit.skin_color)
+		face_material.set_shader_param("albedo", outfit.skin_color)
 	
 	for mesh in outfit:
 		if mesh in special_items:
@@ -115,20 +115,16 @@ func refresh():
 			nodes[mesh].mesh = outfit[mesh]
 		else:
 			nodes[mesh].mesh = defaults[mesh]
-	
-	# Notes on materials
-	# Head: surface 0 is skin, surface 1 is eyes, surface 2 is mouth
-	# Hat: surface 0 is clothes, surface 1 is hair
-	# Hair and eyebrows: surface 0 is hair, surface 1 is accessories
-	# Other things: surface 0 is the clothing, surface 1 is skin
 	for n in nodes:
 		var m := nodes[n] as MeshInstance
 		if !m:
 			continue
 		if n == "head":
-			m.set_surface_material(0, skin_material)
+			m.set_surface_material(0, face_material)
 			if m.get_surface_material_count() > 1:
 				m.set_surface_material(1, eye_material)
+			if m.get_surface_material_count() > 2:
+				m.set_surface_material(2, mouth_material)
 		elif n == "hat":
 			if m.get_surface_material_count() > 1:
 				m.set_surface_material(1, hair_material)
