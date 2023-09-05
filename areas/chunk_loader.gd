@@ -73,7 +73,8 @@ func _load_wait():
 		if is_active(chunk):
 			return
 		var c = _get_content(_hires, chunk.name)
-		call_deferred("_add_content", chunk, c as PackedScene)
+		if !exit_thread:
+			call_deferred("_add_content", chunk, c as PackedScene)
 
 func quit():
 	exit_thread = true

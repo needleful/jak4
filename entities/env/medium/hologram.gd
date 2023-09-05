@@ -7,8 +7,13 @@ export(Material) var hologram_material: Material
 
 func _ready():
 	material_overlay = hologram_material
-	for c in get_children():
-		c.material_overlay = hologram_material
+	_overlay(self)
+
+func _overlay(node):
+	for c in node.get_children():
+		if c is GeometryInstance:
+			c.material_overlay = hologram_material
+		_overlay(c)
 
 func set_real_visible(v):
 	real_object_visible = v
@@ -19,6 +24,10 @@ func set_real_visible(v):
 			material_override = invisible_material
 		else:
 			material_override = null
-		for c in get_children():
-			if c is GeometryInstance:
-				c.material_override = material_override
+		_override(self)
+
+func _override(n):
+	for c in n.get_children():
+		if c is GeometryInstance:
+			c.material_override = material_override
+		_override(c)

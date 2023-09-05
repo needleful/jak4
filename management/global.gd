@@ -432,6 +432,10 @@ func load_sync(reload := true):
 		save_thread.wait_to_finish()
 	if ResourceLoader.exists(save_path):
 		game_state = ResourceLoader.load(save_path, "", true)
+		if !game_state:
+			print_debug("ERROR: failed to load file: ", save_path)
+			reset_game()
+			return
 		if !(game_state.version is GameVersion):
 			game_state.version = GameVersion.new()
 		if !game_state.version.compatible(version):

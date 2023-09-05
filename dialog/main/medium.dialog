@@ -8,10 +8,14 @@
 			* ...
 			* Nothing seems to happen.
 			You -- Drat! Maybe I need to talk with Armstrong again. Perhaps we-
-			[main_speaker activate]
-			[mention: activated]
-			You -- ...
-				My God...
+			[Global stat: mum/info]
+				[main_speaker activate]
+				[mention: activated]
+				You -- ...
+					My God...
+			{otherwise}
+				[goto: primordial]
+
 	> [skip] (No)
 		[exit]
 * {otherwise}[Global stat: mum/end] The Medium is eerily silent.
@@ -21,9 +25,11 @@
 	[exit]
 {otherwise}
 	[main_speaker sit]
-	[mention: activated]
-	[main_speaker activate]
-
+	[Global stat: mum/info]
+		[mention: activated]
+		[main_speaker activate]
+	{otherwise}
+		[goto: primordial]
 :mum
 [mention: main_area]
 
@@ -48,66 +54,6 @@
 [mention: mum]
 * You hear something behind you.
 * ...
-
-[! Global stat: mum/info]
-	[! Global stat: talked/mum]
-		[Global create_task: mum]
-
-		[note: mum/info_needed | Mum. It's really her. At least, what I can remember. But it's barely anything. I have to find out where she lived, or who knew her around here. I think that will help... |+ mum]
-		[! Global stat: mum/appearance]
-			* The thing sitting next to you is barely human.
-			* The outline of a dress. Her arched nose. The faint hum of her voice, whispering something less than words.
-			* That's all you can make out. Somehow this is more than you could recall.
-			* It's unmistakable.
-		{otherwise}
-			* Combined with the photograph you found, the face is unmistakable.
-			* She stares blankly ahead.
-		You -- Hi Mum.
-			I....
-		[player anim_play: SitSad | SittingSad-loop] 
-		You -- ...
-			It works. It actually works. After all these years...
-			All there is now is to find people who knew you, or records, or... I don't know. Whatever I can find about you. The Medium will work with it.
-			...
-			I didn't expect to feel like this....
-		* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
-		* Soon, you may find what you're looking for.
-		[player anim_play: SitRecover | M_Sitting-loop]
-	{otherwise}
-		* The ghost of your mother sits and stares.
-	> I wonder what you'll say in this state...
-		[! Global stat: mum/discussed/brainless_intro]
-			You -- Hello, Mum?
-			Mum?
-			You -- Yes. You're my mother.
-			I'm your mother?
-			You -- ...
-			[Global add_stat: mum/discussed/brainless_intro]
-		:brainless_loop
-		> [mentioned: brainless] This is going nowhere. I'll be back when I learn a little more.
-			Going nowhere...
-		> Do you know where you are?
-			Where am I?
-			[mention: brainless]
-			[goto: brainless_loop]
-		> Do you know why you left Vaeland?
-			[! Global stat: world/info/vaelers_disliked] Too cold.
-				You -- What?
-			{otherwise} I don't like Vaelers.
-				You -- Then why did you marry Father?
-				I don't know.
-			[mention: brainless]
-			[goto: brainless_loop]
-		> You abandoned me.
-			I suppose I did.
-			You -- ... Why did you answer like that?
-			[mention: brainless]
-			[goto: brainless_loop]
-		[goto: _exit]
-	> I'll be back, okay mum?
-		You'll be back...
-		[goto: _exit]
-
 [! Global stat: mum/introduction]
 	[! Global stat: mum/info]
 		[! Global stat: mum/appearance]
@@ -281,6 +227,34 @@
 			Jackie. Do you remember what I said? We need to talk inside the Medium. It's very important.
 			[goto: _exit]
 [goto: _exit]
+
+:primordial
+[mention: activated]
+[mention: mum]
+[main_speaker activate: primordial]
+You -- --!
+	W-what is this? Wh-
+* The thing in front of you
+* It's barely human.
+* You hear the faint hum of its voice, murmuring something less than words.
+* That's all you can make out. Somehow this is more than you could recall.
+* It's unmistakable.
+You -- m.. mum.
+	I....
+[note: mum/info_needed | Mum. It's her. It's her. I can feel it. It's unmistakeable, but she's of no use in this state. I need to learn more about her before I can have a conversation. I think that's how it works... |+ mum]
+[player anim_play: SitSad | SittingSad-loop] 
+You -- ...
+	It works. It actually works. After all these years...
+	All there is now is to find people who knew you, or records, or... I don't know. Whatever I can find about you. The Medium will work with it.
+	...
+	I didn't expect to feel like this....
+* With more knowledge about your mother, the Medium will generate a more sophisticated AI of her.
+* Soon, you may find what you're looking for.
+[player anim_play: SitRecover | M_Sitting-loop]
+* You suddenly don't feel well. You don't want to be in this creature's presence anymore.
+Mumma -- B..baby ba... baby ba....
+[goto: _exit]
+
 
 :main_segment
 > I'll see you later, mum.

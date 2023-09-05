@@ -5,6 +5,7 @@ signal activated
 signal deactivated
 signal endgame
 export(bool) var preview setget set_preview
+export(bool) var rooms_visible setget set_rooms_visible
 
 var visual_name := "Mum"
 
@@ -21,17 +22,25 @@ func exit():
 	$activator.play("Deactivate")
 	emit_signal("deactivated")
 	$DialogTrigger.show()
-	$mum.bye()
+	if $mum.visible:
+		$mum.bye()
 	return true
 
-func activate():
+func activate(mode := "default"):
+	match mode:
+		"primordial":
+			$primordial_room.show()
+			$hologram.hide()
+		_:
+			$primordial_room.hide()
+			$hologram.show()
 	var _x = Global.add_stat("medium/activated")
 	$activator.play("Activate")
 	emit_signal("activated")
 	$DialogTrigger.hide()
 	return true
 
-func show_mum():
+func show_mum(): 
 	$mum.hello()
 
 func set_preview(p):
@@ -46,3 +55,18 @@ func set_preview(p):
 func end_game():
 	$DialogTrigger.deactivate()
 	emit_signal("endgame")
+
+func set_rooms_visible(v):
+	rooms_visible = v
+	if v:
+		if $hologram.visible:
+			$hologram.real_object_visible = true
+		elif $primordial_room.visible:
+			$primordial_room.real_object_visible = true
+	else:
+		$hologram.real_object_visible = false
+		$primordial_room.real_object_visible = false 
+
+func hide_room():
+	$hologram.hide()
+	$primordial_room.hide()

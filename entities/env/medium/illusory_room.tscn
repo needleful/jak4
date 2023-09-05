@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -26,6 +26,8 @@
 [ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=24]
 [ext_resource path="res://material/coat/fabric2.jpg" type="Texture" id=25]
 [ext_resource path="res://material/env/snow.png" type="Texture" id=26]
+[ext_resource path="res://entities/visual/mum_primordial.tscn" type="PackedScene" id=27]
+[ext_resource path="res://entities/visual/empty.png" type="Texture" id=28]
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.791512
@@ -166,25 +168,25 @@ tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
 "times": PoolRealArray( 0, 1.5, 3 ),
-"transitions": PoolRealArray( 0.68302, 3.36359, 1 ),
+"transitions": PoolRealArray( 0.68302, 1.6818, 1 ),
 "update": 0,
 "values": [ 0.0, 1.0, 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("hologram:visible")
+tracks/1/path = NodePath("ReflectionProbe:interior_ambient_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
+"times": PoolRealArray( 0, 1.5, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.223529, 0.262745, 0.235294, 1 ), Color( 0.937255, 0.976471, 1, 1 ), Color( 0.564706, 0.6, 0.623529, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("hologram:real_object_visible")
-tracks/2/interp = 1
+tracks/2/path = NodePath(".:rooms_visible")
+tracks/2/interp = 0
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
@@ -193,18 +195,6 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ false, true ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("ReflectionProbe:interior_ambient_color")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0, 1.5, 3 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 0.223529, 0.262745, 0.235294, 1 ), Color( 0.937255, 0.976471, 1, 1 ), Color( 0.564706, 0.6, 0.623529, 1 ) ]
 }
 
 [sub_resource type="Animation" id=281]
@@ -222,19 +212,19 @@ tracks/0/keys = {
 "values": [ 0.0, 1.0, 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("hologram:visible")
+tracks/1/path = NodePath("ReflectionProbe:interior_ambient_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 2.5 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
+"times": PoolRealArray( 0, 1.1, 2.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.564706, 0.6, 0.623529, 1 ), Color( 0.937255, 0.976471, 1, 1 ), Color( 0.223529, 0.262745, 0.235294, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("hologram:real_object_visible")
+tracks/2/path = NodePath(".:rooms_visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -244,18 +234,6 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("ReflectionProbe:interior_ambient_color")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0, 1.1, 2.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 0.564706, 0.6, 0.623529, 1 ), Color( 0.937255, 0.976471, 1, 1 ), Color( 0.223529, 0.262745, 0.235294, 1 ) ]
 }
 
 [sub_resource type="Animation" id=280]
@@ -285,7 +263,7 @@ tracks/1/keys = {
 "values": [ false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("hologram:real_object_visible")
+tracks/2/path = NodePath("ReflectionProbe:interior_ambient_color")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -294,10 +272,10 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ false ]
+"values": [ Color( 0.223529, 0.262745, 0.235294, 1 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("ReflectionProbe:interior_ambient_color")
+tracks/3/path = NodePath("primordial_room:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -305,9 +283,46 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 0.223529, 0.262745, 0.235294, 1 ) ]
+"update": 1,
+"values": [ false ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("mum:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath(".:rooms_visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="CubeMesh" id=301]
+flip_faces = true
+size = Vector3( 5, 3.2, 8 )
+
+[sub_resource type="ShaderMaterial" id=302]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 0.1
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 0, 0, 0, 1 )
+shader_param/main_texture = ExtResource( 28 )
 
 [node name="illusory_room" instance=ExtResource( 5 )]
 script = ExtResource( 10 )
@@ -444,3 +459,29 @@ light_cull_mask = 4293984256
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.610705, 0.156977, 3.41268 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293984256
+
+[node name="primordial_room" type="MeshInstance" parent="." index="11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.467779, 0.0183017 )
+visible = false
+layers = 65536
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
+mesh = SubResource( 301 )
+material/0 = SubResource( 302 )
+script = ExtResource( 1 )
+real_object_visible = false
+invisible_material = SubResource( 283 )
+hologram_material = SubResource( 278 )
+
+[node name="mum_primordial" parent="primordial_room" index="0" instance=ExtResource( 27 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365467, -1.61827, -3.5932 )
+
+[node name="mema" parent="primordial_room/mum_primordial" index="0"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
+
+[node name="hair" parent="primordial_room/mum_primordial/mema" index="0"]
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
+
+[editable path="primordial_room/mum_primordial"]
