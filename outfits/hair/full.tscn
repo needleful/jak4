@@ -1,0 +1,188 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://outfits/hair/hair_full.glb" type="PackedScene" id=1]
+[ext_resource path="res://entities/visual/ik_target.gd" type="Script" id=2]
+[ext_resource path="res://entities/visual/hair_ik.gd" type="Script" id=3]
+
+[node name="hair_full" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+skeleton_node = NodePath("Armature001/Skeleton")
+ik_break = NodePath("ik_break")
+hair_mesh_node = NodePath("Armature001/Skeleton/hair_full")
+player_velocity_influence = false
+
+[node name="hair_start_pos" type="Spatial" parent="." index="0"]
+
+[node name="hair_end" type="Spatial" parent="hair_start_pos" index="0"]
+transform = Transform( 0.340323, 8.19564e-08, -0.940309, -2.70084e-08, -1, 0, -0.940309, -6.14673e-08, -0.340323, 0.0965406, -0.023469, 0.0638878 )
+
+[node name="hair_end2" type="Spatial" parent="hair_start_pos" index="1"]
+transform = Transform( 0.0147343, -1.93715e-07, 0.999891, 2.75671e-07, -1, -1.08033e-07, 0.999892, 1.63796e-07, -0.0147343, -0.0983186, -0.0152895, 0.0892102 )
+
+[node name="hair_end3" type="Spatial" parent="hair_start_pos" index="2"]
+transform = Transform( -0.99516, -6.70552e-08, 0.0982636, 8.6613e-08, -1, -2.23517e-08, 0.0982637, 7.45058e-09, 0.99516, -0.160654, 0.216438, 0.0352725 )
+
+[node name="hair_end4" type="Spatial" parent="hair_start_pos" index="3"]
+transform = Transform( -0.575009, 3.20375e-07, -0.818147, -3.0396e-07, -1, -1.78814e-07, -0.818147, -2.6077e-08, 0.575009, -0.131195, -0.0268123, -0.00707646 )
+
+[node name="hair_end5" type="Spatial" parent="hair_start_pos" index="4"]
+transform = Transform( 0.868383, -1.49012e-08, -0.495893, 5.82077e-10, -1, -7.45058e-08, -0.495893, 1.04308e-07, -0.868383, -0.0742046, 0.00407144, -0.140747 )
+
+[node name="hair_end6" type="Spatial" parent="hair_start_pos" index="5"]
+transform = Transform( -0.291123, 5.21541e-08, 0.956686, 1.86614e-07, -1, 1.04308e-07, 0.956686, 2.01166e-07, 0.291123, 0.090213, -0.0057787, -0.114897 )
+
+[node name="hair_end7" type="Spatial" parent="hair_start_pos" index="6"]
+transform = Transform( -0.786618, 0.0120191, -0.617323, 0.0451768, -0.99601, -0.0769581, -0.615785, -0.0884252, 0.782937, 0.161448, 0.019093, -0.0300536 )
+
+[node name="hair_end8" type="Spatial" parent="hair_start_pos" index="7"]
+transform = Transform( -0.780485, -2.13273e-07, -0.625175, -1.49012e-08, -1, 4.47035e-08, -0.625174, 9.68575e-08, 0.780485, 0.072865, 0.304711, 0.00682711 )
+
+[node name="hair_end9" type="Spatial" parent="hair_start_pos" index="8"]
+transform = Transform( -0.922404, 5.96046e-08, -0.386225, -1.04308e-07, -1, 2.98023e-08, -0.386225, 2.98023e-08, 0.922404, 0.17685, 0.147513, 0.0527825 )
+
+[node name="hair_end_bang" type="Spatial" parent="hair_start_pos" index="9"]
+transform = Transform( 0.952835, -1.49012e-08, 0.30349, 1.95578e-08, -1, -8.9407e-08, 0.30349, 5.96046e-08, -0.952834, -0.0340942, 0.181056, 0.176849 )
+
+[node name="Armature001" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="SkeletonIK" type="SkeletonIK" parent="Armature001/Skeleton" index="1"]
+process_priority = 1
+root_bone = "MidHair01"
+tip_bone = "C_Hair01"
+target_node = NodePath("../../../ik_break/hair_end")
+
+[node name="SkeletonIK2" type="SkeletonIK" parent="Armature001/Skeleton" index="2"]
+process_priority = 1
+root_bone = "MidHair02"
+tip_bone = "C_Hair02"
+target_node = NodePath("../../../ik_break/hair_end2")
+
+[node name="SkeletonIK3" type="SkeletonIK" parent="Armature001/Skeleton" index="3"]
+process_priority = 1
+root_bone = "MidHair03"
+tip_bone = "C_Hair03"
+target_node = NodePath("../../../ik_break/hair_end3")
+
+[node name="SkeletonIK4" type="SkeletonIK" parent="Armature001/Skeleton" index="4"]
+process_priority = 1
+root_bone = "MidHair04"
+tip_bone = "C_Hair04"
+target_node = NodePath("../../../ik_break/hair_end4")
+
+[node name="SkeletonIK5" type="SkeletonIK" parent="Armature001/Skeleton" index="5"]
+process_priority = 1
+root_bone = "MidHair05"
+tip_bone = "C_Hair05"
+target_node = NodePath("../../../ik_break/hair_end5")
+
+[node name="SkeletonIK6" type="SkeletonIK" parent="Armature001/Skeleton" index="6"]
+process_priority = 1
+root_bone = "MidHair06"
+tip_bone = "C_Hair06"
+target_node = NodePath("../../../ik_break/hair_end6")
+
+[node name="SkeletonIK7" type="SkeletonIK" parent="Armature001/Skeleton" index="7"]
+process_priority = 1
+root_bone = "MidHair07"
+tip_bone = "C_Hair07"
+target_node = NodePath("../../../ik_break/hair_end7")
+
+[node name="SkeletonIK8" type="SkeletonIK" parent="Armature001/Skeleton" index="8"]
+process_priority = 1
+root_bone = "MidHair08"
+tip_bone = "C_Hair08"
+target_node = NodePath("../../../ik_break/hair_end8")
+
+[node name="SkeletonIK9" type="SkeletonIK" parent="Armature001/Skeleton" index="9"]
+process_priority = 1
+root_bone = "MidHair09"
+tip_bone = "C_Hair09"
+target_node = NodePath("../../../ik_break/hair_end9")
+
+[node name="SkeletonIKBang" type="SkeletonIK" parent="Armature001/Skeleton" index="10"]
+process_priority = 1
+root_bone = "MidBang"
+tip_bone = "C_Bang"
+target_node = NodePath("../../../ik_break/hair_end_bang")
+
+[node name="ik_break" type="Node" parent="." index="3"]
+
+[node name="hair_end" type="Spatial" parent="ik_break" index="0"]
+transform = Transform( 0.340323, 8.19564e-08, -0.940309, -2.70084e-08, -1, 0, -0.940309, -6.14673e-08, -0.340323, 0.0965406, -0.023469, 0.0638878 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end2" type="Spatial" parent="ik_break" index="1"]
+transform = Transform( 0.0147343, -1.93715e-07, 0.999891, 2.75671e-07, -1, -1.08033e-07, 0.999892, 1.63796e-07, -0.0147343, -0.0983186, -0.0152895, 0.0892102 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end2")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end3" type="Spatial" parent="ik_break" index="2"]
+transform = Transform( -0.99516, -6.70552e-08, 0.0982636, 8.6613e-08, -1, -2.23517e-08, 0.0982637, 7.45058e-09, 0.99516, -0.160654, 0.216438, 0.0352725 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end3")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end4" type="Spatial" parent="ik_break" index="3"]
+transform = Transform( -0.575009, 3.20375e-07, -0.818147, -3.0396e-07, -1, -1.78814e-07, -0.818147, -2.6077e-08, 0.575009, -0.131195, -0.0268123, -0.00707646 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end4")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end5" type="Spatial" parent="ik_break" index="4"]
+transform = Transform( 0.868383, -1.49012e-08, -0.495893, 5.82077e-10, -1, -7.45058e-08, -0.495893, 1.04308e-07, -0.868383, -0.0742046, 0.00407144, -0.140747 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end5")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end6" type="Spatial" parent="ik_break" index="5"]
+transform = Transform( -0.291123, 5.21541e-08, 0.956686, 1.86614e-07, -1, 1.04308e-07, 0.956686, 2.01166e-07, 0.291123, 0.090213, -0.0057787, -0.114897 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end6")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end7" type="Spatial" parent="ik_break" index="6"]
+transform = Transform( -0.786618, 0.0120191, -0.617323, 0.0451768, -0.99601, -0.0769581, -0.615785, -0.0884252, 0.782937, 0.161448, 0.019093, -0.0300536 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end7")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end8" type="Spatial" parent="ik_break" index="7"]
+transform = Transform( -0.780485, -2.13273e-07, -0.625175, -1.49012e-08, -1, 4.47035e-08, -0.625174, 9.68575e-08, 0.780485, 0.072865, 0.304711, 0.00682711 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end8")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end9" type="Spatial" parent="ik_break" index="8"]
+transform = Transform( -0.922404, 5.96046e-08, -0.386225, -1.04308e-07, -1, 2.98023e-08, -0.386225, 2.98023e-08, 0.922404, 0.17685, 0.147513, 0.0527825 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end9")
+max_distance = 0.2
+acceleration = 1.0
+gravity = 0.4
+
+[node name="hair_end_bang" type="Spatial" parent="ik_break" index="9"]
+transform = Transform( 0.952835, -1.49012e-08, 0.30349, 1.95578e-08, -1, -8.9407e-08, 0.30349, 5.96046e-08, -0.952834, -0.0340942, 0.181056, 0.176849 )
+script = ExtResource( 2 )
+target_node = NodePath("../../hair_start_pos/hair_end_bang")
+max_distance = 0.03
+gravity = 0.4

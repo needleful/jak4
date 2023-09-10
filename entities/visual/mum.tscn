@@ -3,13 +3,10 @@
 [ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=3]
-[ext_resource path="res://material/coat.shader" type="Shader" id=4]
 [ext_resource path="res://entities/visual/mum.gd" type="Script" id=5]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=6]
-[ext_resource path="res://outfits/hair/hair_detail_1.png" type="Texture" id=7]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
-[ext_resource path="res://outfits/hair/hair_pallette_1.png" type="Texture" id=10]
 [ext_resource path="res://outfits/eyes/neutral_set.tres" type="Resource" id=11]
 [ext_resource path="res://material/characters/eye.shader" type="Shader" id=12]
 [ext_resource path="res://outfits/eyes/shadowed_set.tres" type="Resource" id=13]
@@ -59,23 +56,72 @@ shader_param/alpha_clip = 0.75
 shader_param/main_texture = ExtResource( 14 )
 shader_param/iris_texture = ExtResource( 15 )
 
-[sub_resource type="Gradient" id=56]
-offsets = PoolRealArray( 0, 0.0697674, 1 )
-colors = PoolColorArray( 0, 0, 0, 1, 0.100303, 0.0240947, 0.288675, 1, 0.757812, 0.344124, 0.248657, 1 )
+[sub_resource type="Shader" id=15]
+code = "shader_type spatial;
 
-[sub_resource type="GradientTexture" id=3]
-gradient = SubResource( 56 )
-width = 64
+uniform sampler2D palette: hint_albedo;
+uniform sampler2D gradient;
+uniform sampler2D detail;
+uniform float light_bias: hint_range(-1, 1);
+uniform float softness: hint_range(0, 1) = 1.0;
+uniform float specularity: hint_range(1, 16) = 1.0;
+uniform float detail_scale: hint_range(0.1, 512.0) = 256.0;
 
-[sub_resource type="ShaderMaterial" id=55]
-shader = ExtResource( 4 )
-shader_param/light_bias = 0.0
-shader_param/softness = 0.656
-shader_param/specularity = 2.875
-shader_param/detail_scale = 36.957
-shader_param/palette = ExtResource( 10 )
-shader_param/gradient = SubResource( 3 )
-shader_param/detail = ExtResource( 7 )
+void fragment()
+{
+	float t = texture(palette, UV).r;
+	float d = mix(1.0, texture(detail, UV*detail_scale).r, COLOR.b);
+	ALBEDO = d*texture(gradient, vec2(t, 0)).rgb;
+	ROUGHNESS = clamp(2.0/specularity, 0, 1);
+}
+
+void light()
+{
+	// negative. Use as ambient shadow
+	if(LIGHT_COLOR.r < 0.0 || LIGHT_COLOR.g < 0.0 || LIGHT_COLOR.b < 0.0) {
+		DIFFUSE_LIGHT += (DIFFUSE_LIGHT + AMBIENT_LIGHT*ALBEDO)*LIGHT_COLOR*ATTENUATION;
+	}
+	else {
+		float spec = specularity/32.0;
+		float light = smoothstep(0, softness, dot(NORMAL, LIGHT) + light_bias);
+		DIFFUSE_LIGHT += 0.4*(1.0-spec) * light * LIGHT_COLOR * ATTENUATION * ALBEDO;
+		
+		// Specular
+		vec3 h = normalize(VIEW + LIGHT);
+		float cNdotH = max(0.0, dot(NORMAL, h));
+		float blinn = pow(cNdotH, specularity);
+		blinn *= spec;
+		float intensity = blinn; 
+		DIFFUSE_LIGHT += LIGHT_COLOR * intensity * ATTENUATION * ALBEDO;
+	}
+}
+"
+
+[sub_resource type="StreamTexture" id=17]
+flags = 7
+load_path = "res://.import/hair_detail_1.png-476452f427653cd09f677c09c35b5fc6.s3tc.stex"
+
+[sub_resource type="Gradient" id=10]
+offsets = PoolRealArray( 0, 0.809249 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.424316, 0.0928192, 0.0928192, 1 )
+
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 10 )
+width = 32
+
+[sub_resource type="StreamTexture" id=16]
+flags = 23
+load_path = "res://.import/hair_pallette_1.png-86b79361f413e64ce1c5e61dc031cd90.s3tc.stex"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 15 )
+shader_param/light_bias = null
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/detail_scale = 256.0
+shader_param/palette = SubResource( 16 )
+shader_param/gradient = SubResource( 11 )
+shader_param/detail = SubResource( 17 )
 
 [sub_resource type="ShaderMaterial" id=57]
 shader = ExtResource( 12 )
@@ -626,7 +672,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
+node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -656,43 +702,39 @@ outfit = {
 eye_set = ExtResource( 11 )
 skin_material = SubResource( 49 )
 eye_material = SubResource( 39 )
-hair_material = SubResource( 55 )
+hair_material = SubResource( 18 )
 mouth_material = SubResource( 57 )
 face_material = SubResource( 58 )
 
 [node name="eyebrows" parent="Armature/Skeleton" index="0"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/1 = SubResource( 49 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 material/0 = SubResource( 58 )
+material/1 = SubResource( 39 )
+material/2 = SubResource( 57 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 skin = SubResource( 54 )
 
 [node name="shirt" type="MeshInstance" parent="Armature/Skeleton" index="5"]
 visible = false
 layers = 65536
-material_override = SubResource( 8 )
 material_overlay = SubResource( 2 )
 skin = SubResource( 54 )
 
