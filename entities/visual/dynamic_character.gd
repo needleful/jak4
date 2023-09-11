@@ -130,8 +130,12 @@ func refresh():
 				m.set_surface_material(1, hair_material)
 		elif n == "eyebrows":
 			m.set_surface_material(0, hair_material)
-		elif m.get_surface_material_count() > 1:
-			m.set_surface_material(1, skin_material)
+		else:
+			if m.get_surface_material_count() > 1:
+				m.set_surface_material(1, skin_material)
+			if m.get_surface_material_count() > 2:
+				m.set_surface_material(2,
+					Coat.new(true, Coat.Rarity.Uncommon, Coat.Rarity.Sublime).generate_material())
 	nodes.pants.skin = nodes.fullbody.skin
 	nodes.shirt.skin = nodes.fullbody.skin
 	
