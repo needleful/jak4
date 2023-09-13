@@ -1,21 +1,25 @@
 tool
 extends EditorScript
 
-var target_group := "cargo_box"
+var target_group := "wheels"
 var resource_folder := "res://entities/env/train_set/muzna_city"
 
 var list: Array
 
 func _run():
-	list = all_scenes_in_path(resource_folder)
-	for l in list:
-		if l is PackedScene:
-			print(l.resource_path)
-	
+	#list = [all_scenes_in_path(resource_folder)]
+	#for l in list:
+	#	if l is PackedScene:
+	#		print(l.resource_path)
+	var wheels := load("res://entities/env/train_set/empty_cart.tscn") as PackedScene
+	if !wheels:
+		return
 	var scn := get_scene()
 	for node in scn.get_tree().get_nodes_in_group(target_group):
 		var parent :Node = node.get_parent()
-		var new_node = get_from_list().instance()
+		if parent.name != "blockout":
+			continue
+		var new_node = wheels.instance()
 		parent.add_child(new_node)
 		new_node.owner = scn
 		if node is Spatial:
