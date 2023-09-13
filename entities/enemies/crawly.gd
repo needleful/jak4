@@ -49,7 +49,6 @@ func _ready():
 		attack_player = $attack_audio
 	else:
 		attack_player = sound
-
 	anim.play("Idle-loop")
 
 func _physics_process(delta):

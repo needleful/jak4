@@ -172,3 +172,16 @@ func save():
 
 func load_game():
 	Global.load_sync()
+
+func load_chunk(chunk_name: String):
+	var scene := get_tree().current_scene
+	var chunk := scene.get_node(chunk_name)
+	scene.chunk_loader.queue_load(chunk, false)
+	echo("Loading "+ chunk_name)
+
+func activate_chunk(chunk_name: String):
+	var scene := get_tree().current_scene
+	var chunk := scene.get_node(chunk_name)
+	scene.chunk_loader.activate(chunk)
+	echo("Activating "+ chunk_name)
+
