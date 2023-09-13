@@ -60,13 +60,9 @@ func find_exit_to(place: String):
 
 func set_active(a):
 	if !a and has_node("active_entities"):
-		if is_inside_tree():
-			print_debug("deactivate ", get_parent().name)
 		active_entities = $active_entities
 		active_transform = active_entities.transform
 		remove_child(active_entities)
 	elif a and active_entities and !has_node("active_entities"):
-		if is_inside_tree():
-			print_debug("activate ", get_parent().name)
 		add_child(active_entities)
 		active_entities.transform = active_transform

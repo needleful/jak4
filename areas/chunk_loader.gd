@@ -132,7 +132,6 @@ func queue_load(chunk: Spatial, synchronous: bool):
 	if _status[chunk.name] != Status.Unloaded:
 		return
 	_status[chunk.name] = Status.Loading
-	print_debug("Loading: ", chunk.name)
 	if !(chunk.name in _hires):
 		return
 	if chunk.has_node("dynamic_content"):
@@ -150,7 +149,6 @@ func unload(chunk: Spatial):
 	if _status[chunk.name] != Status.Loaded:
 		return
 	_status[chunk.name] = Status.Unloaded
-	print_debug("Unloading: ", chunk.name)
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
 	if chunk.name in _hires:
