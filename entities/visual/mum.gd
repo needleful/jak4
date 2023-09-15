@@ -5,11 +5,16 @@ export(Material) var hologram_material
 export(Material) var hidden_material
 
 export(bool) var real_visible := false setget set_real_visible
+export(NodePath) var path_node:NodePath setget set_path_node
+export(float, 0.0, 1.0) var path_amount := 0.0 setget set_path_amount
+
 onready var anim_tree:AnimationTree = $AnimationTree
 onready var anim_state:AnimationNodeStateMachinePlayback = anim_tree["parameters/StateMachine/playback"]
+onready var custom_anim: AnimationNodeAnimation = anim_tree.tree_root.get_node("StateMachine").get_node("CustomNode")
 
 var look_center := Vector2(0.5, 0.1)
 var look_radii := Vector2(0.6, 0.4)
+var path : Path
 
 var look_target:Spatial = null
 onready var eye_material: ShaderMaterial = $Armature.eye_material
@@ -32,8 +37,8 @@ func track(target: Spatial):
 	set_physics_process(!!look_target)
 
 func hello():
+	print_debug("hello")
 	anim_tree.active = true
-	anim_state.start("IntroWalk")
 	make_visible()
 
 func make_visible():
@@ -47,6 +52,13 @@ func make_visible():
 	anim_tree["parameters/Big/add_amount"] = 1.0
 	$vis_anim.play("Show")
 	_overlay(skeleton)
+
+func play_state(state: String):
+	anim_state.travel(state)
+
+func play_animation(anim: String):
+	custom_anim.animation = anim
+	anim_state.travel("CustomNode")
 
 func bye():
 	$vis_anim.play("Hide")
@@ -95,3 +107,19 @@ func _process(delta):
 	p += look_center
 	var current_pos:Vector2 = eye_material.get_shader_param("iris_offset")
 	eye_material.set_shader_param("iris_offset", current_pos.move_toward(p, delta*6))
+
+func set_path_node(p_path: NodePath):
+	path_node = p_path
+	if has_node(p_path):
+		path = get_node(p_path)
+	else:
+		path = null
+
+func set_path_amount(p_path: float):
+	path_amount = p_path
+	if !path:
+		return
+	else:
+		var pos = path.curve.interpolate_baked(p_path*path.curve.get_baked_length())
+		pos.y = 0
+		global_transform.origin = path.global_transform*pos

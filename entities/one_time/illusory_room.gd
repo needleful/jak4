@@ -40,8 +40,12 @@ func activate(mode := "default"):
 	$DialogTrigger.hide()
 	return true
 
-func show_mum(): 
-	$mum.hello()
+func play(anim: String):
+	var o := $orchestrator
+	if !o.has_animation(anim):
+		print_debug("Missing animation: ", anim)
+	else:
+		$orchestrator.play(anim)
 
 func set_preview(p):
 	if !Engine.editor_hint or !has_node("activator"):

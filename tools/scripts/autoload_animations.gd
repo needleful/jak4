@@ -8,7 +8,7 @@ func _enter_tree():
 		var dir = Directory.new()
 		var err = dir.open(search_path)
 		if err != OK:
-			print_debug("Failed to open player animations. Code: ", err)
+			print_debug("Failed to open animations at %s. Code: " % search_path, err)
 			return
 		dir.list_dir_begin()
 		var file_name = dir.get_next()

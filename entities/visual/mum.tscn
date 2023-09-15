@@ -1,10 +1,12 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=3]
+[ext_resource path="res://_glb/characters/mum/anim/Sit.anim" type="Animation" id=4]
 [ext_resource path="res://entities/visual/mum.gd" type="Script" id=5]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=6]
+[ext_resource path="res://_glb/characters/mum/anim/Walk-loop.anim" type="Animation" id=7]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
 [ext_resource path="res://outfits/eyes/neutral_set.tres" type="Resource" id=11]
@@ -15,10 +17,8 @@
 [ext_resource path="res://outfits/mouth/mouth1_pursed.png" type="Texture" id=16]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
 [ext_resource path="res://_glb/characters/mum/anim/ScaleChange.anim" type="Animation" id=18]
-[ext_resource path="res://_glb/characters/mum/anim/IntroWalk.anim" type="Animation" id=19]
 [ext_resource path="res://_glb/characters/mum/anim/00_RESET.anim" type="Animation" id=20]
 [ext_resource path="res://outfits/hair/primordial.tscn" type="PackedScene" id=21]
-[ext_resource path="res://_glb/characters/mum/anim/WalkCycle.anim" type="Animation" id=22]
 [ext_resource path="res://outfits/head/primordial_head.mesh" type="ArrayMesh" id=23]
 [ext_resource path="res://outfits/skin/skin_clear.png" type="Texture" id=24]
 [ext_resource path="res://outfits/head/face_sun_damaged.png" type="Texture" id=25]
@@ -650,21 +650,33 @@ animation = "ScaleChange"
 [sub_resource type="AnimationNodeAnimation" id=32]
 animation = "00_RESET"
 
-[sub_resource type="AnimationNodeAnimation" id=33]
-animation = "IntroWalk"
+[sub_resource type="AnimationNodeAnimation" id=59]
+animation = "Sit"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+[sub_resource type="AnimationNodeAnimation" id=60]
+animation = "Walk-loop"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=61]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=62]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=63]
+xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachine" id=35]
 states/00_RESET/node = SubResource( 32 )
 states/00_RESET/position = Vector2( 346, 110 )
-states/IntroWalk/node = SubResource( 33 )
-states/IntroWalk/position = Vector2( 346, 200 )
-transitions = [ "00_RESET", "IntroWalk", SubResource( 34 ) ]
+states/CustomNode/node = SubResource( 59 )
+states/CustomNode/position = Vector2( 528, 110 )
+states/Walk/node = SubResource( 60 )
+states/Walk/position = Vector2( 346, 196 )
+transitions = [ "00_RESET", "Walk", SubResource( 61 ), "CustomNode", "Walk", SubResource( 62 ), "Walk", "CustomNode", SubResource( 63 ) ]
 start_node = "00_RESET"
+graph_offset = Vector2( -78, 43 )
 
 [sub_resource type="AnimationNodeBlendTree" id=36]
-graph_offset = Vector2( -335, -13 )
+graph_offset = Vector2( -350.083, 77.8609 )
 nodes/Animation/node = SubResource( 31 )
 nodes/Animation/position = Vector2( -80, 220 )
 nodes/Big/node = SubResource( 30 )
@@ -713,7 +725,6 @@ material_overlay = SubResource( 2 )
 [node name="fullbody" parent="Armature/Skeleton" index="1"]
 layers = 65536
 material_overlay = SubResource( 2 )
-material/1 = SubResource( 49 )
 
 [node name="hat" parent="Armature/Skeleton" index="2"]
 layers = 65536
@@ -722,9 +733,6 @@ material_overlay = SubResource( 2 )
 [node name="head" parent="Armature/Skeleton" index="3"]
 layers = 65536
 material_overlay = SubResource( 2 )
-material/0 = SubResource( 58 )
-material/1 = SubResource( 39 )
-material/2 = SubResource( 57 )
 
 [node name="pants" type="MeshInstance" parent="Armature/Skeleton" index="4"]
 visible = false
@@ -753,12 +761,12 @@ transform = Transform( 1, 0, 0, 0, 0.203954, 0.97898, 0, -0.97898, 0.203954, 0, 
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/00_RESET = ExtResource( 20 )
-anims/IntroWalk = ExtResource( 19 )
 anims/RESET = SubResource( 47 )
 anims/ScaleChange = ExtResource( 18 )
-anims/WalkCycle = ExtResource( 22 )
+anims/Sit = ExtResource( 4 )
+anims/Walk-loop = ExtResource( 7 )
 script = ExtResource( 17 )
-search_path = "res://_glb/characters/dynamic_mum/anim"
+search_path = "res://_glb/characters/mum/anim"
 
 [node name="vis_anim" type="AnimationPlayer" parent="." index="2"]
 anims/Hide = SubResource( 52 )
