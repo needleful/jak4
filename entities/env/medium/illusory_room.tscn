@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -29,12 +29,14 @@
 [ext_resource path="res://entities/visual/mum_primordial.tscn" type="PackedScene" id=27]
 [ext_resource path="res://entities/visual/empty.png" type="Texture" id=28]
 
+[sub_resource type="AnimationNodeStateMachinePlayback" id=306]
+
 [sub_resource type="Animation" id=304]
 length = 0.001
 
 [sub_resource type="Animation" id=303]
 resource_name = "mum_walks_in"
-length = 10.0
+length = 11.0
 tracks/0/type = "method"
 tracks/0/path = NodePath("mum")
 tracks/0/interp = 1
@@ -42,8 +44,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 1.4, 8, 9.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "hello"
@@ -51,8 +53,14 @@ tracks/0/keys = {
 "args": [ "Walk" ],
 "method": "play_state"
 }, {
+"args": [  ],
+"method": "track_player"
+}, {
 "args": [ "Sit" ],
 "method": "play_animation"
+}, {
+"args": [  ],
+"method": "track_player"
 } ]
 }
 tracks/1/type = "value"
@@ -86,10 +94,10 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 6.3, 8 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0, 1.8, 2.5, 3.7, 4.4, 6.3, 7.6, 9.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 176.904, 0 ), Vector3( 0, 130.733, 0 ), Vector3( 0, 92.22, 0 ) ]
+"values": [ Vector3( 0, 270, 0 ), Vector3( 0, 260, 0 ), Vector3( 0, 230, 0 ), Vector3( 0, 150, 0 ), Vector3( 0, 137, 0 ), Vector3( 0, 158.524, 0 ), Vector3( 0, 175.298, 0 ), Vector3( 0, 90, 0 ) ]
 }
 tracks/4/type = "value"
 tracks/4/path = NodePath("mum:path_node")
@@ -103,10 +111,36 @@ tracks/4/keys = {
 "update": 1,
 "values": [ NodePath("../intro_path") ]
 }
+tracks/5/type = "value"
+tracks/5/path = NodePath("look_target:translation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 8.4 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.783324, -1.11376, -0.304634 ) ]
+}
+tracks/6/type = "method"
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 8.6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "mum_track_target"
+} ]
+}
 
 [sub_resource type="Curve3D" id=305]
 _data = {
-"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0.00947869, -0.00789094, 0.0168235, 0.077037, 0.0145639, 0.651658, -0.077037, -0.0145639, -0.651658, -1.7843, 0.012363, -0.6172, -0.149839, -0.0211868, 0.539201, 0.149839, 0.0211868, -0.539201, -0.81299, 0.0151156, -2.17306, 0, 0, 0, 0, 0, 0, -0.75253, 0.0344466, -3.25067 ),
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 0.00947869, -0.00789094, 0.0168235, 0.0781298, -0.00213428, 0.658567, -0.0781298, 0.00213428, -0.658567, -1.79768, 0.0503896, -0.599067, -0.160327, 0.00781514, 0.553914, 0.160327, -0.00781514, -0.553914, -0.8151, 0.0364823, -2.17969, 0, 0, 0, 0, 0, 0, -0.75253, 0.0344466, -3.25067 ),
 "tilts": PoolRealArray( 0, 0, 0, 0 )
 }
 
@@ -409,26 +443,36 @@ radius = 0.715599
 script = ExtResource( 10 )
 
 [node name="mum" parent="." index="0" instance=ExtResource( 7 )]
-transform = Transform( -0.0387343, 0, 0.999189, 0, 1, 0, -0.999189, 0, -0.0387343, -0.855032, -1.1646, -0.28539 )
+transform = Transform( -0.999586, 0, 0.0281467, 0, 1, 0, -0.0281467, 0, -0.999586, -0.826863, -1.1646, 0.0899701 )
 path_node = NodePath("../intro_path")
-path_amount = 1.0
+path_amount = 0.925
 
-[node name="orchestrator" type="AnimationPlayer" parent="." index="1"]
+[node name="head_attach" parent="mum/Armature/Skeleton" index="6"]
+transform = Transform( 0.985113, -0.433362, -0.0902831, 8.04663e-07, 0.220271, -1.0573, 0.442666, 0.964406, 0.200918, 0.00984692, 0.961137, -0.494285 )
+
+[node name="AnimationTree" parent="mum" index="5"]
+parameters/StateMachine/playback = SubResource( 306 )
+parameters/StateMachine/Walk/blend_position = 0
+
+[node name="look_target" type="Position3D" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.783324, -1.11376, -0.304634 )
+
+[node name="orchestrator" type="AnimationPlayer" parent="." index="2"]
 playback_call_in_editor = true
 method_call_mode = 1
 anims/RESET = SubResource( 304 )
 anims/mum_walks_in = SubResource( 303 )
 
-[node name="intro_path" type="Path" parent="." index="2"]
+[node name="intro_path" type="Path" parent="." index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.102502, -1.1646, 2.96528 )
 curve = SubResource( 305 )
 
-[node name="activator" type="AnimationPlayer" parent="." index="3"]
+[node name="activator" type="AnimationPlayer" parent="." index="4"]
 anims/Activate = SubResource( 279 )
 anims/Deactivate = SubResource( 281 )
 anims/RESET = SubResource( 280 )
 
-[node name="primordial_room" type="MeshInstance" parent="." index="4"]
+[node name="primordial_room" type="MeshInstance" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.467779, 0.0183017 )
 visible = false
 layers = 65536
@@ -452,7 +496,7 @@ material_overlay = SubResource( 278 )
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 
-[node name="hologram" parent="." index="5"]
+[node name="hologram" parent="." index="6"]
 visible = false
 layers = 65536
 material_override = SubResource( 283 )
@@ -521,11 +565,11 @@ material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 288 )
 
-[node name="chair" parent="." index="6"]
+[node name="chair" parent="." index="7"]
 material/0 = ExtResource( 3 )
 material/1 = ExtResource( 13 )
 
-[node name="DialogTrigger" type="Area" parent="." index="7"]
+[node name="DialogTrigger" type="Area" parent="." index="8"]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0.0477264, -1.1073, -0.147872 )
 collision_layer = 0
 collision_mask = 2
@@ -540,7 +584,7 @@ shape = SubResource( 1 )
 
 [node name="dialog_circle" parent="DialogTrigger" index="1" instance=ExtResource( 6 )]
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="8"]
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.520651, 0.0393349 )
 layers = 65536
 extents = Vector3( 4.20511, 1.73285, 4.19788 )
@@ -549,33 +593,34 @@ cull_mask = 65536
 interior_enable = true
 interior_ambient_color = Color( 0.223529, 0.262745, 0.235294, 1 )
 
-[node name="SpotLight" type="SpotLight" parent="." index="9"]
+[node name="SpotLight" type="SpotLight" parent="." index="10"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.02803, 0.304066 )
 light_color = Color( 0.466667, 1, 0.886275, 1 )
 light_cull_mask = 4294901759
 spot_range = 3.06288
 spot_angle = 37.4657
 
-[node name="OmniLight" type="OmniLight" parent="." index="10"]
+[node name="OmniLight" type="OmniLight" parent="." index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.380018, 1.19864, -2.16977 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293984256
 shadow_enabled = true
 
-[node name="OmniLight5" type="OmniLight" parent="." index="11"]
+[node name="OmniLight5" type="OmniLight" parent="." index="12"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.53643, 1.19864, 0.898832 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293984256
 omni_range = 4.1412
 
-[node name="OmniLight2" type="OmniLight" parent="." index="12"]
+[node name="OmniLight2" type="OmniLight" parent="." index="13"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.19258, 0.156977, 0.786691 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293984256
 
-[node name="OmniLight3" type="OmniLight" parent="." index="13"]
+[node name="OmniLight3" type="OmniLight" parent="." index="14"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.610705, 0.156977, 3.41268 )
 light_color = Color( 1, 0.894118, 0.745098, 1 )
 light_cull_mask = 4293984256
 
+[editable path="mum"]
 [editable path="primordial_room/mum_primordial"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://_glb/characters/mum/anim/Walk-loop.anim" type="Animation" id=7]
 [ext_resource path="res://material/mum/discard.shader" type="Shader" id=8]
 [ext_resource path="res://entities/visual/dynamic_character.gd" type="Script" id=9]
+[ext_resource path="res://_glb/characters/mum/anim/WalkLookLeft-loop.anim" type="Animation" id=10]
 [ext_resource path="res://outfits/eyes/neutral_set.tres" type="Resource" id=11]
 [ext_resource path="res://material/characters/eye.shader" type="Shader" id=12]
 [ext_resource path="res://outfits/eyes/shadowed_set.tres" type="Resource" id=13]
@@ -17,6 +18,7 @@
 [ext_resource path="res://outfits/mouth/mouth1_pursed.png" type="Texture" id=16]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=17]
 [ext_resource path="res://_glb/characters/mum/anim/ScaleChange.anim" type="Animation" id=18]
+[ext_resource path="res://_glb/characters/mum/anim/WalkLookRight-loop.anim" type="Animation" id=19]
 [ext_resource path="res://_glb/characters/mum/anim/00_RESET.anim" type="Animation" id=20]
 [ext_resource path="res://outfits/hair/primordial.tscn" type="PackedScene" id=21]
 [ext_resource path="res://outfits/head/primordial_head.mesh" type="ArrayMesh" id=23]
@@ -47,7 +49,7 @@ shader_param/main_texture = ExtResource( 27 )
 [sub_resource type="ShaderMaterial" id=39]
 shader = ExtResource( 12 )
 shader_param/iris_scale = 0.572
-shader_param/iris_offset = Vector2( 0.5, 0.1 )
+shader_param/iris_offset = Vector2( 0.358429, -0.288706 )
 shader_param/look_distance = 0.0
 shader_param/subsurface_scattering = 0.434
 shader_param/softness = 1.0
@@ -391,18 +393,6 @@ bind/80/pose = Transform( 0.973675, 0.227941, 0, 0, 0, -1, -0.227941, 0.973675, 
 
 [sub_resource type="Animation" id=47]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("look_target:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( -0.560428, -0.621836, -0.141326 ) ]
-}
 
 [sub_resource type="Animation" id=52]
 length = 4.0
@@ -656,12 +646,27 @@ animation = "Sit"
 [sub_resource type="AnimationNodeAnimation" id=60]
 animation = "Walk-loop"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=61]
+[sub_resource type="AnimationNodeAnimation" id=61]
+animation = "WalkLookLeft-loop"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=62]
-xfade_time = 0.1
+[sub_resource type="AnimationNodeAnimation" id=66]
+animation = "WalkLookRight-loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=62]
+blend_point_0/node = SubResource( 60 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 61 )
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource( 66 )
+blend_point_2/pos = 1.0
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=63]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=64]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=65]
 xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachine" id=35]
@@ -669,14 +674,14 @@ states/00_RESET/node = SubResource( 32 )
 states/00_RESET/position = Vector2( 346, 110 )
 states/CustomNode/node = SubResource( 59 )
 states/CustomNode/position = Vector2( 528, 110 )
-states/Walk/node = SubResource( 60 )
+states/Walk/node = SubResource( 62 )
 states/Walk/position = Vector2( 346, 196 )
-transitions = [ "00_RESET", "Walk", SubResource( 61 ), "CustomNode", "Walk", SubResource( 62 ), "Walk", "CustomNode", SubResource( 63 ) ]
+transitions = [ "00_RESET", "Walk", SubResource( 63 ), "Walk", "CustomNode", SubResource( 64 ), "CustomNode", "Walk", SubResource( 65 ) ]
 start_node = "00_RESET"
 graph_offset = Vector2( -78, 43 )
 
 [sub_resource type="AnimationNodeBlendTree" id=36]
-graph_offset = Vector2( -350.083, 77.8609 )
+graph_offset = Vector2( -413.163, 88.519 )
 nodes/Animation/node = SubResource( 31 )
 nodes/Animation/position = Vector2( -80, 220 )
 nodes/Big/node = SubResource( 30 )
@@ -684,7 +689,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
+node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -747,7 +752,7 @@ material_overlay = SubResource( 2 )
 skin = SubResource( 54 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1, 1.42109e-14, 7.15258e-07, 7.00223e-07, 0.203954, -0.97898, -1.4588e-07, 0.97898, 0.203954, -1.98986e-15, 1.15055, -0.00574669 )
+transform = Transform( 1.06052, -0.193566, -0.0650657, -0.126439, -0.352193, -1.0131, 0.160358, 1.00244, -0.368502, 0.0260076, 0.987574, -0.129441 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
@@ -765,6 +770,8 @@ anims/RESET = SubResource( 47 )
 anims/ScaleChange = ExtResource( 18 )
 anims/Sit = ExtResource( 4 )
 anims/Walk-loop = ExtResource( 7 )
+anims/WalkLookLeft-loop = ExtResource( 10 )
+anims/WalkLookRight-loop = ExtResource( 19 )
 script = ExtResource( 17 )
 search_path = "res://_glb/characters/mum/anim"
 
@@ -784,13 +791,12 @@ wait_time = 6.0
 one_shot = true
 autostart = true
 
-[node name="look_target" type="Position3D" parent="." index="5"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.560428, -0.621836, -0.141326 )
-
-[node name="AnimationTree" type="AnimationTree" parent="." index="6"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 tree_root = SubResource( 36 )
 anim_player = NodePath("../AnimationPlayer")
+active = true
 parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 37 )
+parameters/StateMachine/Walk/blend_position = 0.936114
 
 [connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]

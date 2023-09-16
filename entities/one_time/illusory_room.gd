@@ -47,6 +47,9 @@ func play(anim: String):
 	else:
 		$orchestrator.play(anim)
 
+func mum_track_target():
+	$mum.track($look_target)
+
 func set_preview(p):
 	if !Engine.editor_hint or !has_node("activator"):
 		return

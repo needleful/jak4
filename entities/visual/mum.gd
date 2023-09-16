@@ -34,7 +34,8 @@ func _overlay(n: Node):
 
 func track(target: Spatial):
 	look_target = target
-	set_physics_process(!!look_target)
+	set_process(!!look_target)
+	anim_tree["parameters/StateMachine/Walk/blend_position"] = 0
 
 func hello():
 	print_debug("hello")
@@ -90,13 +91,20 @@ func _on_blink_timer_timeout():
 func track_player():
 	track(Global.get_player().eyes)
 
-func track_target():
-	track($look_target)
-
 func _process(delta):
 	if !is_visible_in_tree() or !is_instance_valid(look_target):
 		track(null)
 		return
+	look_track(delta)
+
+func look_track(delta):
+	# walk tracking
+	var dir := look_target.global_transform.origin - global_transform.origin
+	dir.y = 0
+	dir = dir.normalized()
+	var angle := dir.angle_to(global_transform.basis.z)/(0.7*PI)
+	anim_tree["parameters/StateMachine/Walk/blend_position"] = angle
+	# Eye tracking
 	var relative_pos := eyes.global_transform.affine_inverse()*look_target.global_transform
 	if relative_pos.origin.z <= 0:
 		return
