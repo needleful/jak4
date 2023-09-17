@@ -1795,14 +1795,14 @@ func wardrobe_unlock(paused):
 func lock(_dialog := true):
 	set_process_input(false)
 	set_state(State.Locked)
-	ui.game.get_node("stats").hide()
+	#ui.game.get_node("stats").hide()
 	ui.game.get_node("inventory/vis_timer").stop()
 	ui.game.get_node("inventory").hide()
 
 func unlock(new_state := State.Ground):
 	set_process_input(true)
 	set_state(new_state)
-	ui.game.get_node("stats").show()
+	#ui.game.get_node("stats").show()
 
 func toggle_noclip():
 	if state != State.NoClip:
