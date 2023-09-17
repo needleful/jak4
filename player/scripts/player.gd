@@ -1197,7 +1197,7 @@ func anim_exit(transition:String, wait_to_unlock := false):
 
 func set_visual_position(new_transform:Transform):
 	set_saved_transform(new_transform)
-	rotate_mesh(-global_transform.basis.z)
+	rotate_mesh(-new_transform.basis.z)
 
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath

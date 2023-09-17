@@ -52,7 +52,7 @@
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=50]
 [ext_resource path="res://material/env/foundry/concrete.jpg" type="Texture" id=51]
 [ext_resource path="res://entities/env/ancient/circle_thing.tscn" type="PackedScene" id=52]
-[ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=53]
+[ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=53]
 [ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=54]
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=55]
 [ext_resource path="res://audio/music/ancient_caverns.ogg" type="AudioStream" id=56]
@@ -71,23 +71,6 @@
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=69]
 [ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=70]
 [ext_resource path="res://material/env/copper/copper_corroded.material" type="Material" id=71]
-
-[sub_resource type="ShaderMaterial" id=50]
-shader = ExtResource( 50 )
-shader_param/uv_scale = 0.5
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity = 2.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 39 )
-shader_param/ground = ExtResource( 51 )
-shader_param/ceiling = ExtResource( 51 )
-
-[sub_resource type="OccluderShapePolygon" id=264]
-polygon_points = PoolVector2Array( 85.6989, -69.6411, 90.7528, 33.3036, -15.4519, 36.8017, -27.3983, -76.3646 )
-
-[sub_resource type="OccluderShapePolygon" id=265]
-polygon_points = PoolVector2Array( 98.9883, -197.316, 123.35, 40.6459, -81.6738, 47.3585, -105.012, -175.747, 29.3866, 74.5432, -32.1247, -244.697 )
 
 [sub_resource type="SphereShape" id=1]
 radius = 54.0252
@@ -617,7 +600,7 @@ tracks/1/keys = {
 resource_name = "Activate"
 length = 1.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../../dungeon/interior1/door_entry-kine:translation")
+tracks/0/path = NodePath("../../../dungeon/interior1/door_entry-kine:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -629,7 +612,7 @@ tracks/0/keys = {
 "values": [ Vector3( -0.097168, -2.94842, 45.9359 ), Vector3( -0.097168, 1.67171, 45.9359 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../../dungeon/interior1/door_entry-kine001:translation")
+tracks/1/path = NodePath("../../../dungeon/interior1/door_entry-kine001:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -644,7 +627,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=271]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../../dungeon/interior1/door_entry-kine:translation")
+tracks/0/path = NodePath("../../../dungeon/interior1/door_entry-kine:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -656,7 +639,7 @@ tracks/0/keys = {
 "values": [ Vector3( -0.097168, -2.94842, 45.9359 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../../dungeon/interior1/door_entry-kine001:translation")
+tracks/1/path = NodePath("../../../dungeon/interior1/door_entry-kine001:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -672,7 +655,7 @@ tracks/1/keys = {
 resource_name = "Activate"
 length = 0.2
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../../dungeon/interior1/door_entry-kine002:translation")
+tracks/0/path = NodePath("../../../dungeon/interior1/door_entry-kine002:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -684,7 +667,7 @@ tracks/0/keys = {
 "values": [ Vector3( -0.0971222, -0.229038, -45.8928 ), Vector3( -0.0971527, -4.9006, -45.8928 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../../dungeon/interior1/door_entry-kine003:translation")
+tracks/1/path = NodePath("../../../dungeon/interior1/door_entry-kine003:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -699,7 +682,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=275]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../../dungeon/interior1/door_entry-kine003:translation")
+tracks/0/path = NodePath("../../../dungeon/interior1/door_entry-kine003:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -711,7 +694,7 @@ tracks/0/keys = {
 "values": [ Vector3( -0.0971375, -14.6196, -45.8928 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../../dungeon/interior1/door_entry-kine002:translation")
+tracks/1/path = NodePath("../../../dungeon/interior1/door_entry-kine002:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -734,6 +717,17 @@ shader_param/main_texture = ExtResource( 67 )
 
 [sub_resource type="BoxShape" id=272]
 extents = Vector3( 15.8653, 10.1659, 6.60832 )
+
+[sub_resource type="ShaderMaterial" id=50]
+shader = ExtResource( 50 )
+shader_param/uv_scale = 0.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 2.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 39 )
+shader_param/ground = ExtResource( 51 )
+shader_param/ceiling = ExtResource( 51 )
 
 [sub_resource type="ShaderMaterial" id=284]
 resource_local_to_scene = true
@@ -896,7 +890,7 @@ shader_param/hologram = ExtResource( 62 )
 resource_name = "Activate"
 length = 3.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../dungeon_elevate/interior7/elevate_door-kine:translation")
+tracks/0/path = NodePath("../../dungeon_elevate/interior7/elevate_door-kine:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -908,7 +902,7 @@ tracks/0/keys = {
 "values": [ Vector3( 4.88674, 29.3568, -0.0163412 ), Vector3( 4.88674, 34.006, -0.0163403 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../dungeon_elevate/interior8/elevate_door2-kine:translation")
+tracks/1/path = NodePath("../../dungeon_elevate/interior8/elevate_door2-kine:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -1032,7 +1026,7 @@ tracks/10/keys = {
 resource_name = "Deactivate"
 length = 4.0
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../dungeon_elevate/interior7/elevate_door-kine:translation")
+tracks/0/path = NodePath("../../dungeon_elevate/interior7/elevate_door-kine:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -1044,7 +1038,7 @@ tracks/0/keys = {
 "values": [ Vector3( 4.88674, 34.006, -0.0163403 ), Vector3( 4.88674, 29.3568, -0.0163412 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../dungeon_elevate/interior8/elevate_door2-kine:translation")
+tracks/1/path = NodePath("../../dungeon_elevate/interior8/elevate_door2-kine:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -1179,7 +1173,7 @@ tracks/11/keys = {
 [sub_resource type="Animation" id=260]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../../dungeon_elevate/interior7/elevate_door-kine:translation")
+tracks/0/path = NodePath("../../dungeon_elevate/interior7/elevate_door-kine:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -1191,7 +1185,7 @@ tracks/0/keys = {
 "values": [ Vector3( 4.88674, 34.006, -0.0163403 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../../dungeon_elevate/interior8/elevate_door2-kine:translation")
+tracks/1/path = NodePath("../../dungeon_elevate/interior8/elevate_door2-kine:translation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -1813,6 +1807,12 @@ tracks/11/keys = {
 "values": [ Color( 0.709804, 1, 0.917647, 1 ) ]
 }
 
+[sub_resource type="OccluderShapePolygon" id=264]
+polygon_points = PoolVector2Array( 81.411, -70.1122, 42.5788, 39.3331, -15.4519, 36.8017, -27.3983, -76.3646 )
+
+[sub_resource type="OccluderShapePolygon" id=265]
+polygon_points = PoolVector2Array( 98.9883, -197.316, 123.35, 40.6459, -81.6738, 47.3585, -105.012, -175.747, 29.3866, 74.5432, -32.1247, -244.697 )
+
 [node name="chunk054" instance=ExtResource( 49 )]
 script = ExtResource( 1 )
 
@@ -1828,268 +1828,209 @@ collision_layer = 257
 [node name="StaticBody" parent="city/roads" index="0"]
 collision_layer = 257
 
-[node name="exterior1" parent="dungeon" index="0"]
+[node name="coffee_break" parent="." index="1"]
 material/0 = ExtResource( 27 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/exterior1" index="0"]
+[node name="exterior1" parent="active_entities/dungeon" index="0"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/exterior1" index="0"]
 collision_layer = 257
 
-[node name="hallway1" parent="dungeon" index="1"]
-material/0 = ExtResource( 27 )
+[node name="hallway1" parent="active_entities/dungeon" index="1"]
+material/0 = ExtResource( 53 )
 
-[node name="StaticBody" parent="dungeon/hallway1" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon/hallway1" index="0"]
 collision_layer = 257
 
-[node name="interior1" parent="dungeon" index="2"]
-material/0 = ExtResource( 27 )
+[node name="interior1" parent="active_entities/dungeon" index="2"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="bridge" parent="dungeon/interior1" index="0"]
-material/0 = ExtResource( 27 )
+[node name="bridge" parent="active_entities/dungeon/interior1" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/interior1/bridge" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon/interior1/bridge" index="0"]
 collision_layer = 257
 
-[node name="door_entry-kine" parent="dungeon/interior1" index="1"]
+[node name="door_entry-kine" parent="active_entities/dungeon/interior1" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.097168, -2.94842, 45.9359 )
 
-[node name="mesh" parent="dungeon/interior1/door_entry-kine" index="0"]
-material/0 = ExtResource( 27 )
+[node name="mesh" parent="active_entities/dungeon/interior1/door_entry-kine" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="door_entry-kine001" parent="dungeon/interior1" index="2"]
+[node name="door_entry-kine001" parent="active_entities/dungeon/interior1" index="2"]
 transform = Transform( -1, -3.25841e-07, 0, 3.25841e-07, -1, 0, 0, 0, 1, -0.097168, -7.70194, 45.9359 )
 
-[node name="mesh" parent="dungeon/interior1/door_entry-kine001" index="0"]
-material/0 = ExtResource( 27 )
+[node name="mesh" parent="active_entities/dungeon/interior1/door_entry-kine001" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="door_entry-kine002" parent="dungeon/interior1" index="3"]
+[node name="door_entry-kine002" parent="active_entities/dungeon/interior1" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0971222, -0.229038, -45.8928 )
 
-[node name="mesh" parent="dungeon/interior1/door_entry-kine002" index="0"]
-material/0 = ExtResource( 27 )
+[node name="mesh" parent="active_entities/dungeon/interior1/door_entry-kine002" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="door_entry-kine003" parent="dungeon/interior1" index="4"]
+[node name="door_entry-kine003" parent="active_entities/dungeon/interior1" index="4"]
 transform = Transform( -1, -3.25841e-07, 0, 3.25841e-07, -1, 0, 0, 0, 1, -0.0971375, -14.6196, -45.8928 )
 
-[node name="mesh" parent="dungeon/interior1/door_entry-kine003" index="0"]
+[node name="mesh" parent="active_entities/dungeon/interior1/door_entry-kine003" index="0"]
+material/0 = ExtResource( 53 )
+material/1 = ExtResource( 29 )
+
+[node name="entrance" parent="active_entities/dungeon/interior1" index="5"]
+material/0 = ExtResource( 53 )
+material/1 = ExtResource( 29 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior1/entrance" index="0"]
+collision_layer = 257
+
+[node name="exit" parent="active_entities/dungeon/interior1" index="6"]
+material/0 = ExtResource( 53 )
+material/1 = ExtResource( 29 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior1/exit" index="0"]
+collision_layer = 257
+
+[node name="fanwell" parent="active_entities/dungeon/interior1" index="7"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior1/fanwell" index="0"]
+collision_layer = 257
+
+[node name="fanwell2" parent="active_entities/dungeon/interior1" index="8"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior1/fanwell2" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="active_entities/dungeon/interior1" index="9"]
+collision_layer = 257
+
+[node name="interior2" parent="active_entities/dungeon" index="3"]
+material/0 = ExtResource( 53 )
+material/1 = ExtResource( 29 )
+
+[node name="pipe" parent="active_entities/dungeon/interior2" index="0"]
+material/0 = ExtResource( 27 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior2/pipe" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="active_entities/dungeon/interior2" index="1"]
+collision_layer = 257
+
+[node name="interior4" parent="active_entities/dungeon" index="4"]
+material/0 = ExtResource( 53 )
+material/1 = ExtResource( 29 )
+
+[node name="StaticBody" parent="active_entities/dungeon/interior4" index="0"]
+collision_layer = 257
+
+[node name="room_large" parent="active_entities/dungeon" index="5"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/room_large" index="0"]
+collision_layer = 257
+
+[node name="tube_entry" parent="active_entities/dungeon" index="6"]
 material/0 = ExtResource( 27 )
 material/1 = ExtResource( 29 )
 
-[node name="entrance" parent="dungeon/interior1" index="5"]
+[node name="StaticBody" parent="active_entities/dungeon/tube_entry" index="0"]
+collision_layer = 257
+
+[node name="tunnels" parent="active_entities/dungeon" index="7"]
 material/0 = ExtResource( 27 )
+
+[node name="room" parent="active_entities/dungeon/tunnels" index="0"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/tunnels/room" index="0"]
+collision_layer = 257
+
+[node name="room001" parent="active_entities/dungeon/tunnels" index="1"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon/tunnels/room001" index="0"]
+collision_layer = 257
+
+[node name="StaticBody" parent="active_entities/dungeon/tunnels" index="2"]
+collision_layer = 257
+
+[node name="interior5" parent="active_entities/dungeon_elevate" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/interior1/entrance" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior5" index="0"]
 collision_layer = 257
 
-[node name="exit" parent="dungeon/interior1" index="6"]
-material/0 = ExtResource( 27 )
+[node name="interior6" parent="active_entities/dungeon_elevate" index="1"]
+material/0 = ExtResource( 53 )
+
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior6" index="0"]
+collision_layer = 257
+
+[node name="interior7" parent="active_entities/dungeon_elevate" index="2"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/interior1/exit" index="0"]
-collision_layer = 257
+[node name="elevate_door-kine" parent="active_entities/dungeon_elevate/interior7" index="0"]
+transform = Transform( 0.999989, 0, 0.00465548, 0, 1, 0, -0.00465548, 0, 0.999989, 4.88674, 29.3568, -0.0163412 )
 
-[node name="fanwell" parent="dungeon/interior1" index="7"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon/interior1/fanwell" index="0"]
-collision_layer = 257
-
-[node name="fanwell2" parent="dungeon/interior1" index="8"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon/interior1/fanwell2" index="0"]
-collision_layer = 257
-
-[node name="StaticBody" parent="dungeon/interior1" index="9"]
-collision_layer = 257
-
-[node name="interior2" parent="dungeon" index="3"]
-material/0 = ExtResource( 27 )
+[node name="mesh" parent="active_entities/dungeon_elevate/interior7/elevate_door-kine" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="pipe" parent="dungeon/interior2" index="0"]
-material/0 = SubResource( 50 )
-
-[node name="StaticBody" parent="dungeon/interior2/pipe" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior7" index="1"]
 collision_layer = 257
 
-[node name="StaticBody" parent="dungeon/interior2" index="1"]
-collision_layer = 257
-
-[node name="interior4" parent="dungeon" index="4"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon/interior4" index="0"]
-collision_layer = 257
-
-[node name="room_large" parent="dungeon" index="5"]
-material/0 = ExtResource( 27 )
+[node name="interior8" parent="active_entities/dungeon_elevate" index="3"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/room_large" index="0"]
-collision_layer = 257
-
-[node name="tube_entry" parent="dungeon" index="6"]
-material/0 = ExtResource( 27 )
+[node name="capacitor_input" parent="active_entities/dungeon_elevate/interior8" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon/tube_entry" index="0"]
-collision_layer = 257
-
-[node name="tunnels" parent="dungeon" index="7"]
-material/0 = ExtResource( 27 )
-
-[node name="room" parent="dungeon/tunnels" index="0"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon/tunnels/room" index="0"]
-collision_layer = 257
-
-[node name="room001" parent="dungeon/tunnels" index="1"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon/tunnels/room001" index="0"]
-collision_layer = 257
-
-[node name="StaticBody" parent="dungeon/tunnels" index="2"]
-collision_layer = 257
-
-[node name="interior5" parent="dungeon_elevate" index="0"]
-material/0 = ExtResource( 27 )
+[node name="capacitor_shrine" parent="active_entities/dungeon_elevate/interior8/capacitor_input" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="StaticBody" parent="dungeon_elevate/interior5" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior8/capacitor_input/capacitor_shrine" index="0"]
 collision_layer = 257
 
-[node name="interior6" parent="dungeon_elevate" index="1"]
-material/0 = ExtResource( 27 )
-
-[node name="StaticBody" parent="dungeon_elevate/interior6" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior8/capacitor_input" index="1"]
 collision_layer = 257
 
-[node name="interior7" parent="dungeon_elevate" index="2"]
-material/0 = ExtResource( 27 )
+[node name="elevate_door2-kine" parent="active_entities/dungeon_elevate/interior8" index="1"]
+transform = Transform( 0.489513, 0, 0.871996, 0, 1, 0, -0.871996, 0, 0.489513, 14.5483, 11.7206, -24.7659 )
+
+[node name="mesh" parent="active_entities/dungeon_elevate/interior8/elevate_door2-kine" index="0"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="elevate_door-kine" parent="dungeon_elevate/interior7" index="0"]
-transform = Transform( 0.999989, 0, 0.00465545, 0, 1, 0, -0.00465545, 0, 0.999989, 4.88674, 34.006, -0.0163403 )
-
-[node name="mesh" parent="dungeon_elevate/interior7/elevate_door-kine" index="0"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 29 )
-
-[node name="StaticBody" parent="dungeon_elevate/interior7" index="1"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior8" index="2"]
 collision_layer = 257
 
-[node name="interior8" parent="dungeon_elevate" index="3"]
-material/0 = ExtResource( 27 )
+[node name="interior9" parent="active_entities/dungeon_elevate" index="4"]
+material/0 = ExtResource( 53 )
 material/1 = ExtResource( 29 )
 
-[node name="capacitor_input" parent="dungeon_elevate/interior8" index="0"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 29 )
-
-[node name="capacitor_shrine" parent="dungeon_elevate/interior8/capacitor_input" index="0"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 29 )
-
-[node name="StaticBody" parent="dungeon_elevate/interior8/capacitor_input/capacitor_shrine" index="0"]
+[node name="StaticBody" parent="active_entities/dungeon_elevate/interior9" index="0"]
 collision_layer = 257
 
-[node name="StaticBody" parent="dungeon_elevate/interior8/capacitor_input" index="1"]
-collision_layer = 257
-
-[node name="elevate_door2-kine" parent="dungeon_elevate/interior8" index="1"]
-transform = Transform( 0.489513, 0, 0.871996, 0, 1, 0, -0.871996, 0, 0.489513, 14.5483, 16.5036, -24.7659 )
-
-[node name="mesh" parent="dungeon_elevate/interior8/elevate_door2-kine" index="0"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 29 )
-
-[node name="StaticBody" parent="dungeon_elevate/interior8" index="2"]
-collision_layer = 257
-
-[node name="interior9" parent="dungeon_elevate" index="4"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 63 )
-
-[node name="StaticBody" parent="dungeon_elevate/interior9" index="0"]
-collision_layer = 257
-
-[node name="coffee_break" parent="." index="3"]
-material/0 = ExtResource( 27 )
-material/1 = ExtResource( 29 )
-
-[node name="scrap1" parent="." index="4" instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 0.998791, 0.0491528, 0, -0.0491528, 0.998791, 131.407, -73.7483, 191.075 )
-
-[node name="occlude_cave" type="Occluder" parent="." index="5"]
-transform = Transform( -0.270999, 0, -0.96258, 0, 1, 0, 0.96258, 0, -0.270999, 91.4752, 387.129, -94.5943 )
-shape = SubResource( 264 )
-
-[node name="occlude_cave2" type="Occluder" parent="." index="6"]
-transform = Transform( -0.270999, 0.961953, 0.0347273, -3.15398e-09, -0.0360774, 0.999349, 0.96258, 0.270822, 0.00977692, 14.6998, 290.802, -116.448 )
-shape = SubResource( 265 )
-
-[node name="rock3" parent="." index="7" instance=ExtResource( 25 )]
-transform = Transform( 1, 0, 0, 0, 0.820573, -0.571541, 0, 0.571541, 0.820573, 75.9096, 334.486, 5.69468 )
-
-[node name="rock4" parent="rock3" index="1" instance=ExtResource( 25 )]
-transform = Transform( 0.184282, 0.101304, 0.977639, 0.708088, -0.703521, -0.0605729, 0.681654, 0.703417, -0.201378, -2.05275, -9.77615, 19.6246 )
-
-[node name="rock2" parent="." index="8" instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 0.496062, 0.868287, 0, -0.868287, 0.496062, -53.2648, 427.677, -209.58 )
-
-[node name="zone_cave_entrance" type="MultiMeshSystem" parent="." index="9"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 141.345, 2.39909, 233.943 )
-
-[node name="fountain" parent="zone_cave_entrance" index="0" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 0.995274, -0.0971086, 0, 0.0971086, 0.995274, 6.65514, -1.92247, 4.05688 )
-
-[node name="scrap2" parent="zone_cave_entrance" index="1" instance=ExtResource( 9 )]
-transform = Transform( 0.347103, 0.937827, 0, -0.937827, 0.347103, 0, 0, 0, 1, 20.5764, 1.33422, 16.6232 )
-
-[node name="scrap_pile1" parent="zone_cave_entrance" index="2" instance=ExtResource( 13 )]
-transform = Transform( -0.530898, -0.847436, 0, 0.847436, -0.530898, 0, 0, 0, 1, -12.5758, -0.748688, 23.4563 )
-
-[node name="scrap_pile2" parent="zone_cave_entrance" index="3" instance=ExtResource( 13 )]
-transform = Transform( -0.803134, -0.42265, -0.419931, -0.573916, 0.359545, 0.735764, -0.159987, 0.831922, -0.531328, -40.6856, 21.9783, -23.7872 )
-
-[node name="scrap_pile3" parent="zone_cave_entrance" index="4" instance=ExtResource( 11 )]
-transform = Transform( -0.840423, 0.227681, 0.491783, -0.43514, -0.824408, -0.361946, 0.323022, -0.518182, 0.791924, -24.9287, 12.5653, -3.12007 )
-
-[node name="table2" parent="zone_cave_entrance" index="5" instance=ExtResource( 10 )]
-transform = Transform( -0.0164571, 0.582701, -0.81252, 0.7537, 0.54121, 0.372864, 0.657012, -0.60626, -0.448089, 1.30901, -4.0845, 20.2568 )
-
-[node name="tower" parent="zone_cave_entrance" index="6" instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 0.7281, -0.685471, 0, 0.685471, 0.7281, -28.163, 1.12133, -26.2177 )
-
-[node name="tower3" parent="zone_cave_entrance" index="7" instance=ExtResource( 12 )]
-transform = Transform( 0.237091, -0.943979, -0.229546, 0.803712, 0.0578576, 0.592199, -0.545742, -0.324894, 0.772405, 74.5892, -7.22182, 48.1237 )
-
-[node name="tower2" parent="zone_cave_entrance" index="8" instance=ExtResource( 12 )]
-transform = Transform( -0.622641, 0.142713, 0.769384, 0, -0.983228, 0.18238, 0.782508, 0.113557, 0.612198, -28.163, 12.4578, 18.8126 )
-
-[node name="scrap4" parent="zone_cave_entrance" index="9" instance=ExtResource( 14 )]
-transform = Transform( 0.305095, 0.952322, 0, -0.952322, 0.305095, 0, 0, 0, 1, 48.1489, -0.547802, 30.3839 )
-
-[node name="scrap5" parent="zone_cave_entrance" index="10" instance=ExtResource( 14 )]
-transform = Transform( -0.00141701, -0.0176897, -0.999843, -0.999227, -0.0392581, 0.00211071, -0.0392893, 0.999072, -0.0176204, 45.2755, -0.547802, 30.3839 )
-
-[node name="active_entities" type="Spatial" parent="." index="10"]
-
-[node name="npc_lost_phone" parent="active_entities" index="0" instance=ExtResource( 3 )]
+[node name="npc_lost_phone" parent="active_entities" index="2" instance=ExtResource( 3 )]
 transform = Transform( -0.987212, 0, -0.159413, 0, 1, 0, 0.159413, 0, -0.987212, 133.85, 1.19235, 231.662 )
 dialog = ExtResource( 4 )
 visual_name = "Distressed Woman"
 
-[node name="cave_env" type="Area" parent="active_entities" index="1"]
+[node name="cave_env" type="Area" parent="active_entities" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 125.322, -64.176, 116.732 )
 collision_layer = 0
 collision_mask = 2
@@ -2173,7 +2114,7 @@ shape = SubResource( 283 )
 [node name="reflection_cave3" type="ReflectionProbe" parent="active_entities/cave_env" index="17"]
 transform = Transform( 0.99667, 0.0368086, 0.0727556, -0.0517942, 0.974959, 0.216271, -0.0629731, -0.219319, 0.973619, -136.866, 439.007, -226.018 )
 max_distance = 16384.0
-extents = Vector3( 87.0148, 82.6426, 65.035 )
+extents = Vector3( 80.3752, 82.6426, 65.035 )
 origin_offset = Vector3( 0, -2.23517e-10, -0.0722656 )
 cull_mask = 1015807
 interior_enable = true
@@ -2232,7 +2173,7 @@ interior_enable = true
 interior_ambient_color = Color( 0.352941, 0.356863, 0.498039, 1 )
 
 [node name="reflection_interior7" type="ReflectionProbe" parent="active_entities/cave_env" index="24"]
-transform = Transform( 0.985524, 0, 0.169538, 0, 1, 0, -0.169538, 0, 0.985524, -29.8322, 396.322, -147.205 )
+transform = Transform( 0.985524, 0, 0.169538, 0, 1, 0, -0.169538, 0, 0.985524, -26.0395, 396.322, -147.857 )
 intensity = 0.15
 max_distance = 16384.0
 extents = Vector3( 30.2684, 9.70163, 26.8785 )
@@ -2264,7 +2205,7 @@ origin_offset = Vector3( -0.139648, 18.8105, -0.0722656 )
 cull_mask = 1015807
 interior_enable = true
 
-[node name="area_cave_lower" type="MultiMeshSystem" parent="active_entities" index="2"]
+[node name="area_cave_lower" type="MultiMeshSystem" parent="active_entities" index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 125.322, -64.176, 116.732 )
 
 [node name="fountain2" parent="active_entities/area_cave_lower" index="0" instance=ExtResource( 2 )]
@@ -2352,7 +2293,7 @@ transform = Transform( 0.962097, 0, -0.272707, 0, 1, 0, 0.272707, 0, 0.962097, -
 [node name="scrap4" parent="active_entities/area_cave_lower" index="19" instance=ExtResource( 14 )]
 transform = Transform( 0.728186, 0.254926, -0.636206, -0.191976, 0.966961, 0.167727, 0.657944, 0, 0.753067, -48.2344, 55.4453, -52.5702 )
 
-[node name="pickups_underside" type="MultiMeshSystem" parent="active_entities" index="3"]
+[node name="pickups_underside" type="MultiMeshSystem" parent="active_entities" index="5"]
 transform = Transform( 1, 0, 0, 0, 0.999945, -0.0104333, 0, 0.0104333, 0.999945, 73.5025, 354.862, 0.49054 )
 
 [node name="bug_pickup" parent="active_entities/pickups_underside" index="0" instance=ExtResource( 19 )]
@@ -2371,7 +2312,7 @@ transform = Transform( 1, 0, 0, 0, 0.999866, 0.0163625, 0, -0.0163625, 0.999866,
 transform = Transform( 1, 0, 0, 0, 0.999985, 0.00551801, 0, -0.00551801, 0.999985, 2.71489, -34.5125, 17.3032 )
 quantity = 7
 
-[node name="area_main_encounter" type="MultiMeshSystem" parent="active_entities" index="4"]
+[node name="area_main_encounter" type="MultiMeshSystem" parent="active_entities" index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 189.16, 47.8818, 37.4358 )
 
 [node name="OmniLight" type="OmniLight" parent="active_entities/area_main_encounter" index="0"]
@@ -2409,6 +2350,8 @@ transform = Transform( -0.290805, 0, -0.956783, 0, 1, 0, 0.956783, 0, -0.290805,
 transform = Transform( -0.868088, 0, -0.496412, 0, 1, 0, 0.496412, 0, -0.868088, 63.9759, 29.5206, 37.209 )
 
 [node name="custom_awareness" type="Area" parent="active_entities/area_main_encounter/speeder" index="11"]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/area_main_encounter/speeder/custom_awareness" index="0"]
 transform = Transform( 1, 0, -3.72529e-09, 0, 1, 0, 3.72529e-09, 0, 1, 0, 0, 27.8503 )
@@ -3175,15 +3118,12 @@ transform = Transform( -0.14461, 0, 0.989489, 0, 1, 0, -0.989489, 0, -0.14461, 4
 [node name="bug_pickup3" parent="active_entities/area_main_encounter/room3" index="20" instance=ExtResource( 19 )]
 transform = Transform( -0.919008, 0, 0.394239, 0, 1, 0, -0.394239, 0, -0.919008, 41.0357, -7.92404, 42.619 )
 
-[node name="wardrobe" parent="active_entities/area_main_encounter/room3" index="21" instance=ExtResource( 53 )]
-transform = Transform( 0.533952, 0, 0.845515, 0, 1, 0, -0.845515, 0, 0.533952, -3.98582, -10.2121, 59.4286 )
-
-[node name="coat_pickup" parent="active_entities/area_main_encounter/room3" index="22" instance=ExtResource( 54 )]
+[node name="coat_pickup" parent="active_entities/area_main_encounter/room3" index="21" instance=ExtResource( 54 )]
 transform = Transform( -0.480173, 0, 0.877174, 0, 1, 0, -0.877174, 0, -0.480173, -2.78091, -10.0544, 62.0373 )
 min_rarity = 1
 max_rarity = 4
 
-[node name="coat_pickup2" parent="active_entities/area_main_encounter/room3" index="23" instance=ExtResource( 54 )]
+[node name="coat_pickup2" parent="active_entities/area_main_encounter/room3" index="22" instance=ExtResource( 54 )]
 transform = Transform( 0.632501, 0, 0.774559, 0, 1, 0, -0.774559, 0, 0.632501, -1.49742, -10.2243, 59.1202 )
 min_rarity = 1
 max_rarity = 4
@@ -3291,7 +3231,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1634, -16.5464, 1.07346 )
 [node name="bug_pickup2" parent="active_entities/area_main_encounter" index="17" instance=ExtResource( 19 )]
 transform = Transform( -0.456177, 0, 0.889889, 0, 1, 0, -0.889889, 0, -0.456177, 9.21255, -15.618, 1.30307 )
 
-[node name="area_elevate" type="MultiMeshSystem" parent="active_entities" index="5"]
+[node name="area_elevate" type="MultiMeshSystem" parent="active_entities" index="7"]
 transform = Transform( 0.939307, 0, -0.343077, 0, 1, 0, 0.343077, 0, 0.939307, 90.2019, 75.6795, -20.0627 )
 
 [node name="room1" type="VisibilityEnabler" parent="active_entities/area_elevate" index="0"]
@@ -3869,7 +3809,7 @@ reset_on_player_death = true
 transform = Transform( 0.221898, 0, 0.97507, 0, 1, 0, -0.97507, 0, 0.221898, -12.0489, 349.026, -76.9354 )
 reset_on_player_death = true
 
-[node name="area_cave_exit" type="MultiMeshSystem" parent="active_entities" index="6"]
+[node name="area_cave_exit" type="MultiMeshSystem" parent="active_entities" index="8"]
 transform = Transform( 0.97215, 0, -0.23436, 0, 1, 0, 0.23436, 0, 0.97215, -0.432537, 413.925, -105.118 )
 
 [node name="death_plane" parent="active_entities/area_cave_exit" index="0" instance=ExtResource( 45 )]
@@ -4115,17 +4055,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2851, 46.1954, -71.8466 )
 [node name="bug_pickup3" parent="active_entities/area_cave_exit" index="25" instance=ExtResource( 19 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4069, 51.1944, -72.8565 )
 
-[node name="reflection_exterior" type="ReflectionProbe" parent="active_entities" index="7"]
+[node name="reflection_exterior" type="ReflectionProbe" parent="active_entities" index="9"]
 transform = Transform( 0.448827, -0.0667923, 0.891119, 0, 0.997203, 0.0747436, -0.893619, -0.0335469, 0.447571, 140.969, 9.88227, 227.583 )
 max_distance = 3093.6
 extents = Vector3( 44.9372, 58.1337, 64.3841 )
 
-[node name="reflection_exterior2" type="ReflectionProbe" parent="active_entities" index="8"]
+[node name="reflection_exterior2" type="ReflectionProbe" parent="active_entities" index="10"]
 transform = Transform( -0.301419, -0.0712674, 0.950825, 0, 0.997203, 0.0747436, -0.953492, 0.0225291, -0.300576, -19.9411, 458.087, -198.355 )
 max_distance = 16384.0
 extents = Vector3( 9.50031, 20.8815, 13.5009 )
 
-[node name="reflection_cave2" type="ReflectionProbe" parent="active_entities" index="9"]
+[node name="reflection_cave2" type="ReflectionProbe" parent="active_entities" index="11"]
 transform = Transform( 0.448827, -0.0667923, 0.891119, 0, 0.997203, 0.0747436, -0.893619, -0.0335469, 0.447571, 140.969, -56.253, 191.383 )
 intensity = 0.07
 max_distance = 16384.0
@@ -4133,7 +4073,7 @@ extents = Vector3( 44.9372, 42.5147, 44.5421 )
 cull_mask = 1047551
 interior_enable = true
 
-[node name="reflection_cave3" type="ReflectionProbe" parent="active_entities" index="10"]
+[node name="reflection_cave3" type="ReflectionProbe" parent="active_entities" index="12"]
 transform = Transform( 0.416807, -0.00874161, 0.908953, -0.0077462, 0.999883, 0.0131682, -0.908962, -0.0125295, 0.416691, 136.683, -15.5661, 113.878 )
 intensity = 0.07
 max_distance = 16384.0
@@ -4141,16 +4081,76 @@ extents = Vector3( 39.5523, 78, 87.2991 )
 cull_mask = 1047551
 interior_enable = true
 
-[node name="reflection_cave4" type="ReflectionProbe" parent="active_entities" index="11"]
+[node name="reflection_cave4" type="ReflectionProbe" parent="active_entities" index="13"]
 transform = Transform( 0.986473, -0.00679797, 0.163782, 0.0134642, 0.999124, -0.0396262, -0.163369, 0.0412954, 0.9857, -19.5085, 436.611, -173.544 )
+intensity = 0.37
 max_distance = 16384.0
 extents = Vector3( 22.4824, 34.4714, 28.7193 )
 origin_offset = Vector3( 0, -2.23517e-10, -0.0722656 )
 cull_mask = 1015807
 interior_enable = true
 
-[node name="illusory_room" parent="." index="11" instance=ExtResource( 55 )]
+[node name="illusory_room" parent="active_entities" index="14" instance=ExtResource( 55 )]
 transform = Transform( -0.919463, 0, 0.393176, 0, 1, 0, -0.393176, 0, -0.919463, 177.961, 65.8842, 7.59753 )
+
+[node name="fountainA_large" parent="active_entities" index="15" instance=ExtResource( 70 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 225.453, 86.8201, 58.5951 )
+
+[node name="rock3" parent="active_entities" index="16" instance=ExtResource( 25 )]
+transform = Transform( 1, 0, 0, 0, 0.820573, -0.571541, 0, 0.571541, 0.820573, 75.9096, 334.486, 5.69468 )
+
+[node name="rock4" parent="active_entities/rock3" index="1" instance=ExtResource( 25 )]
+transform = Transform( 0.184282, 0.101304, 0.977639, 0.708088, -0.703521, -0.0605729, 0.681654, 0.703417, -0.201378, -2.05275, -9.77615, 19.6246 )
+
+[node name="rock2" parent="active_entities" index="17" instance=ExtResource( 24 )]
+transform = Transform( 1, 0, 0, 0, 0.496062, 0.868287, 0, -0.868287, 0.496062, -53.2648, 427.677, -209.58 )
+
+[node name="scrap1" parent="." index="3" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 0.998791, 0.0491528, 0, -0.0491528, 0.998791, 131.407, -73.7483, 191.075 )
+
+[node name="occlude_cave" type="Occluder" parent="." index="4"]
+transform = Transform( -0.337104, 0, -0.941468, 0, 1, 0, 0.941468, 0, -0.337104, 91.4752, 387.129, -94.5943 )
+shape = SubResource( 264 )
+
+[node name="occlude_cave2" type="Occluder" parent="." index="5"]
+transform = Transform( -0.270999, 0.961953, 0.0347273, -3.15398e-09, -0.0360774, 0.999349, 0.96258, 0.270822, 0.00977692, 14.6998, 290.802, -116.448 )
+shape = SubResource( 265 )
+
+[node name="zone_cave_entrance" type="MultiMeshSystem" parent="." index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 141.345, 2.39909, 233.943 )
+
+[node name="fountain" parent="zone_cave_entrance" index="0" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 0.995274, -0.0971086, 0, 0.0971086, 0.995274, 6.65514, -1.92247, 4.05688 )
+
+[node name="scrap2" parent="zone_cave_entrance" index="1" instance=ExtResource( 9 )]
+transform = Transform( 0.347103, 0.937827, 0, -0.937827, 0.347103, 0, 0, 0, 1, 20.5764, 1.33422, 16.6232 )
+
+[node name="scrap_pile1" parent="zone_cave_entrance" index="2" instance=ExtResource( 13 )]
+transform = Transform( -0.530898, -0.847436, 0, 0.847436, -0.530898, 0, 0, 0, 1, -12.5758, -0.748688, 23.4563 )
+
+[node name="scrap_pile2" parent="zone_cave_entrance" index="3" instance=ExtResource( 13 )]
+transform = Transform( -0.803134, -0.42265, -0.419931, -0.573916, 0.359545, 0.735764, -0.159987, 0.831922, -0.531328, -40.6856, 21.9783, -23.7872 )
+
+[node name="scrap_pile3" parent="zone_cave_entrance" index="4" instance=ExtResource( 11 )]
+transform = Transform( -0.840423, 0.227681, 0.491783, -0.43514, -0.824408, -0.361946, 0.323022, -0.518182, 0.791924, -24.9287, 12.5653, -3.12007 )
+
+[node name="table2" parent="zone_cave_entrance" index="5" instance=ExtResource( 10 )]
+transform = Transform( -0.0164571, 0.582701, -0.81252, 0.7537, 0.54121, 0.372864, 0.657012, -0.60626, -0.448089, 1.30901, -4.0845, 20.2568 )
+
+[node name="tower" parent="zone_cave_entrance" index="6" instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 0.7281, -0.685471, 0, 0.685471, 0.7281, -28.163, 1.12133, -26.2177 )
+
+[node name="tower3" parent="zone_cave_entrance" index="7" instance=ExtResource( 12 )]
+transform = Transform( 0.237091, -0.943979, -0.229546, 0.803712, 0.0578576, 0.592199, -0.545742, -0.324894, 0.772405, 74.5892, -7.22182, 48.1237 )
+
+[node name="tower2" parent="zone_cave_entrance" index="8" instance=ExtResource( 12 )]
+transform = Transform( -0.622641, 0.142713, 0.769384, 0, -0.983228, 0.18238, 0.782508, 0.113557, 0.612198, -28.163, 12.4578, 18.8126 )
+
+[node name="scrap4" parent="zone_cave_entrance" index="9" instance=ExtResource( 14 )]
+transform = Transform( 0.305095, 0.952322, 0, -0.952322, 0.305095, 0, 0, 0, 1, 48.1489, -0.547802, 30.3839 )
+
+[node name="scrap5" parent="zone_cave_entrance" index="10" instance=ExtResource( 14 )]
+transform = Transform( -0.00141701, -0.0176897, -0.999843, -0.999227, -0.0392581, 0.00211071, -0.0392893, 0.999072, -0.0176204, 45.2755, -0.547802, 30.3839 )
 
 [connection signal="toggled" from="active_entities/area_main_encounter/dswitch_a" to="active_entities/area_main_encounter/room1/door_entry" method="_on_toggled"]
 [connection signal="toggled" from="active_entities/area_main_encounter/room1/dswitch_a2" to="active_entities/area_main_encounter/room1/stairs2" method="_on_toggled"]

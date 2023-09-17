@@ -18,7 +18,7 @@ func sit():
 # Eventually there will be multiple exit animations 
 func exit():
 	var p:PlayerBody = Global.get_player()
-	p.set_visual_position($chair.global_transform.translated(-$chair.global_transform.basis.z*0.5))
+	p.set_visual_position($chair.global_transform.translated($chair.global_transform.basis.z*0.5))
 	$activator.play("Deactivate")
 	emit_signal("deactivated")
 	$DialogTrigger.show()
