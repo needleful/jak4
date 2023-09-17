@@ -968,11 +968,14 @@ func _physics_process(delta):
 				or !holding("mv_crouch")
 			):
 				next_state = State.Fall
-		State.LockedWaiting, State.PlaceFlag:
+		State.LockedWaiting, State.GetItem:
 			if after(MIN_TIME_LOCKED) and mesh.body.get_current_node() == "Walk":
-				unlock()
+				next_state = State.Ground
+		State.PlaceFlag:
 			if after(TIME_PLACE_FLAG, true, 1) and held_item:
 				place_flag()
+			elif after(MIN_TIME_LOCKED) and mesh.body.get_current_node() == "Walk":
+				next_state = State.Ground
 	if next_state != State.None:
 		set_state(next_state)
 	
@@ -1943,6 +1946,7 @@ func set_state(next_state: int):
 	mesh.enter_state(next_state)
 	match next_state:
 		State.Ground:
+			set_process_input(true)
 			last_ground_origin = global_transform.origin
 			can_air_spin = true
 			can_slide_lunge = true

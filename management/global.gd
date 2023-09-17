@@ -411,10 +411,8 @@ func reset_game():
 	gravity_stunned_bodies = {}
 	journal_by_tag = {}
 	reset_mum()
-	print_debug("New game...")
 	var dir := Directory.new()
 	if dir.file_exists(save_path):
-		print_debug("Backing up save...")
 		var _x = dir.rename(save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
 
@@ -427,7 +425,6 @@ func save_game():
 	save_async()
 
 func load_sync(reload := true):
-	print_debug("loading save")
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
 	if ResourceLoader.exists(save_path):

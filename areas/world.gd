@@ -79,7 +79,6 @@ func _input(event):
 			$mapcam.current = true
 
 func _enter_tree():
-	print_debug("WORLD: Entering tree")
 	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
 		Global.load_sync(false)
 		
@@ -492,11 +491,8 @@ func wake_up():
 
 func start_day():
 	if !ignore_day:
-		print_debug("Brand new day!")
 		var _x = Global.add_stat("current_day")
 		get_tree().call_group("daily_schedule", "_on_midnight")
-	else:
-		print_debug("Day ignored!")
 	ignore_day = false
 
 # Hours with decimals
