@@ -1,7 +1,7 @@
 tool
 extends EditorScript
 
-var target_group := "wheels"
+var target_group := "train_color_random"
 var resource_folder := "res://entities/env/train_set/muzna_city"
 
 var list: Array
@@ -11,20 +11,28 @@ func _run():
 	#for l in list:
 	#	if l is PackedScene:
 	#		print(l.resource_path)
-	var wheels := load("res://entities/env/train_set/empty_cart.tscn") as PackedScene
-	if !wheels:
-		return
 	var scn := get_scene()
 	for node in scn.get_tree().get_nodes_in_group(target_group):
-		var parent :Node = node.get_parent()
-		if parent.name != "blockout":
-			continue
-		var new_node = wheels.instance()
-		parent.add_child(new_node)
-		new_node.owner = scn
-		if node is Spatial:
-			new_node.transform = node.transform
-			node.queue_free()
+		#replace(node)
+		colorize(node)
+
+func colorize(node):
+	if node is MeshInstance:
+		var s:ShaderMaterial = node.get_surface_material(0)
+		if s:
+			s.set_shader_param("albedo", 
+			Color.from_hsv(randf(), randf()*0.75, randf()*0.8))
+
+func replace(node):
+	var parent :Node = node.get_parent()
+	if parent.name != "blockout":
+		return
+	var new_node = get_from_list().instance()
+	parent.add_child(new_node)
+	new_node.owner = get_scene()
+	if node is Spatial:
+		new_node.transform = node.transform
+		node.queue_free()
 
 func get_from_list() -> PackedScene:
 	return list[int(rand_range(1, list.size())) - 1]
