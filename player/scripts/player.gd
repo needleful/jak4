@@ -1830,13 +1830,11 @@ func gravity_stun(dam):
 	if !dead:
 		set_state(State.GravityStun)
 
-func celebrate(id: String = "", item: Spatial = null, local := Transform()):
+func celebrate(item: Spatial = null, local := Transform()):
 	held_item = item
 	set_state(State.GetItem)
 	if held_item:
 		held_item.transform = local
-	if id and id != "":
-		ui.game.get_node("item_get").show_alert(id.capitalize())
 
 func get_item(item: ItemPickup):
 	if item.item_id == "health_pickup":
@@ -1846,9 +1844,9 @@ func get_item(item: ItemPickup):
 			var preview = item.get_node("preview")
 			var t = preview.transform
 			item.remove_child(preview)
-			celebrate(item.item_id, preview, t)
+			celebrate(preview, t)
 		else:
-			celebrate(item.item_id, null)
+			celebrate()
 	if item.custom_sound:
 		mesh.play_pickup_sound(item.custom_sound)
 	elif !item.item_id.begins_with("wep_"):

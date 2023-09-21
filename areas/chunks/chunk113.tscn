@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=2]
+[gd_scene load_steps=111 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -178,6 +178,10 @@ tracks/2/keys = {
 "update": 0,
 "values": [ Vector3( 21.0846, 31.43, -7.66545 ) ]
 }
+
+[sub_resource type="CylinderShape" id=316]
+height = 17.4846
+radius = 47.3238
 
 [sub_resource type="Animation" id=1]
 resource_name = "Activate"
@@ -2184,12 +2188,16 @@ health = 60
 attack_damage = 15
 
 [node name="visit_village" type="Area" parent="active_entities/zone_village" index="36"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.4026, 0, -4.67325 )
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 53 )
 place_id = "village_tower"
 custom_stat = "abandoned_village"
 note = "There's an abandoned village next to this tower, overrun with spectres."
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/visit_village" index="0"]
+shape = SubResource( 316 )
 
 [node name="tower_exterior" type="MultiMeshSystem" parent="active_entities" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153.945, 42.3289, 3.38622 )

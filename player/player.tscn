@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=2]
+[gd_scene load_steps=140 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -63,6 +63,8 @@
 [ext_resource path="res://ui/components/focus_cursor.gd" type="Script" id=61]
 [ext_resource path="res://ui/icons/close_window_hover.png" type="Texture" id=62]
 [ext_resource path="res://ui/icons/new_reply.png" type="Texture" id=63]
+[ext_resource path="res://ui/game_log.gd" type="Script" id=64]
+[ext_resource path="res://ui/components/log_message.tscn" type="PackedScene" id=65]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -336,149 +338,6 @@ margin_bottom = 32.0
 [sub_resource type="StyleBoxEmpty" id=183]
 
 [sub_resource type="StyleBoxEmpty" id=184]
-
-[sub_resource type="Animation" id=9]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("save:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("saving:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("saving:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("save:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=10]
-resource_name = "save_complete"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("save:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("save:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1.9, 4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("saving:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 1.9, 4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=11]
-resource_name = "save_start"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/path = NodePath("save:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("saving:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("saving:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("save:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
 
 [sub_resource type="Gradient" id=180]
 colors = PoolColorArray( 1, 0.908051, 0.488281, 1, 0.980469, 0.665096, 0.329376, 1 )
@@ -1388,6 +1247,7 @@ margin_bottom = 1079.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="gameing" type="AspectRatioContainer" parent="ui"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
@@ -1399,37 +1259,6 @@ margin_left = -6.10352e-05
 margin_top = 0.00671387
 margin_right = 1920.0
 margin_bottom = 1079.99
-
-[node name="saveStats" type="VBoxContainer" parent="ui/gameing/gameing"]
-pause_mode = 2
-time_scale_response = false
-anchor_top = 0.5
-anchor_bottom = 0.5
-margin_left = 13.0
-margin_top = 184.0
-margin_right = 163.0
-margin_bottom = 269.0
-
-[node name="saving" type="Label" parent="ui/gameing/gameing/saveStats"]
-time_scale_response = false
-visible = false
-margin_right = 150.0
-margin_bottom = 22.0
-text = "Saving..."
-
-[node name="save" type="Label" parent="ui/gameing/gameing/saveStats"]
-time_scale_response = false
-visible = false
-margin_top = 26.0
-margin_right = 150.0
-margin_bottom = 48.0
-text = "SAVED!"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/saveStats"]
-time_scale_response = false
-anims/RESET = SubResource( 9 )
-anims/save_complete = SubResource( 10 )
-anims/save_start = SubResource( 11 )
 
 [node name="stats" type="Control" parent="ui/gameing/gameing"]
 pause_mode = 1
@@ -1662,9 +1491,9 @@ text = "Debug Data"
 
 [node name="a11" type="Label" parent="ui/gameing/gameing/debug/stats"]
 time_scale_response = false
-margin_top = 286.0
+margin_top = 312.0
 margin_right = 694.0
-margin_bottom = 308.0
+margin_bottom = 334.0
 text = "Debug Data"
 
 [node name="game_state" type="VBoxContainer" parent="ui/gameing/gameing/debug"]
@@ -1795,7 +1624,6 @@ anims/start = SubResource( 68 )
 [node name="weapon" type="TextureRect" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -522.0
@@ -1877,6 +1705,7 @@ flip_h = true
 [node name="inventory" type="GridContainer" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
+visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -2112,25 +1941,27 @@ text = "Resetting"
 align = 1
 valign = 1
 
-[node name="item_get" parent="ui/gameing/gameing" instance=ExtResource( 10 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -360.0
-margin_top = -82.0
-margin_right = 360.0
-margin_bottom = -46.0
-format = "Item Found: %s"
+[node name="log" type="ScrollContainer" parent="ui/gameing/gameing"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -371.0
+margin_top = -318.987
+margin_right = -52.0
+margin_bottom = -112.987
+script = ExtResource( 64 )
+label_scene = ExtResource( 65 )
 
-[node name="note_get" parent="ui/gameing/gameing" instance=ExtResource( 10 )]
-anchor_top = 0.0
-anchor_bottom = 0.0
-margin_top = 50.0
-margin_bottom = 71.0
-format = "New Journal Entry: %s/%s"
+[node name="vbox" type="VBoxContainer" parent="ui/gameing/gameing/log"]
+margin_right = 313.0
+margin_bottom = 206.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
 
 [node name="dialog" type="AspectRatioContainer" parent="ui"]
 pause_mode = 2
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
@@ -2156,6 +1987,23 @@ margin_top = 10.0
 margin_right = -20.0
 margin_bottom = -10.0
 rect_min_size = Vector2( 500, 0 )
+
+[node name="log" type="ScrollContainer" parent="ui/dialog/dialog/viewer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = -657.0
+margin_top = -360.987
+margin_right = -6.0
+margin_bottom = -10.9866
+script = ExtResource( 64 )
+label_scene = ExtResource( 65 )
+
+[node name="vbox" type="VBoxContainer" parent="ui/dialog/dialog/viewer/log"]
+margin_right = 645.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
 
 [node name="buttons" type="GridContainer" parent="ui/dialog/dialog"]
 time_scale_response = false

@@ -89,7 +89,6 @@ func clear():
 func rapid_start():
 	for c in AmmoSpawner.MAX.keys():
 		var wep = "wep_"+c
-		echo("Got "+wep)
 		var _x = Global.add_item(wep)
 		_x = Global.add_item(c, AmmoSpawner.MAX[c])
 	var _x = Global.add_item("wep_time_gun")

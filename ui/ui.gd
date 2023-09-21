@@ -162,31 +162,53 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			anim.stop()
 			anim.play("show")
 		show_specific_item(item)
+		return
 	elif item in WEAPONS:
+		var wep_select := ""
+		var wep_name := ""
+		match item:
+			"wep_pistol":
+				wep_select = "wep_1"
+				wep_name = tr("Pistol")
+			"wep_wave_shot":
+				wep_select = "wep_2"
+				wep_name = tr("Bubble Shot")
+			"wep_grav_gun":
+				wep_select = "wep_3"
+				wep_name = tr("Gravity Cannon")
+			"wep_time_gun":
+				wep_select = "wep_4"
+				wep_name = tr("Time Gun")
 		if count > 0:
 			player.gun.add_weapon(item, startup)
 			if !startup:
 				player.gun.swap_to(item)
 			show_ammo()
 			if !startup:
-				match item:
-					"wep_pistol":
-						show_prompt(["wep_1"], tr("Pistol"))
-					"wep_wave_shot":
-						show_prompt(["wep_2"], tr("Bubble Shot"))
-					"wep_grav_gun":
-						show_prompt(["wep_3"], tr("Gravity Cannon"))
-					"wep_time_gun":
-						show_prompt(["wep_4"], tr("Time Gun"))
+				show_prompt([wep_select], wep_name)
 		else:
 			player.gun.remove_weapon(item)
+		if !startup:
+			if change > 0:
+				write_log("Weapon found: "+wep_name)
+			else:
+				write_log("Weapon removed: "+wep_name)
 	elif player.current_weapon == item:
 		game.get_node("weapon/ammo/ammo_label").text = str(count)
 		if player.current_weapon and !game.get_node("weapon").visible:
 			show_ammo()
+		if !startup and change > 0:
+			write_log("Found: "+item.capitalize()+" Ammo")
 	elif item in player.mesh.coat_mesh.meshes:
 		player.mesh.coat_mesh.set_coat_type(item)
+		if !startup and change > 0:
+			write_log("New Coat: "+item.capitalize())
 	else:
+		if !startup:
+			if change > 0:
+				write_log("Item found: "+ item.capitalize())
+			else:
+				write_log("Item removed: "+item.capitalize())
 		match item:
 			"health_up":
 				var health_up := count
@@ -247,10 +269,12 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 					else:
 						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
 
-func on_journal_updated(category: String, subject: String):
-	var alert = [category.capitalize(), subject.capitalize()]
-	game.get_node("note_get").show_alert(alert)
-	$dialog/note_get.show_alert(alert)
+func on_journal_updated(tags: Array):
+	var t := PoolStringArray()
+	for tag in tags:
+		if !Global.has_stat(tag):
+			t.append(tag.capitalize())
+	write_log("Journal Updated: "+ t.join(", "))
 
 func equip_previous():
 	if equipment_inventory.size() == 1:
@@ -348,10 +372,10 @@ func debug_show_inventory():
 		add_label(state_viewer, "\t%s: %d" % [i, Global.count(i)])
 
 func prepare_save():
-	game.get_node("saveStats/AnimationPlayer").play("save_start")
+	write_log("Saving...")
 
 func complete_save():
-	game.get_node("saveStats/AnimationPlayer").queue("save_complete")
+	write_log("SAVED!")
 
 func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_label := ""):
 	set_mode(Mode.Dialog)
@@ -478,3 +502,8 @@ func block_input():
 	input_blocked = true
 	yield(get_tree().create_timer(0.1), "timeout")
 	input_blocked = false
+
+func write_log(message: String):
+	game.get_node("log").echo(message)
+	dialog.get_node("log").echo(message)
+	$debug_console.echo(message)

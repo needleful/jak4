@@ -3,7 +3,7 @@ extends Node
 signal inventory_changed
 signal item_changed(item, change, count)
 signal stat_changed(tag, value)
-signal journal_updated(category, subject)
+signal journal_updated(tags)
 
 var game_state : GameState
 # The game doesn't save in test scenes
@@ -144,6 +144,7 @@ func add_note(text: String, tags: Array):
 	game_state.journal.push_back([text, tags])
 	var index := game_state.journal.size() - 1
 	add_tagged_entries(index, tags)
+	emit_signal("journal_updated", tags)
 	return true
 
 func add_tagged_entries(index: int, tags:Array):
