@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=2]
+[gd_scene load_steps=110 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -52,11 +52,8 @@
 [ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=50]
 [ext_resource path="res://entities/env/stone/rock4.tscn" type="PackedScene" id=51]
 [ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=52]
-[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=53]
+[ext_resource path="res://areas/visit_area.gd" type="Script" id=53]
 [ext_resource path="res://material/env/copper/copper_corroded.material" type="Material" id=54]
-[ext_resource path="res://entities/env/electrical/outlet_box.tscn" type="PackedScene" id=55]
-[ext_resource path="res://entities/env/electrical/charger.tscn" type="PackedScene" id=56]
-[ext_resource path="res://entities/env/electrical/phone.tscn" type="PackedScene" id=57]
 [ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=58]
 [ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=59]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=60]
@@ -1867,6 +1864,7 @@ interior_ambient_color = Color( 0.172549, 0.231373, 0.231373, 1 )
 
 [node name="env_tower" type="Area" parent="active_entities" index="4"]
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
+visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 32 )
@@ -2118,34 +2116,19 @@ transform = Transform( -0.90181, 0, 0.432133, 0, 1, 0, -0.432133, 0, -0.90181, 4
 [node name="bed_native" parent="active_entities/zone_village/hut" index="0" instance=ExtResource( 45 )]
 transform = Transform( -0.99665, 0, -0.0817842, 0, 1, 0, 0.0817842, 0, -0.99665, 2.49518, 4.0778, -0.105026 )
 
-[node name="bed_native2" parent="active_entities/zone_village/hut" index="1" instance=ExtResource( 45 )]
-transform = Transform( -0.318406, 0, -0.947954, 0, 1, 0, 0.947954, 0, -0.318406, 1.06083, 0.96, -3.06976 )
-
-[node name="light_hang1" parent="active_entities/zone_village/hut" index="2" instance=ExtResource( 44 )]
+[node name="light_hang1" parent="active_entities/zone_village/hut" index="1" instance=ExtResource( 44 )]
 transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.85982, 6.3068, 6.0058 )
+light_enabled = false
 
-[node name="carpet" parent="active_entities/zone_village/hut" index="3" instance=ExtResource( 47 )]
+[node name="carpet" parent="active_entities/zone_village/hut" index="2" instance=ExtResource( 47 )]
 transform = Transform( -0.562255, 0, -0.826964, 0, 1, 0, 0.826964, 0, -0.562255, 0.135376, 0.96, 0.365021 )
 
-[node name="sitting_pillow" parent="active_entities/zone_village/hut" index="4" instance=ExtResource( 52 )]
+[node name="sitting_pillow" parent="active_entities/zone_village/hut" index="3" instance=ExtResource( 52 )]
 transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.26609, 4.09293, 3.14957 )
-
-[node name="npc" parent="active_entities/zone_village/hut" index="5" instance=ExtResource( 53 )]
-transform = Transform( -0.90181, 0, -0.432133, 0, 1, 0, 0.432133, 0, -0.90181, 2.27773, 4.19901, 3.14561 )
-visual_name = "Solitary Man"
-sitting = true
-
-[node name="outlet_box" parent="active_entities/zone_village/hut" index="6" instance=ExtResource( 55 )]
-transform = Transform( -0.752873, 0, 0.658166, 0, 1, 0, -0.658166, 0, -0.752873, 1.4118, 4.11143, 3.7142 )
-
-[node name="charger" parent="active_entities/zone_village/hut/outlet_box" index="1" instance=ExtResource( 56 )]
-transform = Transform( 0.998946, 0, 0.0459103, 0, 1, 0, -0.0459103, 0, 0.998946, 0.104118, 0.137493, -0.0814514 )
-
-[node name="phone" parent="active_entities/zone_village/hut/outlet_box" index="2" instance=ExtResource( 57 )]
-transform = Transform( 0.394533, 0, 0.918882, 0, 1, 0, -0.918882, 0, 0.394533, 0.277107, -0.0164499, 0.0456543 )
 
 [node name="wind_generator" parent="active_entities/zone_village" index="22" instance=ExtResource( 46 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 67.996, 8.6259, 4.78935 )
+move_scale = 0.1
 
 [node name="bug_pickup2" parent="active_entities/zone_village" index="23" instance=ExtResource( 35 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.0638, 0, -29.5896 )
@@ -2175,6 +2158,38 @@ collision_layer = 4
 [node name="gem_pickup9" parent="active_entities/zone_village" index="30" instance=ExtResource( 42 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 49.4286, 0.861696, -5.84036 )
 collision_layer = 4
+
+[node name="crawly3" parent="active_entities/zone_village" index="31" instance=ExtResource( 17 )]
+transform = Transform( -0.99515, 0, -0.0983697, 0, 1, 0, 0.0983697, 0, -0.99515, 47.2781, 0.221731, 11.4015 )
+respawns = false
+
+[node name="crawly4" parent="active_entities/zone_village" index="32" instance=ExtResource( 17 )]
+transform = Transform( -0.118326, 0, -0.992975, 0, 1, 0, 0.992975, 0, -0.118326, 27.7506, 0.108275, -3.45296 )
+respawns = false
+
+[node name="crawly5" parent="active_entities/zone_village" index="33" instance=ExtResource( 17 )]
+transform = Transform( -0.890433, 0, 0.455115, 0, 1, 0, -0.455115, 0, -0.890433, 33.0059, 0.108275, -14.2645 )
+respawns = false
+
+[node name="crawly6" parent="active_entities/zone_village" index="34" instance=ExtResource( 17 )]
+transform = Transform( -0.30222, 0, -0.953238, 0, 1, 0, 0.953238, 0, -0.30222, 17.3495, 7.80074, -21.875 )
+respawns = false
+
+[node name="crawly7" parent="active_entities/zone_village" index="35" instance=ExtResource( 17 )]
+transform = Transform( 0.946197, 0, -0.32359, 0, 1, 0, 0.32359, 0, 0.946197, 51.783, 8.43799, -20.6531 )
+respawns = false
+drops_coat = true
+gem_drop_max = 10
+health = 60
+attack_damage = 15
+
+[node name="visit_village" type="Area" parent="active_entities/zone_village" index="36"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 53 )
+place_id = "village_tower"
+custom_stat = "abandoned_village"
+note = "There's an abandoned village next to this tower, overrun with spectres."
 
 [node name="tower_exterior" type="MultiMeshSystem" parent="active_entities" index="8"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153.945, 42.3289, 3.38622 )
