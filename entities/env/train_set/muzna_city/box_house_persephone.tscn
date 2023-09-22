@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=1]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=2]
+[ext_resource path="res://_glb/env/train_set/muzna_city/box_house_persephone.glb" type="PackedScene" id=3]
+[ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=4]
+[ext_resource path="res://entities/visual/coat_like.gd" type="Script" id=5]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 0.713726, 1, 0.839216, 1 )
+
+[node name="box_house_persephone" instance=ExtResource( 3 )]
+
+[node name="box_house_persephone" parent="." index="0"]
+material/0 = SubResource( 1 )
+material/1 = SubResource( 1 )
+
+[node name="StaticBody" parent="box_house_persephone/box_house_awning" index="0"]
+collision_layer = 4097
+script = ExtResource( 5 )
+double_sided = true
+
+[node name="box_house_patio" parent="box_house_persephone" index="1"]
+material/0 = ExtResource( 1 )
+
+[node name="StaticBody" parent="box_house_persephone" index="2"]
+collision_layer = 257
+
+[node name="box_house_persephone-interior" parent="." index="1"]
+material/0 = ExtResource( 4 )
+
+[node name="StaticBody" parent="box_house_persephone-interior" index="0"]
+collision_layer = 257
