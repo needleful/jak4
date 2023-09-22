@@ -681,7 +681,7 @@ start_node = "00_RESET"
 graph_offset = Vector2( -78, 43 )
 
 [sub_resource type="AnimationNodeBlendTree" id=36]
-graph_offset = Vector2( -334, -5 )
+graph_offset = Vector2( -58, 39 )
 nodes/Animation/node = SubResource( 31 )
 nodes/Animation/position = Vector2( -80, 220 )
 nodes/Big/node = SubResource( 30 )
@@ -689,7 +689,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
+node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -752,7 +752,7 @@ material_overlay = SubResource( 2 )
 skin = SubResource( 54 )
 
 [node name="head_attach" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1.07939, 0.0357685, 0.00641734, -0.00077497, 0.213335, -1.05872, -0.0363312, 1.05812, 0.21324, -0.0100599, 1.37232, -0.00287612 )
+transform = Transform( 1, 1.7053e-13, 7.15258e-07, 7.00223e-07, 0.203954, -0.978981, -1.4588e-07, 0.978981, 0.203954, 4.23841e-15, 1.15055, -0.00574669 )
 bone_name = "Head"
 
 [node name="eyes" type="Position3D" parent="Armature/Skeleton/head_attach" index="0"]
@@ -795,8 +795,8 @@ autostart = true
 tree_root = SubResource( 36 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/Big/add_amount = 1.0
+parameters/Big/add_amount = 0.0
 parameters/StateMachine/playback = SubResource( 37 )
-parameters/StateMachine/Walk/blend_position = -0.00443655
+parameters/StateMachine/Walk/blend_position = 0
 
 [connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]
