@@ -51,6 +51,7 @@ var otherwise := false
 var talked := 0
 var skip_reply := false
 var discussed: Dictionary
+var variables: Dictionary
 var is_exiting := false
 # Stack of IDs for DialogItems
 var call_stack: Array
@@ -76,6 +77,7 @@ func _init():
 	discussed = {}
 	label_conditions = {}
 	contextual_replies = {}
+	variables = {}
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
 
@@ -160,6 +162,7 @@ func clear():
 	otherwise = false
 	call_stack = []
 	contextual_replies = {}
+	variables = {}
 	for c in messages.get_children():
 		c.queue_free()
 	clear_replies()

@@ -1,4 +1,4 @@
-[! Global stat: captain_redford/start]
+[! stat?: captain_redford/start]
 	{talked == 0}
 		// At the blockade
 		I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
@@ -43,7 +43,7 @@
 		Stop it. Stop with this nonsense. Just... take the key and open the door.
 		* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
 		[Global add_item: manor_key]
-	{otherwise}[! Global stat: chunk052/front_door/open]
+	{otherwise}[! stat?: chunk052/front_door/open]
 		Well... Are you going to open it?
 		You -- I unlocked it, but it's still stuck.
 		It can probably be kicked open now.
@@ -61,8 +61,8 @@
 	You -- Because the house is falling apart. There's sand everywhere...
 	No, no... it's not going outside...
 	[main_speaker travel_to: | ../shelf_view]
-{otherwise}[Global stat: manor052/investigation1]
-	[Global stat: manor052/passage/open] 
+{otherwise}[stat?: manor052/investigation1]
+	[stat?: manor052/passage/open] 
 		So it was a passage!
 		Excellent work, uh, I never caught your name.
 		You -- Jackie.
@@ -80,21 +80,21 @@
 	{otherwise}
 		There must be a lock here somewhere...
 {otherwise}[main_speaker at: shelf_view]
-	[Global stat: manor052/passage/open]
+	[stat?: manor052/passage/open]
 		Alright, let's venture onward.
 		[main_speaker travel_to: | ../path_passage]
 	{otherwise} 
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
 		You -- Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
-		[Global add_stat: manor052/investigation1]
+		[+stat: manor052/investigation1]
 {otherwise}[main_speaker at: kitchen]
-	[! Global stat: manor052/investigation2]
+	[! stat?: manor052/investigation2]
 		Well done! It appears it was a secret passage to the kitchen! Perhaps for servants.
 		You -- It doesn't appear any soldiers have ever quartered here.
 			This is just a regular home.
 		No. We need to investigate further! Let's find the keys to the rest of the home.
-		[Global add_stat: manor052/investigation2]
+		[+stat: manor052/investigation2]
 	{otherwise}
 		Did you find anything?
 		[! Global count: manor_den_key]
@@ -106,20 +106,20 @@
 		[Global remove_stat: manor052/investigation2]
 		[main_speaker travel_to: | ../path_den]
 {otherwise}[main_speaker at: den]
-	[! Global stat: manor052/investigation3]
+	[! stat?: manor052/investigation3]
 		Nothing here makes any sense.  Where are the sandbags? We boarded up the windows weeks ago!
 		You -- I've been telling you, you buffoon! The war ended! Whatever delusions you have are of a long-gone era.
 		...
 		We just... Have to find the next part of the path.
 		You -- What path? What proof do we have there's a path? All we know is there was a servant's path behind the cabinet. What more are we looking for?
 		Trust me, Jacqueline. I've got... a feeling, I suppose. There is more here.
-		[Global add_stat: manor052/investigation3]
-	{otherwise}[! Global stat: redford/discussed/denial]
+		[+stat: manor052/investigation3]
+	{otherwise}[! stat?: redford/discussed/denial]
 		It's clear the manor was renovated since I was last here...
 		But whoever it was is long gone now.
 		You -- Have you been listening to a word I've said this entire time?
 		* He makes a noise like a sigh, despite no evidence he has lungs.
-		[Global add_stat: redford/sigh]
+		[+stat: redford/sigh]
 		Jacqueline, may I tell you a story?
 		We often receive mail at the front lines. Letters and gifts from loved ones, newspapers, et cetera.
 		One day, one of my soldiers received a letter informing him his wife and daughter had drowned in a boating accident.
@@ -132,12 +132,12 @@
 		You -- It's five stages.
 		If you say so. But for some men, I believe there are only two stages:
 		Denial and death.
-		[Global add_stat: jackie/info/denial]
+		[+stat: jackie/info/denial]
 		[note: redford/discussed/denial | “Denial and death”... I think he may understand his situation more than he's admitting. |+ captain_redford jackie/info/denial]
-	[! Global stat: manor052/basement/open]
+	[! stat?: manor052/basement/open]
 		Let's open up the rest of this manor.
 	{otherwise}
-		[! Global stat: redford/discussed/basement]
+		[! stat?: redford/discussed/basement]
 			I presume the basement door was your doing?
 			You -- Yes. There's more to this place yet.
 			We shall continue.
@@ -148,7 +148,7 @@
 		[Global remove_stat: manor052/investigation3]
 		[main_speaker travel_to: ../basement_passage]
 {otherwise}[main_speaker at: basement_passage]
-	[! Global stat: redford/discussed/poem1]
+	[! stat?: redford/discussed/poem1]
 		You -- Good God, this place is endless!
 		Soldier without blood.
 		You -- Pardon me?
@@ -161,7 +161,7 @@
 		You -- You're... scaring me, Redford.
 		Sorry, just some old poetry.
 		[note: redford/discussed/poem1 | “Soldier without blood. Nostrils without breath. A heart without love. A life without death.” How did Redford become what he is? |+ captain_redford]
-	{otherwise}[! Global stat: redford/discussed/poem2]
+	{otherwise}[! stat?: redford/discussed/poem2]
 		Solid feet on soft ground,
 		Solid teeth in soft necks,
 		Solid eyes to gather 'round
@@ -178,7 +178,7 @@
 			[note: redford/burning | It's from his experience. |+ captain_redford]
 			[back]
 		[forget: poem]
-	[! Global stat: manor052/final_area/open]
+	[! stat?: manor052/final_area/open]
 		We must find the next passage.
 		// TODO: fill this out
 	{otherwise}
@@ -202,15 +202,15 @@
 	> [! mentioned: truth][mentioned: end_death][mentioned: end_knowledge] This is how you came to be, isn't it?
 		I died. I remember it. I remember the flash of white. Or maybe black?
 		It was gunfire from the cliffs. They must have been in the caves. I knew the scouts should have searched deeper. God-damned fools. Cowards. Those caves go as deep as your bravery will take you.
-		[Global add_stat: caves/depth]
+		[+stat: caves/depth]
 		And then I was in the desert, walking. Like it was mere seconds ago. I thought I'd just barely survived the chaos at first.
 		[note: redford/death | Redford remembers his death. Apparently his soldiers were ambushed from the caves. Somehow his mind was preserved in one of these spectres, as if he'd survived. |+ captain_redford]
 
-		[Global stat: redford/sigh]
+		[stat?: redford/sigh]
 			* He makes that almost-sigh sound again.
 		{otherwise}
 			* He makes a sound like a sigh, despite likely having no lungs.	
-		[Global add_stat: redford/sigh]
+		[+stat: redford/sigh]
 		It's confusing.  I can't recollect how long I've been like this.
 
 		[mention: truth]
@@ -242,7 +242,7 @@ Let's just find the end of this labyrinth and rescue whoever survived this thric
 // TODO: How is the basement reached?
 // I want it to be a riddle
 // Refer to the book of Isiah, maybe?
-[! Global stat: redford/discussed/isiah_journal]
+[! stat?: redford/discussed/isiah_journal]
 	You -- I found a curious notebook, Redford. It contains passages from the book of Isiah with notes.
 	This house is empty.
 	You -- ...? Yes, we've been over that.
@@ -261,8 +261,8 @@ Let's just find the end of this labyrinth and rescue whoever survived this thric
 
 : post_mission
 // TODO: something here
-[Global add_stat: redford/post_talk]
->  [Global stat: redford/rant] Quite frankly, you were the most frightening part of this whole journey, Redford.
+[+stat: redford/post_talk]
+>  [stat?: redford/rant] Quite frankly, you were the most frightening part of this whole journey, Redford.
 	Yes, I suppose my meandering thoughts could have been unsettling. Pay little mind to it. War is fought as much in the spirit as on the battlefield.
 	You -- I was quite certain you would snap and force me to kill you.
 	You have a most dramatic imagination, young Jacqueline. I could handily beat you in combat if it had come to that.
@@ -288,7 +288,7 @@ Who told me such things? Certainly not my commanders. We fight for God, and in H
 	He always had the option to take a better job to provide more, but that would throw a wrench into /his/ freedom and /his/ plans, so naturally he didn't consider such a thing. As a child, I saw this as independence. As a man, I see it as apathy.
 	Never mind when we were sick and couldn't afford a doctor, never mind the days we had to go with bread and broth for dinner. As long as he didn't have to go into a dull office or factory every day, it was exactly the life he wanted.
 	If Mother and I were there to take care of the little ones, all the better.
-	[Global add_stat: daddy_issues]
+	[+stat: daddy_issues]
 	[note: redford/father | Redford feels his father didn't provide when he was young. |+ captain_redford daddy_issues]
 	//[Global add_note: TODO: Some anecdote about Jackie's father. |+ father daddy_issues]
 Nonsense. Gibberish. Lies. Lies. Lies. Ignore everything I say. Now and for ever. What a waste of time.

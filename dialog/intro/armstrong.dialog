@@ -1,4 +1,4 @@
-[! Global stat: armstrong/intro]
+[! stat?: armstrong/intro]
 	Ah, Jackie the coats girl! Hello!
 	You -- “Coats girl”?
 	[main_speaker boast]
@@ -8,13 +8,13 @@
 		I have one for out in the sun, another for the cold, and a third just in case.
 	[main_speaker shrug]
 	See! Coats Girl.
-	[Global add_stat: armstrong/intro]
+	[+stat: armstrong/intro]
 
 	[Global task_is_complete: activate_the_medium]
 		But more important matters, clearly. How did you know you needed a capacitor to fix the Medium?
 		You -- Well, it looked like that device needed something plugged into it, so I plugged in the white tube I found.
 		Have you used it yet?
-		[Global stat: talked/mum]
+		[stat?: talked/mum]
 			[goto: medium_activated]
 		{otherwise}
 			You -- Not yet.
@@ -34,7 +34,7 @@
 	Not without a capacitor. It goes in the machine inside the building here.
 	You -- Where do we get it?
 	If anyone found one, they would have stored it in the cave at the back of the village. You can check there if you want.
-	>[Global stat: cave_capacitor_124] Is it this white thing I found?
+	>[stat?: cave_capacitor_124] Is it this white thing I found?
 		Fantastic! In the wall here is the receptor. You can plug it in and we'll see if that works!
 	> Why would one of these just be lying in a cave?
 		It's where we store scrap for transport to Maslikir.
@@ -43,39 +43,39 @@
 			You -- What does that mean?
 			It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are eventually exported I assume.
 			:l_power
-			> [! Global stat: armstrong/discussed/medium_capacitor] Why would the Medium need one of these, if they're so strong?
-				[Global add_stat: armstrong/discussed/medium_capacitor]
+			> [! stat?: armstrong/discussed/medium_capacitor] Why would the Medium need one of these, if they're so strong?
+				[+stat: armstrong/discussed/medium_capacitor]
 				I would not know. The Medium is almost magical in nature. Presumably it burns through them quite quickly, given these are the only exposed parts of the machine.
 				[goto: l_power]
-			> [! Global stat: armstrong/discussed/maslikir] Where is this “Maslikir”?
-				[Global add_stat: armstrong/discussed/maslikir]
+			> [! stat?: armstrong/discussed/maslikir] Where is this “Maslikir”?
+				[+stat: armstrong/discussed/maslikir]
 				[Global mark_map: maslikir | A town that makes its money melting down scrap.]
 				It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
 				We sell them scrap and they make useful things from it. Mostly copper wire.
 				If you like melted metal, it could be a fun stop on your visit.
 				[goto: l_power]
-			> [! Global stat: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
-				[Global add_stat: armstrong/discussed/capacitor_export]
+			> [! stat?: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
+				[+stat: armstrong/discussed/capacitor_export]
 				I would assume so. Maybe they are good for big power grids or labs, though I do not get much news of it.
 				[goto: l_power]
 			> Well, I suppose that's clear enough. I'll take a look in the cave.
 				Hopefully there is one. Save you a trip out of town.
-				[Global add_stat: armstrong/discussed/capacitor_scrap_pre]
+				[+stat: armstrong/discussed/capacitor_scrap_pre]
 		> Alright, I'll take a look in there.
 			Hopefully there is one. Save you a trip out of town.
 	> I'll look there. Thanks.
 		Excellent!  And I will be here if you need any advice.
 	[exit]
-{otherwise}[! Global stat: medium/activated]
-	[Global stat: door/medium_door]
+{otherwise}[! stat?: medium/activated]
+	[stat?: door/medium_door]
 		You did it! The door is open! Do you know how to use the Medium?
 		You -- Yes.
 	{otherwise}
-		[! Global stat: armstrong/discussed/door]
+		[! stat?: armstrong/discussed/door]
 			How goes your search, Coats Girl? Was there a capacitor in the cave?
 			[Global count: capacitor]
-				[Global stat: cave_capacitor_124] [! Global stat: armstrong/cave_capacitor]
-					[Global add_stat: armstrong/cave_capacitor] [Global abolish_notes:+ activate_the_medium hideaway]
+				[stat?: cave_capacitor_124] [! stat?: armstrong/cave_capacitor]
+					[+stat: armstrong/cave_capacitor] [Global abolish_notes:+ activate_the_medium hideaway]
 					You -- There was.
 					As I suspected!
 				{otherwise}
@@ -92,9 +92,9 @@
 					But anyway, we are not here for history. If you climb in the hole in the wall, you should see where the capacitor goes.
 				> Where did you need this?
 					In the wall here is a, uh, receptor. It matches the bottom of the capacitor, so it is easy to fit.
-				[Global add_stat: armstrong/discussed/door]
+				[+stat: armstrong/discussed/door]
 			{otherwise}
-				[Global stat: cave_124_entered]
+				[stat?: cave_124_entered]
 					You -- I've been in the cave, but I didn't find anything.
 					I would make sure to be thorough. Don't want to miss anything right under our noses.
 				{otherwise}
@@ -104,10 +104,10 @@
 		{otherwise}
 
 	[exit]
-{otherwise}[! Global stat: talked/mum]
+{otherwise}[! stat?: talked/mum]
 	You should use the Medium first. We can talk later.
 	[exit]
-{otherwise}[Global stat: talked/mum][! Global stat: armstrong/discussed/mum]
+{otherwise}[stat?: talked/mum][! stat?: armstrong/discussed/mum]
 	:medium_activated
 	You -- I saw my mum.
 	You -- Well, sort of. She was like a... I don't know exactly. An impression. I never knew her that well.
@@ -116,7 +116,7 @@
 	What was her name? There aren't many cities out here. Maybe I knew her?
 	You -- Tara Sylde.
 	Do you know her full name?
-	[Global add_stat: mum/short_name]
+	[+stat: mum/short_name]
 	You -- ...What do you mean? That is her full name.
 	In Yaqazi, a name is usually four parts: a, uh, personal name, then maybe the father's name, then the family, then the place.
 	?>I'm curious now, what's your full name?
@@ -130,13 +130,13 @@
 	[Global mark_map: plateau_town] It is also called the “Great Plateau”. It's the big one to the west, can't miss it. Even more obvious with the Tree Tower on top.
 	You -- Right. So this plateau would be the best place to find people who knew my mother?
 	It would be my first guess, at least. Good luck to you.
-	[Global add_stat: mum/plateau]
+	[+stat: mum/plateau]
 	[note: armstrong/discussed/mum | My mother probably lived on the Sylda Plateau, according to Armstrong. |+ mum mum/plateau plateau_town]
 	[exit]
 {otherwise}
 	[task_is_active: cleanup]
-		[! Global stat: armstrong/cleanup]
-			[Global add_stat: armstrong/cleanup]
+		[! stat?: armstrong/cleanup]
+			[+stat: armstrong/cleanup]
 			The guard at the front gate has been seeing dozens of specters in the rubble. Do you have a plan to deal with them?
 			You -- Kicking and shooting, I suppose.
 			Right...
@@ -146,8 +146,8 @@
 		{otherwise}
 			You -- Still working on getting rid of the spectres at the front, but it should be done soon.
 			Good. Thank you.
-	{otherwise} [Global stat: hdw_gate] [! Global stat: armstrong/gate]
-		[Global add_stat: armstrong/gate] Hey, I heard you cleared the Specters in front of the gate. Impressive!
+	{otherwise} [stat?: hdw_gate] [! stat?: armstrong/gate]
+		[+stat: armstrong/gate] Hey, I heard you cleared the Specters in front of the gate. Impressive!
 		You -- Oh, it was nothing.
 		Far from nothing! I did not know Vaelers could fight.
 		You -- Funny, the guard at the gate said something similar.
@@ -163,16 +163,16 @@
 		It is good to see you again, Jackie.
 
 :main_loop
-> [! Global stat: armstrong/discussed/medium_hole] Why is there a hole in the Medium, anyway?
+> [! stat?: armstrong/discussed/medium_hole] Why is there a hole in the Medium, anyway?
 	Don't know who did it. I guess they needed to fix it? The doors are locked shut without power.
 	It is strong metal. It must have taken months of cutting.
 	A guy took a grinder to some of this metal. Whole blade exploded! Nearly died!
 	?> Was “the guy” you?
 		He was me, yes. Thought I could make the hole bigger. Good thing I wore my goggles!
 		[back]
-	[Global add_stat: armstrong/discussed/medium_hole]
-> [Global stat: capacitor_124][! Global stat: armstrong/discussed/capacitor_scrap] Why was there a capacitor in the cave with the scrap, if they're so valuable?
-	[Global stat: armstrong/discussed/capacitor_scrap_pre]
+	[+stat: armstrong/discussed/medium_hole]
+> [stat?: capacitor_124][! stat?: armstrong/discussed/capacitor_scrap] Why was there a capacitor in the cave with the scrap, if they're so valuable?
+	[stat?: armstrong/discussed/capacitor_scrap_pre]
 		I distinctly remember you asking this before.
 		You -- Have I?
 		Yes. Basically, the capacitors are too powerful for us to use. The wind generators are enough.
@@ -182,25 +182,25 @@
 		You -- What does that mean?
 		It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are shipped off on the train I assume.
 	:l_power2
-	> [! Global stat: armstrong/discussed/medium_capacitor] Why would the Medium need two of these, if they're so strong?
-		[Global add_stat: armstrong/discussed/medium_capacitor]
+	> [! stat?: armstrong/discussed/medium_capacitor] Why would the Medium need two of these, if they're so strong?
+		[+stat: armstrong/discussed/medium_capacitor]
 		I would not know. Computers are power-hungry, and it is far stronger than normal computers.
 		[goto: l_power2]
-	> [! Global stat: armstrong/discussed/maslikir] Where is this “Maslikir”?
-		[Global add_stat: armstrong/discussed/maslikir]
+	> [! stat?: armstrong/discussed/maslikir] Where is this “Maslikir”?
+		[+stat: armstrong/discussed/maslikir]
 		[Global mark_map: maslikir | A town that makes its money melting down scrap.]
 		It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
 		We sell them scrap and they make useful things from it. Mostly copper wire.
 		If you like melted metal, it could be a fun stop on your visit.
 		[goto: l_power2]
-	> [! Global stat: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
-		[Global add_stat: armstrong/discussed/capacitor_export]
+	> [! stat?: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
+		[+stat: armstrong/discussed/capacitor_export]
 		I would assume so. Maybe they are good for big power grids or labs, but I do not get news of such things.
 		[goto: l_power2]
 	> Well, I suppose that all makes sense.
 		Clear as mud, yes?
-		[Global add_stat: armstrong/discussed/capacitor_scrap]
-> [! Global stat: armstrong/discussed/medium][Global stat: mum/true_talked] Why do people around here not care about the Medium?
+		[+stat: armstrong/discussed/capacitor_scrap]
+> [! stat?: armstrong/discussed/medium][stat?: mum/true_talked] Why do people around here not care about the Medium?
 	You -- It's such an incredible piece of technology, but it was just sitting here in disrepair for years.
 	Well, it is merely a reflection of our minds. It tells us what we already thought.
 	You -- It's more powerful than you're giving it credit. The Medium has been doing much more than simply reflecting my biases back at me.
@@ -211,7 +211,7 @@
 	You -- I'm capable of sorting its guesswork from the truth. As I learn more, I can simply ask questions again.
 	Ergh, if you say so...
 	Just remember it is a very good storyteller, not a psychic.
-	[Global add_stat: armstrong/discussed/medium]
+	[+stat: armstrong/discussed/medium]
 > See you.
 	Take care, Jackie.
 	[exit]
@@ -221,7 +221,7 @@
 /// ITEMS
 
 :item(wep_pistol) :- !main_speaker.in_tutorial()
-[! Global stat: armstrong/pistol]
+[! stat?: armstrong/pistol]
 	You -- A young woman gave me this pistol.
 	Wow, this is from a Vaeler officer! Quite the gift! Who gave it to you? Why?
 	You -- Her name is Riley. She was being harassed by those flying spectres, so she lent me her pistol to deal with them.
@@ -232,7 +232,7 @@
 		You -- Uh, maybe I should ask her...
 		Well yes, obviously! She should not be without a firearm if she's out exploring the desert.
 	Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
-	[Global add_stat: armstrong/pistol]
+	[+stat: armstrong/pistol]
 {otherwise}
 	You -- Say, remember when you offered to show me how to use my pistol?
 	Right, did you want me to give you an introduction?
@@ -303,7 +303,7 @@ Thanks. It was hard for a while, but this is a hard place. You get used to such 
 
 :note(the_tree_tower)
 :note(riley) :- Global.stat("riley/saved")
-[Global stat: riley/_entry113/saved]
+[stat?: riley/_entry113/saved]
 	You -- I met a young woman named Riley up by the tower. She seemed to be some sort of explorer.
 {otherwise}
 	You -- I met a young woman named Riley. She seemed to be some sort of explorer.
@@ -324,7 +324,7 @@ Thanks. It was hard for a while, but this is a hard place. You get used to such 
 :note(hideaway)
 You -- Have you lived in this village your whole life?
 I lived up on the cliffs to the east of here when I was younger, but it got too dangerous with the specters, especially after my father died.
-[! Global stat: armstrong/parents]
+[! stat?: armstrong/parents]
 	You -- Your father died? I'm terribly sorry to hear that. Was it the spectres?
 	No, no. It was simply his time, and he died from illness. My mother went about ten years later. That was, oh, six years ago or so.
 	[note: armstrong/parents | Armstrong's parents died of illness. His father when he was eight, and his mother when he was eighteen. He doesn't seem terribly upset, but perhaps he's putting up a strong front. |+ armstrong]
@@ -338,7 +338,7 @@ It is, but it might have just been a story to keep us out. It did not, of course
 [back]
 
 :_entry_ending
-[! Global stat: armstrong/discussed/ending]
+[! stat?: armstrong/discussed/ending]
 	Are you sure it is safe for you to travel? Not shook too bad or anything?
 	> I'm fine.
 		Are you sure?
@@ -349,7 +349,7 @@ It is, but it might have just been a story to keep us out. It did not, of course
 	You can always catch the next train. No trouble taking some time to process things.
 	You -- ... I suppose not.
 	And if you're staying around, I'll be in town if you need anything! I can even join you back here and see you off when you really go.
-	[Global add_stat: armstrong/discussed/ending]
+	[+stat: armstrong/discussed/ending]
 {otherwise}
 	Heading out?
 	You -- Perhaps.

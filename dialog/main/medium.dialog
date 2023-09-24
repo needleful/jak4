@@ -1,5 +1,5 @@
 :_start
-[! Global stat: medium/activated]
+[! stat?: medium/activated]
 	* You've read about this.
 	* To activate the medium, you just sit in the chair.
 	* Do you want to activate the Medium?
@@ -8,7 +8,7 @@
 			* ...
 			* Nothing seems to happen.
 			You -- Drat! Maybe I need to talk with Armstrong again. Perhaps we-
-			[Global stat: mum/info]
+			[stat?: mum/info]
 				[main_speaker activate]
 				[mention: activated]
 				You -- ...
@@ -18,14 +18,14 @@
 
 	> [skip] (No)
 		[exit]
-* {otherwise}[Global stat: mum/end] The Medium is eerily silent.
+* {otherwise}[stat?: mum/end] The Medium is eerily silent.
 	> Hello?
 		* There is no response.
 	> [skip] (Leave)
 	[exit]
 {otherwise}
 	[main_speaker sit]
-	[Global stat: mum/info]
+	[stat?: mum/info]
 		[mention: activated]
 		[main_speaker activate]
 	{otherwise}
@@ -46,7 +46,7 @@
 	// caves - she was fond of caves and frequently explored them
 // Should I enumerate how Jackie's state of mind changes? How does that affect the AI? The Medium canonically accounts for it, but does it do so perfectly?
 
-[! Global stat: mum/introvert][! Global stat: mum/intensity]
+[! stat?: mum/introvert][! stat?: mum/intensity]
 	// Special case when she has no personality, she just reflects Jackie's own personality and her preconceptions.
 	[mention: head_empty]
 
@@ -54,9 +54,9 @@
 [mention: mum]
 * You hear something behind you.
 * ...
-[! Global stat: mum/introduction]
-	[! Global stat: mum/info]
-		[! Global stat: mum/appearance]
+[! stat?: mum/introduction]
+	[! stat?: mum/info]
+		[! stat?: mum/appearance]
 			* The ghost stares blankly
 		{otherwise}
 			* Your mother looks at you blankly.
@@ -68,50 +68,50 @@
 		You -- Can I ask you a few questions?
 		Questions?
 	{otherwise}
-		[Global stat: mum/intensity]Who are you?
+		[stat?: mum/intensity]Who are you?
 		{otherwise} ... Do I know you?
 		You -- Hi Mum.
 			It's me, Jackie. Jacqueline.
-		[Global stat: mum/intensity] What? That's nonsense. Where am I?
+		[stat?: mum/intensity] What? That's nonsense. Where am I?
 		{otherwise} Jacqueline? But she is just... where are we?
 		You -- The Medium.
 		Someone got that old thing working again?
 		...
 		Oh.
-		[Global stat: mum/huh] Huh.
+		[stat?: mum/huh] Huh.
 		{otherwise} Oh...
-		[Global add_stat: mum/introduction]
-		[Global add_stat: mum/true_talked]
+		[+stat: mum/introduction]
+		[+stat: mum/true_talked]
 
-		[Global stat: mum/intensity] I died, then?
+		[stat?: mum/intensity] I died, then?
 		{otherwise}.... What happened to me, then?
 		
-		[Global stat: jackie/ambivalent]
+		[stat?: jackie/ambivalent]
 			You -- I don't know. You left when I was born and never came back.
-			[Global stat: mum/intensity] You don't know? So I might be alive?
+			[stat?: mum/intensity] You don't know? So I might be alive?
 			{otherwise} Oh.  I could still be alive, then?
 			You -- ...
 		{otherwise}
 			You -- We uh, don't know. You went missing.
-			[Global stat: mum/intensity] You don't know? So I might be alive?
+			[stat?: mum/intensity] You don't know? So I might be alive?
 			{otherwise} Oh.  I could still be alive, then?
 			You -- It's possible.
-		[Global stat: mum/intensity] So you came here for help finding her?
+		[stat?: mum/intensity] So you came here for help finding her?
 		{otherwise} So you came here to find out what happened to me? Or, well, your mother?
 		> Yes.
-			[Global add_stat: mum/seek]
+			[+stat: mum/seek]
 			You -- If there's anyone who would know what happened to you, it would be the very person I'm looking for.
-			[Global stat: mum/intensity] You do realize the Medium is just a memory, don't you? 
+			[stat?: mum/intensity] You do realize the Medium is just a memory, don't you? 
 			{otherwise} Oh, Jackie... You understand how the Medium works, do you not? I am just a memory.
 			You -- Of course I do. It scans the user's brain and constructs an AI to match their understanding of the subject. But it's so much more than a memory...
 				From what I understand, the Medium is capable of correcting for deficiencies in memory. It not only knows what I know, but it knows how my mind distorts information.
 				And they connect with a network of computing machines to track information about the world and use that to further aide in reconstructing a subject.
 				It's not magic, but it's an immensely powerful data processor.
-			[Global stat: mum/intensity] Do you really think you'll learn anything from me that you couldn't on your own?
+			[stat?: mum/intensity] Do you really think you'll learn anything from me that you couldn't on your own?
 			{otherwise} You seem to know what you are talking about. But do you really think I can provide what you could not learn on your own?
 			You -- I'm confident you can.
-			[Global stat: mum/intensity]
-				[Global stat: mum/huh] Hm. I think you trust this machine too much, but fine.
+			[stat?: mum/intensity]
+				[stat?: mum/huh] Hm. I think you trust this machine too much, but fine.
 				{otherwise} I think you trust this machine too much, but fine.
 				What sort of things did you want to ask about?
 			{otherwise}
@@ -119,7 +119,7 @@
 		> No.
 			You -- I mean, I don't expect I'll be able to. I just...
 				Father never talked about you. I didn't even know you existed until I was almost thirteen.
-			[Global stat: mum/abandon]
+			[stat?: mum/abandon]
 				I see. So you wanted to learn about this part of you?
 				You -- I suppose so.
 				// TODO: expand this
@@ -134,14 +134,14 @@
 					[event: end_hug | #false]
 				What do you want to talk about?
 	[goto: main_segment]
-{otherwise}[! Global stat: mum/time]
+{otherwise}[! stat?: mum/time]
 	Hm? Did you forget something?
 	{seconds_since_conversation() > 200}
 		You -- What do you mean?
 		You sounded like you were leaving.
 		You -- I... did leave? I was gone for some time.
 		No. You left, and then...
-		[Global stat: mum/huh] ... Huh.
+		[stat?: mum/huh] ... Huh.
 		{otherwise} ...
 		You -- Is something wrong?
 		No. It's nothing. Just my memory failing me for a moment. Did you want to talk?
@@ -153,7 +153,7 @@
 	{otherwise}
 		You -- Yeah, I guess I wanted to ask about some more stuff.
 	[goto: main_segment]
-{otherwise}[! Global stat: mum/discussed/jackie][! mentioned: head_empty] {Global.stat("mum/discussed") > 2}
+{otherwise}[! stat?: mum/discussed/jackie][! mentioned: head_empty] {Global.stat("mum/discussed") > 2}
 	You know, Jackie. I've told you a bit about myself.
 	But I'd like to know more about you.
 	You -- You would? What sort of things?
@@ -175,21 +175,21 @@
 			In my childhood, they told me she was my mother.
 			I was probably 12 when they finally told me about you.
 			I wasn't terribly surprised.
-	[Global add_stat: mum/discussed/jackie]
+	[+stat: mum/discussed/jackie]
 	[goto: main_segment]
 {otherwise}{Global.stat("mum/timebomb") < 2 or (Global.stat("mum/timebomb") < 5 and Global.stat("mum/info") <= 7)}
-	[Global stat: mum/network]{Global.stat("mum/info") >= 3}
-		[Global add_stat: mum/timebomb]
+	[stat?: mum/network]{Global.stat("mum/info") >= 3}
+		[+stat: mum/timebomb]
 	You -- Hi Mum.
 	Hello again, Jackie. Did you need something?
 	[goto: main_segment]
-{otherwise}[! Global stat: mum/end]
+{otherwise}[! stat?: mum/end]
 	[mentioned: main_area]
-		[Global stat: mum/discussed/real_mum_found]
+		[stat?: mum/discussed/real_mum_found]
 			You -- Mum! Where is she? Can you tell me?
 			...
 			You -- Mum?
-		{otherwise}[Global stat: mum/discussed/go_to_medium]
+		{otherwise}[stat?: mum/discussed/go_to_medium]
 			You -- Mum, what did you need to tell me? It sounded urgent.
 			...
 			You -- Mum? ...Is it that serious?
@@ -207,21 +207,21 @@
 		* She does not respond.
 		You -- I've never seen that thing before...
 	{otherwise}
-		[! Global stat: mum/discussed/go_to_medium]
+		[! stat?: mum/discussed/go_to_medium]
 			You -- Hello again, mum.
-			[Global stat: mum/seek]
+			[stat?: mum/seek]
 				Jackie. I'm still alive. The real me. 
 				You -- What? Where? How do you know?
 				She might be in danger. We can't talk through these networks.
 				Come back to the Medium and I can tell you more there.
-				[Global add_stat: mum/discussed/real_mum_found]
+				[+stat: mum/discussed/real_mum_found]
 			{otherwise}
 				Jackie. I need you to do me a favor.
 				You -- You do?
 				Yes. I need you to talk with me at the Medium. I've learned something very important, but we need more privacy to discuss it.
 				You -- Privacy? From whom?
 				You will have to see.
-			[Global add_stat: mum/discussed/go_to_medium]
+			[+stat: mum/discussed/go_to_medium]
 			[goto: _exit]
 		{otherwise}
 			Jackie. Do you remember what I said? We need to talk inside the Medium. It's very important.
@@ -232,7 +232,7 @@
 [mention: activated]
 [mention: mum]
 [main_speaker activate: primordial]
-[! Global stat: mum/info_needed]
+[! stat?: mum/info_needed]
 	You -- --!
 		W-what is this? Wh-
 	* The thing in front of you
@@ -264,7 +264,7 @@
 :main_segment
 > I'll see you later, mum.
 	[mentioned: head_empty] See you later.
-	{otherwise}[Global stat: mum/intensity] Goodbye.
+	{otherwise}[stat?: mum/intensity] Goodbye.
 	{otherwise} Until next time, Jackie.
 [goto: _exit]
 
@@ -274,22 +274,22 @@
 
 :_network
 [mention: network]
-[Global stat: mum/info]
-	[Global stat: mum/network]
+[stat?: mum/info]
+	[stat?: mum/network]
 		[goto: _start]
 	{otherwise}
 		[note: mum/network | Mum can apparently travel between different machines throughout the region. |+ mum]
 		You -- M-mum?! What are you doing here?
-		[Global stat: mum/huh] Huh? I don't know? What is this?
+		[stat?: mum/huh] Huh? I don't know? What is this?
 		{otherwise}I don't know? What is this?
 		[mentioned: network054] [Global task_exists: lost_phone]
 			You -- This place is inside a cave. I was helping a woman who dropped her phone and found myself stuck down here.
 			Did you find the phone?
-			[Global add_stat: mum/discussed/phone]
+			[+stat: mum/discussed/phone]
 			[Global count: dropped_phone]
 				You -- I think so? I believe it's this little black bar.
 				[mentioned: head_empty]... Yes honey, that's what phones are.
-				?> [!Global stat: mum/knows_phones] How do you know what a phone is?
+				?> [!stat?: mum/knows_phones] How do you know what a phone is?
 					[subtopic: knows_phones]
 					[back]
 				{otherwise} Yes. That's a phone.
@@ -305,7 +305,7 @@
 				[mention: network_knowledge]What, you think it bounced up through the cave, unlocked the door, and made its way up here? Clearly it would be at the entrance, still.
 				You -- Wait, how...
 			You -- Alright Mum, we're getting side-tracked. My question for you is, how are you here? Does this building connect to the Medium somehow?
-			[Global stat: mum/huh] Huh... That is the only explanation, I think.
+			[stat?: mum/huh] Huh... That is the only explanation, I think.
 			{otherwise}I think... that is the only explanation.
 		{otherwise}
 			You -- I stumbled onto this strange facility. It must connect to the Medium somehow.
@@ -323,7 +323,7 @@
 ?answer> That's not an answer, Mum.
 	I'm not sure, exactly. I can remember people using them in town, but clearly...
 	[back]
-[Global add_stat: medium/doubt]
+[+stat: medium/doubt]
 [note: mum/knows_phones | Mum has knowledge of the outside world that I don't fully understand, like these strange “phones” everyone has. I don't fully understand how the Medium pulls this knowledge, and Mum doesn't either. |+ mum]
 [forget: answer]
 [back]
@@ -335,13 +335,13 @@
 You -- What was the war like?
 {Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
 {otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
-[Global stat: mum/curiosity]
+[stat?: mum/curiosity]
 	I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
 	They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
 The war was like a flood. I had no idea what the politics leading up to the invasion were like.
 It was just: one day, they were ghosts. The next, their soldiers were coming off trains by the thousands.
 
-[Global stat: mum/plateau]
+[stat?: mum/plateau]
 	We were safe up on the plateau at first. The path up from the tracks was too difficult for their horses and artillery, especially once the bridges were demolished. But that left us trapped above the bloodshed.
 	For several weeks, we just lived life like normal.
 	I can't describe the emotions I was feeling at the time. A sort of numb horror. It felt surreal.
@@ -349,17 +349,17 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 	The news started getting worse. The Vaelers brought in stronger cannons to demolish defensive positions from the base of the plateau.
 	They fought their way up to the north village and turned it into their base of operations for the plateau.
 	// Why does the Medium tell us this?
-	[! Global stat: mum/crab_hill][Global stat: mum/caves]
+	[! stat?: mum/crab_hill][stat?: mum/caves]
 		...
 		When I was a child, I found a cave on the side of the plateau. There's a few well-known caves, but this one was near the very highest point on the plateau, just below the ledge of a small village.
 		I remember thinking, “Maybe we can sneak our way into that cave and come out somewhere safe.” But I don't know. The caves in the area are often more dangerous than soldiers, and I assume Vaelers were already in the gulch when I was imagining this, ready to cut us off.
 	I don't think there was ever a way we could escape...
 	The Vaelers made short work of the few soldiers still in the village. The rest of us were made subjects of Vaeland's new provincial government, “liberated” from our “corrupt” parliament.
-	[Global stat: mum/account/orstad]
+	[stat?: mum/account/orstad]
 		You -- How did you survive? Orstad said you were shot.
 		// TODO: who knows why Jackie's mum survived? Does anyone?
 		// What if the Medium implants a false memory of Mum having a limp? Jackie has such a vague memory of her that it could work.
-		[Global add_stat: mum/limp] I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
+		[+stat: mum/limp] I was shot in the leg. It's why I had a limp, if you can remember from so long ago.
 		I don't think the soldiers were intending to kill me. I was just a young girl at the time.
 		// TODO: research life in cities taken over by invading forces
 		// Maybe somebody else saved Mum? Who would know?
@@ -368,36 +368,36 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 	Our village was one of the first caught up in the combat. We were overwhelmed in hardly a day.
 	I was lucky to escape unnoticed in the chaos. But my family...
 
-[Global stat: mum/crab_hill]
+[stat?: mum/crab_hill]
 	You -- How did you find your way to Crab Hill?
-	[! Global stat: mum/plateau]
+	[! stat?: mum/plateau]
 		Our village was at the base of Crab Hill. It was quite difficult, but I was able to scale the wall into the city while the Vaelers were still fighting their way across the valley.
-		[Global add_stat: mum/near_crab_hill]
+		[+stat: mum/near_crab_hill]
 	{otherwise}
 		There were only two ways down the plateau without crossing the Vaelers' path: down the cliffs, or through the caves, if you could reach them.
 		I imagine most people attempted the cliffs, but for me, the caves were the obvious choice.
 		There's a village on the cliff overlooking the gulch, and on the side of the cliffs is a small entrance into the cave network.
 		The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
 		It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
-		[Global add_stat: mum/caves]
-[Global add_stat: mum/discussed]
-[Global add_stat: mum/discussed/war]
+		[+stat: mum/caves]
+[+stat: mum/discussed]
+[+stat: mum/discussed/war]
 [back]
 [goto: _exit]
 
 // EVENTS
 :note(jackie/flaws)
 You -- If you had to describe your most major flaw, what do you think it would be?
-[Global stat: mum/timebomb]
+[stat?: mum/timebomb]
 	Hm... I don't know. I have many flaws, it's hard to choose just one.
 	[exit]
-{otherwise}[Global stat: mum/killer]
+{otherwise}[stat?: mum/killer]
 	I've been told I can be too harsh. I don't know if that's a flaw with me, or the people around me, but I'll say that.
-{otherwise}[Global stat: mum/intensity]
+{otherwise}[stat?: mum/intensity]
 	Sometimes I can take things too serious, perhaps.
-{otherwise}[Global stat: mum/introvert]
+{otherwise}[stat?: mum/introvert]
 	I worry sometimes that I'm too cold, or don't connect with people well enough.
-{otherwise}[Global stat: mum/war]
+{otherwise}[stat?: mum/war]
 	I think sometimes I'm too hesitant to act.
 {otherwise}
 	Hm... I'm not sure. Perhaps that's my flaw: indecision.
@@ -434,7 +434,7 @@ Why do you ask?
 
 :note(info/mail_stealing)
 You -- Have you heard anything about mail being frequently stolen?
-[Global stat: info/mail_stealing/contradicted]
+[stat?: info/mail_stealing/contradicted]
 	No. Rarely it happens, but I never had mail stolen. Who told you that?
 {otherwise}
 	Oh yes, it's quite an issue.
@@ -450,32 +450,32 @@ They barely speak Yaqazi.
 
 :note(visited/large_cave_085) :- Global.stat("mum/info")
 You -- I found an enormous cavern with ancient structures under the plateau!
-[Global stat: mum/caves]
+[stat?: mum/caves]
 	Could you tell what it was for?
-	[! Global stat: ancient/info/caves]
+	[! stat?: ancient/info/caves]
 		You -- I wasn't expecting that question.
 		Over the years, people have found many strange ruins in the caves. The mystery is always “why did they build such things?”
 		Sometimes it is easier to divine a purpose for it, but others are confusing.
-		[Global add_stat: ancient/info/caves]
-	[Global stat: visited/graveyard_085]
+		[+stat: ancient/info/caves]
+	[stat?: visited/graveyard_085]
 		You -- Well, I found what I can only assume is a graveyard at the very end.
 			The rest of the structures appeared to be living quarters and associated infrastructure.
 			So I would assume it was a subterranean city or settlement of some sort.
 		You think they lived down there?
 		You -- I don't know... Perhaps they were ancient miners, or researchers?
-		[Global stat: mum/huh] Mhm. They are always so strange... More questions than answers.
+		[stat?: mum/huh] Mhm. They are always so strange... More questions than answers.
 		{otherwise} They are always so strange... More questions than answers.
-		[Global add_stat: mum/discussed/graveyard_085]
+		[+stat: mum/discussed/graveyard_085]
 	{otherwise}
 		You -- It was quite a large structure with many pieces, but I couldn't quite tell you what it was for.
 		Well, such is the way of things. Those ancient societies are often opaque to us.
 {otherwise}
-	[Global stat: mum/huh] Hm, you did? I've heard stories of such structures underground, but never saw one for myself.
+	[stat?: mum/huh] Hm, you did? I've heard stories of such structures underground, but never saw one for myself.
 	{otherwise} You did? I've heard stories of such structures underground, but never saw one for myself.
 	Those caves are quite dangerous, you know..
 	You -- It can be a tricky climb, but not too much trouble.
 	I'm more worried about you getting lost down there than stuck. They can be quite the labyrinths...
-[Global add_stat: mum/discussed/large_cave_085]
+[+stat: mum/discussed/large_cave_085]
 [back]
 
 :note(visited/graveyard_085) :- Global.stat("mum/info")
@@ -485,18 +485,18 @@ You -- I found an enormous cavern with ancient structures under the plateau!
 	You -- I found what I believe is an ancient graveyard in one of those massive caves.
 You -- The rest of the structures appeared to be living quarters and associated infrastructure.
 	So I would assume it was a subterranean city or settlement of some sort.
-[Global stat: mum/huh] Huh. A graveyard? You think they lived down there?
+[stat?: mum/huh] Huh. A graveyard? You think they lived down there?
 {otherwise} A graveyard? You think they lived down there?
 You -- I don't know... Perhaps they were ancient miners, or researchers?
 They are always so strange... More questions than answers.
-[Global add_stat: mum/discussed/graveyard_085]
+[+stat: mum/discussed/graveyard_085]
 [back]
 
 // PEOPLE
 :note(orstad) :- Global.stat("orstad/mum") and Global.stat("mum/info")
 You -- Do you remember Orstad?
 // You can probably find information indicating she knew him?
-[Global stat: mum/abandon]
+[stat?: mum/abandon]
 	I can't recall any Orstads. 
 	You -- He said he'd seen you when you were teenagers.
 	Girls our age weren't supposed to mingle with boys.
@@ -505,7 +505,7 @@ You -- Do you remember Orstad?
 	You -- He said he knew you before the war, though he hadn't talked much with you.
 	// TODO: expand here, maybe she has some opinion on him
 	I probably saw him before. Girls weren't supposed to mingle with the boys until we were older, though.
-[Global add_stat: mum/discussed/orstad]
+[+stat: mum/discussed/orstad]
 [back]
 
 :note(balter) :- Global.stat("balter/mum") and Global.stat("mum/info")
@@ -519,8 +519,8 @@ We lived with a few other families in a crowded apartment on Crab Hill.
 You -- How did you meet my father?
 // TODO: big expand
 I don't know...
-[Global add_stat: mum/discussed]
-[Global add_stat: mum/discussed/father]
+[+stat: mum/discussed]
+[+stat: mum/discussed/father]
 [back]
 [goto: _exit]
 
@@ -537,8 +537,8 @@ I didn't even realize I was in a different place at first.
 I just blinked and you were back. I had some sense the room was different.
 You -- Perhaps you're a duplicate of the original?
 ...
-[Global add_stat: mum/discussed]
-[Global add_stat: mum/discussed/network]
+[+stat: mum/discussed]
+[+stat: mum/discussed/network]
 [back]
 
 :note(mum/time) :- Global.stat("mum/timebomb") > 2 and Global.stat("mum/info")
@@ -550,7 +550,7 @@ You -- ...
 // TODO: can the player choose to press further?
 // What's Mum's motivation for not talking about this?
 // Cynicism: she doesn't think Jackie would help her.
-[Global add_stat: mum/discussed/time]
+[+stat: mum/discussed/time]
 [back]
 
 :note(mum/left) :- Global.stat("mum/info")
@@ -562,14 +562,14 @@ You --  Why did you leave?
 	// She needed to find someone
 	// There was some unknown conflict between Tara and Jackie's dad
 	// terminal illness? But why leave?
-[Global stat: mum/soldier][Global stat: mum/introvert]
+[stat?: mum/soldier][stat?: mum/introvert]
 	Vaeland was like a poison to me. The people, the noise, the air...
 	I fought to keep their world out of Yaqaz and then I plunged into it. I could not adjust to their lifestyle, their social orders, their callousness...
 	Especially not on top of raising a child. I didn't want you becoming like those I saw around me, but how could I stop it?
 	I wanted more than anything to bring you back to Yaqaz with me, but I knew your father would come find me if I did.
 	If I left, that only hurt my reputation. If his daughter disappeared and he did nothing, imagine how badly that would reflect on him.
 	I hoped that I could try again, and maybe have a family in a place I felt was home.
-{otherwise}[Global stat: mum/soldier]
+{otherwise}[stat?: mum/soldier]
 	I couldn't handle Vaeland anymore. Not after everything I'd seen them do to my home.
 	I thought I could be strong and push past it at first. But seeing all those Vaelers, day in and day out...
 	And worse still, I was treated like a curiosity! None of them saw what their soldiers had done, they just saw this strange little woman they wanted to poke and prod about her strange ways and her strange customs. Such ignorance. Apathy...
@@ -582,21 +582,21 @@ You --  Why did you leave?
 	You -- I understand. That's what I'd always imagined...
 	* Almost word for word, in fact.
 
-[Global add_stat: mum/discussed]
-[Global add_stat: mum/discussed/leaving]
+[+stat: mum/discussed]
+[+stat: mum/discussed/leaving]
 [back]
 [goto: _exit]
 
 // TASKS
 // ITEMS
 :item(dropped_phone)
-[Global stat: mum/discussed/phone/owner]
+[stat?: mum/discussed/phone/owner]
 	You -- I still don't understand this contraption.
 	[mentioned: head_empty] You really should return that.
 	{otherwise} Are you keeping it?
 		You -- What would I do with it? I already have a phone at home.
 	[back]
-[Global stat: mum/discussed/phone]
+[stat?: mum/discussed/phone]
 	You -- I still don't understand this odd machine.
 	You make calls with it. Do you know whose it is?
 {otherwise}[Global task_exists: lost_phone]
@@ -605,7 +605,7 @@ You --  Why did you leave?
 {otherwise}
 	You -- I found this odd artefact in a cavern.
 	A cell phone? Do you know whose it is?
-	?phone> [!Global stat: mum/knows_phones] How do you know what it is?
+	?phone> [!stat?: mum/knows_phones] How do you know what it is?
 		[subtopic: knows_phones]
 		[back]
 	You -- A “cell phone”? 
@@ -615,24 +615,24 @@ Press the power button... It's the center one, near the bottom.
 // TODO: animations maybe but low priority
 You -- Can you read it?
 Yes. It's “Kolira.” No one I'm familiar with.
-[Global add_stat: mum/discussed/phone]
-[Global add_stat: mum/discussed/phone/owner]
+[+stat: mum/discussed/phone]
+[+stat: mum/discussed/phone/owner]
 [forget: phone]
 [back]
 
 :item(tablet_key)
 You -- I found this odd artefact.
-[Global stat: mum/discussed/phone]
+[stat?: mum/discussed/phone]
 	You -- Is it another “cell phone” everyone's so obsessed with?
 	No, no.
 Let me get a good look.
 // TODO: reuse the phone animations
 ... I believe this is some sort of key.
-[Global stat: eye_tablet/used]
+[stat?: eye_tablet/used]
 	You -- I've used it as such. I'm not sure what all it unlocks.
 {otherwise}
 	You -- Do you know what it unlocks?
-[Global stat: mum/cave]
+[stat?: mum/cave]
 	I don't know where exactly, but look at this symbol here, in the center.
 	You'll see a matching symbol next to the doors it unlocks. The door will open for you if you're holding it.
 [back]
@@ -641,7 +641,7 @@ Let me get a good look.
 You -- I found this lovely little scooter!
 // TODO: make sure this stays consistent! Currently the player can get a hover scooter next to the photo of Mum
 // If new ways to get appearance are added, make it some other variable
-[Global stat: mum/appearance]
+[stat?: mum/appearance]
 	[mention: empty_headed] I rode one as a child! They're so exciting, aren't they?
 	{otherwise} I had one as a girl. How do you like it?
 	> I quite like riding it around!
@@ -649,7 +649,7 @@ You -- I found this lovely little scooter!
 	> It's hard to use on hills.
 		You just need to pick and choose the right slopes to ride.
 		Once you get into a groove, it's quite fast. Unless you're going straight up a hill. 
-	[Global stat: mum/timebomb] I'm a little jealous, honestly.
+	[stat?: mum/timebomb] I'm a little jealous, honestly.
 [back]
 
 :item(lantern)
@@ -674,7 +674,7 @@ You -- A woman asked me to deliver this letter.
 	You -- Well, why else would I do anything?
 > It's a rather odd thing, isn't it? I don't know why she needed me to deliver it.
 	Yes, I'm not sure why she'd ask a foreigner to deliver her mail.
-> [Global stat: yomi/rude] She was rather rude to me, though I'm not sure she meant it.
+> [stat?: yomi/rude] She was rather rude to me, though I'm not sure she meant it.
 	What did she say?
 	You -- She said I must be “younger than I look”.
 	Ouch.
@@ -712,7 +712,7 @@ Interesting.
 
 :_exit
 [mentioned: mum]
-	[Global add_stat: talked/mum]
+	[+stat: talked/mum]
 [mentioned: activated]
 	[track_conversation_time]
 	[main_speaker exit]

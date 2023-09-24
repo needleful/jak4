@@ -14,6 +14,12 @@ var r_whitespace := RegEx.new()
 var r_expression := RegEx.new()
 var r_sq_expression := RegEx.new()
 var r_context_reply := RegEx.new()
+var r_special_replace := RegEx.new()
+
+var special_functions := {
+	"+stat" : "Global.add_stat",
+	"stat?" : "Global.stat"
+}
 
 func _init():
 	r_comment.compile("^\\s*//")
@@ -26,6 +32,7 @@ func _init():
 	r_context_reply.compile("^\\s*\\?([a-zA-Z0-9_/]*)>")
 	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
+	r_special_replace.compile("\\$([a-zA-Z_]+)\\b")
 
 func get_importer_name():
 	return "np.dialog"
@@ -209,6 +216,10 @@ func extract_expressions(line: String) -> Dictionary:
 			continue
 		
 		var ex : String = rm.get_string(1)
+		for rvar in r_special_replace.search_all(ex):
+			ex = ex.replace(
+				rvar.get_string(),
+				"variables[\"%s\"]" % rvar.get_string(1))
 		dict.line = dict.line.replace(s, "")
 		line_no_expressions = dict.line
 		dict.conditions.append(ex)
@@ -226,6 +237,8 @@ func extract_expressions(line: String) -> Dictionary:
 
 		var slot := ""
 		for f in func_str.split(" ", false):
+			if f in special_functions:
+				f = special_functions[f]
 			if slot != "" and slot != "!":
 				slot += "."
 			slot += f.strip_edges()
@@ -257,14 +270,17 @@ func extract_expressions(line: String) -> Dictionary:
 		var sqex := slot + message
 		dict.conditions.append(sqex)
 		dict.line = dict.line.replace(rm.get_string(), "")
-		#print_debug(rm.get_string(), " --> ", sqex)
-
 	return dict
 
 func sq_argument(arg: String) -> String:
 	var s := arg.strip_edges()
 	if s.begins_with("#"):
 		return s.substr(1)
+	var m := r_special_replace.search(s)
+	if m:
+		return s.replace(
+			m.get_string(),
+			"variables[\"%s\"]" % m.get_string(1))
 	else:
 		return '"' + s.replace('"', '\\"') + '"'
 

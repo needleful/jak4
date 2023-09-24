@@ -16,7 +16,7 @@
 	Oh no no. Not that... I think so?
 > Can I buy things from you directly? Or do sell to some sort of hardware store?
 	Eh, I do not know. I would ask the bossman. At the top of the building, in the office.
-> [Global stat: need_capacitors] Do you have any spare capacitors? I imagine you use a lot of electricity.
+> [stat?: need_capacitors] Do you have any spare capacitors? I imagine you use a lot of electricity.
 	I am not much of an electrician. I would ask the bossman, in the office at the top of the foundry.
 > This is an impressive building. When was it built?
 	Bossman had a small foundry at Crab Hill, selling copper wire he pulled himself.
@@ -27,14 +27,14 @@
 [goto: main_loop]
 
 :_entry_capacitor
-[Global stat: need_capacitors]
-	[Global stat: foundry/arc_furnace]
+[stat?: need_capacitors]
+	[stat?: foundry/arc_furnace]
 		You -- Hello again.
 		Hi.
 		You -- You said I could buy a capacitor from the foreman, correct?
 		If we have any surplus, you would ask him. At his office above the whole foundry.
 	{otherwise}
-		[Global add_stat: foundry/arc_furnace]
+		[+stat: foundry/arc_furnace]
 		You -- Excuse me, sir! Are those capacitors?
 		Hm? These? Eh, yes.
 		You -- Would you be able to lend me one?

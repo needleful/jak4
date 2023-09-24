@@ -8,19 +8,19 @@
 	You -- I think I have those.
 		...
 		Uh, I'll probably find them at some point.
-	Well, as long as we fill them out before you leave, I think it'll be fine.
+	Well, as long as I have them before you leave, it will be fine.
 	...
 	You -- What happens if you don't fill them out?
-	They send more papers to fill out.
+	They send more papers.
 	You -- My condolences.
-{otherwise}[Global stat: talked/mum] [! Global stat: landlord/discussed/mum]
-	Say, if you do not mind me prying, who did you talk with in there?
+{otherwise}[stat?: talked/mum] [! stat?: landlord/discussed/mum]
+	Say, if you do not mind me prying, who did you talk to with the Medium?
 	> Uh, sorry, I can't get into it right now.
 		Oh, no worries! Eh, enjoy the lodgings!
 	> My mother.
 		Oh. I understand. You must miss her terribly.
 		> [skip] Honestly, no.
-			You -- [Global add_stat: jackie/ambivalent] Honestly, no. I didn't know her well enough to miss her, per se. It's more...
+			You -- [+stat: jackie/ambivalent] Honestly, no. I didn't know her well enough to miss her, per se. It's more...
 			> [skip] Anger
 				You -- Anger. Or, frustration, I suppose. I know so little about her. She left behind no photographs, no letters, no family or friends besides my father. I'm not even certain she died.
 				You're not?
@@ -41,7 +41,7 @@
 				You don't?
 				You -- No. She left after I was born, and nobody could ever contact her again, so we assume as much.
 				> [skip] I hope she died.
-					You -- [Global add_stat: jackie/ambivalent]I h--
+					You -- [+stat: jackie/ambivalent]I h--
 					You -- .... 
 					You -- I have to go, sorry.
 				> I hope I can get more answers from the Medium.
@@ -50,7 +50,7 @@
 			> When I was very young. Just a baby.
 				I'm sure she would have wished to see you now. That she left so soon is an tragedy for both of you.
 				You -- ... it is.
-	[Global add_stat: landlord/discussed/mum]
+	[+stat: landlord/discussed/mum]
 {otherwise}
 	Did you need anything?
 	You -- Not right now, thanks.
@@ -113,4 +113,45 @@ Oh, I see it's important. It is the white building in town. Impossible to miss.
 Talk to Armstrong, he is at the machine now.
 [remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] 
 You -- Excellent. I'll talk to him.
+[exit]
+
+:note(jackie)
+You -- Do you often host foreigners like me?
+Not foreigners, no.  I hosted visitors from another province about, eh, two years ago.
+You -- Does the Medium not get visitors?
+Not so much, no. It is just your memories.
+[back]
+
+:note(mum)
+You -- Did you get along with your parents?
+Hm... One of my earliest memories is the smell of my mother's tea. She always added orange rinds.
+I haven't made orange tea in years... Perhaps I can make some before you leave, if anyone brings oranges into town.
+// TODO: it would be sweet if he made tea because of this
+[note: host/tea | He's offered to make me some orange tea before I go, if he can find some oranges. |+ host] 
+[back]
+
+:note(host/tea)
+You -- Did you ever make that orange tea you mentioned?
+Not yet. Nobody's selling oranges in town. I will let you know if I find any.
+[back]
+
+:tea
+* The landlord grates off the outer layers of the orange rind into a little pile, then cuts the orange into quarters and removes the rind in chunks.
+* He puts the orange zest and the rinds into his tea pot, along with black tea leaves.
+* He pours boiling water over the mixture and lets it steep for about ten minutes.
+Oranges were a special occasion when I was a boy. The do not grow in the province, and they are expensive at the markets. But my mother loved them, and whenever we could, we would buy her one.
+* He pours you a cup. The liquid is golden brown, with orange flecks floating about, and a thin layer of oil on the top.
+No matter how many times we said "no, it is for you, you can have it all", she would give everyone a slice. Now I see there is little point in good food if you don't share it.
+* You take a sip. The flavor is... less than expected. It tastes diluted, like the rind and the tea leaves nullified each other. The floral aroma and slightly bitter taste evoke the experience of drinking soapy bath water.
+Then, she would add the rind to tea, and the house would smell of oranges for days. Then the scraps went into the garden to feed the plants.
+* He offers you half the orange, from which the rind came. It's delicious, a reprieve from the hot desert, and the tea.
+You -- It's lovely. Thank you for your hospitality.
+Thank you for finding oranges for me! I do not know how much trouble it was, but oranges are still a rare sight.
+You -- With all my running around the province, it was only a matter of time before I found some.
+I am glad for it.
+My mother has been gone for a very long time. It must be thirty years, now. It's nice to remember her with someone.
+* You both finish your tea and oranges in silence. The tea gets substantially worse as you get to the bottom of the cup, but the flavor's growing on you. Maybe.
+* The room has a pleasant citrus aroma.
+Thank you. We should have tea again before you leave.
+You -- Perhaps we should. Take care.
 [exit]

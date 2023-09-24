@@ -18,18 +18,18 @@
 	{otherwise} * He's talking to a young girl. She says nothing.
 	// Do you want a bit of food? I would have no trouble (lit: Trouble to me not).
 	Tirus -- / ... Poro-nit leshene? Kirke kame tono./
-	[Global stat: language/basic]* You can make part of what he said: “Do you want (something) food? (Something) me not.”
-	[Global stat: language/intermediate]* “Do you want some food? It's no trouble.”
+	[stat?: language/basic]* You can make part of what he said: “Do you want (something) food? (Something) me not.”
+	[stat?: language/intermediate]* “Do you want some food? It's no trouble.”
 	[main_speaker scene_play: laili_pops_out]
 	* The child stares for a moment, then runs out again.
 	Tirus -- (Sigh) /Gara teeya.../
-	[Global stat: language/intermediate] * (Sigh) So strange...
+	[stat?: language/intermediate] * (Sigh) So strange...
 	> [Global task_exists: flight_test] Laili's certainly a character, isn't she?
 		Tirus -- What? You know her?
 		You -- Certainly. She's recruited me for her mischief, not that I volunteered.
 		Tirus -- But she talks to you? Every week she comes in, never says anything.
 			I worried she had no family.
-		[Global stat: laili/orphan]
+		[stat?: laili/orphan]
 			You -- Oh, she doesn't. She lives on the top of the... large monument in the center of town. I don't know what it's called.
 		{otherwise}
 			You -- I'm not sure if she does. She lives on top of the... large monument in the center of town. I don't know what it's called.
@@ -56,7 +56,7 @@
 	You -- Jackie.
 	Right..
 {otherwise}[Global task_is_active: strange_girl]
-	[Global stat: laili/friendship][Global stat: laili/flight]
+	[stat?: laili/friendship][stat?: laili/flight]
 		You -- Good #{general_time()}, Tirus.
 		Tirus -- ... 
 			How do you know my name?
@@ -91,14 +91,14 @@
 		I forgot it.
 		> [Global task_exists: flight_test] The girl's name is Laili, by the way. She's recruited me to fly her glider.
 			Really? Have you asked if she's getting enough food?
-			[Global stat: laili/friendship]
+			[stat?: laili/friendship]
 				You -- I have. She said she was doing alright, but sounded grateful for the offer. I'm not sure when she's coming in, though.
 				I will keep my eyes out!
 			{otherwise}
 				You -- I haven't brought it up yet.
 				Tirus -- Well, what are you waiting for? I don't want her starving!
 					Did you at least find out where she lives?
-				[Global stat: laili/orphan]
+				[stat?: laili/orphan]
 					You -- Oh, she's an orphan. She lives up on top of the monument in town. Quite tragic.
 				{otherwise}
 					You -- I assume she lives on the monument in the center of town. That's where I found her, at least.
@@ -177,7 +177,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 		Laili -- No! Wait! I need Vaeler help. For Vaeler problems.
 		You -- Vaeler problems?
 
-	[Global stat: laili/name]
+	[stat?: laili/name]
 		* Laili pulls the blanket off the object she's been sitting on.
 	{otherwise}
 		* The girl pulls the blanket off the object she's been sitting on.
@@ -217,7 +217,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 	Did you want to talk about anything else?
 
 :_laili_home_loop
-> [! Global stat: laili/orphan] What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
+> [! stat?: laili/orphan] What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
 	Laili -- I live #{"here" if main_speaker.on_monument else "there"}.
 	You -- What? Isn't #{"this" if main_speaker.on_monument else "it"} some sort of... church or some such thing? Why would they let you up #{"here" if main_speaker.on_monument else "there"}?
 	Laili -- Optics.
@@ -225,7 +225,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 	Laili -- They can't stop me if they don't see me.
 	You -- Aren't your parents worried?
 	Laili -- Nah, they're dead.
-	[Global add_stat: laili/orphan]
+	[+stat: laili/orphan]
 	You -- Oh...
 	> I can understand, to an extent. My mother died when I was young.
 		Laili -- Both my parents died, it's completely different.
@@ -235,7 +235,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 		You -- What? No, not at all! That's just how the saying goes!
 		Laili -- That's confusing.
 	[goto: _laili_home_loop]
-> [! Global stat: laili/friendship][Global stat: tirus/laili/home] That tavern-keeper, Tirus, wanted me to see if you wanted to stay with a family instead of sleeping out here.
+> [! stat?: laili/friendship][stat?: tirus/laili/home] That tavern-keeper, Tirus, wanted me to see if you wanted to stay with a family instead of sleeping out here.
 	[subtopic: _laili_tirus]
 	And I care, too. I'd hate for you to sleep out in the cold.
 	Laili -- ...
@@ -243,7 +243,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 		It might be better than sleeping out here...
 		Thanks..
 	[note: laili/friendship | I've talked with Laili about finding her a better living situation. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
-> {otherwise}[! Global stat: laili/friendship][Global stat:  tirus/laili] That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
+> {otherwise}[! stat?: laili/friendship][stat?:  tirus/laili] That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
 	[subtopic: _laili_tirus]
 	And I care, too. I would hate for you to go hungry, just like Tirus would.
 	Laili -- ...
@@ -252,7 +252,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 		...
 		Thanks.
 	[note: laili/friendship | I've talked with Laili about asking for food if she needs it. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
-> [! Global stat: laili/flight] Well, let's get this plane up the cliff.
+> [! stat?: laili/flight] Well, let's get this plane up the cliff.
 	Laili -- Good. I'll show you how the cables work...
 	[main_speaker start_climb]
 > I'll be back.
@@ -260,7 +260,7 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 [exit]
 
 :_laili_tirus
-[Global add_stat: laili/tirus]
+[+stat: laili/tirus]
 Laili -- He did?
 You -- Does that surprise you? He was worried. He's the reason I went looking for you.
 Laili -- ....
@@ -289,11 +289,11 @@ You -- It... I'm sure you can think of something. I'm not perfect.
 [back]
 
 :laili_climb
-[! Global stat: laili/climb]
+[! stat?: laili/climb]
 	Laili -- Are you ready?
 	You -- It's quite a climb. I'm not sure I have the energy for it.
 	Laili -- Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
-	[Global add_stat: laili/climb]
+	[+stat: laili/climb]
 {otherwise}
 	Laili -- How are you doing?
 > I've realized I have other things I need to do. Can we stop?
@@ -332,7 +332,7 @@ You -- It... I'm sure you can think of something. I'm not perfect.
 :item(long_bolt) :- mentioned("pre-flight")
 You -- I found this bolt. Is it from the plane?
 [Global remove_item: long_bolt]
-[Global stat: laili/flight]
+[stat?: laili/flight]
 	Laili -- Oh, that must be why the wing fell off.
 	You -- Wait, you didn't check?
 	Laili -- I figured it would eventually work itself out.
@@ -342,7 +342,7 @@ You -- I found this bolt. Is it from the plane?
 	You -- What would have happened?
 	Laili -- If you want to do another flight test, we can find out.
 	You -- I suppose it's a mystery for the ages.
-[Global add_stat: laili/disaster_averted]
+[+stat: laili/disaster_averted]
 [back]
 
 :item(_)
@@ -356,10 +356,10 @@ Laili -- Neat.
 
 :laili_post_flight
 [Global task_is_complete: flight_test]
-	[! Global stat: laili/test_again]
+	[! stat?: laili/test_again]
 		I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
 		You -- I'll keep that in mind if I'm ever feeling suicidal.
-		[Global add_stat: laili/test_again]
+		[+stat: laili/test_again]
 	{otherwise}
 		Thanks again for testing. I'll get the plane back up the cliff.
 {otherwise}{main_speaker.crashed}

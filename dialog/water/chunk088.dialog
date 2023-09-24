@@ -1,10 +1,10 @@
-[Global stat: chunk088/water]
+[stat?: chunk088/water]
 	Thank you for your patronage!
 	[exit]
 
 {otherwise}{talked == 0}
 	Hello!
-	[Global stat: paid_water]
+	[stat?: paid_water]
 		You -- Hello. How much is the water?
 		Fifteen deathgnats.
 	{otherwise}
@@ -13,7 +13,7 @@
 		You -- May I use it?
 		For fifteen deathgnats, yes.
 	{Global.count("bug") < 50} You -- Ouch.
-	[Global add_stat: paid_water]
+	[+stat: paid_water]
 	[goto: choice]
 
 {otherwise}
@@ -24,7 +24,7 @@
 :choice
 	> {Global.count("bug") > 15} Here, fifteen deathgnats.
 		[Global add_item: bug | #-15] Excellent!
-		[Global add_stat: chunk088/water] Thank you for your business!
+		[+stat: chunk088/water] Thank you for your business!
 		[exit]
 	> {otherwise} I can't afford that. Can I have a drink just this once?
 		The water's for the village, we have to make money somehow.

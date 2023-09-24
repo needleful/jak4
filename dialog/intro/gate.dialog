@@ -1,4 +1,4 @@
-[Global stat: hdw_gate]
+[stat?: hdw_gate]
 	I am still surprised you actually cleared out the gate.
 	You -- What, you thought a Vaeler would be too weak to handle it?
 	Yes.
@@ -12,7 +12,7 @@
 {otherwise}[Global task_exists: the_village_gate]
 	You -- Can you open the gate now?
 	Did you clear the gate of the specters?
-	[Global stat: hdw/clear]
+	[stat?: hdw/clear]
 		You -- Yes.
 		[subtopic: gate_cleared]
 		[exit]
@@ -23,11 +23,12 @@
 	You -- Hi, I'm going out. Can you unlock the gate?
 	No.
 	You -- What? But I need to leave the village!
-	We only open when clear of specters.
-	> [Global stat: hdw/clear] They were the skull creatures outside, right? I believe I took care of all of them.
+	We only open when clear of specters. They don't usually come down here.
+	> [stat?: hdw/clear] They were the skull creatures outside, right? I believe I took care of all of them.
 		[subtopic: gate_cleared]
 	> Specters? Pardon me?
 		Foul ghost machine. Ancient metal mixed with the centuries of rot and decay. The sins of the ancestors rendered ours to bear as skulls and bones.
+		They usually stay in their caves, but they have been roaming lately.
 		> What?
 			Hm. Bone monsters that bite and shoot bullets.
 			You -- I'm not going to let some pests get in my way. What if I clear the gate for you?
@@ -36,19 +37,19 @@
 			[subtopic: gate_clear]
 	> What if I clear these specters for you?
 		[subtopic: gate_clear]
-	>[Global stat: tyler_tutorial] A little boy and I were running all up and down this wall earlier today. How much protection does it even offer?
+	>[stat?: tyler_tutorial] A little boy and I were running all up and down this wall earlier today. How much protection does it even offer?
 		Enough to protect the lives of everyone here.
 		If you climbed wall before, you can again.
-		[Global stat: asked_to_climb]
+		[stat?: asked_to_climb]
 			You -- Of course...
-		[Global add_stat: asked_to_climb]
+		[+stat: asked_to_climb]
 	> {otherwise} What am I supposed to do, climb over it?
 		If you want to leave, yes.
-		[Global stat: asked_to_climb]
+		[stat?: asked_to_climb]
 			You -- I've had to do an awful lot of climbing today.
 		{otherwise}
 			You -- Ugh. But I might tear my coat...
-		[Global add_stat: asked_to_climb]
+		[+stat: asked_to_climb]
 	> Fine. I'll find some other way around.
 [exit]
 
@@ -60,24 +61,25 @@ The same Vaelic who govern by papers and proxies, terrified to leave their villa
 The same Vaelic who die instantly without their chilled tea on a warm day?
 The very face of weakness and arrogance, that Vaelic?
 You -- ... That's a rather uncharitable view of Vaeland.
-[Global add_stat: world/info/vaelers_disliked] Okay
-You -- .. Well- regardless, if these “spectres” are going to be in my way, I'll deal with them myself.
-[Global create_task: the_village_gate | They won't open the gate to Hideaway unless I clear out all the “Spectres” out front of it. I can just climb the wall in the meantime.] Do not kill yourself for small convenience. It is bad for tourism. But if they are gone, tell me and I can open gate.
+[+stat: world/info/vaelers_disliked] Okay
+You -- .. Well, regardless, if these “spectres” are going to be in my way, I'll deal with them myself.
+[Global create_task: the_village_gate]
+[Global add_note: Creatures called "Spectres" are hanging out near the entrance of the village, and they won't open the gate until they're gone. |+ the_village_gate hideaway] Do not kill yourself for small convenience. It is bad for tourism. But if they are gone, tell me and I can open gate.
 You -- Alright, I will.
 [exit]
 
 :gate_cleared
 What? You did?
-[! Global stat: weapon] How? Where is your gun?
+[! stat?: weapon] How? Where is your gun?
 	You -- I kicked them mostly.
 {otherwise} With a pistol?
 	You -- Well, kicking is faster usually.
 You KICKED them to death? Hm, it makes sense. You are rather tall.
-[Global add_stat: hdw_gate][Global complete_task: the_village_gate | Glad to see he's letting me through.]
+[+stat: hdw_gate][Global complete_task: the_village_gate | Glad to see he's letting me through.]
 [back]
 
 :_coat
-[! Global stat: hdw_gate]
+[! stat?: hdw_gate]
 	You -- That's a lovely fabric you're wearing.
 	If this is flattery, it will not work.
 	> Never mind. It was just a compliment.

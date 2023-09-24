@@ -4,8 +4,8 @@
 {otherwise}
 	You -- Hello again.
 	Hallo, miss.
- [Global stat: foundry/pistol_upgrade][Global count: wep_pistol]
-	[Global add_stat: foundry/pistol_upgrade]
+ [stat?: foundry/pistol_upgrade][Global count: wep_pistol]
+	[+stat: foundry/pistol_upgrade]
 	Say, what's that? An old pistol?
 	You -- Oh, yes. Someone left it behind. Would you like to see it?
 	* You give the foreman your pistol. He unloads and examines it.
@@ -15,8 +15,8 @@
 	You -- Oh? So it would be fresh copper?
 	Something much stronger. We have been experimenting with different bronze alloys. We have so much copper, we should be doing more than just selling wire.
 	You -- Oh! That could be a worthwhile investment...
-{otherwise}[Global count: wep_wave_shot][!Global stat: foundry/wave_shot_upgrade]
-	[Global add_stat: foundry/wave_shot_upgrade]
+{otherwise}[Global count: wep_wave_shot][!stat?: foundry/wave_shot_upgrade]
+	[+stat: foundry/wave_shot_upgrade]
 	What is that?
 	* He points your weapon, the bubble shot.
 	You -- Oh! I found this curious device on the plateau. It fires a sort of bubble.
@@ -29,8 +29,8 @@
 	I'd let you keep both models. You'd just have to pay for the labor.
 	You -- I'll keep that in mind.
 
-[Global task_is_active: activate_the_medium] [! Global stat: foundry/capacitor]
-	[Global add_stat: foundry/capacitor]
+[Global task_is_active: activate_the_medium] [! stat?: foundry/capacitor]
+	[+stat: foundry/capacitor]
 	You -- I was wondering if you had any surplus capacitors?
 	Hm? You are looking to buy them?
 	You -- A few, maybe.
@@ -42,16 +42,16 @@
 		I hope they get off their asses and start moving soon!
 	{otherwise}
 		Not so good today. The train is stuck. They said there was a problem on the tracks.
-	[! Global stat: foreman/discussed/balter]
+	[! stat?: foreman/discussed/balter]
 		But also, I am having issues with Balter at the capital.
 		You -- Who's that?
 		// TODO: who is Balter within the Bralna government? Why is he interested in the foundry?
-		[Global add_stat: balter/info] He's an auditor for the provincial government, up on Crab Hill. He has been very picky with our documents, constantly rejecting our forms for small errors.
+		[+stat: balter/info] He's an auditor for the provincial government, up on Crab Hill. He has been very picky with our documents, constantly rejecting our forms for small errors.
 		[Global mark_map: crab_hill | Capital of the Bralna province.]
 		Ah, it's just part of doing business. We'll reach an agreement soon enough.
 		[Global create_task: debts_unpaid]
 		[note: balter/account/foreman | The Maslikir foreman is having trouble with an auditor, Balter. He's at the capital building on Crab Hill. | maslikir crab_hill balter debts_unpaid]
-[Global stat: foundry/capacitor] > I'd like to see what you're selling. 
+[stat?: foundry/capacitor] > I'd like to see what you're selling. 
 	[shop]
 	[exiting] I hope we can do business again.
 [exit]

@@ -4,13 +4,13 @@
 	> Just a tourist.
 		There's plenty of scenery outside you could be bothering instead.
 		[mention: tourist]
-	> [Global stat: balter/info] Are you Balter?
+	> [stat?: balter/info] Are you Balter?
 		Huh? Do I know you?
-		[Global stat: balter/foreman]
+		[stat?: balter/foreman]
 			You -- The foreman at Maslikir mentioned you.
 			Ah, him. Did he send you to try and get him out of paying his taxes?
 			You -- Ah, no, he just mentioned you.
-			[Global add_stat: balter/discussed/foreman]
+			[+stat: balter/discussed/foreman]
 		{otherwise}
 			You -- I just heard your name mentioned.
 		So what do you want?
@@ -24,12 +24,12 @@
 :note(balter/foreman)
 [goto: foreman]
 :forman
-[! Global stat: balter/discussed/foreman] 
+[! stat?: balter/discussed/foreman] 
 	You -- The foreman at the Maslikir foundry mentioned you.
 	Is he roping you into his taxes?
 	You -- Ah, no, he just told me you were rejecting his forms.
 	Well, I wouldn't reject them if he just paid what he owes.
-	[Global add_stat: balter/discussed/foreman]
+	[+stat: balter/discussed/foreman]
 {otherwise}
 	You -- I wanted to talk about the foreman again.
 [exit]
@@ -40,7 +40,7 @@ You -- I wanted to ask you about my mother again.
 [exit]
 
 :note(mum/records)
-[! Global stat: balter/discussed/records] 
+[! stat?: balter/discussed/records] 
 	You -- I'm looking for the records on people who live in the province. Could you help me?
 	What? No.
 	You -- Why not?
@@ -49,7 +49,7 @@ You -- I wanted to ask you about my mother again.
 	You -- My mother.
 	Her name is.. ?
 
-	[Global stat: mum/short_name]
+	[stat?: mum/short_name]
 		You -- Tara Sylde. I know that's just part of her name, but maybe we can narrow it down from there?
 	{otherwise}
 		You -- Tara Sylde.
@@ -72,11 +72,11 @@ You -- I wanted to ask you about my mother again.
 	//  - Indicate why Balter feels betrayed
 	//  - Show Tara was a soldier or something? But why? How does this affect the Medium?
 	//  - Show Tara's personality from Balter's perspective: hot-headed, stubborn, impulsive
-	[Global add_stat: mum/crab_hill] She'd fled here when the Vaelers overran the rest of the province. A young girl with no family, no home, nothing.
+	[+stat: mum/crab_hill] She'd fled here when the Vaelers overran the rest of the province. A young girl with no family, no home, nothing.
 	She wound up living with me and my family, along with the others in our apartment.
-	[Global add_stat: mum/war]
-	[Global add_stat: mum/soldier] When we fought to keep this city out of the Vaelers' hands, anyone who could hold a rifle was fighting, including Tara.
-	[Global add_stat: mum/intensity] She had this intensity in her eyes. I've seen people become catatonic from the war. She became something else.
+	[+stat: mum/war]
+	[+stat: mum/soldier] When we fought to keep this city out of the Vaelers' hands, anyone who could hold a rifle was fighting, including Tara.
+	[+stat: mum/intensity] She had this intensity in her eyes. I've seen people become catatonic from the war. She became something else.
 	When we fought to keep this city out of the Vaelers' hands, anyone who could hold a rifle was fighting, including Tara.We never kept an official tally, but I think she killed more Vaelers than anyone else I knew.
 	[note: mum/killer | Balter says Mum killed more Vaeler soldiers than anyone else he knew. |+ mum war]
 
@@ -84,7 +84,7 @@ You -- I wanted to ask you about my mother again.
 	There used to be a beautiful stone palace here. Thousands of years old. Now it's this hideous box...
 	But once the shells came in, it was too dangerous to keep fighting. This city is strong, but small. We couldn't hide from their artillery for long.
 	// More personality for Tara here.
-	[Global add_stat: mum/caves] When we moved people into the cave network under the city, those of us who were younger were asked to go deeper and map out the cave for safe hiding spots. She made it a competition to see how deep we could go.
+	[+stat: mum/caves] When we moved people into the cave network under the city, those of us who were younger were asked to go deeper and map out the cave for safe hiding spots. She made it a competition to see how deep we could go.
 
 	She and I were so similar. I thought, after the war...
 	No, it doesn't matter any more. After the war, she left the city for her home. Reasonable enough.
@@ -92,15 +92,15 @@ You -- I wanted to ask you about my mother again.
 	We'd probably killed a hundred men just like him, and there she was. Leaving on a train for the nation that scarred this place so deeply.
 	Just enough
 
-	[Global add_stat: mum/info]
-	[Global add_stat: balter/discussed/records]
+	[+stat: mum/info]
+	[+stat: balter/discussed/records]
 {otherwise}
 	About those records...
 	// TODO: anything
 [exit]
 
 :_fountain
-> [Global task_is_active: fountain_statue][! Global stat: fountain_statue/balter] Who would I ask about installing a statue at the entrance of the city?
+> [Global task_is_active: fountain_statue][! stat?: fountain_statue/balter] Who would I ask about installing a statue at the entrance of the city?
 	...? Me, I suppose.
 	You -- Wonderful! It should be on top of the fountain, naturally, made of that lo-
 	Whoa! Did you think you could dictate what should be built and I would hop to it for you?
@@ -115,4 +115,4 @@ You -- I wanted to ask you about my mother again.
 	Two: three quarters of the businesses at the plaza approve the statue's design. I can arrange the hearing when it happens.
 	[Global add_note: According to Balter, I need to commision a local artist for the fountain statue. |+ fountain_statue crab_hill]
 	[Global add_note: Once Balter and Siraj approve the statue, Balter will schedule a hearing with the local businesses on placing the statue. |+ fountain_statue balter siraj]
-> [Global task_is_active: fountain_statue ][Global stat: fountain_statue/balter] So about the statue... 
+> [Global task_is_active: fountain_statue ][stat?: fountain_statue/balter] So about the statue... 

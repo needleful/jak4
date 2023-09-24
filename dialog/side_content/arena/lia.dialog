@@ -1,67 +1,75 @@
-[! Global stat: arena125/entered]
-	Uh, this place ain't for no tourists! Scram please!
-	> I don't know, it seems like a fun attraction.
-		Hm... Okay, but you have to sign this waiver.
-		* She hands you a paper and a pen. It's in Yaqazi, which you can't read.
-		> [skip] (Sign the waiver)
-			You -- Like the laws here bind me...
-			* You sign the page.
-			* Perhaps you should have just scribbled and claimed it was your signature. Then if you got in trouble, you could say you hadn't signed it. But it's too late, now. Your handwriting too beautiful and unique to claim it's somebody else's.
-			Okay, great!
-			[goto: arena]
-		> You know, I'll let it stay a mystery.
-	> [skip] (Scram)
+[! stat?: lia/waiver]
+	[! stat?: lia/investigation]
+		Uh, this place ain't for no tourists! Scram please!
+		> [stat?: arena137/visited] What? The arena? I've already been inside.
+			You know?
+			... Okay, but you have to sign the waiver.
+			[goto: waiver]
+		> I don't know, it seems like a fun attraction.
+			No! It ain't!
+			You -- ...
+		> [skip] (Scram)
+	[otherwise]
+		If you want in, you need to sign the waiver.
+		[goto: waiver]
+{otherwise}[stat?: lia/investigation]
+	...
 {otherwise}
-	[! Global stat: arena125/completed]
-		Want to compete in the arena? 
-		:arena_entry
-		Top score gets a snazzy coat. The entry fee is twenty-five gems.
-		> {Global.count("gem") > 25}[skip] (Pay 25 gems) I do love coats...
-			You -- I do love coats...
-		> {otherwise} I don't have the money.
-		> I will not participate in reckless blood sport for a coat.
-	{otherwise}[! Global stat: arena125/coat]
-		Hey killer! Want to play again? You still ain't got that coat. The entry fee is twenty-five gems.
-		> {Global.count("gem") > 25}[skip] (Pay 25 gems) I'll give it another go.
-			You -- I'll give it another go.
-		> {otherwise} I don't have the money.
-		> I'd prefer not.
-	{otherwise}
-		Hey Jackie! Want to show these losers how it's done? I'll drop the entry fee to fifty gems for you.
-		?> Isn't that higher than it used to be?
-			Well, you're a pro, ain't you? Gotta pay the pro fee now!
-			You -- I don't even win anything if I compete!
-			You win the joy of a job well done.
-			[back]
-		> {Global.count("gem") > 50} [skip] (Pay 50 gems) Sure, it could be my #{general_time(true)} exercise.
-			You -- Sure, it could be my #{general_time(true)} exercise.
-		> {otherwise} I don't have the money.
-		> Not today, thanks.
-			Well, you're always welcome to compete!
-		[exit]
+	Have fun in the arena!
 [exit]
 
 :arena
-[! Global stat: arena125/entered]
+[! stat?: arena125/entered]
 [mark_map: actual_cliff_village]
 We run a sort of hunting arena, where people get in a cage with a bunch of specters and shoot 'em.
 You -- That sounds incredibly dangerous!
 Nobody's died yet, but that's why you have to sign the waiver. Do you want to try?
 You -- Pardon me? Try?
 [note: arena125/entered | There's a combat arena in the cave! |+ actual_cave_village]
-[Global task_exists: unwanted_visitors][Global stat: bairo/conspiracy]
+[Global task_exists: unwanted_visitors][stat?: bairo/conspiracy]
 	[Global add_note: The arena explains the noises Bairo heard. It wasn't sacrifices, like he'd imagined. |+ unwanted_visitors]
 [note]
 
 :note(bairo/conspiracy)
-> Have there been any Spectres running loose lately?
-	[note: arena125/specters | Lia says there's been spectres coming from the tower for years, especially in the nearby village. |+ unwanted_visitors village_tower]
-	Yeah, they come out of the tower. People used to live in the village next to it, but it got so bad everyone had to leave.
-	Most of them live here, by the bridge, or down in Hideaway now.
-	?> How long ago was that?
-		I guess ten years ago? It might be like thirteen years, actually.
-	Chief Hurial would know about that better than me.
+> Have you seen any Spectres running loose lately?
+	You seen the sun rise lately?
+	[mention: spectres]
+	You -- There's no need to be snippy, I've heard there's more than usual.
+	I don't see it. They're everywhere all the time.
+> Have there been any strange noises from the caves at night?
+	[mention: caves]
+	[mention: spectres]
+	Caves are strange and noisy. Nothing interesting. Buy earmuffs.
 > That chap down the hill, Bairo, said you were sending Spectres to kill him?
 	Huh? Me? I don't know who that is.
 	You -- He meant the entire village, I think. He was quite suspicious of everyone here.
-	I ain't the village. Ask Chief Hurial, he's the village.
+	I ain't the village. Ask Chief Hurial. He's the village.
+[back]
+
+:note(the_village_gate) :- mentioned("spectres")
+You -- The village down in the valley saw spectres. The guard told me they weren't a common sight.
+[goto: reveal]
+[back]
+
+:note(visited/abandoned_village) :- mentioned("spectres")
+You -- The nearby village under the tower was abandoned. Overrun by spectres.
+[goto: reveal]
+[back]
+
+:reveal
+You -- It's clear to me something unusual is happening around here, and I have reasons to suspect it's something to do with you and this cave.
+Hm... Okay, okay. How about this? I'll let you in, but you have to sign the waiver.
+[+stat: lia/investigation]
+[goto: waiver]
+[exit]
+
+:waiver	
+* She hands you a paper and a pen. It's in Yaqazi, which you can't read.
+> [skip] (Sign the waiver)
+	You -- Like the laws here bind me...
+	* You sign the page. [+stat: lia/waiver]
+	* Perhaps you should have just scribbled and claimed it was your signature. Then if you got in trouble, you could say you hadn't signed it. But it's too late, now. Your handwriting is too distinct and beautiful to claim it's somebody else's.
+	Okay, great! Have fun in the caves!
+> You know, maybe I won't do this.
+	Good idea.
+[exit]
