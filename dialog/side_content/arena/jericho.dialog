@@ -1,23 +1,28 @@
+[Global has_stat: arena137/name]
+	{$name =  Global.stat("arena137/name")}
+{otherwise}
+	{$name = "Jaki"}
+
 [! stat?: arena137/entered]
 	/Eh, ine kes?/
 	You -- Oh, um, my name is Jackie.
-	Vaeler? Oh no, you are not for here, no.
+	Vaeler? Oh no, you aren't for here, no.
 {otherwise}[! stat?: arena137/completed]
-	Good to see you again, Jaki! Do you want to hunt? It is only 25 gems.
+	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
 	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
 		[Global remove_item: gem | #25] Yes, throw me in the chasm.
 		// TODO
 	> {otherwise} I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 {otherwise}[! stat?: arena137/coat]
-	Hello killer! Want to hunt again? It is still 25 gems.
+	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[Global remove_item: gem | #25] Sure, I'll try again.
 		// TODO
 	> No, thank you. I still have puncture wounds from last time.
 {otherwise}
-	The queen bee herself! Jaki! Want to show the kids how it is done? I drop price to 50 gems.
-	?> Isn't that /more/ expensive than it was before?
+	The queen bee herself! #{$name}! Want to show the kids how it's done? I drop price to 50 gems.
+	?> Isn't that /higher/ than it was before?
 		Well, a pro gets the pro rate!
 		You -- I don't even win anything if I win!
 		You win the joy of a job done good.
@@ -30,29 +35,64 @@
 [exit]
 
 :item(arena_access) :- !Global.stat("arena137/entered")
+{$name = "Jaki"}
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
-You are Jaki? Waiver, you signed it?
+* He takes the paper. [Global remove_item: arena_access]
+You are #{$name}? Waiver, you signed it?
 You -- Yes, I did sign a waiver... of some sort.
-Well, Jaki, welcome to the arena! I can show you around.
+[goto: arena_entry]
+[back]
+
+:item(fake_arena_access) :- !Global.stat("arena13/entered")
+{$name = "Kara"}
+* You show him the paper you received from Lia.
+You -- Is this what I need to show you?
+* He takes the paper. [Global remove_item: arena_access]
+You are #{$name}? Waiver, you signed it?
+You -- #{$name}? Uh... yes. I did sign a waiver... I guess.
+[goto: arena_entry]
+[back]
+
+:arena_entry
+[Global set_stat: arena137/name | $name]
+Well, #{$name}, welcome to the arena! I can show you around.
 [+stat: arena137/entered]
 [main_speaker lead_player_to: arena/entrance]
 You -- Arena? You play sports down here?
 What exciting! Never has Vaeler seen this! Ever!
 You -- But what sort of sport is it?
-It is hunting sport! We capture specters and we bring them here!
+It's hunting sport! We capture specters and we bring them here!
 You -- What, like shooting them in pens?
 No. A fighter goes into the bottom of the chasm. We throw the beasts in and they hunt until none remain.
 You -- Why would you do such a thing? That sounds incredibly dangerous.
 Nobody has died /ever/! We are very safe.
 You -- But... why?
-Strength. It is hard world. Those who cannot harder, die!
+Strength. It's hard world. Those who cannot harder, die!
 You -- I... see. I didn't sign up to be /in/ the chasm, did I?
 You did! If you want to hunt, we will prepare the chasm! The entry is only twenty gems.
 : loop_choice
 > I mean, I've got nothing better to do at the moment. Throw me in!
 > I'm not getting thrown into some death pit for your entertainment.
 > Wait, I pay /you/ to get thrown in there?
-	Yes! It is much up-to-keep with this arena.
+	Yes! It's much up-to-keep with this arena.
 	[goto: loop_choice]
+[exit]
+
+
+:note(bairo/conspiracy)
+:note(chunk137/suspicion)
+[stat?: arena137/entered]
+	You -- So does this arena have anything to do with those troublesome spectres roaming everywhere outside?
+	Hm? No, we are hunting them. If anything, the number is going down.
+	[stat?: chunk137/suspicion]
+		You -- Not from what I've heard. It seems like there's been recent increases in spectres all around this village.
+			I can't imagine a group more likely to be involved than people collecting these creatures for bloodsport.
+		They don't bleed.
+		You -- You know what I mean.
+	{otherwise}
+		You -- Is that so? I have it from a... source, that something unusual is going on. 
+	This arena has been here for fifteen years. I don't know what to convince you.
+	You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
+	We can check.
 [exit]

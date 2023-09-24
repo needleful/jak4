@@ -32,7 +32,7 @@ func _init():
 	r_context_reply.compile("^\\s*\\?([a-zA-Z0-9_/]*)>")
 	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
-	r_special_replace.compile("\\$([a-zA-Z_]+)\\b")
+	r_special_replace.compile("\\$([a-zA-Z_0-9]+)")
 
 func get_importer_name():
 	return "np.dialog"
@@ -225,6 +225,7 @@ func extract_expressions(line: String) -> Dictionary:
 		dict.conditions.append(ex)
 	var sq_matches := r_sq_expression.search_all(line_no_expressions)
 	for rm in sq_matches:
+		# TODO: add the uh "#" interpolation
 		var text:String = rm.get_string(1)
 		var func_str := ""
 		var args_str := ""
