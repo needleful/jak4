@@ -13,14 +13,15 @@ export(float) var orb_speed := 10.0
 export(float) var orb_seeking := 2.0
 
 var velocity := Vector3.ZERO
-var target : KinematicEnemy
+var target : EnemyBody
 var time_fired := 0.0
 
 onready var player := Global.get_player()
 onready var awareness := $awareness
+onready var anim := $bug/AnimationPlayer
 
 func _ready():
-	$AnimationPlayer.play("Idle-loop")
+	anim.play("Idle-loop")
 
 func _physics_process(delta):
 	var dir:Vector3 = player.global_transform.origin - global_transform.origin
@@ -49,7 +50,7 @@ func _process(delta):
 	if !target:
 		var closest_distance := INF
 		for b in awareness.get_overlapping_bodies():
-			if !b is KinematicEnemy:
+			if !b is EnemyBody:
 				continue
 			var d = (b.global_transform.origin - global_transform.origin).length_squared()
 			if d <= closest_distance:

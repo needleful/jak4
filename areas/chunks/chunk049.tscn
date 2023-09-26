@@ -1,4 +1,4 @@
-[gd_scene load_steps=255 format=2]
+[gd_scene load_steps=384 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -65,6 +65,35 @@
 [ext_resource path="res://_glb/env/train_set/muzna_city/box_house_side_albedo.png" type="Texture" id=63]
 [ext_resource path="res://_glb/env/train_set/muzna_city/box_house_side2_albedo.png" type="Texture" id=64]
 [ext_resource path="res://entities/env/train_set/muzna_city/box_house_persephone.tscn" type="PackedScene" id=65]
+[ext_resource path="res://entities/env/furniture/modern_end_table.tscn" type="PackedScene" id=66]
+[ext_resource path="res://entities/env/furniture/modern_lounge_sofa.tscn" type="PackedScene" id=67]
+[ext_resource path="res://entities/env/furniture/modern_chair.tscn" type="PackedScene" id=68]
+[ext_resource path="res://entities/env/furniture/modern_coffee_table.tscn" type="PackedScene" id=69]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=70]
+[ext_resource path="res://material/coat/checkers1.jpg" type="Texture" id=71]
+[ext_resource path="res://material/coat/fabric1.png" type="Texture" id=72]
+[ext_resource path="res://material/coat/gradient4.jpg" type="Texture" id=73]
+[ext_resource path="res://material/coat/misc1.jpg" type="Texture" id=74]
+[ext_resource path="res://material/coat/checkers2.jpg" type="Texture" id=75]
+[ext_resource path="res://material/coat/hearts4.jpg" type="Texture" id=76]
+[ext_resource path="res://material/coat/cammo2.jpg" type="Texture" id=77]
+[ext_resource path="res://material/coat/stripes2.jpg" type="Texture" id=78]
+[ext_resource path="res://material/coat/misc3.jpg" type="Texture" id=79]
+[ext_resource path="res://material/coat/hearts2.jpg" type="Texture" id=80]
+[ext_resource path="res://material/coat/stripes1.png" type="Texture" id=81]
+[ext_resource path="res://material/coat/sym2.jpg" type="Texture" id=82]
+[ext_resource path="res://material/coat/cammo3.jpg" type="Texture" id=83]
+[ext_resource path="res://material/coat/gradient.jpg" type="Texture" id=84]
+[ext_resource path="res://material/coat/gradient7.jpg" type="Texture" id=85]
+[ext_resource path="res://material/coat/hearts1.jpg" type="Texture" id=86]
+[ext_resource path="res://material/coat/fabric2.jpg" type="Texture" id=87]
+[ext_resource path="res://items/coat.gd" type="Script" id=88]
+[ext_resource path="res://material/coat/sym3.jpg" type="Texture" id=89]
+[ext_resource path="res://material/coat/sym5.png" type="Texture" id=90]
+[ext_resource path="res://material/coat/weird3.jpg" type="Texture" id=91]
+[ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=92]
+[ext_resource path="res://entities/visual/preset_coat.gd" type="Script" id=93]
+[ext_resource path="res://material/coat_doublesided.shader" type="Shader" id=94]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -328,6 +357,28 @@ tracks/2/keys = {
 } ]
 }
 
+[sub_resource type="Gradient" id=289]
+offsets = PoolRealArray( 0.0114943, 0.218391, 1 )
+colors = PoolColorArray( 0.9375, 0.0915527, 0.0915527, 1, 1, 0.753906, 0.932709, 1, 0.715223, 0.327484, 0.855469, 1 )
+
+[sub_resource type="Resource" id=288]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 289 )
+
+[sub_resource type="Gradient" id=287]
+offsets = PoolRealArray( 0, 0.220884, 1 )
+colors = PoolColorArray( 0.315201, 0.0461426, 0.4375, 1, 0.950684, 0.605469, 1, 1, 0.26062, 0.482438, 0.953125, 1 )
+
+[sub_resource type="Resource" id=290]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 287 )
+
 [sub_resource type="ShaderMaterial" id=106]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -337,6 +388,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.689909, 0.789361, 0.698387, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=191]
+offsets = PoolRealArray( 0.681648, 0.7836 )
+colors = PoolColorArray( 0.41926, 0.374805, 0.444941, 1, 0.330534, 0.104226, 0.294463, 1 )
+
+[sub_resource type="GradientTexture" id=291]
+gradient = SubResource( 191 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=292]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 91 )
+shader_param/gradient = SubResource( 291 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=192]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 91 )
+gradient = SubResource( 191 )
 
 [sub_resource type="ShaderMaterial" id=123]
 resource_local_to_scene = true
@@ -538,6 +613,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.155572, 0.0873453, 0.217737, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=193]
+offsets = PoolRealArray( 0.816837, 0.888504 )
+colors = PoolColorArray( 0.0546291, 0.0275442, 0.0387384, 1, 0.937258, 0.617632, 0.682003, 1 )
+
+[sub_resource type="GradientTexture" id=293]
+gradient = SubResource( 193 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=294]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 90 )
+shader_param/gradient = SubResource( 293 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=194]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 90 )
+gradient = SubResource( 193 )
+
 [sub_resource type="ShaderMaterial" id=149]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -567,6 +666,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.309927, 0.467275, 0.432211, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=195]
+offsets = PoolRealArray( 0.0894493, 0.811648, 0.96816 )
+colors = PoolColorArray( 0.124257, 0.494037, 0.11297, 1, 0.882803, 0.613239, 0.206342, 1, 0.100317, 0.105576, 0.106421, 1 )
+
+[sub_resource type="GradientTexture" id=295]
+gradient = SubResource( 195 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=296]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 80 )
+shader_param/gradient = SubResource( 295 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=196]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 80 )
+gradient = SubResource( 195 )
 
 [sub_resource type="ShaderMaterial" id=89]
 resource_local_to_scene = true
@@ -798,6 +921,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.406878, 0.600475, 0.604543, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=197]
+offsets = PoolRealArray( 0.306138, 0.866137, 0.989981 )
+colors = PoolColorArray( 0.0809556, 0.02748, 0.631802, 1, 0.919224, 0.715729, 0.170884, 1, 0.647437, 0.748371, 0.622324, 1 )
+
+[sub_resource type="GradientTexture" id=297]
+gradient = SubResource( 197 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=298]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 79 )
+shader_param/gradient = SubResource( 297 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=198]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 79 )
+gradient = SubResource( 197 )
+
 [sub_resource type="ShaderMaterial" id=130]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -817,6 +964,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.737226, 0.796651, 0.762576, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=199]
+offsets = PoolRealArray( 0.246182, 0.546149, 0.901507 )
+colors = PoolColorArray( 0.326575, 0.429315, 0.522574, 1, 0.094807, 0.094821, 0.443699, 1, 0.124369, 0.370943, 0.678548, 1 )
+
+[sub_resource type="GradientTexture" id=299]
+gradient = SubResource( 199 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=300]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 76 )
+shader_param/gradient = SubResource( 299 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=200]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 199 )
 
 [sub_resource type="ShaderMaterial" id=152]
 resource_local_to_scene = true
@@ -868,6 +1039,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.163972, 0.0996832, 0.341307, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=201]
+offsets = PoolRealArray( 0.173105, 0.412511 )
+colors = PoolColorArray( 0.030983, 0.0114502, 0.00859321, 1, 0.542665, 0.565604, 0.591174, 1 )
+
+[sub_resource type="GradientTexture" id=301]
+gradient = SubResource( 201 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=302]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 82 )
+shader_param/gradient = SubResource( 301 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=202]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 82 )
+gradient = SubResource( 201 )
+
 [sub_resource type="ShaderMaterial" id=35]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -907,6 +1102,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.703241, 0.294914, 0.337504, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=203]
+offsets = PoolRealArray( 0.412371, 0.825216 )
+colors = PoolColorArray( 0.0630951, 0.0411445, 0.0818467, 1, 0.0424071, 0.0701991, 0.146985, 1 )
+
+[sub_resource type="GradientTexture" id=303]
+gradient = SubResource( 203 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=304]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 73 )
+shader_param/gradient = SubResource( 303 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=204]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 73 )
+gradient = SubResource( 203 )
 
 [sub_resource type="ShaderMaterial" id=79]
 resource_local_to_scene = true
@@ -1037,6 +1256,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.149643, 0.191375, 0.289148, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=205]
+offsets = PoolRealArray( 0.127368, 0.27977, 0.34414 )
+colors = PoolColorArray( 0.235373, 0.210805, 0.217944, 1, 0.0226141, 0.0335958, 0.0287924, 1, 0.293886, 0.283432, 0.187137, 1 )
+
+[sub_resource type="GradientTexture" id=305]
+gradient = SubResource( 205 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=306]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 71 )
+shader_param/gradient = SubResource( 305 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=206]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 71 )
+gradient = SubResource( 205 )
 
 [sub_resource type="ShaderMaterial" id=63]
 resource_local_to_scene = true
@@ -1198,6 +1441,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.33889, 0.122456, 0.200532, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=207]
+offsets = PoolRealArray( 0.106283, 0.706546 )
+colors = PoolColorArray( 0.0249662, 0.0235751, 0.107184, 1, 0.0654924, 0.0771438, 0.106884, 1 )
+
+[sub_resource type="GradientTexture" id=307]
+gradient = SubResource( 207 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=308]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 74 )
+shader_param/gradient = SubResource( 307 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=208]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 74 )
+gradient = SubResource( 207 )
+
 [sub_resource type="ShaderMaterial" id=154]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1218,6 +1485,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.0837567, 0.135623, 0.0783729, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=209]
+offsets = PoolRealArray( 0.768085, 0.892497 )
+colors = PoolColorArray( 0.799643, 0.569459, 0.383744, 1, 0.48809, 0.562578, 0.598821, 1 )
+
+[sub_resource type="GradientTexture" id=309]
+gradient = SubResource( 209 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=310]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 72 )
+shader_param/gradient = SubResource( 309 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=210]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 72 )
+gradient = SubResource( 209 )
+
 [sub_resource type="ShaderMaterial" id=116]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1227,6 +1518,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.117583, 0.154257, 0.0694109, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=211]
+offsets = PoolRealArray( 0.358181, 0.628433, 0.948832 )
+colors = PoolColorArray( 0.30001, 0.349849, 0.348035, 1, 0.174624, 0.19459, 0.141815, 1, 0.691024, 0.933193, 0.695365, 1 )
+
+[sub_resource type="GradientTexture" id=311]
+gradient = SubResource( 211 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=312]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 75 )
+shader_param/gradient = SubResource( 311 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=212]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 75 )
+gradient = SubResource( 211 )
 
 [sub_resource type="ShaderMaterial" id=134]
 resource_local_to_scene = true
@@ -1247,6 +1562,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.582836, 0.507119, 0.452469, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=213]
+offsets = PoolRealArray( 0.43491, 0.971075 )
+colors = PoolColorArray( 0.32418, 0.337681, 0.335593, 1, 0.359297, 0.383381, 0.426762, 1 )
+
+[sub_resource type="GradientTexture" id=313]
+gradient = SubResource( 213 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=314]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 83 )
+shader_param/gradient = SubResource( 313 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=214]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 83 )
+gradient = SubResource( 213 )
 
 [sub_resource type="ShaderMaterial" id=99]
 resource_local_to_scene = true
@@ -1358,6 +1697,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.388176, 0.340441, 0.315666, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=215]
+offsets = PoolRealArray( 0.248726, 0.971211 )
+colors = PoolColorArray( 0.129687, 0.0554172, 0.173004, 1, 0.99348, 0.782662, 0.588018, 1 )
+
+[sub_resource type="GradientTexture" id=315]
+gradient = SubResource( 215 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=316]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 85 )
+shader_param/gradient = SubResource( 315 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=216]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 85 )
+gradient = SubResource( 215 )
+
 [sub_resource type="ShaderMaterial" id=103]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1388,6 +1751,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.116786, 0.11855, 0.159391, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=217]
+offsets = PoolRealArray( 0.183694, 0.622903, 0.868263 )
+colors = PoolColorArray( 0.568938, 0.592041, 0.619657, 1, 0.379756, 0.180711, 0.450931, 1, 0.00641681, 0.00238876, 0.00511588, 1 )
+
+[sub_resource type="GradientTexture" id=317]
+gradient = SubResource( 217 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=318]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 81 )
+shader_param/gradient = SubResource( 317 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=218]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 81 )
+gradient = SubResource( 217 )
+
 [sub_resource type="ShaderMaterial" id=120]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1397,6 +1784,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.100279, 0.287284, 0.237922, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=219]
+offsets = PoolRealArray( 0.11405, 0.592604 )
+colors = PoolColorArray( 0.429117, 0.250975, 0.529684, 1, 0.143595, 0.181568, 0.376155, 1 )
+
+[sub_resource type="GradientTexture" id=319]
+gradient = SubResource( 219 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=320]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 87 )
+shader_param/gradient = SubResource( 319 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=220]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 87 )
+gradient = SubResource( 219 )
 
 [sub_resource type="ShaderMaterial" id=104]
 resource_local_to_scene = true
@@ -1417,6 +1828,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.55754, 0.724221, 0.665436, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=221]
+offsets = PoolRealArray( 0.399489, 0.913071 )
+colors = PoolColorArray( 0.087381, 0.415808, 0.568036, 1, 0.621569, 0.770903, 0.299486, 1 )
+
+[sub_resource type="GradientTexture" id=321]
+gradient = SubResource( 221 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=322]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 82 )
+shader_param/gradient = SubResource( 321 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=222]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 82 )
+gradient = SubResource( 221 )
 
 [sub_resource type="ShaderMaterial" id=42]
 resource_local_to_scene = true
@@ -1498,6 +1933,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.664236, 0.660124, 0.661525, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=223]
+offsets = PoolRealArray( 0.0445716, 0.925555, 0.930682 )
+colors = PoolColorArray( 0.141756, 0.0377875, 0.181636, 1, 0.232673, 0.298145, 0.557795, 1, 0.553497, 0.37458, 0.397182, 1 )
+
+[sub_resource type="GradientTexture" id=323]
+gradient = SubResource( 223 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=324]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 84 )
+shader_param/gradient = SubResource( 323 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=224]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 84 )
+gradient = SubResource( 223 )
+
 [sub_resource type="ShaderMaterial" id=168]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1527,6 +1986,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.534364, 0.379719, 0.462194, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=225]
+offsets = PoolRealArray( 0.0504, 0.801041, 0.810756 )
+colors = PoolColorArray( 0.772215, 0.79208, 0.883036, 1, 0.0226094, 0.0359734, 0.0481026, 1, 0.0319016, 0.488127, 0.705506, 1 )
+
+[sub_resource type="GradientTexture" id=325]
+gradient = SubResource( 225 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=326]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 77 )
+shader_param/gradient = SubResource( 325 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=226]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 77 )
+gradient = SubResource( 225 )
 
 [sub_resource type="ShaderMaterial" id=138]
 resource_local_to_scene = true
@@ -1577,6 +2060,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.0493454, 0.0513454, 0.0488939, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=227]
+offsets = PoolRealArray( 0.335079, 0.457263, 0.940595 )
+colors = PoolColorArray( 0.23119, 0.246639, 0.130943, 1, 0.0800842, 0.217012, 0.165677, 1, 0.379803, 0.166466, 0.335974, 1 )
+
+[sub_resource type="GradientTexture" id=327]
+gradient = SubResource( 227 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=328]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 83 )
+shader_param/gradient = SubResource( 327 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=228]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 83 )
+gradient = SubResource( 227 )
 
 [sub_resource type="ShaderMaterial" id=140]
 resource_local_to_scene = true
@@ -1708,6 +2215,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.303821, 0.306171, 0.197945, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=229]
+offsets = PoolRealArray( 0.69528, 0.717034 )
+colors = PoolColorArray( 0.26182, 0.12595, 0.259237, 1, 0.9541, 0.463166, 0.994293, 1 )
+
+[sub_resource type="GradientTexture" id=329]
+gradient = SubResource( 229 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=330]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 89 )
+shader_param/gradient = SubResource( 329 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=230]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 89 )
+gradient = SubResource( 229 )
+
 [sub_resource type="ShaderMaterial" id=178]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1717,6 +2248,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.228899, 0.195307, 0.310939, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=231]
+offsets = PoolRealArray( 0.347457, 0.580699, 0.705834 )
+colors = PoolColorArray( 0.446712, 0.182141, 0.766427, 1, 0.101086, 0.0704519, 0.063359, 1, 0.2092, 0.28825, 0.264089, 1 )
+
+[sub_resource type="GradientTexture" id=331]
+gradient = SubResource( 231 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=332]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 86 )
+shader_param/gradient = SubResource( 331 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=232]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 86 )
+gradient = SubResource( 231 )
 
 [sub_resource type="ShaderMaterial" id=47]
 resource_local_to_scene = true
@@ -1808,6 +2363,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.125248, 0.2565, 0.281091, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=233]
+offsets = PoolRealArray( 0.0440932, 0.187913, 0.75886 )
+colors = PoolColorArray( 0.102048, 0.0733942, 0.0912511, 1, 0.200109, 0.384988, 0.285785, 1, 0.0504443, 0.465245, 0.267249, 1 )
+
+[sub_resource type="GradientTexture" id=333]
+gradient = SubResource( 233 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=334]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 72 )
+shader_param/gradient = SubResource( 333 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=234]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 72 )
+gradient = SubResource( 233 )
+
 [sub_resource type="ShaderMaterial" id=184]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1898,6 +2477,30 @@ shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.307884, 0.289342, 0.357624, 1 )
 shader_param/main_texture = ExtResource( 62 )
 
+[sub_resource type="Gradient" id=235]
+offsets = PoolRealArray( 0.287793, 0.409047 )
+colors = PoolColorArray( 0.00799865, 0.0087938, 0.00787142, 1, 0.0663359, 0.188598, 0.102507, 1 )
+
+[sub_resource type="GradientTexture" id=335]
+gradient = SubResource( 235 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=336]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 78 )
+shader_param/gradient = SubResource( 335 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=236]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 78 )
+gradient = SubResource( 235 )
+
 [sub_resource type="ShaderMaterial" id=146]
 resource_local_to_scene = true
 shader = ExtResource( 15 )
@@ -1957,6 +2560,30 @@ shader_param/specularity = 1.0
 shader_param/uv_scale = Vector2( 1, 1 )
 shader_param/albedo = Color( 0.0895714, 0.108922, 0.0883735, 1 )
 shader_param/main_texture = ExtResource( 62 )
+
+[sub_resource type="Gradient" id=237]
+offsets = PoolRealArray( 0.551984, 0.570523, 0.604192 )
+colors = PoolColorArray( 0.025319, 0.0420183, 0.0242174, 1, 0.413051, 0.558316, 0.603486, 1, 0.385055, 0.39178, 0.632152, 1 )
+
+[sub_resource type="GradientTexture" id=337]
+gradient = SubResource( 237 )
+width = 64
+
+[sub_resource type="ShaderMaterial" id=338]
+shader = ExtResource( 94 )
+shader_param/light_bias = null
+shader_param/softness = 0.6
+shader_param/specularity = 1.0
+shader_param/palette = ExtResource( 76 )
+shader_param/gradient = SubResource( 337 )
+shader_param/detail = ExtResource( 92 )
+
+[sub_resource type="Resource" id=238]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 237 )
 
 [node name="chunk049" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
@@ -3093,6 +3720,31 @@ transform = Transform( 0.714533, 0, 0.699602, 0, 1, 0, -0.699602, 0, 0.714533, 6
 [node name="payphone3" parent="active_entities" index="10" instance=ExtResource( 42 )]
 transform = Transform( 0.731588, 0, 0.681747, 0, 1, 0, -0.681747, 0, 0.731588, 67.618, 12.5603, 75.3504 )
 
+[node name="persephone_house" type="Spatial" parent="active_entities" index="11"]
+transform = Transform( 0.703473, 0, 0.710721, 0, 1, 0, -0.710721, 0, 0.703473, -24.8073, 26.2139, 98.8903 )
+
+[node name="modern_chair" parent="active_entities/persephone_house" index="0" instance=ExtResource( 68 )]
+transform = Transform( -0.0120737, 0, 0.999927, 0, 1, 0, -0.999927, 0, -0.0120737, -0.880051, -0.340466, -1.18118 )
+
+[node name="modern_lounge_sofa" parent="active_entities/persephone_house" index="1" instance=ExtResource( 67 )]
+transform = Transform( -0.0417061, 0, -0.99913, 0, 1, 0, 0.99913, 0, -0.0417061, 1.20454, -0.348696, -2.50272 )
+
+[node name="modern_end_table" parent="active_entities/persephone_house" index="2" instance=ExtResource( 66 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.543488, -0.348694, -2.27281 )
+
+[node name="modern_coffee_table" parent="active_entities/persephone_house" index="3" instance=ExtResource( 69 )]
+transform = Transform( -0.00875399, 0, -0.999961, 0, 1, 0, 0.999961, 0, -0.00875399, 1.10028, -0.294189, -1.31656 )
+
+[node name="carpet" parent="active_entities/persephone_house" index="4" instance=ExtResource( 70 )]
+transform = Transform( -8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 1.00843, -0.36425, -1.41031 )
+script = ExtResource( 93 )
+coat = SubResource( 288 )
+
+[node name="carpet2" parent="active_entities/persephone_house" index="5" instance=ExtResource( 70 )]
+transform = Transform( 0, 0, 0.9, 0, 1, 0, -0.9, 0, 0, 4.51528, -0.36425, 1.62153 )
+script = ExtResource( 93 )
+coat = SubResource( 290 )
+
 [node name="blockout" type="Spatial" parent="." index="7"]
 
 [node name="box_house_short14" parent="blockout" index="0" instance=ExtResource( 58 )]
@@ -3100,6 +3752,12 @@ transform = Transform( 0.677427, -0.0380413, -0.734606, 0.0560673, 0.998427, -1.
 
 [node name="box_house_short" parent="blockout/box_house_short14" index="0"]
 material/0 = SubResource( 106 )
+
+[node name="box_house_awning" parent="blockout/box_house_short14/box_house_short" index="0"]
+material_override = SubResource( 292 )
+
+[node name="StaticBody" parent="blockout/box_house_short14/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 192 )
 
 [node name="box_house_side20" parent="blockout" index="1" instance=ExtResource( 53 )]
 transform = Transform( -0.00782708, -0.038218, -0.999239, 0.0194586, 0.999074, -0.0383642, 0.99978, -0.0197441, -0.00707616, -44.871, 14.4154, 72.7001 )
@@ -3221,6 +3879,12 @@ transform = Transform( 0.698491, -0.00870063, -0.715566, -0.00144713, 0.999907, 
 [node name="box_house_short" parent="blockout/box_house_short15" index="0"]
 material/0 = SubResource( 107 )
 
+[node name="box_house_awning" parent="blockout/box_house_short15/box_house_short" index="0"]
+material_override = SubResource( 294 )
+
+[node name="StaticBody" parent="blockout/box_house_short15/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 194 )
+
 [node name="box_house_side26" parent="blockout" index="21" instance=ExtResource( 54 )]
 transform = Transform( 0.698491, -0.00870063, -0.715566, -0.00144713, 0.999907, -0.0135705, 0.715618, 0.0105144, 0.698413, -7.61353, 14.4695, 120.454 )
 
@@ -3238,6 +3902,12 @@ transform = Transform( 0.698491, -0.00870063, -0.715566, -0.00144713, 0.999907, 
 
 [node name="box_house_short" parent="blockout/box_house_short16" index="0"]
 material/0 = SubResource( 108 )
+
+[node name="box_house_awning" parent="blockout/box_house_short16/box_house_short" index="0"]
+material_override = SubResource( 296 )
+
+[node name="StaticBody" parent="blockout/box_house_short16/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 196 )
 
 [node name="box_house_passenger43" parent="blockout" index="24" instance=ExtResource( 55 )]
 transform = Transform( 0.698491, -0.00870063, -0.715566, -0.00144713, 0.999907, -0.0135705, 0.715618, 0.0105144, 0.698413, 45.5501, 14.4695, 152.659 )
@@ -3377,6 +4047,12 @@ transform = Transform( 0.999093, -0.00870063, -0.041681, 0.00825431, 0.999907, -
 [node name="box_house_short" parent="blockout/box_house_short17" index="0"]
 material/0 = SubResource( 109 )
 
+[node name="box_house_awning" parent="blockout/box_house_short17/box_house_short" index="0"]
+material_override = SubResource( 298 )
+
+[node name="StaticBody" parent="blockout/box_house_short17/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 198 )
+
 [node name="box_house_side32" parent="blockout" index="47" instance=ExtResource( 53 )]
 transform = Transform( 0.689229, -0.00870063, -0.724491, -0.00162156, 0.999907, -0.0135508, 0.724541, 0.0105144, 0.689151, 9.06209, 14.4466, 160.551 )
 
@@ -3388,6 +4064,12 @@ transform = Transform( 0.689229, -0.00870063, -0.724491, -0.00162156, 0.999907, 
 
 [node name="box_house_short" parent="blockout/box_house_short18" index="0"]
 material/0 = SubResource( 110 )
+
+[node name="box_house_awning" parent="blockout/box_house_short18/box_house_short" index="0"]
+material_override = SubResource( 300 )
+
+[node name="StaticBody" parent="blockout/box_house_short18/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 200 )
 
 [node name="box_house_side33" parent="blockout" index="49" instance=ExtResource( 54 )]
 transform = Transform( 0.689229, -0.00870063, -0.724491, -0.00162156, 0.999907, -0.0135508, 0.724541, 0.0105144, 0.689151, -4.51675, 14.2441, 169.474 )
@@ -3419,6 +4101,12 @@ transform = Transform( -0.00666691, -0.0384374, -0.999239, -0.0107851, 0.999206,
 [node name="box_house_short" parent="blockout/box_house_short19" index="0"]
 material/0 = SubResource( 111 )
 
+[node name="box_house_awning" parent="blockout/box_house_short19/box_house_short" index="0"]
+material_override = SubResource( 302 )
+
+[node name="StaticBody" parent="blockout/box_house_short19/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 202 )
+
 [node name="box_house_full18" parent="blockout" index="54" instance=ExtResource( 57 )]
 transform = Transform( -0.00666691, -0.0384374, -0.999239, -0.0107851, 0.999206, -0.0383642, 0.99992, 0.0105211, -0.00707616, -44.7271, 12.3628, 10.2113 )
 
@@ -3442,6 +4130,12 @@ transform = Transform( 0.698994, 0.0110804, -0.715042, -0.0163243, 0.999867, -0.
 
 [node name="box_house_short" parent="blockout/box_house_short20" index="0"]
 material/0 = SubResource( 112 )
+
+[node name="box_house_awning" parent="blockout/box_house_short20/box_house_short" index="0"]
+material_override = SubResource( 304 )
+
+[node name="StaticBody" parent="blockout/box_house_short20/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 204 )
 
 [node name="box_house_passenger59" parent="blockout" index="58" instance=ExtResource( 56 )]
 transform = Transform( 0.699068, 0.00444632, -0.715042, -0.00683462, 0.999976, -0.000463816, 0.715023, 0.00521128, 0.699082, 6.06184, 14.3517, 66.635 )
@@ -3520,6 +4214,12 @@ transform = Transform( 0.699051, -0.00651197, -0.715042, 0.00884065, 0.999961, -
 
 [node name="box_house_short" parent="blockout/box_house_short21" index="0"]
 material/0 = SubResource( 113 )
+
+[node name="box_house_awning" parent="blockout/box_house_short21/box_house_short" index="0"]
+material_override = SubResource( 306 )
+
+[node name="StaticBody" parent="blockout/box_house_short21/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 206 )
 
 [node name="box_house_passenger65" parent="blockout" index="71" instance=ExtResource( 43 )]
 transform = Transform( 0.699051, -0.00651197, -0.715042, 0.00884065, 0.999961, -0.000463816, 0.715017, -0.00599721, 0.699081, 32.177, 14.5955, 106.411 )
@@ -3617,6 +4317,12 @@ transform = Transform( 0.699051, -0.00651197, -0.715042, 0.00884065, 0.999961, -
 [node name="box_house_short" parent="blockout/box_house_short22" index="0"]
 material/0 = SubResource( 114 )
 
+[node name="box_house_awning" parent="blockout/box_house_short22/box_house_short" index="0"]
+material_override = SubResource( 308 )
+
+[node name="StaticBody" parent="blockout/box_house_short22/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 208 )
+
 [node name="box_house_side39" parent="blockout" index="87" instance=ExtResource( 54 )]
 transform = Transform( 0.686753, 0.00189385, -0.726888, -0.00319092, 0.999995, -0.000409326, 0.726884, 0.00260055, 0.686756, 73.3383, 14.6479, 136.79 )
 
@@ -3629,11 +4335,23 @@ transform = Transform( 0.678494, -0.000727403, -0.734606, 0.00107209, 0.999999, 
 [node name="box_house_short" parent="blockout/box_house_short23" index="0"]
 material/0 = SubResource( 115 )
 
+[node name="box_house_awning" parent="blockout/box_house_short23/box_house_short" index="0"]
+material_override = SubResource( 310 )
+
+[node name="StaticBody" parent="blockout/box_house_short23/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 210 )
+
 [node name="box_house_short24" parent="blockout" index="89" instance=ExtResource( 58 )]
 transform = Transform( 0.678494, -0.000727403, -0.734606, 0.00107209, 0.999999, 4.89075e-09, 0.734605, -0.000787567, 0.678494, -5.36254, 14.3905, 89.7241 )
 
 [node name="box_house_short" parent="blockout/box_house_short24" index="0"]
 material/0 = SubResource( 116 )
+
+[node name="box_house_awning" parent="blockout/box_house_short24/box_house_short" index="0"]
+material_override = SubResource( 312 )
+
+[node name="StaticBody" parent="blockout/box_house_short24/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 212 )
 
 [node name="locomotive2" parent="blockout" index="90" instance=ExtResource( 30 )]
 transform = Transform( 0.00634533, -0.0384918, 0.999238, 0.0191359, 0.99908, 0.0383641, -0.999797, 0.0188779, 0.00707607, -44.772, 14.1875, 88.8273 )
@@ -3746,6 +4464,12 @@ transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.
 [node name="box_house_short" parent="blockout/box_house_short" index="0"]
 material/0 = SubResource( 117 )
 
+[node name="box_house_awning" parent="blockout/box_house_short/box_house_short" index="0"]
+material_override = SubResource( 314 )
+
+[node name="StaticBody" parent="blockout/box_house_short/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 214 )
+
 [node name="box_house_passenger3" parent="blockout" index="115" instance=ExtResource( 55 )]
 transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.00254004, 0.7202, -0.0126391, 0.693651, 47.6747, 17.5574, 110.153 )
 
@@ -3812,6 +4536,12 @@ transform = Transform( -0.722005, -0.00864544, -0.691833, 0.002503, 0.999883, -0
 [node name="box_house_short" parent="blockout/box_house_short2" index="0"]
 material/0 = SubResource( 118 )
 
+[node name="box_house_awning" parent="blockout/box_house_short2/box_house_short" index="0"]
+material_override = SubResource( 316 )
+
+[node name="StaticBody" parent="blockout/box_house_short2/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 216 )
+
 [node name="box_house_passenger7" parent="blockout" index="126" instance=ExtResource( 55 )]
 transform = Transform( -0.722005, -0.00864544, -0.691833, 0.002503, 0.999883, -0.0151071, 0.691883, -0.0126391, -0.721899, 28.0549, 17.5785, 96.6134 )
 
@@ -3830,11 +4560,23 @@ transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.
 [node name="box_house_short" parent="blockout/box_house_short3" index="0"]
 material/0 = SubResource( 119 )
 
+[node name="box_house_awning" parent="blockout/box_house_short3/box_house_short" index="0"]
+material_override = SubResource( 318 )
+
+[node name="StaticBody" parent="blockout/box_house_short3/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 218 )
+
 [node name="box_house_short4" parent="blockout" index="129" instance=ExtResource( 58 )]
 transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.00254004, 0.7202, -0.0126391, 0.693651, 11.6637, 17.7152, 72.7572 )
 
 [node name="box_house_short" parent="blockout/box_house_short4" index="0"]
 material/0 = SubResource( 120 )
+
+[node name="box_house_awning" parent="blockout/box_house_short4/box_house_short" index="0"]
+material_override = SubResource( 320 )
+
+[node name="StaticBody" parent="blockout/box_house_short4/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 220 )
 
 [node name="box_house_passenger8" parent="blockout" index="130" instance=ExtResource( 55 )]
 transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.00254004, 0.7202, -0.0126391, 0.693651, -2.74432, 17.6609, 57.7957 )
@@ -3847,6 +4589,12 @@ transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.
 
 [node name="box_house_short" parent="blockout/box_house_short5" index="0"]
 material/0 = SubResource( 121 )
+
+[node name="box_house_awning" parent="blockout/box_house_short5/box_house_short" index="0"]
+material_override = SubResource( 322 )
+
+[node name="StaticBody" parent="blockout/box_house_short5/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 222 )
 
 [node name="box_house_full3" parent="blockout" index="132" instance=ExtResource( 57 )]
 transform = Transform( 0.693602, -0.00864543, -0.720307, 0.0151009, 0.999883, 0.00254004, 0.7202, -0.0126391, 0.693651, -15.1591, 18.1932, 68.6892 )
@@ -3896,6 +4644,12 @@ transform = Transform( 0.69364, 0.00462914, -0.720307, -0.0040359, 0.999989, 0.0
 [node name="box_house_short" parent="blockout/box_house_short6" index="0"]
 material/0 = SubResource( 167 )
 
+[node name="box_house_awning" parent="blockout/box_house_short6/box_house_short" index="0"]
+material_override = SubResource( 324 )
+
+[node name="StaticBody" parent="blockout/box_house_short6/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 224 )
+
 [node name="box_house_passenger14" parent="blockout" index="140" instance=ExtResource( 55 )]
 transform = Transform( 0.69364, 0.00462914, -0.720307, -0.0040359, 0.999989, 0.00254007, 0.72031, 0.00114519, 0.693651, -16.1453, 20.5243, 99.6686 )
 
@@ -3913,6 +4667,12 @@ transform = Transform( -0.720307, 0.00462914, -0.69364, 0.00254007, 0.999989, 0.
 
 [node name="box_house_short" parent="blockout/box_house_short7" index="0"]
 material/0 = SubResource( 169 )
+
+[node name="box_house_awning" parent="blockout/box_house_short7/box_house_short" index="0"]
+material_override = SubResource( 326 )
+
+[node name="StaticBody" parent="blockout/box_house_short7/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 226 )
 
 [node name="box_house_side6" parent="blockout" index="143" instance=ExtResource( 53 )]
 transform = Transform( -0.720307, 0.00462914, -0.69364, 0.00254007, 0.999989, 0.0040359, 0.693651, 0.00114519, -0.72031, -23.5001, 20.5276, 101.572 )
@@ -3943,6 +4703,12 @@ transform = Transform( 0.69364, 0.00462914, -0.720307, -0.0040359, 0.999989, 0.0
 
 [node name="box_house_short" parent="blockout/box_house_short8" index="0"]
 material/0 = SubResource( 172 )
+
+[node name="box_house_awning" parent="blockout/box_house_short8/box_house_short" index="0"]
+material_override = SubResource( 328 )
+
+[node name="StaticBody" parent="blockout/box_house_short8/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 228 )
 
 [node name="box_house_side8" parent="blockout" index="148" instance=ExtResource( 53 )]
 transform = Transform( 0.69364, 0.00462914, -0.720307, -0.0040359, 0.999989, 0.00254007, 0.72031, 0.00114519, 0.693651, 6.35183, 17.3182, 134.494 )
@@ -4022,11 +4788,23 @@ transform = Transform( 0.69364, 0.00462914, -0.720307, -0.0040359, 0.999989, 0.0
 [node name="box_house_short" parent="blockout/box_house_short9" index="0"]
 material/0 = SubResource( 177 )
 
+[node name="box_house_awning" parent="blockout/box_house_short9/box_house_short" index="0"]
+material_override = SubResource( 330 )
+
+[node name="StaticBody" parent="blockout/box_house_short9/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 230 )
+
 [node name="box_house_short10" parent="blockout" index="161" instance=ExtResource( 58 )]
 transform = Transform( 0.73324, 0.00462914, 0.679955, -0.00261561, 0.999989, -0.00398736, -0.679965, 0.00114519, 0.733244, -10.7591, 17.5556, 100.303 )
 
 [node name="box_house_short" parent="blockout/box_house_short10" index="0"]
 material/0 = SubResource( 178 )
+
+[node name="box_house_awning" parent="blockout/box_house_short10/box_house_short" index="0"]
+material_override = SubResource( 332 )
+
+[node name="StaticBody" parent="blockout/box_house_short10/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 232 )
 
 [node name="box_house_full8" parent="blockout" index="162" instance=ExtResource( 57 )]
 transform = Transform( 0.556609, 0.00462914, 0.830762, -0.00162525, 0.999989, -0.00448319, -0.830773, 0.00114519, 0.55661, -2.40415, 17.5068, 109.119 )
@@ -4082,6 +4860,12 @@ transform = Transform( -0.73324, 0.00462914, -0.679954, 0.00261561, 0.999989, 0.
 [node name="box_house_short" parent="blockout/box_house_short11" index="0"]
 material/0 = SubResource( 183 )
 
+[node name="box_house_awning" parent="blockout/box_house_short11/box_house_short" index="0"]
+material_override = SubResource( 334 )
+
+[node name="StaticBody" parent="blockout/box_house_short11/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 234 )
+
 [node name="box_house_passenger25" parent="blockout" index="171" instance=ExtResource( 55 )]
 transform = Transform( 0.999144, 0.00462914, -0.0411066, -0.0046723, 0.999989, -0.000953946, 0.0411017, 0.00114519, 0.999154, 45.2005, 20.292, 162.755 )
 
@@ -4136,6 +4920,12 @@ transform = Transform( 0.749547, -0.00798338, 0.661902, -0.00266625, 0.999883, 0
 [node name="box_house_short" parent="blockout/box_house_short12" index="0"]
 material/0 = SubResource( 188 )
 
+[node name="box_house_awning" parent="blockout/box_house_short12/box_house_short" index="0"]
+material_override = SubResource( 336 )
+
+[node name="StaticBody" parent="blockout/box_house_short12/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 236 )
+
 [node name="box_house_side19" parent="blockout" index="180" instance=ExtResource( 53 )]
 transform = Transform( 0.749547, -0.00798338, 0.661902, -0.00266625, 0.999883, 0.0150791, -0.661945, -0.0130673, 0.749438, -7.37928, 21.1529, 58.1056 )
 
@@ -4171,6 +4961,12 @@ transform = Transform( -0.07598, 0, 0.997109, 0, 1, 0, -0.997109, 0, -0.07598, 3
 
 [node name="box_house_short" parent="blockout/box_house_short13" index="0"]
 material/0 = SubResource( 122 )
+
+[node name="box_house_awning" parent="blockout/box_house_short13/box_house_short" index="0"]
+material_override = SubResource( 338 )
+
+[node name="StaticBody" parent="blockout/box_house_short13/box_house_short/box_house_awning" index="0"]
+coat = SubResource( 238 )
 
 [node name="cargo_cart" parent="blockout" index="186" instance=ExtResource( 45 )]
 transform = Transform( 0.677427, -0.0380413, -0.734606, 0.0560673, 0.998427, -1.85972e-09, 0.73345, -0.0411873, 0.678494, -19.7081, 12.7275, 39.7533 )

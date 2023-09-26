@@ -1,3 +1,4 @@
+tool
 extends Resource
 class_name Coat
 
@@ -129,6 +130,6 @@ func generate_material(backface_culling := true) -> Material:
 	mat.set_shader_param("gradient", gt)
 	mat.set_shader_param("softness", 0.6)
 	mat.set_shader_param("palette", palette)
-	mat.set_shader_param("detail", Global.get_coat_detail())
+	mat.set_shader_param("detail", load("res://material/coat/detail_fabric.bmp"))
 	
 	return mat

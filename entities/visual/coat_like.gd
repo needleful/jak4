@@ -1,4 +1,6 @@
+tool
 extends PhysicsBody
+class_name CoatLike
 
 export(NodePath) var mesh_path = NodePath("..")
 
@@ -6,25 +8,29 @@ onready var node: GeometryInstance
 
 export(bool) var double_sided := false
 export(bool) var persistent := true
-
-var coat: Coat
+export(Resource) var coat: Resource
 
 func _ready():
 	if has_node(mesh_path):
 		node = get_node(mesh_path)
-	if persistent:
-		var c = Global.stat("coats/" + Global.node_stat(self))
-		if !(c is Coat):
-			c = Coat.new(true)
-		set_coat(c)
+	if !coat:
+		if persistent and !Engine.editor_hint:
+			var c = Global.stat("coats/" + Global.node_stat(self))
+			if !(c is Coat):
+				c = Coat.new(true)
+			set_coat(c)
+		else:
+			set_coat(Coat.new(true))
 	else:
-		set_coat(Coat.new(true))
+		set_coat(coat)
 
 func get_coat():
 	return coat
 
 func set_coat(c: Coat):
 	coat = c
+	if !coat:
+		return
 	var mat = coat.generate_material(!double_sided)
 	if node:
 		node.material_override = mat
@@ -33,7 +39,7 @@ func set_coat(c: Coat):
 			if c is GeometryInstance:
 				c.material_override = mat
 
-	if persistent:
+	if persistent and !Engine.editor_hint:
 		Global.set_stat("coats/" + Global.node_stat(self), c)
 	if has_node("light"):
 		var l := $light as Light
@@ -51,3 +57,11 @@ func start_coat_trade(player: PlayerBody):
 	player.set_current_coat(this_coat, true)
 	Global.remove_coat(player_coat)
 	set_coat(player_coat)
+	if persistent:
+		mark_traded()
+
+func mark_traded():
+	return Global.add_stat("traded/"+Global.node_stat(self))
+
+func was_traded():
+	return Global.stat("traded/"+Global.node_stat(self))

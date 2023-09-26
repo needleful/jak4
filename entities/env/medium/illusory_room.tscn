@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -14,20 +14,23 @@
 [ext_resource path="res://material/env/medium/garbage_wood_wainscot.jpg" type="Texture" id=12]
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=13]
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=14]
-[ext_resource path="res://material/env/medium/coffee_table.jpg" type="Texture" id=15]
-[ext_resource path="res://material/env/medium/end_table.jpg" type="Texture" id=16]
-[ext_resource path="res://material/env/medium/floral4_stolen_from_vecteezy.jpg" type="Texture" id=17]
-[ext_resource path="res://material/coat/checkers1.jpg" type="Texture" id=18]
-[ext_resource path="res://material/env/medium/lounge-sofa.jpg" type="Texture" id=19]
+[ext_resource path="res://material/env/noise.jpg" type="Texture" id=15]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=16]
+[ext_resource path="res://_glb/env/furniture/modern_lounge_sofa_mesh2.mesh" type="ArrayMesh" id=17]
+[ext_resource path="res://_glb/env/furniture/modern_end_table_mesh.mesh" type="ArrayMesh" id=18]
+[ext_resource path="res://_glb/env/furniture/modern_coffee_table_mesh2.mesh" type="ArrayMesh" id=19]
 [ext_resource path="res://material/env/medium/wood_stolen_from_ambientcg.jpg" type="Texture" id=20]
-[ext_resource path="res://material/env/medium/floral3_stolen_from_vecteezy.png" type="Texture" id=21]
+[ext_resource path="res://_glb/env/furniture/modern_chair_mesh2.mesh" type="ArrayMesh" id=21]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=22]
-[ext_resource path="res://material/coat.shader" type="Shader" id=23]
-[ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=24]
-[ext_resource path="res://material/coat/fabric2.jpg" type="Texture" id=25]
-[ext_resource path="res://material/env/snow.png" type="Texture" id=26]
+[ext_resource path="res://entities/env/furniture/modern_chair.material" type="Material" id=23]
+[ext_resource path="res://entities/env/furniture/modern_coffee_table.material" type="Material" id=24]
+[ext_resource path="res://entities/env/furniture/modern_lounge_sofa1.material" type="Material" id=25]
+[ext_resource path="res://entities/env/furniture/modern_lounge_sofa2.material" type="Material" id=26]
 [ext_resource path="res://entities/visual/mum_primordial.tscn" type="PackedScene" id=27]
 [ext_resource path="res://entities/visual/empty.png" type="Texture" id=28]
+[ext_resource path="res://entities/env/furniture/modern_end_table.material" type="Material" id=29]
+[ext_resource path="res://entities/env/furniture/pillow_small.material" type="Material" id=30]
+[ext_resource path="res://_glb/env/furniture/pillow_small_mesh.mesh" type="ArrayMesh" id=31]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=306]
 
@@ -331,16 +334,21 @@ shader_param/wall = ExtResource( 20 )
 shader_param/ground = ExtResource( 20 )
 shader_param/ceiling = ExtResource( 20 )
 
-[sub_resource type="ShaderMaterial" id=292]
-shader = ExtResource( 22 )
-shader_param/uv_scale = 0.5
+[sub_resource type="ShaderMaterial" id=307]
+shader = ExtResource( 16 )
+shader_param/wall_scale = 1.0
+shader_param/ground_scale = 1.0
 shader_param/power = 5.0
 shader_param/softness = 0.5
-shader_param/specularity = 1.0
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
 shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 21 )
-shader_param/ground = ExtResource( 21 )
-shader_param/ceiling = ExtResource( 21 )
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 0.94902, 0.937255, 0.901961, 1 )
+shader_param/wall = ExtResource( 15 )
+shader_param/ground = ExtResource( 15 )
+shader_param/ceiling = ExtResource( 15 )
 
 [sub_resource type="ShaderMaterial" id=293]
 shader = ExtResource( 22 )
@@ -353,88 +361,6 @@ shader_param/wall = ExtResource( 12 )
 shader_param/ground = ExtResource( 12 )
 shader_param/ceiling = ExtResource( 12 )
 
-[sub_resource type="ShaderMaterial" id=294]
-shader = ExtResource( 22 )
-shader_param/uv_scale = 0.5
-shader_param/power = 5.0
-shader_param/softness = 0.5
-shader_param/specularity = 1.0
-shader_param/light_bias = 0.0
-shader_param/wall = ExtResource( 26 )
-shader_param/ground = ExtResource( 26 )
-shader_param/ceiling = ExtResource( 26 )
-
-[sub_resource type="Gradient" id=295]
-offsets = PoolRealArray( 0, 0.343173, 1 )
-colors = PoolColorArray( 0.738281, 0.39798, 0.39798, 1, 0.594238, 0.366756, 0.366756, 1, 1, 1, 1, 1 )
-
-[sub_resource type="GradientTexture" id=296]
-gradient = SubResource( 295 )
-width = 64
-
-[sub_resource type="ShaderMaterial" id=297]
-shader = ExtResource( 23 )
-shader_param/light_bias = 0.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/detail_scale = 256.0
-shader_param/palette = ExtResource( 18 )
-shader_param/gradient = SubResource( 296 )
-shader_param/detail = ExtResource( 24 )
-
-[sub_resource type="ShaderMaterial" id=285]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 10.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/main_texture = ExtResource( 15 )
-
-[sub_resource type="ShaderMaterial" id=286]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 10.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/main_texture = ExtResource( 16 )
-
-[sub_resource type="ShaderMaterial" id=290]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/main_texture = ExtResource( 19 )
-
-[sub_resource type="Gradient" id=298]
-colors = PoolColorArray( 0.887795, 0.936035, 0.884846, 1, 0.936302, 0.939941, 0.811434, 1 )
-
-[sub_resource type="GradientTexture" id=299]
-gradient = SubResource( 298 )
-width = 64
-
-[sub_resource type="ShaderMaterial" id=300]
-shader = ExtResource( 23 )
-shader_param/light_bias = null
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/detail_scale = 256.0
-shader_param/palette = ExtResource( 25 )
-shader_param/gradient = SubResource( 299 )
-shader_param/detail = ExtResource( 24 )
-
-[sub_resource type="ShaderMaterial" id=288]
-shader = ExtResource( 14 )
-shader_param/subsurface_scattering = -1.0
-shader_param/softness = 1.0
-shader_param/specularity = 1.0
-shader_param/uv_scale = Vector2( 1, 1 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/main_texture = ExtResource( 17 )
-
 [sub_resource type="CylinderShape" id=1]
 height = 0.791512
 radius = 0.715599
@@ -443,7 +369,7 @@ radius = 0.715599
 script = ExtResource( 10 )
 
 [node name="mum" parent="." index="0" instance=ExtResource( 7 )]
-transform = Transform( -4.3707e-08, 0, 0.9999, 0, 1, 0, -0.9999, 0, -4.3707e-08, -0.855032, -1.1646, -0.28539 )
+transform = Transform( -4.37069e-08, 0, 0.999898, 0, 1, 0, -0.999898, 0, -4.37069e-08, -0.855032, -1.1646, -0.28539 )
 path_node = NodePath("../intro_path")
 path_amount = 1.0
 
@@ -451,8 +377,8 @@ path_amount = 1.0
 transform = Transform( 1.08, 1.98952e-13, 7.72478e-07, 7.56241e-07, 0.220271, -1.0573, -1.5755e-07, 1.0573, 0.220271, -2.10913e-14, 1.38066, -0.00689602 )
 
 [node name="AnimationTree" parent="mum" index="5"]
+parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 306 )
-parameters/StateMachine/Walk/blend_position = 0
 
 [node name="look_target" type="Position3D" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.783324, -1.11376, -0.304634 )
@@ -494,68 +420,73 @@ layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 291 )
-material/1 = SubResource( 292 )
+material/1 = SubResource( 307 )
 material/2 = SubResource( 293 )
-material/3 = SubResource( 294 )
+material/3 = SubResource( 307 )
 script = ExtResource( 1 )
 real_object_visible = false
 invisible_material = SubResource( 283 )
 hologram_material = SubResource( 278 )
 
-[node name="chair" parent="hologram" index="0"]
-layers = 65536
-material_override = SubResource( 283 )
-material_overlay = SubResource( 278 )
-material/0 = SubResource( 297 )
-
-[node name="chair001" parent="hologram" index="1"]
-layers = 65536
-material_override = SubResource( 283 )
-material_overlay = SubResource( 278 )
-material/0 = SubResource( 297 )
-
-[node name="coffee_table" parent="hologram" index="2"]
-layers = 65536
-material_override = SubResource( 283 )
-material_overlay = SubResource( 278 )
-material/0 = SubResource( 285 )
-
-[node name="door_frame" parent="hologram" index="3"]
+[node name="door_frame" parent="hologram" index="0"]
 layers = 98304
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
 material/0 = SubResource( 291 )
 
-[node name="end_table" parent="hologram" index="4"]
+[node name="chair1" type="MeshInstance" parent="hologram" index="1"]
+transform = Transform( 0.508093, 0, -0.861302, 0, 1, 0, 0.861302, 0, 0.508093, 1.3731, -1.1341, -1.99485 )
 layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 286 )
+mesh = ExtResource( 21 )
+skeleton = NodePath("../mum_seat_sofa")
+material/0 = ExtResource( 23 )
 
-[node name="end_table2" parent="hologram" index="5"]
+[node name="chair3" type="MeshInstance" parent="hologram" index="2"]
+transform = Transform( 0.343476, -0.339771, 0.875545, 0.703261, 0.710931, -1.11771e-08, -0.622452, 0.615737, 0.483136, 1.10012, -0.622898, -2.06379 )
 layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 286 )
+mesh = ExtResource( 31 )
+skeleton = NodePath("../mum_seat_sofa")
+material/0 = ExtResource( 30 )
 
-[node name="lounge-sofa" parent="hologram" index="6"]
+[node name="chair2" type="MeshInstance" parent="hologram" index="3"]
+transform = Transform( -0.52319, 0, -0.852216, 0, 1, 0, 0.852216, 0, -0.52319, 1.59023, -1.1341, -0.0974558 )
 layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 290 )
-material/1 = SubResource( 300 )
+mesh = ExtResource( 21 )
+skeleton = NodePath("../mum_seat_sofa")
+material/0 = ExtResource( 23 )
 
-[node name="pillow" parent="hologram" index="7"]
+[node name="end_table" type="MeshInstance" parent="hologram" index="4"]
+transform = Transform( 0.0814976, 0, 0.996674, 0, 1, 0, -0.996674, 0, 0.0814976, -1.23286, -1.1341, -2.25603 )
 layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 288 )
+mesh = ExtResource( 18 )
+skeleton = NodePath("../mum_seat_sofa")
+material/0 = ExtResource( 29 )
 
-[node name="pillow2" parent="hologram" index="8"]
+[node name="coffee_table" type="MeshInstance" parent="hologram" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0353425, -1.1073, -0.989642 )
 layers = 65536
 material_override = SubResource( 283 )
 material_overlay = SubResource( 278 )
-material/0 = SubResource( 288 )
+mesh = ExtResource( 19 )
+skeleton = NodePath("../mum_seat_sofa")
+material/0 = ExtResource( 24 )
+
+[node name="mum_seat_sofa" type="MeshInstance" parent="hologram" index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.31072, -1.14732, -0.802529 )
+layers = 65536
+material_override = SubResource( 283 )
+material_overlay = SubResource( 278 )
+mesh = ExtResource( 17 )
+material/0 = ExtResource( 25 )
+material/1 = ExtResource( 26 )
 
 [node name="chair" parent="." index="7"]
 material/0 = ExtResource( 3 )
