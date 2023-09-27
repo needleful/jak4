@@ -13,8 +13,10 @@ export(Resource) var coat: Resource
 func _ready():
 	if has_node(mesh_path):
 		node = get_node(mesh_path)
+	if Engine.editor_hint:
+		return
 	if !coat:
-		if persistent and !Engine.editor_hint:
+		if persistent:
 			var c = Global.stat("coats/" + Global.node_stat(self))
 			if !(c is Coat):
 				c = Coat.new(true)

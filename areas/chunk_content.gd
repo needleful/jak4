@@ -25,6 +25,7 @@ func _ready():
 			add_child(m)
 			m.name = "__autogen_preview"
 			m.transform = Transform()
+			m.set_surface_material(0, load("res://material/env/terrain_main.material"))
 			if preview_neighbors:
 				# Bring in immediate neightbors
 				# +1, -1, +12, -12, +11, -11, +13, -13
@@ -46,6 +47,7 @@ func _ready():
 						var mn = MeshInstance.new()
 						add_child(mn)
 						mn.mesh = neighbor.mesh
+						mn.set_surface_material(0, load("res://material/env/terrain_main.material"))
 						mn.transform.origin = Vector3(500*n.x, 0, -500*n.y)
 		else:
 			print_debug("No chunk of name ", name)
