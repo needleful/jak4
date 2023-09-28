@@ -1,4 +1,4 @@
-[gd_scene load_steps=360 format=2]
+[gd_scene load_steps=370 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -94,6 +94,10 @@
 [ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=92]
 [ext_resource path="res://entities/visual/preset_coat.gd" type="Script" id=93]
 [ext_resource path="res://material/coat_doublesided.shader" type="Shader" id=94]
+[ext_resource path="res://entities/env/furniture/box_bed.tscn" type="PackedScene" id=95]
+[ext_resource path="res://material/coat/hearts5.jpg" type="Texture" id=96]
+[ext_resource path="res://dialog/side_content/persephone/house_door.dialog" type="Resource" id=97]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=98]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -285,99 +289,6 @@ _data = {
 "points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 9.70836, -2.87169, -148.43, 2.27019, -0.307899, -4.73932, -2.27019, 0.307899, 4.73932, 7.62447, -0.241027, -141.017, 0.690536, -0.197178, -7.47269, -0.690536, 0.197178, 7.47269, -0.738384, -0.0822792, -111.935, -0.340023, 0.0818214, -5.34735, 0.340023, -0.0818214, 5.34735, -0.598091, -0.213711, 119.125, 0.0179501, -0.20308, -3.98026, -0.0179501, 0.20308, 3.98026, -0.380657, -1.09037, 132.382, -0.0976124, -0.0757265, -4.30595, 0.0976124, 0.0757265, 4.30595, -1.01856, -2.24765, 181.363, 0, 0, 0, 0, 0, 0, -21.4962, -2.27494, 206.097, 0, 0, 0, 0, 0, 0, -25.6411, -5.08038, 211.473 ),
 "tilts": PoolRealArray( 0, 0, 0, 0, 0, 0, 0, 0 )
 }
-
-[sub_resource type="SphereShape" id=12]
-
-[sub_resource type="Animation" id=13]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("fade:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("fade:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=14]
-resource_name = "end_game"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("fade:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("fade:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 3 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "go_to_credits"
-} ]
-}
-
-[sub_resource type="Gradient" id=289]
-offsets = PoolRealArray( 0.0114943, 0.218391, 1 )
-colors = PoolColorArray( 0.9375, 0.0915527, 0.0915527, 1, 1, 0.753906, 0.932709, 1, 0.715223, 0.327484, 0.855469, 1 )
-
-[sub_resource type="Resource" id=288]
-resource_name = "Coat"
-script = ExtResource( 88 )
-rarity = 1
-palette = ExtResource( 76 )
-gradient = SubResource( 289 )
-
-[sub_resource type="Gradient" id=287]
-offsets = PoolRealArray( 0, 0.220884, 1 )
-colors = PoolColorArray( 0.315201, 0.0461426, 0.4375, 1, 0.950684, 0.605469, 1, 1, 0.26062, 0.482438, 0.953125, 1 )
-
-[sub_resource type="Resource" id=290]
-resource_name = "Coat"
-script = ExtResource( 88 )
-rarity = 1
-palette = ExtResource( 76 )
-gradient = SubResource( 287 )
 
 [sub_resource type="ShaderMaterial" id=106]
 resource_local_to_scene = true
@@ -2417,6 +2328,122 @@ shader_param/palette = ExtResource( 76 )
 shader_param/gradient = SubResource( 337 )
 shader_param/detail = ExtResource( 92 )
 
+[sub_resource type="SphereShape" id=12]
+
+[sub_resource type="Animation" id=13]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("fade:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "end_game"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("fade:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("fade:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "go_to_credits"
+} ]
+}
+
+[sub_resource type="Gradient" id=339]
+
+[sub_resource type="Resource" id=340]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 0
+palette = ExtResource( 96 )
+gradient = SubResource( 339 )
+
+[sub_resource type="Gradient" id=289]
+offsets = PoolRealArray( 0.0114943, 0.218391, 1 )
+colors = PoolColorArray( 0.9375, 0.0915527, 0.0915527, 1, 1, 0.753906, 0.932709, 1, 0.715223, 0.327484, 0.855469, 1 )
+
+[sub_resource type="Resource" id=288]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 289 )
+
+[sub_resource type="Gradient" id=287]
+offsets = PoolRealArray( 0, 0.220884, 1 )
+colors = PoolColorArray( 0.315201, 0.0461426, 0.4375, 1, 0.950684, 0.605469, 1, 1, 0.26062, 0.482438, 0.953125, 1 )
+
+[sub_resource type="Resource" id=290]
+resource_name = "Coat"
+script = ExtResource( 88 )
+rarity = 1
+palette = ExtResource( 76 )
+gradient = SubResource( 287 )
+
+[sub_resource type="CylinderShape" id=341]
+height = 0.613938
+radius = 0.328053
+
+[sub_resource type="BoxShape" id=342]
+extents = Vector3( 4.18272, 1.5064, 1.60144 )
+
+[sub_resource type="BoxShape" id=343]
+extents = Vector3( 5.03291, 1.56272, 1.46849 )
+
+[sub_resource type="CylinderShape" id=344]
+height = 3.77986
+radius = 1.41097
+
 [node name="chunk049" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
@@ -3423,161 +3450,7 @@ curve = SubResource( 11 )
 [node name="player_teleport_marker" type="Position3D" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 98.9362, 12.5731, 121.167 )
 
-[node name="active_entities" type="Spatial" parent="." index="6"]
-
-[node name="end_train" type="Spatial" parent="active_entities" index="0"]
-transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 115.321, 12.2555, 145.342 )
-script = ExtResource( 34 )
-
-[node name="locomotive" parent="active_entities/end_train" index="0" instance=ExtResource( 30 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2906, 2.00405, -0.0332413 )
-
-[node name="passenger_cart" parent="active_entities/end_train/locomotive" index="3" instance=ExtResource( 31 )]
-transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 14.9983, -0.842084, 0 )
-
-[node name="passenger_cart2" parent="active_entities/end_train/locomotive" index="4" instance=ExtResource( 31 )]
-transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 27.1537, -0.782406, 0 )
-
-[node name="passenger_cart3" parent="active_entities/end_train/locomotive" index="5" instance=ExtResource( 31 )]
-transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 39.2175, -0.782406, -7.62939e-06 )
-
-[node name="passenger_cart4" parent="active_entities/end_train/locomotive" index="6" instance=ExtResource( 31 )]
-transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 51.5175, -0.782406, -1.52588e-05 )
-
-[node name="passenger_cart5" parent="active_entities/end_train/locomotive" index="7" instance=ExtResource( 31 )]
-transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 63.6258, -0.782406, -3.8147e-05 )
-
-[node name="goodbye" type="Area" parent="active_entities/end_train" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.9091, 0.397475, 3.51949 )
-collision_layer = 0
-collision_mask = 2
-script = ExtResource( 32 )
-dialog_sequence = ExtResource( 35 )
-main_speaker = NodePath("..")
-
-[node name="dialog_circle" parent="active_entities/end_train/goodbye" index="0" instance=ExtResource( 33 )]
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/end_train/goodbye" index="1"]
-shape = SubResource( 12 )
-
-[node name="npc2" parent="active_entities/end_train" index="2" instance=ExtResource( 18 )]
-transform = Transform( 0.941054, 0, 0.338257, 0, 1, 0, -0.338257, 0, 0.941054, 32.0701, 0.304795, 3.54254 )
-visual_name = "Traveller"
-
-[node name="npc3" parent="active_entities/end_train" index="3" instance=ExtResource( 18 )]
-transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 33.3183, 0.304793, 4.47469 )
-visual_name = "Traveller"
-
-[node name="npc4" parent="active_entities/end_train" index="4" instance=ExtResource( 18 )]
-transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 44.7468, 0.304794, 3.75823 )
-visual_name = "Traveller"
-
-[node name="npc5" parent="active_entities/end_train" index="5" instance=ExtResource( 18 )]
-transform = Transform( 0.155258, 0, 0.987874, 0, 1, 0, -0.987874, 0, 0.155258, 56.4168, 0.660016, 7.27045 )
-visual_name = "Child"
-model_scale = 0.9
-sitting = true
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="active_entities/end_train" index="6"]
-pause_mode = 2
-anims/RESET = SubResource( 13 )
-anims/end_game = SubResource( 14 )
-
-[node name="fade" type="ColorRect" parent="active_entities/end_train" index="7"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="armstrong_npc" parent="active_entities/end_train" index="8" instance=ExtResource( 18 )]
-transform = Transform( 0.602235, 0, -0.798319, 0, 1, 0, 0.798319, 0, 0.602235, 29.9297, 0.300569, 3.89036 )
-script = ExtResource( 36 )
-dialog = ExtResource( 38 )
-visual_name = "Armstrong"
-friendly_id = "armstrong"
-accessory = ExtResource( 37 )
-custom_entry = "_entry_ending"
-tutorial_node = NodePath("")
-
-[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="1"]
-transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 56.2098, 14.6167, 72.1143 )
-intensity = 0.35
-max_distance = 16384.0
-extents = Vector3( 9.96179, 4.74854, 6.92097 )
-origin_offset = Vector3( 0, -0.34375, 0 )
-interior_enable = true
-interior_ambient_color = Color( 0.172549, 0.2, 0.235294, 1 )
-
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="2"]
-transform = Transform( 0.658098, -0.256814, -0.707781, 0.358286, 0.933595, -0.00561339, 0.662223, -0.249894, 0.706409, 61.3348, 10.5736, 77.1885 )
-intensity = 0.1
-max_distance = 16384.0
-extents = Vector3( 3.88984, 3.7859, 1.60752 )
-
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="active_entities" index="3"]
-transform = Transform( 0.706222, -0.0108907, -0.707907, -0.00478495, 0.999785, -0.0201547, 0.707975, 0.017621, 0.706018, 56.4816, 20.2755, 71.9419 )
-intensity = 0.63
-max_distance = 16384.0
-extents = Vector3( 9.32745, 3.90006, 4.78005 )
-
-[node name="npc" parent="active_entities" index="4" instance=ExtResource( 18 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.3045, 33.1857, 99.3442 )
-
-[node name="leaving" type="Spatial" parent="active_entities" index="5"]
-transform = Transform( 0.690771, 0, 0.723074, 0, 1, 0, -0.723074, 0, 0.690771, 80.9499, 12.5603, 94.5916 )
-script = ExtResource( 20 )
-condition = "!Global.stat(\"natia/leaving\")"
-
-[node name="npc_natia" parent="active_entities/leaving" index="0" instance=ExtResource( 18 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.726303, 0, -0.832153 )
-dialog = ExtResource( 19 )
-visual_name = "Natia"
-friendly_id = "natia"
-
-[node name="juniper_small" parent="active_entities" index="6" instance=ExtResource( 17 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.4546, 12.2767, 99.8644 )
-
-[node name="juniper_small2" parent="active_entities" index="7" instance=ExtResource( 17 )]
-transform = Transform( -0.520051, 0, -0.734539, 0, 0.9, 0, 0.734539, 0, -0.520051, 60.8063, 12.3403, 96.8436 )
-
-[node name="payphone" parent="active_entities" index="8" instance=ExtResource( 42 )]
-transform = Transform( 0.704851, 0, 0.709356, 0, 1, 0, -0.709356, 0, 0.704851, 65.4983, 12.5603, 77.5111 )
-enabled = true
-location = "muzna_cross"
-
-[node name="payphone2" parent="active_entities" index="9" instance=ExtResource( 42 )]
-transform = Transform( 0.714533, 0, 0.699602, 0, 1, 0, -0.699602, 0, 0.714533, 66.5105, 12.5603, 76.4696 )
-
-[node name="payphone3" parent="active_entities" index="10" instance=ExtResource( 42 )]
-transform = Transform( 0.731588, 0, 0.681747, 0, 1, 0, -0.681747, 0, 0.731588, 67.618, 12.5603, 75.3504 )
-
-[node name="persephone_house" type="Spatial" parent="active_entities" index="11"]
-transform = Transform( 0.703473, 0, 0.710721, 0, 1, 0, -0.710721, 0, 0.703473, -24.8073, 26.2139, 98.8903 )
-
-[node name="modern_chair" parent="active_entities/persephone_house" index="0" instance=ExtResource( 68 )]
-transform = Transform( -0.0120737, 0, 0.999927, 0, 1, 0, -0.999927, 0, -0.0120737, -0.880051, -0.340466, -1.18118 )
-
-[node name="modern_lounge_sofa" parent="active_entities/persephone_house" index="1" instance=ExtResource( 67 )]
-transform = Transform( -0.0417061, 0, -0.99913, 0, 1, 0, 0.99913, 0, -0.0417061, 1.20454, -0.348696, -2.50272 )
-
-[node name="modern_end_table" parent="active_entities/persephone_house" index="2" instance=ExtResource( 66 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.543488, -0.348694, -2.27281 )
-
-[node name="modern_coffee_table" parent="active_entities/persephone_house" index="3" instance=ExtResource( 69 )]
-transform = Transform( -0.00875399, 0, -0.999961, 0, 1, 0, 0.999961, 0, -0.00875399, 1.10028, -0.294189, -1.31656 )
-
-[node name="carpet" parent="active_entities/persephone_house" index="4" instance=ExtResource( 70 )]
-transform = Transform( -8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 1.00843, -0.36425, -1.41031 )
-script = ExtResource( 93 )
-coat = SubResource( 288 )
-
-[node name="carpet2" parent="active_entities/persephone_house" index="5" instance=ExtResource( 70 )]
-transform = Transform( 0, 0, 0.9, 0, 1, 0, -0.9, 0, 0, 4.51528, -0.36425, 1.62153 )
-script = ExtResource( 93 )
-coat = SubResource( 290 )
-
-[node name="blockout" type="Spatial" parent="." index="7"]
+[node name="blockout" type="Spatial" parent="." index="6"]
 
 [node name="box_house_short14" parent="blockout" index="0" instance=ExtResource( 58 )]
 transform = Transform( 0.677427, -0.0380413, -0.734606, 0.0560673, 0.998427, -1.85972e-09, 0.73345, -0.0411873, 0.678494, -19.7496, 13.8179, 39.7083 )
@@ -5000,6 +4873,205 @@ transform = Transform( 0.678494, -0.000727403, -0.734606, 0.00107209, 0.999999, 
 
 [node name="box_house_persephone" parent="blockout" index="276" instance=ExtResource( 65 )]
 transform = Transform( 0.711493, 0, 0.702693, 0, 1, 0, -0.702693, 0, 0.711493, -23.7743, 26.574, 97.8273 )
+tracked_stat = "persephone/unlocked"
+
+[node name="active_entities" type="Spatial" parent="." index="7"]
+
+[node name="end_train" type="Spatial" parent="active_entities" index="0"]
+transform = Transform( -0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 115.321, 12.2555, 145.342 )
+script = ExtResource( 34 )
+
+[node name="locomotive" parent="active_entities/end_train" index="0" instance=ExtResource( 30 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2906, 2.00405, -0.0332413 )
+
+[node name="passenger_cart" parent="active_entities/end_train/locomotive" index="3" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 14.9983, -0.842084, 0 )
+
+[node name="passenger_cart2" parent="active_entities/end_train/locomotive" index="4" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 27.1537, -0.782406, 0 )
+
+[node name="passenger_cart3" parent="active_entities/end_train/locomotive" index="5" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 39.2175, -0.782406, -7.62939e-06 )
+
+[node name="passenger_cart4" parent="active_entities/end_train/locomotive" index="6" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 51.5175, -0.782406, -1.52588e-05 )
+
+[node name="passenger_cart5" parent="active_entities/end_train/locomotive" index="7" instance=ExtResource( 31 )]
+transform = Transform( -1, 0, -1.78814e-07, 0, 1, 0, 1.78814e-07, 0, -1, 63.6258, -0.782406, -3.8147e-05 )
+
+[node name="goodbye" type="Area" parent="active_entities/end_train" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.9091, 0.397475, 3.51949 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 32 )
+dialog_sequence = ExtResource( 35 )
+main_speaker = NodePath("..")
+
+[node name="dialog_circle" parent="active_entities/end_train/goodbye" index="0" instance=ExtResource( 33 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/end_train/goodbye" index="1"]
+shape = SubResource( 12 )
+
+[node name="npc2" parent="active_entities/end_train" index="2" instance=ExtResource( 18 )]
+transform = Transform( 0.941054, 0, 0.338257, 0, 1, 0, -0.338257, 0, 0.941054, 32.0701, 0.304795, 3.54254 )
+visual_name = "Traveller"
+
+[node name="npc3" parent="active_entities/end_train" index="3" instance=ExtResource( 18 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 33.3183, 0.304793, 4.47469 )
+visual_name = "Traveller"
+
+[node name="npc4" parent="active_entities/end_train" index="4" instance=ExtResource( 18 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 44.7468, 0.304794, 3.75823 )
+visual_name = "Traveller"
+
+[node name="npc5" parent="active_entities/end_train" index="5" instance=ExtResource( 18 )]
+transform = Transform( 0.155258, 0, 0.987874, 0, 1, 0, -0.987874, 0, 0.155258, 56.4168, 0.660016, 7.27045 )
+visual_name = "Child"
+model_scale = 0.9
+sitting = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="active_entities/end_train" index="6"]
+pause_mode = 2
+anims/RESET = SubResource( 13 )
+anims/end_game = SubResource( 14 )
+
+[node name="fade" type="ColorRect" parent="active_entities/end_train" index="7"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="armstrong_npc" parent="active_entities/end_train" index="8" instance=ExtResource( 18 )]
+transform = Transform( 0.602235, 0, -0.798319, 0, 1, 0, 0.798319, 0, 0.602235, 29.9297, 0.300569, 3.89036 )
+script = ExtResource( 36 )
+dialog = ExtResource( 38 )
+visual_name = "Armstrong"
+friendly_id = "armstrong"
+accessory = ExtResource( 37 )
+custom_entry = "_entry_ending"
+tutorial_node = NodePath("")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="1"]
+transform = Transform( 0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 56.2098, 14.6167, 72.1143 )
+intensity = 0.35
+max_distance = 16384.0
+extents = Vector3( 9.96179, 4.74854, 6.92097 )
+origin_offset = Vector3( 0, -0.34375, 0 )
+interior_enable = true
+interior_ambient_color = Color( 0.172549, 0.2, 0.235294, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="2"]
+transform = Transform( 0.658098, -0.256814, -0.707781, 0.358286, 0.933595, -0.00561339, 0.662223, -0.249894, 0.706409, 61.3348, 10.5736, 77.1885 )
+intensity = 0.1
+max_distance = 16384.0
+extents = Vector3( 3.88984, 3.7859, 1.60752 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="active_entities" index="3"]
+transform = Transform( 0.706222, -0.0108907, -0.707907, -0.00478495, 0.999785, -0.0201547, 0.707975, 0.017621, 0.706018, 56.4816, 20.2755, 71.9419 )
+intensity = 0.63
+max_distance = 16384.0
+extents = Vector3( 9.32745, 3.90006, 4.78005 )
+
+[node name="npc" parent="active_entities" index="4" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 82.3045, 33.1857, 99.3442 )
+
+[node name="leaving" type="Spatial" parent="active_entities" index="5"]
+transform = Transform( 0.690771, 0, 0.723074, 0, 1, 0, -0.723074, 0, 0.690771, 80.9499, 12.5603, 94.5916 )
+script = ExtResource( 20 )
+condition = "!Global.stat(\"natia/leaving\")"
+
+[node name="npc_natia" parent="active_entities/leaving" index="0" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.726303, 0, -0.832153 )
+dialog = ExtResource( 19 )
+visual_name = "Natia"
+friendly_id = "natia"
+
+[node name="juniper_small" parent="active_entities" index="6" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 60.4546, 12.2767, 99.8644 )
+
+[node name="juniper_small2" parent="active_entities" index="7" instance=ExtResource( 17 )]
+transform = Transform( -0.520051, 0, -0.734539, 0, 0.9, 0, 0.734539, 0, -0.520051, 60.8063, 12.3403, 96.8436 )
+
+[node name="payphone" parent="active_entities" index="8" instance=ExtResource( 42 )]
+transform = Transform( 0.704851, 0, 0.709356, 0, 1, 0, -0.709356, 0, 0.704851, 65.4983, 12.5603, 77.5111 )
+enabled = true
+location = "muzna_cross"
+
+[node name="payphone2" parent="active_entities" index="9" instance=ExtResource( 42 )]
+transform = Transform( 0.714533, 0, 0.699602, 0, 1, 0, -0.699602, 0, 0.714533, 66.5105, 12.5603, 76.4696 )
+
+[node name="payphone3" parent="active_entities" index="10" instance=ExtResource( 42 )]
+transform = Transform( 0.731588, 0, 0.681747, 0, 1, 0, -0.681747, 0, 0.731588, 67.618, 12.5603, 75.3504 )
+
+[node name="persephone_house" type="Spatial" parent="active_entities" index="11"]
+transform = Transform( 0.703473, 0, 0.710721, 0, 1, 0, -0.710721, 0, 0.703473, -24.8073, 26.2139, 98.8903 )
+
+[node name="box_bed" parent="active_entities/persephone_house" index="0" instance=ExtResource( 95 )]
+transform = Transform( 0.999988, 0, -0.00512516, 0, 1, 0, 0.00512516, 0, 0.999988, 5.56665, 1.7861, 1.52837 )
+script = ExtResource( 93 )
+coat = SubResource( 340 )
+
+[node name="modern_chair" parent="active_entities/persephone_house" index="1" instance=ExtResource( 68 )]
+transform = Transform( -0.0120737, 0, 0.999927, 0, 1, 0, -0.999927, 0, -0.0120737, -0.880051, -0.340466, -1.18118 )
+
+[node name="modern_lounge_sofa" parent="active_entities/persephone_house" index="2" instance=ExtResource( 67 )]
+transform = Transform( -0.0417061, 0, -0.99913, 0, 1, 0, 0.99913, 0, -0.0417061, 1.20454, -0.348696, -2.50272 )
+
+[node name="modern_end_table" parent="active_entities/persephone_house" index="3" instance=ExtResource( 66 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.543488, -0.348694, -2.27281 )
+
+[node name="modern_coffee_table" parent="active_entities/persephone_house" index="4" instance=ExtResource( 69 )]
+transform = Transform( -0.00875399, 0, -0.999961, 0, 1, 0, 0.999961, 0, -0.00875399, 1.10028, -0.294189, -1.31656 )
+
+[node name="carpet" parent="active_entities/persephone_house" index="5" instance=ExtResource( 70 )]
+transform = Transform( -8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 1.00843, -0.36425, -1.41031 )
+script = ExtResource( 93 )
+coat = SubResource( 288 )
+
+[node name="carpet2" parent="active_entities/persephone_house" index="6" instance=ExtResource( 70 )]
+transform = Transform( 0, 0, 0.9, 0, 1, 0, -0.9, 0, 0, 4.51528, -0.36425, 1.62153 )
+script = ExtResource( 93 )
+coat = SubResource( 290 )
+
+[node name="if_locked" type="Spatial" parent="active_entities/persephone_house" index="7"]
+script = ExtResource( 20 )
+condition = "!Global.stat(\"persephone/unlocked\")"
+listen_for_change = true
+
+[node name="DialogTrigger" type="Area" parent="active_entities/persephone_house/if_locked" index="0"]
+transform = Transform( 0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, 5.47937, -0.34141, -1.46979 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 32 )
+dialog_sequence = ExtResource( 97 )
+main_speaker = NodePath("../../../../blockout/box_house_persephone")
+
+[node name="dialog_circle" parent="active_entities/persephone_house/if_locked/DialogTrigger" index="0" instance=ExtResource( 33 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/persephone_house/if_locked/DialogTrigger" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.154106, 0 )
+shape = SubResource( 341 )
+
+[node name="env_override" type="Area" parent="active_entities/persephone_house" index="8"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 98 )
+wind_reduction_db = 17.6647
+no_combat = true
+close_cam = true
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/persephone_house/env_override" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.647285, 1.02522, -1.38231 )
+shape = SubResource( 342 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/persephone_house/env_override" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49518, 0.936512, 1.44102 )
+shape = SubResource( 343 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="active_entities/persephone_house/env_override" index="2"]
+transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 4.40881, 1.88127, 1.56421 )
+shape = SubResource( 344 )
 
 [editable path="blockout/box_house_short14"]
 [editable path="blockout/box_house_side20"]

@@ -527,6 +527,7 @@ func _physics_process(delta):
 		$base_mesh/Particles2.emitting = false
 	
 	var next_state = State.None
+	var speed:float = (velocity).slide(ground_normal).length()
 	match state:
 		State.Ground:
 			if pressed("mv_jump"):
@@ -534,7 +535,6 @@ func _physics_process(delta):
 			elif should_hover():
 				next_state = State.Hover
 			elif holding("mv_crouch"):
-				var speed:float = (velocity).slide(ground_normal).length()
 				if speed > MIN_SPEED_ROLL or movement.length_squared() >= 0.8:
 					next_state = State.Roll
 				elif speed < 0.2 and !empty(sleep_zone):
@@ -644,6 +644,11 @@ func _physics_process(delta):
 					next_state = State.Climb
 			elif water_depth > DEPTH_WATER_WADE:
 				next_state = State.Wading
+			elif pressed("mv_crouch") and speed < 0.2 and !empty(sleep_zone):
+				next_state = State.Sitting
+				var g = sleep_zone.get_overlapping_bodies()[0]
+				global_transform.origin = g.global_transform.origin
+				rotate_mesh(g.global_transform.basis.z)
 			elif !holding("mv_crouch") and empty(crouch_head):
 				next_state = State.Ground
 			elif after(TIME_COYOTE, empty(ground_area), 1):
@@ -1749,7 +1754,7 @@ func can_save():
 	return !game_ui.in_game
 
 func can_talk():
-	return state == State.Ground
+	return state == State.Ground or state == State.Crouch
 
 func get_dialog_viewer() -> Node:
 	return $ui/dialog/dialog/viewer

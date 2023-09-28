@@ -1,10 +1,21 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=1]
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=2]
 [ext_resource path="res://_glb/env/train_set/muzna_city/box_house_persephone.glb" type="PackedScene" id=3]
-[ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=4]
+[ext_resource path="res://material/env/medium/wood_stolen_from_ambientcg.jpg" type="Texture" id=4]
 [ext_resource path="res://entities/visual/coat_like.gd" type="Script" id=5]
+[ext_resource path="res://material/env/medium/floral3_stolen_from_vecteezy.png" type="Texture" id=6]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=7]
+[ext_resource path="res://material/env/noise.jpg" type="Texture" id=8]
+[ext_resource path="res://material/env/stone/gravel1.png" type="Texture" id=9]
+[ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=10]
+[ext_resource path="res://material/env/medium/garbage_wood_wainscot.jpg" type="Texture" id=11]
+[ext_resource path="res://material/env/stone/rock_striated.png" type="Texture" id=12]
+[ext_resource path="res://material/gem_transparent.shader" type="Shader" id=13]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=14]
+[ext_resource path="res://entities/env/train_set/muzna_city/door_persephone.png" type="Texture" id=15]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=16]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
@@ -19,7 +30,98 @@ shader_param/light_bias = 0.0
 shader_param/shadow_normal_offset = 0.2
 shader_param/albedo = Color( 0.713726, 1, 0.839216, 1 )
 
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 0.5
+shader_param/power = 0.5
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 6 )
+shader_param/ground = ExtResource( 4 )
+shader_param/ceiling = ExtResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 2.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 8 )
+shader_param/ground = ExtResource( 10 )
+shader_param/ceiling = ExtResource( 8 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 11 )
+shader_param/ground = ExtResource( 12 )
+shader_param/ceiling = ExtResource( 9 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 7 )
+shader_param/uv_scale = 3.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 4 )
+shader_param/ground = ExtResource( 10 )
+shader_param/ceiling = ExtResource( 9 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 14 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 0.832
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/main_texture = ExtResource( 15 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 13 )
+shader_param/albedo = Color( 0.180392, 0.180392, 0.211765, 1 )
+shader_param/refraction = 0.01
+shader_param/brightness = 0.0
+
+[sub_resource type="Animation" id=8]
+resource_name = "Activate"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("door-kine:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 1.9, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -138.19, 0 ), Vector3( 0, -125.261, 0 ), Vector3( 0, -131.861, 0 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("door-kine:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
 [node name="box_house_persephone" instance=ExtResource( 3 )]
+script = ExtResource( 16 )
 
 [node name="box_house_persephone" parent="." index="0"]
 material/0 = SubResource( 1 )
@@ -37,7 +139,43 @@ material/0 = ExtResource( 1 )
 collision_layer = 257
 
 [node name="box_house_persephone-interior" parent="." index="1"]
-material/0 = ExtResource( 4 )
+material/0 = SubResource( 2 )
+material/1 = SubResource( 3 )
 
-[node name="StaticBody" parent="box_house_persephone-interior" index="0"]
+[node name="cabinets" parent="box_house_persephone-interior" index="1"]
+material/0 = SubResource( 4 )
+
+[node name="StaticBody" parent="box_house_persephone-interior/cabinets" index="0"]
 collision_layer = 257
+
+[node name="kitchen_counters" parent="box_house_persephone-interior" index="2"]
+material/0 = SubResource( 4 )
+
+[node name="StaticBody" parent="box_house_persephone-interior/kitchen_counters" index="0"]
+collision_layer = 257
+
+[node name="toilet_stairs" parent="box_house_persephone-interior" index="4"]
+material/0 = SubResource( 5 )
+
+[node name="StaticBody" parent="box_house_persephone-interior" index="5"]
+collision_layer = 257
+
+[node name="doorframe" parent="." index="2"]
+material/0 = SubResource( 7 )
+
+[node name="door-kine" parent="." index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.45531, 0.270164, -1 )
+collision_layer = 257
+
+[node name="mesh" parent="door-kine/door_handle-kine" index="0"]
+material/0 = SubResource( 7 )
+
+[node name="door_window" parent="door-kine" index="1"]
+material/0 = SubResource( 6 )
+
+[node name="mesh" parent="door-kine" index="2"]
+material/0 = SubResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
+anims/Activate = SubResource( 8 )
+anims/RESET = SubResource( 9 )

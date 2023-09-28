@@ -2,6 +2,8 @@ tool
 extends PhysicsBody
 class_name CoatLike
 
+signal coat_changed(coat)
+
 export(NodePath) var mesh_path = NodePath("..")
 
 onready var node: GeometryInstance
@@ -33,6 +35,7 @@ func set_coat(c: Coat):
 	coat = c
 	if !coat:
 		return
+	emit_signal("coat_changed", c)
 	var mat = coat.generate_material(!double_sided)
 	if node:
 		node.material_override = mat
