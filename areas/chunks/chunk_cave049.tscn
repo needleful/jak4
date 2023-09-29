@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
+[ext_resource path="res://_glb/chunks/chunk_cave049.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=3]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=4]
+[ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=5]
+
+[node name="chunk_cave049" instance=ExtResource( 2 )]
+script = ExtResource( 4 )
+
+[node name="medium_area" parent="active_entities" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="StaticBody" parent="active_entities/medium_area" index="0"]
+collision_layer = 257
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.063755, -0.33911, -1.45483 )
+intensity = 0.27
+extents = Vector3( 13.3862, 12.6045, 21.0193 )
+interior_enable = true
+interior_ambient_color = Color( 0.298039, 0.207843, 0.32549, 1 )
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="2"]
+transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -33.1558, -3.93629, -28.4685 )
+intensity = 0.44
+extents = Vector3( 146.072, 44.8868, 34.0211 )
+interior_enable = true
+interior_ambient_color = Color( 0.431373, 0.266667, 0.215686, 1 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="active_entities" index="3"]
+transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -65.5575, 30.472, 14.1194 )
+max_distance = 1618.1
+extents = Vector3( 130.404, 44.8868, 34.0211 )
+
+[node name="illusory_room" parent="active_entities" index="4" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00227737, -8.92457, -1.18149 )
