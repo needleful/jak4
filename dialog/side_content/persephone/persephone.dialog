@@ -1,7 +1,9 @@
 // Only occurs if Jackie's died three or more times.
 // There are several payphones that can go
 
+:called
 :persephone
+[+stat: talked/persephone]
 [! Global task_exists: gift_from_persephone]
 	* A payphone rings. Nobody seems interested in answering.
 	* You pick up the receiver.
@@ -22,6 +24,7 @@
 	You -- ... What?
 	?introduction> Persephone, I really do need an answer. How did you know which phone to call?
 		Love, someday you'll have secrets of your own, and I'll be so happy for you.
+		[note: persephone/phone_secret | How did Persephone know how to find me? She evaded my questions... |+ persephone]
 		Now, as I was saying...
 		[back]
 	I'm calling because I want to help. You're looking for information about your mother, correct?
@@ -54,12 +57,15 @@
 			You've not been to Muzna Cross yet? You'll understand when you see it, but call me from there if you can't find it.
 		[back]
 	[Global remember: muzna_cross | places]
-	[Global add_note: Persephone's flat is at Muzna Cross, Line 5, Apartment 8 (mint green). The door takes a code: 794. |+ gift_from_persephone muzna_cross persephone]
+	[note: persephone/door | Persephone's flat is at Muzna Cross, Line 5, Apartment 8 (mint green). The door takes a code: 794. |+ gift_from_persephone muzna_cross persephone]
 	You -- ... Alright, I've put it down in my journal.
 	Excellent! Let me know when you've got it! After that, maybe I can give you a tour of the place!
 	[Global add_note: She apparently wants to give me a tour of the area? I'm not sure how that'd work. |+ persephone]
 
 {otherwise}[! Global task_is_complete: gift_from_persephone]
+	You -- Persephone?
+	Hello, love!
+	// TODO: dialog after visiting the Medium
 	[! stat?: persephone_home/visited]
 		I can see you haven't gone to the flat yet. Are you having trouble finding it?
 		> Yes, I'm not sure where it is.
@@ -78,8 +84,8 @@
 		> No, I'm just calling to say hello.
 			We've already had our hellos, call me once you get my present!
 			[exit]
-	{otherwise}
-		Oh, good! What do you think of my flat, love?
+	{otherwise}[! stat?: persephone/discussed/flat]
+		What do you think of my flat, love?
 		You -- It's cute! How long has it been since you used it? It seems well taken care of.
 		That's probably the dry air. Nothing ever rots out there, it just gets buried in the sand.
 		?rot> It sounds ominous when you say it that way.
@@ -91,17 +97,33 @@
 		You -- Regardless, it's remarkable it's held up as well as it has, if you don't have someone taking care of it.
 		You could use it if you like! I'm not sure where you're staying, but I imagine my bed is softer.
 		You -- It's not as close to the Medium as I'd like, but perhaps if I'm traveling out.
-		Of course. You must tell me about the Medium at some point! I'd heard of it, but it wasn't working when I visited.
+		Of course. You /must/ tell me about the Medium at some point! I'd heard of it, but it wasn't working when I visited.
 		[note: persephone/medium | Persephone's interested in my thoughts on the Medium. |+ persephone the_medium]
-{otherwise}
-	Whoops, not implemented!
+		[+stat:  persephone/discussed/flat]
+	[Global count: triangles_tablet]
+		You -- I found a sort of tablet with triangles on it is that the gift?
+		Part of it. The other part is in the /Smiler's Cave/.
+		// TODO: dialog if you've already visited the cave.
+		You -- What's that?
+		If you look at the plateau from here, you'll notice a large horizontal crack in the rock. That's Smiler's Cave.
+		[Global mark_map: smilers_cave] 
+		I want you to take that little tablet to the temple in the cave.
+		You -- What will happen if I do?
+		It's a surprise! Trust me, Jackie.
+		[note: persephone/cave | Persephone says there's something waiting for me in the Smiler's Cave, in the temple. |+ persephone smilers_cave gift_from_persephone]
+	{otherwise}
+		Did you find my gift on the coffee table?
+		You -- I guess I didn't.
+		Well, you'll have to get that before you go! Didn't you come out here for the gift? Once you get it, I'll call you!
 [exit]
 
-:_payphone
-* The only number you know is Persephone.
-* Call her?
-> [skip] (Yes)
-	* The phone rings...
-	Hi Jackie!
-	You -- Hi Persephone.
-> [skip] (No)
+:player_calling
+[stat?: talked/persephone]
+	* The only number you know is Persephone.
+	* Call her?
+	> [skip] (Yes)
+		* The phone rings...
+		[goto: persephone]
+	> [skip] (No)
+{otherwise}
+	* You don't know any numbers. None worth calling, anyway.

@@ -1,10 +1,155 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk_cave049.glb" type="PackedScene" id=2]
 [ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=3]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=4]
 [ext_resource path="res://entities/env/medium/illusory_room.tscn" type="PackedScene" id=5]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=6]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=7]
+[ext_resource path="res://entities/control/sensor.gd" type="Script" id=8]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=9]
+[ext_resource path="res://entities/env/stone/rock5.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=11]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=12]
+[ext_resource path="res://entities/env/electrical/light_wall.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/env/stone/rock2.tscn" type="PackedScene" id=14]
+[ext_resource path="res://entities/env/stone/rock6.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/copper/basin.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=17]
+
+[sub_resource type="Animation" id=5]
+resource_name = "Activate"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("env/SpotLight:light_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 3.03143, 1 ),
+"update": 0,
+"values": [ Color( 0.847059, 0.690196, 0.835294, 1 ), Color( 0.72549, 0.960784, 0.65098, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("medium_area/door3-kine:translation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 3.8147e-05, 6.60235, -15.6251 ), Vector3( 3.8147e-05, 2.05041, -15.6251 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("medium_area/door-kine:translation")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -4.38062, 6.55914, -15.6251 ), Vector3( -7.03151, 6.55914, -15.6251 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("medium_area/door2-kine:translation")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 4.38069, 6.55914, -15.6251 ), Vector3( 7.08627, 6.55914, -15.6251 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Locked"
+length = 2.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("env/SpotLight:light_color")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.92549, 0.290196, 0.290196, 1 ), Color( 0.847059, 0.690196, 0.835294, 1 ), Color( 0.92549, 0.290196, 0.290196, 1 ), Color( 0.847059, 0.690196, 0.835294, 1 ), Color( 0.92549, 0.290196, 0.290196, 1 ), Color( 0.847059, 0.690196, 0.835294, 1 ), Color( 0.92549, 0.290196, 0.290196, 1 ), Color( 0.847059, 0.690196, 0.835294, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("env/SpotLight:light_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.847059, 0.690196, 0.835294, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("medium_area/door3-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 3.8147e-05, 6.60235, -15.6251 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("medium_area/door-kine:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -4.38062, 6.55914, -15.6251 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("medium_area/door2-kine:translation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 4.38069, 6.55914, -15.6251 ) ]
+}
+
+[sub_resource type="CylinderShape" id=4]
+height = 6.34368
+radius = 4.6578
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 27.626, 35.4672, 22.2263 )
+
+[sub_resource type="CapsuleShape" id=2]
+radius = 22.5644
+height = 87.3608
+
+[sub_resource type="SphereShape" id=3]
+radius = 27.0949
 
 [node name="chunk_cave049" instance=ExtResource( 2 )]
 script = ExtResource( 4 )
@@ -13,27 +158,200 @@ script = ExtResource( 4 )
 material/0 = ExtResource( 3 )
 material/1 = ExtResource( 1 )
 
-[node name="StaticBody" parent="active_entities/medium_area" index="0"]
+[node name="door-kine" parent="active_entities/medium_area" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.38062, 6.55914, -15.6251 )
+
+[node name="mesh" parent="active_entities/medium_area/door-kine/door_bottom-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="mesh" parent="active_entities/medium_area/door-kine" index="1"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="door2-kine" parent="active_entities/medium_area" index="1"]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 4.38069, 6.55914, -15.6251 )
+
+[node name="mesh" parent="active_entities/medium_area/door2-kine/door2_bottom-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="mesh" parent="active_entities/medium_area/door2-kine" index="1"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="door3-kine" parent="active_entities/medium_area" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8147e-05, 6.60235, -15.6251 )
+
+[node name="mesh" parent="active_entities/medium_area/door3-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="emblem" parent="active_entities/medium_area" index="3"]
+material/0 = ExtResource( 1 )
+
+[node name="mesh" parent="active_entities/medium_area/lamp-kine" index="0"]
+material/0 = ExtResource( 3 )
+material/1 = ExtResource( 1 )
+
+[node name="StaticBody" parent="active_entities/medium_area" index="5"]
 collision_layer = 257
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.063755, -0.33911, -1.45483 )
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="1"]
+transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -33.1558, -3.93629, -28.4685 )
+intensity = 0.44
+extents = Vector3( 146.072, 44.8868, 34.0211 )
+origin_offset = Vector3( 19.459, -4.94727, 14.8184 )
+interior_enable = true
+interior_ambient_color = Color( 0.431373, 0.266667, 0.215686, 1 )
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="active_entities" index="2"]
+transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -65.5575, 30.472, 14.1194 )
+max_distance = 1618.1
+extents = Vector3( 130.404, 44.8868, 34.0211 )
+
+[node name="illusory_room" parent="active_entities" index="3" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00227737, -8.92457, -1.18149 )
+
+[node name="entry" type="AnimationPlayer" parent="active_entities" index="4"]
+anims/Activate = SubResource( 5 )
+anims/Locked = SubResource( 6 )
+anims/RESET = SubResource( 7 )
+script = ExtResource( 7 )
+
+[node name="entry_sensor" type="Area" parent="active_entities" index="5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.566 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 8 )
+key_item = "triangles_tablet"
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/entry_sensor" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.418068, -1.14639 )
+shape = SubResource( 4 )
+
+[node name="env" type="Area" parent="active_entities" index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.115158, 1.28497, 1.41362 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 6 )
+wind_reduction_db = 23.8922
+custom_fog = Color( 0.0588235, 0.0588235, 0.0588235, 1 )
+fog_start = 0.0
+fog_end = 104.192
+indirect_light = Color( 0.156863, 0.109804, 0.109804, 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/env" index="0"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/env" index="1"]
+transform = Transform( 0.873976, 0, 0.485969, 0, 1, 0, -0.485969, 0, 0.873976, 11.6367, -4.51332, 34.692 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="active_entities/env" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4209, -20.5463, 58.1545 )
+shape = SubResource( 3 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities/env" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.178905, -1.62408, -2.86845 )
 intensity = 0.27
 extents = Vector3( 13.3862, 12.6045, 21.0193 )
 interior_enable = true
 interior_ambient_color = Color( 0.298039, 0.207843, 0.32549, 1 )
 
-[node name="ReflectionProbe2" type="ReflectionProbe" parent="active_entities" index="2"]
-transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -33.1558, -3.93629, -28.4685 )
-intensity = 0.44
-extents = Vector3( 146.072, 44.8868, 34.0211 )
-interior_enable = true
-interior_ambient_color = Color( 0.431373, 0.266667, 0.215686, 1 )
+[node name="spot" type="SpotLight" parent="active_entities/env" index="4"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -5.14147, -0.965842, 1.67765 )
+light_color = Color( 0.756863, 0.992157, 0.941176, 1 )
+light_energy = 0.5
 
-[node name="ReflectionProbe3" type="ReflectionProbe" parent="active_entities" index="3"]
-transform = Transform( 0.641623, 0.573528, -0.509299, -0.279754, 0.793241, 0.540839, 0.714183, -0.204537, 0.669409, -65.5575, 30.472, 14.1194 )
-max_distance = 1618.1
-extents = Vector3( 130.404, 44.8868, 34.0211 )
+[node name="spot2" type="SpotLight" parent="active_entities/env" index="5"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 5.0536, -0.965842, 1.67765 )
+light_color = Color( 0.756863, 0.992157, 0.941176, 1 )
+light_energy = 0.5
 
-[node name="illusory_room" parent="active_entities" index="4" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00227737, -8.92457, -1.18149 )
+[node name="spot3" type="SpotLight" parent="active_entities/env" index="6"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 5.0536, -0.965842, 5.7839 )
+light_color = Color( 0.756863, 0.992157, 0.941176, 1 )
+light_energy = 0.5
+
+[node name="spot4" type="SpotLight" parent="active_entities/env" index="7"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -4.6024, -0.965842, 5.7839 )
+light_color = Color( 0.756863, 0.992157, 0.941176, 1 )
+light_energy = 0.5
+
+[node name="OmniLight" type="OmniLight" parent="active_entities/env" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.81761, 0 )
+light_color = Color( 0.831373, 0.968627, 0.823529, 1 )
+light_energy = 0.2
+omni_range = 22.3166
+
+[node name="SpotLight" type="SpotLight" parent="active_entities/env" index="9"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.115772, 4.13199, -13.5466 )
+light_color = Color( 0.847059, 0.690196, 0.835294, 1 )
+spot_range = 6.77221
+
+[node name="light_wall" parent="active_entities/env" index="10" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 0.888623, 0.458639, 0, -0.458639, 0.888623, 19.332, -16.2567, 51.9239 )
+
+[node name="light_wall4" parent="active_entities/env" index="11" instance=ExtResource( 13 )]
+transform = Transform( 0.935651, 0.346447, 0.0673191, -0.348857, 0.936764, 0.0277706, -0.0534411, -0.0494683, 0.997345, 4.37112, -15.6819, 33.2981 )
+
+[node name="light_wall2" parent="active_entities/env" index="12" instance=ExtResource( 13 )]
+transform = Transform( 0.734226, 0.668958, -0.115787, -0.361817, 0.241256, -0.900491, -0.574457, 0.703058, 0.419177, 21.2346, -20.3521, 42.2858 )
+
+[node name="light_wall3" parent="active_entities/env" index="13" instance=ExtResource( 13 )]
+transform = Transform( 0.609731, -0.784106, -0.115787, 0.268707, 0.341924, -0.900491, 0.74567, 0.517944, 0.419177, 27.2841, -22.5105, 39.32 )
+
+[node name="npc" parent="active_entities/env" index="14" instance=ExtResource( 9 )]
+transform = Transform( -0.862662, 0, -0.50578, 0, 1, 0, 0.50578, 0, -0.862662, 3.59758, -0.931596, 8.56042 )
+
+[node name="carpet" parent="active_entities/env" index="15" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.18695, -0.931596, 6.40529 )
+
+[node name="sitting_pillow" parent="active_entities/env/carpet" index="1" instance=ExtResource( 12 )]
+transform = Transform( 0.793201, 0, 0.608959, 0, 1, 0, -0.608959, 0, 0.793201, -0.612442, 0.0196002, 1.17601 )
+
+[node name="sitting_pillow2" parent="active_entities/env/carpet" index="2" instance=ExtResource( 12 )]
+transform = Transform( 0.541825, 0, -0.840491, 0, 1, 0, 0.840491, 0, 0.541825, -0.167961, 0.0195997, -1.27479 )
+
+[node name="sitting_pillow3" parent="active_entities/env/carpet" index="3" instance=ExtResource( 12 )]
+transform = Transform( 0.825448, 0, -0.564478, 0, 1, 0, 0.564478, 0, 0.825448, 0.832169, 0.0196002, 0.376847 )
+
+[node name="npc3" parent="active_entities/env" index="16" instance=ExtResource( 9 )]
+transform = Transform( 0.533807, 0, 0.845607, 0, 1, 0, -0.845607, 0, 0.533807, -7.25156, -1.9316, 21.01 )
+sitting = true
+
+[node name="npc2" parent="active_entities/env" index="17" instance=ExtResource( 9 )]
+transform = Transform( 0.533807, 0, 0.845607, 0, 1, 0, -0.845607, 0, 0.533807, 1.9754, -14.7397, 31.2419 )
+
+[node name="npc4" parent="active_entities/env" index="18" instance=ExtResource( 9 )]
+transform = Transform( -0.589471, 0, 0.80779, 0, 1, 0, -0.80779, 0, -0.589471, -4.77417, -0.817896, 7.56772 )
+sitting = true
+
+[node name="OmniLight" type="OmniLight" parent="active_entities" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.90487, -26.1235, 54.4698 )
+omni_range = 8.86125
+
+[node name="basin" parent="active_entities" index="8" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, -1, 1.50996e-07, 0, -1.50996e-07, -1, 13.5375, -32.2968, 56.3933 )
+
+[node name="npc" parent="active_entities" index="9" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.14789, -31.8768, 51.5479 )
+
+[node name="npc2" parent="active_entities" index="10" instance=ExtResource( 9 )]
+transform = Transform( -0.158506, 0, 0.987358, 0, 1, 0, -0.987358, 0, -0.158506, 7.57152, -31.8912, 54.1161 )
+
+[node name="rock5" parent="active_entities" index="11" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1223, -14.002, 0.045505 )
+
+[node name="rock2" parent="active_entities" index="12" instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, -0.743292, -0.668967, 0, 0.668967, -0.743292, 20.1646, -31.3276, 77.0417 )
+
+[node name="rock1" parent="active_entities" index="13" instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, -0.268677, -0.96323, 0, 0.96323, -0.268677, -2.87155, -33.8719, 31.7521 )
+
+[node name="rock6" parent="active_entities" index="14" instance=ExtResource( 15 )]
+transform = Transform( 0.872108, -0.474445, 0.119706, 0.43951, 0.652009, -0.61783, 0.215077, 0.591427, 0.777146, -16.2669, -25.9422, 22.6393 )
+
+[connection signal="locked" from="active_entities/entry_sensor" to="active_entities/entry" method="play" binds= [ "Locked" ]]
+[connection signal="toggled" from="active_entities/entry_sensor" to="active_entities/entry" method="_on_toggled"]

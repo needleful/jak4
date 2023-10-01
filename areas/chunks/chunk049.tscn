@@ -1,4 +1,4 @@
-[gd_scene load_steps=370 format=2]
+[gd_scene load_steps=377 format=2]
 
 [ext_resource path="res://_glb/chunks/chunk049.glb" type="PackedScene" id=1]
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=2]
@@ -98,6 +98,13 @@
 [ext_resource path="res://material/coat/hearts5.jpg" type="Texture" id=96]
 [ext_resource path="res://dialog/side_content/persephone/house_door.dialog" type="Resource" id=97]
 [ext_resource path="res://management/environment_override.gd" type="Script" id=98]
+[ext_resource path="res://ui/items/vis/triangles_tablet.tscn" type="PackedScene" id=99]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=100]
+[ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=101]
+[ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=102]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=103]
+[ext_resource path="res://entities/dialog_node.gd" type="Script" id=104]
+[ext_resource path="res://dialog/side_content/persephone/tablet_pickup.dialog" type="Resource" id=105]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 9 )
@@ -4029,7 +4036,7 @@ material_override = SubResource( 312 )
 transform = Transform( 0.00634533, -0.0384918, 0.999238, 0.0191359, 0.99908, 0.0383641, -0.999797, 0.0188779, 0.00707607, -44.772, 14.1875, 88.8273 )
 
 [node name="garden" parent="blockout" index="91" instance=ExtResource( 47 )]
-transform = Transform( 0.0316608, 0.0110804, 0.999437, 0.0116406, 0.999866, -0.0114539, -0.999431, 0.0119967, 0.0315276, 24.115, 19.9118, 94.3177 )
+transform = Transform( -0.206752, 0.0110804, 0.97833, 0.014029, 0.999866, -0.00835954, -0.978293, 0.0119967, -0.20688, 22.6716, 19.9333, 93.8619 )
 
 [node name="locomotive" parent="blockout" index="92" instance=ExtResource( 30 )]
 transform = Transform( 0.0201621, 0.0110804, 0.999735, 0.0117716, 0.999866, -0.0113192, -0.999727, 0.0119967, 0.020029, -45.2025, 14.17, 121.687 )
@@ -5072,6 +5079,49 @@ shape = SubResource( 343 )
 [node name="CollisionShape3" type="CollisionShape" parent="active_entities/persephone_house/env_override" index="2"]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 4.40881, 1.88127, 1.56421 )
 shape = SubResource( 344 )
+
+[node name="wardrobe" parent="active_entities/persephone_house" index="9" instance=ExtResource( 101 )]
+transform = Transform( 0.00966966, 0, -0.99995, 0, 1, 0, 0.99995, 0, 0.00966966, 5.9714, -0.469849, 1.56877 )
+
+[node name="tablet_indicator" type="Node" parent="active_entities/persephone_house" index="10"]
+script = ExtResource( 104 )
+dialog_sequence = ExtResource( 105 )
+
+[node name="pickup_tablet" parent="active_entities/persephone_house" index="11" instance=ExtResource( 100 )]
+transform = Transform( 0.519039, 0, -0.85475, 0, 1, 0, 0.85475, 0, 0.519039, 1.9769, 0.0188828, -1.27289 )
+item_id = "triangles_tablet"
+
+[node name="triangles_tablet" parent="active_entities/persephone_house/pickup_tablet" index="4" instance=ExtResource( 99 )]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+
+[node name="zone_cliff" type="MultiMeshSystem" parent="active_entities" index="12"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.034, 66.1072, -121.027 )
+
+[node name="npc" parent="active_entities/zone_cliff" index="0" instance=ExtResource( 18 )]
+transform = Transform( 0.103194, 0, 0.994661, 0, 1, 0, -0.994661, 0, 0.103194, -8.41246, -0.118088, 3.62223 )
+
+[node name="npc2" parent="active_entities/zone_cliff" index="1" instance=ExtResource( 18 )]
+transform = Transform( 0.103194, 0, 0.994661, 0, 1, 0, -0.994661, 0, 0.103194, -17.5053, -0.380447, 12.7325 )
+
+[node name="zone_cliff" type="Spatial" parent="." index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 217.034, 66.1072, -121.027 )
+
+[node name="hut" parent="zone_cliff" index="0" instance=ExtResource( 103 )]
+transform = Transform( -0.268134, 0, 0.963382, 0, 1, 0, -0.963382, 0, -0.268134, -15.8308, -1.33968, 14.0908 )
+
+[node name="hut2" parent="zone_cliff" index="1" instance=ExtResource( 103 )]
+transform = Transform( 0.566574, 0, 0.824011, 0, 1, 0, -0.824011, 0, 0.566574, -21.4617, -0.183533, -6.14023 )
+
+[node name="hut3" parent="zone_cliff" index="2" instance=ExtResource( 103 )]
+transform = Transform( -0.715477, 0, 0.698636, 0, 1, 0, -0.698636, 0, -0.715477, 0.683304, -0.729286, 22.2523 )
+
+[node name="fountain2" parent="zone_cliff" index="3" instance=ExtResource( 3 )]
+
+[node name="hut_bath" parent="zone_cliff" index="4" instance=ExtResource( 102 )]
+transform = Transform( 0.964765, 0, 0.263115, 0, 1, 0, -0.263115, 0, 0.964765, -24.7348, -0.788322, 5.34238 )
+
+[node name="hut_bath2" parent="zone_cliff" index="5" instance=ExtResource( 102 )]
+transform = Transform( 0.382624, 0, 0.923904, 0, 1, 0, -0.923904, 0, 0.382624, -9.26082, -0.922905, 21.092 )
 
 [editable path="blockout/box_house_short14"]
 [editable path="blockout/box_house_side20"]

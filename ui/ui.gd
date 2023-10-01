@@ -162,6 +162,11 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			anim.stop()
 			anim.play("show")
 		show_specific_item(item)
+		if item == "capacitor":
+			if change > 0:
+				write_log("You found a Capacitor!")
+			else:
+				write_log("You place the Capacitor.")
 		return
 	elif item in WEAPONS:
 		var wep_select := ""

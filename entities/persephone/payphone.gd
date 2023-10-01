@@ -10,14 +10,28 @@ var visual_name := "Persephone"
 onready var dialog_circle := $dialog_circle
 onready var dialog_trigger := $dialog_circle/DialogTrigger
 
-var active := false
+const calling_stat := "persephone/calling"
+
+var ringing := false
 
 func _ready():
 	dialog_trigger.dialog_sequence = dialog_sequence
-	if enabled and Global.stat("persephone/calling"):
-		activate()
+	if enabled:
+		enable()
+		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
+		if Global.stat(calling_stat):
+			ring()
+		else:
+			stop_ring()
 	else:
-		deactivate()
+		disable()
+
+func _on_stat_changed(stat, value):
+	if stat == calling_stat:
+		if value:
+			ring()
+		else:
+			stop_ring()
 
 func _exit_tree():
 	if !dialog_circle.is_inside_tree():
@@ -26,7 +40,7 @@ func _exit_tree():
 func _process(_delta):
 	var p := Global.get_player()
 	if !p:
-		deactivate()
+		disable()
 		return
 	var pos :Vector3 = p.global_transform.origin
 	var dist := (pos - global_transform.origin).length()
@@ -40,17 +54,21 @@ func _process(_delta):
 func calling_from(p_location):
 	return location == p_location
 
-func activate():
-	if !enabled:
-		return
-	active = true
-	set_process(true)
+func enable():
+	enabled = true
 	if !dialog_circle.is_inside_tree():
 		add_child(dialog_circle)
 
-func deactivate():
-	active = false
-	set_process(false)
+func disable():
 	if dialog_circle.is_inside_tree():
 		remove_child(dialog_circle)
+	stop_ring()
+
+func ring():
+	set_process(true)
+	dialog_trigger.custom_entry = "called"
+
+func stop_ring():
+	set_process(false)
+	dialog_trigger.custom_entry = "player_calling"
 	$ringer.play("RESET")
