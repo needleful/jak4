@@ -1,9 +1,12 @@
 :_start
 [! stat?: medium/activated]
-	* You've read about this.
-	* To activate the medium, you just sit in the chair.
+	* You've read about this. It's the Medium.
+	[mentioned: network] * But there's only one in the area, in the town of Hideaway. What's one doing out here?
+	{otherwise} * To activate it, you just sit in the chair.
 	* Do you want to activate the Medium?
 	> [skip] (Yes)
+		[has_var: network_stat]
+			[+stat: $network_stat]
 		[main_speaker sit]
 			* ...
 			* Nothing seems to happen.
@@ -24,6 +27,8 @@
 	> [skip] (Leave)
 	[exit]
 {otherwise}
+	[has_var: network_stat]
+		[+stat: $network_stat]
 	[main_speaker sit]
 	[stat?: mum/info]
 		[mention: activated]
@@ -32,19 +37,6 @@
 		[goto: primordial]
 :mum
 [mention: main_area]
-
-// Let's enumerate everything the player might know so far:
-	// introvert - very reserved, few friends
-	// intensity - austere, hardened by the war
-	// abandon - tends to leave without saying goodbye
-	// soldier - fought in the Vaeler war to defend Crab Hill
-	// killer - not just a soldier, she killed many Vaelers
-	// plateau - she lived on the Sylda Plateau before the war
-	// crab hill - she lived on Crab Hill during the war
-	// huh - she said "huh" and other nonverbal utterances frequently
-	// lowlands - she moved to the lowlands after the war
-	// caves - she was fond of caves and frequently explored them
-// Should I enumerate how Jackie's state of mind changes? How does that affect the AI? The Medium canonically accounts for it, but does it do so perfectly?
 
 [! stat?: mum/introvert][! stat?: mum/intensity]
 	// Special case when she has no personality, she just reflects Jackie's own personality and her preconceptions.
@@ -134,6 +126,44 @@
 					[event: end_hug | #false]
 				What do you want to talk about?
 	[goto: main_segment]
+{otherwise}[mentioned: network][! stat?: mum/network]
+	[note: mum/network | Mum can apparently travel between different machines throughout the region. |+ mum]
+	You -- M-mum?! What are you doing here?
+	[stat?: mum/huh] Huh? I don't know? What is this?
+	{otherwise}I don't know? What is this?
+	[mentioned: network054] [Global task_exists: lost_phone]
+		You -- This place is inside a cave. I was helping a woman who dropped her phone and found myself stuck down here.
+		Did you find the phone?
+		[+stat: mum/discussed/phone]
+		[Global count: dropped_phone]
+			You -- I think so? I believe it's this little black bar.
+			[mentioned: head_empty]... Yes honey, that's what phones are.
+			?> [!stat?: mum/knows_phones] How do you know what a phone is?
+				[subtopic: knows_phones]
+				[back]
+			{otherwise} Yes. That's a phone.
+			You -- Oh, whatever. These befuddling artefacts are more trouble than they're worth.
+		{otherwise}
+			You -- I haven't found anything so far.
+			Well, where did she drop it?
+			You -- At the entrance to the cave.
+			Did you check there?
+			You -- Obviously, mum. I didn't find it.
+			And you're going to find it in here? At...
+			* She pauses for a moment.
+			[mention: network_knowledge]What, you think it bounced up through the cave, unlocked the door, and made its way up here? Clearly it would be at the entrance, still.
+			You -- Wait, how...
+		You -- Alright Mum, we're getting side-tracked. My question for you is, how are you here? Does this building connect to the Medium somehow?
+		[stat?: mum/huh] Huh... That is the only explanation, I think.
+		{otherwise}I think... that is the only explanation.
+	{otherwise}[mentioned: network049]
+		[stat?: persephone/discussed/second_medium]
+			You -- A friend of mine directed me to this Medium.
+		{otherwise}
+			You -- A friend of mine apparently gave me a key to another Medium.
+	{otherwise}
+		You -- I stumbled onto this strange facility. It must connect to the Medium somehow.
+		I think... that is the only explanation.
 {otherwise}[! stat?: mum/time]
 	Hm? Did you forget something?
 	{seconds_since_conversation() > 200}
@@ -270,51 +300,26 @@
 
 :entry_network054
 [mention: network054]
+[$: network_stat | medium054/activated]
+[goto: _network]
+
+:entry_network049
+[mention: network049]
+[$: network_stat | medium049/activated]
 [goto: _network]
 
 :_network
 [mention: network]
-[stat?: mum/info]
-	[stat?: mum/network]
+[stat: medium/activated][! stat?: $network_stat]
+	* This appears to be another Medium.
+	* Do you wish to activate it?
+	> Yes.
+		[+stat: $network_stat]
 		[goto: _start]
-	{otherwise}
-		[note: mum/network | Mum can apparently travel between different machines throughout the region. |+ mum]
-		You -- M-mum?! What are you doing here?
-		[stat?: mum/huh] Huh? I don't know? What is this?
-		{otherwise}I don't know? What is this?
-		[mentioned: network054] [Global task_exists: lost_phone]
-			You -- This place is inside a cave. I was helping a woman who dropped her phone and found myself stuck down here.
-			Did you find the phone?
-			[+stat: mum/discussed/phone]
-			[Global count: dropped_phone]
-				You -- I think so? I believe it's this little black bar.
-				[mentioned: head_empty]... Yes honey, that's what phones are.
-				?> [!stat?: mum/knows_phones] How do you know what a phone is?
-					[subtopic: knows_phones]
-					[back]
-				{otherwise} Yes. That's a phone.
-				You -- Oh, whatever. These befuddling artefacts are more trouble than they're worth.
-			{otherwise}
-				You -- I haven't found anything so far.
-				Well, where did she drop it?
-				You -- At the entrance to the cave.
-				Did you check there?
-				You -- Obviously, mum. I didn't find it.
-				And you're going to find it in here? At...
-				* She pauses for a moment.
-				[mention: network_knowledge]What, you think it bounced up through the cave, unlocked the door, and made its way up here? Clearly it would be at the entrance, still.
-				You -- Wait, how...
-			You -- Alright Mum, we're getting side-tracked. My question for you is, how are you here? Does this building connect to the Medium somehow?
-			[stat?: mum/huh] Huh... That is the only explanation, I think.
-			{otherwise}I think... that is the only explanation.
-		{otherwise}
-			You -- I stumbled onto this strange facility. It must connect to the Medium somehow.
-			I think... that is the only explanation.
-
-		[goto: main_segment]
-		[goto: _exit]
+	> No.
+		[exit]
 {otherwise}
-	* (ERROR) This conversation should not occur.
+	[goto: _start]
 [goto: _exit]
 
 // TODO: should she know what a phone is? How much does the Medium get from the outside world?

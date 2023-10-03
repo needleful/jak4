@@ -3,12 +3,12 @@
 
 :called
 :persephone
-[+stat: talked/persephone]
-[! Global task_exists: gift_from_persephone]
+[! stat?: talked/persephone]
 	* A payphone rings. Nobody seems interested in answering.
 	* You pick up the receiver.
-	[Global set_stat: persephone/calling | #0]
-
+[+stat: talked/persephone]
+[Global set_stat: persephone/calling | #0]
+[! Global task_exists: gift_from_persephone]
 	Jackie, love! How's the signal?
 	[note: persephone/intro | My old friend Persephone somehow called me by payphone? |+ persephone]
 	You -- .. Persephone? How in God's name did you know I was here?
@@ -46,8 +46,8 @@
 	[forget: introduction]
 	[Global create_task: gift_from_persephone]
 	[note: persephone/gift | Persephone apparently sent something to Yaqaz for me? |+ persephone gift_from_persephone]
-	Yes! The flat's Muzna Cross, Line 5, apartment 8. A cute mint green box! The pass code to the door is 794.
-	?gift> “Line five”? What does that mean?
+	Yes! The flat's Muzna Cross, Line 6, apartment 8. A cute mint green box at the very top! The pass code to the door is 794.
+	?gift> “Line six”? What does that mean?
 		[main_speaker calling_from: muzna_cross]
 			Honey, it's the train yard right in front of you, to the north of the payphone you're talking at.
 			Each line of the yard has a number, and each car as well.
@@ -57,7 +57,7 @@
 			You've not been to Muzna Cross yet? You'll understand when you see it, but call me from there if you can't find it.
 		[back]
 	[Global remember: muzna_cross | places]
-	[note: persephone/door | Persephone's flat is at Muzna Cross, Line 5, Apartment 8 (mint green). The door takes a code: 794. |+ gift_from_persephone muzna_cross persephone]
+	[note: persephone/door | Persephone's flat is at Muzna Cross, Line 6, Apartment 8 (mint green), the highest apartment. The door takes a code: 794. |+ gift_from_persephone muzna_cross persephone]
 	You -- ... Alright, I've put it down in my journal.
 	Excellent! Let me know when you've got it! After that, maybe I can give you a tour of the place!
 	[Global add_note: She apparently wants to give me a tour of the area? I'm not sure how that'd work. |+ persephone]
@@ -73,7 +73,7 @@
 				Well, do you see the train yard? It's right in front of you, north past the station.
 				Each track is labelled with a number, and each train car has a number as well.
 				Those are the apartments! Quite interesting, right? I could have rented a little hut to the south for less, but a city of trains was too good to pass up!
-				So find the sign for line 5, follow it to box 8, and my flat is the green car!
+				So find the sign for line 6, follow it to box 8, and my flat is the green car at the very top!
 			{otherwise}
 				Do you know how to find Muzna Cross? It's the rail station, just north of the plateau. Following the tracks would get you there. [Global mark_map: muzna_cross | The Muzna Cross railway station. Just north of the plateau.]
 				?> Which way is north again?
@@ -84,8 +84,13 @@
 		> No, I'm just calling to say hello.
 			We've already had our hellos, call me once you get my present!
 			[exit]
-	{otherwise}[! stat?: persephone/discussed/flat]
-		What do you think of my flat, love?
+	{otherwise}[! Global count: triangles_tablet]
+		Did you find my gift on the coffee table?
+		You -- I guess I didn't.
+		Well, you'll have to get that before you go! Didn't you come out here for the gift? Once you get it, I'll call you!
+	{otherwise}[! stat?: persephone/discussed/second_medium]
+		// TODO: extra dialog if the player found the third Medium already.
+		What do you think of my flat?
 		You -- It's cute! How long has it been since you used it? It seems well taken care of.
 		That's probably the dry air. Nothing ever rots out there, it just gets buried in the sand.
 		?rot> It sounds ominous when you say it that way.
@@ -97,24 +102,28 @@
 		You -- Regardless, it's remarkable it's held up as well as it has, if you don't have someone taking care of it.
 		You could use it if you like! I'm not sure where you're staying, but I imagine my bed is softer.
 		You -- It's not as close to the Medium as I'd like, but perhaps if I'm traveling out.
-		Of course. You /must/ tell me about the Medium at some point! I'd heard of it, but it wasn't working when I visited.
-		[note: persephone/medium | Persephone's interested in my thoughts on the Medium. |+ persephone the_medium]
-		[+stat:  persephone/discussed/flat]
-	[Global count: triangles_tablet]
-		You -- I found a sort of tablet with triangles on it is that the gift?
-		Part of it. The other part is in the /Smiler's Cave/.
-		// TODO: dialog if you've already visited the cave.
+		Actually, love that's the other part of my gift! Did you find the little tablet with the mountains on it?
+		You -- The little triangles? I did. How does that all tie together with the medium?
+		There's a second Medium in the area, inside the /Smiler's Cave/.
 		You -- What's that?
-		If you look at the plateau from here, you'll notice a large horizontal crack in the rock. That's Smiler's Cave.
+		If you look at the plateau from here, you'll notice a large horizontal crack in the rock. That's the Smiler's Cave.
 		[Global mark_map: smilers_cave] 
 		I want you to take that little tablet to the temple in the cave.
-		You -- What will happen if I do?
-		It's a surprise! Trust me, Jackie.
-		[note: persephone/cave | Persephone says there's something waiting for me in the Smiler's Cave, in the temple. |+ persephone smilers_cave gift_from_persephone]
+		You -- It activates another Medium?
+		Yes!
+		[note: persephone/cave | Persephone says there's a second medium in the Smiler's Cave, in the temple. |+ persephone smilers_cave gift_from_persephone]
+		[+stat: persephone/discussed/second_medium]
+	{otherwise}[! stat?: medium049/activated]
+		Love, I know you haven't activated the second Medium.
+		Go on! Try it! I promise it won't bite.
 	{otherwise}
-		Did you find my gift on the coffee table?
-		You -- I guess I didn't.
-		Well, you'll have to get that before you go! Didn't you come out here for the gift? Once you get it, I'll call you!
+		Yay, you did it!
+		[Global complete_task: gift_from_persephone]
+{otherwise}
+	Did you want to talk about something?
+	* (HINT: use items or journal notes to choose a topic)
+	You -- See you later, Persephone.
+	Bye!
 [exit]
 
 :player_calling

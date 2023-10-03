@@ -1,4 +1,4 @@
-[gd_scene load_steps=140 format=2]
+[gd_scene load_steps=141 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -65,6 +65,7 @@
 [ext_resource path="res://ui/icons/new_reply.png" type="Texture" id=63]
 [ext_resource path="res://ui/game_log.gd" type="Script" id=64]
 [ext_resource path="res://ui/components/log_message.tscn" type="PackedScene" id=65]
+[ext_resource path="res://ui/components/scroll_to_focused.gd" type="Script" id=66]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -2233,39 +2234,41 @@ buttons = true
 
 [node name="debug_console" type="PanelContainer" parent="ui"]
 time_scale_response = false
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 29 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ui/debug_console"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/debug_console"]
 time_scale_response = false
 margin_left = 32.0
 margin_top = 32.0
-margin_right = 1168.0
-margin_bottom = 688.0
+margin_right = 1888.0
+margin_bottom = 1048.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ui/debug_console/ScrollContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ui/debug_console/VBoxContainer"]
 time_scale_response = false
-margin_right = 1130.0
-margin_bottom = 656.0
+margin_right = 1856.0
+margin_bottom = 980.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 66 )
+container_path = NodePath("logs")
+accept_input = true
+
+[node name="logs" type="VBoxContainer" parent="ui/debug_console/VBoxContainer/ScrollContainer"]
+time_scale_response = false
+margin_right = 1850.0
+margin_bottom = 980.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="logs" type="VBoxContainer" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="ui/debug_console/VBoxContainer"]
 time_scale_response = false
-margin_right = 1136.0
-margin_bottom = 620.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="LineEdit" type="LineEdit" parent="ui/debug_console/ScrollContainer/VBoxContainer"]
-time_scale_response = false
-margin_top = 624.0
-margin_right = 1136.0
-margin_bottom = 656.0
+margin_top = 984.0
+margin_right = 1856.0
+margin_bottom = 1016.0
 
 [node name="story_time" type="Panel" parent="ui"]
 time_scale_response = false
@@ -2420,5 +2423,5 @@ material/0 = SubResource( 98 )
 [connection signal="pressed" from="ui/dialog/dialog/item_context/VBoxContainer/cancel" to="ui/dialog/dialog/item_context" method="_on_cancel_pressed"]
 [connection signal="cancelled" from="ui/dialog/dialog/mini_journal" to="ui/dialog/dialog/item_context" method="_on_journal_cancelled"]
 [connection signal="note_chosen" from="ui/dialog/dialog/mini_journal" to="ui/dialog/dialog/item_context" method="_on_mini_journal_note_chosen"]
-[connection signal="text_entered" from="ui/debug_console/ScrollContainer/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
+[connection signal="text_entered" from="ui/debug_console/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]

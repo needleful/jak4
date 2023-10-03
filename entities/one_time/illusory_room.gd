@@ -6,8 +6,13 @@ signal deactivated
 signal endgame
 export(bool) var preview setget set_preview
 export(bool) var rooms_visible setget set_rooms_visible
+export(String) var dialog_entry := ""
 
 var visual_name := "Mum"
+
+func _ready():
+	if dialog_entry != "":
+		$DialogTrigger.custom_entry = dialog_entry
 
 func sit():
 	var p:PlayerBody = Global.get_player()

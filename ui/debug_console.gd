@@ -1,18 +1,21 @@
 extends Control
 
-onready var line_edit := $ScrollContainer/VBoxContainer/LineEdit
-onready var logs := $ScrollContainer/VBoxContainer/logs
+onready var line_edit := $VBoxContainer/LineEdit
+onready var logs := $VBoxContainer/ScrollContainer/logs
+onready var scroll := $VBoxContainer/ScrollContainer
 
 var show_stats := false setget sss
 
 var history: Array
 var index := 0
 var cheats
+var dict: Dictionary
 
 onready var G = Global
 
 func _init():
 	history = []
+	dict = {}
 
 func _ready():
 	var cheat_file = "res://scripts/cheats.gd"
@@ -56,6 +59,7 @@ func _on_text_entered(new_text):
 		echo(ex.get_error_text() + str(output))
 	else:
 		echo(str(output))
+	scroll.scroll_to_end()
 
 func move(dir:Vector3):
 	Global.get_player().global_translate(dir)

@@ -167,6 +167,12 @@ func clear():
 		c.queue_free()
 	clear_replies()
 
+func set_var(var_name: String, value):
+	variables[var_name] = value
+
+func has_var(var_name: String):
+	return var_name in variables
+
 func clear_replies():
 	for c in replies.get_children():
 		c.queue_free()
@@ -257,7 +263,7 @@ func advance():
 			_:
 				insert_label("[Error: Unknown message type: %s] %s" % [
 					DialogItem.Type.keys()[current_item.type], current_item.text
-				], "narration")
+				], "narration", "", false)
 	if !current_item:
 		return
 	var context_reply:DialogItem = sequence.canonical_next(current_item)
@@ -404,7 +410,7 @@ func show_message(text: String, speaker: String, font_override:= ""):
 func show_narration(font_override: String):
 	insert_label(current_item.text, "narration", font_override)
 
-func insert_label(text: String, format: String, font_override := ""):
+func insert_label(text: String, format: String, font_override := "", rich_text := true):
 	var color:Color = colors["default"]
 	var font:Font = fonts["default"]
 	
@@ -420,7 +426,10 @@ func insert_label(text: String, format: String, font_override := ""):
 	label.fit_to_content = true
 	label.scroll_active = false
 	label.bbcode_enabled = true
-	label.bbcode_text = interpolate(text)
+	if rich_text:
+		label.bbcode_text = interpolate(text)
+	else:
+		label.text = text
 	if color != Color.black:
 		label.add_font_override("normal_font", font)
 		label.add_color_override("default_color", color)
@@ -447,7 +456,7 @@ func evaluate(ex_text: String):
 	var err = expr.parse(ex_text, ["Global"])
 	if err != OK:
 		var msg := "\tFailed to parse {%s}. Code %d" % [ex_text, err]
-		insert_label("[Error] "+ msg, "narration")
+		insert_label("[Error] "+ msg, "narration", "", false)
 		print_debug(msg)
 		return true
 	
@@ -456,7 +465,7 @@ func evaluate(ex_text: String):
 	if expr.has_execute_failed():
 		var msg := "\tFailed to execute {%s}.\n\t%s" % [ 
 			ex_text, expr.get_error_text()]
-		insert_label("[Error] "+ msg, "narration")
+		insert_label("[Error] "+ msg, "narration", "", false)
 		print_debug(msg)
 		return true
 	return r

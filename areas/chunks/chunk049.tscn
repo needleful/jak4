@@ -5067,6 +5067,7 @@ script = ExtResource( 98 )
 wind_reduction_db = 17.6647
 no_combat = true
 close_cam = true
+visited_stat = "persephone_home/visited"
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/persephone_house/env_override" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.647285, 1.02522, -1.38231 )
@@ -5089,6 +5090,9 @@ dialog_sequence = ExtResource( 105 )
 
 [node name="pickup_tablet" parent="active_entities/persephone_house" index="11" instance=ExtResource( 100 )]
 transform = Transform( 0.519039, 0, -0.85475, 0, 1, 0, 0.85475, 0, 0.519039, 1.9769, 0.0188828, -1.27289 )
+__meta__ = {
+"_edit_group_": true
+}
 item_id = "triangles_tablet"
 
 [node name="triangles_tablet" parent="active_entities/persephone_house/pickup_tablet" index="4" instance=ExtResource( 99 )]
@@ -5122,6 +5126,8 @@ transform = Transform( 0.964765, 0, 0.263115, 0, 1, 0, -0.263115, 0, 0.964765, -
 
 [node name="hut_bath2" parent="zone_cliff" index="5" instance=ExtResource( 102 )]
 transform = Transform( 0.382624, 0, 0.923904, 0, 1, 0, -0.923904, 0, 0.382624, -9.26082, -0.922905, 21.092 )
+
+[connection signal="picked" from="active_entities/persephone_house/pickup_tablet" to="active_entities/persephone_house/tablet_indicator" method="enter_dialog"]
 
 [editable path="blockout/box_house_short14"]
 [editable path="blockout/box_house_side20"]

@@ -13,6 +13,7 @@ export(AudioStream) var combat_music
 export(bool) var no_combat := false
 export(bool) var close_cam := false
 export(bool) var rescue_available := true
+export(String) var visited_stat := ""
 
 func _ready():
 	var _x = connect("body_entered", self, "_on_body_entered", [], CONNECT_DEFERRED)
@@ -41,6 +42,8 @@ func _on_body_entered(_body):
 	overrides["priority"] = override_priority
 	get_tree().current_scene.apply_environment(overrides)
 	show()
+	if visited_stat != "":
+		var _x = Global.add_stat(visited_stat)
 
 func _on_body_exited(_body):
 	if is_inside_tree():

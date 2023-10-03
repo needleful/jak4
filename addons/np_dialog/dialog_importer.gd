@@ -18,7 +18,8 @@ var r_special_replace := RegEx.new()
 
 var special_functions := {
 	"+stat" : "Global.add_stat",
-	"stat?" : "Global.stat"
+	"stat?" : "Global.stat",
+	"$" : "set_var"
 }
 
 func _init():
