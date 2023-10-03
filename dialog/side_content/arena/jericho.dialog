@@ -1,7 +1,7 @@
 [Global has_stat: arena137/name]
-	{$name =  Global.stat("arena137/name")}
+	[$: name |  #Global.stat("arena137/name")]
 {otherwise}
-	{$name = "Jaki"}
+	[$: name | Jaki]
 
 [! stat?: arena137/entered]
 	/Eh, ine kes?/
@@ -11,14 +11,14 @@
 	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
 	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
 		[Global remove_item: gem | #25] Yes, throw me in the chasm.
-		// TODO
+		[main_speaker get_node("../arena") start_game]
 	> {otherwise} I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 {otherwise}[! stat?: arena137/coat]
 	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[Global remove_item: gem | #25] Sure, I'll try again.
-		// TODO
+		[main_speaker get_node("../arena") start_game]
 	> No, thank you. I still have puncture wounds from last time.
 {otherwise}
 	The queen bee herself! #{$name}! Want to show the kids how it's done? I drop price to 50 gems.
@@ -29,13 +29,13 @@
 		[back]
 	> {Global.count("gem") > 50}[skip] (Pay 50 gems) Sure, it could be my #{general_time(true)} exercise.
 		[Global remove_item: gem | #50] Sure, it could be my #{general_time(true)} exercise.
-		// TODO
+		[main_speaker get_node("../arena") start_game]
 	> Not today, Jericho.
-		// TODO
+		[exit]
 [exit]
 
 :item(arena_access) :- !Global.stat("arena137/entered")
-{$name = "Jaki"}
+[$: name | Jaki]
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
 * He takes the paper. [Global remove_item: arena_access]
@@ -45,7 +45,7 @@ You -- Yes, I did sign a waiver... of some sort.
 [back]
 
 :item(fake_arena_access) :- !Global.stat("arena13/entered")
-{$name = "Kara"}
+[$: name | Kara]
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
 * He takes the paper. [Global remove_item: arena_access]
@@ -73,6 +73,7 @@ You -- I... see. I didn't sign up to be /in/ the chasm, did I?
 You did! If you want to hunt, we will prepare the chasm! The entry is only twenty gems.
 : loop_choice
 > I mean, I've got nothing better to do at the moment. Throw me in!
+	[main_speaker get_node("../arena") start_game]
 > I'm not getting thrown into some death pit for your entertainment.
 > Wait, I pay /you/ to get thrown in there?
 	Yes! It's much up-to-keep with this arena.

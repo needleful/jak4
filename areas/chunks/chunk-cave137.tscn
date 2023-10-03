@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -31,6 +31,8 @@
 [ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=29]
 [ext_resource path="res://dialog/side_content/arena/lia.dialog" type="Resource" id=30]
 [ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=31]
+[ext_resource path="res://games/arena.gd" type="Script" id=32]
+[ext_resource path="res://dialog/side_content/arena/jericho.dialog" type="Resource" id=33]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -538,4 +540,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3835, 0, -91.265 )
 
 [node name="npc_jericho" parent="active_entities/arena" instance=ExtResource( 29 )]
 transform = Transform( -0.163971, 0, -0.986465, 0, 1, 0, 0.986465, 0, -0.163971, -18.4994, 22.1291, 39.584 )
+dialog = ExtResource( 33 )
 visual_name = "Jericho"
+
+[node name="arena" type="Spatial" parent="active_entities/arena"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17.2362, 0 )
+script = ExtResource( 32 )
+time_limit = 5.0
+
+[node name="player_start" type="Position3D" parent="active_entities/arena/arena"]
+transform = Transform( 0.0937715, 0, -0.995594, 0, 1, 0, 0.995594, 0, 0.0937715, 0, -8.8855, 0 )

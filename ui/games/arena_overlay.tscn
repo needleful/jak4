@@ -1,0 +1,222 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/fonts/big_font.res" type="DynamicFont" id=1]
+[ext_resource path="res://ui/games/arena_overlay.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 1, 0.835294, 0.4, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.376471 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("best:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("best:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "new_best"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("best:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("best:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1.56917, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="arena_overlay" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="p" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 34.0
+margin_top = -368.0
+margin_right = 202.0
+margin_bottom = -252.0
+grow_vertical = 0
+
+[node name="m" type="MarginContainer" parent="p"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 227.0
+margin_bottom = 204.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 20
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 20
+
+[node name="v" type="VBoxContainer" parent="p/m"]
+margin_left = 10.0
+margin_top = 20.0
+margin_right = 210.0
+margin_bottom = 177.0
+
+[node name="combo_label" type="Label" parent="p/m/v"]
+margin_right = 200.0
+margin_bottom = 14.0
+text = "Combo: X"
+align = 1
+
+[node name="combo_countdown" type="ProgressBar" parent="p/m/v"]
+margin_top = 18.0
+margin_right = 200.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 200, 20 )
+custom_styles/fg = SubResource( 5 )
+custom_styles/bg = SubResource( 4 )
+max_value = 1.0
+step = 0.001
+value = 0.01
+percent_visible = false
+
+[node name="spacer" type="Control" parent="p/m/v"]
+margin_top = 42.0
+margin_right = 200.0
+margin_bottom = 57.0
+rect_min_size = Vector2( 0, 15 )
+
+[node name="g" type="GridContainer" parent="p/m/v"]
+margin_top = 61.0
+margin_right = 200.0
+margin_bottom = 157.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 8
+columns = 2
+
+[node name="TimeLabel" type="Label" parent="p/m/v/g"]
+margin_right = 96.0
+margin_bottom = 14.0
+text = "Time:"
+
+[node name="TimeRemaining" type="Label" parent="p/m/v/g"]
+margin_left = 104.0
+margin_right = 200.0
+margin_bottom = 14.0
+text = "0:00!!!"
+
+[node name="spacer" type="Control" parent="p/m/v/g"]
+margin_top = 24.0
+margin_right = 96.0
+margin_bottom = 24.0
+
+[node name="spacer2" type="Control" parent="p/m/v/g"]
+margin_left = 104.0
+margin_top = 24.0
+margin_right = 200.0
+margin_bottom = 24.0
+
+[node name="LabelGold" type="Label" parent="p/m/v/g"]
+margin_top = 34.0
+margin_right = 96.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+text = "Gold"
+
+[node name="Gold" type="Label" parent="p/m/v/g"]
+margin_left = 104.0
+margin_top = 34.0
+margin_right = 200.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+text = "Gold time"
+
+[node name="LabelSilver" type="Label" parent="p/m/v/g"]
+margin_top = 58.0
+margin_right = 96.0
+margin_bottom = 72.0
+size_flags_horizontal = 3
+text = "Silver"
+
+[node name="Silver" type="Label" parent="p/m/v/g"]
+margin_left = 104.0
+margin_top = 58.0
+margin_right = 200.0
+margin_bottom = 72.0
+size_flags_horizontal = 3
+text = "Silver Time"
+
+[node name="LabelBronze" type="Label" parent="p/m/v/g"]
+margin_top = 82.0
+margin_right = 96.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+text = "Bronze"
+
+[node name="Bronze" type="Label" parent="p/m/v/g"]
+margin_left = 104.0
+margin_top = 82.0
+margin_right = 200.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+text = "Bronze Time"
+
+[node name="LabelBest" type="Label" parent="p/m/v/g"]
+visible = false
+margin_top = 72.0
+margin_right = 45.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+text = "Best"
+
+[node name="Best" type="Label" parent="p/m/v/g"]
+visible = false
+margin_top = 72.0
+margin_right = 45.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 2 )
+anims/new_best = SubResource( 1 )
+
+[node name="best" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+margin_top = 68.0
+margin_bottom = 112.0
+custom_fonts/font = ExtResource( 1 )
+text = "New Best! XX"
+align = 1

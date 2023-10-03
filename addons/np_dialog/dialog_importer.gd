@@ -211,16 +211,16 @@ func extract_expressions(line: String) -> Dictionary:
 	var line_no_expressions := line
 	var matches = r_expression.search_all(line)
 	for rm in matches:
-		var s: String=  rm.get_string()
+		var s: String= rm.get_string()
 		if s.begins_with("#"):
+			var ex:String = rm.get_string(1)
+			var ex2 := replace_vars(ex)
+			
 			line_no_expressions = dict.line.replace(s, "")
+			dict.line = dict.line.replace(ex, ex2)
 			continue
 		
-		var ex : String = rm.get_string(1)
-		for rvar in r_special_replace.search_all(ex):
-			ex = ex.replace(
-				rvar.get_string(),
-				"variables[\"%s\"]" % rvar.get_string(1))
+		var ex : String = replace_vars(rm.get_string(1))
 		dict.line = dict.line.replace(s, "")
 		line_no_expressions = dict.line
 		dict.conditions.append(ex)
@@ -278,13 +278,19 @@ func sq_argument(arg: String) -> String:
 	var s := arg.strip_edges()
 	if s.begins_with("#"):
 		return s.substr(1)
-	var m := r_special_replace.search(s)
-	if m:
-		return s.replace(
-			m.get_string(),
-			"variables[\"%s\"]" % m.get_string(1))
+	var replaced = replace_vars(s)
+	if replaced != s:
+		return replaced
 	else:
 		return '"' + s.replace('"', '\\"') + '"'
+
+func replace_vars(s: String) -> String:
+	var replaced := s
+	for m in r_special_replace.search_all(s):
+		var m1:String = m.get_string()
+		var m2:String = "variables[\"%s\"]" % m.get_string(1)
+		replaced = replaced.replace(m1, m2)
+	return replaced
 
 func extract_type(line: String) -> Dictionary:
 	var nm := r_narrate.search(line)

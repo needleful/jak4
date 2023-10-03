@@ -45,10 +45,10 @@ func _process(_delta):
 	var pos :Vector3 = p.global_transform.origin
 	var dist := (pos - global_transform.origin).length()
 	var in_range := dist < 80.0
-	var ringing:bool = $ringer.is_playing()
-	if in_range and !ringing:
+	var playing:bool = $ringer.is_playing()
+	if in_range and !playing:
 		$ringer.play("Ring")
-	elif !in_range and ringing:
+	elif !in_range and playing:
 		$ringer.queue("RESET")
 
 func calling_from(p_location):
