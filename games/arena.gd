@@ -1,10 +1,6 @@
 extends Spatial
 class_name GameArena
 
-export(int) var bronze_score := 10
-export(int) var silver_score := 20
-export(int) var gold_score := 40
-export(float) var time_limit := 60.0
 export(String) var friendly_id := ""
 const arena_overlay: PackedScene = preload("res://ui/games/arena_overlay.tscn")
 var timer : Timer
@@ -15,12 +11,16 @@ var dialog_allowed := false
 
 var title := "Arena Score"
 onready var id := hash(get_path())
-onready var spawns := $spawns
+var spawns: Node
+var scenarios : Dictionary
+var scenario : ArenaScenario
+var cs : CombatScenario
 
 var active_enemies := 0
 var score := 0
+var current_wave := 0
 
-const PLAYER_DEATH_PENALTY := -75
+const PLAYER_DEATH_PENALTY := -500
 const POINTS_PER_HP := {
 	"default":1
 }
@@ -29,7 +29,10 @@ const COMBO_DRAIN := 0.1
 const COMBO_DAMAGE_DRAIN := 0.5
 const WON_COLOR := Color.aquamarine
 
-var crawly_scene: PackedScene = load("res://entities/enemies/crawly.tscn")
+var scenes := {
+	"crawly": load("res://entities/enemies/crawly.tscn"),
+	"deathgnat": load("res://entities/enemies/deathgnat.tscn")
+}
 
 func _ready():
 	if has_node("Timer"):
@@ -40,11 +43,19 @@ func _ready():
 		add_child(timer)
 	var _x = timer.connect("timeout", self, "_on_timeout")
 	set_process(false)
+	clear_scenarios()
 
-func start_game():
+func clear_scenarios():
+	for c in get_children():
+		if c is ArenaScenario:
+			remove_child(c)
+			scenarios[c.name] = c
+
+func start_game(p_scenario: String):
 	if CustomGames.is_active():
 		return
-
+	current_wave = 0
+	scenario = scenarios[p_scenario]
 	player = Global.get_player()
 	Global.save_checkpoint(player.global_transform)
 	
@@ -53,24 +64,30 @@ func start_game():
 	var _x = player.connect("died", self, "_on_player_died")
 	_x = player.connect("damaged", self, "_on_player_damaged")
 	
-	timer.start(time_limit)
+	clear_scenarios()
+	cs = scenario.scenario
+	add_child(scenario)
+	scenario.show()
+	spawns = scenario.get_node("spawns")
+	
+	timer.start(scenario.time_limit)
 	set_process(true)
 	
 	active_enemies = 0
 	score = 0
 	
 	overlay = arena_overlay.instance()
-	overlay.gold = gold_score
-	overlay.silver = silver_score
-	overlay.bronze = bronze_score
-	if CustomGames.has_stat(self, "best"):
-		var best: float = CustomGames.stat(self, "best")
+	overlay.gold = scenario.gold_score
+	overlay.silver = scenario.silver_score
+	overlay.bronze = scenario.bronze_score
+	if CustomGames.has_stat(self, best_stat()):
+		var best: float = CustomGames.stat(self, best_stat())
 		overlay.set_best(best)
 	player.game_ui.set_overlay(overlay)
 	overlay.combo = 0
 	overlay.combo_countdown = 0
 	player.game_ui.set_value(0)
-	spawn_wave(5)
+	spawn_wave()
 
 func _process(delta):
 	overlay.time_remaining = timer.time_left
@@ -81,11 +98,11 @@ func _process(delta):
 func add_points(points: int):
 	score += int(points*max(overlay.combo, 1))
 	player.game_ui.set_value(score)
-	if score > bronze_score:
+	if score > scenario.bronze_score:
 		overlay.color_bronze(WON_COLOR)
-	if score > silver_score:
+	if score > scenario.silver_score:
 		overlay.color_silver(WON_COLOR)
-	if score > gold_score:
+	if score > scenario.gold_score:
 		overlay.color_gold(WON_COLOR)
 
 func _on_enemy_died(enemy_id, path):
@@ -99,21 +116,26 @@ func _on_enemy_died(enemy_id, path):
 	overlay.combo_countdown = 1
 	overlay.combo += 1
 	active_enemies -= 1
-	if active_enemies < 2:
-		spawn_wave(5)
+	if active_enemies < scenario.min_enemies:
+		current_wave += 1
+		spawn_wave()
 
-func spawn_wave(count:int):
-	for i in count:
-		var index:int = i % spawns.get_child_count()
-		var spawn_loc := spawns.get_child(index)
-		var crawly := crawly_scene.instance()
-		spawn_loc.add_child(crawly)
-		crawly.global_transform = spawn_loc.global_transform
-		crawly.extra_chase_time = time_limit
-		crawly.call_deferred("aggro_to", player)
-		crawly.add_to_group("arena_enemy")
-		var _x = crawly.connect("died", self, "_on_enemy_died")
-	active_enemies += count
+func spawn_wave():
+	var wave = scenario.get_wave(current_wave)
+	for enemy in wave:
+		var count :int = wave[enemy]
+		if !(enemy in scenes):
+			continue
+		for i in count:
+			var index:int = i % spawns.get_child_count()
+			var spawn_loc := spawns.get_child(index)
+			var node:EnemyBody = scenes[enemy].instance()
+			spawn_loc.add_child(node)
+			node.global_transform = spawn_loc.global_transform
+			node.call_deferred("aggro_to", player)
+			node.add_to_group("arena_enemy")
+			var _x = node.connect("died", self, "_on_enemy_died")
+		active_enemies += count
 
 func _on_player_died():
 	add_points(PLAYER_DEATH_PENALTY)
@@ -128,25 +150,58 @@ func _on_timeout():
 	_end()
 
 func _end():
-	# TODO: potentially have custom end titles, 
-	# like "Player Defeated", "Enemies Defeated", or "Time's Up"
-	CustomGames.end(true)
+	CustomGames.add_stat(self, "completed")
+	var award := 0
+	if score > scenario.gold_score:
+		award = CustomGames.Award.Gold
+	elif score > scenario.silver_score:
+		award = CustomGames.Award.Silver
+	elif score > scenario.bronze_score:
+		award = CustomGames.Award.Bronze
+	
+	var previous_award = CustomGames.stat(self, award_stat())
+	if award > previous_award:
+		CustomGames.set_stat(self, award_stat(), award)
+
+	if award:
+		CustomGames.end(true)
+	else:
+		CustomGames.end(false)
 
 func end():
-	var previous_best = CustomGames.stat(self, "best")
-	var previous_award = CustomGames.stat(self, "award")
+	var previous_best = CustomGames.stat(self, best_stat())
 	if score > previous_best:
-		CustomGames.set_stat(self, "best", score)
+		CustomGames.set_stat(self, best_stat(), score)
 		overlay.new_best(score)
+	get_tree().call_group("arena_enemy", "disconnect", "died", self, "_on_enemy_died")
 	get_tree().call_group("arena_enemy", "queue_free")
 	if player.is_connected("died", self, "_on_player_died"):
 		player.disconnect("died", self, "_on_player_died")
+	if player.is_connected("damaged", self, "_on_player_damaged"):
+		player.disconnect("damaged", self, "_on_player_damaged")
 	set_process(false)
 	overlay = null
 	timer.stop()
 
-func award_name():
-	return CustomGames.Award.keys()[CustomGames.stat("award") - 1]
+func award_stat():
+	return "award/"+scenario.name
 
-func completed():
-	return CustomGames.has_stat(self, "best")
+func best_stat():
+	return "best/"+scenario.name
+
+func award_name(p_scenario):
+	if CustomGames.has_stat(self, "award/"+p_scenario):
+		return CustomGames.Award.keys()[CustomGames.stat(self, "award/"+p_scenario) - 1]
+	else:
+		return "Never Completed"
+
+func completed(p_scenario = ""):
+	if p_scenario == "":
+		return CustomGames.has_stat(self, "completed")
+	return CustomGames.has_stat(self, "best/"+p_scenario)
+
+func scenario_text(p_scenario):
+	if completed(p_scenario):
+		return "(Best Rank: %s)" % award_name(p_scenario)
+	else:
+		return "(New!)"

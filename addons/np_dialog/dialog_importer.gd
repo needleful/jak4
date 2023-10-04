@@ -241,6 +241,8 @@ func extract_expressions(line: String) -> Dictionary:
 		for f in func_str.split(" ", false):
 			if f in special_functions:
 				f = special_functions[f]
+			elif f.begins_with("$"):
+				f = replace_vars(f)
 			if slot != "" and slot != "!":
 				slot += "."
 			slot += f.strip_edges()

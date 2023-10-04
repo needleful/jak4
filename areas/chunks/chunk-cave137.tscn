@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -33,6 +33,10 @@
 [ext_resource path="res://entities/visual/distance_visible.gd" type="Script" id=31]
 [ext_resource path="res://games/arena.gd" type="Script" id=32]
 [ext_resource path="res://dialog/side_content/arena/jericho.dialog" type="Resource" id=33]
+[ext_resource path="res://entities/env/copper/scrap3.tscn" type="PackedScene" id=34]
+[ext_resource path="res://games/arena_scenario.gd" type="Script" id=35]
+[ext_resource path="res://games/arena/deathgnats.scenario" type="Resource" id=36]
+[ext_resource path="res://games/arena/crawlies.scenario" type="Resource" id=37]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -546,26 +550,67 @@ visual_name = "Jericho"
 [node name="arena" type="Spatial" parent="active_entities/arena"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17.2362, 0 )
 script = ExtResource( 32 )
-bronze_score = 1000
-silver_score = 7500
-gold_score = 15000
 
 [node name="player_start" type="Position3D" parent="active_entities/arena/arena"]
-transform = Transform( 0.0937715, 0, -0.995594, 0, 1, 0, 0.995594, 0, 0.0937715, 0, -8.8855, 0 )
+transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
 
-[node name="spawns" type="Spatial" parent="active_entities/arena/arena"]
+[node name="crawlies" type="Spatial" parent="active_entities/arena/arena"]
+script = ExtResource( 35 )
+scenario = ExtResource( 37 )
 
-[node name="spawn1" type="Position3D" parent="active_entities/arena/arena/spawns" groups=["crawly_spawn"]]
+[node name="spawns" type="Spatial" parent="active_entities/arena/arena/crawlies"]
+
+[node name="spawn1" type="Position3D" parent="active_entities/arena/arena/crawlies/spawns" groups=["crawly_spawn"]]
 transform = Transform( 0.235392, 0, -0.971901, 0, 1, 0, 0.971901, 0, 0.235392, 19.8253, -5.27908, -2.10227 )
 
-[node name="spawn2" type="Position3D" parent="active_entities/arena/arena/spawns" groups=["crawly_spawn"]]
+[node name="spawn2" type="Position3D" parent="active_entities/arena/arena/crawlies/spawns" groups=["crawly_spawn"]]
 transform = Transform( 0.332107, 0, 0.943242, 0, 1, 0, -0.943242, 0, 0.332107, -27.6194, -8.38241, -7.77033 )
 
-[node name="spawn3" type="Position3D" parent="active_entities/arena/arena/spawns" groups=["crawly_spawn"]]
+[node name="spawn3" type="Position3D" parent="active_entities/arena/arena/crawlies/spawns" groups=["crawly_spawn"]]
 transform = Transform( -0.523488, 0, -0.852033, 0, 1, 0, 0.852033, 0, -0.523488, 11.9604, -4.92315, 23.827 )
 
-[node name="spawn4" type="Position3D" parent="active_entities/arena/arena/spawns" groups=["crawly_spawn"]]
+[node name="spawn4" type="Position3D" parent="active_entities/arena/arena/crawlies/spawns" groups=["crawly_spawn"]]
 transform = Transform( 0.981984, 0, -0.188965, 0, 1, 0, 0.188965, 0, 0.981984, 3.2844, -10.4192, -33.269 )
 
-[node name="spawn5" type="Position3D" parent="active_entities/arena/arena/spawns" groups=["crawly_spawn"]]
+[node name="spawn5" type="Position3D" parent="active_entities/arena/arena/crawlies/spawns" groups=["crawly_spawn"]]
 transform = Transform( 0.951179, 0, -0.30864, 0, 1, 0, 0.30864, 0, 0.951179, 7.67758, -10.2172, -32.6405 )
+
+[node name="scrap3" parent="active_entities/arena/arena/crawlies" instance=ExtResource( 34 )]
+transform = Transform( 0.0032425, -0.94378, -0.33056, -0.0227291, -0.330545, 0.943517, -0.999737, 0.00445396, -0.022523, -12.2229, -7.75311, 7.31598 )
+
+[node name="rock1" parent="active_entities/arena/arena/crawlies" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 7.45058e-09, 0, 1, 0, -7.45058e-09, 0, 1, -16.6047, -11.0786, 1.16906 )
+
+[node name="scrap2" parent="active_entities/arena/arena/crawlies" instance=ExtResource( 24 )]
+transform = Transform( 0.124942, 0.992164, 0, -0.992164, 0.124942, 0, 0, 0, 1, 8.61425, -4.83685, -3.13192 )
+
+[node name="scrap_pile2" parent="active_entities/arena/arena/crawlies" instance=ExtResource( 20 )]
+transform = Transform( -0.100922, -0.530236, 0.841822, -0.984836, -0.0667721, -0.160125, 0.141114, -0.845216, -0.515457, 18.4981, -4.67836, 12.1987 )
+
+[node name="scrap4" parent="active_entities/arena/arena/crawlies" instance=ExtResource( 24 )]
+transform = Transform( -0.100922, -0.530236, 0.841822, -0.984836, -0.0667721, -0.160125, 0.141114, -0.845216, -0.515457, -6.78533, -8.27884, -15.6006 )
+
+[node name="deathgnats" type="Spatial" parent="active_entities/arena/arena"]
+script = ExtResource( 35 )
+bronze_score = 500
+silver_score = 3500
+gold_score = 8000
+time_limit = 100.0
+scenario = ExtResource( 36 )
+
+[node name="spawns" type="Spatial" parent="active_entities/arena/arena/deathgnats"]
+
+[node name="spawn1" type="Position3D" parent="active_entities/arena/arena/deathgnats/spawns"]
+transform = Transform( -0.505452, 0, -0.862855, 0, 1, 0, 0.862855, 0, -0.505452, 18.092, 0, 20.1908 )
+
+[node name="spawn2" type="Position3D" parent="active_entities/arena/arena/deathgnats/spawns"]
+transform = Transform( 0.871148, 0, -0.491021, 0, 1, 0, 0.491021, 0, 0.871148, 15.8048, 6.66971, -14.3242 )
+
+[node name="spawn3" type="Position3D" parent="active_entities/arena/arena/deathgnats/spawns"]
+transform = Transform( 0.192775, 0, 0.981243, 0, 1, 0, -0.981243, 0, 0.192775, -19.2027, -0.886614, -8.35549 )
+
+[node name="spawn4" type="Position3D" parent="active_entities/arena/arena/deathgnats/spawns"]
+transform = Transform( -0.685705, 0, 0.727879, 0, 1, 0, -0.727879, 0, -0.685705, -15.0528, -0.886614, 25.4423 )
+
+[node name="spawn5" type="Position3D" parent="active_entities/arena/arena/deathgnats/spawns"]
+transform = Transform( -0.292573, 0, -0.956243, 0, 1, 0, 0.956243, 0, -0.292573, 22.1867, 31.3077, 8.99515 )
