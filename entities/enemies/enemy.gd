@@ -94,6 +94,8 @@ func _ready():
 			else:
 				state.transform = starting_position
 			target = null
+	else:
+		starting_health = health
 	if drops_coat:
 		coat = Coat.new(true, minimum_rarity, maximum_rarity)
 		get_node(mesh_node).set_surface_material(0, coat.generate_material())
@@ -326,6 +328,7 @@ func play_damage_sfx():
 func aggro_to(node: Spatial):
 	if node != self:
 		target = node
+		set_physics_process(true)
 
 func no_target():
 	return ( 

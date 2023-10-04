@@ -6,6 +6,12 @@ signal game_completed
 
 var active_game = null
 
+enum Award {
+	Bronze = 1,
+	Silver = 2,
+	Gold = 3
+}
+
 func start(game: Object):
 	if active_game:
 		print_debug(

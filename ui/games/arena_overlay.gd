@@ -16,6 +16,10 @@ func set_combo(c: int):
 	$p/m/v/combo_label.text = "Combo: %d" % combo
 
 func set_combo_countdown(c: float):
+	if c < 0:
+		c = 0
+	if c > 1:
+		c = 1
 	combo_countdown = c
 	$p/m/v/combo_countdown.value = c
 
@@ -28,7 +32,7 @@ func new_best(best:int):
 	$p/m/v/g/LabelBest.show()
 	$p/m/v/g/Best.show()
 	$p/m/v/g/Best.text = str(best)
-	$best.text = "New best: %d" % best
+	$best.text = "New Best: %d" % best
 	$AnimationPlayer.play("new_best")
 
 func set_gold(g: int):

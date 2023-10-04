@@ -1,12 +1,6 @@
 extends Spatial
 class_name GameRace
 
-enum Award {
-	Bronze = 1,
-	Silver = 2,
-	Gold = 3
-}
-
 export(float) var bronze_seconds: float
 export(float) var silver_seconds: float
 export(float) var gold_seconds: float
@@ -158,13 +152,13 @@ func win():
 	var award: int
 	if race_time <= gold_seconds:
 		overlay.color_gold(WON_COLOR)
-		award = Award.Gold
+		award = CustomGames.Award.Gold
 	elif race_time <= silver_seconds:
 		overlay.color_silver(WON_COLOR)
-		award = Award.Silver
+		award = CustomGames.Award.Silver
 	else:
 		overlay.color_bronze(WON_COLOR)
-		award = Award.Bronze
+		award = CustomGames.Award.Bronze
 	
 	CustomGames.end(true)
 	
@@ -172,13 +166,13 @@ func win():
 		return
 	CustomGames.set_stat(self, "award", award)
 	
-	if award >= Award.Bronze and last_award < Award.Bronze:
+	if award >= CustomGames.Award.Bronze and last_award < CustomGames.Award.Bronze:
 		var _x = Global.add_item("bug", bronze_reward)
 		_x = Global.add_item("bronze_medal")
-	if award >= Award.Silver and last_award < Award.Silver:
+	if award >= CustomGames.Award.Silver and last_award < CustomGames.Award.Silver:
 		var _x = Global.add_item("bug", silver_reward)
 		_x = Global.add_item("silver_medal")
-	if award >= Award.Gold and last_award < Award.Gold:
+	if award >= CustomGames.Award.Gold and last_award < CustomGames.Award.Gold:
 		var _x = Global.add_item("bug", gold_reward)
 		_x = Global.add_item("gold_medal")
 		if gold_gives_coat:
@@ -199,3 +193,6 @@ func has_required_items():
 		if !Global.count(stats[0]) >= count:
 			return false
 	return true
+
+func award_name():
+	return CustomGames.Award.keys()[CustomGames.stat("award") - 1]

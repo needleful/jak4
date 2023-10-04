@@ -7,16 +7,16 @@
 	/Eh, ine kes?/
 	You -- Oh, um, my name is Jackie.
 	Vaeler? Oh no, you aren't for here, no.
-{otherwise}[! stat?: arena137/completed]
+{otherwise}[! main_speaker get_node("../arena") completed]
 	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
-	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
+	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
 		[Global remove_item: gem | #25] Yes, throw me in the chasm.
 		[main_speaker get_node("../arena") start_game]
 	> {otherwise} I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 {otherwise}[! stat?: arena137/coat]
 	Hello killer! Want to hunt again? It's still 25 gems.
-	> {Global.count("gem") > 25}[skip] (Pay 25 gems) Sure, I'll try again.
+	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[Global remove_item: gem | #25] Sure, I'll try again.
 		[main_speaker get_node("../arena") start_game]
 	> No, thank you. I still have puncture wounds from last time.
@@ -27,7 +27,7 @@
 		You -- I don't even win anything if I win!
 		You win the joy of a job done good.
 		[back]
-	> {Global.count("gem") > 50}[skip] (Pay 50 gems) Sure, it could be my #{general_time(true)} exercise.
+	> {Global.count("gem") >= 50}[skip] (Pay 50 gems) Sure, it could be my #{general_time(true)} exercise.
 		[Global remove_item: gem | #50] Sure, it could be my #{general_time(true)} exercise.
 		[main_speaker get_node("../arena") start_game]
 	> Not today, Jericho.
@@ -70,10 +70,13 @@ Nobody has died /ever/! We are very safe.
 You -- But... why?
 Strength. It's hard world. Those who cannot harder, die!
 You -- I... see. I didn't sign up to be /in/ the chasm, did I?
-You did! If you want to hunt, we will prepare the chasm! The entry is only twenty gems.
-: loop_choice
-> I mean, I've got nothing better to do at the moment. Throw me in!
+You did! If you want to hunt, we will prepare the chasm! The entry is only twenty-five gems.
+: loop_choice	
+> {Global.count("gem") >= 25}[skip] (Pay 25 gems) I mean, I've got nothing better to do at the moment. Throw me in!
+	[Global remove_item: gem | #25] I mean, I've got nothing better to do at the moment. Throw me in!
 	[main_speaker get_node("../arena") start_game]
+> {otherwise} I don't have that kind of money.
+	Well, you should get that kind of money!
 > I'm not getting thrown into some death pit for your entertainment.
 > Wait, I pay /you/ to get thrown in there?
 	Yes! It's much up-to-keep with this arena.

@@ -145,6 +145,11 @@ func get_shield():
 func get_target_ref():
 	return ref_target.global_transform.origin
 
+func aggro_to(node):
+	.aggro_to(node)
+	if target and ai < AI.Chasing:
+		set_state(AI.Chasing)
+
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:
 		return
@@ -153,6 +158,8 @@ func set_state(new_ai, force := false):
 	else:
 		cooldown_timer = 0
 	ai = new_ai
+	if ai != AI.Idle or AI.Dead:
+		set_physics_process(true)
 	state_timer = 0
 	damaged = []
 	gravity_scale = 1
