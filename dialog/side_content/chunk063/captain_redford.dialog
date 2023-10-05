@@ -1,7 +1,7 @@
 [! stat?: captain_redford/start]
 	{talked == 0}
 		// At the blockade
-		I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this locomotive property of the Vaeland Empire!
+		I, Captain Nathaniel Redford of the Sixth Cavalry, on authority of King August IX, declare this train property of the Vaeland Empire!
 		> You can talk?
 		> King August IX died fifteen years ago...
 
@@ -14,22 +14,22 @@
 		Fashion? Well, if one wishes not to be insulted, perhaps one should not make oneself so easy to insult.
 		You -- I will not tolerate such abuse from a skull with legs! State your business or I shall deal with you like the other spectres, talking or not!
 		You speak nonsense, girl. I stated my business. I am capturing this locomotive to aid in the war effort. The question is, what is a woman such as yourself doing in the middle of a battlefield?
-		You -- What war? Do you mean the Vaeler-Yaqaz War? But it's been over for forty years...
+		You -- What war? Do you mean the Vaelic-Yaqazi War? But it's been over for forty years...
 		What do you mean "over"?
-		You -- We lost. The Yaqazi dispelled us from the region decades ago. And they've been awfully smug about it, quite frankly.
-		Impossible! I saw my company just two days ago! Speaking of which, we must find them. They're likely uneasy without my leadership.
+		You -- We lost. The Yaqazi dispelled Vaeland from the region decades ago. And, frankly, they've been awfully smug about it.
+		Impossible! I saw my company just two days ago! If what you say has any connection to reality, they're likely uneasy without my leadership.
 		You shall accompany me to our fortifications at the Ember Crest Manor. With reinforcements, we can hold this station with ease.
 		And once we get there, you shall be sent home to Vaeland. This abominable desert is no place for a lady, even a short-haired one.
 	{otherwise}
 		Young lady. As I have said, we must part for the Ember Crest Manor at once!
-	> Fine. I will humor your delusions and go to this manor with you.
-		It's just over the ridge northeast of here. Stay by my side. We can't trust these natives...
+	> Fine. I'll humor your delusions and go to this manor with you.
+		It's just over the ridge northeast of here. Stay by my side. There are assassins in the sands...
 		[Global create_task: troops_of_the_manor]
 		[mark_map: ember_crest_manor]
 		[note: captain_redford/start | A strange talking spectre, calling itself “Captain Redford”, has demanded I travel with him to the Ember Crest Manor to find his men. I have no doubt this is a trap of some sort. |+ captain_redford troops_of_the_manor ember_crest_manor]
 		[main_speaker travel_to: ember_crest_manor | ../path_ember_crest]
-	> No. Stay on that train forever for all I care.
-		What?! Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
+	> No. Stand here on the tracks forever for all I care.
+		What? Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
 		... Get back here!
 {otherwise}{main_speaker.get_chunk() == "chunk063"}
 	Right, let's continue!
@@ -46,7 +46,7 @@
 	{otherwise}[! stat?: chunk052/front_door/open]
 		Well... Are you going to open it?
 		You -- I unlocked it, but it's still stuck.
-		It can probably be kicked open now.
+		Just give it a firm kick. That should do it.
 	{otherwise}
 		Marvelous! Now to find my men...
 		[main_speaker travel_to: | ../path_entry]
@@ -59,7 +59,7 @@
 	You -- What?
 	Air... There's a nasty draft in here.
 	You -- Because the house is falling apart. There's sand everywhere...
-	No, no... it's not going outside...
+	No, no... it's not flowing outside...
 	[main_speaker travel_to: | ../shelf_view]
 {otherwise}[stat?: manor052/investigation1]
 	[stat?: manor052/passage/open] 
@@ -118,8 +118,7 @@
 		It's clear the manor was renovated since I was last here...
 		But whoever it was is long gone now.
 		You -- Have you been listening to a word I've said this entire time?
-		* He makes a noise like a sigh, despite no evidence he has lungs.
-		[+stat: redford/sigh]
+		* He makes a noise like a sigh, despite no evidence he has lungs. [+stat: redford/sigh] 
 		Jacqueline, may I tell you a story?
 		We often receive mail at the front lines. Letters and gifts from loved ones, newspapers, et cetera.
 		One day, one of my soldiers received a letter informing him his wife and daughter had drowned in a boating accident.
@@ -132,6 +131,9 @@
 		You -- It's five stages.
 		If you say so. But for some men, I believe there are only two stages:
 		Denial and death.
+		?> So you understand, then? What I've been saying?
+			...
+			[back]
 		[+stat: jackie/info/denial]
 		[note: redford/discussed/denial | “Denial and death”... I think he may understand his situation more than he's admitting. |+ captain_redford jackie/info/denial]
 	[! stat?: manor052/basement/open]
@@ -156,8 +158,7 @@
 		A heart without love.
 		A life without death.
 		You -- Redford, what are you talking about?
-		[mention: isiah]
-		We've been paid back for what our hands have done.
+		We've been paid back for what our hands have done. [mention: isiah]
 		You -- You're... scaring me, Redford.
 		Sorry, just some old poetry.
 		[note: redford/discussed/poem1 | “Soldier without blood. Nostrils without breath. A heart without love. A life without death.” How did Redford become what he is? |+ captain_redford]
@@ -195,15 +196,18 @@
 	: everyone
 	> [! mentioned: end_knowledge] Pardon me? How do you know such a thing?
 		[mention: end_knowledge]
+		... I don't. It's a feeling. Those are the only words that can come to my mouth when I try to describe this...
+		Everyone.
 		[goto: everyone]
 	> [! mentioned: end_death] How did they get here?
 		[mention: end_death]
+
 		[goto: everyone]
 	> [! mentioned: truth][mentioned: end_death][mentioned: end_knowledge] This is how you came to be, isn't it?
 		I died. I remember it. I remember the flash of white. Or maybe black?
-		It was gunfire from the cliffs. They must have been in the caves. I knew the scouts should have searched deeper. God-damned fools. Cowards. Those caves go as deep as your bravery will take you.
+		It was gunfire from the cliffs. There are so many caves in this horrid place. I knew the scouts should have searched deeper. Fools. Cowards. They go as deep as your bravery will take you.
 		[+stat: caves/depth]
-		And then I was in the desert, walking. Like it was mere seconds ago. I thought I'd just barely survived the chaos at first.
+		And then I was in the desert, walking. Like it was mere seconds ago. I thought I'd just barely survived the chaos.
 		[note: redford/death | Redford remembers his death. Apparently his soldiers were ambushed from the caves. Somehow his mind was preserved in one of these spectres, as if he'd survived. |+ captain_redford]
 
 		[stat?: redford/sigh]
@@ -211,7 +215,7 @@
 		{otherwise}
 			* He makes a sound like a sigh, despite likely having no lungs.	
 		[+stat: redford/sigh]
-		It's confusing.  I can't recollect how long I've been like this.
+		It's confusing.  I can't recollect how long I've been like this. Why would I have come into being now?
 
 		[mention: truth]
 		[Global complete_task: troops_of_the_manor]
@@ -282,16 +286,15 @@ Let's just find the end of this labyrinth and rescue whoever survived this thric
 :rant
 It's better to be dead than injured, economically speaking. Shattered bones, burst vessels, hemorrhaged brains. They won't fight anymore. But the stomach yet growls, the mother yet expects her boy home. Drooling in a chair, murmuring something less than words after his teeth and tongue and throat met copper shrapnel and dry air and hot sand. “Thank you for your service” a guest stammers, struck stupid by his first glimpse into the lobotomized pain I've seen in a thousand broken bodies. He will forget how it felt. The hammer doesn't remember every nail. The wood does.
 Let this Godless place take anyone who doesn't walk out with his own two feet. It's better this way.
-Who told me such things? Certainly not my commanders. We fight for God, and in His name we heal all wounds. It must have been my father. I must have been small. A sapling grows into the sturdiest tree when there are no competing roots. He never fought a day in his life. Not for his country, and certainly not for us.
+Who told me such things? Certainly not my commanders. We fight under the light of Christ, and in His name we heal all wounds. It must have been my father. I must have been small. A sapling grows into the sturdiest tree when there are no competing roots. He never fought a day in his life. Not for his country, and certainly not for us.
 ?> Did you have troubles with your father growing up?
-	I was the eldest of six. My father made a meager wage as a “writer”, which more often than not meant wandering off to the pub for the day while our mother worked at a factory sewing shirts.
-	He always had the option to take a better job to provide more, but that would throw a wrench into /his/ freedom and /his/ plans, so naturally he didn't consider such a thing. As a child, I saw this as independence. As a man, I see it as apathy.
-	Never mind when we were sick and couldn't afford a doctor, never mind the days we had to go with bread and broth for dinner. As long as he didn't have to go into a dull office or factory every day, it was exactly the life he wanted.
-	If Mother and I were there to take care of the little ones, all the better.
+	I was the eldest of six. My father made a meager wage as a “writer”, which more often than not meant wandering off to the pub for the day while our mother worked at a factory sewing shirts. He always had the option to take a better job to provide more, but that would throw a wrench into /his/ freedom and /his/ plans, so naturally he didn't consider such a thing. As a child, I saw this as independence. As a man, I see it as apathy. Never mind when we were sick and couldn't afford a doctor, never mind the days we had to go with bread and broth for dinner. As long as he didn't have to go into a dull office or a factory every day, it was exactly the life he wanted. If Mother and I were there to take care of the little ones, all the better.
+	I haven't even seen the man in twenty years. I don't miss him.
 	[+stat: daddy_issues]
 	[note: redford/father | Redford feels his father didn't provide when he was young. |+ captain_redford daddy_issues]
 	//[Global add_note: TODO: Some anecdote about Jackie's father. |+ father daddy_issues]
+	[back]
 Nonsense. Gibberish. Lies. Lies. Lies. Ignore everything I say. Now and for ever. What a waste of time.
-The only reason captains are given helmets and conscripts are not is because our skulls are thinner.
+Captains are given helmets and conscripts are not because our skulls are thinner.
 [note: redford/rant | Redford really has gone mad, hasn't he? These ramblings are too much. |+ captain_redford war]
 [back]

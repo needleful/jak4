@@ -17,6 +17,7 @@ export(ScreenMode) var screen_mode setget set_screen, get_screen
 export(bool) var vsync setget set_vsync, get_vsync
 export (int, 8, 48) var text_size setget set_textsize, get_textsize
 export (Color) var text_color setget set_text_color, get_text_color
+export(int) var default_monitor
 
 func get_name() -> String:
 	return "Display"
