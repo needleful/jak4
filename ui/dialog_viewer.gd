@@ -173,6 +173,12 @@ func set_var(var_name: String, value):
 func has_var(var_name: String):
 	return var_name in variables
 
+func inc_var(var_name: String, value: int = 1):
+	if !has_var(var_name):
+		set_var(var_name, 0)
+	variables[var_name] += value
+	return variables[var_name]
+
 func clear_replies():
 	for c in replies.get_children():
 		c.queue_free()

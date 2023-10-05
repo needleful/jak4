@@ -120,18 +120,37 @@ You did! If you want to hunt, we will prepare the chasm! The entry is only twent
 [exit]
 
 :note(bairo/conspiracy)
-:note(chunk137/suspicion)
+:note(visited/abandoned_village)
+:note(the_village_gate)
 [stat?: arena137/entered]
 	You -- So does this arena have anything to do with those troublesome spectres roaming everywhere outside?
 	Hm? No, we are hunting them. If anything, the number is going down.
-	[stat?: chunk137/suspicion]
-		You -- Not from what I've heard. It seems like there's been recent increases in spectres all around this village.
-			I can't imagine a group more likely to be involved than people collecting these creatures for bloodsport.
-		They don't bleed.
-		You -- You know what I mean.
+	[stat?: visited/abandoned_village]
+		[++: sus]
+	[stat?: bairo/conspiracy]
+		[++: sus | #2]
+	[stat?: the_village_gate]
+		[++: sus]
+	{$sus > 2}
+		You -- I don't believe you. I've seen them everywhere.
+			[stat?: visited/abandoned_village]
+				You -- There's an entire abandoned village outside the nearby tower.
+			[stat?: the_village_gate]
+				You -- I had to clear the gate outside Hideaway just to leave the village.
+			[stat?: bairo/conspiracy]
+				You -- They've been invading people's homes, for God's sake.
+			You -- You're telling me those are just a coincidence?
+		Hm... This arena has been here for fifteen years. I don't know what to convince you.
+		You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
+		I will show you.
 	{otherwise}
-		You -- Is that so? I have it from a... source, that something unusual is going on. 
-	This arena has been here for fifteen years. I don't know what to convince you.
-	You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
-	We can check.
+		They come and go. Whatever you seen was coincidence. Nothing more.
+		* You've seen spectres everywhere, but what you've seen may well be a coincidence.
+		[+stat: arena/denied_suspicion]
+{otherwise}
+	You -- Do you know anything about the spectres roaming the area recently?
+	Ah, they are nasty creatures. Don't touch them.
+	You -- I mean, have you noticed more of them?
+	More? No.
+	[+stat: arena/ignored]
 [exit]

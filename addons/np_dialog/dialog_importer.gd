@@ -19,7 +19,8 @@ var r_special_replace := RegEx.new()
 var special_functions := {
 	"+stat" : "Global.add_stat",
 	"stat?" : "Global.stat",
-	"$" : "set_var"
+	"$" : "set_var",
+	"++": "inc_var"
 }
 
 func _init():
@@ -96,7 +97,7 @@ func parse_text(text: String, src_path = "<local>"):
 	var prev: DialogItem
 	var current_level := 0
 	var indent := ""
-	var label := ""
+	var labels := []
 	
 	var line_number := 0
 	
@@ -107,7 +108,7 @@ func parse_text(text: String, src_path = "<local>"):
 		
 		var label_search := r_label.search(line)
 		if label_search:
-			label = label_search.get_string(1)
+			labels.append(label_search.get_string(1))
 			continue
 		# Whitespace and indentation
 		var wspe := extract_whitespace(line, indent, src_path, line_number)
@@ -177,9 +178,9 @@ func parse_text(text: String, src_path = "<local>"):
 		current_dialog = line_number
 		current_level += level_change
 		prev = wd
-		if label != "":
+		for label in labels:
 			seq.labels[label] = line_number
-		label = ""
+		labels = []
 	return seq
 
 func extract_whitespace(line: String, indent: String, src_path, line_number) -> Dictionary:
