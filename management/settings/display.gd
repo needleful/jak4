@@ -70,6 +70,8 @@ func set_text_color(val:Color):
 
 func set_default_monitor(m: int):
 	OS.current_screen = m
+	_default_monitor = m
 
 func get_default_monitor():
-	return OS.current_screen
+	_default_monitor = OS.current_screen
+	return _default_monitor

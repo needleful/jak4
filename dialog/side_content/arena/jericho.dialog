@@ -19,12 +19,15 @@
 	> {otherwise} I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 
-{otherwise}[! stat?: arena137/coat]
+{otherwise}{Global.stat("arena137/gold") < 3}
 	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[$: cost | #25]
 		Sure, I'll try again.
 		[goto: scenario_pick]
+	> {otherwise} I don't have the money for it.
+		What? You should get money, then!
+		[exit]
 	> No, thank you. I still have puncture wounds from last time.
 
 {otherwise}
@@ -46,12 +49,11 @@
 
 :scenario_pick
 What do you want to fight?
-// TODO: add gold ranks for each scenario
-> [skip()] A bunch of crawlers.  #{$arena.scenario_text("crawlies")}
+> [skip] A bunch of crawlers.  #{$arena.scenario_text("crawlies")}
 	You -- A bunch of crawlers.
 	Alright, let's do it!
 	[$: scenario | crawlies]
-> [skip()] Giant deathgnats. #{$arena.scenario_text("deathgnats")}
+> [skip] Giant deathgnats. #{$arena.scenario_text("deathgnats")}
 	You -- Giant deathgnats.
 	[! Global count: wep_pistol] Usually we only let people with guns fight them. Are you sure you want to?
 		> Yes.
@@ -62,6 +64,15 @@ What do you want to fight?
 	{otherwise}
 		Have fun!
 	[$: scenario | deathgnats]
+> [$arena rank: #1][skip] A basic mix of crawlers and deathgnats. #{$arena.scenario_text("basic_mix")}
+	Alright, let's do it!
+	[$: scenario | basic_mix]
+> [$arena rank: #2][skip] Flood the whole chasm with water! #{$arena.scenario_text("flooded_basic")}
+	You're crazy! Let's do it!
+	[$: scenario | flooded_basic]
+> Do you have more options?
+	If you get silver rank in the challenges, I will let you pick the more advanced, eh, scenarios, as it were.
+	[goto: scenario_pick]
 > Actually, I've changed my mind.
 	Suit yourself.
 	[exit]

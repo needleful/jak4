@@ -188,3 +188,8 @@ func activate_chunk(chunk_name: String):
 	scene.chunk_loader.activate(chunk)
 	echo("Activating "+ chunk_name)
 
+func map(list, f: String):
+	var result := []
+	for l in list:
+		result.append(l.call(f))
+	return result

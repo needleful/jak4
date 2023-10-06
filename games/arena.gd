@@ -6,7 +6,7 @@ const arena_overlay: PackedScene = preload("res://ui/games/arena_overlay.tscn")
 var timer : Timer
 var player : PlayerBody
 var overlay: Control
-var respawn := false
+var respawn := true
 var dialog_allowed := false
 
 var title := "Arena Score"
@@ -16,7 +16,6 @@ var scenarios : Dictionary
 var scenario : ArenaScenario
 var cs : CombatScenario
 
-var active_enemies := 0
 var score := 0
 var current_wave := 0
 
@@ -60,7 +59,6 @@ func start_game(p_scenario: String):
 	Global.save_checkpoint(player.global_transform)
 	
 	CustomGames.start(self)
-	player.teleport_to($player_start.global_transform)
 	var _x = player.connect("died", self, "_on_player_died")
 	_x = player.connect("damaged", self, "_on_player_damaged")
 	
@@ -69,11 +67,11 @@ func start_game(p_scenario: String):
 	add_child(scenario)
 	scenario.show()
 	spawns = scenario.get_node("spawns")
+	player.teleport_to(scenario.get_node("player_start").global_transform)
 	
 	timer.start(scenario.time_limit)
 	set_process(true)
 	
-	active_enemies = 0
 	score = 0
 	
 	overlay = arena_overlay.instance()
@@ -115,27 +113,56 @@ func _on_enemy_died(enemy_id, path):
 		add_points(hp*p)
 	overlay.combo_countdown = 1
 	overlay.combo += 1
-	active_enemies -= 1
-	if active_enemies < scenario.min_enemies:
+	
+	var active_enemies := 0
+	for en in get_tree().get_nodes_in_group("arena_enemy"):
+		if en.is_inside_tree() and !en.is_dead():
+			active_enemies += 1
+	if active_enemies <= scenario.min_enemies:
 		current_wave += 1
 		spawn_wave()
 
 func spawn_wave():
 	var wave = scenario.get_wave(current_wave)
+	var spawn_index := 0
 	for enemy in wave:
-		var count :int = wave[enemy]
-		if !(enemy in scenes):
+		var eid: String = enemy.replace("+", "")
+		if !(eid in scenes):
 			continue
+		var count = wave[enemy]
+		var properties := {}
+		var spawn_group := eid
+		if count is Dictionary:
+			properties = count
+			if "_count" in properties:
+				count = properties._count
+			else:
+				count = 1
+			if "_spawn" in properties:
+				spawn_group = properties._spawn
+		
+		if !(count is int) and !(count is float):
+			print_debug("BAD COUNT for file: ", scenario.scenario.resource_path, "\n\t=>", count)
+			count = 5
 		for i in count:
-			var index:int = i % spawns.get_child_count()
+			var index:int = spawn_index % spawns.get_child_count()
+			while !spawns.get_child(index).is_in_group(spawn_group):
+				spawn_index += 1
+				index = spawn_index % spawns.get_child_count()
+			spawn_index += 1
+			
 			var spawn_loc := spawns.get_child(index)
-			var node:EnemyBody = scenes[enemy].instance()
+			var node:EnemyBody = scenes[eid].instance()
+			for field in properties:
+				if !field.begins_with("_"):
+					node.set(field, properties[field])
+
 			spawn_loc.add_child(node)
 			node.global_transform = spawn_loc.global_transform
-			node.call_deferred("aggro_to", player)
+			if scenario.aggro_automatically:
+				node.call_deferred("aggro_to", player)
 			node.add_to_group("arena_enemy")
 			var _x = node.connect("died", self, "_on_enemy_died")
-		active_enemies += count
 
 func _on_player_died():
 	add_points(PLAYER_DEATH_PENALTY)
@@ -161,6 +188,7 @@ func _end():
 	
 	var previous_award = CustomGames.stat(self, award_stat())
 	if award > previous_award:
+		CustomGames.add_stat(self, ["bronze", "silver", "gold"][award - 1])
 		CustomGames.set_stat(self, award_stat(), award)
 
 	if award:
@@ -205,3 +233,6 @@ func scenario_text(p_scenario):
 		return "(Best Rank: %s)" % award_name(p_scenario)
 	else:
 		return "(New!)"
+
+func rank(x: int):
+	return CustomGames.stat(self, "silver") >= x

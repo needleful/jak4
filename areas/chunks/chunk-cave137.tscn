@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -40,6 +40,10 @@
 [ext_resource path="res://material/env/copper/copper_corroded1.png" type="Texture" id=38]
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=39]
 [ext_resource path="res://_glb/chunks/chunk-cave137.glb" type="PackedScene" id=40]
+[ext_resource path="res://games/arena/basic_mix.scenario" type="Resource" id=41]
+[ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=42]
+[ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=43]
+[ext_resource path="res://games/arena/flooded_basic.scenario" type="Resource" id=44]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -113,6 +117,23 @@ shader_param/foam_distance = 2.764
 shader_param/foam_noise_scale = 0.632
 shader_param/foam_noise_scale2 = 0.176
 shader_param/foam_noise = ExtResource( 14 )
+
+[sub_resource type="QuadMesh" id=21]
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = ExtResource( 12 )
+shader_param/surface_albedo = Color( 1, 0.8, 0.8, 1 )
+shader_param/deep_albedo = Color( 0.113725, 0.00392157, 0.00392157, 1 )
+shader_param/max_depth = 1.5
+shader_param/foam_color = Color( 0.529412, 0.466667, 0.466667, 0.560784 )
+shader_param/refraction = 0.004
+shader_param/foam_distance = 0.5
+shader_param/foam_noise_scale = 1.0
+shader_param/foam_noise_scale2 = 0.2
+shader_param/foam_noise = ExtResource( 14 )
+
+[sub_resource type="BoxShape" id=23]
+extents = Vector3( 58.7561, 10, 41.9473 )
 
 [sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 39 )
@@ -261,14 +282,7 @@ omni_range = 30.1935
 script = ExtResource( 31 )
 distance = 80.0
 
-[node name="OmniLight6" type="OmniLight" parent="active_entities/env" index="19"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.06883, -2.37171, -95.2058 )
-light_color = Color( 1, 0.580392, 0.580392, 1 )
-omni_range = 44.8053
-script = ExtResource( 31 )
-distance = 100.0
-
-[node name="OmniLight9" type="OmniLight" parent="active_entities/env" index="20"]
+[node name="OmniLight9" type="OmniLight" parent="active_entities/env" index="19"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 76.6073, -165.933, -65.8855 )
 light_color = Color( 1, 0.580392, 0.807843, 1 )
 light_energy = 0.186
@@ -276,7 +290,7 @@ omni_range = 44.8053
 script = ExtResource( 31 )
 distance = 100.0
 
-[node name="OmniLight10" type="OmniLight" parent="active_entities/env" index="21"]
+[node name="OmniLight10" type="OmniLight" parent="active_entities/env" index="20"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 178.237, -126.786, 107.275 )
 light_color = Color( 1, 0.580392, 0.807843, 1 )
 light_energy = 0.186
@@ -284,7 +298,7 @@ omni_range = 74.7783
 script = ExtResource( 31 )
 distance = 100.0
 
-[node name="OmniLight11" type="OmniLight" parent="active_entities/env" index="22"]
+[node name="OmniLight11" type="OmniLight" parent="active_entities/env" index="21"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 194.722, -44.0466, 31.2182 )
 light_color = Color( 1, 0.580392, 0.807843, 1 )
 light_energy = 0.186
@@ -292,45 +306,38 @@ omni_range = 48.6852
 script = ExtResource( 31 )
 distance = 100.0
 
-[node name="OmniLight7" type="OmniLight" parent="active_entities/env" index="23"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 44.8334, -2.81628, -83.6085 )
-light_color = Color( 1, 0.776471, 0.580392, 1 )
-omni_range = 48.4464
-script = ExtResource( 31 )
-distance = 100.0
-
-[node name="CollisionShape9" type="CollisionShape" parent="active_entities/env" index="24"]
+[node name="CollisionShape9" type="CollisionShape" parent="active_entities/env" index="22"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6003, -88.8134, -82.3415 )
 shape = SubResource( 12 )
 
-[node name="OmniLight8" type="OmniLight" parent="active_entities/env" index="25"]
+[node name="OmniLight8" type="OmniLight" parent="active_entities/env" index="23"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59487, 24.7438, -52.8916 )
 light_color = Color( 0.858824, 0.890196, 0.643137, 1 )
 light_energy = 0.556
 omni_range = 12.1214
 omni_attenuation = 1.8025
 
-[node name="CollisionShape10" type="CollisionShape" parent="active_entities/env" index="26"]
+[node name="CollisionShape10" type="CollisionShape" parent="active_entities/env" index="24"]
 transform = Transform( 0.811461, -0.159055, 0.562345, 0.0341004, 0.973498, 0.22614, -0.583411, -0.164328, 0.795379, 126.568, -168.792, 52.5881 )
 shape = SubResource( 14 )
 
-[node name="CollisionShape11" type="CollisionShape" parent="active_entities/env" index="27"]
+[node name="CollisionShape11" type="CollisionShape" parent="active_entities/env" index="25"]
 transform = Transform( -1, 8.74228e-08, -8.74228e-08, 8.74228e-08, 1, -1.50996e-07, 8.74228e-08, -1.50996e-07, -1, 197.635, -111.77, 74.7386 )
 shape = SubResource( 15 )
 
-[node name="CollisionShape12" type="CollisionShape" parent="active_entities/env" index="28"]
+[node name="CollisionShape12" type="CollisionShape" parent="active_entities/env" index="26"]
 transform = Transform( 0.608422, 0.219205, 0.76274, 0.0263443, 0.954989, -0.29547, -0.793177, 0.199864, 0.575261, 205.819, -32.4334, 17.2025 )
 shape = SubResource( 18 )
 
-[node name="CollisionShape15" type="CollisionShape" parent="active_entities/env" index="29"]
+[node name="CollisionShape15" type="CollisionShape" parent="active_entities/env" index="27"]
 transform = Transform( 0.422441, -0.145986, 0.894557, 0.00323207, 0.98718, 0.159575, -0.906385, -0.0645196, 0.417497, 170.563, -30.8782, -2.94639 )
 shape = SubResource( 19 )
 
-[node name="CollisionShape13" type="CollisionShape" parent="active_entities/env" index="30"]
+[node name="CollisionShape13" type="CollisionShape" parent="active_entities/env" index="28"]
 transform = Transform( 0.831877, 0.282523, 0.477661, 0.029326, 0.837132, -0.546214, -0.554183, 0.468391, 0.688106, 225.169, -43.5466, 35.3616 )
 shape = SubResource( 17 )
 
-[node name="CollisionShape14" type="CollisionShape" parent="active_entities/env" index="31"]
+[node name="CollisionShape14" type="CollisionShape" parent="active_entities/env" index="29"]
 transform = Transform( 0.918604, 0.282523, 0.27631, -0.0954565, 0.837132, -0.538607, -0.383477, 0.468391, 0.795961, 239.918, -63.3227, 61.8099 )
 shape = SubResource( 20 )
 
@@ -657,28 +664,27 @@ visual_name = "Jericho"
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.295486, -22.9784, -1.59966 )
 script = ExtResource( 32 )
 
-[node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena" index="0"]
-transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
-
-[node name="crawlies" type="Spatial" parent="active_entities/zone_arena/arena" index="1"]
+[node name="crawlies" type="Spatial" parent="active_entities/zone_arena/arena" index="0"]
+visible = false
 script = ExtResource( 35 )
+min_enemies = 1
 scenario = ExtResource( 37 )
 
 [node name="spawns" type="Spatial" parent="active_entities/zone_arena/arena/crawlies" index="0"]
 
-[node name="spawn1" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="0" groups=["crawly_spawn"]]
+[node name="spawn1" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="0" groups=["crawly"]]
 transform = Transform( 0.235392, 0, -0.971901, 0, 1, 0, 0.971901, 0, 0.235392, 19.8253, -5.27908, -2.10227 )
 
-[node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="1" groups=["crawly_spawn"]]
+[node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="1" groups=["crawly"]]
 transform = Transform( 0.332107, 0, 0.943242, 0, 1, 0, -0.943242, 0, 0.332107, -27.6194, -8.38241, -7.77033 )
 
-[node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="2" groups=["crawly_spawn"]]
+[node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="2" groups=["crawly"]]
 transform = Transform( -0.523488, 0, -0.852033, 0, 1, 0, 0.852033, 0, -0.523488, 11.9604, -4.92315, 23.827 )
 
-[node name="spawn4" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="3" groups=["crawly_spawn"]]
+[node name="spawn4" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="3" groups=["crawly"]]
 transform = Transform( 0.981984, 0, -0.188965, 0, 1, 0, 0.188965, 0, 0.981984, 3.2844, -10.4192, -33.269 )
 
-[node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="4" groups=["crawly_spawn"]]
+[node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/crawlies/spawns" index="4" groups=["crawly"]]
 transform = Transform( 0.951179, 0, -0.30864, 0, 1, 0, 0.30864, 0, 0.951179, 7.67758, -10.2172, -32.6405 )
 
 [node name="scrap3" parent="active_entities/zone_arena/arena/crawlies" index="1" instance=ExtResource( 34 )]
@@ -696,7 +702,25 @@ transform = Transform( -0.100922, -0.530236, 0.841822, -0.984836, -0.0667721, -0
 [node name="scrap4" parent="active_entities/zone_arena/arena/crawlies" index="5" instance=ExtResource( 24 )]
 transform = Transform( -0.100922, -0.530236, 0.841822, -0.984836, -0.0667721, -0.160125, 0.141114, -0.845216, -0.515457, -6.78533, -8.27884, -15.6006 )
 
-[node name="deathgnats" type="Spatial" parent="active_entities/zone_arena/arena" index="2"]
+[node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena/crawlies" index="6"]
+transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
+
+[node name="OmniLight6" type="OmniLight" parent="active_entities/zone_arena/arena/crawlies" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3147, 14.8645, -3.9408 )
+light_color = Color( 1, 0.580392, 0.580392, 1 )
+omni_range = 44.8053
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="OmniLight7" type="OmniLight" parent="active_entities/zone_arena/arena/crawlies" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4499, 14.4199, 7.65651 )
+light_color = Color( 1, 0.776471, 0.580392, 1 )
+omni_range = 48.4464
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="deathgnats" type="Spatial" parent="active_entities/zone_arena/arena" index="1"]
+visible = false
 script = ExtResource( 35 )
 bronze_score = 500
 silver_score = 3500
@@ -706,20 +730,231 @@ scenario = ExtResource( 36 )
 
 [node name="spawns" type="Spatial" parent="active_entities/zone_arena/arena/deathgnats" index="0"]
 
-[node name="spawn1" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="0"]
+[node name="spawn1" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="0" groups=["deathgnat"]]
 transform = Transform( -0.505452, 0, -0.862855, 0, 1, 0, 0.862855, 0, -0.505452, 18.092, 0, 20.1908 )
 
-[node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="1"]
+[node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="1" groups=["deathgnat"]]
 transform = Transform( 0.871148, 0, -0.491021, 0, 1, 0, 0.491021, 0, 0.871148, 15.8048, 6.66971, -14.3242 )
 
-[node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="2"]
+[node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="2" groups=["deathgnat"]]
 transform = Transform( 0.192775, 0, 0.981243, 0, 1, 0, -0.981243, 0, 0.192775, -19.2027, -0.886614, -8.35549 )
 
-[node name="spawn4" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="3"]
+[node name="spawn4" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="3" groups=["deathgnat"]]
 transform = Transform( -0.685705, 0, 0.727879, 0, 1, 0, -0.727879, 0, -0.685705, -15.0528, -0.886614, 25.4423 )
 
-[node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="4"]
+[node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="4" groups=["deathgnat"]]
 transform = Transform( -0.292573, 0, -0.956243, 0, 1, 0, 0.956243, 0, -0.292573, 17.6125, 31.3077, 7.59563 )
+
+[node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats" index="1"]
+transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
+
+[node name="OmniLight8" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3147, 14.8645, -3.9408 )
+light_color = Color( 1, 0.580392, 0.580392, 1 )
+omni_range = 44.8053
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="OmniLight9" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4499, 14.4199, 7.65651 )
+light_color = Color( 1, 0.776471, 0.580392, 1 )
+omni_range = 48.4464
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="basic_mix" type="Spatial" parent="active_entities/zone_arena/arena" index="2"]
+visible = false
+script = ExtResource( 35 )
+bronze_score = 2000
+silver_score = 10000
+gold_score = 25000
+time_limit = 150.0
+min_enemies = 0
+scenario = ExtResource( 41 )
+
+[node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix" index="0"]
+transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
+
+[node name="spawns" type="Spatial" parent="active_entities/zone_arena/arena/basic_mix" index="1"]
+
+[node name="spawn1" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="0" groups=["crawly"]]
+transform = Transform( 0.646742, 0, 0.762709, 0, 1, 0, -0.762709, 0, 0.646742, -27.217, -8.59941, -3.20878 )
+
+[node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="1" groups=["crawly"]]
+transform = Transform( 0.952588, 0, -0.304265, 0, 1, 0, 0.304265, 0, 0.952588, 9.5653, -9.53963, -41.5141 )
+
+[node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="2" groups=["crawly"]]
+transform = Transform( 0.952588, 0, -0.304265, 0, 1, 0, 0.304265, 0, 0.952588, 10.9021, -9.29271, -38.0511 )
+
+[node name="spawn4" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="3" groups=["crawly"]]
+transform = Transform( -0.457098, 0, -0.889416, 0, 1, 0, 0.889416, 0, -0.457098, 15.7439, -5.53551, 6.3889 )
+
+[node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="4" groups=["crawly"]]
+transform = Transform( -0.940459, 0, -0.339907, 0, 1, 0, 0.339907, 0, -0.940459, 18.1035, 0.245846, 43.2293 )
+
+[node name="spawn6" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="5" groups=["crawly"]]
+transform = Transform( 0.648355, 0, 0.761338, 0, 1, 0, -0.761338, 0, 0.648355, -19.4871, -8.6062, -24.4465 )
+
+[node name="deathgnat_spawn" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="6" groups=["deathgnat"]]
+transform = Transform( 0.508776, 0, -0.860899, 0, 1, 0, 0.860899, 0, 0.508776, 19.0624, 31.7852, -0.0267639 )
+
+[node name="deathgnat_spawn2" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="7" groups=["deathgnat"]]
+transform = Transform( -0.738102, 0, 0.674689, 0, 1, 0, -0.674689, 0, -0.738102, -24.607, 18.151, 13.3187 )
+
+[node name="deathgnat_spawn3" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="8" groups=["deathgnat"]]
+transform = Transform( -0.123266, 0, -0.992374, 0, 1, 0, 0.992374, 0, -0.123266, 14.8803, 21.7412, 15.6772 )
+
+[node name="deathgnat_spawn4" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="9" groups=["deathgnat"]]
+transform = Transform( 0.404302, 0, -0.914626, 0, 1, 0, 0.914626, 0, 0.404302, 17.7973, -0.0817852, -7.80675 )
+
+[node name="deathgnat_spawn5" type="Position3D" parent="active_entities/zone_arena/arena/basic_mix/spawns" index="10" groups=["deathgnat"]]
+transform = Transform( 0.374487, 0, 0.927232, 0, 1, 0, -0.927232, 0, 0.374487, -28.2344, 5.19488, -12.4296 )
+
+[node name="OmniLight10" type="OmniLight" parent="active_entities/zone_arena/arena/basic_mix" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3147, 14.8645, -3.9408 )
+light_color = Color( 1, 0.580392, 0.580392, 1 )
+omni_range = 44.8053
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="OmniLight11" type="OmniLight" parent="active_entities/zone_arena/arena/basic_mix" index="3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4499, 14.4199, 7.65651 )
+light_color = Color( 1, 0.776471, 0.580392, 1 )
+omni_range = 48.4464
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="flooded_basic" type="Spatial" parent="active_entities/zone_arena/arena" index="3"]
+script = ExtResource( 35 )
+bronze_score = 900
+silver_score = 6500
+gold_score = 12000
+time_limit = 90.0
+min_enemies = 1
+scenario = ExtResource( 44 )
+
+[node name="OmniLight12" type="OmniLight" parent="active_entities/zone_arena/arena/flooded_basic" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3147, 14.8645, -3.9408 )
+light_color = Color( 0.403922, 0.388235, 0.952941, 1 )
+omni_range = 44.8053
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="OmniLight13" type="OmniLight" parent="active_entities/zone_arena/arena/flooded_basic" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4499, 14.4199, 7.65651 )
+light_color = Color( 0.262745, 0.666667, 0.823529, 1 )
+light_energy = 1.678
+omni_range = 48.4464
+script = ExtResource( 31 )
+distance = 100.0
+
+[node name="StaticBody" type="StaticBody" parent="active_entities/zone_arena/arena/flooded_basic" index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0187, -12.311, 0 )
+collision_layer = 8192
+collision_mask = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/flooded_basic/StaticBody" index="0"]
+transform = Transform( 94.6272, 0, 0, 0, -3.5214e-06, 0.999999, 0, -80.5603, -4.37113e-08, 10.0187, 10, 0 )
+mesh = SubResource( 21 )
+material/0 = SubResource( 22 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/flooded_basic/StaticBody" index="1"]
+shape = SubResource( 23 )
+
+[node name="scrap4" parent="active_entities/zone_arena/arena/flooded_basic" index="3" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.2725, -0.644196, -25.2573 )
+
+[node name="tower" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="1" instance=ExtResource( 18 )]
+transform = Transform( 0.987971, -0.119516, -0.0981296, 0, 0.634569, -0.772866, 0.15464, 0.763569, 0.626936, -8.69547, -9.46882, 29.4716 )
+
+[node name="tower2" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="2" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 0.106407, -0.994323, 0, 0.994323, 0.106407, -8.69547, -6.31512, 13.3909 )
+
+[node name="scrap2" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="3" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.39827, -1.66673, 11.0361 )
+
+[node name="scrap3" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="4" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6915, -3.39886, 3.99512 )
+
+[node name="scrap4" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="5" instance=ExtResource( 34 )]
+transform = Transform( 0.962329, -0.271884, -0.00119584, 0.0282553, 0.104382, -0.994136, 0.270415, 0.956652, 0.108132, 30.7864, -4.29857, -1.14379 )
+
+[node name="scrap_pile1" parent="active_entities/zone_arena/arena/flooded_basic/scrap4/scrap4" index="1" instance=ExtResource( 19 )]
+transform = Transform( 0.917656, 0, -0.397376, -4.47035e-08, 1, 2.98023e-08, 0.397376, 1.49012e-08, 0.917656, -7.11516, 0.750099, 8.57154 )
+
+[node name="palace_roof1" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="6" instance=ExtResource( 43 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.9968, -4.7789, 15.9919 )
+
+[node name="mine_shack" parent="active_entities/zone_arena/arena/flooded_basic/scrap4/palace_roof1" index="1" instance=ExtResource( 22 )]
+transform = Transform( -0.505751, -0.258986, 0.822887, -0.455796, 0.890084, 0, -0.732439, -0.375068, -0.568206, -14.3893, -5.7421, 38.5801 )
+
+[node name="palace2" parent="active_entities/zone_arena/arena/flooded_basic/scrap4" index="7" instance=ExtResource( 16 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.1026, -14.5655, 29.8188 )
+
+[node name="drill2" parent="active_entities/zone_arena/arena/flooded_basic/scrap4/palace2" index="1" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.56485, 8.71233, 4.13158 )
+
+[node name="drill3" parent="active_entities/zone_arena/arena/flooded_basic/scrap4/palace2" index="2" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.760829, 8.71233, -7.6291 )
+
+[node name="drill4" parent="active_entities/zone_arena/arena/flooded_basic/scrap4/palace2" index="3" instance=ExtResource( 17 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.00301, 8.71233, 3.43332 )
+
+[node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic" index="4"]
+transform = Transform( 0.838601, 0, -0.544747, 0, 1, 0, 0.544747, 0, 0.838601, 16.1638, -3, -11.244 )
+
+[node name="spawns" type="Spatial" parent="active_entities/zone_arena/arena/flooded_basic" index="5"]
+
+[node name="crawly" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="0" groups=["crawly"]]
+transform = Transform( -0.877501, 0, -0.479574, 0, 1, 0, 0.479574, 0, -0.877501, 15.6671, -1.68463, -1.46244 )
+
+[node name="crawly2" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="1" groups=["crawly"]]
+transform = Transform( -0.606803, 0, -0.794852, 0, 1, 0, 0.794852, 0, -0.606803, 10.1896, 1.04367, 6.19326 )
+
+[node name="crawly3" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="2" groups=["crawly"]]
+transform = Transform( -0.893279, 0, 0.449503, 0, 1, 0, -0.449503, 0, -0.893279, -11.0502, 1.05005, 20.664 )
+
+[node name="crawly4" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="3" groups=["crawly"]]
+transform = Transform( 0.231516, 0, 0.972831, 0, 1, 0, -0.972831, 0, 0.231516, -22.3266, 1.05005, -0.697601 )
+
+[node name="crawly5" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="4" groups=["crawly"]]
+transform = Transform( 0.231516, 0, 0.972831, 0, 1, 0, -0.972831, 0, 0.231516, -26.1264, -0.184881, -14.4171 )
+
+[node name="crawly6" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="5" groups=["crawly"]]
+transform = Transform( 0.97574, 0, 0.218933, 0, 1, 0, -0.218933, 0, 0.97574, -23.7777, 1.40955, -24.3774 )
+
+[node name="crawly7" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="6" groups=["crawly"]]
+transform = Transform( -0.999964, 0, -0.00839024, 0, 1, 0, 0.00839024, 0, -0.999964, 2.21644, -0.956619, 29.5706 )
+
+[node name="crawly8" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="7" groups=["crawly"]]
+transform = Transform( -0.986821, 0, -0.161812, 0, 1, 0, 0.161812, 0, -0.986821, 18.8864, 0.693195, 43.394 )
+
+[node name="deathgnat" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="8" groups=["deathgnat"]]
+transform = Transform( 0.659689, 0, 0.751538, 0, 1, 0, -0.751538, 0, 0.659689, -17.3021, 9.74023, -9.54637 )
+
+[node name="deathgnat2" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="9" groups=["deathgnat"]]
+transform = Transform( -0.511664, 0, 0.859186, 0, 1, 0, -0.859186, 0, -0.511664, -30.2799, 9.74023, 14.3839 )
+
+[node name="deathgnat3" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="10" groups=["deathgnat"]]
+transform = Transform( -0.857403, 0, -0.514645, 0, 1, 0, 0.514645, 0, -0.857403, 1.88696, 9.74023, 22.8468 )
+
+[node name="deathgnat4" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="11" groups=["deathgnat"]]
+transform = Transform( 0.119184, 0, -0.992872, 0, 1, 0, 0.992872, 0, 0.119184, 17.2226, 9.74023, 1.43256 )
+
+[node name="deathgnat5" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="12" groups=["deathgnat"]]
+transform = Transform( 0.999936, 0, -0.0113265, 0, 1, 0, 0.0113265, 0, 0.999936, -13.4127, 7.30413, -20.7305 )
+
+[node name="deathgnat_static" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="13" groups=["deathgnat_static"]]
+transform = Transform( -0.996838, 0, 0.0794627, 0, 1, 0, -0.0794627, 0, -0.996838, -6.42925, 5.14056, -2.8007 )
+
+[node name="deathgnat_static2" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="14" groups=["deathgnat_static"]]
+transform = Transform( 0.572704, 0, 0.819762, 0, 1, 0, -0.819762, 0, 0.572704, -0.0434113, 5.14056, 7.97768 )
+
+[node name="deathgnat_static3" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="15" groups=["deathgnat_static"]]
+transform = Transform( 0.417083, 0, -0.908868, 0, 1, 0, 0.908868, 0, 0.417083, -13.6207, 5.14056, 8.6448 )
 
 [node name="bridge" parent="active_entities/zone_arena" index="2"]
 material/0 = SubResource( 13 )
