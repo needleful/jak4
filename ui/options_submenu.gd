@@ -81,7 +81,8 @@ func add_widget(property, widget_scene: PackedScene) -> void:
 		var _x = widget.connect("changed", options, "set")
 
 func is_export_var(property)->bool:
-	return property.usage & Settings.USAGE_FLAGS == Settings.USAGE_FLAGS
+	return (property.usage & Settings.USAGE_FLAGS == Settings.USAGE_FLAGS
+		and !property.name.begins_with("_"))
 
 func _on_ui_redraw():
 	emit_signal("ui_redraw")
