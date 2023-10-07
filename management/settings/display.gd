@@ -9,7 +9,7 @@ enum ScreenMode {
 	Fullscreen,
 	Windowed,
 	Borderless,
-	BorderlessFullscreen
+	ExclusiveFullscreen
 }
 
 #warning-ignore:unused_class_variable
@@ -26,27 +26,17 @@ func set_screen(val: int):
 	screen_mode = val
 	match screen_mode:
 		ScreenMode.Fullscreen:
+			OS.window_borderless = true
 			OS.window_fullscreen = true
-			OS.set_window_always_on_top(false)
 		ScreenMode.Windowed:
 			OS.window_fullscreen = false
 			OS.window_borderless = false
-			OS.set_window_always_on_top(false)
 		ScreenMode.Borderless:
 			OS.window_fullscreen = false
 			OS.window_borderless = true
-			OS.set_window_always_on_top(false)
-		ScreenMode.BorderlessFullscreen:
-			OS.window_fullscreen = false
-			OS.window_borderless = true
-			OS.window_size = OS.get_screen_size() - Vector2(1, 0)
-			OS.set_window_always_on_top(true)
-
-func _notification(what):
-	if what == NOTIFICATION_WM_FOCUS_IN and screen_mode == ScreenMode.BorderlessFullscreen:
-		OS.set_window_always_on_top(true)
-	elif what == NOTIFICATION_WM_FOCUS_OUT:
-		OS.set_window_always_on_top(false)
+		ScreenMode.ExclusiveFullscreen:
+			OS.window_fullscreen = true
+			OS.window_borderless = false
 
 func get_screen() -> int:
 	return screen_mode
