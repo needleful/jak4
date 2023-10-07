@@ -12,7 +12,6 @@ enum ScreenMode {
 }
 
 #warning-ignore:unused_class_variable
-export(int) var _default_monitor setget set_default_monitor, get_default_monitor
 export(ScreenMode) var screen_mode setget set_screen, get_screen
 #warning-ignore:unused_class_variable
 export(bool) var vsync setget set_vsync, get_vsync
@@ -67,11 +66,3 @@ func set_text_color(val:Color):
 	theme.set_color("font_color_fg", "TabContainer", text_color)
 	theme.set_color("default_color", "RichTextLabel", text_color)
 	emit_signal("ui_redraw")
-
-func set_default_monitor(m: int):
-	OS.current_screen = m
-	_default_monitor = m
-
-func get_default_monitor():
-	_default_monitor = OS.current_screen
-	return _default_monitor
