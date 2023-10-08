@@ -1,5 +1,11 @@
 extends Position3D
 
+# Invisible tags that are used in multiple places
+const implicit_stats := [
+	"jackie/flaws",
+	"daddy_issues"
+]
+
 func _ready():
 	if !Global.valid_game_state && !Global.player_spawned:
 		Global.remember("jackie")
@@ -22,6 +28,8 @@ func _ready():
 		if p:
 			p.teleport_to(global_transform)
 		Global.player_spawned = true
+		for tag in implicit_stats:
+			Global.add_stat(tag)
 
 func get_player():
 	return get_tree().current_scene.get_node("player")

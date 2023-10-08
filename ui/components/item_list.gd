@@ -40,6 +40,8 @@ func _init():
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		set_process_input(is_visible_in_tree())
+		if !is_visible_in_tree():
+			clear()
 
 func _input(event):
 	if !is_visible_in_tree():

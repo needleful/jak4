@@ -2,6 +2,7 @@ extends ScrollContainer
 
 export(NodePath) var container_path
 export(bool) var accept_input := false
+export(bool) var reset_on_show := false
 onready var container := get_node(container_path) as Container
 var active_tween : SceneTreeTween
 var scroll_speed := 1200.0
@@ -17,7 +18,12 @@ func _ready():
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		set_process(accept_input and is_visible_in_tree())
+		if is_visible_in_tree():
+			set_process(accept_input)
+			if reset_on_show:
+				scroll_vertical = 0
+		else:
+			set_process(false)
 
 func _process(delta):
 	scroll_vertical += int(Input.get_axis("ui_scroll_up", "ui_scroll_down")*delta*scroll_speed)

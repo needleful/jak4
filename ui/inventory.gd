@@ -63,8 +63,6 @@ func set_active(active):
 		player_description.id = 'you'
 		item_viewer.insert_item('you', player_description)
 		item_viewer.view_items(Global.get_fancy_inventory())
-	else:
-		item_viewer.clear()
 	set_process(active)
 	set_process_input(active)
 

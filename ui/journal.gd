@@ -68,12 +68,14 @@ func set_active(active):
 		set_sort(sort)
 		draw_list()
 	else:
+		Util.clear(list)
+		Util.clear(subject_notes)
 		set_sort(Sort.Subject)
 
 func draw_list():
 	starting_item = null
 	selected_subject = null
-	clear(list)
+	Util.clear(list)
 	if sort == Sort.Subject:
 		populate_list(NoteType.People)
 		populate_list(NoteType.Places)
@@ -180,7 +182,7 @@ func _on_subject_focused(type: int, subject: String):
 	write_notes(n)
 
 func write_notes(n: Array):
-	clear(subject_notes)
+	Util.clear(subject_notes)
 	if buttons:
 		for note_pair in n:
 			var b := Util.multiline_button(note_pair[0])
@@ -262,10 +264,6 @@ func _resize_note_buttons():
 func focus_first_button():
 	if starting_item:
 		starting_item.grab_focus()
-
-func clear(node: Node):
-	for c in node.get_children():
-		c.queue_free()
 
 func _on_close_pressed():
 	emit_signal("cancelled", false)
