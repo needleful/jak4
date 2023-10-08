@@ -35,6 +35,8 @@ var cooldown_timer := 0.0
 var give_up_timer := 0.0
 
 var ground_normal := Vector3.UP
+const DROWN_TIME := 3.0
+var submerged_time := 0.0
 
 onready var anim := $AnimationPlayer
 onready var sound := $AudioStreamPlayer3D
@@ -91,6 +93,9 @@ func _physics_process(delta):
 		AI.GravityStunDead:
 			if state_timer > Global.gravity_stun_time:
 				next = AI.Dead
+	if drowning(delta):
+		print_debug("drowned! ", get_path())
+		next = AI.Dead
 	set_state(next)
 	
 	match ai:
@@ -136,6 +141,14 @@ func play_damage_sfx():
 	sound.stream = damage_audio
 	sound.play()
 
+func drowning(delta):
+	if false:
+		submerged_time += delta
+		return submerged_time > DROWN_TIME
+	else:
+		submerged_time = 0
+		return false
+
 func get_shield():
 	if is_inside_tree():
 		return $debug_shield
@@ -149,6 +162,12 @@ func aggro_to(node):
 	.aggro_to(node)
 	if target and ai < AI.Chasing:
 		set_state(AI.Chasing)
+	
+	if target and target.is_in_group("enemy"):
+		# Add to enemy layer
+		awareness.collision_mask = awareness.collision_mask | 4
+	else:
+		awareness.collision_mask = awareness.collision_mask & ~4
 
 func set_state(new_ai, force := false):
 	if ai == new_ai and !force:

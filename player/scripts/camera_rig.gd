@@ -104,7 +104,6 @@ func _physics_process(delta):
 	else:
 		cv = lerp(cv, CORRECTION_VELOCITY, 0.1)
 	
-	
 	if player.should_slow_follow():
 		hv = lerp(hv, H_SLOW_CORRECTION, 0.1)
 	elif player.is_locked():

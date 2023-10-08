@@ -21,7 +21,8 @@ var current_wave := 0
 
 const PLAYER_DEATH_PENALTY := -500
 const POINTS_PER_HP := {
-	"default":1
+	"default":1,
+	"deathgnat":1.5
 }
 
 const COMBO_DRAIN := 0.1

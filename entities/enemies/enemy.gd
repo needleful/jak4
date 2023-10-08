@@ -126,6 +126,11 @@ func _ready():
 		var _x = awareness.connect("body_entered", self, "_on_awareness_entered")
 	elif awareness:
 		retarget()
+	if has_node("drowner"):
+		var d := $drowner
+		d.drowned = false
+		if !d.is_connected("drowned", self, "set_state"):
+			var _x = d.connect("drowned", self, "set_state", [AI.Dead])
 
 func _on_awareness_entered(body):
 	if "do_not_disturb" in body and body.do_not_disturb:
@@ -329,6 +334,11 @@ func aggro_to(node: Spatial):
 	if node != self:
 		target = node
 		set_physics_process(true)
+	if target and target.is_in_group("enemy"):
+		# Add to enemy layer
+		awareness.collision_mask = awareness.collision_mask | 4
+	else:
+		awareness.collision_mask = awareness.collision_mask & ~4
 
 func no_target():
 	return ( 

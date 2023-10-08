@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=73 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -44,6 +44,8 @@
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=42]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=43]
 [ext_resource path="res://games/arena/flooded_basic.scenario" type="Resource" id=44]
+[ext_resource path="res://material/env/copper/copper_local_coords.tres" type="Material" id=45]
+[ext_resource path="res://entities/control/door.gd" type="Script" id=46]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -104,8 +106,11 @@ extents = Vector3( 7.47879, 6.12893, 24.7253 )
 [sub_resource type="BoxShape" id=24]
 extents = Vector3( 12.2412, 7.64039, 17.0837 )
 
+[sub_resource type="BoxShape" id=25]
+extents = Vector3( 45, 24, 56 )
+
 [sub_resource type="BoxShape" id=9]
-extents = Vector3( 60.8471, 2, 60.1306 )
+extents = Vector3( 57, 12, 56 )
 
 [sub_resource type="QuadMesh" id=10]
 
@@ -120,6 +125,85 @@ shader_param/foam_distance = 2.764
 shader_param/foam_noise_scale = 0.632
 shader_param/foam_noise_scale2 = 0.176
 shader_param/foam_noise = ExtResource( 14 )
+
+[sub_resource type="Animation" id=26]
+resource_name = "Activate"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("arena_entry/door2-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 6.53745, 2.28817, -0.57513 ), Vector3( 6.96489, 2.28817, 0.694336 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("arena_entry/door1-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 5.88358, 2.28817, -2.51711 ), Vector3( 5.77991, 2.28817, -2.82503 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("arena_entry/door1-kine:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 18.6086, 0 ), Vector3( 0, 18.6086, 0 ), Vector3( 3.81746, 18.6086, 0 ) ]
+}
+
+[sub_resource type="Animation" id=27]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("arena_entry/door2-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 6.53745, 2.28817, -0.57513 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("arena_entry/door1-kine:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 5.88358, 2.28817, -2.51711 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("arena_entry/door1-kine:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 18.6086, 0 ) ]
+}
 
 [sub_resource type="QuadMesh" id=21]
 
@@ -314,7 +398,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6003, -88.8134, -82.3415 )
 shape = SubResource( 12 )
 
 [node name="OmniLight8" type="OmniLight" parent="active_entities/env" index="23"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59487, 24.7438, -52.8916 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.24021, 24.7438, -52.7319 )
 light_color = Color( 0.858824, 0.890196, 0.643137, 1 )
 light_energy = 0.556
 omni_range = 12.1214
@@ -542,11 +626,15 @@ transform = Transform( 0.974303, 0, 0.225242, 0, 1, 0, -0.225242, 0, 0.974303, -
 collision_layer = 8192
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/cave_center/water" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
+[node name="CollisionShape2" type="CollisionShape" parent="active_entities/cave_center/water" index="0"]
+transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, -35, 0 )
+shape = SubResource( 25 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/cave_center/water" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0 )
 shape = SubResource( 9 )
 
-[node name="MeshInstance" type="MeshInstance" parent="active_entities/cave_center/water" index="1"]
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/cave_center/water" index="2"]
 transform = Transform( 113.904, 0, 0, 0, -4.89297e-06, 40, 0, -111.938, -1.74846e-06, 0, 0, 0 )
 mesh = SubResource( 10 )
 material/0 = SubResource( 11 )
@@ -662,12 +750,18 @@ transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 9
 [node name="gem_pickup10" parent="active_entities/cave_center" index="37" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 7.22888, 37.4559, -39.8589 )
 
-[node name="npc_jericho" parent="active_entities/zone_arena" index="0" instance=ExtResource( 29 )]
-transform = Transform( -0.163971, 0, -0.986465, 0, 1, 0, 0.986465, 0, -0.163971, -18.7949, 16.3869, 37.9843 )
+[node name="door_entry" type="AnimationPlayer" parent="active_entities/zone_arena" index="0"]
+anims/Activate = SubResource( 26 )
+anims/RESET = SubResource( 27 )
+script = ExtResource( 46 )
+tracked_stat = "arena137/entered"
+
+[node name="npc_jericho" parent="active_entities/zone_arena" index="1" instance=ExtResource( 29 )]
+transform = Transform( 0.748995, 0, -0.662576, 0, 1, 0, 0.662576, 0, 0.748995, -24.5474, 15.2065, 37.1319 )
 dialog = ExtResource( 33 )
 visual_name = "Jericho"
 
-[node name="arena" type="Spatial" parent="active_entities/zone_arena" index="1"]
+[node name="arena" type="Spatial" parent="active_entities/zone_arena" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.295486, -22.9784, -1.59966 )
 script = ExtResource( 32 )
 
@@ -963,7 +1057,32 @@ transform = Transform( 0.572704, 0, 0.819762, 0, 1, 0, -0.819762, 0, 0.572704, -
 [node name="deathgnat_static3" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="15" groups=["deathgnat_static"]]
 transform = Transform( 0.417083, 0, -0.908868, 0, 1, 0, 0.908868, 0, 0.417083, -13.6207, 5.14056, 8.6448 )
 
-[node name="bridge" parent="active_entities/zone_arena" index="2"]
+[node name="arena_entry" parent="active_entities/zone_arena" index="3"]
+material/0 = ExtResource( 45 )
+
+[node name="door1-kine" parent="active_entities/zone_arena/arena_entry" index="0"]
+transform = Transform( 0.947721, 0, 0.319101, 0, 1, 0, -0.319101, 0, 0.947721, 5.88358, 2.28817, -2.51711 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="mesh" parent="active_entities/zone_arena/arena_entry/door1-kine" index="0"]
+material/0 = ExtResource( 45 )
+
+[node name="door2-kine" parent="active_entities/zone_arena/arena_entry" index="1"]
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="mesh" parent="active_entities/zone_arena/arena_entry/door2-kine" index="0"]
+material/0 = ExtResource( 45 )
+
+[node name="StaticBody" parent="active_entities/zone_arena/arena_entry" index="2"]
+collision_layer = 257
+
+[node name="bridge" parent="active_entities/zone_arena" index="4"]
 material/0 = SubResource( 13 )
 
 [node name="StaticBody" parent="active_entities/zone_arena/bridge" index="0"]

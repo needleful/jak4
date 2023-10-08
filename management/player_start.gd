@@ -29,7 +29,7 @@ func _ready():
 			p.teleport_to(global_transform)
 		Global.player_spawned = true
 		for tag in implicit_stats:
-			Global.add_stat(tag)
+			_x = Global.add_stat(tag)
 
 func get_player():
 	return get_tree().current_scene.get_node("player")

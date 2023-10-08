@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://_glb/enemies/crawly/crawly.glb" type="PackedScene" id=1]
 [ext_resource path="res://entities/enemies/crawly.gd" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://audio/enemy/crawly_quit.wav" type="AudioStream" id=7]
 [ext_resource path="res://audio/enemy/crawly_attack.wav" type="AudioStream" id=8]
 [ext_resource path="res://audio/enemy/crawly_alerted.wav" type="AudioStream" id=9]
+[ext_resource path="res://entities/enemies/drowner.gd" type="Script" id=10]
 
 [sub_resource type="CylinderShape" id=2]
 height = 0.965059
@@ -47,12 +48,6 @@ damage_audio = ExtResource( 6 )
 quit_audio = ExtResource( 7 )
 attack_audio = ExtResource( 8 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/11/bound_children = [ NodePath("legfl") ]
-bones/13/bound_children = [ NodePath("legbl") ]
-bones/15/bound_children = [ NodePath("legfr") ]
-bones/17/bound_children = [ NodePath("legbr") ]
-
 [node name="crawly" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 3 )
 
@@ -86,7 +81,7 @@ shape = SubResource( 7 )
 [node name="awareness" type="Area" parent="." index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.026123, 0 )
 collision_layer = 0
-collision_mask = 6
+collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="awareness" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3662, 6 )
@@ -104,7 +99,7 @@ shape = SubResource( 3 )
 [node name="attack_range" type="Area" parent="." index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.026123, 0 )
 collision_layer = 0
-collision_mask = 6
+collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="attack_range" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.922294, 1.00539 )
@@ -135,3 +130,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.645996, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58432, 0 )
 aabb = AABB( -1.20784, -0.784991, -1.33699, 2.41568, 1.56998, 2.67397 )
 children_only = false
+
+[node name="drowner" type="Spatial" parent="." index="13"]
+script = ExtResource( 10 )
+DROWN_TIME = 2.0
+
+[node name="water_cast" type="Position3D" parent="drowner" index="0"]
+transform = Transform( 1, 0, 0, 0, 0.91694, -0.399025, 0, 0.399025, 0.91694, 0, 0.817385, 0.53613 )
+
+[node name="water_cast2" type="Position3D" parent="drowner" index="1"]
+transform = Transform( 1, 0, 0, 0, 0.91694, -0.399025, 0, 0.399025, 0.91694, -1.19209e-07, -0.0220392, 0.355637 )
+
+[node name="water_cast3" type="Position3D" parent="drowner" index="2"]
+transform = Transform( 1, 0, 0, 0, 0.91694, -0.399025, 0, 0.399025, 0.91694, -1.19209e-07, -0.0220392, -0.783702 )

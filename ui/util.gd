@@ -9,6 +9,7 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 	b.clip_text = false
 	var l := RichTextLabel.new()
 	b.add_child(l)
+	l.bbcode_enabled = true
 	l.fit_to_content = true
 	l.anchor_left = 0
 	l.anchor_right = 1
@@ -18,7 +19,7 @@ static func multiline_button(text: String, font_override : Font = null) -> Butto
 	l.margin_right = -10
 	l.margin_top = 5
 	l.margin_bottom = -5
-	l.text = text
+	l.bbcode_text = text
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if font_override:
 		l.add_font_override("font", font_override)
