@@ -71,11 +71,11 @@
 [ext_resource path="res://player/particles/kick_stars.png" type="Texture" id=69]
 [ext_resource path="res://player/anim/jackie_animator.tres" type="AnimationNodeBlendTree" id=70]
 [ext_resource path="res://player/scripts/gun.gd" type="Script" id=71]
-[ext_resource path="res://material/coat.shader" type="Shader" id=72]
-[ext_resource path="res://material/coat/gradient.jpg" type="Texture" id=73]
-[ext_resource path="res://material/coat/detail_fabric.bmp" type="Texture" id=74]
-[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=75]
-[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=76]
+[ext_resource path="res://player/default_coat.material" type="Material" id=72]
+[ext_resource path="res://material/characters/eye.shader" type="Shader" id=73]
+[ext_resource path="res://material/white_pixel.bmp" type="Texture" id=74]
+[ext_resource path="res://outfits/eyes/iris_purple_normal.png" type="Texture" id=75]
+[ext_resource path="res://entities/visual/blink.gd" type="Script" id=76]
 [ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=77]
 [ext_resource path="res://_glb/characters/jackie/anim/Hover-LeanRight-loop.anim" type="Animation" id=78]
 [ext_resource path="res://_glb/characters/jackie/anim/Hover_LeanDown-loop.anim" type="Animation" id=79]
@@ -97,22 +97,17 @@
 [ext_resource path="res://audio/player/spin_kick1.wav" type="AudioStream" id=95]
 [ext_resource path="res://audio/player/lunge_kick1.wav" type="AudioStream" id=96]
 
-[sub_resource type="Gradient" id=64]
-offsets = PoolRealArray( 0.126437, 0.475096, 0.858238 )
-colors = PoolColorArray( 0.703125, 0.0796509, 0.0796509, 1, 1, 0.617188, 0.940186, 1, 0, 0.273438, 1, 1 )
-
-[sub_resource type="GradientTexture" id=65]
-gradient = SubResource( 64 )
-
-[sub_resource type="ShaderMaterial" id=66]
-shader = ExtResource( 72 )
-shader_param/light_bias = null
+[sub_resource type="ShaderMaterial" id=179]
+shader = ExtResource( 73 )
+shader_param/iris_scale = 0.5
+shader_param/iris_offset = Vector2( 0.5, 0 )
+shader_param/look_distance = 0.17
+shader_param/subsurface_scattering = null
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
-shader_param/detail_scale = 256.0
-shader_param/palette = ExtResource( 73 )
-shader_param/gradient = SubResource( 65 )
-shader_param/detail = ExtResource( 74 )
+shader_param/alpha_clip = 0.75
+shader_param/main_texture = ExtResource( 74 )
+shader_param/iris_texture = ExtResource( 75 )
 
 [sub_resource type="ShaderMaterial" id=169]
 shader = ExtResource( 59 )
@@ -337,6 +332,98 @@ albedo_texture = ExtResource( 69 )
 material = SubResource( 88 )
 size = Vector2( 0.1, 0.1 )
 
+[sub_resource type="Animation" id=180]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Armature/Skeleton/jackie:blend_shapes/EyesOpen")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Armature/Skeleton/jackie:blend_shapes/EyesClosed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Armature/Skeleton/coat:material/0")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 72 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Armature/Skeleton/jackie:material/0")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 77 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Armature/Skeleton/pants:material/0")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 77 ) ]
+}
+
+[sub_resource type="Animation" id=181]
+resource_name = "blink"
+length = 0.2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/path = NodePath("Armature/Skeleton/jackie:blend_shapes/EyesOpen")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0, 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Armature/Skeleton/jackie:blend_shapes/EyesClosed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.05, 0.15, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0, 1.0, 0.0 ]
+}
+
 [node name="base_mesh" instance=ExtResource( 1 )]
 script = ExtResource( 63 )
 sound_roll = ExtResource( 92 )
@@ -360,18 +447,18 @@ bones/64/bound_children = [ NodePath("footRight") ]
 
 [node name="coat" parent="Armature/Skeleton" index="0"]
 layers = 2
-material/0 = SubResource( 66 )
+material/0 = ExtResource( 72 )
 script = ExtResource( 90 )
 
 [node name="hover_board" parent="Armature/Skeleton" index="1"]
 visible = false
 layers = 2
-material/0 = ExtResource( 75 )
-material/1 = ExtResource( 76 )
 
 [node name="jackie" parent="Armature/Skeleton" index="2"]
 layers = 2
+blend_shapes/EyesOpen = 1.0
 material/0 = ExtResource( 77 )
+material/1 = SubResource( 179 )
 
 [node name="pants" parent="Armature/Skeleton" index="3"]
 layers = 2
@@ -379,12 +466,12 @@ material/0 = ExtResource( 77 )
 
 [node name="footLeft" type="BoneAttachment" parent="Armature/Skeleton" index="4"]
 time_scale_response = false
-transform = Transform( 0.014959, 0.0328849, -0.999347, -0.764864, -0.643365, -0.0326201, -0.644018, 0.764853, 0.0155283, 0.118776, 0.108887, -0.00203503 )
+transform = Transform( 0.0149589, 0.0328853, -0.999348, -0.764864, -0.643366, -0.03262, -0.644018, 0.764853, 0.0155287, 0.118776, 0.108887, -0.00203504 )
 bone_name = "Ankle.L"
 
 [node name="footRight" type="BoneAttachment" parent="Armature/Skeleton" index="5"]
 time_scale_response = false
-transform = Transform( 0.0149589, -0.0328852, 0.999347, 0.764864, -0.643365, -0.03262, 0.644018, 0.764853, 0.0155287, -0.118776, 0.108887, -0.00203507 )
+transform = Transform( 0.0149591, -0.0328851, 0.999347, 0.764864, -0.643365, -0.03262, 0.644018, 0.764853, 0.0155285, -0.118776, 0.108887, -0.00203493 )
 bone_name = "Ankle.R"
 
 [node name="chest" type="BoneAttachment" parent="Armature/Skeleton" index="6"]
@@ -540,7 +627,7 @@ transform = Transform( 0.707107, -0.707107, -2.23517e-08, -8.61473e-09, -4.47035
 
 [node name="knee_left" type="BoneAttachment" parent="Armature/Skeleton" index="11"]
 time_scale_response = false
-transform = Transform( 0.00166916, 0.0519231, -0.99865, -0.0480051, -0.997495, -0.0519433, -0.998846, 0.048027, 0.000827521, 0.0866715, 0.809257, 0.014476 )
+transform = Transform( 0.00199112, 0.0582328, -0.998301, -0.0538387, -0.996849, -0.0582554, -0.998548, 0.0538632, 0.00115022, 0.0866715, 0.775664, 0.014476 )
 bone_name = "Thign.L"
 
 [node name="ref_leg_left" type="Spatial" parent="Armature/Skeleton/knee_left" index="0"]
@@ -548,7 +635,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
 
 [node name="knee_right" type="BoneAttachment" parent="Armature/Skeleton" index="12"]
 time_scale_response = false
-transform = Transform( 0.00166894, -0.051923, 0.99865, 0.0480051, -0.997496, -0.0519432, 0.998846, 0.0480269, 0.000827789, -0.0866715, 0.809257, 0.014476 )
+transform = Transform( 0.00199155, -0.0582329, 0.998301, 0.0538388, -0.996849, -0.0582555, 0.998548, 0.0538633, 0.00114998, -0.0866715, 0.775664, 0.014476 )
 bone_name = "Thign.R"
 
 [node name="ref_leg_right" type="Spatial" parent="Armature/Skeleton/knee_right" index="0"]
@@ -755,3 +842,13 @@ time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.446756, 1.6592, 0.328179 )
 light_energy = 0.597
 light_cull_mask = 4293918722
+
+[node name="blink" type="AnimationPlayer" parent="." index="10"]
+anims/RESET = SubResource( 180 )
+anims/blink = SubResource( 181 )
+script = ExtResource( 76 )
+blink_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="blink" index="0"]
+wait_time = 4.0
+autostart = true

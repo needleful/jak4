@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://outfits/fullbody/mum.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://_glb/characters/mum/anim/WalkLookRight-loop.anim" type="Animation" id=19]
 [ext_resource path="res://_glb/characters/mum/anim/00_RESET.anim" type="Animation" id=20]
 [ext_resource path="res://outfits/hair/primordial.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/visual/blink.gd" type="Script" id=22]
 [ext_resource path="res://outfits/head/primordial_head.mesh" type="ArrayMesh" id=23]
 [ext_resource path="res://outfits/skin/skin_clear.png" type="Texture" id=24]
 [ext_resource path="res://outfits/head/face_sun_damaged.png" type="Texture" id=25]
@@ -689,7 +690,7 @@ nodes/Big/position = Vector2( 140, 120 )
 nodes/StateMachine/node = SubResource( 35 )
 nodes/StateMachine/position = Vector2( -80, 60 )
 nodes/output/position = Vector2( 380, 140 )
-node_connections = [ "Big", 0, "StateMachine", "Big", 1, "Animation", "output", 0, "Big" ]
+node_connections = [ "output", 0, "Big", "Big", 0, "StateMachine", "Big", 1, "Animation" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
@@ -785,18 +786,18 @@ anims/Show_Partial = SubResource( 45 )
 [node name="blink" type="AnimationPlayer" parent="." index="3"]
 anims/RESET = SubResource( 29 )
 anims/blink = SubResource( 28 )
+script = ExtResource( 22 )
+blink_timer = NodePath("blink_timer")
 
-[node name="blink_timer" type="Timer" parent="." index="4"]
+[node name="blink_timer" type="Timer" parent="blink" index="0"]
 wait_time = 6.0
 one_shot = true
 autostart = true
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
 tree_root = SubResource( 36 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/Big/add_amount = 1.0
 parameters/StateMachine/playback = SubResource( 37 )
 parameters/StateMachine/Walk/blend_position = 0
-
-[connection signal="timeout" from="blink_timer" to="." method="_on_blink_timer_timeout"]

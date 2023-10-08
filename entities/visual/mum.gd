@@ -78,16 +78,6 @@ func _override(n: Node, mat: Material):
 		else:
 			_override(m, mat)
 
-func _on_blink_timer_timeout():
-	$blink.playback_speed = rand_range(0.7, 1.0)
-	$blink.play("blink")
-	var time: float
-	if randf() < 0.15:
-		time = rand_range(0.2, 0.5)
-	else:
-		time = rand_range(3.0, 6.0)
-	$blink_timer.start(time)
-
 func track_player():
 	track(Global.get_player().eyes)
 
