@@ -9,5 +9,10 @@ func _ready():
 
 func _on_size_changed():
 	var s := OS.window_size
-	var screen_ratio := float(s.x)/float(s.y)
+	
+	var screen_ratio: float
+	if s.x == 0 or s.y == 0:
+		screen_ratio = max_aspect_ratio
+	else:
+		screen_ratio = float(s.x)/float(s.y)
 	ratio = clamp(screen_ratio, min_aspect_ratio, max_aspect_ratio)

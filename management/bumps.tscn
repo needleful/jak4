@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://management/bumps.gd" type="Script" id=1]
 [ext_resource path="res://material/particles/dust.png" type="Texture" id=2]
@@ -70,6 +70,47 @@ color_ramp = SubResource( 6 )
 hue_variation = -0.02
 hue_variation_random = 1.0
 
+[sub_resource type="Gradient" id=16]
+offsets = PoolRealArray( 0, 0.753181, 1 )
+colors = PoolColorArray( 5, 4.54, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=17]
+gradient = SubResource( 16 )
+width = 16
+use_hdr = true
+
+[sub_resource type="Curve" id=18]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -1.87121, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=19]
+curve = SubResource( 18 )
+
+[sub_resource type="ParticlesMaterial" id=20]
+lifetime_randomness = 0.6
+emission_shape = 1
+emission_sphere_radius = 0.2
+flag_align_y = true
+direction = Vector3( 0, 1, 0 )
+spread = 14.73
+initial_velocity = 15.0
+initial_velocity_random = 0.36
+scale_random = 0.53
+scale_curve = SubResource( 19 )
+color_ramp = SubResource( 17 )
+
+[sub_resource type="SpatialMaterial" id=21]
+flags_unshaded = true
+flags_do_not_receive_shadows = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CylinderMesh" id=22]
+material = SubResource( 21 )
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.5
+radial_segments = 4
+rings = 0
+
 [node name="bumps" type="Node"]
 script = ExtResource( 1 )
 
@@ -98,3 +139,14 @@ unit_db = -15.0
 unit_size = 8.0
 max_db = -2.0
 bus = "SFX"
+
+[node name="sparks1" type="Particles" parent="."]
+cast_shadow = 0
+amount = 12
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+visibility_aabb = AABB( -1.1812, -0.732766, -1.1388, 2.3624, 2.13155, 2.2776 )
+local_coords = false
+process_material = SubResource( 20 )
+draw_pass_1 = SubResource( 22 )

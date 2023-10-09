@@ -195,4 +195,4 @@ func has_required_items():
 	return true
 
 func award_name():
-	return CustomGames.Award.keys()[CustomGames.stat("award") - 1]
+	return CustomGames.Award.keys()[CustomGames.stat(self, "award") - 1]

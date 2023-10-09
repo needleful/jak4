@@ -213,18 +213,14 @@ func extract_expressions(line: String) -> Dictionary:
 	var matches = r_expression.search_all(line)
 	for rm in matches:
 		var s: String= rm.get_string()
+		var ex:String = rm.get_string(1)
+		var ex2 := replace_vars(ex)
+		line_no_expressions = line_no_expressions.replace(s, "")
 		if s.begins_with("#"):
-			var ex:String = rm.get_string(1)
-			var ex2 := replace_vars(ex)
-			
-			line_no_expressions = dict.line.replace(s, "")
 			dict.line = dict.line.replace(ex, ex2)
-			continue
-		
-		var ex : String = replace_vars(rm.get_string(1))
-		dict.line = dict.line.replace(s, "")
-		line_no_expressions = dict.line
-		dict.conditions.append(ex)
+		else:
+			dict.line = dict.line.replace(s, "")
+			dict.conditions.append(ex2)
 	var sq_matches := r_sq_expression.search_all(line_no_expressions)
 	for rm in sq_matches:
 		# TODO: add the uh "#" interpolation

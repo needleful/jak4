@@ -217,9 +217,10 @@ Tirus -- I don't know. She comes in a few times a week for months now.
 	Did you want to talk about anything else?
 
 :_laili_home_loop
-> [! stat?: laili/orphan] What #{"are you doing up here" if main_speaker.on_monument else "were you doing up on top of the monument... thing"}, anyway?
-	Laili -- I live #{"here" if main_speaker.on_monument else "there"}.
-	You -- What? Isn't #{"this" if main_speaker.on_monument else "it"} some sort of... church or some such thing? Why would they let you up #{"here" if main_speaker.on_monument else "there"}?
+[$:m | #main_speaker.on_monument]
+> [! stat?: laili/orphan] What #{ternary($m, "are you doing up here", "were you doing up on top of the monument... thing")}, anyway?
+	Laili -- I live #{ternary($m, "here", "there")}.
+	You -- What? Isn't #{ternary($m, "this", "it")} some sort of... church or some such thing? Why would they let you up #{ternary($m, "here", "there")}?
 	Laili -- Optics.
 	You -- ... What?
 	Laili -- They can't stop me if they don't see me.

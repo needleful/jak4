@@ -6,7 +6,8 @@ enum Surface {
 	Metal,
 	Glass,
 	Grass,
-	Wood
+	Wood,
+	Bubble
 }
 
 enum Impact {
@@ -31,6 +32,9 @@ onready var emitters := {
 		Impact.SlidingImpact:$particle_sand_small,
 		Impact.Footstep:null,
 		Impact.SlidingStep:null,
+	},
+	Surface.Metal: {
+		Impact.ImpactStrong:$sparks1
 	}
 }
 
@@ -96,9 +100,11 @@ func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):
 	
 func impact_particles(surf:int, impact:int, position: Vector3, normal:Vector3):
 	if !(surf in emitters):
-		surf = Surface.Rock
+		return
 	if !(impact in emitters[surf]):
-		impact = Impact.ImpactLight
+		return
+	if surf == Surface.Metal:
+		pass
 	if surf in emitters and impact in emitters[surf]:
 		var emitter_orig = emitters[surf][impact]
 		if !emitter_orig:
@@ -148,7 +154,6 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 	e.emitting = true
 	yield(get_tree().create_timer(e.lifetime, false), "timeout")
 	if is_instance_valid(e):
-		e.restart()
 		e.emitting = false
 		remove_child(e)
 		ObjectPool.put(ename, e)

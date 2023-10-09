@@ -1,4 +1,4 @@
-[gd_scene load_steps=128 format=2]
+[gd_scene load_steps=129 format=2]
 
 [ext_resource path="res://_glb/characters/jackie/base_mesh.glb" type="PackedScene" id=1]
 [ext_resource path="res://tools/scripts/autoload_animations.gd" type="Script" id=2]
@@ -96,13 +96,15 @@
 [ext_resource path="res://audio/player/roll_jump.wav" type="AudioStream" id=94]
 [ext_resource path="res://audio/player/spin_kick1.wav" type="AudioStream" id=95]
 [ext_resource path="res://audio/player/lunge_kick1.wav" type="AudioStream" id=96]
+[ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=97]
+[ext_resource path="res://material/env/ancient/white_metal.material" type="Material" id=98]
 
 [sub_resource type="ShaderMaterial" id=179]
 shader = ExtResource( 73 )
 shader_param/iris_scale = 0.5
 shader_param/iris_offset = Vector2( 0.5, 0 )
 shader_param/look_distance = 0.17
-shader_param/subsurface_scattering = null
+shader_param/subsurface_scattering = 1.0
 shader_param/softness = 1.0
 shader_param/specularity = 1.0
 shader_param/alpha_clip = 0.75
@@ -115,14 +117,6 @@ shader_param/albedo = Color( 0.988235, 0.996078, 1, 1 )
 shader_param/refraction = 0.0
 shader_param/brightness = null
 
-[sub_resource type="Gradient" id=76]
-offsets = PoolRealArray( 0, 0.47479, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 0.0743922, 0.0756836, 0.0570583, 1, 0, 0, 0, 1 )
-
-[sub_resource type="GradientTexture" id=77]
-gradient = SubResource( 76 )
-width = 32
-
 [sub_resource type="Curve" id=78]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
@@ -131,13 +125,16 @@ width = 32
 curve = SubResource( 78 )
 
 [sub_resource type="ParticlesMaterial" id=73]
+emission_shape = 1
+emission_sphere_radius = 0.1
 direction = Vector3( 0, 0, 1 )
 spread = 8.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 12.0
+linear_accel = -4.0
 scale = 4.0
 scale_curve = SubResource( 79 )
-color_ramp = SubResource( 77 )
+color = Color( 2, 0.7, 1.8, 1 )
 
 [sub_resource type="SpatialMaterial" id=74]
 flags_transparent = true
@@ -148,10 +145,23 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 albedo_color = Color( 13.0902, 1.93333, 1, 1 )
+albedo_texture = ExtResource( 69 )
 
 [sub_resource type="QuadMesh" id=75]
 material = SubResource( 74 )
 size = Vector2( 0.05, 0.05 )
+
+[sub_resource type="ParticlesMaterial" id=182]
+emission_shape = 1
+emission_sphere_radius = 0.1
+direction = Vector3( 0, 0, 1 )
+spread = 8.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 12.0
+linear_accel = -4.0
+scale = 4.0
+scale_curve = SubResource( 79 )
+color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="ParticlesMaterial" id=85]
 lifetime_randomness = 0.23
@@ -394,6 +404,30 @@ tracks/4/keys = {
 "update": 1,
 "values": [ ExtResource( 77 ) ]
 }
+tracks/5/type = "value"
+tracks/5/path = NodePath("Armature/Skeleton/hover_board:material/0")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 98 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Armature/Skeleton/hover_board:material/1")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 97 ) ]
+}
 
 [sub_resource type="Animation" id=181]
 resource_name = "blink"
@@ -440,6 +474,8 @@ script = ExtResource( 90 )
 [node name="hover_board" parent="Armature/Skeleton" index="1"]
 visible = false
 layers = 2
+material/0 = ExtResource( 98 )
+material/1 = ExtResource( 97 )
 
 [node name="jackie" parent="Armature/Skeleton" index="2"]
 layers = 2
@@ -478,8 +514,20 @@ width = 0.3
 time_scale_response = false
 transform = Transform( 1, 3.55271e-15, -2.84217e-14, 3.55271e-15, 1, 0, 1.42109e-14, 0, 1, 1.73858e-09, 0.0544889, -0.00340463 )
 lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
 local_coords = false
 process_material = SubResource( 73 )
+draw_pass_1 = SubResource( 75 )
+
+[node name="damage_particles2" type="Particles" parent="Armature/Skeleton/chest" index="2"]
+time_scale_response = false
+transform = Transform( 1, 3.55271e-15, -2.84217e-14, 3.55271e-15, 1, 0, 1.42109e-14, 0, 1, 1.73858e-09, 0.0544889, -0.00340463 )
+lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
+local_coords = false
+process_material = SubResource( 182 )
 draw_pass_1 = SubResource( 75 )
 
 [node name="head" type="BoneAttachment" parent="Armature/Skeleton" index="7"]

@@ -167,18 +167,6 @@ func clear():
 		c.queue_free()
 	clear_replies()
 
-func set_var(var_name: String, value):
-	variables[var_name] = value
-
-func has_var(var_name: String):
-	return var_name in variables
-
-func inc_var(var_name: String, value: int = 1):
-	if !has_var(var_name):
-		set_var(var_name, 0)
-	variables[var_name] += value
-	return variables[var_name]
-
 func clear_replies():
 	for c in replies.get_children():
 		c.queue_free()
@@ -745,6 +733,24 @@ func swap_coats():
 	player.set_current_coat(speaker_coat, true)
 	Global.remove_coat(player_coat)
 	return true
+
+func set_var(var_name: String, value):
+	variables[var_name] = value
+
+func has_var(var_name: String):
+	return var_name in variables
+
+func inc_var(var_name: String, value: int = 1):
+	if !has_var(var_name):
+		set_var(var_name, 0)
+	variables[var_name] += value
+	return variables[var_name]
+
+func ternary(cond: bool, when_true, when_false):
+	if cond:
+		return when_true
+	else:
+		return when_false
 
 func speaker_stat() -> String:
 	if !main_speaker:

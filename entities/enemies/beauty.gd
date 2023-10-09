@@ -52,7 +52,7 @@ onready var hitboxes := [
 const GRAVITY := Vector3.DOWN*24.0
 var velocity := Vector3.ZERO
 const ACCEL_GROUND := 20.0
-var orb := load("res://entities/projectile.tscn")
+var orb := load("res://entities/combat/projectile.tscn")
 var damaged_objects : Array
 
 onready var guns := [

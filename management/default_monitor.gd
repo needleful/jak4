@@ -9,9 +9,10 @@ func _enter_tree():
 		if r != OK:
 			print_debug("Failed to load default monitor")
 			return
-		var i :int = f.get_8()
-		if i > 0:
-			OS.current_screen = i
+		var data = f.get_buffer(2)
+		# Don't try setting the monitor if the number of monitors has changed since closing
+		if data[0] > 0 and data[1] == OS.get_screen_count():
+			OS.current_screen = data[0]
 
 func _exit_tree():
 	var f := File.new()
@@ -19,4 +20,7 @@ func _exit_tree():
 	if r != OK:
 		print_debug("Failed to save default monitor")
 		return
-	f.store_8(OS.current_screen)
+	var b := PoolByteArray()
+	b.push_back(OS.current_screen)
+	b.push_back(OS.get_screen_count())
+	f.store_buffer(b)

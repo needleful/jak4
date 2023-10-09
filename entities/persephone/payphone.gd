@@ -33,10 +33,6 @@ func _on_stat_changed(stat, value):
 		else:
 			stop_ring()
 
-func _exit_tree():
-	if !dialog_circle.is_inside_tree():
-		dialog_circle.free()
-
 func _process(_delta):
 	var p := Global.get_player()
 	if !p:

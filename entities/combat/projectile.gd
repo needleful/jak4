@@ -4,7 +4,9 @@ export(int) var damage := 10
 export(float) var speed := 10.0
 export(float) var turn_speed := 2.0
 export(Vector3) var offset := Vector3.ZERO
+const orb_explosion: PackedScene = preload("res://entities/combat/projectile_explosion.tscn")
 
+var explosion: Node
 var source: Node
 var target: Spatial
 
@@ -23,6 +25,10 @@ func _ready():
 		hitbox = $hitbox
 
 func fire(p_target: Spatial, p_offset := Vector3.ZERO, p_time := 6.0):
+	if ObjectPool.has("orb_explosion"):
+		explosion = ObjectPool.get("orb_explosion")
+	else:
+		explosion = orb_explosion.instance()
 	timer = 0.0
 	active_time = p_time
 	disabled = false
@@ -87,3 +93,7 @@ func _remove():
 	disabled = true
 	set_physics_process(false)
 	ObjectPool.call_deferred("put", "orb", self)
+	if explosion:
+		explosion.request_ready()
+		get_tree().current_scene.add_child(explosion)
+		explosion.global_transform = global_transform

@@ -351,17 +351,18 @@ func start_dive_shockwave(_max_damage: bool):
 
 func start_damage_particle(dir: Vector3):
 	var emitter := $Armature/Skeleton/chest/damage_particles
+	var emitter2 := $Armature/Skeleton/chest/damage_particles2
+	emitter.restart()
+	emitter2.restart()
 	dir.y = 0.5
 	var local_dir: Vector3 = emitter.global_transform.basis.inverse()*(dir).normalized()
 	emitter.process_material.direction = local_dir
+	emitter2.process_material.direction = local_dir
 	emitter.emitting = true
-	yield(get_tree().create_timer(0.2), "timeout")
-	emitter.emitting = false
+	emitter2.emitting = true
 
 func start_heal_particle():
 	$Armature/Skeleton/head/heal_particles.emitting = true
-	yield(get_tree().create_timer(1.0), "timeout")
-	$Armature/Skeleton/head/heal_particles.emitting = false
 
 func start_roll_particles():
 	pass

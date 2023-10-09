@@ -21,7 +21,7 @@ export(bool) var cloaked := false
 const cloaked_material : Material = preload("res://material/characters/cloaked.material")
 
 const GRAV_DECAY := 1.0
-const projectile: PackedScene = preload("res://entities/projectile.tscn")
+const projectile: PackedScene = preload("res://entities/combat/projectile.tscn")
 
 const TIME_MIN_IDLE := 0.15
 
@@ -265,7 +265,7 @@ func take_damage(damage: int, dir: Vector3, source: Node, _tag := ""):
 		# stealth attack: double damage
 		damage *= 2
 	health -= damage
-	
+	Bumps.impact_on(self, Bumps.Impact.ImpactStrong, global_transform.origin + dir*0.75, dir)
 	var dead := health <= 0
 	
 	apply_central_impulse(mass*damage*dir*damaged_speed)
