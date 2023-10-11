@@ -10,7 +10,7 @@ func _enter_tree():
 			print_debug("Failed to load default monitor")
 			return
 		var data = f.get_buffer(2)
-		# Don't try setting the monitor if the number of monitors has changed since closing
+		# Don't try setting the monitor if the number of screens has changed
 		if data[0] > 0 and data[1] == OS.get_screen_count():
 			OS.current_screen = data[0]
 

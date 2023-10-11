@@ -68,3 +68,6 @@ func set_active(a):
 	elif a and active_entities and !has_node("active_entities"):
 		add_child(active_entities)
 		active_entities.transform = active_transform
+
+func is_active():
+	return has_node("active_entities")

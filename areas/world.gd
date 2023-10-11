@@ -62,6 +62,7 @@ var chunk_loader: ChunkLoader
 var ignore_day := false
 var rescue_available := true
 var cached_bounds: Dictionary
+var cached_active_bounds: Dictionary
 
 func _init():
 	terrain_hires = {}
@@ -122,6 +123,12 @@ func _ready():
 			set_time(Global.stat("clock_time"), true)
 	else:
 		set_time(9.75)
+	var ws := OS.window_size
+	if ws.x == 0 or ws.y == 0:
+		OS.window_fullscreen = false
+		OS.window_borderless = false
+		OS.current_screen = 0
+		OS.window_size = Vector2(600, 600)
 
 func _process(delta):
 	time += delta
@@ -215,13 +222,10 @@ func load_nearby_chunks(position: Vector3, synchronous := false):
 		if chunk_loader.is_loaded(ch):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
+		if !(ch.name in cached_bounds):
+			cached_bounds[ch.name] = calculate_bounds(ch, true)
+		var box: AABB = cached_bounds[ch.name] 
 		
-		var box: AABB
-		if ch.name in cached_bounds:
-			box = cached_bounds[ch.name] 
-		else:
-			box = calculate_bounds(ch, true)
-			cached_bounds[ch.name] = box
 		var load_zone: AABB = box.grow(Global.render_distance*DIST_LOAD)
 		var unload_zone:AABB = box.grow(Global.render_distance*DIST_UNLOAD)
 		if false:
@@ -257,7 +261,13 @@ func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
-		var box: AABB = cached_bounds[ch.name]
+		var box: AABB
+		if is_active(ch):
+			if !(ch.name in cached_active_bounds):
+				cached_active_bounds[ch.name] = calculate_bounds(ch, true)
+			box = cached_active_bounds[ch.name]
+		else:
+			box = cached_bounds[ch.name]
 		if !chunk_loader.is_loaded(ch):
 			continue
 		var local : Vector3 = position - ch.global_transform.origin

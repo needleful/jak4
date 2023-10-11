@@ -9,6 +9,11 @@
 	/Eh, ine kes?/
 	You -- Oh, um, my name is Jackie.
 	Vaeler? Oh no, you aren't for here, no.
+	You -- What's behind the door?
+	Nothing you want to see.
+	You -- ...
+	[stat?: bairo/sacrifices] 
+		* Was Bairo right about the inhabitants of the village? Something strange is going on here.
 
 {otherwise}[! $arena completed]
 	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
@@ -129,6 +134,14 @@ You did! If you want to hunt, we will prepare the chasm! The entry is only twent
 	[goto: loop_choice]
 [exit]
 
+:note(bairo/sacrifices) :- !Global.stat("arena137/entered")
+You -- Have you heard any strange noises in the caves?
+Hm.... nope.
+You -- Really?
+There are creatures roaming at night. Perhaps those are what you hear?
+[exit]
+
+:note(bairo/sacrifices) 
 :note(bairo/conspiracy)
 :note(visited/abandoned_village)
 :note(the_village_gate)
@@ -150,7 +163,7 @@ You did! If you want to hunt, we will prepare the chasm! The entry is only twent
 			[stat?: bairo/conspiracy]
 				You -- They've been invading people's homes, for God's sake.
 			You -- You're telling me those are just a coincidence?
-		Hm... This arena has been here for fifteen years. I don't know what to convince you.
+		Hm... Well, perhaps there are more around than usual. But the arena is very secure. We are not responsible for this.
 		You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
 		I will show you.
 	{otherwise}
