@@ -8,7 +8,7 @@ uniform sampler2D ceiling: hint_albedo;
 uniform float uv_scale = 0.125;
 uniform float power = 5.0;
 uniform float softness = 0.5;
-uniform float specularity = 1.0;
+uniform float specularity: hint_range(1.0, 32.0) = 1.0;
 uniform float light_bias = 0.0;
 
 varying vec3 position;

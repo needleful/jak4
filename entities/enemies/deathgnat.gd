@@ -66,6 +66,8 @@ func _physics_process(delta):
 			if state_timer > Global.gravity_stun_time:
 				next_state = AI.Chasing
 		AI.Dead:
+			mode = RigidBody.MODE_RIGID
+			sleeping = false
 			set_physics_process(false)
 		AI.GravityStunDead:
 			if state_timer > Global.gravity_stun_time:

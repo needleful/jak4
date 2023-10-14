@@ -1,0 +1,17 @@
+[note: cave137/podium | There's a massive structure deep in the caves, marked by a skull. There's a podium with a slot for something. |+ unwanted_visitors actual_cliff_village]
+[! stat?: cave137/locked]
+	[Global count: skull_tablet]
+	* This podium seems to be missing something.
+	You -- ...
+[stat?: cave137/locked]
+	* Whatever you did by inserting the tablet into the podium seems to be keeping the creatures inactive.
+[exit]
+
+:item(skull_tablet)
+* You place the tablet in the podium. It fits.
+[Global remove_item: skull_tablet]
+[Global abolish_notes:+ unwanted_visitors_actual_cliff_village]
+[note: cave137/locked | I've inserted the skull tablet. It seems to have worked. I should let Bairo know. |+ unwanted_visitors actual_cliff_village bairo/skull_tablet]
+{get_tree().call_group("enemy137", "kill")}
+You immediately notice a change.
+[exit]

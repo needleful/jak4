@@ -8,8 +8,12 @@ export(NodePath) var mesh_instance := NodePath(".")
 
 onready var m: MeshInstance = get_node(mesh_instance)
 
-func _ready():
-	set_light_enabled(light_enabled)
+func _notification(what):
+	if ((what == NOTIFICATION_VISIBILITY_CHANGED
+		or what == NOTIFICATION_READY)
+		and is_visible_in_tree()
+	):
+		set_light_enabled(light_enabled)
 
 func set_light_enabled(e):
 	light_enabled = e

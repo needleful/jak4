@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -31,6 +31,22 @@
 [ext_resource path="res://entities/env/stone/rock6.tscn" type="PackedScene" id=29]
 [ext_resource path="res://entities/env/stone/rock8.tscn" type="PackedScene" id=30]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=31]
+[ext_resource path="res://entities/env/furniture/stump_table.tscn" type="PackedScene" id=32]
+[ext_resource path="res://entities/env/furniture/incense.tscn" type="PackedScene" id=33]
+[ext_resource path="res://entities/env/furniture/bottle1.tscn" type="PackedScene" id=34]
+[ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=36]
+[ext_resource path="res://ui/items/vis/skull_tablet.tscn" type="PackedScene" id=37]
+[ext_resource path="res://entities/env/furniture/shelf.tscn" type="PackedScene" id=38]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=39]
+[ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=40]
+[ext_resource path="res://entities/dialog_thing.tscn" type="PackedScene" id=41]
+[ext_resource path="res://dialog/side_content/arena/skull_tablet.dialog" type="Resource" id=42]
+[ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=43]
+[ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=44]
+[ext_resource path="res://ui/items/vis/fake_arena_access.tscn" type="PackedScene" id=45]
+[ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=46]
+[ext_resource path="res://dialog/side_content/arena/somebody.dialog" type="Resource" id=47]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 1.37823, 1.71547, 1.36145 )
@@ -235,6 +251,37 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 77.8439, 21.9916, -118.499 )
 [node name="zone_cliffs" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.2532, -21.7226, -61.562 )
 
+[node name="hut" type="Spatial" parent="active_entities/zone_cliffs"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -97.497, 5.82305, -2.71206 )
+
+[node name="bed_native" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 35 )]
+transform = Transform( -0.981581, 0, 0.191044, 0, 1, 0, -0.191044, 0, -0.981581, 3.49229, -0.0315876, 1.04393 )
+
+[node name="table2" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 44 )]
+transform = Transform( 0.444169, 0, 0.895943, 0, 1, 0, -0.895943, 0, 0.444169, -1.46383, 0, 3.29143 )
+
+[node name="fake_arena_access_pickup" parent="active_entities/zone_cliffs/hut/table2" instance=ExtResource( 46 )]
+transform = Transform( 0.256877, 0.0685063, 0.964013, -0.0310432, 0.997555, -0.0626179, -0.965946, -0.013841, 0.258375, 0.494492, 0.540093, 1.30773 )
+item_id = "fake_arena_access"
+
+[node name="fake_arena_access" parent="active_entities/zone_cliffs/hut/table2/fake_arena_access_pickup" instance=ExtResource( 45 )]
+transform = Transform( 0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0 )
+
+[node name="sitting_pillow" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98072, -0.0346069, -3.12811 )
+
+[node name="sitting_pillow2" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 36 )]
+transform = Transform( 0.461006, 0, -0.887397, 0, 1, 0, 0.887397, 0, 0.461006, 3.24665, -0.0377121, -2.01772 )
+
+[node name="sofa" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 43 )]
+transform = Transform( -0.998212, 0, 0.0597761, 0, 1, 0, -0.0597761, 0, -0.998212, 0.348875, -3.16092, -3.99634 )
+
+[node name="incense" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.915641, -3.16092, -3.68311 )
+
+[node name="table3" parent="active_entities/zone_cliffs/hut" instance=ExtResource( 44 )]
+transform = Transform( -0.86388, 0, 0.503697, 0, 1, 0, -0.503697, 0, -0.86388, 3.89563, -3.16092, 1.5103 )
+
 [node name="fountain" parent="active_entities/zone_cliffs" instance=ExtResource( 31 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 114.513, 20.1625, -30.6958 )
 
@@ -284,6 +331,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.4144, -99.1099, 55.6371 )
 
 [node name="crawly" parent="active_entities/zone_cliffs" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 78.2394, -96.7843, 59.5322 )
+
+[node name="npc" parent="active_entities/zone_cliffs" instance=ExtResource( 17 )]
+transform = Transform( 0.0169751, 0, 0.999856, 0, 1, 0, -0.999856, 0, 0.0169751, 96.0622, 18.8003, -115.252 )
+dialog = ExtResource( 47 )
+visual_name = "Somo"
+friendly_id = "somo"
 
 [node name="rocks_area" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 0.995635, 0, 0.0933352, 0, 1, 0, -0.0933352, 0, 0.995635, 5.58275, -216.96, 174.81 )
@@ -413,6 +466,28 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107273, 0.600998, 2.0266 )
 [node name="hut_area" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -224.548, -145.425, 91.6663 )
 
+[node name="skull_tablet" parent="active_entities/hut_area" instance=ExtResource( 37 )]
+transform = Transform( 0.657083, 0, 0.361583, 0, 0.75, 0, -0.361583, 0, 0.657083, 10.5929, 0.794281, -3.15212 )
+script = ExtResource( 27 )
+condition = "!Global.stat(\"bairo/give_tablet\")"
+listen_for_change = true
+
+[node name="skull_tablet_dialog" parent="active_entities/hut_area/skull_tablet" instance=ExtResource( 41 )]
+transform = Transform( 0.5625, 0, 2.98023e-08, 0, 0.5625, 0, -2.98023e-08, 0, 0.5625, 0.0402527, -0.80397, -0.20536 )
+dialog_sequence = ExtResource( 42 )
+
+[node name="carpet" parent="active_entities/hut_area" instance=ExtResource( 39 )]
+transform = Transform( 0.647437, 0, 0.762119, 0, 1, 0, -0.762119, 0, 0.647437, 9.14444, 0.238525, -5.08123 )
+
+[node name="shelf" parent="active_entities/hut_area" instance=ExtResource( 38 )]
+transform = Transform( 0.77253, 0, 0.634979, 0, 1, 0, -0.634979, 0, 0.77253, 9.25848, 0.258926, -3.25282 )
+
+[node name="stump_table" parent="active_entities/hut_area" instance=ExtResource( 32 )]
+transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 10.7, -0.213699, -2.91045 )
+
+[node name="incense" parent="active_entities/hut_area/stump_table" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.148483, 0.96756, 0.29184 )
+
 [node name="gem_pickup3" parent="active_entities/hut_area" instance=ExtResource( 8 )]
 transform = Transform( -0.972439, 0, 0.233157, 0, 1, 0, -0.233157, 0, -0.972439, 9.77173, 0.409271, -7.85619 )
 quantity = 10
@@ -420,9 +495,6 @@ persistent = true
 
 [node name="wardrobe" parent="active_entities/hut_area" instance=ExtResource( 9 )]
 transform = Transform( -0.707107, 0, 0.707106, 0, 1, 0, -0.707106, 0, -0.707107, 7.24374, 0.208221, -4.97511 )
-
-[node name="coat_pickup" parent="active_entities/hut_area" instance=ExtResource( 10 )]
-transform = Transform( -0.0150965, 0, -0.999886, 0, 1, 0, 0.999886, 0, -0.0150965, 12.5482, 0.237244, -4.66629 )
 
 [node name="bug_pickup" parent="active_entities/hut_area" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3203, 8.42451, -6.42747 )
@@ -440,7 +512,7 @@ transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189,
 respawns = false
 
 [node name="crawly3" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
-transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 18.5314, -2.04289, -8.54148 )
+transform = Transform( -0.736189, 0, 0.676776, 0, 1, 0, -0.676776, 0, -0.736189, 19.1657, -2.04289, -9.106 )
 respawns = false
 
 [node name="crawly2" parent="active_entities/hut_area/enemy_group" instance=ExtResource( 6 )]
@@ -457,15 +529,45 @@ dialog = ExtResource( 26 )
 visual_name = "Bairo"
 friendly_id = "bairo"
 
+[node name="bottle1" parent="active_entities/hut_area/safe" instance=ExtResource( 34 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6462, 0.791672, -2.65372 )
+
+[node name="bottle2" parent="active_entities/hut_area/safe" instance=ExtResource( 34 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.60718, 1.24907, -2.51367 )
+
+[node name="bottle3" parent="active_entities/hut_area/safe" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.33669, 1.24986, -2.62904 )
+
 [node name="unsafe" type="Spatial" parent="active_entities/hut_area"]
 script = ExtResource( 27 )
 condition = "!Global.stat(\"bairo/saved\")"
+
+[node name="bottle1" parent="active_entities/hut_area/unsafe" instance=ExtResource( 34 )]
+transform = Transform( -0.196248, 0.980554, 0, -0.980554, -0.196248, 0, 0, 0, 1, 6.96913, 0.325348, -6.78911 )
+
+[node name="bottle3" parent="active_entities/hut_area/unsafe" instance=ExtResource( 34 )]
+transform = Transform( 1, 0, 0, 0, -0.289547, 0.957164, 0, -0.957164, -0.289547, 8.5656, 0.354553, -5.89108 )
 
 [node name="npc_bob" parent="active_entities/hut_area/unsafe" instance=ExtResource( 17 )]
 transform = Transform( 0.753077, 0, -0.657932, 0, 1, 0, 0.657932, 0, 0.753077, 3.24292, 3.15559, -4.95671 )
 dialog = ExtResource( 26 )
 visual_name = "Bairo"
 friendly_id = "bairo"
+
+[node name="bottle2" parent="active_entities/hut_area/unsafe" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, -0.140761, 0.990044, 0, -0.990044, -0.140761, 9.83011, 0.308685, -3.89437 )
+
+[node name="sitting_pillow" parent="active_entities/hut_area" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.68213, 0.25914, -9.75648 )
+
+[node name="sitting_pillow2" parent="active_entities/hut_area" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.32103, 0.261307, -9.02705 )
+
+[node name="bed_native" parent="active_entities/hut_area" instance=ExtResource( 35 )]
+transform = Transform( -0.921953, 0, 0.387301, 0, 1, 0, -0.387301, 0, -0.921953, 13.0309, 0.202423, -4.94189 )
+
+[node name="carpet2" parent="active_entities/hut_area" instance=ExtResource( 39 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4082, -2.91551, -6.65283 )
 
 [node name="valley_area" type="MultiMeshSystem" parent="active_entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -164.23, -233.328, 214.16 )
@@ -564,3 +666,9 @@ transform = Transform( 0.985514, 0.0431311, -0.164015, -0.050999, 0.997725, -0.0
 
 [node name="gem_pickup10" parent="active_entities/area_combat2" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0395, -0.0323792, 15.2855 )
+
+[node name="sofa" parent="." instance=ExtResource( 43 )]
+transform = Transform( -0.924057, 0, -0.382254, 0, 1, 0, 0.382254, 0, -0.924057, -215.72, -148.34, 81.3774 )
+
+[node name="sofa2" parent="." instance=ExtResource( 43 )]
+transform = Transform( -0.279264, 0, 0.960215, 0, 1, 0, -0.960215, 0, -0.279264, -210.768, -148.34, 83.7561 )

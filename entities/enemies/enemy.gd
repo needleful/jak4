@@ -200,6 +200,9 @@ func rotate_up(speed: float, up := Vector3.UP):
 		var angle = current_up.angle_to(desired_up)
 		add_torque(mass*axis*angle*speed - 0.1*mass*angular_velocity)
 
+func kill():
+	set_state(AI.Dead)
+
 func die():
 	var _x = Global.add_stat("killed/"+id)
 	var drop_dir := Vector3(0, 4, 3)

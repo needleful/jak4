@@ -1,34 +1,16 @@
 [! stat?: lia/waiver]
-	[! stat?: lia/investigation]
-		Uh, this place ain't for no tourists! Scram please!
-		> [stat?: arena137/visited] What? The arena? I've already been inside.
-			You know?
-			... Okay, but you have to sign the waiver.
-			[goto: waiver]
-		> I don't know, it seems like a fun attraction.
-			No! It ain't!
-			You -- ...
-		> [skip] (Scram)
-	{otherwise}
-		If you want in, you need to sign the waiver.
-		[goto: waiver]
-{otherwise}[stat?: lia/investigation]
-	...
+	Uh, this place ain't for no tourists! Scram please!
+	You -- ...
 {otherwise}
-	Have fun in the arena!
+	Have fun in there!
 [exit]
 
-:arena
-[! stat?: arena125/entered]
-[mark_map: actual_cliff_village]
-We run a sort of hunting arena, where people get in a cage with a bunch of specters and shoot 'em.
-You -- That sounds incredibly dangerous!
-Nobody's died yet, but that's why you have to sign the waiver. Do you want to try?
-You -- Pardon me? Try?
-[note: arena125/entered | There's a combat arena in the cave! |+ actual_cave_village]
-[Global task_exists: unwanted_visitors][stat?: bairo/conspiracy]
-	[Global add_note: The arena explains the noises Bairo heard. It wasn't sacrifices, like he'd imagined. |+ unwanted_visitors]
-[note]
+:note(arena137/entered) :- !Global.stat("lia/waiver")
+:note(arena137/escape) :- !Global.stat("lia/waiver")
+You -- I'd like to get into the arena.
+What? You know about it? You want to sign the waiver?
+[goto: waiver]
+[back]
 
 :note(bairo/conspiracy)
 > Have you seen any Spectres running loose lately?
@@ -46,30 +28,18 @@ You -- Pardon me? Try?
 	I ain't the village. Ask Chief Hurial. He's the village.
 [back]
 
-:note(the_village_gate) :- mentioned("spectres")
-You -- The village down in the valley saw spectres. The guard told me they weren't a common sight.
-[goto: reveal]
-[back]
-
-:note(visited/abandoned_village) :- mentioned("spectres")
-You -- The nearby village under the tower was abandoned. Overrun by spectres.
-[goto: reveal]
-[back]
-
-:reveal
-You -- It's clear to me something unusual is happening around here, and I have reasons to suspect it's something to do with you and this cave.
-Hm... Okay, okay. How about this? I'll let you in, but you have to sign the waiver.
-[+stat: lia/investigation]
-[goto: waiver]
-[exit]
-
 :waiver	
 * She hands you a paper and a pen. It's in Yaqazi, which you can't read.
+You -- Uh, can you... summarize it for me?
+If you die in the caves it's your fault.
 > [skip] (Sign the waiver)
 	You -- Like the laws here bind me...
-	* You sign the page. [+stat: lia/waiver]
+	* You sign the page.
 	* Perhaps you should have just scribbled and claimed it was your signature. Then if you got in trouble, you could say you hadn't signed it. But it's too late, now. Your handwriting is too distinct and beautiful to claim it's somebody else's.
-	Okay, great! Have fun in the caves!
+	* Lia takes your waiver and writes out some sort of access pass.
+	[note: lia/waiver | I signed a waiver to get access to the arena. |+ lia unwanted_visitors]
+	[Global add_item: arena_access]
+	Okay, great! Have fun in the arena!
 > You know, maybe I won't do this.
 	Good idea.
 [exit]

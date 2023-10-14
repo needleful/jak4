@@ -52,36 +52,75 @@
 		[note: bairo/conspiracy | Bairo claims the inhabitants of the cliff village released spectres in his home to kill him (among other things). |+ unwanted_visitors bairo]
 		[Global mark_map: actual_cliff_village]
 		[note: bairo/sacrifices | Bairo wants me to find out what's inside the cave in this village. He asserts the villagers are performing blood sacrifices. |+ unwanted_visitors actual_cliff_village bairo/conspiracy]
-{otherwise}[! stat?: bairo/arena]
-	Have you found anything?
-	[stat?: arena125/entered]
-		You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
-			No sacrifices or anything like that, though I question the ethics of such blood sport.
-		But why? Are they training soldiers to take my home?
-		[stat?: arena125/fun]
-			You -- They told me it was strictly for entertainment.
+[!Global task_is_complete: unwanted_visitors]
+	[stat?: cave137/locked]
+		You -- Your skull tablet was some sort of key that deactivated the creatures.
+		Really? So could you bring it back?
+		You -- It's in the machine, whatever it was...
+		But why would they attack me now? I got it years ago.
+		You -- I'm not sure, but it should be safe now.
+		That is a relief. Thank you.
+		// TODO: what does the player get from this? Maybe nothing.
+		[Global complete_task: unwanted_visitors]
+	{otherwise}[! stat?: bairo/arena]
+		Have you found anything?
+		[stat?: arena137/entered]
+			You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
+				No sacrifices or anything like that, though I question the ethics of such blood sport.
+			But why? Are they training soldiers to take my home?
+			You -- It seemed like it was strictly for entertainment.
+			But why send the specters to my home, then?
+			You -- If they did, I assume it was an accident.
+			[+stat: bairo/arena]
 		{otherwise}
-			You -- I can't imagine they'd go through all the effort just to take your farm.
-				Not that it's not a lovely farm, but they seem to have other priorities.
-		But why send the specters to my home, then?
-		You -- Right, quite frankly I forgot that 
-		[+stat: bairo/arena]
-	{otherwise}
-		You -- Not yet.
-		In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
-{otherwise}[! stat?: bairo/investigation_complete]
-	* TODO: Uh I don't know what the actual plot was
-{otherwise}[! Global task_is_complete: unwanted_visitors]
-	* TODO: How does the task end?
+			You -- Not yet.
+			In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
+	{otherwise}[!stat?: cave137/locked]
+		Have you stopped that dastardly arena?
+		You -- Not yet, I'm still figuring out what the problem is.
+		Drat! And I broke my stick trying to lean on it. I am defenseless!
 {otherwise}
 	You -- How's the farm going?
-	Good, thanks to you!
-	[exit]
+	No attacks yet, though I am missing my lucky tablet.
+	You -- It was not lucky in the slightest.
+	You have no way of proving that. It can be a key /and/ lucky.
 [exit]
 
-:item(strange_artefact) :- !Global.task_is_complete("unwanted_visitors")
-You -- Have you seen anything like this before?
-[exit]
+:note(bairo/skull_tablet) :- Global.task_is_complete("unwanted_visitors")
+You -- Do you still miss that skull tablet?
+I suppose it was not that big a deal. I have not been eaten by monsters... yet.
+[back]
+
+:note(bairo/skull_tablet) :- Global.stat("bairo/give_tablet")
+You -- Have you noticed anything different with me carrying the tablet?
+Not yet, but the attacks are rare. I hope my bad luck does not catch up to me without it...
+[back]
+
+:note(cave137/podium) :- Global.stat('bairo/skull_tablet') and !Global.task_is_complete("unwanted_visitors")
+:note(bairo/skull_tablet) :- Global.stat('visited/spawn137')
+You -- I know that skull tablet's a problem, Bairo.
+What do you mean?
+You -- There's some sort of structure in the caves with that same skull emblem. We need to take that back to where it came from.
+But it was a gift! And I got it years ago. Why would it only cause problems now?
+You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
+* Bairo sighs. He takes the skull tablet and gives it to you.
+[Global set_item_count: skull_tablet | #1]
+[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ actual_cliff_village bairo unwanted_visitors bairo/skull_tablet]
+I hope it still gives me luck....
+[back]
+
+:note(bairo/skull_tablet) :- Global.stat("bairo/saved")
+You -- What's that strange skull tablet on your table?
+Ah, that is a sacred artifact. The dark gemstones are very rare. It has brought me good luck.
+You -- How long have you had that thing?
+If you are suggesting what I think, no. I have had it for many years, much longer than the attacks from these monsters.
+You -- I don't think a black skull tablet should be ruled out right away.
+... Well, okay. Do you want to take it?
+You -- I think I should.
+[Global set_item_count: skull_tablet | #1]
+[note: bairo/give_tablet | Bairo gave me that skull tablet. I don't know what it's for, but it can't be anything good. |+ bairo unwanted_visitors bairo/skull_tablet]
+Please bring it back as soon as you figure out what's really causing issues. I am uneasy with bad luck, now.
+[back]
 
 :_coat :- Global.stat("bairo/saved")
 You -- Say, would you be interested in trading coats?

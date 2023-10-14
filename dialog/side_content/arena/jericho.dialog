@@ -13,6 +13,7 @@
 	Nothing you want to see.
 	You -- ...
 	[stat?: bairo/sacrifices] 
+		[note: arena137/locked | There's a strange door in the caves, guarded by a man. He insisted it was nothing. |+ jericho unwanted_visitors actual_cliff_village]
 		* Was Bairo right about the inhabitants of the village? Something strange is going on here.
 
 {otherwise}[! $arena completed]
@@ -108,7 +109,7 @@ You -- #{$name}? Uh... yes. I did sign a waiver... I guess.
 :arena_entry
 [Global set_stat: arena137/name | $name]
 Well, #{$name}, welcome to the arena!
-[+stat: arena137/entered]
+[note: arena137/entered | There's an arena down in the caves here. |+ actual_cliff_village]
 You -- Arena? You play sports down here?
 What exciting! Never has Vaeler seen this! Ever!
 You -- But what sort of sport is it?
@@ -121,7 +122,7 @@ You -- But... why?
 Strength. It's hard world. Those who cannot harder, die!
 You -- I... see. I didn't sign up to be /in/ the chasm, did I?
 You did! If you want to hunt, we will prepare the chasm! The entry is only twenty-five gems.
-: loop_choice	
+:loop_choice	
 > {Global.count("gem") >= 25}[skip] (Pay 25 gems) I mean, I've got nothing better to do at the moment. Throw me in!
 	[$: cost | #25]
 	I mean, I've got nothing better to do at the moment. Throw me in!
@@ -141,6 +142,7 @@ You -- Really?
 There are creatures roaming at night. Perhaps those are what you hear?
 [exit]
 
+:note(arena137/escape)
 :note(bairo/sacrifices) 
 :note(bairo/conspiracy)
 :note(visited/abandoned_village)
@@ -152,6 +154,8 @@ There are creatures roaming at night. Perhaps those are what you hear?
 		[++: sus]
 	[stat?: bairo/conspiracy]
 		[++: sus | #2]
+	[stat?: arena137/escape]
+		[++: sus | #2]
 	[Global task_exists: the_village_gate]
 		[++: sus]
 	{$sus > 2}
@@ -160,15 +164,21 @@ There are creatures roaming at night. Perhaps those are what you hear?
 				You -- There's an entire abandoned village outside the nearby tower.
 			[Global task_exists: the_village_gate]
 				You -- I had to clear the gate outside Hideaway just to leave the village.
+			[stat?: arena137/escape]
+				You -- Someone in town told me spectres are escaping the arena somehow.
 			[stat?: bairo/conspiracy]
 				You -- They've been invading people's homes, for God's sake.
 			You -- You're telling me those are just a coincidence?
 		Hm... Well, perhaps there are more around than usual. But the arena is very secure. We are not responsible for this.
 		You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
-		I will show you.
+		I'll tell somebody to unlock the door for you. It's at the bottom of the arena. Check for yourself and see we are very secure.
+		[+stat: arena137/pen_access]
+		[+stat: arena137/show_pen]
+		[exit]
 	{otherwise}
 		They come and go. Whatever you seen was coincidence. Nothing more.
 		* You've seen spectres everywhere, but what you've seen may well be a coincidence.
+		* Perhaps you need to find more specific examples of unusual activity.
 		[+stat: arena/denied_suspicion]
 {otherwise}
 	You -- Do you know anything about the spectres roaming the area recently?
