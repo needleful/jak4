@@ -40,7 +40,7 @@ void fragment() {
 	
 	vec4 color_green = texture(ground_green, position.xz*uv_scale);
 	vec4 color_black = texture(ground_black, position.xz*uv_scale_black);
-	float ground_mix = COLOR.g;
+	float ground_mix = sqrt(clamp(COLOR.g, 0.0, 1.0));
 	vec4 color_y_up = mix( color_black, color_green,
 		ground_mix);
 		

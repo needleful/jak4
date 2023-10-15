@@ -31,14 +31,15 @@ static func resize_buttons(buttons: Array):
 		if l:
 			b.rect_min_size.y = l.get_content_height() + l.margin_top*2
 
-static func calculate_bounds(node: Spatial, top_level := true) -> AABB:
+static func calculate_bounds(node: Spatial, top_level := true, max_depth := 6) -> AABB:
 	var box: AABB = AABB()
 	if node is VisualInstance:
 		box = node.get_aabb()
-	for c in node.get_children():
-		if c is Spatial:
-			var child_bounds := calculate_bounds(c, false) 
-			box = box.merge(child_bounds)
+	if max_depth > 0:
+		for c in node.get_children():
+			if c is Spatial:
+				var child_bounds := calculate_bounds(c, false, max_depth - 1) 
+				box = box.merge(child_bounds)
 	if !top_level:
 		box = node.transform.xform(box)
 	return box
