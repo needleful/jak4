@@ -1,6 +1,9 @@
 extends Spatial
 class_name GameArena
 
+signal game_started
+signal game_ended
+
 export(String) var friendly_id := ""
 const arena_overlay: PackedScene = preload("res://ui/games/arena_overlay.tscn")
 var timer : Timer
@@ -43,12 +46,18 @@ func _ready():
 		add_child(timer)
 	var _x = timer.connect("timeout", self, "_on_timeout")
 	set_process(false)
-	clear_scenarios()
+	clear_scenarios(false)
 
-func clear_scenarios():
+func clear_scenarios(clear_base: bool):
 	for c in get_children():
 		if c is ArenaScenario:
 			remove_child(c)
+			scenarios[c.name] = c
+		elif c.name == "base":
+			if clear_base:
+				remove_child(c)
+			else:
+				c.show()
 			scenarios[c.name] = c
 
 func start_game(p_scenario: String):
@@ -63,7 +72,7 @@ func start_game(p_scenario: String):
 	var _x = player.connect("died", self, "_on_player_died")
 	_x = player.connect("damaged", self, "_on_player_damaged")
 	
-	clear_scenarios()
+	clear_scenarios(true)
 	cs = scenario.scenario
 	add_child(scenario)
 	scenario.show()
@@ -87,6 +96,7 @@ func start_game(p_scenario: String):
 	overlay.combo_countdown = 0
 	player.game_ui.set_value(0)
 	spawn_wave()
+	emit_signal("game_started")
 
 func _process(delta):
 	overlay.time_remaining = timer.time_left
@@ -211,6 +221,10 @@ func end():
 	set_process(false)
 	overlay = null
 	timer.stop()
+	clear_scenarios(true)
+	add_child(scenarios["base"])
+	emit_signal("game_ended")
+	player.fade_in()
 
 func award_stat():
 	return "award/"+scenario.name

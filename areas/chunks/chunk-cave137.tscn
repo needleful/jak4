@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=2]
+[gd_scene load_steps=109 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -63,6 +63,15 @@
 [ext_resource path="res://entities/control/spawner.gd" type="Script" id=61]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=62]
 [ext_resource path="res://entities/env/copper/copper_fountain.tscn" type="PackedScene" id=63]
+[ext_resource path="res://ui/items/vis/fake_arena_access.tscn" type="PackedScene" id=64]
+[ext_resource path="res://entities/env/electrical/drink_fridge.tscn" type="PackedScene" id=65]
+[ext_resource path="res://entities/env/furniture/stump_table.tscn" type="PackedScene" id=66]
+[ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=67]
+[ext_resource path="res://entities/env/copper/light_hang1.tscn" type="PackedScene" id=68]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=69]
+[ext_resource path="res://entities/env/copper/platform_small.tscn" type="PackedScene" id=70]
+[ext_resource path="res://dialog/side_content/arena/pen_guard.dialog" type="Resource" id=71]
+[ext_resource path="res://dialog/side_content/arena/arena_worker.dialog" type="Resource" id=72]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -260,6 +269,37 @@ tracks/0/keys = {
 "values": [ Vector3( 0.130199, 0, -0.0116382 ) ]
 }
 
+[sub_resource type="Animation" id=278]
+resource_name = "Activate"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("upper_entry/upper_door-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.8, 1, 1.5, 2 ),
+"transitions": PoolRealArray( 1.93187, 0.482968, 0.574349, 2.07053, 1 ),
+"update": 0,
+"values": [ Vector3( -1.6363, 2.00154, 0.254799 ), Vector3( 1.64874, 2.00154, 0.130936 ), Vector3( 1.62476, 2.00154, 0.13184 ), Vector3( 1.61008, 2.00154, -0.257648 ), Vector3( 1.59539, 2.00154, -0.647137 ) ]
+}
+
+[sub_resource type="Animation" id=279]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("upper_entry/upper_door-kine:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -1.6363, 2.00154, 0.254799 ) ]
+}
+
 [sub_resource type="QuadMesh" id=21]
 
 [sub_resource type="ShaderMaterial" id=22]
@@ -276,6 +316,8 @@ shader_param/foam_noise = ExtResource( 14 )
 
 [sub_resource type="BoxShape" id=23]
 extents = Vector3( 58.7561, 10, 41.9473 )
+
+[sub_resource type="BoxShape" id=274]
 
 [sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 39 )
@@ -312,15 +354,12 @@ shader_param/wall = ExtResource( 50 )
 shader_param/ground = ExtResource( 50 )
 shader_param/ceiling = ExtResource( 50 )
 
-[sub_resource type="BoxShape" id=274]
-
 [sub_resource type="SphereShape" id=277]
 
 [node name="chunk-cave137" groups=["navmesh"] instance=ExtResource( 40 )]
 script = ExtResource( 1 )
 
 [node name="env" type="Area" parent="active_entities" index="0"]
-visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 9 )
@@ -545,7 +584,6 @@ distance = 40.0
 
 [node name="env_evil" type="Area" parent="active_entities" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 81.7208, -196.732, -64.4167 )
-visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 9 )
@@ -778,115 +816,122 @@ transform = Transform( 113.904, 0, 0, 0, -4.89297e-06, 40, 0, -111.938, -1.74846
 mesh = SubResource( 10 )
 material/0 = SubResource( 11 )
 
-[node name="rock4" parent="active_entities/cave_center" index="1" instance=ExtResource( 4 )]
+[node name="fake_arena_access_pickup" parent="active_entities/cave_center" index="1" instance=ExtResource( 3 )]
+transform = Transform( 0.849271, 0.236817, 0.471866, -0.0194752, 0.907201, -0.420248, -0.527599, 0.347715, 0.77507, -41.6517, 4.75957, 14.4684 )
+item_id = "fake_arena_access"
+
+[node name="fake_arena_access" parent="active_entities/cave_center/fake_arena_access_pickup" index="4" instance=ExtResource( 64 )]
+transform = Transform( 0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0 )
+
+[node name="rock4" parent="active_entities/cave_center" index="2" instance=ExtResource( 4 )]
 transform = Transform( 0.724206, 0.65176, -0.225242, -0.66895, 0.743307, 0, 0.167424, 0.150676, 0.974303, -32.1422, -10.4952, 13.1038 )
 
-[node name="rock7" parent="active_entities/cave_center" index="2" instance=ExtResource( 10 )]
+[node name="rock7" parent="active_entities/cave_center" index="3" instance=ExtResource( 10 )]
 transform = Transform( 0.253288, -0.940803, -0.225242, 0.965617, 0.259968, 0, 0.0585557, -0.217497, 0.974303, -4.00161, -15.34, 29.4285 )
 
-[node name="rock8" parent="active_entities/cave_center" index="3" instance=ExtResource( 7 )]
+[node name="rock8" parent="active_entities/cave_center" index="4" instance=ExtResource( 7 )]
 transform = Transform( 0.974303, -0.0128871, 0.224873, 0, -0.998362, -0.0572146, 0.225242, 0.0557443, -0.972707, 16.7363, -13.0374, 13.3171 )
 
-[node name="rock14" parent="active_entities/cave_center" index="4" instance=ExtResource( 7 )]
+[node name="rock14" parent="active_entities/cave_center" index="5" instance=ExtResource( 7 )]
 transform = Transform( 0.788839, 0.0128871, 0.614465, -0.0444095, 0.998362, 0.0360736, -0.612993, -0.0557443, 0.788119, 1.69131, -11.8255, -3.59484 )
 
-[node name="rock9" parent="active_entities/cave_center" index="5" instance=ExtResource( 13 )]
+[node name="rock9" parent="active_entities/cave_center" index="6" instance=ExtResource( 13 )]
 transform = Transform( 0.974303, -0.224887, -0.0126419, 0, 0.056126, -0.998424, 0.225242, 0.972767, 0.0546837, -8.17221, -1.0362, -3.13006 )
 
-[node name="rock10" parent="active_entities/cave_center" index="6" instance=ExtResource( 10 )]
+[node name="rock10" parent="active_entities/cave_center" index="7" instance=ExtResource( 10 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -9.4011, -18.1059, -4.10583 )
 
-[node name="rock11" parent="active_entities/cave_center" index="7" instance=ExtResource( 10 )]
+[node name="rock11" parent="active_entities/cave_center" index="8" instance=ExtResource( 10 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -11.042, -18.1059, 2.99206 )
 
-[node name="rock12" parent="active_entities/cave_center" index="8" instance=ExtResource( 4 )]
+[node name="rock12" parent="active_entities/cave_center" index="9" instance=ExtResource( 4 )]
 transform = Transform( 0.974303, -0.149533, -0.168446, 0, 0.747843, -0.663876, 0.225242, 0.646816, 0.728625, 24.3855, 5.4378, -44.7331 )
 
-[node name="rock16" parent="active_entities/cave_center" index="9" instance=ExtResource( 13 )]
+[node name="rock16" parent="active_entities/cave_center" index="10" instance=ExtResource( 13 )]
 transform = Transform( 0.94753, -0.21316, 0.238222, 0.127976, 0.935843, 0.328362, -0.292932, -0.280646, 0.914018, 36.4219, 24.504, -38.0327 )
 
-[node name="rock17" parent="active_entities/cave_center" index="10" instance=ExtResource( 7 )]
+[node name="rock17" parent="active_entities/cave_center" index="11" instance=ExtResource( 7 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 10.1089, 18.276, -43.402 )
 
-[node name="rock18" parent="active_entities/cave_center" index="11" instance=ExtResource( 7 )]
+[node name="rock18" parent="active_entities/cave_center" index="12" instance=ExtResource( 7 )]
 transform = Transform( 0.468247, 0.0262993, -0.883206, 0.112782, -0.99316, 0.0302199, -0.87637, -0.11376, -0.46801, 12.3019, 14.7371, -43.8194 )
 
-[node name="rock15" parent="active_entities/cave_center" index="12" instance=ExtResource( 4 )]
+[node name="rock15" parent="active_entities/cave_center" index="13" instance=ExtResource( 4 )]
 transform = Transform( 0.348389, -0.762541, -0.54512, 0.849586, 0.0111832, 0.527332, -0.396016, -0.646843, 0.651741, 41.9806, 7.37516, -35.9552 )
 
-[node name="basin" parent="active_entities/cave_center" index="13" instance=ExtResource( 15 )]
+[node name="basin" parent="active_entities/cave_center" index="14" instance=ExtResource( 15 )]
 transform = Transform( -0.186192, 0.976682, 0.106888, -0.98157, -0.180143, -0.0637871, -0.0430444, -0.116795, 0.992223, 46.3165, -11.123, 1.39699 )
 
-[node name="drill2" parent="active_entities/cave_center" index="14" instance=ExtResource( 17 )]
+[node name="drill2" parent="active_entities/cave_center" index="15" instance=ExtResource( 17 )]
 transform = Transform( 0.974303, -0.116537, 0.192751, 0, -0.855752, -0.517386, 0.225242, 0.504091, -0.833761, 6.80146, -2.8977, 49.1733 )
 
-[node name="tower" parent="active_entities/cave_center" index="15" instance=ExtResource( 18 )]
+[node name="tower" parent="active_entities/cave_center" index="16" instance=ExtResource( 18 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 14.6714, -16.8234, 40.4158 )
 
-[node name="palace2" parent="active_entities/cave_center" index="16" instance=ExtResource( 16 )]
+[node name="palace2" parent="active_entities/cave_center" index="17" instance=ExtResource( 16 )]
 transform = Transform( 0.186308, 0.467966, -0.863885, 0.521378, -0.79235, -0.316774, -0.832739, -0.391394, -0.391608, 18.2459, -18.4647, 3.60324 )
 
-[node name="scrap_pile1" parent="active_entities/cave_center" index="17" instance=ExtResource( 19 )]
+[node name="scrap_pile1" parent="active_entities/cave_center" index="18" instance=ExtResource( 19 )]
 transform = Transform( 0.687925, 0.689946, -0.225242, -0.708143, 0.706069, 0, 0.159036, 0.159503, 0.974303, -2.01161, -2.0455, 33.7423 )
 
-[node name="scrap_pile2" parent="active_entities/cave_center" index="18" instance=ExtResource( 19 )]
+[node name="scrap_pile2" parent="active_entities/cave_center" index="19" instance=ExtResource( 19 )]
 transform = Transform( 0.687925, -0.205844, -0.695978, -0.708143, 0.0197604, -0.705793, 0.159036, 0.978385, -0.132174, -6.09991, -11.4832, 28.8193 )
 
-[node name="scrap_pile3" parent="active_entities/cave_center" index="19" instance=ExtResource( 20 )]
+[node name="scrap_pile3" parent="active_entities/cave_center" index="20" instance=ExtResource( 20 )]
 transform = Transform( 0.974303, 0.193849, -0.114702, 0, 0.509238, 0.860626, 0.225242, -0.83851, 0.496152, -1.17947, -24.5627, 17.9955 )
 
-[node name="scrap_pile4" parent="active_entities/cave_center" index="20" instance=ExtResource( 20 )]
+[node name="scrap_pile4" parent="active_entities/cave_center" index="21" instance=ExtResource( 20 )]
 transform = Transform( -0.906003, -0.0797884, -0.415682, 0.423257, -0.178353, -0.888281, -0.00326362, -0.980726, 0.19536, -2.09209, -25.8703, 19.9709 )
 
-[node name="scrap4" parent="active_entities/cave_center" index="21" instance=ExtResource( 21 )]
+[node name="scrap4" parent="active_entities/cave_center" index="22" instance=ExtResource( 21 )]
 transform = Transform( 0.0025796, -0.000506997, -0.999996, 0.192832, 0.981232, 0, 0.981228, -0.192831, 0.00262943, -5.84636, 8.4688, -10.3964 )
 
-[node name="mine_shack" parent="active_entities/cave_center" index="22" instance=ExtResource( 22 )]
+[node name="mine_shack" parent="active_entities/cave_center" index="23" instance=ExtResource( 22 )]
 transform = Transform( 0.974303, -0.101596, -0.201028, 0, 0.892497, -0.451053, 0.225242, 0.439462, 0.869562, -6.83623, -7.8799, -34.156 )
 
-[node name="bug_pickup4" parent="active_entities/cave_center" index="23" instance=ExtResource( 5 )]
+[node name="bug_pickup4" parent="active_entities/cave_center" index="24" instance=ExtResource( 5 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -38.9695, 4.4388, 12.7856 )
 
-[node name="bug_pickup5" parent="active_entities/cave_center" index="24" instance=ExtResource( 5 )]
+[node name="bug_pickup5" parent="active_entities/cave_center" index="25" instance=ExtResource( 5 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -7.19126, 0.2953, -26.8372 )
 
-[node name="bug_pickup10" parent="active_entities/cave_center" index="25" instance=ExtResource( 5 )]
+[node name="bug_pickup10" parent="active_entities/cave_center" index="26" instance=ExtResource( 5 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -10.157, 0.304836, -3.8141 )
 
-[node name="stamina_up_pickup" parent="active_entities/cave_center" index="26" instance=ExtResource( 25 )]
+[node name="stamina_up_pickup" parent="active_entities/cave_center" index="27" instance=ExtResource( 25 )]
 transform = Transform( 0.974303, 0.223896, 0.0245864, 0, -0.109156, 0.994025, 0.225242, -0.968481, -0.106351, -9.51597, 10.8565, -0.487911 )
 
-[node name="gem_pickup" parent="active_entities/cave_center" index="27" instance=ExtResource( 28 )]
+[node name="gem_pickup" parent="active_entities/cave_center" index="28" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 35.8325, 17.5681, -31.7416 )
 
-[node name="gem_pickup2" parent="active_entities/cave_center" index="28" instance=ExtResource( 28 )]
+[node name="gem_pickup2" parent="active_entities/cave_center" index="29" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 38.3398, 20.634, -34.3657 )
 
-[node name="gem_pickup3" parent="active_entities/cave_center" index="29" instance=ExtResource( 28 )]
+[node name="gem_pickup3" parent="active_entities/cave_center" index="30" instance=ExtResource( 28 )]
 transform = Transform( 0.974302, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974302, 33.3657, 21.7511, -41.7328 )
 
-[node name="gem_pickup4" parent="active_entities/cave_center" index="30" instance=ExtResource( 28 )]
+[node name="gem_pickup4" parent="active_entities/cave_center" index="31" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 30.206, 28.6968, -39.7072 )
 
-[node name="gem_pickup5" parent="active_entities/cave_center" index="31" instance=ExtResource( 28 )]
+[node name="gem_pickup5" parent="active_entities/cave_center" index="32" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -11.3853, 9.63504, 1.48051 )
 
-[node name="gem_pickup6" parent="active_entities/cave_center" index="32" instance=ExtResource( 28 )]
+[node name="gem_pickup6" parent="active_entities/cave_center" index="33" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 6.02393, 5.5242, 17.7984 )
 
-[node name="gem_pickup7" parent="active_entities/cave_center" index="33" instance=ExtResource( 28 )]
+[node name="gem_pickup7" parent="active_entities/cave_center" index="34" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 1.74623, 0.886658, 28.3187 )
 
-[node name="bug_pickup" parent="active_entities/cave_center" index="34" instance=ExtResource( 5 )]
+[node name="bug_pickup" parent="active_entities/cave_center" index="35" instance=ExtResource( 5 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -4.78975, 7.42539, 26.9709 )
 
-[node name="gem_pickup8" parent="active_entities/cave_center" index="35" instance=ExtResource( 28 )]
+[node name="gem_pickup8" parent="active_entities/cave_center" index="36" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 13.2424, 29.6208, -36.8223 )
 
-[node name="gem_pickup9" parent="active_entities/cave_center" index="36" instance=ExtResource( 28 )]
+[node name="gem_pickup9" parent="active_entities/cave_center" index="37" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 9.07521, 38.0744, -42.1187 )
 
-[node name="gem_pickup10" parent="active_entities/cave_center" index="37" instance=ExtResource( 28 )]
+[node name="gem_pickup10" parent="active_entities/cave_center" index="38" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 7.22888, 37.4559, -39.8589 )
 
 [node name="door_entry" type="AnimationPlayer" parent="active_entities/zone_arena" index="0"]
@@ -902,15 +947,20 @@ anims/RESET = SubResource( 273 )
 script = ExtResource( 46 )
 tracked_stat = "arena137/show_pen"
 
-[node name="npc_jericho" parent="active_entities/zone_arena" index="2" instance=ExtResource( 29 )]
+[node name="door_upper" type="AnimationPlayer" parent="active_entities/zone_arena" index="2"]
+anims/Activate = SubResource( 278 )
+anims/RESET = SubResource( 279 )
+script = ExtResource( 46 )
+
+[node name="npc_jericho" parent="active_entities/zone_arena" index="3" instance=ExtResource( 29 )]
 transform = Transform( 0.748995, 0, -0.662576, 0, 1, 0, 0.662576, 0, 0.748995, -24.5474, 15.2065, 37.1319 )
 dialog = ExtResource( 33 )
 visual_name = "Jericho"
 
-[node name="copper_fountain" parent="active_entities/zone_arena" index="3" instance=ExtResource( 63 )]
-transform = Transform( 0.964479, 0, -0.26416, 0, 1, 0, 0.26416, 0, 0.964479, -0.870779, 17.3941, -26.7742 )
+[node name="copper_fountain" parent="active_entities/zone_arena" index="4" instance=ExtResource( 63 )]
+transform = Transform( 0.964479, 0, -0.26416, 0, 1, 0, 0.26416, 0, 0.964479, 0.00583267, 16.8881, -26.6014 )
 
-[node name="arena" type="Spatial" parent="active_entities/zone_arena" index="4"]
+[node name="arena" type="Spatial" parent="active_entities/zone_arena" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.295486, -22.9784, -1.59966 )
 script = ExtResource( 32 )
 
@@ -984,7 +1034,7 @@ scenario = ExtResource( 36 )
 transform = Transform( -0.505452, 0, -0.862855, 0, 1, 0, 0.862855, 0, -0.505452, 18.092, 0, 20.1908 )
 
 [node name="spawn2" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="1" groups=["deathgnat"]]
-transform = Transform( 0.871148, 0, -0.491021, 0, 1, 0, 0.491021, 0, 0.871148, 15.8048, 6.66971, -14.3242 )
+transform = Transform( 0.871148, 0, -0.491021, 0, 1, 0, 0.491021, 0, 0.871148, 9.3015, 11.9194, -7.68996 )
 
 [node name="spawn3" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="2" groups=["deathgnat"]]
 transform = Transform( 0.192775, 0, 0.981243, 0, 1, 0, -0.981243, 0, 0.192775, -19.2027, -0.886614, -8.35549 )
@@ -993,24 +1043,39 @@ transform = Transform( 0.192775, 0, 0.981243, 0, 1, 0, -0.981243, 0, 0.192775, -
 transform = Transform( -0.685705, 0, 0.727879, 0, 1, 0, -0.727879, 0, -0.685705, -15.0528, -0.886614, 25.4423 )
 
 [node name="spawn5" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats/spawns" index="4" groups=["deathgnat"]]
-transform = Transform( -0.292573, 0, -0.956243, 0, 1, 0, 0.956243, 0, -0.292573, 17.6125, 31.3077, 7.59563 )
+transform = Transform( 0.00550811, 0, -0.999985, 0, 1, 0, 0.999985, 0, 0.00550811, 16.5766, 31.3077, 7.78442 )
 
 [node name="player_start" type="Position3D" parent="active_entities/zone_arena/arena/deathgnats" index="1"]
 transform = Transform( 0.0679783, 0, 0.997687, 0, 1, 0, -0.997687, 0, 0.0679783, -22.6976, -10.0082, 14.7205 )
 
-[node name="OmniLight8" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="2"]
+[node name="tower" parent="active_entities/zone_arena/arena/deathgnats" index="2" instance=ExtResource( 18 )]
+transform = Transform( 0.495416, -0.756281, 0.427319, 0.868182, 0.414842, -0.272337, 0.0286935, 0.50591, 0.862109, 11.3106, -7.05361, 2.21204 )
+
+[node name="rail_cart" parent="active_entities/zone_arena/arena/deathgnats" index="3" instance=ExtResource( 26 )]
+transform = Transform( -0.969052, 0, 0.246856, 0, 1, 0, -0.246856, 0, -0.969052, 28.6814, 5.38066, 13.0805 )
+
+[node name="rail_cart2" parent="active_entities/zone_arena/arena/deathgnats" index="4" instance=ExtResource( 26 )]
+transform = Transform( -0.964817, 0, -0.262923, 0, 1, 0, 0.262923, 0, -0.964817, 29.4406, 11.9973, -1.60062 )
+
+[node name="tower2" parent="active_entities/zone_arena/arena/deathgnats" index="5" instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2547, -9.77669, -7.99 )
+
+[node name="OmniLight8" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3147, 14.8645, -3.9408 )
-light_color = Color( 1, 0.580392, 0.580392, 1 )
+light_color = Color( 0.898039, 0.580392, 1, 1 )
 omni_range = 44.8053
 script = ExtResource( 31 )
 distance = 100.0
 
-[node name="OmniLight9" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="3"]
+[node name="OmniLight9" type="OmniLight" parent="active_entities/zone_arena/arena/deathgnats" index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.4499, 14.4199, 7.65651 )
-light_color = Color( 1, 0.776471, 0.580392, 1 )
+light_color = Color( 0.8, 1, 0.580392, 1 )
 omni_range = 48.4464
 script = ExtResource( 31 )
 distance = 100.0
+
+[node name="platform_small" parent="active_entities/zone_arena/arena/deathgnats" index="8" instance=ExtResource( 70 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.8614, -2.31099, 9.58443 )
 
 [node name="basic_mix" type="Spatial" parent="active_entities/zone_arena/arena" index="2"]
 visible = false
@@ -1207,7 +1272,253 @@ transform = Transform( 0.572704, 0, 0.819762, 0, 1, 0, -0.819762, 0, 0.572704, -
 [node name="deathgnat_static3" type="Position3D" parent="active_entities/zone_arena/arena/flooded_basic/spawns" index="15" groups=["deathgnat_static"]]
 transform = Transform( 0.417083, 0, -0.908868, 0, 1, 0, 0.908868, 0, 0.417083, -13.6207, 5.14056, 8.6448 )
 
-[node name="arena_entry" parent="active_entities/zone_arena" index="5"]
+[node name="base" type="Spatial" parent="active_entities/zone_arena/arena" index="4"]
+
+[node name="OmniLight" type="OmniLight" parent="active_entities/zone_arena/arena/base" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.4674, 24.3154, 3.64295 )
+light_color = Color( 0.835294, 0.584314, 0.584314, 1 )
+omni_range = 47.3595
+script = ExtResource( 31 )
+distance = 80.0
+
+[node name="OmniLight2" type="OmniLight" parent="active_entities/zone_arena/arena/base" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3095, 44.7152, 0.18541 )
+light_color = Color( 0.901961, 0.823529, 0.654902, 1 )
+omni_range = 26.0878
+script = ExtResource( 31 )
+distance = 60.0
+
+[node name="palace_roof1" parent="active_entities/zone_arena/arena/base" index="2" instance=ExtResource( 43 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.9865, -10.7833, 4.78889 )
+
+[node name="npc2" parent="active_entities/zone_arena/arena/base" index="3" instance=ExtResource( 29 )]
+transform = Transform( 0.323465, 0, -0.94624, 0, 1, 0, 0.94624, 0, 0.323465, 23.4582, -4.77407, -2.80372 )
+dialog = ExtResource( 72 )
+visual_name = "Arena Worker"
+
+[node name="npc" parent="active_entities/zone_arena/arena/base" index="4" instance=ExtResource( 29 )]
+transform = Transform( -0.862601, 0, 0.505886, 0, 1, 0, -0.505886, 0, -0.862601, -18.6896, -8.92631, 14.8272 )
+dialog = ExtResource( 72 )
+visual_name = "Arena Worker"
+
+[node name="npc3" parent="active_entities/zone_arena/arena/base" index="5" instance=ExtResource( 29 )]
+transform = Transform( 0.984169, 0, -0.177234, 0, 1, 0, 0.177234, 0, 0.984169, 10.2322, -9.57635, -36.8188 )
+visual_name = "Arena Guard"
+
+[node name="audience" type="Spatial" parent="active_entities/zone_arena" index="6"]
+transform = Transform( -0.936154, 0, -0.351589, 0, 1, 0, 0.351589, 0, -0.936154, 24.0793, 7.42533, 4.91364 )
+
+[node name="drink_fridge" parent="active_entities/zone_arena/audience" index="0" instance=ExtResource( 65 )]
+transform = Transform( 0.970945, 0, -0.239303, 0, 1, 0, 0.239303, 0, 0.970945, 0, 0, 0 )
+
+[node name="sitting_pillow" parent="active_entities/zone_arena/audience" index="1" instance=ExtResource( 69 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.485031, -0.123162, -1.949 )
+
+[node name="sitting_pillow2" parent="active_entities/zone_arena/audience" index="2" instance=ExtResource( 69 )]
+transform = Transform( -0.135847, 0, -0.99073, 0, 1, 0, 0.99073, 0, -0.135847, 1.81895, -0.270222, -2.89124 )
+
+[node name="sitting_pillow3" parent="active_entities/zone_arena/audience" index="3" instance=ExtResource( 69 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.262543, 0.136742, 3.62809 )
+
+[node name="sitting_pillow4" parent="active_entities/zone_arena/audience" index="4" instance=ExtResource( 69 )]
+transform = Transform( -0.540888, 0, -0.841095, 0, 1, 0, 0.841095, 0, -0.540888, -0.0514679, 0.250008, 5.18058 )
+
+[node name="stump_table" parent="active_entities/zone_arena/audience" index="5" instance=ExtResource( 66 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43145, -0.0349483, -5.2404 )
+
+[node name="light_hang1" parent="active_entities/zone_arena/audience" index="6" instance=ExtResource( 68 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40097, 5.57552, -0.605068 )
+
+[node name="light_hang2" parent="active_entities/zone_arena/audience" index="7" instance=ExtResource( 68 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.53249, 5.6359, -6.30586 )
+
+[node name="table2" parent="active_entities/zone_arena/audience" index="8" instance=ExtResource( 67 )]
+transform = Transform( 0.729722, 0, -0.683743, 0, 1, 0, 0.683743, 0, 0.729722, 2.62009, 0.0372515, -7.84573 )
+
+[node name="npc" parent="active_entities/zone_arena/audience" index="9" instance=ExtResource( 29 )]
+transform = Transform( -0.0177796, 0, 0.999842, 0, 1, 0, -0.999842, 0, -0.0177796, -0.138229, 0.38409, 5.14121 )
+visual_name = "Spectator"
+sitting = true
+
+[node name="npc2" parent="active_entities/zone_arena/audience" index="10" instance=ExtResource( 29 )]
+transform = Transform( -0.0177795, 0, 0.999842, 0, 1, 0, -0.999842, 0, -0.0177795, -0.270088, 0.24213, 3.62873 )
+visual_name = "Spectator"
+sitting = true
+
+[node name="npc3" parent="active_entities/zone_arena/audience" index="11" instance=ExtResource( 29 )]
+transform = Transform( 0.55425, 0, 0.83235, 0, 1, 0, -0.83235, 0, 0.55425, 1.7767, -0.160672, -2.75565 )
+visual_name = "Spectator"
+sitting = true
+
+[node name="npc4" parent="active_entities/zone_arena/audience" index="12" instance=ExtResource( 29 )]
+transform = Transform( -0.519741, 0, -0.854324, 0, 1, 0, 0.854324, 0, -0.519741, 0.873856, -0.0751009, 0.921055 )
+visual_name = "Spectator"
+
+[node name="pens_area" type="Spatial" parent="active_entities/zone_arena" index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.4479, -45.7378, -8.62563 )
+
+[node name="rail_cart" parent="active_entities/zone_arena/pens_area" index="0" instance=ExtResource( 26 )]
+transform = Transform( 0.91052, 0.224695, -0.347081, -0.255156, 0.965895, -0.0440628, 0.325343, 0.12868, 0.936799, -11.7857, -3.10706, 13.1074 )
+
+[node name="rail_cart2" parent="active_entities/zone_arena/pens_area" index="1" instance=ExtResource( 26 )]
+transform = Transform( 0.91052, 0.224695, -0.347081, -0.255156, 0.965895, -0.0440628, 0.325343, 0.12868, 0.936799, -11.7857, -3.10706, 13.1074 )
+
+[node name="rail_cart3" parent="active_entities/zone_arena/pens_area" index="2" instance=ExtResource( 26 )]
+transform = Transform( 0.91052, 0.261644, -0.320148, -0.255156, 0.964854, 0.0628578, 0.325343, 0.0244545, 0.945279, -9.70948, -3.17446, 7.24393 )
+
+[node name="rail_cart4" parent="active_entities/zone_arena/pens_area" index="3" instance=ExtResource( 26 )]
+transform = Transform( 0.710813, 0.626299, -0.320148, -0.643699, 0.762692, 0.0628579, 0.283543, 0.161399, 0.945279, -7.64308, -2.20456, 7.87928 )
+
+[node name="rail_cart5" parent="active_entities/zone_arena/pens_area" index="4" instance=ExtResource( 26 )]
+transform = Transform( 0.745225, 0.626299, -0.228888, -0.64651, 0.762692, -0.0180088, 0.163292, 0.161399, 0.973286, -9.13918, -2.27556, 14.02 )
+
+[node name="scrap_pile4" parent="active_entities/zone_arena/pens_area" index="5" instance=ExtResource( 27 )]
+transform = Transform( 0.118828, -0.0289158, 0.992494, 0.236441, 0.971646, 1.76162e-09, -0.964352, 0.234667, 0.122296, -13.711, -1.57446, 25.381 )
+
+[node name="crawly" parent="active_entities/zone_arena/pens_area" index="6" instance=ExtResource( 11 )]
+transform = Transform( 0.34146, 0, -0.939896, 0, 1, 0, 0.939896, 0, 0.34146, 17.8724, -5.75346, -3.20496 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="crawly2" parent="active_entities/zone_arena/pens_area" index="7" instance=ExtResource( 11 )]
+transform = Transform( 0.34146, 0, -0.939896, 0, 1, 0, 0.939896, 0, 0.34146, 22.0815, -3.70646, -0.302773 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly2" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly2/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="crawly3" parent="active_entities/zone_arena/pens_area" index="8" instance=ExtResource( 11 )]
+transform = Transform( -0.78229, 0, -0.622915, 0, 1, 0, 0.622915, 0, -0.78229, 15.7139, -5.50056, 0.817665 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly3" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly3/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="crawly4" parent="active_entities/zone_arena/pens_area" index="9" instance=ExtResource( 11 )]
+transform = Transform( 0.898134, 0, 0.439721, 0, 1, 0, -0.439721, 0, 0.898134, 14.1187, -5.10516, -4.60696 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly4" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly4/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="crawly5" parent="active_entities/zone_arena/pens_area" index="10" instance=ExtResource( 11 )]
+transform = Transform( -0.758058, 0, 0.652187, 0, 1, 0, -0.652187, 0, -0.758058, 12.8053, -4.98366, -0.856964 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly5" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly5/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="crawly6" parent="active_entities/zone_arena/pens_area" index="11" instance=ExtResource( 11 )]
+transform = Transform( -0.758058, 0, 0.652187, 0, 1, 0, -0.652187, 0, -0.758058, 20.1465, -5.58766, 0.420067 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/crawly6" index="14"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/crawly6/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat" parent="active_entities/zone_arena/pens_area" index="12" instance=ExtResource( 53 )]
+transform = Transform( -0.262569, 0, -0.964913, 0, 1, 0, 0.964913, 0, -0.262569, 19.3609, -3.19176, 7.75948 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat2" parent="active_entities/zone_arena/pens_area" index="13" instance=ExtResource( 53 )]
+transform = Transform( 0.836345, 0, 0.548204, 0, 1, 0, -0.548204, 0, 0.836345, 23.622, 2.01944, 4.90756 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat2" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat2/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat3" parent="active_entities/zone_arena/pens_area" index="14" instance=ExtResource( 53 )]
+transform = Transform( -0.999449, 0, -0.033176, 0, 1, 0, 0.033176, 0, -0.999449, 15.6468, -1.11766, 9.52285 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat3" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat3/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat4" parent="active_entities/zone_arena/pens_area" index="15" instance=ExtResource( 53 )]
+transform = Transform( 0.956415, 0, 0.292009, 0, 1, 0, -0.292009, 0, 0.956415, 16.3659, -2.21886, 6.31423 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat4" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat4/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat5" parent="active_entities/zone_arena/pens_area" index="16" instance=ExtResource( 53 )]
+transform = Transform( 0.606686, 0, -0.794942, 0, 1, 0, 0.794942, 0, 0.606686, 28.6847, 0.0111427, 6.55241 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat5" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat5/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="deathgnat6" parent="active_entities/zone_arena/pens_area" index="17" instance=ExtResource( 53 )]
+transform = Transform( -0.107221, 0, -0.994235, 0, 1, 0, 0.994235, 0, -0.107221, 30.4656, 4.32314, 6.85838 )
+
+[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/pens_area/deathgnat6" index="9"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/pens_area/deathgnat6/custom_awareness" index="0"]
+shape = SubResource( 274 )
+
+[node name="npc5" parent="active_entities/zone_arena/pens_area" index="18" instance=ExtResource( 29 )]
+transform = Transform( 0.597047, 0, -0.802206, 0, 1, 0, 0.802206, 0, 0.597047, 7.74963, -4.27846, 5.98463 )
+dialog = ExtResource( 71 )
+visual_name = "Pen Guard"
+custom_entry = "guard1"
+
+[node name="npc4" parent="active_entities/zone_arena/pens_area" index="19" instance=ExtResource( 29 )]
+transform = Transform( -0.670402, 0, -0.741998, 0, 1, 0, 0.741998, 0, -0.670402, 8.22914, -4.16686, 2.85845 )
+dialog = ExtResource( 71 )
+visual_name = "Pen Guard"
+custom_entry = "guard2"
+
+[node name="OmniLight" type="SpotLight" parent="active_entities/zone_arena/pens_area" index="20"]
+transform = Transform( -0.235082, 0.344243, -0.908974, 0.212829, 0.930718, 0.297435, 0.948389, -0.123534, -0.29206, -25.5257, 4.62485, 29.9803 )
+light_color = Color( 0.737255, 0.439216, 0.388235, 1 )
+light_energy = 0.719
+light_negative = true
+spot_range = 46.203
+spot_angle = 37.0838
+
+[node name="bug_pickup" parent="active_entities/zone_arena/pens_area" index="21" instance=ExtResource( 5 )]
+transform = Transform( -0.72824, 0, 0.685322, 0, 1, 0, -0.685322, 0, -0.728239, -15.4302, -1.85243, 34.734 )
+
+[node name="arena_entry" parent="active_entities/zone_arena" index="8"]
 material/0 = ExtResource( 45 )
 
 [node name="door1-kine" parent="active_entities/zone_arena/arena_entry" index="0"]
@@ -1233,13 +1544,21 @@ material/0 = ExtResource( 45 )
 [node name="StaticBody" parent="active_entities/zone_arena/arena_entry" index="2"]
 collision_layer = 257
 
-[node name="bridge" parent="active_entities/zone_arena" index="6"]
+[node name="bridge" parent="active_entities/zone_arena" index="9"]
 material/0 = SubResource( 13 )
 
 [node name="StaticBody" parent="active_entities/zone_arena/bridge" index="0"]
 collision_layer = 257
 
-[node name="pen_doors" parent="active_entities/zone_arena" index="7"]
+[node name="large_upper_fence" parent="active_entities/zone_arena" index="10"]
+material/0 = SubResource( 270 )
+material/1 = SubResource( 271 )
+
+[node name="StaticBody" parent="active_entities/zone_arena/large_upper_fence" index="0"]
+collision_layer = 16
+collision_mask = 10
+
+[node name="pen_doors" parent="active_entities/zone_arena" index="11"]
 material/0 = ExtResource( 49 )
 
 [node name="door-kine" parent="active_entities/zone_arena/pen_doors" index="0"]
@@ -1263,7 +1582,7 @@ collision_mask = 10
 [node name="StaticBody" parent="active_entities/zone_arena/pen_doors" index="2"]
 collision_layer = 257
 
-[node name="pens" parent="active_entities/zone_arena" index="8"]
+[node name="pens" parent="active_entities/zone_arena" index="12"]
 material/0 = ExtResource( 49 )
 
 [node name="fence2" parent="active_entities/zone_arena/pens" index="0"]
@@ -1274,143 +1593,25 @@ material/1 = SubResource( 271 )
 collision_layer = 16
 collision_mask = 10
 
-[node name="rail_cart" parent="active_entities/zone_arena" index="9" instance=ExtResource( 26 )]
-transform = Transform( 0.91052, 0.224695, -0.347081, -0.255156, 0.965895, -0.0440628, 0.325343, 0.12868, 0.936799, 35.6622, -48.8449, 4.48175 )
+[node name="upper_entry" parent="active_entities/zone_arena" index="13"]
+material/0 = ExtResource( 49 )
 
-[node name="rail_cart2" parent="active_entities/zone_arena" index="10" instance=ExtResource( 26 )]
-transform = Transform( 0.91052, 0.224695, -0.347081, -0.255156, 0.965895, -0.0440628, 0.325343, 0.12868, 0.936799, 35.6622, -48.8449, 4.48175 )
+[node name="upper_door-kine" parent="active_entities/zone_arena/upper_entry" index="0"]
+transform = Transform( 0.99929, 0, 0.037678, 0, 1, 0, -0.037678, 0, 0.99929, -1.6363, 2.00154, 0.254799 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="rail_cart3" parent="active_entities/zone_arena" index="11" instance=ExtResource( 26 )]
-transform = Transform( 0.91052, 0.261644, -0.320148, -0.255156, 0.964854, 0.0628578, 0.325343, 0.0244545, 0.945279, 37.7384, -48.9123, -1.3817 )
+[node name="mesh" parent="active_entities/zone_arena/upper_entry/upper_door-kine" index="0"]
+material/0 = ExtResource( 45 )
 
-[node name="rail_cart4" parent="active_entities/zone_arena" index="12" instance=ExtResource( 26 )]
-transform = Transform( 0.710813, 0.626299, -0.320148, -0.643699, 0.762692, 0.0628579, 0.283543, 0.161399, 0.945279, 39.8048, -47.9424, -0.746353 )
+[node name="upper_fence" parent="active_entities/zone_arena/upper_entry" index="1"]
+material/0 = SubResource( 270 )
+material/1 = SubResource( 271 )
 
-[node name="rail_cart5" parent="active_entities/zone_arena" index="13" instance=ExtResource( 26 )]
-transform = Transform( 0.745225, 0.626299, -0.228888, -0.64651, 0.762692, -0.0180088, 0.163292, 0.161399, 0.973286, 38.3087, -48.0134, 5.39431 )
-
-[node name="scrap_pile4" parent="active_entities/zone_arena" index="14" instance=ExtResource( 27 )]
-transform = Transform( 0.118828, -0.0289158, 0.992494, 0.236441, 0.971646, 1.76162e-09, -0.964352, 0.234667, 0.122296, 33.7369, -47.3123, 16.7554 )
-
-[node name="crawly" parent="active_entities/zone_arena" index="15" instance=ExtResource( 11 )]
-transform = Transform( 0.34146, 0, -0.939896, 0, 1, 0, 0.939896, 0, 0.34146, 65.3203, -51.4913, -11.8306 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="crawly2" parent="active_entities/zone_arena" index="16" instance=ExtResource( 11 )]
-transform = Transform( 0.34146, 0, -0.939896, 0, 1, 0, 0.939896, 0, 0.34146, 69.5294, -49.4443, -8.92841 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly2" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly2/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="crawly3" parent="active_entities/zone_arena" index="17" instance=ExtResource( 11 )]
-transform = Transform( -0.78229, 0, -0.622915, 0, 1, 0, 0.622915, 0, -0.78229, 63.1618, -51.2384, -7.80797 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly3" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly3/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="crawly4" parent="active_entities/zone_arena" index="18" instance=ExtResource( 11 )]
-transform = Transform( 0.898134, 0, 0.439721, 0, 1, 0, -0.439721, 0, 0.898134, 61.5666, -50.843, -13.2326 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly4" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly4/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="crawly5" parent="active_entities/zone_arena" index="19" instance=ExtResource( 11 )]
-transform = Transform( -0.758058, 0, 0.652187, 0, 1, 0, -0.652187, 0, -0.758058, 60.2532, -50.7215, -9.4826 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly5" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly5/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="crawly6" parent="active_entities/zone_arena" index="20" instance=ExtResource( 11 )]
-transform = Transform( -0.758058, 0, 0.652187, 0, 1, 0, -0.652187, 0, -0.758058, 67.5944, -51.3255, -8.20557 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/crawly6" index="14"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/crawly6/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat" parent="active_entities/zone_arena" index="21" instance=ExtResource( 53 )]
-transform = Transform( -0.262569, 0, -0.964913, 0, 1, 0, 0.964913, 0, -0.262569, 66.8088, -48.9296, -0.866158 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat2" parent="active_entities/zone_arena" index="22" instance=ExtResource( 53 )]
-transform = Transform( 0.836345, 0, 0.548204, 0, 1, 0, -0.548204, 0, 0.836345, 71.0699, -43.7184, -3.71807 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat2" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat2/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat3" parent="active_entities/zone_arena" index="23" instance=ExtResource( 53 )]
-transform = Transform( -0.999449, 0, -0.033176, 0, 1, 0, 0.033176, 0, -0.999449, 63.0947, -46.8555, 0.897217 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat3" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat3/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat4" parent="active_entities/zone_arena" index="24" instance=ExtResource( 53 )]
-transform = Transform( 0.956415, 0, 0.292009, 0, 1, 0, -0.292009, 0, 0.956415, 63.8138, -47.9567, -2.3114 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat4" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat4/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat5" parent="active_entities/zone_arena" index="25" instance=ExtResource( 53 )]
-transform = Transform( 0.606686, 0, -0.794942, 0, 1, 0, 0.794942, 0, 0.606686, 76.1326, -45.7267, -2.07323 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat5" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat5/custom_awareness" index="0"]
-shape = SubResource( 274 )
-
-[node name="deathgnat6" parent="active_entities/zone_arena" index="26" instance=ExtResource( 53 )]
-transform = Transform( -0.107221, 0, -0.994235, 0, 1, 0, 0.994235, 0, -0.107221, 77.9135, -41.4147, -1.76726 )
-
-[node name="custom_awareness" type="Area" parent="active_entities/zone_arena/deathgnat6" index="9"]
-collision_layer = 0
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/deathgnat6/custom_awareness" index="0"]
-shape = SubResource( 274 )
+[node name="StaticBody" parent="active_entities/zone_arena/upper_entry/upper_fence" index="0"]
+collision_layer = 16
+collision_mask = 10
 
 [node name="emblem" parent="active_entities/zone_spawn" index="0"]
 material/0 = ExtResource( 58 )
@@ -1492,3 +1693,10 @@ material/1 = ExtResource( 58 )
 
 [node name="StaticBody" parent="izone_spawn/spawning_chamber" index="0"]
 collision_layer = 257
+
+[connection signal="game_ended" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_entry" method="reset_power"]
+[connection signal="game_ended" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_pen_entry" method="reset_power"]
+[connection signal="game_ended" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_upper" method="clear_power"]
+[connection signal="game_started" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_entry" method="clear_power"]
+[connection signal="game_started" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_pen_entry" method="clear_power"]
+[connection signal="game_started" from="active_entities/zone_arena/arena" to="active_entities/zone_arena/door_upper" method="_on_activated"]

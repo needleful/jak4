@@ -973,7 +973,14 @@ transform = Transform( -0.416785, 0, -0.909005, 0, 1, 0, 0.909005, 0, -0.416785,
 [node name="laili_new_home" type="Position3D" parent="active_entities/zone_city" index="14"]
 transform = Transform( -0.664428, 0, 0.747352, 0, 1, 0, -0.747353, 0, -0.664427, 61.2697, -9.70754, -23.491 )
 
-[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="15"]
+[node name="npc_laili" parent="active_entities/zone_city" index="15" instance=ExtResource( 29 )]
+transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
+climbing_path = NodePath("../laili_points")
+laili_start = NodePath("../laili_climb_start")
+player_start = NodePath("../laili_points/start")
+on_monument = true
+
+[node name="not_pre_flight" type="Spatial" parent="active_entities/zone_city" index="16"]
 script = ExtResource( 35 )
 condition = "!Global.stat(\"laili/pre_flight\")"
 listen_for_change = true
@@ -982,13 +989,6 @@ listen_for_change = true
 transform = Transform( -0.21231, 0, 0.977202, 0, 1, 0, -0.977202, 0, -0.21231, -1.50587, 24.8676, 1.58049 )
 
 [node name="laili_plane_blanket" parent="active_entities/zone_city/not_pre_flight/laili_plane_v1" index="9" instance=ExtResource( 37 )]
-
-[node name="npc_laili" parent="active_entities/zone_city" index="16" instance=ExtResource( 29 )]
-transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
-climbing_path = NodePath("../laili_points")
-laili_start = NodePath("../laili_climb_start")
-player_start = NodePath("../laili_points/start")
-on_monument = true
 
 [node name="scrap4" parent="active_entities/zone_city" index="17" instance=ExtResource( 45 )]
 transform = Transform( -0.00323469, 0.999995, 0, -0.999995, -0.00323469, 0, 0, 0, 1, -239.104, -31.399, 280.045 )
@@ -1163,7 +1163,7 @@ transform = Transform( 0.340863, -0.939985, -0.0155046, -0.940112, -0.340834, -0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 89.6746, -75.3301, 4.80309 )
 
 [node name="ruin1" parent="zone_cliff" index="8" instance=ExtResource( 67 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 79.5416, -75.5912, 28.529 )
+transform = Transform( 0.991974, -0.126445, 0, 0.126445, 0.991974, 0, 0, 0, 1, 79.5416, -76.3641, 28.529 )
 
 [node name="ruin4" parent="zone_cliff" index="9" instance=ExtResource( 67 )]
 transform = Transform( -0.0418249, 0, -0.999125, 0, 1, 0, 0.999125, 0, -0.0418249, 106.91, -81.59, 41.4237 )

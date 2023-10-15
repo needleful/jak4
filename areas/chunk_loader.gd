@@ -25,6 +25,7 @@ var _load_queue : Array
 var _load_thread := Thread.new()
 
 var loaded_first := false
+var bounds_cache := BoundsCache.new()
 
 func _init():
 	_status = {}
@@ -181,3 +182,15 @@ func is_active(chunk: Spatial):
 
 func empty_queue():
 	return _load_queue.empty()
+
+func get_bounds(chunk: Node):
+	var state := get_chunk_state(chunk)
+	return bounds_cache.get_bounds(chunk, state)
+
+func get_chunk_state(chunk: Node) -> int:
+	if is_active(chunk):
+		return BoundsCache.State.Active
+	elif is_loaded(chunk):
+		return BoundsCache.State.Inactive
+	else:
+		return BoundsCache.State.LowRes

@@ -1,7 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://audio/env/amb_fridge.ogg" type="AudioStream" id=1]
 [ext_resource path="res://_glb/env/electrical/drink_fridge.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=3]
+[ext_resource path="res://material/env/electrical/albedo_drink_fridge.png" type="Texture" id=4]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 3 )
+shader_param/subsurface_scattering = null
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/main_texture = ExtResource( 4 )
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_transparent = true
@@ -11,6 +22,7 @@ roughness = 0.0
 [node name="drink_fridge" instance=ExtResource( 2 )]
 
 [node name="mesh" parent="drink_fridge-kine" index="0"]
+material/0 = SubResource( 2 )
 material/1 = SubResource( 1 )
 
 [node name="SpotLight" type="SpotLight" parent="." index="1"]

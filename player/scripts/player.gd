@@ -662,12 +662,13 @@ func _physics_process(delta):
 				if after(TIME_TO_SIT, desired_velocity.length() < 0.001, 2):
 					next_state = State.Sitting
 		State.Climb:
-			drain_stamina(
-				(desired_velocity.length() + STAMINA_DRAIN_MIN)
-				* STAMINA_DRAIN_CLIMB
-				* delta
-				* (1.0-sqrt(max(current_normal.y, 0)))
-			)
+			if !best_floor or !best_floor.is_in_group("ladder"):
+				drain_stamina(
+					(desired_velocity.length() + STAMINA_DRAIN_MIN)
+					* STAMINA_DRAIN_CLIMB
+					* delta
+					* (1.0-sqrt(max(current_normal.y, 0)))
+				)
 			if total_stamina() >= 0 and pressed("mv_jump"):
 				drain_stamina(STAMINA_DRAIN_WALLJUMP)
 				if current_normal == Vector3.ZERO:

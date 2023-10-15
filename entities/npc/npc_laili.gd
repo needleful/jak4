@@ -61,6 +61,7 @@ func cancel_climb() -> bool:
 func _on_game_completed():
 	if CustomGames.active_game == climb_game:
 		var _x = Global.add_stat("laili/pre_flight")
+	custom_entry = "laili"
 	_disconnect_game()
 
 func _on_game_failed():

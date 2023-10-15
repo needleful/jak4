@@ -61,14 +61,11 @@ var terrain_lowres: Dictionary
 var chunk_loader: ChunkLoader
 var ignore_day := false
 var rescue_available := true
-var cached_bounds: Dictionary
-var cached_active_bounds: Dictionary
 
 func _init():
 	terrain_hires = {}
 	terrain_lowres = {}
 	env_overrides = []
-	cached_bounds = {}
 
 func _input(event):
 	if event.is_action_pressed("debug_map_view"):
@@ -100,6 +97,8 @@ func _ready():
 			print_debug("\t", int(rand_range(0, 144)))
 	
 	chunk_loader = ChunkLoader.new()
+	if Global.has_stat("_bounds_cache"):
+		chunk_loader.bounds_cache = Global.stat("_bounds_cache")
 	
 	for c in get_children():
 		if c.name.begins_with("chunk_lowres"):
@@ -163,6 +162,7 @@ func get_sun():
 
 func prepare_save():
 	Global.set_stat("clock_time", get_time())
+	Global.set_stat("_bounds_cache", chunk_loader.bounds_cache)
 
 func update_terrain_lod(pos: Vector3):
 	pos.y = 0
@@ -222,9 +222,7 @@ func load_nearby_chunks(position: Vector3, synchronous := false):
 		if chunk_loader.is_loaded(ch):
 			loaded_box.text += "\n"+ch.name
 		var local : Vector3 = position - ch.global_transform.origin
-		if !(ch.name in cached_bounds):
-			cached_bounds[ch.name] = calculate_bounds(ch, true)
-		var box: AABB = cached_bounds[ch.name] 
+		var box: AABB = chunk_loader.get_bounds(ch)
 		
 		var load_zone: AABB = box.grow(Global.render_distance*DIST_LOAD)
 		var unload_zone:AABB = box.grow(Global.render_distance*DIST_UNLOAD)
@@ -261,13 +259,7 @@ func update_active_chunks(position: Vector3):
 	var active_box = $debug/box/active_chunks
 	active_box.text = "Active Chunks:"
 	for ch in chunks.values():
-		var box: AABB
-		if is_active(ch):
-			if !(ch.name in cached_active_bounds):
-				cached_active_bounds[ch.name] = calculate_bounds(ch, true)
-			box = cached_active_bounds[ch.name]
-		else:
-			box = cached_bounds[ch.name]
+		var box: AABB = chunk_loader.get_bounds(ch)
 		if !chunk_loader.is_loaded(ch):
 			continue
 		var local : Vector3 = position - ch.global_transform.origin
@@ -287,18 +279,6 @@ func force_activate(ch: Spatial):
 
 func is_active(chunk: Spatial):
 	return chunk_loader.is_active(chunk)
-
-func calculate_bounds(node: Spatial, top_level := false) -> AABB:
-	var box: AABB = AABB()
-	if node is VisualInstance:
-		box = node.get_aabb()
-	for c in node.get_children():
-		if c is Spatial:
-			var child_bounds := calculate_bounds(c) 
-			box = box.merge(child_bounds)
-	if !top_level:
-		box = node.transform.xform(box)
-	return box
 
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")

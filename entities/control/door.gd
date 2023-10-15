@@ -35,8 +35,7 @@ func _ready():
 		tracked_stat = Global.node_stat(self)
 	if tracked_stat != "":
 		open_stat = "door/" + tracked_stat
-		var stat_power = Global.stat(tracked_stat)
-		add_power(stat_power, true)
+		reset_power()
 		var _x = Global.connect("stat_changed", self, "_on_stat_changed")
 	if open:
 		open = false
@@ -68,6 +67,10 @@ func _on_toggled(active, instant := false):
 
 func clear_power(instant := false):
 	add_power(-power, instant)
+
+func reset_power():
+	var stat_power = Global.stat(tracked_stat)
+	add_power(stat_power, true)
 
 func add_power(amount:= 1, instant := false):
 	power += amount
