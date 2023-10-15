@@ -101,12 +101,13 @@ func _ready():
 		chunk_loader.bounds_cache = Global.stat("_bounds_cache")
 	
 	for c in get_children():
-		if c.name.begins_with("chunk_lowres"):
-			var name_convert = c.name.replace("chunk_lowres", "chunk").replace("000", "")
-			terrain_lowres[name_convert] = c.mesh
-			c.queue_free()
-		elif c.name.begins_with("chunk"):
+		if c.name.begins_with("chunk") and !c.name.begins_with("chunk_lowres"):
+			var lowres_name:String = c.name.replace("chunk", "chunk_lowres")
 			terrain_hires[c.name] = c.mesh
+			if has_node(lowres_name):
+				var lowres := get_node(lowres_name)
+				terrain_lowres[c.name] = lowres.mesh
+				lowres.queue_free()
 			chunks[c.name] = c
 	chunk_loader.start_loading(chunks.values())
 

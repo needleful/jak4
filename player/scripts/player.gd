@@ -348,7 +348,7 @@ onready var hover_floor_finder := $hover_floor_finder
 onready var hover_cast := $hover_cast
 onready var hover_area := $hover_area
 
-onready var water_cast := $water_cast
+onready var water_cast := $base_mesh/water_cast
 
 onready var ui := $ui
 onready var game_ui:Control = ui.game.get_node("custom_game")
@@ -493,8 +493,6 @@ func _physics_process(delta):
 		best_floor = null
 	debug.get_node("stats/a11").text = str(average_normal)
 	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
-	debug.get_node("stats/a9").text = "Depth: " + str(max_depth)
-	
 	
 	if water_cast.is_colliding():
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
@@ -505,10 +503,13 @@ func _physics_process(delta):
 		else:
 			debug.get_node("stats/a8").text = "Splashing"
 
-		var wpart : Particles = $water_cast/Particles
-		var mpart : Particles = $base_mesh/Particles2
+		var wpart : Particles = water_cast.get_node("standing_ripple")
+		var mpart : Particles = water_cast.get_node("running_ripple")
 		wpart.emitting = true
-		mpart.emitting = velocity.length_squared() > 4
+		var emit_please_god := velocity.length_squared() > 4
+		mpart.visible = true
+		mpart.emitting = emit_please_god
+		debug.get_node("stats/a9").text = "Ripples: " + str(emit_please_god)
 		
 		var ripple_color := Color.white
 		if water_cast.get_collider().has_method("get_ripple_color"):
@@ -516,15 +517,14 @@ func _physics_process(delta):
 		wpart.process_material.color = ripple_color
 		mpart.process_material.color = ripple_color
 		
-		var ripple_pos = water_cast.get_collision_point() + Vector3.DOWN*0.0375
+		var ripple_pos = water_cast.get_collision_point() + Vector3.UP*0.01
 		wpart.global_transform.origin = ripple_pos
 		mpart.global_transform.origin = ripple_pos
 	else:
-		#debug.get_node("stats/a8").text = "Dry"
+		debug.get_node("stats/a8").text = "Dry"
 		water_depth = 0
-		
-		$water_cast/Particles.emitting = false
-		$base_mesh/Particles2.emitting = false
+		water_cast.get_node("standing_ripple").emitting = false
+		water_cast.get_node("running_ripple").emitting = false
 	
 	var next_state = State.None
 	var speed:float = (velocity).slide(ground_normal).length()
@@ -2074,11 +2074,13 @@ func set_state(next_state: int):
 			velocity += get_visual_forward()*SPEED_DASH
 			velocity.y = SPEED_DASH_V
 		State.Wading:
+			water_cast.get_node("running_ripple").emitting = true
 			can_air_spin = true
 			can_slide_lunge = true
 			wall_cling = true
 			dash_charges = Global.count("dash_charge")
 		State.WadingJump:
+			water_cast.get_node("running_ripple").emitting = true
 			reset_ground()
 			start_jump(5.0)
 		State.WallCling:

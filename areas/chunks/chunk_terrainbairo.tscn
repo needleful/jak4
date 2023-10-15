@@ -1,0 +1,204 @@
+[gd_scene load_steps=30 format=2]
+
+[ext_resource path="res://_glb/chunks/chunk_terrain.bairo.glb" type="PackedScene" id=1]
+[ext_resource path="res://entities/npc/npc.tscn" type="PackedScene" id=2]
+[ext_resource path="res://areas/chunk_content.gd" type="Script" id=3]
+[ext_resource path="res://entities/control/conditional.gd" type="Script" id=4]
+[ext_resource path="res://dialog/side_content/arena/bairo.dialog" type="Resource" id=5]
+[ext_resource path="res://dialog/side_content/arena/skull_tablet.dialog" type="Resource" id=6]
+[ext_resource path="res://entities/dialog_thing.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/env/furniture/stump_table.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/env/furniture/incense.tscn" type="PackedScene" id=9]
+[ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=10]
+[ext_resource path="res://entities/env/furniture/bottle2.tscn" type="PackedScene" id=11]
+[ext_resource path="res://entities/enemies/enemy_group.gd" type="Script" id=12]
+[ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=13]
+[ext_resource path="res://entities/wardrobe.tscn" type="PackedScene" id=14]
+[ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=15]
+[ext_resource path="res://entities/env/furniture/sitting_pillow.tscn" type="PackedScene" id=16]
+[ext_resource path="res://entities/env/stone/ruin1.tscn" type="PackedScene" id=17]
+[ext_resource path="res://entities/env/stone/hut_bath.tscn" type="PackedScene" id=18]
+[ext_resource path="res://ui/items/vis/skull_tablet.tscn" type="PackedScene" id=19]
+[ext_resource path="res://entities/env/furniture/shelf.tscn" type="PackedScene" id=20]
+[ext_resource path="res://entities/env/furniture/bed_native.tscn" type="PackedScene" id=21]
+[ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=22]
+[ext_resource path="res://material/water_surface.material" type="Material" id=23]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=24]
+[ext_resource path="res://entities/env/stone/hut.tscn" type="PackedScene" id=25]
+[ext_resource path="res://entities/env/furniture/bottle1.tscn" type="PackedScene" id=26]
+[ext_resource path="res://entities/env/stone/rock1.tscn" type="PackedScene" id=27]
+[ext_resource path="res://material/env/stone/bricks.material" type="Material" id=28]
+
+[sub_resource type="ConvexPolygonShape" id=1]
+points = PoolVector3Array( 13.1871, 0.881538, -13.5105, 4.07844, 0.881538, -11.4876, 25.5366, 0.882092, -1.54125, 19.3619, 0.881538, -7.5274, 25.6517, -4.30816, -0.975074, 13.5371, -4.40627, -12.1088, -14.0527, -3.51943, -7.0867, -23.2476, -3.22344, -5.41266, -23.2476, 0.881538, -5.4096, -23.3244, 0.881538, 5.60479, -18.0461, 0.881538, 12.304, -9.73801, 0.881538, 16.0561, -0.0108833, 0.881538, 17.7485, 9.56284, 0.881538, 16.7753, 17.9237, 0.881538, 11.4593, 23.4656, 0.881538, 6.52597, 23.4656, -4.42401, 6.54128, 17.9285, -4.78041, 11.444, 19.592, -4.35749, -6.54195, 4.34212, -4.11084, -10.4348, -18.0845, -4.14576, 12.4295, -23.3244, -3.63859, 5.60173, -9.84828, -4.08479, 16.3284, -0.0108833, -4.39518, 17.7546, 9.72583, -4.30594, 16.5274 )
+
+[node name="chunk_terrainbairo" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="spring" parent="." index="0"]
+material/0 = ExtResource( 28 )
+
+[node name="StaticBody" parent="spring" index="0"]
+collision_layer = 257
+
+[node name="water" parent="." index="1"]
+material/0 = ExtResource( 23 )
+
+[node name="water-col" type="StaticBody" parent="water" index="0"]
+collision_layer = 8448
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="water/water-col" index="0"]
+shape = SubResource( 1 )
+
+[node name="hut_zone" type="Spatial" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83601, 36.1047, -46.8123 )
+
+[node name="carpet2" parent="hut_zone" index="0" instance=ExtResource( 24 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 26.6361, 7.02899, -17.5707 )
+
+[node name="hut" parent="hut_zone" index="1" instance=ExtResource( 25 )]
+transform = Transform( -0.474866, 0, -0.880058, 0, 1, 0, 0.880058, 0, -0.474866, 26.4694, 6.06902, -17.6196 )
+
+[node name="ruin1" parent="hut_zone" index="2" instance=ExtResource( 17 )]
+transform = Transform( 0.887126, 6.96887e-08, 0.461526, 0, -1, 1.50996e-07, 0.461526, -1.33953e-07, -0.887126, 21.5474, 5.369, -17.3206 )
+
+[node name="rock2" parent="hut_zone" index="3" instance=ExtResource( 27 )]
+transform = Transform( 0.887126, -0.4458, 0.119452, 0, -0.258819, -0.965926, 0.461526, 0.856898, -0.229605, 27.9534, 2.44, -15.4658 )
+
+[node name="rock3" parent="hut_zone" index="4" instance=ExtResource( 27 )]
+transform = Transform( -0.485276, 0.415789, -0.769172, 0.859789, 0.0669873, -0.506236, -0.158963, -0.906991, -0.389998, -2.40445, 5.38977, -50.5282 )
+
+[node name="rock6" parent="hut_zone" index="5" instance=ExtResource( 27 )]
+transform = Transform( 0.381326, -0.422887, -0.822045, -0.907214, -0.342054, -0.24487, -0.177632, 0.839146, -0.514083, -1.27486, 5.52256, -62.275 )
+
+[node name="rock7" parent="hut_zone" index="6" instance=ExtResource( 27 )]
+transform = Transform( -0.822046, -0.381326, 0.422887, -0.24487, 0.907214, 0.342054, -0.514083, 0.177632, -0.839146, -7.47021, 9.71257, -68.4998 )
+
+[node name="rock8" parent="hut_zone" index="7" instance=ExtResource( 27 )]
+transform = Transform( -0.861722, 0.245529, 0.444017, -0.24487, 0.565203, -0.787771, -0.444381, -0.787566, -0.426926, -3.71252, 14.5366, -62.0626 )
+
+[node name="rock9" parent="hut_zone" index="8" instance=ExtResource( 27 )]
+transform = Transform( -0.968083, -0.197611, -0.154158, -0.24487, 0.614643, 0.749835, -0.0534236, 0.763651, -0.643415, -10.2145, 8.39256, -62.9636 )
+
+[node name="sofa" parent="hut_zone" index="9" instance=ExtResource( 22 )]
+transform = Transform( -0.996176, 0, 0.0873691, 0, 1, 0, -0.0873691, 0, -0.996176, 26.912, 7.03, -21.5256 )
+
+[node name="sofa2" parent="hut_zone" index="10" instance=ExtResource( 22 )]
+transform = Transform( 0.195422, 0, 0.98072, 0, 1, 0, -0.98072, 0, 0.195422, 30.208, 7.03, -17.1299 )
+
+[node name="rock10" parent="hut_zone" index="11" instance=ExtResource( 27 )]
+transform = Transform( -0.379468, 0.0425659, 0.924225, -0.481125, -0.862328, -0.157825, 0.790268, -0.504557, 0.347706, 34.4444, 0.496002, -13.0758 )
+
+[node name="hut_bath" parent="hut_zone" index="12" instance=ExtResource( 18 )]
+transform = Transform( 0.973001, 0, -0.230799, 0, 1, 0, 0.230799, 0, 0.973001, 25.5467, 5.82259, -32.7316 )
+
+[node name="active_entities" type="Spatial" parent="." index="3"]
+
+[node name="hut_area" type="MultiMeshSystem" parent="active_entities" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83601, 36.1047, -46.8123 )
+
+[node name="skull_tablet" parent="active_entities/hut_area" index="0" instance=ExtResource( 19 )]
+transform = Transform( 0.735902, 0, 0.144737, 0, 0.75, 0, -0.144737, 0, 0.735902, 25.1779, 10.7435, -14.3733 )
+script = ExtResource( 4 )
+condition = "!Global.stat(\"bairo/give_tablet\")"
+listen_for_change = true
+
+[node name="skull_tablet_dialog" parent="active_entities/hut_area/skull_tablet" index="1" instance=ExtResource( 7 )]
+transform = Transform( 0.55431, 0, -0.0956386, 0, 0.5625, 0, 0.0956386, 0, 0.55431, 0.0845642, -0.810242, -0.202408 )
+dialog_sequence = ExtResource( 6 )
+
+[node name="carpet" parent="active_entities/hut_area" index="1" instance=ExtResource( 24 )]
+transform = Transform( 0.926097, 0, 0.377287, 0, 1, 0, -0.377287, 0, 0.926097, 24.7897, 10.183, -16.7597 )
+
+[node name="shelf" parent="active_entities/hut_area" index="2" instance=ExtResource( 20 )]
+transform = Transform( 0.978391, 0, 0.206764, 0, 1, 0, -0.206764, 0, 0.978391, 24.047, 10.2034, -15.0851 )
+
+[node name="stump_table" parent="active_entities/hut_area" index="3" instance=ExtResource( 8 )]
+transform = Transform( -0.340743, 0, 0.940157, 0, 1, 0, -0.940157, 0, -0.340743, 25.1678, 9.7308, -14.116 )
+
+[node name="incense" parent="active_entities/hut_area/stump_table" index="1" instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.148483, 0.96756, 0.29184 )
+
+[node name="gem_pickup3" parent="active_entities/hut_area" index="4" instance=ExtResource( 10 )]
+transform = Transform( -0.755068, 0, 0.655646, 0, 1, 0, -0.655646, 0, -0.755068, 26.6269, 10.3538, -18.9319 )
+quantity = 10
+persistent = true
+
+[node name="wardrobe" parent="active_entities/hut_area" index="5" instance=ExtResource( 14 )]
+transform = Transform( -0.300945, 0, 0.953641, 0, 1, 0, -0.953641, 0, -0.300945, 23.0545, 10.1527, -17.5428 )
+
+[node name="bug_pickup" parent="active_entities/hut_area" index="6" instance=ExtResource( 13 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 26.4541, 18.369, -17.4113 )
+
+[node name="bug_pickup2" parent="active_entities/hut_area" index="7" instance=ExtResource( 13 )]
+transform = Transform( -0.685033, 0, 0.728513, 0, 1, 0, -0.728513, 0, -0.685033, -4.90468, 8.97559, -62.3523 )
+
+[node name="enemy_group" type="Spatial" parent="active_entities/hut_area" index="8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09572, 2.23872, 2.51089 )
+script = ExtResource( 12 )
+stat_name = "bairo/saved"
+
+[node name="crawly" parent="active_entities/hut_area/enemy_group" index="0" instance=ExtResource( 15 )]
+transform = Transform( -0.340743, 0, 0.940157, 0, 1, 0, -0.940157, 0, -0.340743, 27.0892, 4.01878, -20.6555 )
+respawns = false
+
+[node name="crawly3" parent="active_entities/hut_area/enemy_group" index="1" instance=ExtResource( 15 )]
+transform = Transform( -0.340743, 0, 0.940157, 0, 1, 0, -0.940157, 0, -0.340743, 35.4051, 7.9016, -20.1864 )
+respawns = false
+
+[node name="crawly2" parent="active_entities/hut_area/enemy_group" index="2" instance=ExtResource( 15 )]
+transform = Transform( -0.09986, 0, -0.995001, 0, 1, 0, 0.995001, 0, -0.09986, 33.3439, 4.67891, -20.4883 )
+respawns = false
+
+[node name="safe" type="Spatial" parent="active_entities/hut_area" index="9"]
+script = ExtResource( 4 )
+condition = "Global.stat(\"bairo/saved\")"
+
+[node name="npc_bob_safe" parent="active_entities/hut_area/safe" index="0" instance=ExtResource( 2 )]
+transform = Transform( 0.685658, 0, 0.727923, 0, 1, 0, -0.727923, 0, 0.685658, 24.7813, 10.1781, -19.8457 )
+dialog = ExtResource( 5 )
+visual_name = "Bairo"
+friendly_id = "bairo"
+
+[node name="bottle1" parent="active_entities/hut_area/safe" index="1" instance=ExtResource( 26 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 25.0015, 10.7362, -13.9131 )
+
+[node name="bottle2" parent="active_entities/hut_area/safe" index="2" instance=ExtResource( 26 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 24.0152, 11.1936, -14.2684 )
+
+[node name="bottle3" parent="active_entities/hut_area/safe" index="3" instance=ExtResource( 11 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 23.8285, 11.1944, -14.4956 )
+
+[node name="unsafe" type="Spatial" parent="active_entities/hut_area" index="10"]
+script = ExtResource( 4 )
+condition = "!Global.stat(\"bairo/saved\")"
+
+[node name="bottle1" parent="active_entities/hut_area/unsafe" index="0" instance=ExtResource( 26 )]
+transform = Transform( -0.174097, 0.869875, -0.461526, -0.980554, -0.196248, 0, -0.0905736, 0.452552, 0.887126, 23.6481, 10.2698, -19.2788 )
+
+[node name="bottle3" parent="active_entities/hut_area/unsafe" index="1" instance=ExtResource( 26 )]
+transform = Transform( 0.887126, 0.441757, 0.133634, 0, -0.289547, 0.957164, 0.461526, -0.849126, -0.256865, 24.6499, 10.299, -17.7453 )
+
+[node name="npc_bob" parent="active_entities/hut_area/unsafe" index="2" instance=ExtResource( 2 )]
+transform = Transform( 0.364421, 0, -0.931234, 0, 1, 0, 0.931234, 0, 0.364421, 19.4968, 13.1001, -19.373 )
+dialog = ExtResource( 5 )
+visual_name = "Bairo"
+friendly_id = "bairo"
+
+[node name="bottle2" parent="active_entities/hut_area/unsafe" index="3" instance=ExtResource( 11 )]
+transform = Transform( 0.887126, 0.456932, 0.0649649, 0, -0.140761, 0.990044, 0.461526, -0.878294, -0.124873, 24.8502, 10.2532, -15.3904 )
+
+[node name="sitting_pillow" parent="active_entities/hut_area" index="11" instance=ExtResource( 16 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 26.5373, 10.2036, -21.1206 )
+
+[node name="sitting_pillow2" parent="active_entities/hut_area" index="12" instance=ExtResource( 16 )]
+transform = Transform( 0.887126, 0, -0.461526, 0, 1, 0, 0.461526, 0, 0.887126, 24.9932, 10.2058, -21.1017 )
+
+[node name="bed_native" parent="active_entities/hut_area" index="13" instance=ExtResource( 21 )]
+transform = Transform( -0.639139, 0, 0.769091, 0, 1, 0, -0.769091, 0, -0.639139, 28.1731, 10.1469, -14.8424 )
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="active_entities" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 65.0209, 45.4857, -66.3502 )
+max_distance = 860.9
+extents = Vector3( 33.3415, 15.6401, 20.1282 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=2]
+[gd_scene load_steps=143 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -102,6 +102,10 @@ albedo_texture = ExtResource( 35 )
 [sub_resource type="QuadMesh" id=174]
 material = SubResource( 84 )
 
+[sub_resource type="SphereMesh" id=194]
+radius = 0.1
+height = 0.2
+
 [sub_resource type="Gradient" id=175]
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
 
@@ -117,6 +121,7 @@ width = 32
 curve = SubResource( 177 )
 
 [sub_resource type="ParticlesMaterial" id=178]
+resource_local_to_scene = true
 direction = Vector3( 0, 0, -1 )
 spread = 27.42
 flatness = 1.0
@@ -132,8 +137,12 @@ params_cull_mode = 2
 albedo_texture = ExtResource( 36 )
 
 [sub_resource type="PlaneMesh" id=93]
+resource_local_to_scene = true
 material = SubResource( 179 )
 size = Vector2( 1, 1 )
+
+[sub_resource type="PrismMesh" id=195]
+size = Vector3( 0.2, 0.2, 0.2 )
 
 [sub_resource type="SpatialMaterial" id=44]
 
@@ -745,7 +754,9 @@ moving_platform_exclude_mask = 65536
 script = ExtResource( 1 )
 flag = ExtResource( 11 )
 
-[node name="water_cast" type="RayCast" parent="."]
+[node name="base_mesh" parent="." instance=ExtResource( 3 )]
+
+[node name="water_cast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 enabled = true
@@ -755,35 +766,42 @@ script = ExtResource( 49 )
 deep_water_sounds = [ ExtResource( 55 ), ExtResource( 54 ), ExtResource( 56 ), ExtResource( 53 ) ]
 shallow_water_sounds = [ ExtResource( 52 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 57 ) ]
 
-[node name="Particles" type="Particles" parent="water_cast"]
+[node name="standing_ripple" type="Particles" parent="base_mesh/water_cast"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.19209e-07, 0 )
 lifetime = 5.0
 local_coords = false
 process_material = SubResource( 83 )
 draw_pass_1 = SubResource( 174 )
 
-[node name="water_step1" type="AudioStreamPlayer3D" parent="water_cast"]
-unit_db = -35.0
-unit_size = 5.0
-max_db = -5.0
-bus = "SFX_Player"
+[node name="MeshInstance" type="MeshInstance" parent="base_mesh/water_cast/standing_ripple"]
+visible = false
+mesh = SubResource( 194 )
 
-[node name="water_step2" type="AudioStreamPlayer3D" parent="water_cast"]
-unit_db = -35.0
-unit_size = 5.0
-max_db = -5.0
-bus = "SFX_Player"
-
-[node name="base_mesh" parent="." instance=ExtResource( 3 )]
-
-[node name="Particles2" type="Particles" parent="base_mesh"]
+[node name="running_ripple" type="Particles" parent="base_mesh/water_cast"]
 time_scale_response = false
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 2, 0 )
+transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0 )
 amount = 16
 lifetime = 1.2
 local_coords = false
 process_material = SubResource( 178 )
 draw_pass_1 = SubResource( 93 )
+
+[node name="MeshInstance" type="MeshInstance" parent="base_mesh/water_cast/running_ripple"]
+transform = Transform( 1, 1.50996e-07, 1.50996e-07, -1.50996e-07, -4.37114e-08, 1, 1.50996e-07, -1, -4.37114e-08, 0, -1.19209e-07, 0 )
+visible = false
+mesh = SubResource( 195 )
+
+[node name="water_step1" type="AudioStreamPlayer3D" parent="base_mesh/water_cast"]
+unit_db = -35.0
+unit_size = 5.0
+max_db = -5.0
+bus = "SFX_Player"
+
+[node name="water_step2" type="AudioStreamPlayer3D" parent="base_mesh/water_cast"]
+unit_db = -35.0
+unit_size = 5.0
+max_db = -5.0
+bus = "SFX_Player"
 
 [node name="flag_ref" type="Spatial" parent="base_mesh"]
 time_scale_response = false

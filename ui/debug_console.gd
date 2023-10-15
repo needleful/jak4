@@ -138,27 +138,28 @@ func view_history(offset):
 
 func tp(location):
 	print_debug("Teleport ", location)
+	var chunk_name := ""
 	if location is int:
-		var chunk_name = "chunk%03d" % location
-		var scn = get_tree().current_scene
-		if scn.has_node(chunk_name):
-			#scn.unload_all()
-			var pos = scn.get_node(chunk_name).global_transform.origin
-			var player = Global.get_player()
-			var space = player.get_world().space
-			var state = PhysicsServer.space_get_direct_state(space)
-			var ray_start = pos + Vector3.UP*3400
-			var ray_end = pos + Vector3.DOWN*1000
-			var col = state.intersect_ray(ray_start, ray_end)
-			if col:
-				pos = col.position
-			var new_transform = player.global_transform
-			new_transform.origin = pos
-			player.teleport_to(new_transform)
-		else:
-			return "No chunk: " + chunk_name
+		chunk_name = "chunk%03d" % location
 	else:
-		return "Not yet supported"
+		chunk_name = "chunk"+str(location)
+	var scn = get_tree().current_scene
+	if scn.has_node(chunk_name):
+		#scn.unload_all()
+		var pos = scn.get_node(chunk_name).global_transform.origin
+		var player = Global.get_player()
+		var space = player.get_world().space
+		var state = PhysicsServer.space_get_direct_state(space)
+		var ray_start = pos + Vector3.UP*3400
+		var ray_end = pos + Vector3.DOWN*1000
+		var col = state.intersect_ray(ray_start, ray_end)
+		if col:
+			pos = col.position
+		var new_transform = player.global_transform
+		new_transform.origin = pos
+		player.teleport_to(new_transform)
+	else:
+		return "No chunk: " + chunk_name
 
 func stats():
 	var s := ""

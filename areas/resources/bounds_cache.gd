@@ -25,6 +25,5 @@ func get_bounds(chunk: Node, state: int) -> AABB:
 			bounds_cache[chunk.name] = new_bounds.merge(bounds_cache[chunk.name])
 		else:
 			bounds_cache[chunk.name] = new_bounds
-		assert(cache_state[chunk.name] <= state)
 		cache_state[chunk.name] = state
 	return bounds_cache[chunk.name]
