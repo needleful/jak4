@@ -674,7 +674,7 @@ func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
-	if main_speaker.has_method("exit_dialog"):
+	if is_instance_valid(main_speaker) and main_speaker.has_method("exit_dialog"):
 		main_speaker.exit_dialog()
 	set_process_input(false)
 	return RESULT_END
@@ -753,7 +753,7 @@ func ternary(cond: bool, when_true, when_false):
 		return when_false
 
 func speaker_stat() -> String:
-	if !main_speaker:
+	if !is_instance_valid(main_speaker):
 		return "_NO_SPEAKER_"
 	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
 		return main_speaker.friendly_id

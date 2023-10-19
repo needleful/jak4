@@ -39,6 +39,7 @@
 		[+stat: bairo/arena]
 		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. |+ unwanted_visitors bairo actual_cliff_village]
 		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
+		[Global add_note: There's a rope ladder up the cliff here. |+ bairo_farm]
 	{otherwise}
 		You -- What? Are you terribly sure?
 		Yes! But it is no use. Nobody shall listen until poor Bairo is dead.
@@ -49,10 +50,18 @@
 		Oh no, you are right!
 		* He sighs.
 		I can reward you if you discover what evil is hidden in their caves.
+		?> [! stat?: shortcut125] It's quite the climb up those cliffs.
+			It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. Probably those no-good cannibals.
+			[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
+			[back]
 		[note: bairo/conspiracy | Bairo claims the inhabitants of the cliff village released spectres in his home to kill him (among other things). |+ unwanted_visitors bairo]
 		[Global mark_map: actual_cliff_village]
 		[note: bairo/sacrifices | Bairo wants me to find out what's inside the cave in this village. He asserts the villagers are performing blood sacrifices. |+ unwanted_visitors actual_cliff_village bairo/conspiracy]
 {otherwise}[!Global task_is_complete: unwanted_visitors]
+	?> [! stat?: shortcut125] It's quite the climb up those cliffs.
+		It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. Probably those no-good cannibals.
+		[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
+		[back]
 	[stat?: cave137/locked]
 		You -- Your skull tablet was some sort of key that deactivated the creatures.
 		Really? So could you bring it back?
@@ -75,11 +84,15 @@
 		{otherwise}
 			You -- Not yet.
 			In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
-	{otherwise}[!stat?: cave137/locked]
+	{otherwise}[! stat?: cave137/locked]
 		Have you stopped that dastardly arena?
 		You -- Not yet, I'm still figuring out what the problem is.
 		Drat! And I broke my stick trying to lean on it. I am defenseless!
 {otherwise}
+	?> [! stat?: shortcut125] It's quite the climb up those cliffs.
+		It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. I thought it was the villagers, but maybe it just broke.
+		[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
+		[back]
 	You -- How's the farm going?
 	No attacks yet, though I am missing my lucky tablet.
 	You -- It was not lucky in the slightest.

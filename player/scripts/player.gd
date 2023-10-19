@@ -475,7 +475,7 @@ func _physics_process(delta):
 	if max_depth > DEPTH_CRUSH:
 		for c in get_slide_count():
 			var n := get_slide_collision(c).collider
-			if n.is_in_group("no_crush"):
+			if !n or n.is_in_group("no_crush"):
 				crush_skip = 10
 				break
 		if crush_skip <= 0:
@@ -489,10 +489,9 @@ func _physics_process(delta):
 		ground_normal = current_normal
 	elif average_normal.y > MIN_DOT_GROUND:
 		ground_normal = average_normal
-	elif best_floor_dot < MIN_DOT_CLIMB_AIR:
-		best_floor = null
 	debug.get_node("stats/a11").text = str(average_normal)
-	debug.get_node("stats/a2").text = "Input: " + str(movement.length_squared())
+	debug.get_node("stats/a2").text = "Floor: " + (
+			"null" if !best_floor else best_floor.name)
 	
 	if water_cast.is_colliding():
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
@@ -577,7 +576,7 @@ func _physics_process(delta):
 			elif pressed("mv_crouch") and desired_velocity.dot(average_normal) > MIN_DOT_SLIDE_ROLL:
 				next_state = State.Roll
 				# TODO: maybe a neat little slide animation if you hold crouch while sliding down-hill
-			elif best_floor_dot >= MIN_DOT_CLIMB and can_climb():
+			elif can_climb(best_floor_dot):
 				next_state = State.Climb
 			elif water_depth > DEPTH_WATER_WADE:
 				next_state = State.WadingFall
@@ -599,7 +598,7 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
+			elif can_climb(current_normal.y, MIN_DOT_CLIMB_AIR):
 				next_state = State.Climb
 			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
@@ -632,8 +631,7 @@ func _physics_process(delta):
 			elif best_floor and best_floor.is_in_group("dont_stand"):
 				next_state = State.Fall
 			elif (best_floor_dot < MIN_DOT_GROUND
-				and best_floor_dot > MIN_DOT_CLIMB
-				and can_climb()
+				and can_climb(best_floor_dot)
 			):
 				if (desired_velocity.dot(average_normal) > MIN_DOT_CLIMB_MOVEMENT
 					and floor_cast.is_colliding()
@@ -654,7 +652,7 @@ func _physics_process(delta):
 			elif after(TIME_COYOTE, empty(ground_area), 1):
 				next_state = State.Fall
 			elif after(TIME_COYOTE, best_floor_dot < MIN_DOT_GROUND, 1):
-				if best_floor_dot > MIN_DOT_CLIMB and can_climb():
+				if can_climb(best_floor_dot):
 					next_state = State.Climb
 				else:
 					next_state = State.Slide
@@ -662,7 +660,9 @@ func _physics_process(delta):
 				if after(TIME_TO_SIT, desired_velocity.length() < 0.001, 2):
 					next_state = State.Sitting
 		State.Climb:
-			if !best_floor or !best_floor.is_in_group("ladder"):
+			if best_floor and best_floor.is_in_group("ladder"):
+				stamina = max_stamina
+			else:
 				drain_stamina(
 					(desired_velocity.length() + STAMINA_DRAIN_MIN)
 					* STAMINA_DRAIN_CLIMB
@@ -735,7 +735,7 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				elif empty(crouch_head):
 					next_state = State.Ground
-			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
+			elif can_climb(current_normal.y, MIN_DOT_CLIMB_AIR):
 				next_state = State.Climb
 			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
@@ -759,7 +759,7 @@ func _physics_process(delta):
 					next_state = State.Ground
 			elif can_ledge_grab():
 				next_state = State.LedgeHang
-			elif best_floor_dot > MIN_DOT_CLIMB_AIR and can_climb():
+			elif can_climb(best_floor_dot, MIN_DOT_CLIMB_AIR):
 				next_state = State.Climb
 			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
@@ -796,7 +796,7 @@ func _physics_process(delta):
 					next_state = State.Crouch
 				else:
 					next_state = State.Ground
-			elif current_normal.y > MIN_DOT_CLIMB_AIR and can_climb():
+			elif can_climb(current_normal.y, MIN_DOT_CLIMB_AIR):
 				next_state = State.Climb
 			elif can_wall_cling(current_normal):
 				next_state = State.WallCling
@@ -924,7 +924,7 @@ func _physics_process(delta):
 				next_state = State.LungeKick
 			elif pressed("combat_spin"):
 				next_state = State.SpinKick
-			elif best_floor_dot < MIN_DOT_GROUND and best_floor_dot >= MIN_DOT_CLIMB and can_climb():
+			elif best_floor_dot < MIN_DOT_GROUND and can_climb(best_floor_dot):
 				next_state = State.Climb
 			elif water_depth < DEPTH_WATER_DRY:
 				next_state = State.Ground
@@ -1172,6 +1172,7 @@ func empty(area: Area):
 	return area.get_overlapping_bodies().size() == 0
 
 func reset_ground():
+	best_floor = null
 	for i in running_ground.size():
 		running_ground[i] = Vector3.ZERO
 
@@ -1429,12 +1430,14 @@ func should_hover() -> bool:
 		and pressed("hover_toggle") 
 		and Global.count("hover_scooter"))
 
-func can_climb() -> bool:
-	return (
-		total_stamina() > MIN_CLIMB_STAMINA
-		and holding("mv_crouch")
-		and (!best_floor or !best_floor.is_in_group("dont_stand"))
-	)
+func can_climb(floor_dot: float, min_dot := MIN_DOT_CLIMB) -> bool:
+	if !best_floor or !holding("mv_crouch") or best_floor.is_in_group("dont_stand"):
+		return false
+	else:
+		var can_normal_climb:bool = (floor_dot > min_dot
+			and total_stamina() > MIN_CLIMB_STAMINA)
+		return can_normal_climb or (floor_dot > MIN_DOT_CLIMB
+			and best_floor.is_in_group("ladder"))
 
 func can_wall_cling(normal: Vector3) -> bool:
 	var res:bool = ( wall_cling 
