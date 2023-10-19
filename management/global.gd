@@ -4,6 +4,7 @@ signal inventory_changed
 signal item_changed(item, change, count)
 signal stat_changed(tag, value)
 signal journal_updated(tags)
+signal task_completed(task_name)
 
 var game_state : GameState
 # The game doesn't save in test scenes
@@ -219,6 +220,7 @@ func complete_task(task_id: String, note := "")-> bool:
 		if note != "":
 			add_note(note, [task_id])
 	abolish_notes([task_id])
+	emit_signal("task_completed", task_id)
 	return true
 
 func task_is_active(task_id: String) -> bool:

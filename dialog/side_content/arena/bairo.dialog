@@ -105,24 +105,29 @@ I suppose it was not that big a deal. I have not been eaten by monsters... yet.
 [back]
 
 :note(bairo/skull_tablet) :- Global.stat("bairo/give_tablet")
+// By default, blocks are optional.
 You -- Have you noticed anything different with me carrying the tablet?
 Not yet, but the attacks are rare. I hope my bad luck does not catch up to me without it...
 [back]
 
 :note(cave137/podium) :- Global.stat('bairo/skull_tablet') and !Global.task_is_complete("unwanted_visitors")
 :note(bairo/skull_tablet) :- Global.stat('visited/spawn137')
+[quest]
 You -- I know that skull tablet's a problem, Bairo.
 What do you mean?
 You -- There's some sort of structure in the caves with that same skull emblem. We need to take that back to where it came from.
 But it was a gift! And I got it years ago. Why would it only cause problems now?
 You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
 * Bairo sighs. He takes the skull tablet and gives it to you.
+> I'm stupid, fail the quest please.
+	[back: #false]
 [Global set_item_count: skull_tablet | #1]
 [note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ actual_cliff_village bairo unwanted_visitors bairo/skull_tablet]
 I hope it still gives me luck....
 [back]
 
 :note(bairo/skull_tablet) :- Global.stat("bairo/saved")
+[quest]
 You -- What's that strange skull tablet on your table?
 Ah, that is a sacred artifact. The dark gemstones are very rare. It has brought me good luck.
 You -- How long have you had that thing?

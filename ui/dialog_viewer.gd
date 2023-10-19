@@ -84,6 +84,8 @@ func _init():
 func _ready():
 	ui_settings_apply()
 	var _x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
+	_x = Global.connect("stat_changed", self, "_on_stat_changed")
+	_x = Global.connect("task_completed", self, "_on_task_completed")
 	remove_child(aside_template)
 	end()
 
@@ -170,6 +172,17 @@ func clear():
 func clear_replies():
 	for c in replies.get_children():
 		c.queue_free()
+
+func _on_task_completed(_task):
+	_evaluate_labels()
+
+func _on_stat_changed(_stat, _value):
+	_evaluate_labels()
+
+# TODO: evaluate every label to see if we can use an item or note for it
+func _evaluate_labels():
+	if !is_visible_in_tree():
+		return
 
 func _on_message_added(child: Node):
 	yield(get_tree(), "idle_frame")
@@ -688,6 +701,7 @@ func exit_anim(animation:String):
 
 func mention(topic):
 	discussed[topic] = true
+	_evaluate_labels()
 	return true
 
 func mentioned(topic):
@@ -701,7 +715,12 @@ func subtopic(label: String):
 	push_stack(current_item)
 	return goto(label)
 
-func back():
+# Mark this block as a quest (TODO)
+func quest():
+	pass
+
+# 'completed' indicates the player doesn't need to revisit this block
+func back(completed := true):
 	# If there's nothing on the call stack, we just continue
 	if call_stack.empty():
 		return true
