@@ -6,7 +6,6 @@ signal exited_anim(animation)
 signal event(id)
 signal event_with_source(id, source)
 signal pick_item
-signal new_contextual_reply
 signal control_screen(controlled)
 
 class CallFrame:
@@ -46,6 +45,7 @@ const RESULT_NOSKIP := {"result":"noskip"}
 
 var r_interpolate := RegEx.new()
 var r_italics := RegEx.new()
+var r_special_label := RegEx.new()
 
 var otherwise := false
 var talked := 0
@@ -67,8 +67,15 @@ const SECONDS_PER_MINUTE := 60
 const item_fallthrough := "item(_)"
 # Dictionary of arrays mapping context to messages
 var contextual_replies : Dictionary
-
 var sorted_labels : Array
+
+enum LabelState {
+	Invalid, # We don't meet the conditions for this label
+	Quest,
+	Optional,
+	Visited
+}
+var label_states : Dictionary
 
 func _init():
 	sorted_labels = []
@@ -78,14 +85,15 @@ func _init():
 	label_conditions = {}
 	contextual_replies = {}
 	variables = {}
+	label_states = {}
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
+	_x = r_special_label.compile("@?(item|note)\\(\\s*([^)]+)\\s*\\)\\s*")
 
 func _ready():
 	ui_settings_apply()
 	var _x = messages.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
-	_x = Global.connect("stat_changed", self, "_on_stat_changed")
-	_x = Global.connect("task_completed", self, "_on_task_completed")
+	_x = Global.connect("anything_changed", self, "_evaluate_labels")
 	remove_child(aside_template)
 	end()
 
@@ -126,7 +134,15 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 					p_sequence.resource_path, label, s[1]]
 				insert_label("[Error] "+ msg, "narration")
 				print_debug(msg)
-			label_conditions[l] = e
+			var e2 = _parse_special_label(label)
+			if e2:
+				label_conditions[l] = [e, e2]
+			else:
+				label_conditions[l] = e
+		else:
+			var e = _parse_special_label(l)
+			if e:
+				label_conditions[l] = e
 	sorted_labels = sequence.labels.keys()
 	sorted_labels.sort_custom(self, "_sort_labels")
 
@@ -155,7 +171,40 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 		current_item = s
 	if "friendly_id" in main_speaker and main_speaker.friendly_id != "":
 		Global.remember(main_speaker.friendly_id)
+	_evaluate_labels()
 	advance()
+
+func _parse_special_label(label: String) -> Expression:
+	var ex = Expression.new()
+	var m := r_special_label.search(label)
+	if !m:
+		return null
+	
+	var type := m.get_string(1)
+	var argument := m.get_string(2)
+	var quest_type := label.begins_with('@')
+	var ex_str := ""
+	if type == "item":
+		ex_str = "Global.count('%s')" % argument
+	elif type == "note":
+		ex_str = "Global.has_note('%s')" % argument
+	else:
+		print_debug("BUG: unknown label type: ", type)
+		return null
+	if quest_type:
+		ex_str = "_quest(%s)" % ex_str
+	var res = ex.parse(ex_str, ["Global"])
+	print(label, " --> ", ex_str)
+	if res != OK:
+		print_debug("ERROR: bad special label: `", label, "`, converted to: ", ex_str)
+		return null
+	return ex
+
+func _quest(b):
+	if b and !(b is Dictionary and "_failure" in b):
+		return {"_quest": b}
+	else:
+		return b
 
 func clear():
 	last_speaker = ""
@@ -165,8 +214,8 @@ func clear():
 	call_stack = []
 	contextual_replies = {}
 	variables = {}
-	for c in messages.get_children():
-		c.queue_free()
+	label_states = {}
+	Util.clear(messages)
 	clear_replies()
 
 func clear_replies():
@@ -181,8 +230,81 @@ func _on_stat_changed(_stat, _value):
 
 # TODO: evaluate every label to see if we can use an item or note for it
 func _evaluate_labels():
-	if !is_visible_in_tree():
+	if !main_speaker:
 		return
+	print_debug("Evaluating labels...")
+	for l in sorted_labels:
+		var quest := false
+		if l in label_conditions:
+			var res = _execute_label(l)
+			if !res or (res is Dictionary and "_failure" in res):
+				label_states[l] = LabelState.Invalid
+				continue
+			quest = res is Dictionary and "_quest" in res
+		var old_state = LabelState.Invalid
+		if l in label_states:
+			old_state = label_states[l]
+		label_states[l] = LabelState.Optional if !quest else LabelState.Quest
+		if old_state < label_states[l]:
+			print("Updated label: ", l)
+			_notify_new_item(l, label_states[l])
+
+func _notify_new_item(label: String, label_state: int):
+	var label_type:String = label.split("(", false)[0].replace("@", "")
+	var base_node: Node
+	if label_type == "item":
+		base_node = $"../item_context/VBoxContainer/show_inventory/Button"
+	elif label_type == "note":
+		base_node = $"../item_context/VBoxContainer/show_journal/Button"
+	else:
+		return
+	print_debug("New ", label_type)
+	var key := ""
+	match label_state:
+		LabelState.Invalid:
+			return
+		LabelState.Optional:
+			key = "indicator-optional/AnimationPlayer"
+		LabelState.Quest:
+			key = "indicator-quest/AnimationPlayer"
+		LabelState.Visited:
+			key = "indicator-visited/AnimationPlayer"
+	
+	var indicators := $"../buttons/trade"
+	var child_node : AnimationPlayer = base_node.get_node(key)
+	var indicator : AnimationPlayer = indicators.get_node(key)
+	if !child_node.get_parent().visible:
+		child_node.play("indicate")
+	if !indicator.get_parent().visible:
+		indicator.play("indicate")
+
+func _notify_contextual_reply():
+	# TODO: indicate it on the specific button,
+	#	with appropriate level of importance
+	var a: AnimationPlayer =(
+		$"../buttons/trade/indicator-optional/AnimationPlayer")
+	if !a.get_parent().visible:
+		a.play("indicate")
+
+func _execute_label(l: String):
+	var cond = label_conditions[l]
+	var conds: Array
+	if cond is Expression:
+		conds = [cond]
+	elif cond is Array:
+		conds = cond
+	else:
+		print_debug("Invalid condition: ", cond)
+	var res
+	for ex in conds:
+		res = ex.execute([Global], self)
+		if ex.has_execute_failed():
+			print_debug("Execution failed for ", l,
+				"\n\t", ex.get_error_text())
+			return {"_failure": ex.get_error_text()}
+		if !res:
+			break
+	return res
 
 func _on_message_added(child: Node):
 	yield(get_tree(), "idle_frame")
@@ -485,6 +607,7 @@ func check_condition(cond: String):
 	return result
 
 func end():
+	main_speaker = null
 	set_process_input(false)
 	Global.can_pause = true
 
@@ -594,8 +717,13 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogI
 		 found_label = "%s(_)" % type if fallthrough else ""
 	else:
 		found_label = type
-	for l in sorted_labels:
+	for label in sorted_labels:
+		var l: String = label
+		if l.begins_with('@'):
+			l = l.substr(1)
 		if !l.begins_with(type):
+			continue
+		if label in label_states and label_states[label] == LabelState.Invalid:
 			continue
 		if items:
 			var found := false
@@ -604,14 +732,6 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogI
 					found = true
 					break
 			if !found:
-				continue
-		if l in label_conditions:
-			var ex:Expression = label_conditions[l]
-			var res = ex.execute([Global], self)
-			if ex.has_execute_failed():
-				print_debug("Execution failed for ", l,
-					"\n\t", ex.get_error_text())
-			if !res:
 				continue
 		found_label = l
 		break
@@ -634,7 +754,7 @@ func insert_contextual_reply(message: DialogItem, context := ""):
 		contextual_replies[key].append(message)
 	else:
 		contextual_replies[key] = [message]
-	emit_signal("new_contextual_reply")
+	_notify_contextual_reply()
 
 ########################################
 ## Dialog functions
@@ -715,12 +835,8 @@ func subtopic(label: String):
 	push_stack(current_item)
 	return goto(label)
 
-# Mark this block as a quest (TODO)
-func quest():
-	pass
-
 # 'completed' indicates the player doesn't need to revisit this block
-func back(completed := true):
+func back(_completed := true):
 	# If there's nothing on the call stack, we just continue
 	if call_stack.empty():
 		return true

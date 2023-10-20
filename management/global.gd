@@ -1,6 +1,7 @@
 extends Node
 
 signal inventory_changed
+signal anything_changed
 signal item_changed(item, change, count)
 signal stat_changed(tag, value)
 signal journal_updated(tags)
@@ -146,6 +147,7 @@ func add_note(text: String, tags: Array):
 	var index := game_state.journal.size() - 1
 	add_tagged_entries(index, tags)
 	emit_signal("journal_updated", tags)
+	emit_signal("anything_changed")
 	return true
 
 func add_tagged_entries(index: int, tags:Array):
@@ -206,6 +208,8 @@ func create_task(task_id: String, note: String = "") -> bool:
 		game_state.active_tasks.append(task_id)
 		if note != "":
 			add_note(note, [task_id])
+		else:
+			emit_signal("anything_changed")
 		return true
 
 func complete_task(task_id: String, note := "")-> bool:
@@ -221,6 +225,7 @@ func complete_task(task_id: String, note := "")-> bool:
 			add_note(note, [task_id])
 	abolish_notes([task_id])
 	emit_signal("task_completed", task_id)
+	emit_signal("anything_changed")
 	return true
 
 func task_is_active(task_id: String) -> bool:
@@ -252,8 +257,10 @@ func add_item(item: String, amount:= 1) -> int:
 		var _x = add_stat(item, amount)
 	else:
 		var _x = Global.set_item_recency(item)
+	print_debug("Item added: ", item)
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount, game_state.inventory[item])
+	emit_signal("anything_changed")
 	return game_state.inventory[item]
 
 func remove_item(item: String, amount := 1) -> bool:
@@ -268,6 +275,7 @@ func set_item_count(item: String, amount: int) -> bool:
 	game_state.inventory[item] = amount
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount - old_amount, amount)
+	emit_signal("anything_changed")
 	return true
 
 func set_item_recency(item: String):
@@ -316,6 +324,7 @@ func stats(ids: Array) -> bool:
 func set_stat(tag: String, value):
 	game_state.stats[tag] = value
 	emit_signal("stat_changed", tag, value)
+	emit_signal("anything_changed")
 	return value
 
 func add_stat(tag: String, amount := 1) -> int:
@@ -325,6 +334,7 @@ func add_stat(tag: String, amount := 1) -> int:
 		game_state.stats[tag] = amount
 	var value =  game_state.stats[tag]
 	emit_signal("stat_changed", tag, value)
+	emit_signal("anything_changed")
 	return value
 
 func remove_stat(tag: String) -> bool:
@@ -339,6 +349,7 @@ func temp_stat(index: String):
 func set_temp_stat(tag: String, value):
 	stats_temp[tag] = value
 	emit_signal("stat_changed", tag, value)
+	emit_signal("anything_changed")
 	return value
 
 func add_temp_stat(tag: String, amount := 1) -> int:
@@ -348,6 +359,7 @@ func add_temp_stat(tag: String, amount := 1) -> int:
 		stats_temp[tag] = amount
 	var value =  stats_temp[tag]
 	emit_signal("stat_changed", tag, value)
+	emit_signal("anything_changed")
 	return value
 
 func get_coat_detail():

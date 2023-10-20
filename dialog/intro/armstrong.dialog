@@ -219,7 +219,6 @@
 
 
 /// ITEMS
-
 :item(wep_pistol) :- !main_speaker.in_tutorial()
 [! stat?: armstrong/pistol]
 	You -- A young woman gave me this pistol.
@@ -240,10 +239,11 @@
 	You -- Yes.
 	Alright, I'll show you the ropes.
 	[main_speaker start_tutorial: pistol]
+	[exit]
 > [skip] Maybe Layer (Skip Tutorial)
 	You -- Maybe Later.
 	Okay, let me know. I don't want you hurting yourself.
-[exit]
+[back]
 
 :item(hover_scooter)
 You -- I found this sort of hover scooter out while I was exploring.
@@ -262,7 +262,6 @@ Hm... that would do it. Perhaps when there was water.
 	> How deep are we into this cycle? If the rivers came, I imagine this place would be flooded.
 	[note: armstrong/water_cycle | Armstrong says water comes to this province in cycles: a century of rain and rivers, then five centuries of drought. | armstrong water_cycle]
 [exit]
-
 
 :note(armstrong/coats_girl)
 You -- Do people really call me “Coats Girl”?
@@ -335,6 +334,11 @@ It is, but it might have just been a story to keep us out. It did not, of course
 [Global mark_map: actual_cliff_village]
 [note: amstrong/cliff_village_caves | There are dangerous cliffs outside this village. |+ actual_cliff_village]
 [Global add_note: Armstrong used to explore caves in his childhood, before he moved to this village. |+ armstrong amstrong/cliff_village_caves]
+[back]
+
+:@item(cube)
+You -- This cube is incredibly important.
+No.
 [back]
 
 :_entry_ending

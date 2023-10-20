@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material/water_surface.material" type="Material" id=1]
+[ext_resource path="res://_glb/chunks/water_room.glb" type="PackedScene" id=2]
+[ext_resource path="res://player/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material/env/vaeler/tile.png" type="Texture" id=4]
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=5]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 5 )
+shader_param/uv_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 4 )
+shader_param/ground = ExtResource( 4 )
+shader_param/ceiling = ExtResource( 4 )
+
+[node name="water_room" instance=ExtResource( 2 )]
+
+[node name="player" parent="." index="0" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127922, -0.476051, 0.420091 )
+
+[node name="room" parent="." index="1"]
+material/0 = SubResource( 1 )
+
+[node name="StaticBody" parent="room" index="0"]
+collision_layer = 257
+
+[node name="water" parent="." index="2"]
+material/0 = ExtResource( 1 )
+
+[node name="StaticBody" parent="water" index="0"]
+collision_layer = 8192
+collision_mask = 0

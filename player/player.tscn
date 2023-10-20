@@ -1261,7 +1261,6 @@ flag = ExtResource( 11 )
 [node name="water_cast" type="RayCast" parent="base_mesh"]
 time_scale_response = false
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
-visible = false
 enabled = true
 cast_to = Vector3( 0, -2, 0 )
 collision_mask = 8192
@@ -2600,8 +2599,8 @@ anims/indicate = SubResource( 200 )
 [node name="indicator-optional" type="TextureRect" parent="ui/dialog/dialog/buttons/trade"]
 visible = false
 material = SubResource( 225 )
-margin_left = 142.0
-margin_right = 174.0
+margin_left = 106.0
+margin_right = 138.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 32, 32 )
 texture = ExtResource( 63 )
@@ -3053,11 +3052,9 @@ material/0 = SubResource( 98 )
 [connection signal="event_with_source" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_event"]
 [connection signal="exited" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited"]
 [connection signal="exited_anim" from="ui/dialog/dialog/viewer" to="." method="_on_dialog_exited_anim"]
-[connection signal="new_contextual_reply" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/buttons/trade/indicator-optional/AnimationPlayer" method="play" binds= [ "indicate" ]]
 [connection signal="pick_item" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="enter"]
 [connection signal="started" from="ui/dialog/dialog/viewer" to="ui/dialog/dialog/item_context" method="_on_dialog_started"]
 [connection signal="cancelled" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="_on_item_context_cancelled"]
-[connection signal="closed" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/buttons/trade/indicator-optional" method="hide"]
 [connection signal="context_reply" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="show_context_reply"]
 [connection signal="item_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_item"]
 [connection signal="note_picked" from="ui/dialog/dialog/item_context" to="ui/dialog/dialog/viewer" method="use_note"]
