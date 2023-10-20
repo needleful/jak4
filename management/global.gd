@@ -257,7 +257,6 @@ func add_item(item: String, amount:= 1) -> int:
 		var _x = add_stat(item, amount)
 	else:
 		var _x = Global.set_item_recency(item)
-	print_debug("Item added: ", item)
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount, game_state.inventory[item])
 	emit_signal("anything_changed")

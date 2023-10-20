@@ -10,10 +10,12 @@ signal control_screen(controlled)
 
 class CallFrame:
 	var item: DialogItem
+	var block_name: String
 	var box: Control
-	func _init(p_item: DialogItem, p_box: Control):
+	func _init(p_item: DialogItem, p_box: Control, p_block_name: String):
 		item = p_item
 		box = p_box
+		block_name = p_block_name
 
 var shopping := false setget set_shopping
 var entered_from := ""
@@ -50,13 +52,14 @@ var r_special_label := RegEx.new()
 var otherwise := false
 var talked := 0
 var skip_reply := false
-var discussed: Dictionary
+var context: Dictionary
 var variables: Dictionary
 var is_exiting := false
 # Stack of IDs for DialogItems
 var call_stack: Array
 var advance_on_resume := false
 var label_conditions : Dictionary
+var block_names: Dictionary
 
 const SECONDS_PER_YEAR := 356*24*3600
 const SECONDS_PER_MONTH := 30*24*3600
@@ -73,19 +76,26 @@ enum LabelState {
 	Invalid, # We don't meet the conditions for this label
 	Quest,
 	Optional,
-	Visited
+	Completed
 }
 var label_states : Dictionary
+
+enum BlockState {
+	Unvisited,
+	Visited,
+	Completed
+}
 
 func _init():
 	sorted_labels = []
 	fonts = {}
 	call_stack = []
-	discussed = {}
+	context = {}
 	label_conditions = {}
 	contextual_replies = {}
 	variables = {}
 	label_states = {}
+	block_names = {}
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
 	_x = r_special_label.compile("@?(item|note)\\(\\s*([^)]+)\\s*\\)\\s*")
@@ -121,11 +131,17 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	source_node = p_source_node
 	sequence = p_sequence.duplicate()
 	label_conditions = {}
+	block_names = {}
 	sorted_labels = []
 	message_list = messages
 	for l in sequence.labels:
-		if l.find(":-") >= 0:
-			var s = l.split(":-")
+		var label_ex :String = l
+		if l.find("->") >= 0:
+			var s =  l.split('->')[1]
+			label_ex = s[0]
+			block_names[l] = s[1]
+		if label_ex.find(":-") >= 0:
+			var s = label_ex.split(":-")
 			var label = s[0].strip_edges()
 			var e = Expression.new()
 			var res = e.parse(s[1], ["Global"])
@@ -194,7 +210,6 @@ func _parse_special_label(label: String) -> Expression:
 	if quest_type:
 		ex_str = "_quest(%s)" % ex_str
 	var res = ex.parse(ex_str, ["Global"])
-	print(label, " --> ", ex_str)
 	if res != OK:
 		print_debug("ERROR: bad special label: `", label, "`, converted to: ", ex_str)
 		return null
@@ -209,7 +224,7 @@ func _quest(b):
 func clear():
 	last_speaker = ""
 	is_exiting = false
-	discussed = {}
+	context = {}
 	otherwise = false
 	call_stack = []
 	contextual_replies = {}
@@ -232,7 +247,6 @@ func _on_stat_changed(_stat, _value):
 func _evaluate_labels():
 	if !main_speaker:
 		return
-	print_debug("Evaluating labels...")
 	for l in sorted_labels:
 		var quest := false
 		if l in label_conditions:
@@ -244,9 +258,15 @@ func _evaluate_labels():
 		var old_state = LabelState.Invalid
 		if l in label_states:
 			old_state = label_states[l]
-		label_states[l] = LabelState.Optional if !quest else LabelState.Quest
+		if old_state == LabelState.Completed:
+			return
+		var block_name: String = block_names[l] if l in block_names else l
+		var block_stat = speaker_stat() + "/" + block_name
+		if Global.stat(block_stat) >= BlockState.Completed:
+			label_states[l] = LabelState.Completed
+		else:
+			label_states[l] = LabelState.Optional if !quest else LabelState.Quest
 		if old_state < label_states[l]:
-			print("Updated label: ", l)
 			_notify_new_item(l, label_states[l])
 
 func _notify_new_item(label: String, label_state: int):
@@ -258,7 +278,6 @@ func _notify_new_item(label: String, label_state: int):
 		base_node = $"../item_context/VBoxContainer/show_journal/Button"
 	else:
 		return
-	print_debug("New ", label_type)
 	var key := ""
 	match label_state:
 		LabelState.Invalid:
@@ -267,7 +286,7 @@ func _notify_new_item(label: String, label_state: int):
 			key = "indicator-optional/AnimationPlayer"
 		LabelState.Quest:
 			key = "indicator-quest/AnimationPlayer"
-		LabelState.Visited:
+		LabelState.Completed:
 			key = "indicator-visited/AnimationPlayer"
 	
 	var indicators := $"../buttons/trade"
@@ -477,12 +496,12 @@ func choose_reply(item: DialogItem, skip: bool):
 	current_item = item
 	get_next()
 
-func show_context_reply(item: DialogItem):
+func show_context_reply(item: DialogItem, block_name: String):
 	if !remove_context_reply(item):
 		print_debug("Could not remove context reply: '%d'" % item.text)
 	set_process_input(true)
 	# TODO: would create a new child here
-	push_stack(current_item, true)
+	push_stack(current_item, block_name, true)
 	show_message(item.text, "You")
 	last_speaker = "You"
 	current_item = sequence.canonical_next(item)
@@ -500,8 +519,8 @@ func remove_context_reply(item: DialogItem):
 func use_note(tags:Array):
 	enable_replies()
 	var l := _find_item("note", tags, true)
-	if l:
-		_goto_special(l)
+	if !l.empty():
+		_goto_special(l[0], l[1])
 	else:
 		_no_label()
 
@@ -511,12 +530,12 @@ func use_item(id:String, desc: ItemDescription = null):
 		trade_coats()
 		return
 	var by_item := _find_item("item", [id], false)
-	if by_item:
-		_goto_special(by_item)
+	if !by_item.empty():
+		_goto_special(by_item[0], by_item[1])
 		return
 	var by_tag := _find_item("item", desc.tags if desc else [], true)
-	if by_tag:
-		_goto_special(by_tag)
+	if !by_tag.empty():
+		_goto_special(by_tag[0], by_tag[1])
 	else:
 		_no_label()
 
@@ -610,21 +629,22 @@ func end():
 	main_speaker = null
 	set_process_input(false)
 	Global.can_pause = true
+	get_tree().call_group("dialog_indicator", "play", "RESET")
 
 func trade_coats():
 	if mentioned("_coat"):
 		get_next()
 		return
-	var coat_item: DialogItem = _find_item("_coat")
-	if coat_item:
+	var coat_item := _find_item("_coat")
+	if !coat_item.empty():
 		mention("_coat")
-		push_stack(current_item, true)
-		current_item = coat_item
+		push_stack(current_item, coat_item[1], true)
+		current_item = coat_item[0]
 		advance()
 	else:
 		insert_label("[You cannot trade coats at this time]", "narration")
 
-func push_stack(item: DialogItem, special_call := false):
+func push_stack(item: DialogItem, block_name: String, special_call := false):
 	var m: Control
 	if special_call:
 		var box = aside_template.duplicate()
@@ -633,7 +653,7 @@ func push_stack(item: DialogItem, special_call := false):
 		var _x = m.connect("child_entered_tree", self, "_on_message_added", [], CONNECT_DEFERRED)
 	else:
 		m = message_list
-	call_stack.push_back(CallFrame.new(item, message_list))
+	call_stack.push_back(CallFrame.new(item, message_list, block_name))
 	message_list = m
 
 func skip_and_exit():
@@ -647,8 +667,11 @@ func fast_exit():
 		get_next()
 	else:
 		is_exiting = true
-		push_stack(current_item)
-		current_item = _find_item("_exit")
+		var exit_item = _find_item("_exit")
+		if exit_item.empty():
+			exit_item = [null, "_exit"]
+		push_stack(current_item, exit_item[1])
+		current_item = exit_item[0]
 		advance()
 
 func pause():
@@ -706,12 +729,13 @@ func _jump_next(item: DialogItem):
 	current_item = item
 	advance()
 
-func _goto_special(item: DialogItem):
-	push_stack(current_item, true)
+func _goto_special(item: DialogItem, label: String):
+	var block_name = block_names[label] if label in block_names else label
+	push_stack(current_item, block_name, true)
 	current_item = item
 	advance()
 
-func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogItem:
+func _find_item(type:String, items = null, fallthrough : bool = true) -> Array:
 	var found_label: String
 	if items:
 		 found_label = "%s(_)" % type if fallthrough else ""
@@ -733,23 +757,23 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> DialogI
 					break
 			if !found:
 				continue
-		found_label = l
+		found_label = label
 		break
 	if found_label != "" and sequence.has(found_label):
-		return sequence.find_label(found_label)
+		return [sequence.find_label(found_label), found_label]
 	else:
-		return null
+		return []
 
 func _no_label():
 	insert_label("[Nothing happened]", "narration")
 	if replies.get_child_count():
 		replies.get_child(0).grab_focus()
 
-func insert_contextual_reply(message: DialogItem, context := ""):
+func insert_contextual_reply(message: DialogItem, added_context := ""):
 	var key := "--never-remove--"
-	if context != "":
-		mention(context)
-		key = context
+	if added_context != "":
+		mention(added_context)
+		key = added_context
 	if key in contextual_replies:
 		contextual_replies[key].append(message)
 	else:
@@ -790,7 +814,7 @@ func event(tag: String, should_pause := false, auto_advance_on_resume:= true):
 func goto(label: String):
 	var item := _find_item(label)
 	if item:
-		current_item = item
+		current_item = item[0]
 		return RESULT_SKIP
 	else:
 		return false
@@ -803,43 +827,78 @@ func skip():
 func noskip():
 	return RESULT_NOSKIP
 
+func complete_block(id: String = ""):
+	return _set_block(id, BlockState.Completed)
+
+func mark_discussed(id: String = ""):
+	return _set_block(id, BlockState.Completed)
+
+func _set_block(id: String, state: int):
+	if id == "":
+		if call_stack.empty():
+			return false
+		id = call_stack[call_stack.size() - 1].block_name
+	var block_stat = speaker_stat() + "/" + id
+	if Global.stat(block_stat) < state:
+		Global.set_stat(block_stat, state)
+	return true
+
 func exit(state := PlayerBody.State.Ground):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited", state)
 	if is_instance_valid(main_speaker) and main_speaker.has_method("exit_dialog"):
 		main_speaker.exit_dialog()
-	set_process_input(false)
+	end()
 	return RESULT_END
 
 func exit_anim(animation:String):
 	var stat: String = get_talked_stat()
 	var _x = Global.add_stat(stat)
 	emit_signal("exited_anim", animation)
-	set_process_input(false)
+	end()
 	return RESULT_END
 
 func mention(topic):
-	discussed[topic] = true
+	context[topic] = true
 	_evaluate_labels()
 	return true
 
 func mentioned(topic):
-	return topic in discussed
+	return topic in context
 
 func forget(topic):
 	var _x = contextual_replies.erase(topic)
-	return discussed.erase(topic)
+	return context.erase(topic)
 
 func subtopic(label: String):
-	push_stack(current_item)
+	push_stack(current_item, block_names[label] if label in block_names else label)
 	return goto(label)
 
+func discussed(id: String = "") -> bool:
+	return _block_state(id, BlockState.Completed)
+
+func completed(id: String = "") -> bool:
+	return _block_state(id, BlockState.Completed)
+
+func _block_state(id: String, min_state: int) -> bool:
+	if id == "":
+		if call_stack.empty():
+			return false 
+		var block_name:String = call_stack[call_stack.size() - 1].block_name
+		id = block_name
+	var block_stat = speaker_stat() + "/" + id
+	return Global.stat(block_stat) >= min_state
+
 # 'completed' indicates the player doesn't need to revisit this block
-func back(_completed := true):
+func back(completed := true):
 	# If there's nothing on the call stack, we just continue
 	if call_stack.empty():
 		return true
+	if completed:
+		complete_block()
+	else:
+		mark_discussed()
 	var call_frame:CallFrame = call_stack.pop_back()
 	var caller := call_frame.item
 	message_list = call_frame.box
@@ -919,10 +978,10 @@ func say_number(v: float) -> String:
 	return NumberToString.verbose(v)
 
 func can_discuss(stat: String) -> bool:
-	return Global.stat(stat) and !Global.stat("discussed/" + speaker_stat() + "/" + stat)
+	return Global.stat(stat) and !Global.stat("context/" + speaker_stat() + "/" + stat)
 
-func mark_discussed(stat: String) -> bool:
-	var _x = Global.add_stat("discussed/" + speaker_stat() + "/" + stat)
+func mark_context(stat: String) -> bool:
+	var _x = Global.add_stat("context/" + speaker_stat() + "/" + stat)
 	return true
 
 func shop():

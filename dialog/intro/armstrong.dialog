@@ -220,7 +220,7 @@
 
 /// ITEMS
 :item(wep_pistol) :- !main_speaker.in_tutorial()
-[! stat?: armstrong/pistol]
+[! discussed]
 	You -- A young woman gave me this pistol.
 	Wow, this is from a Vaeler officer! Quite the gift! Who gave it to you? Why?
 	You -- Her name is Riley. She was being harassed by those flying spectres, so she lent me her pistol to deal with them.
@@ -231,19 +231,22 @@
 		You -- Uh, maybe I should ask her...
 		Well yes, obviously! She should not be without a firearm if she's out exploring the desert.
 	Do you want me to show you how to use it? It could be useful to protect yourself outside the city.
-	[+stat: armstrong/pistol]
-{otherwise}
+[! completed]
 	You -- Say, remember when you offered to show me how to use my pistol?
 	Right, did you want me to give you an introduction?
+{otherwise}
+	You -- Say, could you give me a refresher on my pistol?
+	Sure. Right now?
 > [skip] Yes (Begin Weapons Tutorial)
 	You -- Yes.
 	Alright, I'll show you the ropes.
 	[main_speaker start_tutorial: pistol]
+	[complete_block]
 	[exit]
 > [skip] Maybe Layer (Skip Tutorial)
 	You -- Maybe Later.
 	Okay, let me know. I don't want you hurting yourself.
-[back]
+[back: #false]
 
 :item(hover_scooter)
 You -- I found this sort of hover scooter out while I was exploring.
@@ -261,7 +264,7 @@ Hm... that would do it. Perhaps when there was water.
 		Perhaps, but then how do you explain the canyons?
 	> How deep are we into this cycle? If the rivers came, I imagine this place would be flooded.
 	[note: armstrong/water_cycle | Armstrong says water comes to this province in cycles: a century of rain and rivers, then five centuries of drought. | armstrong water_cycle]
-[exit]
+[back]
 
 :note(armstrong/coats_girl)
 You -- Do people really call me “Coats Girl”?
@@ -338,8 +341,21 @@ It is, but it might have just been a story to keep us out. It did not, of course
 
 :@item(cube)
 You -- This cube is incredibly important.
+[completed]
+	Naturally.
+	[back]
+{otherwise}[discussed]
+	This again?
 No.
-[back]
+> I insist
+	You know what? I'm in.
+	[back]
+> Drat, you've got me.
+	[discussed]
+		Like I always do.
+	{otherwise}
+		Of course I do.
+[back: #false]
 
 :_entry_ending
 [! stat?: armstrong/discussed/ending]
