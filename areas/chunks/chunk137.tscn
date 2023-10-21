@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=2]
+[gd_scene load_steps=91 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=9]
 [ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=10]
 [ext_resource path="res://entities/env/stone/rock3.tscn" type="PackedScene" id=11]
+[ext_resource path="res://dialog/side_content/chunk137/tirus.dialog" type="Resource" id=12]
 [ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=14]
 [ext_resource path="res://entities/env/copper/c_table.tscn" type="PackedScene" id=15]
@@ -20,7 +21,7 @@
 [ext_resource path="res://entities/water_hut.tscn" type="PackedScene" id=19]
 [ext_resource path="res://dialog/water/chunk137.dialog" type="Resource" id=20]
 [ext_resource path="res://dialog/side_content/chunk137/monument.dialog" type="Resource" id=21]
-[ext_resource path="res://dialog/side_content/chunk137/tavern.dialog" type="Resource" id=22]
+[ext_resource path="res://dialog/side_content/chunk137/laili.dialog" type="Resource" id=22]
 [ext_resource path="res://entities/shop_stock/temp_stock.inv" type="Resource" id=23]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=24]
 [ext_resource path="res://entities/env/stone/rock_collapsible.tscn" type="PackedScene" id=25]
@@ -334,6 +335,8 @@ polygon_points = PoolVector2Array( 304.094, -184.746, 183.886, 7.62628, -98.9865
 
 [node name="chunk137" groups=["navmesh"] instance=ExtResource( 27 )]
 script = ExtResource( 1 )
+custom_neighbors = {
+}
 
 [node name="city" parent="." index="0"]
 material/0 = ExtResource( 62 )
@@ -750,7 +753,7 @@ anims/laili_pops_out = SubResource( 8 )
 
 [node name="npc_shop_tirus" parent="active_entities/zone_city" index="4" instance=ExtResource( 24 )]
 transform = Transform( -0.976936, 0, 0.213531, 0, 1, 0, -0.213531, 0, -0.976936, 56.7071, -14.7281, 16.986 )
-dialog = ExtResource( 22 )
+dialog = ExtResource( 12 )
 visual_name = "Tirus"
 friendly_id = "tirus"
 custom_entry = "tirus"
@@ -975,6 +978,7 @@ transform = Transform( -0.664428, 0, 0.747352, 0, 1, 0, -0.747353, 0, -0.664427,
 
 [node name="npc_laili" parent="active_entities/zone_city" index="15" instance=ExtResource( 29 )]
 transform = Transform( -0.670804, 0, 0.741634, 0, 1, 0, -0.741634, 0, -0.670804, 0.632339, 24.5587, 2.67619 )
+dialog = ExtResource( 22 )
 climbing_path = NodePath("../laili_points")
 laili_start = NodePath("../laili_climb_start")
 player_start = NodePath("../laili_points/start")

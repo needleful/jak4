@@ -87,7 +87,7 @@
 		You -- Thank you dearly! It looks great!
 [back]
 
-:item(housing_paperwork) :- mentioned("paperwork")
+:@item(housing_paperwork) :- mentioned("paperwork") -> paperwork
 [Global remove_item: housing_paperwork]
 * You hand him the papers.
 You -- Here it is. So about the Medium?
@@ -97,7 +97,7 @@ It is the white building in town. Impossible to miss.
 You -- Right. I'll talk to him.
 [exit]
 
-:item(housing_paperwork) :- stat(talked/armstrong)
+:@item(housing_paperwork) :- Global.stat("talked/armstrong") -> paperwork
 [mentioned: paperwork]
 	You -- Right, here's the paperwork.
 {otherwise}
@@ -106,7 +106,7 @@ You -- Right. I'll talk to him.
 Yes, I will take those, thank you.
 [exit]
 
-:item(housing_paperwork)
+:item(housing_paperwork) -> paperwork
 [Global remove_item: housing_paperwork]
 You -- Here's the papers you mentioned in you letter. Do you know how I would get to the Medium, by the way?
 Oh, I see it's important. It is the white building in town. Impossible to miss.

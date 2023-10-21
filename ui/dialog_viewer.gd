@@ -136,11 +136,11 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	message_list = messages
 	for l in sequence.labels:
 		var label_ex :String = l
-		if l.find("->") >= 0:
-			var s =  l.split('->')[1]
+		if "->" in l:
+			var s =  l.split('->')
 			label_ex = s[0]
 			block_names[l] = s[1]
-		if label_ex.find(":-") >= 0:
+		if ":-" in label_ex:
 			var s = label_ex.split(":-")
 			var label = s[0].strip_edges()
 			var e = Expression.new()
@@ -248,6 +248,8 @@ func _evaluate_labels():
 	if !main_speaker:
 		return
 	for l in sorted_labels:
+		if l.begins_with("note("):
+			pass
 		var quest := false
 		if l in label_conditions:
 			var res = _execute_label(l)
@@ -496,11 +498,12 @@ func choose_reply(item: DialogItem, skip: bool):
 	current_item = item
 	get_next()
 
-func show_context_reply(item: DialogItem, block_name: String):
+func show_context_reply(item: DialogItem):
 	if !remove_context_reply(item):
 		print_debug("Could not remove context reply: '%d'" % item.text)
 	set_process_input(true)
-	# TODO: would create a new child here
+	# TODO: ability to mark contextual replies with unique block names
+	var block_name = "_placeholder"
 	push_stack(current_item, block_name, true)
 	show_message(item.text, "You")
 	last_speaker = "You"
@@ -844,12 +847,12 @@ func _set_block(id: String, state: int):
 	return true
 
 func exit(state := PlayerBody.State.Ground):
-	var stat: String = get_talked_stat()
-	var _x = Global.add_stat(stat)
-	emit_signal("exited", state)
 	if is_instance_valid(main_speaker) and main_speaker.has_method("exit_dialog"):
 		main_speaker.exit_dialog()
+	var stat: String = get_talked_stat()
 	end()
+	var _x = Global.add_stat(stat)
+	emit_signal("exited", state)
 	return RESULT_END
 
 func exit_anim(animation:String):

@@ -1,45 +1,45 @@
 // Inspired by Int and Elvis from "Before the Green Moon"
 :tirus
 {talked == 0}
-	Hm? Kholt mi!
+	Tirus -- Hm? Kholt mi!
 	You -- Uh, hello.
-	Oh.
-	Vaeler.
-	What brings you here?
+	Tirus -- Oh.
+		Vaeler.
+		What brings you here?
 	// TODO: if I'm not going to have a choice then remove the choice
-	You -- Just exploring, I suppose.
-	Interesting. You are pale. Be sure to wear hood or the sun will strike.
-	You -- Duly noted...
+	> Just exploring, I suppose.
+		Tirus -- Interesting. You are pale. Be sure to wear hood or the sun will strike.
+		You -- Duly noted...
 	[main_speaker scene_play: laili_pops_in]
 	* The man's eyes perk up at someone behind you.
-	Ey, kholt mi!
+	Tirus -- Ey, kholt mi!
 	[Global task_exists: flight_test]
 		* You recognize who he's looking at. It's that odd girl, Laili.
 	{otherwise} * He's talking to a young girl. She says nothing.
 	// Do you want a bit of food? I would have no trouble (lit: Trouble to me not).
-	/... Poro-nit leshene? Kirke kame tono./
+	Tirus -- / ... Poro-nit leshene? Kirke kame tono./
 	[stat?: language/basic]* You can make part of what he said: “Do you want (something) food? (Something) me not.”
 	[stat?: language/intermediate]* “Do you want some food? It's no trouble.”
 	[main_speaker scene_play: laili_pops_out]
 	* The child stares for a moment, then runs out again.
-	(Sigh) /Gara teeya.../
+	Tirus -- (Sigh) /Gara teeya.../
 	[stat?: language/intermediate] * (Sigh) So strange...
 	> [Global task_exists: flight_test] Laili's certainly a character, isn't she?
-		What? You know her?
+		Tirus -- What? You know her?
 		You -- Certainly. She's recruited me for her mischief, not that I volunteered.
-		But she talks to you? Every week she comes in, never says anything.
+		Tirus -- But she talks to you? Every week she comes in, never says anything.
 			I worried she had no family.
 		[stat?: laili/orphan]
 			You -- Oh, she doesn't. She lives on the top of the... large monument in the center of town. I don't know what it's called.
 		{otherwise}
 			You -- I'm not sure if she does. She lives on top of the... large monument in the center of town. I don't know what it's called.
-		What!? And you let her!?
+		Tirus -- What!? And you let her!?
 		You -- Well- I-... It's not like I can end homelessness, now can I?
-		Yes! You can! We have houses! We ask someone to put her in their house!
+		Tirus -- Yes! You can! We have houses! We ask someone to put her in their house!
 			Letting a child sleep alone, on cold nights... Only a Vaeler would not bat an eye.
 		You -- I'm not going to tolerate this verbal abuse. I can /ask/ her about such an arrangement, if it must be my responsibility.
 			I have to wonder if she would tolerate it. She's rather... eccentric. I can't imagine her getting on well with other people for a whole night.
-		Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
+		Tirus -- Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
 		// Adjust this so the quest doesn't drag on. No foster-home stuff, just get her to eat some food from Tirus.
 		[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
 	> {otherwise} Who was that?
@@ -49,7 +49,7 @@
 		[shop]
 		Thanks.
 	> Well, it was a lovely chat, but I must be off.
-		Yes. Do watch for the heat...
+		Tirus -- Yes. Do watch for the heat...
 	[exit]
 {otherwise}[! Global task_exists: strange_girl]
 	Hello again, uh...
@@ -58,29 +58,29 @@
 {otherwise}[Global task_is_active: strange_girl]
 	[stat?: laili/friendship][stat?: laili/flight]
 		You -- Good #{general_time()}, Tirus.
-		... 
+		Tirus -- ... 
 			How do you know my name?
 		[main_speaker scene_play: laili_pops_in]
 		Laili -- Uh.
 			* You hear someone behind you.
 			Hi.
-		... Hi. I don't think we're introduced. I'm Tirus.
+		Tirus -- ... Hi. I don't think we're introduced. I'm Tirus.
 		Laili -- Yeah.
 			...
 			Oh, right. I'm Laili.
 			I was wondering if... uh, I could 
 			borrow an apple?
-		Hm...
+		Tirus -- Hm...
 			How about I just give you one instead?
 			Less book-keeping.
 		Laili -- Uh, that works too.
 		// hand it here
 		Laili -- Thanks.
-		If you need anything, just ask. I'll help if I can.
+		Tirus -- If you need anything, just ask. I'll help if I can.
 		Laili -- ... Thanks.
 		[main_speaker scene_play: laili_pops_out]
 		* She leaves.
-		So that is progress!
+		Tirus -- So that is progress!
 			I have been talking in the hopes of finding a family with extra room for her to sleep.
 			If it fails, she can sleep in the closet here. I have a, uh, hammock somewhere.
 		[Global complete_task: strange_girl | Well, I think I did quite a lovely job getting her eating!]
@@ -96,15 +96,15 @@
 				I will keep my eyes out!
 			{otherwise}
 				You -- I haven't brought it up yet.
-				Well, what are you waiting for? I don't want her starving!
+				Tirus -- Well, what are you waiting for? I don't want her starving!
 					Did you at least find out where she lives?
 				[stat?: laili/orphan]
 					You -- Oh, she's an orphan. She lives up on top of the monument in town. Quite tragic.
 				{otherwise}
 					You -- I assume she lives on the monument in the center of town. That's where I found her, at least.
-				What?! And you let her stay there?
+				Tirus -- What?! And you let her stay there?
 				You -- I don't see how I can change that.
-				What? There are plenty of families with extra space! I will ask around, and you ask her if she wants to stop sleeping out in the cold.
+				Tirus -- What? There are plenty of families with extra space! I will ask around, and you ask her if she wants to stop sleeping out in the cold.
 					Really, this is obvious. Only a Vaeler would not understand.
 				You -- Oh, come on. I'll /ask/ her, that's no trouble. There's no need for the verbal abuse.
 				[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
@@ -115,7 +115,7 @@
 {otherwise}
 	// TODO: the task is complete, get updates on Tirus and Laili
 	> How's Laili doing?
-		Oh, she's getting along nice.
+		Tirus -- Oh, she's getting along nice.
 			There was a family. Mom, dad, little boy about five. They took her in.
 			You can go see her if you like! She's just across the road.
 
@@ -134,19 +134,19 @@
 [exit]
 
 :_tirus_laili
-I don't know. She comes in a few times a week for months now.
+Tirus -- I don't know. She comes in a few times a week for months now.
 	Never says anything. She comes in and leaves. It troubles me.
 	I ask around, and no person recognizes her.
 > Surely she has family nearby. I wouldn't worry.
-	...
+	Tirus -- ...
 > If you're busy working in here, I could look for her and ask.
-	Eh... Well, she does not like for meetings.
+	Tirus -- Eh... Well, she does not like for meetings.
 	You -- Oh, you don't need to worry, I'm quite good with children.
 	* You remember when your grandparents kicked you out of their apartment for getting angry and thrashing your younger cousins with a towel.
 	* It was two years ago, when they were eight and ten. You were twenty-five.
 	You -- ...
 		I mean, it can't go too badly...
-	It couldn't, I suppose. A gentle woman's touch is maybe what she needs.
+	Tirus -- It couldn't, I suppose. A gentle woman's touch is maybe what she needs.
 		If you talk to her, ask that she has enough food. She's skinny. 
 
 	[Global create_task: strange_girl]

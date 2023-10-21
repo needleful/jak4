@@ -336,10 +336,9 @@
 /// NOTES
 
 // LORE
-:note(war) :- Global.stat("mum/info")
+:note(war) :- Global.stat("mum/info") -> war
 You -- What was the war like?
-{Global.stat("mum/discussed/war") > 4} * She sighs and recalls it like a well-rehearsed play.
-{otherwise}{Global.stat("mum/discussed/war") > 1} Again? Alright...
+[discussed] Again? Alright...
 [stat?: mum/curiosity]
 	I remember before the war, the Vaelers were an anomaly to me. They owned the trains that delivered everything across the country, but I never saw one in person.
 	They stayed in their own isolated hamlets, sending out letters and underlings to make deals with us. There were rumors they ate Yaqazi children who strayed out into their territories. I don't know if there was any truth to these...
@@ -385,13 +384,11 @@ It was just: one day, they were ghosts. The next, their soldiers were coming off
 		The Vaelers would never notice it, and even if they did, they were terrified of the caves, or at least saw no tactical advantage to them.
 		It was a bit of a climb from my home to those caves, but it spit me out at the base of the plateau, on the opposite side from the train network.
 		[+stat: mum/caves]
-[+stat: mum/discussed]
-[+stat: mum/discussed/war]
 [back]
 [goto: _exit]
 
 // EVENTS
-:note(jackie/flaws)
+:note(jackie/flaws) :- Global.stat("mum/info") -> flaws
 You -- If you had to describe your most major flaw, what do you think it would be?
 [stat?: mum/timebomb]
 	Hm... I don't know. I have many flaws, it's hard to choose just one.
@@ -437,7 +434,7 @@ Why do you ask?
 	A rather strange thing to ask without a reason.
 [back]
 
-:note(info/mail_stealing)
+:note(info/mail_stealing) :- Global.stat("mum/info") -> mail_stealing
 You -- Have you heard anything about mail being frequently stolen?
 [stat?: info/mail_stealing/contradicted]
 	No. Rarely it happens, but I never had mail stolen. Who told you that?
@@ -446,14 +443,14 @@ You -- Have you heard anything about mail being frequently stolen?
 [back]
 
 // PLACES
-:note(visited/village_080) :- Global.stat("mum/info")
+:note(visited/village_080) :- Global.stat("mum/info") -> village_080
 You -- Do you know anything about those curious little villages up the mountain?
 I've only visited them a few times, to be honest.
 They barely speak Yaqazi.
 // TODO: anything?
 [back]
 
-:note(visited/large_cave_085) :- Global.stat("mum/info")
+:note(visited/large_cave_085) :- Global.stat("mum/info") -> large_cave_085
 You -- I found an enormous cavern with ancient structures under the plateau!
 [stat?: mum/caves]
 	Could you tell what it was for?
@@ -470,7 +467,7 @@ You -- I found an enormous cavern with ancient structures under the plateau!
 		You -- I don't know... Perhaps they were ancient miners, or researchers?
 		[stat?: mum/huh] Mhm. They are always so strange... More questions than answers.
 		{otherwise} They are always so strange... More questions than answers.
-		[+stat: mum/discussed/graveyard_085]
+		[mark_discussed: graveyard_085]
 	{otherwise}
 		You -- It was quite a large structure with many pieces, but I couldn't quite tell you what it was for.
 		Well, such is the way of things. Those ancient societies are often opaque to us.
@@ -480,11 +477,10 @@ You -- I found an enormous cavern with ancient structures under the plateau!
 	Those caves are quite dangerous, you know..
 	You -- It can be a tricky climb, but not too much trouble.
 	I'm more worried about you getting lost down there than stuck. They can be quite the labyrinths...
-[+stat: mum/discussed/large_cave_085]
 [back]
 
-:note(visited/graveyard_085) :- Global.stat("mum/info")
-[Global stats:+ visited/graveyard_085  mum/discussed/large_cave_085]
+:note(visited/graveyard_085) :- Global.stat("mum/info") -> graveyard_085
+[discussed: large_cave_085] [Global stat: visited/graveyard_085]
 	You -- Do you remember that massive cavern I saw? I explored some more and found what I believe is an ancient graveyard.
 {otherwise}
 	You -- I found what I believe is an ancient graveyard in one of those massive caves.
@@ -494,11 +490,10 @@ You -- The rest of the structures appeared to be living quarters and associated 
 {otherwise} A graveyard? You think they lived down there?
 You -- I don't know... Perhaps they were ancient miners, or researchers?
 They are always so strange... More questions than answers.
-[+stat: mum/discussed/graveyard_085]
 [back]
 
 // PEOPLE
-:note(orstad) :- Global.stat("orstad/mum") and Global.stat("mum/info")
+:note(orstad) :- Global.stat("orstad/mum") and Global.stat("mum/info") -> orstad
 You -- Do you remember Orstad?
 // You can probably find information indicating she knew him?
 [stat?: mum/abandon]
@@ -510,43 +505,38 @@ You -- Do you remember Orstad?
 	You -- He said he knew you before the war, though he hadn't talked much with you.
 	// TODO: expand here, maybe she has some opinion on him
 	I probably saw him before. Girls weren't supposed to mingle with the boys until we were older, though.
-[+stat: mum/discussed/orstad]
 [back]
 
-:note(balter) :- Global.stat("balter/mum") and Global.stat("mum/info")
+:note(balter) :- Global.stat("balter/mum") and Global.stat("mum/info") -> balter
 You -- Do you remember Balter?
 Of course. He was like a brother to me after the invasion began.
 We lived with a few other families in a crowded apartment on Crab Hill.
 // TODO: expand
 [back]
 
-:note(father) :- Global.stat("mum/info")
+:note(father) :- Global.stat("mum/info") -> father
 You -- How did you meet my father?
 // TODO: big expand
 I don't know...
-[+stat: mum/discussed]
-[+stat: mum/discussed/father]
 [back]
 [goto: _exit]
 
-:note(jackie) :- Global.stat("mum/info")
+:note(jackie) :- Global.stat("mum/info") -> jackie
 You -- Do you remember me?
 // TODO: big expand
 [back]
 
 // MUM
-:note(mum/network) :- Global.stat("mum/info")
+:note(mum/network) :- Global.stat("mum/info") -> network
 You -- So you're in the network of computers somehow? What's that like?
 // mum/time influences this 
 I didn't even realize I was in a different place at first.
 I just blinked and you were back. I had some sense the room was different.
 You -- Perhaps you're a duplicate of the original?
 ...
-[+stat: mum/discussed]
-[+stat: mum/discussed/network]
 [back]
 
-:note(mum/time) :- Global.stat("mum/timebomb") > 2 and Global.stat("mum/info")
+:note(mum/time) :- Global.stat("mum/timebomb") > 2 and Global.stat("mum/info") -> time
 You -- Mum, about your... gaps in memory. Do you want to talk about it?
 ... I don't think there's anything to discuss.
 You -- Obviously there is!
@@ -555,10 +545,9 @@ You -- ...
 // TODO: can the player choose to press further?
 // What's Mum's motivation for not talking about this?
 // Cynicism: she doesn't think Jackie would help her.
-[+stat: mum/discussed/time]
 [back]
 
-:note(mum/left) :- Global.stat("mum/info")
+:note(mum/left) :- Global.stat("mum/info") -> leaving
 You --  Why did you leave?
 // Possible reasons she left
 	// unhappy being a mother
@@ -586,22 +575,19 @@ You --  Why did you leave?
 	So I returned here, back home. Perhaps I could do better with a new family.
 	You -- I understand. That's what I'd always imagined...
 	* Almost word for word, in fact.
-
-[+stat: mum/discussed]
-[+stat: mum/discussed/leaving]
 [back]
 [goto: _exit]
 
 // TASKS
 // ITEMS
-:item(dropped_phone)
-[stat?: mum/discussed/phone/owner]
+:item(dropped_phone) :- Global.stat("mum/info") -> phone
+[discussed: phone/owner]
 	You -- I still don't understand this contraption.
 	[mentioned: head_empty] You really should return that.
 	{otherwise} Are you keeping it?
 		You -- What would I do with it? I already have a phone at home.
 	[back]
-[stat?: mum/discussed/phone]
+[discussed]
 	You -- I still don't understand this odd machine.
 	You make calls with it. Do you know whose it is?
 {otherwise}[Global task_exists: lost_phone]
@@ -620,12 +606,11 @@ Press the power button... It's the center one, near the bottom.
 // TODO: animations maybe but low priority
 You -- Can you read it?
 Yes. It's “Kolira.” No one I'm familiar with.
-[+stat: mum/discussed/phone]
-[+stat: mum/discussed/phone/owner]
+[mark_discussed: phone/owner]
 [forget: phone]
 [back]
 
-:item(tablet_key)
+:item(tablet_key) :- Global.stat("mum/info") -> tablet_key
 You -- I found this odd artefact.
 [stat?: mum/discussed/phone]
 	You -- Is it another “cell phone” everyone's so obsessed with?
@@ -642,7 +627,7 @@ Let me get a good look.
 	You'll see a matching symbol next to the doors it unlocks. The door will open for you if you're holding it.
 [back]
 
-:item(hover_scooter)
+:item(hover_scooter) :- Global.stat("mum/info")
 You -- I found this lovely little scooter!
 // TODO: make sure this stays consistent! Currently the player can get a hover scooter next to the photo of Mum
 // If new ways to get appearance are added, make it some other variable
@@ -657,7 +642,7 @@ You -- I found this lovely little scooter!
 	[stat?: mum/timebomb] I'm a little jealous, honestly.
 [back]
 
-:item(lantern)
+:item(lantern) :- Global.stat("mum/info")
 // TODO: are lanterns only in caves?
 You -- I found a lantern in the mouth of a cave. Do people often leave them around?
 [mention: head_empty]
@@ -667,12 +652,12 @@ You -- I found a lantern in the mouth of a cave. Do people often leave them arou
 	If they die, yes.
 [back]
 
-:item(long_bolt)
+:item(long_bolt) :- Global.stat("mum/info")
 You -- I found this bolt.
 ... Alright.
 [back]
 
-:item(mother_letter)
+:item(mother_letter) :- Global.stat("mum/info")
 You -- A woman asked me to deliver this letter.
 > She had the most lovely coat.
 	Is that why you're doing favors for people? Nice coats?
@@ -686,20 +671,20 @@ You -- A woman asked me to deliver this letter.
 [back]
 
 // WEAPON TODO: should I track when the player first fires/kills an enemy or just accept the jank?
-:item(wep_grav_gun)
+:item(wep_grav_gun) :- Global.stat("mum/info")
 You -- I found this gravity-distorting weapon.
 Interesting. There's a good deal of ancient technology that plays with gravity. If you can get the elevators to work, they're quite marvelous.
 Perhaps that weapon works on them?
 [back]
 
-:item(wep_pistol)
+:item(wep_pistol) :- Global.stat("mum/info")
 You -- I found an old pistol.
 It's an old Vaelic officer's pistol. Do you know how to use it?
 You -- I'm reasonably adept with it.
 // TODO: war, lore, tips, etc
 [back]
 
-:item(wep_time_gun)
+:item(wep_time_gun) :- Global.stat("mum/info")
 You -- I found the most remarkable device. It's a device that allows me to move through time faster than others.
 What? It changes the flow of time?
 You -- Yes! It's incredible. Everything around me slows to molasses.
@@ -707,7 +692,7 @@ You -- Yes! It's incredible. Everything around me slows to molasses.
 Incredible. I should have known they were playing with time itself, but I never saw it myself.
 [back]
 
-:item(wep_wave_shot)
+:item(wep_wave_shot) :- Global.stat("mum/info")
 You -- I found a device that fires a sort of bubble around me.
 Interesting.
 // TODO: maybe that's it lol

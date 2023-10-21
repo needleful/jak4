@@ -1,0 +1,242 @@
+
+// Rollin' around at the speed of sound up to some neat platforming place or whatever.
+// I'd like some way to hint to the player where she is.
+// She's at the top of the monument and there's a fun way to get up there.
+
+:laili
+[! Global task_exists: flight_test]
+	[Global task_is_active: strange_girl]
+		You -- Hello...
+		Oh, you're Vaeler?
+		You -- I am! Uh, very good! So, my friend from the tavern was concerned for you,
+		That's nice. Listen, Vaeler. I need your help with something.
+		You -- Uh, what, exactly?
+	{otherwise}
+		Laili --Hey, you're Vaeler, yeah?
+		You -- Oh, hello. I'm Jackie.
+		“Jacky?” What country is that
+		You -- Uh, sorry, yes, I'm from Vaeland. My name is Jackie.
+		Ok, Vaeler named Jackie. I'm Laili.
+		You -- ...
+			Well, it was nice meeting you. Ta-ta!
+		* She grabs your arm.
+		No! Wait! I need Vaeler help. For Vaeler problems.
+		You -- Vaeler problems?
+
+	[stat?: laili/name]
+		* Laili pulls the blanket off the object she's been sitting on.
+	{otherwise}
+		* The girl pulls the blanket off the object she's been sitting on.
+	[main_speaker show_plane]
+
+	Vaelers can fly?
+	You -- Wait, is this some sort of aeroplane? How creative!
+	But can you fly?
+	You -- I've been on a plane before, but I'm certainly no pilot.
+	... Good enough. I want you to test my plane.
+	You -- What? I mean, it's a cute plane and all, but no, I'd rather keep my skull in one piece.
+	Your skull isn't one piece. It has a bunch of bones in it.
+	You -- You understood what I meant...
+	I found this plane stuff you can wear to protect you.
+
+	* That “plane stuff”... 
+	* It's a vintage leather flight jacket. On the back is a bird killing a snake, and a message
+	* “VAELAND FLIGHT BRIGADE - 1235 - ALL BUT GOD UNDERNEATH”.
+	* Is it really from 1235? It'd be almost seventy years old! Besides a bit of sun damage, it's holding up well.
+	You -- If you let me keep the jacket, I'll do it.
+	It's too big for me anyway.
+
+	You -- Then it's a deal. So I hop on your little contraption, and you push me off the building?
+	No, we need to go higher, all the way up the cliff.
+	You -- How are we supposed to do that? Do you have a cart or something to haul it up?
+	There's some linkages somebody put up the cliff. You would go to a point and attach this cable to it. Then you'd climb to the next point and do it again.
+		Once you get to the top, I can winch the plane up along the path.
+	You -- Directly up the cliff? There's surely a more reasonable path up.
+	It's either the cliffs, the cave, or coming from the other end of the valley.
+		The cave is way more dangerous than the cliff, and going all the way down the valley would take days. This is the best way up.
+	You -- I suppose you would know.
+	[Global create_task: flight_test]
+	[Global add_note: Laili has recruited me to test her “aeroplane”. Hopefully it doesn't kill me, but I would love that flight jacket. |+ flight_test laili cliff_village]
+{otherwise}[! Global task_is_complete: flight_test]
+	So are you ready to help with the flight test?
+{otherwise}
+	Did you want to talk about anything else?
+
+:_laili_home_loop
+[$:m | #main_speaker.on_monument]
+> [! stat?: laili/orphan] What #{ternary($m, "are you doing up here", "were you doing up on top of the monument... thing")}, anyway?
+	I live #{ternary($m, "here", "there")}.
+	You -- What? Isn't #{ternary($m, "this", "it")} some sort of... church or some such thing? Why would they let you up #{ternary($m, "here", "there")}?
+	Optics.
+	You -- ... What?
+	They can't stop me if they don't see me.
+	You -- Aren't your parents worried?
+	Nah, they're dead.
+	[+stat: laili/orphan]
+	You -- Oh...
+	> I can understand, to an extent. My mother died when I was young.
+		Both my parents died, it's completely different.
+		* You admire your self-restraint in this trying moment.
+	> I'm sorry.
+		Were you involved somehow? I guess I forgive you.
+		You -- What? No, not at all! That's just how the saying goes!
+		That's confusing.
+	[goto: _laili_home_loop]
+> [! stat?: laili/flight] Well, let's get this plane up the cliff.
+	Good. I'll show you how the cables work...
+	[main_speaker start_climb]
+> I'll be back.
+	Okay.
+[exit]
+
+:@note(tirus/laili) :- Global.stat(laili/friendship) -> tirus
+You -- That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
+He did?
+You -- Does that surprise you? He was worried. He's the reason I went looking for you.
+....
+	People don't like me.
+	I don't know. There's something wrong with me.
+You -- ...
+	There's something wrong with everyone...
+No there isn't.
+You -- Of course there is! Nobody's perfect.
+What's wrong with you, then?
+> [skip] My explosive temper.
+> [skip] Vanity.
+> [skip] Insecurity.
+> [skip] Being bitter, unlovable, and ugly.
+> [skip] Racism.
+> [skip] Being self-centered.
+> [skip] My habitual laudanum drinking.
+> [skip] Bulimia.
+> [skip] Pretending to believe in God.
+> [skip] Wishing I were still a child.
+> [skip] You have a point, there's nothing wrong with me...
+[Global add_note: You can learn much about a person from what they say is their greatest flaws. I suppose I have quite a few to choose from. |+ jackie jackie/flaws]
+You -- It... I'm sure you can think of something. I'm not perfect.
+	My point is, there are people who care about you, no matter what you think is “wrong” with yourself.
+	Tirus clearly cares. He said he'd been worried for months.
+	And I care, too. I would hate for you to go hungry, just like Tirus would.
+	...
+I'm doing okay...
+On food...
+...
+Thanks.
+[note: lailu/tirus | I've talked with Laili about asking for food if she needs it. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
+[back]
+
+:laili_climb
+[! stat?: laili/climb]
+	Are you ready?
+	You -- It's quite a climb. I'm not sure I have the energy for it.
+	Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
+	[+stat: laili/climb]
+{otherwise}
+	How are you doing?
+> I've realized I have other things I need to do. Can we stop?
+	Well, I can't force you to climb.
+	[main_speaker cancel_climb]
+> I'll keep going.
+[exit]
+
+:laili_flight
+[mention: pre-flight]
+[Global task_is_complete: flight_test]
+	Did you want to do another test flight?
+	> Well, what could it hurt?
+		Cool, let's see how well you do.
+		[main_speaker fly]
+	> Not at the moment, thank you.
+{otherwise}
+	Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
+	You -- Is there a parachute?
+	I have a blanket you can use.
+	You -- It's better than nothing.
+	:_flight_choice
+	Are you ready to fly?
+	> Alright, I'm ready.
+		[! Global count: flight_jacket]
+			Okay, put on this coat for protection.
+			[Global add_item: flight_jacket]
+			And remember remember to pull back to go up.
+		{otherwise}
+			Remember not to crash.
+		[main_speaker fly]
+	> I'm going to sort my affairs first. Last will and testament, et cetera.
+		I'll be up here doing some final checks.
+[exit]
+
+:item(long_bolt) :- mentioned("pre-flight")
+You -- I found this bolt. Is it from the plane?
+[Global remove_item: long_bolt]
+[stat?: laili/flight]
+	Oh, that must be why the wing fell off.
+	You -- Wait, you didn't check?
+	I figured it would eventually work itself out.
+	You -- Ugh.
+{otherwise}
+	Oh, yeah. Good find. That would have been bad.
+	You -- What would have happened?
+	If you want to do another flight test, we can find out.
+	You -- I suppose it's a mystery for the ages.
+[+stat: laili/disaster_averted]
+[back]
+
+:item(_)
+* You show her an item.
+Neat.
+[back]
+
+// The flight would have Jackie on a flying thing.
+// If they land in on the wheels, it's considered a success.
+// Otherwise, they "crashed" and they have like 1 health point.
+
+:laili_post_flight
+[Global task_is_complete: flight_test]
+	[! stat?: laili/test_again]
+		I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
+		You -- I'll keep that in mind if I'm ever feeling suicidal.
+		[+stat: laili/test_again]
+	{otherwise}
+		Thanks again for testing. I'll get the plane back up the cliff.
+{otherwise}{main_speaker.crashed}
+	Are you okay?
+	You -- I think I've broken my neck.
+		... Is the jacket alright? Any tears?
+	I think this is... technically successful.
+	You -- /Pardon/ me?
+	* You adjust your neck. It seems not to be broken. Probably.
+	It can't be that dangerous. You survived.
+		We'll have to improve the flight time, but otherwise it's basically ready.
+	You -- /“Basically ready”?/
+		Well, if you need another flight test, you can find someone else. The helmet only does so much.
+	[Global complete_task: flight_test | I nearly died flying the bloody thing, but at least I got this lovely coat.]
+{otherwise}
+	Wow... I can't believe it.
+	You -- That's comforting.
+		If I may, I'd like to provide some constructive criticism on the machine's controls.
+	Nah, that's fine.
+	Now I just need to find a factory to mass produce it.
+	Thanks for your help. Let me know if you want to fly again sometime.
+	[+stat: laili/friendship]
+	[Global complete_task: flight_test | Surprisingly, the flight went without much issue. I've got a lovely coat, as well.]
+[main_speaker reset_flight]
+[exit]
+
+:laili_new_home
+// Some structure. Also, maybe a trip to Maslikir? Very exciting.
+You -- Hi again, Laili.
+Hi Jackie.
+You -- I heard you moved here. How exciting! Do you like it?
+I could take it or leave it, personally. The bed is nice.
+	So when should we fly next?
+	The plane's still up on the cliff if you want another go. Maybe next time you can try a loop.
+You -- Uh, I'll let you know.
+
+[exit]
+
+:_coat
+* I didn't implement it yet.
+[back]
+
+// Next up: Laili disappears! You find her in maslikir making her plane out of copper.

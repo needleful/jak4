@@ -86,7 +86,7 @@ What do you want to fight?
 [$arena start_game: $scenario]
 [exit]
 
-:item(arena_access) :- !Global.stat("arena137/entered")
+:@item(arena_access) :- !Global.stat("arena137/entered")
 [$: name | Jaki]
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
@@ -96,7 +96,7 @@ You -- Yes, I did sign a waiver... of some sort.
 [goto: arena_entry]
 [back]
 
-:item(fake_arena_access) :- !Global.stat("arena13/entered")
+:@item(fake_arena_access) :- !Global.stat("arena13/entered")
 [$: name | Kara]
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
@@ -145,11 +145,12 @@ You -- Really?
 There are creatures roaming at night. Perhaps those are what you hear?
 [exit]
 
-:note(arena137/escape) -> access
-:note(bairo/sacrifices) -> access
-:note(bairo/conspiracy) -> access
-:note(visited/abandoned_village) -> access
-:note(the_village_gate) -> access
+:@note(arena137/escape) :- Global.task_exists("unwelcome_visitors") -> pen_access
+:@note(bairo/sacrifices) :- Global.task_exists("unwelcome_visitors") -> pen_access
+:@note(bairo/conspiracy)  :- Global.task_exists("unwelcome_visitors")-> pen_access
+:@note(visited/abandoned_village) :- Global.task_exists("unwelcome_visitors") -> pen_access
+:@note(the_village_gate) :- Global.task_exists("unwelcome_visitors") -> pen_access
+// TODO: what to say here after you visit the pen
 [stat?: arena137/entered]
 	You -- So does this arena have anything to do with those troublesome spectres roaming everywhere outside?
 	Hm? No, we are hunting them. If anything, the number is going down.
