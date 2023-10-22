@@ -72,13 +72,15 @@ const item_fallthrough := "item(_)"
 var contextual_replies : Dictionary
 var sorted_labels : Array
 
-enum LabelState {
+enum LocalBlockState {
 	Invalid, # We don't meet the conditions for this label
-	Quest,
-	Optional,
-	Completed
+	Optional, # This item is optional
+	Quest, # This item is important
+	Completed, # We've completed this before
+	Visited # We've visited this block in the current dialog tree
 }
-var label_states : Dictionary
+var block_states : Dictionary
+var block_types : Dictionary
 
 enum BlockState {
 	Unvisited,
@@ -94,7 +96,7 @@ func _init():
 	label_conditions = {}
 	contextual_replies = {}
 	variables = {}
-	label_states = {}
+	block_states = {}
 	block_names = {}
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
@@ -115,6 +117,9 @@ func _input(event):
 	elif event.is_action_pressed("ui_cancel"):
 		fast_exit()
 	elif event.is_action_pressed("dialog_item"):
+		var c = $"../buttons/trade/indicators/indicator-contextual"
+		if c.visible:
+			c.get_node("AnimationPlayer").play("RESET")
 		emit_signal("pick_item")
 		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
@@ -136,10 +141,12 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	message_list = messages
 	for l in sequence.labels:
 		var label_ex :String = l
+		var block: String = l
 		if "->" in l:
 			var s =  l.split('->')
 			label_ex = s[0]
 			block_names[l] = s[1]
+			block = s[1]
 		if ":-" in label_ex:
 			var s = label_ex.split(":-")
 			var label = s[0].strip_edges()
@@ -150,13 +157,13 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 					p_sequence.resource_path, label, s[1]]
 				insert_label("[Error] "+ msg, "narration")
 				print_debug(msg)
-			var e2 = _parse_special_label(label)
+			var e2 = _parse_special_label(label, block)
 			if e2:
 				label_conditions[l] = [e, e2]
 			else:
 				label_conditions[l] = e
 		else:
-			var e = _parse_special_label(l)
+			var e = _parse_special_label(l, block)
 			if e:
 				label_conditions[l] = e
 	sorted_labels = sequence.labels.keys()
@@ -190,7 +197,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 	_evaluate_labels()
 	advance()
 
-func _parse_special_label(label: String) -> Expression:
+func _parse_special_label(label: String, block: String) -> Expression:
 	var ex = Expression.new()
 	var m := r_special_label.search(label)
 	if !m:
@@ -200,6 +207,7 @@ func _parse_special_label(label: String) -> Expression:
 	var argument := m.get_string(2)
 	var quest_type := label.begins_with('@')
 	var ex_str := ""
+	block_types[block] = type
 	if type == "item":
 		ex_str = "Global.count('%s')" % argument
 	elif type == "note":
@@ -229,7 +237,7 @@ func clear():
 	call_stack = []
 	contextual_replies = {}
 	variables = {}
-	label_states = {}
+	block_states = {}
 	Util.clear(messages)
 	clear_replies()
 
@@ -243,69 +251,104 @@ func _on_task_completed(_task):
 func _on_stat_changed(_stat, _value):
 	_evaluate_labels()
 
-# TODO: evaluate every label to see if we can use an item or note for it
 func _evaluate_labels():
 	if !main_speaker:
 		return
 	for l in sorted_labels:
-		if l.begins_with("note("):
-			pass
+		var block: String = l
+		if l in block_names:
+			block = block_names[l]
 		var quest := false
 		if l in label_conditions:
 			var res = _execute_label(l)
 			if !res or (res is Dictionary and "_failure" in res):
-				label_states[l] = LabelState.Invalid
+				block_states[block] = LocalBlockState.Invalid
 				continue
 			quest = res is Dictionary and "_quest" in res
-		var old_state = LabelState.Invalid
-		if l in label_states:
-			old_state = label_states[l]
-		if old_state == LabelState.Completed:
-			return
+		var old_state = LocalBlockState.Invalid
+		if block in block_states:
+			old_state = block_states[block]
+		if old_state == LocalBlockState.Completed:
+			continue
 		var block_name: String = block_names[l] if l in block_names else l
 		var block_stat = speaker_stat() + "/" + block_name
 		if Global.stat(block_stat) >= BlockState.Completed:
-			label_states[l] = LabelState.Completed
+			block_states[block] = LocalBlockState.Completed
 		else:
-			label_states[l] = LabelState.Optional if !quest else LabelState.Quest
-		if old_state < label_states[l]:
-			_notify_new_item(l, label_states[l])
+			block_states[block] = LocalBlockState.Optional if !quest else LocalBlockState.Quest
+		if old_state < block_states[block]:
+			_notify_new_item(l, block_states[block])
+	_check_notifications()
+
+func _check_notifications():
+	var notifications := {
+		"item":[],
+		"note":[],
+		"_":[]
+	}
+	for block in block_states:
+		if block in block_types:
+			var type = block_types[block]
+			var state = block_states[block]
+			if !(state in notifications[type]):
+				notifications[type].append(state)
+			if !(state in notifications['_']):
+				notifications['_'].append(state)
+	for type in notifications:
+		if type == '_':
+			continue
+		for state in LocalBlockState.values():
+			if state == LocalBlockState.Visited:
+				continue # Nothing to clear
+			if !(state in notifications[type]):
+				_clear_notifications(type, state,
+					 !(state in notifications['_']))
 
 func _notify_new_item(label: String, label_state: int):
 	var label_type:String = label.split("(", false)[0].replace("@", "")
+	var nodes := _get_notification_nodes(label_type, label_state)
+	for n in nodes:
+		if !n.get_parent().visible:
+			n.play("indicate")
+
+func _get_notification_nodes(type: String, state: int) -> Array:
 	var base_node: Node
-	if label_type == "item":
-		base_node = $"../item_context/VBoxContainer/show_inventory/Button"
-	elif label_type == "note":
-		base_node = $"../item_context/VBoxContainer/show_journal/Button"
-	else:
-		return
+	match type:
+		"item":
+			base_node = $"../item_context/VBoxContainer/show_inventory"
+		"note":
+			base_node = $"../item_context/VBoxContainer/show_journal"
+		_:
+			return []
+
 	var key := ""
-	match label_state:
-		LabelState.Invalid:
-			return
-		LabelState.Optional:
-			key = "indicator-optional/AnimationPlayer"
-		LabelState.Quest:
-			key = "indicator-quest/AnimationPlayer"
-		LabelState.Completed:
-			key = "indicator-visited/AnimationPlayer"
+	match state:
+		LocalBlockState.Optional:
+			key = "indicators/indicator-optional/AnimationPlayer"
+		LocalBlockState.Quest:
+			key = "indicators/indicator-quest/AnimationPlayer"
+		LocalBlockState.Completed:
+			key = "indicators/indicator-visited/AnimationPlayer"
+		_:
+			return []
 	
 	var indicators := $"../buttons/trade"
 	var child_node : AnimationPlayer = base_node.get_node(key)
 	var indicator : AnimationPlayer = indicators.get_node(key)
-	if !child_node.get_parent().visible:
-		child_node.play("indicate")
-	if !indicator.get_parent().visible:
-		indicator.play("indicate")
+	return [child_node, indicator]
+
+func _clear_notifications(type: String, state: int, clear_main: bool):
+	var nodes := _get_notification_nodes(type, state)
+	if nodes.empty():
+		return
+	nodes[0].play("RESET")
+	if clear_main:
+		nodes[1].play("RESET")
 
 func _notify_contextual_reply():
-	# TODO: indicate it on the specific button,
-	#	with appropriate level of importance
-	var a: AnimationPlayer =(
-		$"../buttons/trade/indicator-optional/AnimationPlayer")
-	if !a.get_parent().visible:
-		a.play("indicate")
+	var c = $"../buttons/trade/indicators/indicator-contextual"
+	if !c.visible:
+		c.get_node("AnimationPlayer").play("indicate")
 
 func _execute_label(l: String):
 	var cond = label_conditions[l]
@@ -746,11 +789,12 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> Array:
 		found_label = type
 	for label in sorted_labels:
 		var l: String = label
+		var block:String = label if !(label in block_names) else block_names[label]
 		if l.begins_with('@'):
 			l = l.substr(1)
 		if !l.begins_with(type):
 			continue
-		if label in label_states and label_states[label] == LabelState.Invalid:
+		if block in block_states and block_states[block] == LocalBlockState.Invalid:
 			continue
 		if items:
 			var found := false
@@ -844,6 +888,8 @@ func _set_block(id: String, state: int):
 	var block_stat = speaker_stat() + "/" + id
 	if Global.stat(block_stat) < state:
 		Global.set_stat(block_stat, state)
+	block_states[id] = LocalBlockState.Visited
+	_check_notifications()
 	return true
 
 func exit(state := PlayerBody.State.Ground):
