@@ -80,6 +80,7 @@ enum LocalBlockState {
 	Completed, # We've completed this before
 	Visited # We've visited this block in the current dialog tree
 }
+var label_states : Dictionary
 var block_states : Dictionary
 var block_types : Dictionary
 
@@ -97,8 +98,9 @@ func _init():
 	label_conditions = {}
 	contextual_replies = {}
 	variables = {}
-	block_states = {}
 	block_names = {}
+	label_states = {}
+	block_states = {}
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
 	_x = r_special_label.compile("@?(item|note)\\(\\s*([^)]+)\\s*\\)\\s*")
@@ -238,6 +240,7 @@ func clear():
 	call_stack = []
 	contextual_replies = {}
 	variables = {}
+	label_states = {}
 	block_states = {}
 	Util.clear(messages)
 	clear_replies()
@@ -256,29 +259,27 @@ func _evaluate_labels():
 	if !main_speaker:
 		return
 	for l in sorted_labels:
-		var block: String = l
-		if l in block_names:
-			block = block_names[l]
 		var quest := false
 		if l in label_conditions:
 			var res = _execute_label(l)
 			if !res or (res is Dictionary and "_failure" in res):
-				block_states[block] = LocalBlockState.Invalid
+				label_states[l] = LocalBlockState.Invalid
 				continue
 			quest = res is Dictionary and "_quest" in res
 		var old_state = LocalBlockState.Invalid
-		if block in block_states:
-			old_state = block_states[block]
+		var block: String = l
+		if l in block_names:
+			block = block_names[l]
+		if l in label_states:
+			old_state = label_states[l]
 		if old_state == LocalBlockState.Completed:
 			continue
-		var block_name: String = block_names[l] if l in block_names else l
-		var block_stat = speaker_stat() + "/" + block_name
-		if Global.stat(block_stat) >= BlockState.Completed:
+		var block_stat = speaker_stat() + "/" + block
+		if Global.stat(block_stat) >= BlockState.Completed and block_states[l] < BlockState.Completed:
+			label_states[l] = LocalBlockState.Completed
 			block_states[block] = LocalBlockState.Completed
 		else:
-			block_states[block] = LocalBlockState.Optional if !quest else LocalBlockState.Quest
-		if old_state < block_states[block]:
-			_notify_new_item(l, block_states[block])
+			label_states[l] = LocalBlockState.Optional if !quest else LocalBlockState.Quest
 	_check_notifications()
 
 func _check_notifications():
@@ -287,6 +288,14 @@ func _check_notifications():
 		"note":[],
 		"_":[]
 	}
+	var updated_blocks := {}
+	for label in label_states:
+		var block = block_names[label] if label in block_names else label
+		if (!(block in block_states) 
+			or label_states[label] > block_states[block]
+		):
+			updated_blocks[block] = [label, label_states[label]]
+			block_states[block] = label_states[label]
 	for block in block_states:
 		if block in block_types:
 			var type = block_types[block]
@@ -304,6 +313,9 @@ func _check_notifications():
 			if !(state in notifications[type]):
 				_clear_notifications(type, state,
 					 !(state in notifications['_']))
+	for b in updated_blocks:
+		var update = updated_blocks[b]
+		_notify_new_item(update[0], update[1])
 
 func _notify_new_item(label: String, label_state: int):
 	if difficulty.dialog_hints < DifficultySettings.DialogHints.ItemsAndNotes:
@@ -331,7 +343,7 @@ func _get_notification_nodes(type: String, state: int) -> Array:
 		LocalBlockState.Quest:
 			key = "indicators/indicator-quest/AnimationPlayer"
 		LocalBlockState.Completed:
-			key = "indicators/indicator-visited/AnimationPlayer"
+			key = "indicators/indicator-completed/AnimationPlayer"
 		_:
 			return []
 	
@@ -787,12 +799,11 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> Array:
 		found_label = type
 	for label in sorted_labels:
 		var l: String = label
-		var block:String = label if !(label in block_names) else block_names[label]
 		if l.begins_with('@'):
 			l = l.substr(1)
 		if !l.begins_with(type):
 			continue
-		if block in block_states and block_states[block] == LocalBlockState.Invalid:
+		if label in label_states and !label_states[label]:
 			continue
 		if items:
 			var found := false

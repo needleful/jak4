@@ -57,7 +57,7 @@
 	[Global count: housing_paperwork] [mention: paperwork]
 		Did you find the paperwork?
 		You -- I'm sure it's in my bag somewhere.
-		* (HINT: You can use items in dialog by pressing "Use Item" as shown on the left, and selecting the "Housing Paperwork".)
+		* (HINT: You can use items in dialog by pressing the “Special Dialog” button as shown on the left, and selecting the "Housing Paperwork".)
 		You -- ...
 		Well, whenever you find it, that will be good.
 	[otherwise]
@@ -87,31 +87,34 @@
 		You -- Thank you dearly! It looks great!
 [back]
 
-:@item(housing_paperwork) :- mentioned("paperwork") -> paperwork
-[Global remove_item: housing_paperwork]
-* You hand him the papers.
-You -- Here it is. So about the Medium?
-Ah, thank you. Armstrong is out beside the machine, with the goggles. He knows it better than everyone.
-[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] 
-It is the white building in town. Impossible to miss.
-You -- Right. I'll talk to him.
-[exit]
-
-:@item(housing_paperwork) :- Global.stat("talked/armstrong") -> paperwork
+:item(housing_paperwork) :- Global.stat("talked/armstrong") -> paperwork
 [mentioned: paperwork]
 	You -- Right, here's the paperwork.
 [otherwise]
 	You -- I found that paperwork, if you still needed it.
 [Global remove_item: housing_paperwork]
+[complete_block]
 Yes, I will take those, thank you.
 [exit]
 
-:item(housing_paperwork) -> paperwork
+:@item(housing_paperwork) :- mentioned("paperwork") -> paperwork
+* You hand him the papers.
+You -- Here it is. So about the Medium?
 [Global remove_item: housing_paperwork]
-You -- Here's the papers you mentioned in you letter. Do you know how I would get to the Medium, by the way?
+[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong]
+[complete_block]
+Ah, thank you. Armstrong is out beside the machine, with the goggles. He knows it better than everyone.
+It is the white building in town. Impossible to miss.
+You -- Right. I'll talk to him.
+[exit]
+
+:item(housing_paperwork) -> paperwork
+You -- Here's the papers you mentioned in your letter. Do you know how I would get to the Medium, by the way?
 Oh, I see it's important. It is the white building in town. Impossible to miss.
+[Global remove_item: housing_paperwork]
+[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong]
+[complete_block]
 Talk to Armstrong, he is at the machine now.
-[remember: He must be the little fellow by the Medium, like the landlord said. | armstrong] 
 You -- Excellent. I'll talk to him.
 [exit]
 

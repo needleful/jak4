@@ -1,10 +1,13 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
-[ext_resource path="res://ui/icons/new_reply.png" type="Texture" id=1]
+[ext_resource path="res://ui/dialog/indicator-context.png" type="Texture" id=1]
 [ext_resource path="res://ui/fancy/drawn_lines.shader" type="Shader" id=2]
+[ext_resource path="res://ui/dialog/indicator-completed.png" type="Texture" id=3]
+[ext_resource path="res://ui/dialog/indicator-quest.png" type="Texture" id=4]
+[ext_resource path="res://ui/dialog/indicator-optional.png" type="Texture" id=5]
 
 [sub_resource type="Gradient" id=196]
-colors = PoolColorArray( 0.996094, 0.23735, 0.46853, 1, 0.858824, 0.858824, 0.858824, 1 )
+colors = PoolColorArray( 1, 0, 0.304688, 1, 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=197]
 gradient = SubResource( 196 )
@@ -73,7 +76,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Gradient" id=230]
-colors = PoolColorArray( 0.996094, 0.572432, 0.291824, 1, 0.858824, 0.858824, 0.858824, 1 )
+colors = PoolColorArray( 0.996094, 0.572432, 0.291824, 1, 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=231]
 gradient = SubResource( 230 )
@@ -142,7 +145,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Gradient" id=189]
-colors = PoolColorArray( 1, 0.827451, 0.4, 1, 0.858824, 0.858824, 0.858824, 1 )
+colors = PoolColorArray( 1, 0.827451, 0.4, 1, 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=190]
 gradient = SubResource( 189 )
@@ -211,7 +214,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Gradient" id=201]
-colors = PoolColorArray( 0.147354, 0.147354, 0.433594, 1, 0.858824, 0.858824, 0.858824, 1 )
+colors = PoolColorArray( 0.305313, 0.305313, 0.730469, 1, 0, 0, 0, 1 )
 
 [sub_resource type="GradientTexture" id=202]
 gradient = SubResource( 201 )
@@ -293,7 +296,7 @@ margin_left = 1780.0
 margin_right = 1812.0
 margin_bottom = 1098.0
 rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 1 )
+texture = ExtResource( 4 )
 stretch_mode = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="indicator-quest" groups=["dialog_indicator"]]
@@ -321,23 +324,23 @@ margin_left = 1852.0
 margin_right = 1884.0
 margin_bottom = 1098.0
 rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 1 )
+texture = ExtResource( 5 )
 stretch_mode = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="indicator-optional" groups=["dialog_indicator"]]
 anims/RESET = SubResource( 214 )
 anims/indicate = SubResource( 215 )
 
-[node name="indicator-visited" type="TextureRect" parent="."]
+[node name="indicator-completed" type="TextureRect" parent="."]
 visible = false
 material = SubResource( 229 )
 margin_left = 1888.0
 margin_right = 1920.0
 margin_bottom = 1098.0
 rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 1 )
+texture = ExtResource( 3 )
 stretch_mode = 4
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="indicator-visited" groups=["dialog_indicator"]]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="indicator-completed" groups=["dialog_indicator"]]
 anims/RESET = SubResource( 216 )
 anims/indicate = SubResource( 217 )
