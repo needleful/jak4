@@ -30,6 +30,7 @@ func exit():
 	$DialogTrigger.show()
 	if $mum.visible:
 		$mum.bye()
+	$deactivation.play()
 	return true
 
 func activate(mode := "default"):
@@ -44,6 +45,7 @@ func activate(mode := "default"):
 	$activator.play("Activate")
 	emit_signal("activated")
 	$DialogTrigger.hide()
+	$activation.play()
 	return true
 
 func play(anim: String):

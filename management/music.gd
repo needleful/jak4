@@ -66,7 +66,6 @@ func _process(delta):
 			volume_db += FADEIN_SPEED*delta
 			if volume_db > 0:
 				volume_db = 0
-			
 
 func set_music(default_override, combat_override):
 	fadeout = true
@@ -82,6 +81,14 @@ func play_next():
 
 func reset():
 	set_music(default_explore_music, default_combat_music)
+
+func play_track(track: String):
+	var path:String = "res://audio/music/"+track
+	if !ResourceLoader.exists(path):
+		print_debug("Music not found: ", path)
+		return
+	else:
+		play_music(load(path) as AudioStream)
 
 func play_music(music: AudioStream):
 	set_music(music, null)

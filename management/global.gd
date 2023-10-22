@@ -115,6 +115,9 @@ func get_player() -> Node:
 		return n
 	return null
 
+func get_music() -> Node:
+	return Music
+
 func set_valid_game_state(state):
 	valid_game_state = state and game_state
 
