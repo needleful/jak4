@@ -50,7 +50,7 @@ var r_interpolate := RegEx.new()
 var r_italics := RegEx.new()
 var r_special_label := RegEx.new()
 
-var otherwise := false
+var _otherwise := false
 var talked := 0
 var skip_reply := false
 var context: Dictionary
@@ -234,7 +234,7 @@ func clear():
 	last_speaker = ""
 	is_exiting = false
 	context = {}
-	otherwise = false
+	_otherwise = false
 	call_stack = []
 	contextual_replies = {}
 	variables = {}
@@ -401,7 +401,7 @@ func advance():
 	var result := false
 	var noskip := false
 	var font_override := ""
-	otherwise = false
+	_otherwise = false
 	while !result:
 		var otherwise_used := false
 		if !current_item:
@@ -414,7 +414,7 @@ func advance():
 		result = true
 		font_override = ""
 		for c in current_item.conditions:
-			var r = check_condition(c)
+			var r = evaluate(c)
 			if r is Dictionary and "_otherwise" in r:
 				otherwise_used = true
 				r = r["_otherwise"]
@@ -437,11 +437,11 @@ func advance():
 		if !result:
 			current_item = sequence.failed_next(current_item)
 			if sequence.went_up:
-				otherwise = false
+				_otherwise = false
 			elif !otherwise_used:
-				otherwise = true
+				_otherwise = true
 		else:
-			otherwise = false
+			_otherwise = false
 			if current_item.type == DialogItem.Type.CONTEXT_REPLY:
 				insert_contextual_reply(current_item, current_item.speaker)
 				current_item = sequence.failed_next(current_item)
@@ -465,13 +465,13 @@ func advance():
 	if !current_item:
 		return
 	var context_reply:DialogItem = sequence.canonical_next(current_item)
-	otherwise = false
+	_otherwise = false
 	while context_reply and context_reply.type == DialogItem.Type.CONTEXT_REPLY:
 		var otherwise_used := false
 		current_item = context_reply
 		result = true
 		for c in context_reply.conditions:
-			var r = check_condition(c)
+			var r = evaluate(c)
 			if r is Dictionary and "_otherwise" in r:
 				r = r["_otherwise"]
 				otherwise_used = true
@@ -479,15 +479,15 @@ func advance():
 				result = false
 				break
 		if result:
-			otherwise = false
+			_otherwise = false
 			insert_contextual_reply(context_reply, context_reply.speaker)
 		elif !otherwise_used:
-			otherwise = true
+			_otherwise = true
 		context_reply = sequence.failed_next(context_reply)
 
 func list_replies():
 	var reply: DialogItem = current_item
-	otherwise = false
+	_otherwise = false
 	while reply and reply.type == DialogItem.Type.REPLY:
 		var font_override := ""
 		skip_reply = false
@@ -495,7 +495,7 @@ func list_replies():
 		var result := true
 		var otherwise_used := false
 		for c in cond:
-			var r = check_condition(c)
+			var r = evaluate(c)
 			if r is Dictionary and "_otherwise" in r:
 				r = r["_otherwise"]
 				otherwise_used = true
@@ -505,7 +505,7 @@ func list_replies():
 			elif r is Dictionary and "_format" in r:
 				font_override = r._format
 		if result:
-			otherwise = false
+			_otherwise = false
 			var f: Font
 			if font_override in fonts:
 				f = fonts[font_override]
@@ -515,7 +515,7 @@ func list_replies():
 			var s = skip_reply
 			var _x = b.connect("pressed", self, "choose_reply", [r, s])
 		elif !otherwise_used:
-			otherwise = true
+			_otherwise = true
 		reply = sequence.next(reply)
 	if replies.get_child_count() == 0:
 		print_debug("\tNo replies.")
@@ -668,13 +668,6 @@ func evaluate(ex_text: String):
 		print_debug(msg)
 		return true
 	return r
-
-func check_condition(cond: String):
-	if cond == "otherwise":
-		return {"_otherwise": otherwise}
-	
-	var result = evaluate(cond)
-	return result
 
 func end():
 	main_speaker = null
@@ -835,6 +828,9 @@ func insert_contextual_reply(message: DialogItem, added_context := ""):
 ########################################
 ## Dialog functions
 ########################################
+
+func otherwise():
+	return {"_otherwise": _otherwise}
 
 func exiting():
 	is_exiting = true

@@ -11,7 +11,7 @@
 		You -- I am! Uh, very good! So, my friend from the tavern was concerned for you,
 		That's nice. Listen, Vaeler. I need your help with something.
 		You -- Uh, what, exactly?
-	{otherwise}
+	[otherwise]
 		Laili --Hey, you're Vaeler, yeah?
 		You -- Oh, hello. I'm Jackie.
 		“Jacky?” What country is that
@@ -25,7 +25,7 @@
 
 	[stat?: laili/name]
 		* Laili pulls the blanket off the object she's been sitting on.
-	{otherwise}
+	[otherwise]
 		* The girl pulls the blanket off the object she's been sitting on.
 	[main_speaker show_plane]
 
@@ -57,9 +57,9 @@
 	You -- I suppose you would know.
 	[Global create_task: flight_test]
 	[Global add_note: Laili has recruited me to test her “aeroplane”. Hopefully it doesn't kill me, but I would love that flight jacket. |+ flight_test laili cliff_village]
-{otherwise}[! Global task_is_complete: flight_test]
+[otherwise][! Global task_is_complete: flight_test]
 	So are you ready to help with the flight test?
-{otherwise}
+[otherwise]
 	Did you want to talk about anything else?
 
 :_laili_home_loop
@@ -131,7 +131,7 @@ Thanks.
 	You -- It's quite a climb. I'm not sure I have the energy for it.
 	Oh, don't worry about it. I left some stamina boosters at the trickiest points. You should be able to climb the whole thing, as long as you're careful.
 	[+stat: laili/climb]
-{otherwise}
+[otherwise]
 	How are you doing?
 > I've realized I have other things I need to do. Can we stop?
 	Well, I can't force you to climb.
@@ -147,7 +147,7 @@ Thanks.
 		Cool, let's see how well you do.
 		[main_speaker fly]
 	> Not at the moment, thank you.
-{otherwise}
+[otherwise]
 	Are you ready to fly? You'll stand here. Here's the yoke. Uh, here's the tires.
 	You -- Is there a parachute?
 	I have a blanket you can use.
@@ -159,7 +159,7 @@ Thanks.
 			Okay, put on this coat for protection.
 			[Global add_item: flight_jacket]
 			And remember remember to pull back to go up.
-		{otherwise}
+		[otherwise]
 			Remember not to crash.
 		[main_speaker fly]
 	> I'm going to sort my affairs first. Last will and testament, et cetera.
@@ -174,7 +174,7 @@ You -- I found this bolt. Is it from the plane?
 	You -- Wait, you didn't check?
 	I figured it would eventually work itself out.
 	You -- Ugh.
-{otherwise}
+[otherwise]
 	Oh, yeah. Good find. That would have been bad.
 	You -- What would have happened?
 	If you want to do another flight test, we can find out.
@@ -197,9 +197,9 @@ Neat.
 		I think I've devised a way to get the plane back up the cliff on my own, if you want to try flying again.
 		You -- I'll keep that in mind if I'm ever feeling suicidal.
 		[+stat: laili/test_again]
-	{otherwise}
+	[otherwise]
 		Thanks again for testing. I'll get the plane back up the cliff.
-{otherwise}{main_speaker.crashed}
+[otherwise]{main_speaker.crashed}
 	Are you okay?
 	You -- I think I've broken my neck.
 		... Is the jacket alright? Any tears?
@@ -211,7 +211,7 @@ Neat.
 	You -- /“Basically ready”?/
 		Well, if you need another flight test, you can find someone else. The helmet only does so much.
 	[Global complete_task: flight_test | I nearly died flying the bloody thing, but at least I got this lovely coat.]
-{otherwise}
+[otherwise]
 	Wow... I can't believe it.
 	You -- That's comforting.
 		If I may, I'd like to provide some constructive criticism on the machine's controls.

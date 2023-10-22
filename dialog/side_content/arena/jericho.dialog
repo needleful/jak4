@@ -2,7 +2,7 @@
 
 [Global has_stat: arena137/name]
 	[$: name |  #Global.stat("arena137/name")]
-{otherwise}
+[otherwise]
 	[$: name | Jaki]
 
 [! stat?: arena137/entered]
@@ -16,27 +16,27 @@
 		[note: arena137/locked | There's a strange door in the caves, guarded by a man. He insisted it was nothing. |+ jericho unwanted_visitors actual_cliff_village]
 		* Was Bairo right about the inhabitants of the village? Something strange is going on here.
 
-{otherwise}[! $arena completed]
+[otherwise][! $arena completed]
 	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
 		[$: cost | #25]
 		Yes, throw me in the chasm.
 		[goto: scenario_pick]
-	> {otherwise} I don't have that much money.
+	> [otherwise] I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 
-{otherwise}{Global.stat("arena137/gold") < 3}
+[otherwise]{Global.stat("arena137/gold") < 3}
 	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[$: cost | #25]
 		Sure, I'll try again.
 		[goto: scenario_pick]
-	> {otherwise} I don't have the money for it.
+	> [otherwise] I don't have the money for it.
 		What? You should get money, then!
 		[exit]
 	> No, thank you. I still have puncture wounds from last time.
 
-{otherwise}
+[otherwise]
 	The queen bee herself! #{$name}! Want to show the kids how it's done? I drop price to 50 gems.
 	?> Isn't that /higher/ than it was before?
 		Well, a pro gets the pro rate!
@@ -47,7 +47,7 @@
 		[$: cost | #50]
 		Sure, it could be my #{general_time(true)} exercise.
 		[goto: scenario_pick]
-	> {otherwise} I don't have the money.
+	> [otherwise] I don't have the money.
 		What? You are big superstar! Where has your money gone?
 	> Not today, Jericho.
 		[exit]
@@ -67,7 +67,7 @@ What do you want to fight?
 		> Never mind, you've got a point.
 			Come back if you get a gun and show us what you got!
 			[exit]
-	{otherwise}
+	[otherwise]
 		Have fun!
 	[$: scenario | deathgnats]
 > [$arena rank: #1][skip] A basic mix of crawlers and deathgnats. #{$arena.scenario_text("basic_mix")}
@@ -116,7 +116,7 @@ Well, #{$name}, welcome to the arena!
 	You -- But what sort of sport is it?
 	It's hunting sport! We capture specters and we bring them here!
 	You -- What, like shooting them in pens?
-{otherwise}
+[otherwise]
 	You -- So how does this work? They're in pens and you shoot them, or something?
 No no. A fighter goes into the bottom of the chasm. We throw the beasts in and they hunt until none remain.
 You -- Why would anyone do such a thing? That sounds incredibly dangerous.
@@ -130,7 +130,7 @@ You did! If you want to hunt, we will prepare the chasm! The entry is only twent
 	[$: cost | #25]
 	I mean, I've got nothing better to do at the moment. Throw me in!
 	[goto: scenario_pick]
-> {otherwise} I don't have that kind of money.
+> [otherwise] I don't have that kind of money.
 	Well, you should get that kind of money!
 > I'm not getting thrown into some death pit for your entertainment.
 > Wait, I pay /you/ to get thrown in there?
@@ -180,12 +180,12 @@ There are creatures roaming at night. Perhaps those are what you hear?
 		[+stat: arena137/show_pen]
 		[complete_block]
 		[exit]
-	{otherwise}
+	[otherwise]
 		They come and go. Whatever you seen was coincidence. Nothing more.
 		* You've seen spectres everywhere, but what you've seen may well be a coincidence.
 		* Perhaps you need to find more specific examples of unusual activity.
 		[+stat: arena/denied_suspicion]
-{otherwise}
+[otherwise]
 	You -- Do you know anything about the spectres roaming the area recently?
 	Ah, they are nasty creatures. Don't touch them.
 	You -- I mean, have you noticed more of them?

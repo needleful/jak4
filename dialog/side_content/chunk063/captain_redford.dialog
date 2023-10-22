@@ -20,7 +20,7 @@
 		Impossible! I saw my company just two days ago! If what you say has any connection to reality, they're likely uneasy without my leadership.
 		You shall accompany me to our fortifications at the Ember Crest Manor. With reinforcements, we can hold this station with ease.
 		And once we get there, you shall be sent home to Vaeland. This abominable desert is no place for a lady, even a short-haired one.
-	{otherwise}
+	[otherwise]
 		Young lady. As I have said, we must part for the Ember Crest Manor at once!
 	> Fine. I'll humor your delusions and go to this manor with you.
 		It's just over the ridge northeast of here. Stay by my side. There are assassins in the sands...
@@ -31,10 +31,10 @@
 	> No. Stand here on the tracks forever for all I care.
 		What? Young lady, that was an order from an officer! You will not wander the battlefield unaccompanied!
 		... Get back here!
-{otherwise}{main_speaker.get_chunk() == "chunk063"}
+[otherwise]{main_speaker.get_chunk() == "chunk063"}
 	Right, let's continue!
 	[main_speaker continue_travel: ../path_ember_crest]
-{otherwise}[main_speaker at: front_door]
+[otherwise][main_speaker at: front_door]
 	[! Global count: manor_key]
 		There's something wrong here.
 		You -- Yes. Your soldiers left decades ago. There's only the blasted spectres here now.
@@ -43,14 +43,14 @@
 		Stop it. Stop with this nonsense. Just... take the key and open the door.
 		* He wriggles a key out of his breast pocket. It falls to the ground and you take it.
 		[Global add_item: manor_key]
-	{otherwise}[! stat?: chunk052/front_door/open]
+	[otherwise][! stat?: chunk052/front_door/open]
 		Well... Are you going to open it?
 		You -- I unlocked it, but it's still stuck.
 		Just give it a firm kick. That should do it.
-	{otherwise}
+	[otherwise]
 		Marvelous! Now to find my men...
 		[main_speaker travel_to: | ../path_entry]
-{otherwise}[main_speaker at: entry]
+[otherwise][main_speaker at: entry]
 	Right, where in the blazes IS everyone?
 	You -- They're gone! I've been telling you! And you haven't explained how you became a spectre!
 	I've told you who I am plenty of times! I'm Captain Nathaniel Redford of the Sixth Cavalry! Recognized by His Grace, King August IX, December 8th, 1251.
@@ -61,7 +61,7 @@
 	You -- Because the house is falling apart. There's sand everywhere...
 	No, no... it's not flowing outside...
 	[main_speaker travel_to: | ../shelf_view]
-{otherwise}[stat?: manor052/investigation1]
+[otherwise][stat?: manor052/investigation1]
 	[stat?: manor052/passage/open] 
 		So it was a passage!
 		Excellent work, uh, I never caught your name.
@@ -77,25 +77,25 @@
 		[Global remove_stat: manor052/investigation1]
 		[main_speaker emit_signal: npc_event | investigation1_complete]
 		[main_speaker travel_to: | ../path_passage]
-	{otherwise}
+	[otherwise]
 		There must be a lock here somewhere...
-{otherwise}[main_speaker at: shelf_view]
+[otherwise][main_speaker at: shelf_view]
 	[stat?: manor052/passage/open]
 		Alright, let's venture onward.
 		[main_speaker travel_to: | ../path_passage]
-	{otherwise} 
+	[otherwise] 
 		Air is going behind this shelf. A secret passage? Help me push it out of the way.
 		* You both try pushing the shelf. It's locked in place by some mechanism.
 		You -- Your suspicion seems well-founded... this is a door, alright.  Perhaps there's a lever or what-have-you.
 		[+stat: manor052/investigation1]
-{otherwise}[main_speaker at: kitchen]
+[otherwise][main_speaker at: kitchen]
 	[! stat?: manor052/investigation2]
 		Well done! It appears it was a secret passage to the kitchen! Perhaps for servants.
 		You -- It doesn't appear any soldiers have ever quartered here.
 			This is just a regular home.
 		No. We need to investigate further! Let's find the keys to the rest of the home.
 		[+stat: manor052/investigation2]
-	{otherwise}
+	[otherwise]
 		Did you find anything?
 		[! Global count: manor_den_key]
 			You -- Nothing yet.
@@ -105,7 +105,7 @@
 		Oh, excellent! Let's go see what it unlocks!
 		[Global remove_stat: manor052/investigation2]
 		[main_speaker travel_to: | ../path_den]
-{otherwise}[main_speaker at: den]
+[otherwise][main_speaker at: den]
 	[! stat?: manor052/investigation3]
 		Nothing here makes any sense.  Where are the sandbags? We boarded up the windows weeks ago!
 		You -- I've been telling you, you buffoon! The war ended! Whatever delusions you have are of a long-gone era.
@@ -114,7 +114,7 @@
 		You -- What path? What proof do we have there's a path? All we know is there was a servant's path behind the cabinet. What more are we looking for?
 		Trust me, Jacqueline. I've got... a feeling, I suppose. There is more here.
 		[+stat: manor052/investigation3]
-	{otherwise}[! stat?: redford/discussed/denial]
+	[otherwise][! stat?: redford/discussed/denial]
 		It's clear the manor was renovated since I was last here...
 		But whoever it was is long gone now.
 		You -- Have you been listening to a word I've said this entire time?
@@ -138,18 +138,18 @@
 		[note: redford/discussed/denial | “Denial and death”... I think he may understand his situation more than he's admitting. |+ captain_redford jackie/info/denial]
 	[! stat?: manor052/basement/open]
 		Let's open up the rest of this manor.
-	{otherwise}
+	[otherwise]
 		[! stat?: redford/discussed/basement]
 			I presume the basement door was your doing?
 			You -- Yes. There's more to this place yet.
 			We shall continue.
-		{otherwise}
+		[otherwise]
 			Excellent work as always, Jacqueline.
 			You -- Of course.
 			Let's venture further.
 		[Global remove_stat: manor052/investigation3]
 		[main_speaker travel_to: ../basement_passage]
-{otherwise}[main_speaker at: basement_passage]
+[otherwise][main_speaker at: basement_passage]
 	[! stat?: redford/discussed/poem1]
 		You -- Good God, this place is endless!
 		Soldier without blood.
@@ -162,7 +162,7 @@
 		You -- You're... scaring me, Redford.
 		Sorry, just some old poetry.
 		[note: redford/discussed/poem1 | “Soldier without blood. Nostrils without breath. A heart without love. A life without death.” How did Redford become what he is? |+ captain_redford]
-	{otherwise}[! stat?: redford/discussed/poem2]
+	[otherwise][! stat?: redford/discussed/poem2]
 		Solid feet on soft ground,
 		Solid teeth in soft necks,
 		Solid eyes to gather 'round
@@ -182,13 +182,13 @@
 	[! stat?: manor052/final_area/open]
 		We must find the next passage.
 		// TODO: fill this out
-	{otherwise}
+	[otherwise]
 		You -- The next door is open. No riddle this time. I just had to flip a lever.
 		Your acrobatics were most impressive. I would have assisted, but alas... my shoes have worn too thin to keep steady footing on this metal.
 		* You sigh.
 		You -- Of course, Redford.
 		[main_speaker travel_to: ../final_area]
-{otherwise}[main_speaker at: final_area]
+[otherwise][main_speaker at: final_area]
 	// TODO: Wrap it all up. Tell a joke or two.
 	And there they are.
 	You -- What? What is it?
@@ -212,7 +212,7 @@
 
 		[stat?: redford/sigh]
 			* He makes that almost-sigh sound again.
-		{otherwise}
+		[otherwise]
 			* He makes a sound like a sigh, despite likely having no lungs.	
 		[+stat: redford/sigh]
 		It's confusing.  I can't recollect how long I've been like this. Why would I have come into being now?
@@ -220,9 +220,9 @@
 		[mention: truth]
 		[Global complete_task: troops_of_the_manor]
 		[exit]
-{otherwise}[Global task_is_complete: troops_of_the_manor]
+[otherwise][Global task_is_complete: troops_of_the_manor]
 	[goto: post_mission]
-{otherwise}
+[otherwise]
 	*(ERROR: Captain Redford has no words for the current situation.)
 [exit]
 
@@ -259,7 +259,7 @@ Let's just find the end of this labyrinth and rescue whoever survived this thric
 	Bring it over here. I'll take a look.
 	* You show him the book. He takes a moment to read through it.
 	... It's hard to say. I'll think it over. Perhaps you can try your luck solving it in the meantime, and let me know if you're having trouble.
-{otherwise}
+[otherwise]
 	You -- Any ideas on the journal?
 [exit]
 

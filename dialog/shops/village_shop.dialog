@@ -13,7 +13,7 @@
 			You -- I've talked with that gentleman Armstrong about it. Apparently it just needs some missing parts.
 			So Armstrong has roped you into repairing that contraption?
 			You -- Well, of course! I need to use it.
-		{otherwise} 
+		[otherwise] 
 			You -- I'm going to talk with the repair man working at it to see what I can do.
 			So Armstrong finally has someone else to help fix that contraption!
 			You -- If that's what he needs, of course I'll help. I need to use it.
@@ -45,11 +45,11 @@
 		There is no need to tell me if you are shy. It must be important to come all this way.
 		Besides, you probably came in here to buy something, not to have me talk your ears off.
 
-{otherwise} Welcome back, Jackie!
+[otherwise] Welcome back, Jackie!
 	* {talked > 10} The familiar smell of the incense comforts you.
-	* {otherwise}{talked > 7} The burning incense is not unpleasant.
-	* {otherwise}{talked > 4} The incense is strong.
-	* {otherwise} The bitter incense burns at your sinuses.
+	* [otherwise]{talked > 7} The burning incense is not unpleasant.
+	* [otherwise]{talked > 4} The incense is strong.
+	* [otherwise] The bitter incense burns at your sinuses.
 
 	{Global.stat("current_day") > 1}{talked > 0}[! Global task_exists: fridge_conspiracy]
 		[mention: bother]
@@ -132,12 +132,12 @@
 		[! stat?: bug]
 			You -- What do they look like, exactly?
 			I have one in a jar on the table, if you would like to examine it.
-		{otherwise}{Global stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
+		[otherwise]{Global stat('bug') == 1} I see you have found one! Nasty creatures, aren't they?
 			You -- It keeps vibrating. Do people really carry these around?
 			Hahaha!
 			You do not need to keep it alive. It would be quite unbearable carrying dozens of live deathgnats.
 			The one I keep is quite a handful.
-			{otherwise} You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
+			[otherwise] You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
 			Commendable work!
 		> Where do I find deathgnats?
 			Ha! Where can you not find them? They are pervasive!
@@ -171,7 +171,7 @@ You -- Gotta go, see you!
 [traded_coats] You -- Could we trade outfits again?
 	Hm, you changed your mind?
 	How about the same deal as last time: my coat, in exchange for yours plus fifty gems.
-{otherwise}
+[otherwise]
 	You -- Would you be willing to trade outfits? Yours is so lovely...
 	Hm... I only have two sets.
 	If you give me your coat in exchange, plus... oh, fifty gems? Then we have a deal.
@@ -179,7 +179,7 @@ You -- Gotta go, see you!
 > {Global count("gem") > 50} Deal. My coat and fifty gems.
 	{Global add_item("gem", -50)} Very well.
 	[swap_coats] I hope you enjoy.
-> {otherwise} Ouch. I don't have fifty gems.
+> [otherwise] Ouch. I don't have fifty gems.
 	Well, I'm sure you can find some if you are interested.
 Anything else I can help you with?
 [back]

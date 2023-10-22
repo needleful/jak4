@@ -12,9 +12,9 @@
 				{Global.count("pistol") < 5}
 					You -- I have a pistol, but I don't have enough bullets to take care of them.
 					[Global add_item: pistol | #12] Here's the bullets I have! I'm a terrible shot...
-				{otherwise}
+				[otherwise]
 					You -- I've got it taken care of.
-			{otherwise}
+			[otherwise]
 				You -- I suppose I would.
 				[Global add_item: wep_pistol]
 				[Global add_item: pistol | #12]
@@ -24,7 +24,7 @@
 		> [skip] (Decline) I'm going to scope out the area first.
 			You -- I'm going to scope out the area first.
 			Uh... don't take too long please!
-	{otherwise}
+	[otherwise]
 		Seriously, I could use some help with those deathgnats.
 		{Global.count("pistol") < 6}
 			You -- I'm running a bit low on bullets.
@@ -34,7 +34,7 @@
 		> I need to get some more supplies first.
 			I guess I'll uuuh be here until then.
 			[exit]
-{otherwise}[!stat?: riley/discussed/capacitors]
+[otherwise][!stat?: riley/discussed/capacitors]
 	{talked == 0}
 		Eey! Klerdena sur!
 		You --  Uh, apologies.  That's "thank you" in Yaqazi, correct? I forgot how to say "you're welcome".
@@ -43,23 +43,23 @@
 		Yeah, I was pinned down by those deathgnats, but you took them out no problem! I'm Riley, by the way.
 		You -- Jackie. It was no trouble. One of them had a lovely coat.
 		[subtopic: saved_113]
-	{otherwise}
+	[otherwise]
 		Thanks for the help! I'm Riley, by the way.
 		[subtopic: saved_113]
-{otherwise}[!stat?: capacitor_113]
+[otherwise][!stat?: capacitor_113]
 	Have anything else you wanted to ask?
 	> [Global count: wep_pistol]{Global.count("pistol") < 5} I'm running a little low on bullets for your pistol.
 		[Global add_item: pistol | #8] Oh, I can give you some more.
 		You -- Thanks.
 	> Not at the moment.
 	[exit]
-{otherwise}[!stat?: riley/discussed/capacitor_113]
+[otherwise][!stat?: riley/discussed/capacitor_113]
 	You -- I found that capacitor you were looking for.
 	Really? Wow!
 	You can hold onto it, if you want. Once we've got twelve, we can make our way up to the tree and see what's inside!
 	I'll be out of here in a bit. See you around!
 	[+stat: riley/discussed/capacitor_113]
-{otherwise}
+[otherwise]
 	// TODO: more content here
 	Did you want to talk about anything else before I head out?
 	You -- Where are you going next?
@@ -94,13 +94,13 @@ I found an entrance at the base of the tree that punches through the tower's out
 	Alright! Before those deathgnats came, I pushed those floating flower things up so they make a path to the tower's lower level. Hop on those and look for a little hole in the wall. I'll come in after you.
 	You -- Alright, I'll look for a hole.
 	[Global add_note: Riley says there must be a capacitor inside the tower by the Hideaway. |+ the_tree_tower village_tower ]
-{otherwise}
+[otherwise]
 	You -- That's an interesting coincidence. I actually found one of those capacitors in the tower.
 	What!? Were you using it for something?
 	[Global task_is_active: activate_the_medium]
 		You -- I needed one to activate the Medium down in the village.
 		Oh...
-	{otherwise}
+	[otherwise]
 		You -- Not particularly, no.
 		Really?
 	Well, if you come across any more, could you lend me a hand? I'm a little in over my head, I guess...
@@ -111,7 +111,7 @@ Thank you! I think we'll make a great team.
 	[Global add_item: wep_pistol]
 	[Global add_item: pistol | #12]
 	And here: I'll let you have my pistol. I think you'll get more use out of it than I ever have.
-{otherwise}
+[otherwise]
 	You can keep that pistol, by the way. You seem to know how to use it better than I do.
 [+stat: riley/discussed/capacitors]
 [exit]
@@ -134,12 +134,12 @@ Thank you! I think we'll make a great team.
 		Thanks again.
 		You -- Do you need any help getting down?
 		Thanks, but no. The deathgnats are really the only specters that worry me. I can just jump around the others, but those bullets are too much for me!
-	{otherwise}
+	[otherwise]
 		Phew! You really saved me there, Jackie!
 		{talked == 0} I was pinned down before you took out those deathgnats!
 		[+stat: riley/111/reward] [Global add_item: bug | #31] [Global add_item: gem | #75] Here's some of the loot I got before it hit the fan. I can take it from here.
 		[goto: shop_generic]
-{otherwise}
+[otherwise]
 	{Global add_stat("riley/111/talked") > 1}
 		Hey again, Jackie!
 		You -- Hey. Are you okay?
@@ -150,7 +150,7 @@ Thank you! I think we'll make a great team.
 			[main_speaker track_enemies]
 		> I'll scope out the area and be back soon, alright?
 			Alright...
-	{otherwise}
+	[otherwise]
 		You -- Are you good?
 		Good. How's the deathgnat situation?
 		You -- In progress.
@@ -162,15 +162,15 @@ You -- Gotta go, bye!
 
 :_coat
 [traded_coats] You -- Say, could we trade coats again?
-{otherwise} You -- That's a very lovely coat. Would you be interested in swapping for mine?
+[otherwise] You -- That's a very lovely coat. Would you be interested in swapping for mine?
 
 [main_speaker needs_saving] Uh, a little busy right now? A little pinned-down-by-gunfire right now?
 	You -- Okay, I'll get the deathgnats first.
-{otherwise}[traded_coats] Again? Did you regret the trade?
+[otherwise][traded_coats] Again? Did you regret the trade?
 	You -- Well, I'm just quite picky with coats.
 	I suppose we can.
 	[swap_coats] You -- Thanks!
-{otherwise} You want to trade coats? Like, my coat for yours?
+[otherwise] You want to trade coats? Like, my coat for yours?
 	You -- Yes.
 	You're so odd. But sure, let's trade.
 	[swap_coats] You -- Thanks!

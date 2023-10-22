@@ -17,16 +17,16 @@
 	[stat?: talked/balter] 
 		[Global add_note: Ask Balter about putting a statue at the front entrance to the fort. |+ fountain_statue crab_hill]
 		You -- I know! I'll ask Balter! He seems like an important fellow.
-	{otherwise}
+	[otherwise]
 		[Global add_note: Find and ask an authority about adding a statue at the front of the fortress. |+ fountain_statue crab_hill]
 		You -- Is there an administration building, or some authority I would ask about adding a statue?
 		Maybe the large grey building at the top of the city?
 		You -- I'll check there, thank you! 
-{otherwise}[! Global task_completed: fountain_statue]
+[otherwise][! Global task_completed: fountain_statue]
 	How goes your quest to add a statue to the fountain?
 	You -- Patience, friend! We can't rush art!
 	We are not friends.
-{otherwise}
+[otherwise]
 	I have to say, this is an impressive statue.
 	You -- Exactly! And you doubted me...
 	I did not have any opinion about you.
@@ -38,7 +38,7 @@
 {talked == 0}
 	Hello!
 	You -- Hi!
-{otherwise}
+[otherwise]
 	You -- Hello again!
 	Hello!
 [Global task_exists: fountain_statue][Global.stat: fountain_statue/balter]
@@ -49,7 +49,7 @@
 		You -- Yes. Balter said you also wanted to build a statue at the front plaza.
 		Eh? You're interested in helping?
 		You -- I could do with a bit more to do on my visit.
-	{otherwise}
+	[otherwise]
 		Any progress on the statue?
 
 [exit]

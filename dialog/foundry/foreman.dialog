@@ -1,7 +1,7 @@
 {talked == 0}
 	You -- Hello. You seem like the management around here.
 	I'm the foreman, correct.
-{otherwise}
+[otherwise]
 	You -- Hello again.
 	Hallo, miss.
  [stat?: foundry/pistol_upgrade][Global count: wep_pistol]
@@ -15,7 +15,7 @@
 	You -- Oh? So it would be fresh copper?
 	Something much stronger. We have been experimenting with different bronze alloys. We have so much copper, we should be doing more than just selling wire.
 	You -- Oh! That could be a worthwhile investment...
-{otherwise}[Global count: wep_wave_shot][!stat?: foundry/wave_shot_upgrade]
+[otherwise][Global count: wep_wave_shot][!stat?: foundry/wave_shot_upgrade]
 	[+stat: foundry/wave_shot_upgrade]
 	What is that?
 	* He points your weapon, the bubble shot.
@@ -25,7 +25,7 @@
 	* He examines the device, careful not to pry anything out of place. After some careful investigation, he slides the covers off and examines its internals.
 	This is fascinating...
 	[Global count: bronze_pistol] I could give it the same treatment as your pistol. I'd have to call in some outside experts, but we could reverse-engineer this and remake it with new parts.
-	{otherwise} I think.. if I call in some outside experts, we could reverse-engineer this and remake it with new parts.
+	[otherwise] I think.. if I call in some outside experts, we could reverse-engineer this and remake it with new parts.
 	I'd let you keep both models. You'd just have to pay for the labor.
 	You -- I'll keep that in mind.
 
@@ -40,7 +40,7 @@
 	[Global task_is_complete: unblock_the_train]
 		Much better, with your help unblocking the train.
 		I hope they get off their asses and start moving soon!
-	{otherwise}
+	[otherwise]
 		Not so good today. The train is stuck. They said there was a problem on the tracks.
 	[! stat?: foreman/discussed/balter]
 		But also, I am having issues with Balter at the capital.
@@ -69,18 +69,18 @@ Don't trip on your way down.
 	> {Global.count("gem") < 12} I don't have that many.
 		Wow, that's barely pocket change. Do you have enough for food?
 		You -- I... haven't thought about that....
-	> {otherwise} Sure, I can do that.
+	> [otherwise] Sure, I can do that.
 		[Global remove_item: gem | #12][swap_coats] Thank you again!
 		At this rate, your indecision will pay for my lunch!
 	> I've changed my mind. You can keep the coat for now.
-{otherwise}
+[otherwise]
 	You -- Say, that's a lovely fabric. Would you be willing to trade?
 	Trade what? My coat for yours?
 	You -- Yes.
 	Hm... well, it is an old favorite. How about for 12 gems?
 	> {Global.count("gem") < 12} I don't have that many.
 		Really? Wow, you have bigger problems than not having my coat...
-	> {otherwise} Sure, here's the gems and my coat.
+	> [otherwise] Sure, here's the gems and my coat.
 		[Global remove_item: gem | #12][swap_coats] Good to do business with you.
 		With this money, I can buy an entire grain of rice.
 		[back]

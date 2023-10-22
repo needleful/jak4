@@ -53,7 +53,7 @@
 			Each line of the yard has a number, and each car as well.
 			You -- Oh, it's a train car?
 			Yes! It's quite Bohemian! I felt like we could take off at any moment!
-		{otherwise}
+		[otherwise]
 			You've not been to Muzna Cross yet? You'll understand when you see it, but call me from there if you can't find it.
 		[back]
 	[Global remember: muzna_cross | places]
@@ -62,7 +62,7 @@
 	Excellent! Let me know when you've got it! After that, maybe I can give you a tour of the place!
 	[Global add_note: She apparently wants to give me a tour of the area? I'm not sure how that'd work. |+ persephone]
 
-{otherwise}[! Global task_is_complete: gift_from_persephone]
+[otherwise][! Global task_is_complete: gift_from_persephone]
 	You -- Persephone?
 	Hello, love!
 	// TODO: dialog after visiting the Medium
@@ -74,7 +74,7 @@
 				Each track is labelled with a number, and each train car has a number as well.
 				Those are the apartments! Quite interesting, right? I could have rented a little hut to the south for less, but a city of trains was too good to pass up!
 				So find the sign for line 6, follow it to box 8, and my flat is the green car at the very top!
-			{otherwise}
+			[otherwise]
 				Do you know how to find Muzna Cross? It's the rail station, just north of the plateau. Following the tracks would get you there. [Global mark_map: muzna_cross | The Muzna Cross railway station. Just north of the plateau.]
 				?> Which way is north again?
 					You really should get that internal compass developed, love!
@@ -84,11 +84,11 @@
 		> No, I'm just calling to say hello.
 			We've already had our hellos, call me once you get my present!
 			[exit]
-	{otherwise}[! Global count: triangles_tablet]
+	[otherwise][! Global count: triangles_tablet]
 		Did you find my gift on the coffee table?
 		You -- I guess I didn't.
 		Well, you'll have to get that before you go! Didn't you come out here for the gift? Once you get it, I'll call you!
-	{otherwise}[! stat?: persephone/discussed/second_medium]
+	[otherwise][! stat?: persephone/discussed/second_medium]
 		// TODO: extra dialog if the player found the third Medium already.
 		What do you think of my flat?
 		You -- It's cute! How long has it been since you used it? It seems well taken care of.
@@ -113,13 +113,13 @@
 		Yes!
 		[note: persephone/cave | Persephone says there's a second medium in the Smiler's Cave, in the temple. |+ persephone smilers_cave gift_from_persephone]
 		[+stat: persephone/discussed/second_medium]
-	{otherwise}[! stat?: medium049/activated]
+	[otherwise][! stat?: medium049/activated]
 		Love, I know you haven't activated the second Medium.
 		Go on! Try it! I promise it won't bite.
-	{otherwise}
+	[otherwise]
 		Yay, you did it!
 		[Global complete_task: gift_from_persephone]
-{otherwise}
+[otherwise]
 	Did you want to talk about something?
 	* (HINT: use items or journal notes to choose a topic)
 	You -- See you later, Persephone.
@@ -134,5 +134,5 @@
 		* The phone rings...
 		[goto: persephone]
 	> [skip] (No)
-{otherwise}
+[otherwise]
 	* You don't know any numbers. None worth calling, anyway.

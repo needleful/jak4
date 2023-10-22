@@ -3,9 +3,9 @@
 	You -- For what?
 	For the ultimate challenge...
 	[exit]
-{otherwise }{game_stat("award") >= 3}
+[otherwise]{game_stat("award") >= 3}
 	You are a real G. That stands for “real gamer”.
-{otherwise }[! has_game_stat: best]
+[otherwise][! has_game_stat: best]
 	Hmm...
 	* They inspect your equipment.
 	You are ready for the ultimate challenge.
@@ -15,7 +15,7 @@
 	No stops. No checkpoints.
 	Twenty minutes. Ten if you're good.
 	Do you wish to face this epic trial?
-{otherwise}
+[otherwise]
 	Do you want to try the ultimate challenge once again? Here to the summit of God's Tongue. No stops. No checkpoints. Ten minutes.
 {has_game_stat("best")}
 	* Your current best time is #{"%.3f" % game_stat("best")} seconds (#{main_speaker.get_parent().award_name()} Rank).
@@ -36,7 +36,7 @@ You -- Say, that's a lovely coat..
 		I would find the rot that spawns the specters and eat it whole.
 		[swap_coats] But for now, here is my humble shirt.
 		You -- Uh, thank you.
-	{otherwise} No.
+	[otherwise] No.
 		You -- Oh.
 > Just wanted to mention that, bye!
 [back]

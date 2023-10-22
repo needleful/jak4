@@ -11,30 +11,19 @@ var r_narrate := RegEx.new()
 var r_reply := RegEx.new()
 var r_speaker := RegEx.new()
 var r_whitespace := RegEx.new()
-var r_expression := RegEx.new()
-var r_sq_expression := RegEx.new()
 var r_context_reply := RegEx.new()
-var r_special_replace := RegEx.new()
 
-var special_functions := {
-	"+stat" : "Global.add_stat",
-	"stat?" : "Global.stat",
-	"$" : "set_var",
-	"++": "inc_var"
-}
+var exp_parser := NPDialogExpParser.new()
 
 func _init():
 	r_comment.compile("^\\s*//")
 	r_whitespace_start.compile("^(\\s+)")
 	r_label.compile("^\\s*:(.+)")
-	r_expression.compile("#?\\{([^\\}]+)\\}")
-	r_sq_expression.compile("#?\\[([^\\]]+)\\]")
 	r_narrate.compile("^\\s*\\*\\s*")
 	r_reply.compile("^\\s*>\\s*")
 	r_context_reply.compile("^\\s*\\?([a-zA-Z0-9_/]*)>")
 	r_speaker.compile("^\\s*([^\\-]+)\\s*--\\s*")
 	r_whitespace.compile("\\s+")
-	r_special_replace.compile("\\$([a-zA-Z_0-9]+)")
 
 func get_importer_name():
 	return "np.dialog"
@@ -116,9 +105,12 @@ func parse_text(text: String, src_path = "<local>"):
 		var wd := DialogItem.new()
 		seq.dialog[line_number] = wd
 		
-		var sp := extract_expressions(line)
-		line = sp.line
-		wd.conditions = sp.conditions
+		var sp := exp_parser.extract(line)
+		if "_parse_error" in sp:
+			print_debug("ERROR for ", src_path, ":", line_number, "\n\t", sp)
+		else:
+			line = sp.line
+			wd.conditions = sp.conditions
 		
 		var td := extract_type(line)
 		line = td.line
@@ -204,92 +196,6 @@ func extract_whitespace(line: String, indent: String, src_path, line_number) -> 
 	else:
 		dict.indent_level = 0
 	return dict
-
-func extract_expressions(line: String) -> Dictionary:
-	var dict = {}
-	dict.line = line
-	dict.conditions = []
-	var line_no_expressions := line
-	var matches = r_expression.search_all(line)
-	for rm in matches:
-		var s: String= rm.get_string()
-		var ex:String = rm.get_string(1)
-		var ex2 := replace_vars(ex)
-		line_no_expressions = line_no_expressions.replace(s, "")
-		if s.begins_with("#"):
-			dict.line = dict.line.replace(ex, ex2)
-		else:
-			dict.line = dict.line.replace(s, "")
-			dict.conditions.append(ex2)
-	var sq_matches := r_sq_expression.search_all(line_no_expressions)
-	for rm in sq_matches:
-		# TODO: add the uh "#" interpolation
-		var text:String = rm.get_string(1)
-		var func_str := ""
-		var args_str := ""
-		var idx:int = text.find(":")
-		if idx >= 0:
-			func_str = text.substr(0, idx)
-			args_str = text.substr(idx+1)
-		else:
-			func_str = text
-
-		var slot := ""
-		for f in func_str.split(" ", false):
-			if f in special_functions:
-				f = special_functions[f]
-			elif f.begins_with("$"):
-				f = replace_vars(f)
-			if slot != "" and slot != "!":
-				slot += "."
-			slot += f.strip_edges()
-
-		var message := "("
-		var args := 0
-		if args_str != "":
-			for a in args_str.split("|"):
-				if args:
-					message += ", "
-					
-				if a.begins_with("+"):
-					a = a.substr(1)
-					message += "["
-					var items := 0
-					for s2 in a.split(" ", false):
-						s2 = sq_argument(s2)
-						if s2 == "":
-							continue
-						if items:
-							message += ","
-						message += s2
-						items += 1
-					message += "]"
-				else:
-					message += sq_argument(a)
-				args += 1
-		message += ")"
-		var sqex := slot + message
-		dict.conditions.append(sqex)
-		dict.line = dict.line.replace(rm.get_string(), "")
-	return dict
-
-func sq_argument(arg: String) -> String:
-	var s := arg.strip_edges()
-	if s.begins_with("#"):
-		return s.substr(1)
-	var replaced = replace_vars(s)
-	if replaced != s:
-		return replaced
-	else:
-		return '"' + s.replace('"', '\\"') + '"'
-
-func replace_vars(s: String) -> String:
-	var replaced := s
-	for m in r_special_replace.search_all(s):
-		var m1:String = m.get_string()
-		var m2:String = "variables[\"%s\"]" % m.get_string(1)
-		replaced = replaced.replace(m1, m2)
-	return replaced
 
 func extract_type(line: String) -> Dictionary:
 	var nm := r_narrate.search(line)

@@ -15,7 +15,7 @@
 	Tirus -- Ey, kholt mi!
 	[Global task_exists: flight_test]
 		* You recognize who he's looking at. It's that odd girl, Laili.
-	{otherwise} * He's talking to a young girl. She says nothing.
+	[otherwise] * He's talking to a young girl. She says nothing.
 	// Do you want a bit of food? I would have no trouble (lit: Trouble to me not).
 	Tirus -- / ... Poro-nit leshene? Kirke kame tono./
 	[stat?: language/basic]* You can make part of what he said: “Do you want (something) food? (Something) me not.”
@@ -31,7 +31,7 @@
 			I worried she had no family.
 		[stat?: laili/orphan]
 			You -- Oh, she doesn't. She lives on the top of the... large monument in the center of town. I don't know what it's called.
-		{otherwise}
+		[otherwise]
 			You -- I'm not sure if she does. She lives on top of the... large monument in the center of town. I don't know what it's called.
 		Tirus -- What!? And you let her!?
 		You -- Well- I-... It's not like I can end homelessness, now can I?
@@ -42,7 +42,7 @@
 		Tirus -- Yes. Good. Talk to her. I can talk with people in town. Lots of families, we can find someone with extra room.
 		// Adjust this so the quest doesn't drag on. No foster-home stuff, just get her to eat some food from Tirus.
 		[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
-	> {otherwise} Who was that?
+	> [otherwise] Who was that?
 		[subtopic: _tirus_laili]
 	> Say, do you have anything for sale?
 		I do.
@@ -51,11 +51,11 @@
 	> Well, it was a lovely chat, but I must be off.
 		Tirus -- Yes. Do watch for the heat...
 	[exit]
-{otherwise}[! Global task_exists: strange_girl]
+[otherwise][! Global task_exists: strange_girl]
 	Hello again, uh...
 	You -- Jackie.
 	Right..
-{otherwise}[Global task_is_active: strange_girl]
+[otherwise][Global task_is_active: strange_girl]
 	[stat?: laili/friendship][stat?: laili/flight]
 		You -- Good #{general_time()}, Tirus.
 		Tirus -- ... 
@@ -84,7 +84,7 @@
 			I have been talking in the hopes of finding a family with extra room for her to sleep.
 			If it fails, she can sleep in the closet here. I have a, uh, hammock somewhere.
 		[Global complete_task: strange_girl | Well, I think I did quite a lovely job getting her eating!]
-	{otherwise}
+	[otherwise]
 		// TODO: avoid repeating this dialog
 		How goes it, Vaeler?
 		You -- I have a name, you know.
@@ -94,13 +94,13 @@
 			[stat?: laili/friendship]
 				You -- I have. She said she was doing alright, but sounded grateful for the offer. I'm not sure when she's coming in, though.
 				I will keep my eyes out!
-			{otherwise}
+			[otherwise]
 				You -- I haven't brought it up yet.
 				Tirus -- Well, what are you waiting for? I don't want her starving!
 					Did you at least find out where she lives?
 				[stat?: laili/orphan]
 					You -- Oh, she's an orphan. She lives up on top of the monument in town. Quite tragic.
-				{otherwise}
+				[otherwise]
 					You -- I assume she lives on the monument in the center of town. That's where I found her, at least.
 				Tirus -- What?! And you let her stay there?
 				You -- I don't see how I can change that.
@@ -109,10 +109,10 @@
 				You -- Oh, come on. I'll /ask/ her, that's no trouble. There's no need for the verbal abuse.
 				[note: tirus/laili/home | Convincing Laili to move into a foster home has now become my responsibility, for some reason. |+ strange_girl laili tirus]
 				[exit]
-		> {otherwise} I haven't found her yet.
+		> [otherwise] I haven't found her yet.
 			She is very elusive. I have asked a few people. They never see her going home.
 			You -- I suppose I'll keep looking, then.
-{otherwise}
+[otherwise]
 	// TODO: the task is complete, get updates on Tirus and Laili
 	> How's Laili doing?
 		Tirus -- Oh, she's getting along nice.
@@ -126,7 +126,7 @@
 		For you, the Vaeler discount!
 		You -- What, do I pay twice as much?
 		Eh, but would you ever know?
-	{otherwise}
+	[otherwise]
 		Sure.
 	[shop]
 	Thanks. See you.
