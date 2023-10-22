@@ -15,9 +15,16 @@ enum Aggression {
 	HighAggression
 }
 
+enum DialogHints {
+	NoHints,
+	OnlyReplies,
+	ItemsAndNotes
+}
+
 export(DamageFactor) var enemy_damage = DamageFactor.NormalDamage
 export(DamageFactor) var player_damage = DamageFactor.NormalDamage
 export(Aggression) var aggression = Aggression.NormalAggression
+export(DialogHints) var dialog_hints = DialogHints.ItemsAndNotes
 
 func get_name():
 	return "Difficulty"

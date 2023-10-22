@@ -39,6 +39,7 @@ onready var message_container := $messages/messages
 onready var messages := $messages/messages/list
 onready var message_list := messages
 onready var aside_template:Control = $aside_template
+onready var difficulty: DifficultySettings = Settings.sub_options["Difficulty"]
 
 const RESULT_SKIP := {"result":"skip"}
 const RESULT_PAUSE := {"result":"pause"}
@@ -305,6 +306,8 @@ func _check_notifications():
 					 !(state in notifications['_']))
 
 func _notify_new_item(label: String, label_state: int):
+	if difficulty.dialog_hints < DifficultySettings.DialogHints.ItemsAndNotes:
+		return
 	var label_type:String = label.split("(", false)[0].replace("@", "")
 	var nodes := _get_notification_nodes(label_type, label_state)
 	for n in nodes:
@@ -346,6 +349,8 @@ func _clear_notifications(type: String, state: int, clear_main: bool):
 		nodes[1].play("RESET")
 
 func _notify_contextual_reply():
+	if difficulty.dialog_hints < DifficultySettings.DialogHints.OnlyReplies:
+		return
 	var c = $"../buttons/trade/indicators/indicator-contextual"
 	if !c.visible:
 		c.get_node("AnimationPlayer").play("indicate")
