@@ -21,29 +21,22 @@ func extract(line: String) -> Dictionary:
 			"conditions":[]
 		}
 	var exp_strings := []
-	var interp_strings := []
 	
 	var interp_expression := false
 	var l := line
 	var line_no_expressions := ""
 	while l != "":
 		match l[0]:
-			'[':
-				var end := l.find(']')
+			'[', '{':
+				var end_char = ']' if l[0] == '[' else '}'
+				var end := l.find(end_char)
 				if end < 0:
-					return {"_parse_error": "missing ending `}` for "+l}
-				var ex := sq_convert(l.substr(1, end-1))
-				if interp_expression:
-					line_no_expressions += "#{%s}" % ex
-				else:
-					exp_strings.append(ex)
-				l = l.substr(end+1)
-				interp_expression = false
-			'{':
-				var end := l.find('}')
-				if end < 0:
-					return {"_parse_error": "missing ending `}` for "+l}
-				var ex := replace_vars(l.substr(1, end-1))
+					return {"_parse_error": "missing ending `"+end_char+"` for "+l}
+				var ex := (
+					sq_convert(l.substr(1, end-1))
+					if l[0] == '['
+					else replace_vars(l.substr(1, end-1))
+				)
 				if interp_expression:
 					line_no_expressions += "#{%s}" % ex
 				else:
