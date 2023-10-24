@@ -128,6 +128,10 @@ func _fail():
 		overlay.color_silver(EXPIRED_COLOR)
 		overlay.color_gold(EXPIRED_COLOR)
 		CustomGames.end(false)
+		var s := Global.add_stat("race/failed")
+		if s < 3:
+			Global.get_player().ui.show_prompt(
+				["reset"], "(Hold) Respawn at Race Start")
 
 func end():
 	if next_point and next_point.is_connected("body_entered", self, "connect_next_point"):

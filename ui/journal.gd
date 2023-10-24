@@ -129,10 +129,13 @@ func populate_list(type: int):
 				ids = s
 		NoteType.ActiveTasks:
 			category = "tasks"
-			ids = Global.game_state.active_tasks
+			ids = Global.game_state.active_tasks.duplicate()
 		NoteType.CompletedTasks:
 			category = "completed"
-			ids = Global.game_state.completed_tasks
+			ids = Global.game_state.completed_tasks.duplicate()
+	for tag in ids:
+		if Global.get_notes_by_tag(tag).empty():
+			ids.erase(tag)
 	if ids.empty():
 		return
 	
@@ -185,14 +188,15 @@ func write_notes(n: Array):
 	Util.clear(subject_notes)
 	if buttons:
 		for note_pair in n:
-			var b := Util.multiline_button(note_pair[0])
+			var note_text:String = note_pair[0]
+			if sort != Sort.Subject:
+				note_text += '\n\t[i]%s[/i]' % _tag_list(note_pair[1])
+			var b := Util.multiline_button(note_text)
 			if !starting_item:
 				starting_item = b
 			var _x = b.connect("pressed", self, "emit_signal", ["note_chosen", note_pair[1]], CONNECT_ONESHOT)
 			if sort == Sort.Subject:
 				b.focus_mode = FOCUS_CLICK
-			else:
-				b.hint_tooltip = _tag_list(note_pair[1])
 			subject_notes.add_child(b)
 		call_deferred("_resize_note_buttons")
 	else:
@@ -209,7 +213,13 @@ func write_notes(n: Array):
 				var tag_list := Label.new()
 				tag_list.autowrap = true
 				var tc := get_color("font_color", "Label")
-				tc.a = 0.75
+				if "abolished" in note_pair[1]:
+					var lc := tc
+					lc.a = 0.4
+					l.add_color_override("font_color", lc)
+					tc.a = 0.4
+				else:
+					tc.a = 0.75
 				tag_list.add_color_override("font_color", tc)
 				tag_list.text = _tag_list(note_pair[1])
 				
@@ -227,6 +237,8 @@ func _tag_list(t_list: Array) -> String:
 	var s := "tags: "
 	var tags_added := 0
 	for tag in t_list:
+		if tag == "abolished":
+			continue
 		if Global.has_stat(tag):
 			continue
 		var t:String = tag.capitalize()

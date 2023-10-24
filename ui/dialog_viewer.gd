@@ -242,12 +242,9 @@ func clear():
 	variables = {}
 	label_states = {}
 	block_states = {}
+	block_types = {}
 	Util.clear(messages)
-	clear_replies()
-
-func clear_replies():
-	for c in replies.get_children():
-		c.queue_free()
+	Util.clear(replies)
 
 func _on_task_completed(_task):
 	_evaluate_labels()
@@ -275,9 +272,11 @@ func _evaluate_labels():
 		if old_state == LocalBlockState.Completed:
 			continue
 		var block_stat = speaker_stat() + "/" + block
-		if Global.stat(block_stat) >= BlockState.Completed and block_states[l] < BlockState.Completed:
+		if Global.stat(block_stat) >= BlockState.Completed and (
+			!(l in block_states)
+			or block_states[l] < LocalBlockState.Completed
+		):
 			label_states[l] = LocalBlockState.Completed
-			block_states[block] = LocalBlockState.Completed
 		else:
 			label_states[l] = LocalBlockState.Optional if !quest else LocalBlockState.Quest
 	_check_notifications()
@@ -308,14 +307,15 @@ func _check_notifications():
 		if type == '_':
 			continue
 		for state in LocalBlockState.values():
-			if state == LocalBlockState.Visited:
+			if state == LocalBlockState.Visited or state == LocalBlockState.Invalid:
 				continue # Nothing to clear
 			if !(state in notifications[type]):
 				_clear_notifications(type, state,
 					 !(state in notifications['_']))
 	for b in updated_blocks:
 		var update = updated_blocks[b]
-		_notify_new_item(update[0], update[1])
+		if update[1] != LocalBlockState.Invalid and update[1] != LocalBlockState.Visited:
+			_notify_new_item(update[0], update[1])
 
 func _notify_new_item(label: String, label_state: int):
 	if difficulty.dialog_hints < DifficultySettings.DialogHints.ItemsAndNotes:
@@ -323,8 +323,7 @@ func _notify_new_item(label: String, label_state: int):
 	var label_type:String = label.split("(", false)[0].replace("@", "")
 	var nodes := _get_notification_nodes(label_type, label_state)
 	for n in nodes:
-		if !n.get_parent().visible:
-			n.play("indicate")
+		n.play("indicate")
 
 func _get_notification_nodes(type: String, state: int) -> Array:
 	var base_node: Node
@@ -409,7 +408,7 @@ func advance():
 	if !current_item:
 		exit()
 		return
-	clear_replies()
+	Util.clear(replies)
 	var result := false
 	var noskip := false
 	var font_override := ""
@@ -890,7 +889,7 @@ func complete_block(id: String = ""):
 	return _set_block(id, BlockState.Completed)
 
 func mark_discussed(id: String = ""):
-	return _set_block(id, BlockState.Completed)
+	return _set_block(id, BlockState.Visited)
 
 func _set_block(id: String, state: int):
 	if id == "":
@@ -937,7 +936,7 @@ func subtopic(label: String):
 	return goto(label)
 
 func discussed(id: String = "") -> bool:
-	return _block_state(id, BlockState.Completed)
+	return _block_state(id, BlockState.Visited)
 
 func completed(id: String = "") -> bool:
 	return _block_state(id, BlockState.Completed)

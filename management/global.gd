@@ -129,7 +129,9 @@ func get_valid_game_state():
 func remember(tag: String, category: String = "people"):
 	if category in game_state.stats:
 		if !(tag in game_state.stats[category]):
-			game_state.stats[category].append(tag)
+			var t = game_state.stats[category]
+			t.append(tag)
+			game_state.stats[category] = t
 	else:
 		game_state.stats[category] = [tag]
 	return true
@@ -252,10 +254,7 @@ func count(item: String) -> int:
 		return 0
 
 func add_item(item: String, amount:= 1) -> int:
-	if item in game_state.inventory:
-		game_state.inventory[item] += amount
-	else:
-		game_state.inventory[item] = amount
+	_add_item(item, amount)
 	if item in tracked_items:
 		var _x = add_stat(item, amount)
 	else:
@@ -263,7 +262,19 @@ func add_item(item: String, amount:= 1) -> int:
 	emit_signal("inventory_changed")
 	emit_signal("item_changed", item, amount, game_state.inventory[item])
 	emit_signal("anything_changed")
+	var resource_path = "res://ui/items/%s.tres" % item
+	if ResourceLoader.exists(resource_path):
+		var desc := load(resource_path) as ItemDescription
+		if desc and !desc.tags.empty():
+			for t in desc.tags:
+				_add_item(t, amount)
 	return game_state.inventory[item]
+
+func _add_item(item: String, amount: int):
+	if item in game_state.inventory:
+		game_state.inventory[item] += amount
+	else:
+		game_state.inventory[item] = amount
 
 func remove_item(item: String, amount := 1) -> bool:
 	if count(item) >= amount:
