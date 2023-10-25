@@ -6,7 +6,8 @@ const special_functions := {
 	"+stat" : "Global.add_stat",
 	"stat?" : "Global.stat",
 	"$" : "set_var",
-	"++": "inc_var"
+	"++": "inc_var",
+	"?" : "ternary"
 }
 
 var r_special_replace := RegEx.new()

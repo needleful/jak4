@@ -38,3 +38,31 @@ They don't let me in the arenas anymore. But maybe you can get access? If you ta
 You -- It's that simple?
 The arena is open to anyone who knows about it.
 [back]
+
+:_coat
+[traded_coats]
+	You -- Could we trade coats again?
+	You're very strange. Sure.
+	[swap_coats] 
+	You -- Thank you!
+	[back]
+[otherwise][! stat?: arena137/escape]
+	You -- Say, that's a lovely fabric you're wearing.
+	Hm? Who are you?
+	You -- I'm just a visitor.
+	Are you here to see the arena?
+	[goto: arena]
+[otherwise]
+	[discussed]
+		You -- So, about your coat..
+	[otherwise]
+		You -- Say, that's a lovely coat...
+	You -- Would you be interested in trading?
+	[! stat?: cave137/locked]
+		Maybe once we figure out this specter problem.
+	[otherwise]
+		You know, you've helped a lot. Sure. We can trade.
+		[swap_coats]
+		You -- Thank you!
+		[back]
+[back: #false]
