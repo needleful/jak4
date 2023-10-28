@@ -33,6 +33,7 @@ var MIN_DIST_SQ_ENEMIES := 2000.0
 onready var env := $WorldEnvironment
 onready var env_tween: Tween = $env_tween
 onready var sun_tween: Tween = $sun_tween
+onready var stars_tween: SceneTreeTween
 onready var sun := $sun
 onready var stars := $stars
 onready var indirect_tween := $indirect_tween
@@ -361,8 +362,10 @@ func _set_env(p_env: Dictionary):
 		Music.reset()
 	if "show_sun" in p_env:
 		set_sun_enabled(p_env.show_sun)
+		set_stars_enabled(p_env.show_sun)
 	else:
 		set_sun_enabled(env_settings.sun_visible)
+		set_stars_enabled(true)
 	var p = Global.get_player()
 	if p:
 		if "do_not_disturb" in p_env:
@@ -384,6 +387,25 @@ func _clear_env():
 func get_wind_audio():
 	return $audio_wind
 
+func set_stars_enabled(_enabled: bool):
+	pass
+
+func _doesnt_work(enabled: bool):
+		if stars_tween:
+			stars_tween.kill()
+		stars_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+		var _x
+		if enabled:
+			stars.show()
+			stars.material_override.set_shader_param("strength", 0)
+		
+		_x = stars_tween.tween_property(
+			stars.material_override, "shader_param/strength",
+			env_settings.star_brightness if enabled else 0.0,
+			FOG_TWEEN_TIME)
+		if !enabled:
+			_x = stars_tween.tween_callback(stars, "hide")
+
 func set_sun_enabled(enabled:bool):
 	sun_enabled = enabled
 	if time < TIME_READY:
@@ -395,12 +417,6 @@ func set_sun_enabled(enabled:bool):
 	_x = sun_tween.interpolate_property(sun, "light_energy",
 		sun.light_energy,
 		1.0 if enabled else 0.0,
-		FOG_TWEEN_TIME,
-		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	
-	_x = sun_tween.interpolate_property( stars.material_override, "shader_param/strength",
-		stars.material_override.get_shader_param("strength"),
-		env_settings.star_brightness if enabled else 0.0,
 		FOG_TWEEN_TIME,
 		Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	
