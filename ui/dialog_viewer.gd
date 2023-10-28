@@ -127,7 +127,7 @@ func _input(event):
 		disable_replies()
 	elif event.is_action_pressed("skip_to_next_choice"):
 		while current_item and current_item.type != DialogItem.Type.REPLY:
-			if !get_next():
+			if !main_speaker or !get_next():
 				break
 	elif current_item.type != DialogItem.Type.REPLY and event.is_action_pressed("ui_accept"):
 		get_next()
@@ -148,7 +148,7 @@ func start(p_source_node: Node, p_sequence: Resource, speaker: Node = null, star
 		if "->" in l:
 			var s =  l.split('->')
 			label_ex = s[0]
-			block_names[l] = s[1]
+			block_names[l] = s[1].strip_edges()
 			block = s[1]
 		if ":-" in label_ex:
 			var s = label_ex.split(":-")
@@ -271,7 +271,7 @@ func _evaluate_labels():
 			old_state = label_states[l]
 		if old_state == LocalBlockState.Completed:
 			continue
-		var block_stat = speaker_stat() + "/" + block
+		var block_stat = speaker_stat() + "/" + block.strip_edges()
 		if Global.stat(block_stat) >= BlockState.Completed and (
 			!(l in block_states)
 			or block_states[l] < LocalBlockState.Completed
@@ -896,7 +896,7 @@ func _set_block(id: String, state: int):
 		if call_stack.empty():
 			return false
 		id = call_stack[call_stack.size() - 1].block_name
-	var block_stat = speaker_stat() + "/" + id
+	var block_stat = speaker_stat() + "/" + id.strip_edges()
 	if Global.stat(block_stat) < state:
 		Global.set_stat(block_stat, state)
 	block_states[id] = LocalBlockState.Visited
@@ -947,7 +947,7 @@ func _block_state(id: String, min_state: int) -> bool:
 			return false 
 		var block_name:String = call_stack[call_stack.size() - 1].block_name
 		id = block_name
-	var block_stat = speaker_stat() + "/" + id
+	var block_stat = speaker_stat() + "/" + id.strip_edges()
 	return Global.stat(block_stat) >= min_state
 
 # 'completed' indicates the player doesn't need to revisit this block

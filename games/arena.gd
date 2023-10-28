@@ -224,7 +224,7 @@ func end():
 	clear_scenarios(true)
 	add_child(scenarios["base"])
 	emit_signal("game_ended")
-	player.fade_in()
+	player.teleport_to($base/player_start.global_transform)
 
 func award_stat():
 	return "award/"+scenario.name

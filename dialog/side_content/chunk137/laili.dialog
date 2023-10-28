@@ -56,7 +56,7 @@
 		The cave is way more dangerous than the cliff, and going all the way down the valley would take days. This is the best way up.
 	You -- I suppose you would know.
 	[Global create_task: flight_test]
-	[Global add_note: Laili has recruited me to test her “aeroplane”. Hopefully it doesn't kill me, but I would love that flight jacket. |+ flight_test laili cliff_village]
+	[Global add_note: Laili has recruited me to test her “aeroplane”. Hopefully it doesn't kill me, but I would love that flight jacket. |+ flight_test laili putkela]
 [otherwise][! Global task_is_complete: flight_test]
 	So are you ready to help with the flight test?
 [otherwise]
@@ -89,7 +89,7 @@
 	Okay.
 [exit]
 
-:@note(tirus/laili) :- Global.stat(laili/friendship) -> tirus
+:@note(strange_girl) :- Global.stat("laili/friendship") -> tirus
 You -- That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
 He did?
 You -- Does that surprise you? He was worried. He's the reason I went looking for you.
@@ -122,7 +122,7 @@ I'm doing okay...
 On food...
 ...
 Thanks.
-[note: lailu/tirus | I've talked with Laili about asking for food if she needs it. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
+[note: laili/tirus | I've talked with Laili about asking for food if she needs it. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
 [back]
 
 :laili_climb
@@ -209,8 +209,9 @@ Neat.
 	It can't be that dangerous. You survived.
 		We'll have to improve the flight time, but otherwise it's basically ready.
 	You -- /“Basically ready”?/
-		Well, if you need another flight test, you can find someone else. The helmet only does so much.
+		Well, if you need another flight test, you can find someone else. The jacket does nothing for protection.
 	[Global complete_task: flight_test | I nearly died flying the bloody thing, but at least I got this lovely coat.]
+	[+stat: laili/friendship]
 [otherwise]
 	Wow... I can't believe it.
 	You -- That's comforting.

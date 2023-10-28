@@ -17,7 +17,7 @@
 		[note: bairo/helping | There was a man stuck on the roof of his home until I cleared out the creatures inside. |+ unwanted_visitors bairo]
 	It is so terrible! Those scoundrels released those creatures into my home!
 	You -- Someone released them? Who?
-	Those terrible miscreants up on the cliff! They have been trying to kill me for months!
+	Those terrible miscreants up on the cliff, in Serubikir! They have been trying to kill me for months!
 	You -- Those are serious allegations. Is it the whole town? Why would they want to harm you?
 	The natural spring watering my crops is very valuable. Many would kill to have it.
 	But those on the cliff are especially evil! They hold blood sacrifices in the cave near their village! I have heard the screams! They feed ancient evils...
@@ -37,7 +37,7 @@
 		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
 		If you do, I can reward you.
 		[+stat: bairo/arena]
-		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. |+ unwanted_visitors bairo actual_cliff_village]
+		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. |+ unwanted_visitors bairo serubikir]
 		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
 		[Global add_note: There's a rope ladder up the cliff here. |+ bairo_farm]
 	[otherwise]
@@ -55,23 +55,14 @@
 			[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
 			[back]
 		[note: bairo/conspiracy | Bairo claims the inhabitants of the cliff village released spectres in his home to kill him (among other things). |+ unwanted_visitors bairo]
-		[Global mark_map: actual_cliff_village]
-		[note: bairo/sacrifices | Bairo wants me to find out what's inside the cave in this village. He asserts the villagers are performing blood sacrifices. |+ unwanted_visitors actual_cliff_village bairo/conspiracy]
-[otherwise][!Global task_is_complete: unwanted_visitors]
+		[Global mark_map: serubikir]
+		[note: bairo/sacrifices | Bairo wants me to find out what's inside the cave in this village. He asserts the villagers are performing blood sacrifices. |+ unwanted_visitors serubikir bairo/conspiracy]
+[otherwise][! Global task_is_complete: unwanted_visitors]
 	?> [! stat?: shortcut125] It's quite the climb up those cliffs.
 		It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. Probably those no-good cannibals.
 		[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
 		[back]
-	[stat?: cave137/locked]
-		You -- Your skull tablet was some sort of key that deactivated the creatures.
-		Really? So could you bring it back?
-		You -- It's in the machine, whatever it was...
-		But why would they attack me now? I got it years ago.
-		You -- I'm not sure, but it should be safe now.
-		That is a relief. Thank you.
-		// TODO: what does the player get from this? Maybe nothing.
-		[Global complete_task: unwanted_visitors]
-	[otherwise][! stat?: bairo/arena]
+	[! stat?: bairo/arena]
 		Have you found anything?
 		[stat?: arena137/entered]
 			You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
@@ -89,15 +80,30 @@
 		You -- Not yet, I'm still figuring out what the problem is.
 		Drat! And I broke my stick trying to lean on it. I am defenseless!
 [otherwise]
-	?> [! stat?: shortcut125] It's quite the climb up those cliffs.
-		It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. I thought it was the villagers, but maybe it just broke.
-		[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
-		[back]
+	[subtopic: task_completed]
+[exit]
+
+:task_completed
+?> [! stat?: shortcut125] It's quite the climb up those cliffs.
+	It is, yes. There used to be a rope ladder right above the farm, but somebody pulled it up. I thought it was the villagers, but maybe it just broke.
+	[note: bairo/discussed/shortcut | There's supposed to be a rope ladder leading up the cliffs from the farm. |+ bairo_farm]
+	[back]
+[! completed]
+	You -- Your skull tablet was some sort of key that deactivated the creatures.
+	Really? So could you bring it back?
+	You -- It's in the machine, whatever it was...
+	But why would they attack me now? I got it years ago.
+	You -- I'm not sure, but it should be safe now.
+	That is a relief. Thank you.
+	I have something that may be of interest to you. An old elixir. I don't have any need for running and jumping, but you might want it.
+	[Global add_item: stamina_up]
+	You -- Alright, I'll take it. Thank you.
+[otherwise]
 	You -- How's the farm going?
 	No attacks yet, though I am missing my lucky tablet.
 	You -- It was not lucky in the slightest.
 	You have no way of proving that. It can be a key /and/ lucky.
-[exit]
+[back]
 
 :note(bairo/skull_tablet) :- Global.task_is_complete("unwanted_visitors")
 You -- Do you still miss that skull tablet?
@@ -111,7 +117,7 @@ Not yet, but the attacks are rare. I hope my bad luck does not catch up to me wi
 [back]
 
 :@note(cave137/podium) :- Global.stat('bairo/skull_tablet') and !Global.task_is_complete("unwanted_visitors") -> skull
-:@note(bairo/skull_tablet) :- Global.stat('visited/spawn137') -> skull
+:@note(bairo/skull_tablet) :- Global.stat('cave137/podium') or Global.stat('visited/hive137') -> skull
 You -- I know that skull tablet's a problem, Bairo.
 What do you mean?
 You -- There's some sort of structure in the caves with that same skull emblem. We need to take that back to where it came from.
@@ -119,7 +125,7 @@ But it was a gift! And I got it years ago. Why would it only cause problems now?
 You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
 * Bairo sighs. He takes the skull tablet and gives it to you.
 [Global set_item_count: skull_tablet | #1]
-[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ actual_cliff_village bairo unwanted_visitors bairo/skull_tablet]
+[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ serubikir bairo unwanted_visitors bairo/skull_tablet]
 I hope it still gives me luck....
 [back]
 

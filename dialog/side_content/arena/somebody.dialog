@@ -1,18 +1,39 @@
-Hello.
-You -- Hello!
-[stat?: talked/lia]
-	Did you talk to Lia? Are you joining the arena?
-	[goto: arena]
+[! stat?: arena137/escape]
+	Hello.
+	You -- Hello!
+	[stat?: talked/lia]
+		Did you talk to Lia? Are you joining the arena?
+		[subtopic: arena]
+[otherwise][! Global task_is_complete: unwanted_visitors]
+	Have you found out anything about the arena?
+	You -- I've been looking into it. How about you?
+	They don't let me in the arena anymore.
+[otherwise]
+	[subtopic: arena_completed]
 [exit]
 
-:note(arena137/locked)
+:arena_completed
+[completed]
+	Thanks again for helping find out where those creatures were coming from.
+	Hopefully we can still get the arena to stop.
+[otherwise]
+	You -- I found out where the spectres were coming from.
+		There was some sort of hive deeper in the caves controlled by a tablet key.
+		That farmer Bairo was holding onto it for some reason, but returning it seems to have made some of the creatures go away.
+	Really? They weren't escaping from the arena?
+	You -- Not that I know of.
+	Hm... Hopefully you're right. It would be nice if it gets safer around here.
+	Thank you for your help.
+[back]
+
+:note(arena137/locked) -> arena
 You -- Do you know what that door is down in the caves?
 * She checks if anyone's listening.
 I do. It's the arena.
-[goto: arena]
+[subtopic: arena]
 [back]
 
-:@note(bairo/sacrifices) -> arena 
+:@note(bairo/sacrifices) -> arena
 :@note(bairo/conspiracy) -> arena
 You -- Have you noticed anything strange around here? Any sightings of Spectres?
 * She checks if anyone's listening.
@@ -24,7 +45,7 @@ Yes. Have you met Jericho, down in the caves?
 [otherwise]
 	You -- I haven't.
 	Well, down in the caves, there's a man guarding a door to the arenas.
-[goto: arena]
+[subtopic: arena]
 [back]
 
 :arena
@@ -34,11 +55,12 @@ You -- That sounds dangerous.
 It is. Everybody is fine with it, because it brings money into town. But there are more spectres around than ever. They are escaping from the arena, I know it.
 You -- Really? They're the cause of it? What can we do to stop it?
 They don't let me in the arenas anymore. But maybe you can get access? If you talk to Lia, at the mouth of the cave, and tell her about the arena, she'll let you in.
-[note: arena137/escape | Somebody told me there's an arena deep in the caves, and spectres are escaping from it. She wants me to mention the arenas to Lia to get access. |+ unwanted_visitors actual_cliff_village somo lia]
+[note: arena137/escape | Somebody told me there's an arena deep in the caves, and spectres are escaping from it. She wants me to mention the arenas to Lia to get access. |+ unwanted_visitors serubikir somo lia]
 You -- It's that simple?
 The arena is open to anyone who knows about it.
 [back]
 
+[exit]
 :_coat
 [traded_coats]
 	You -- Could we trade coats again?

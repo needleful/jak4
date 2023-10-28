@@ -63,17 +63,20 @@ func _init():
 	var v_patch = ProjectSettings.get_setting("global/patch_version")
 	version = GameVersion.new(v_major, v_minor, v_patch)
 	game_state = GameState.new(version)
+	pause_mode = Node.PAUSE_MODE_PROCESS
+	reset_state()
+
+func _ready():
+	reset_state()
+
+func reset_state():
+	randomize()
+	call_deferred("place_flags")
 	journal_by_tag = {}
 	stories = {}
 	stats_temp = {}
 	gravity_stunned_bodies = {}
-	pause_mode = Node.PAUSE_MODE_PROCESS
 	reset_mum()
-
-func _ready():
-	randomize()
-	call_deferred("place_flags")
-	journal_by_tag = {}
 	if valid_game_state:
 		var i := 0
 		for entry in game_state.journal:
@@ -433,13 +436,10 @@ func request_rescue():
 
 #Saving and loading
 func reset_game():
+	reset_state()
 	valid_game_state = false
 	player_spawned = false
 	game_state = GameState.new(version)
-	stats_temp = {}
-	gravity_stunned_bodies = {}
-	journal_by_tag = {}
-	reset_mum()
 	var dir := Directory.new()
 	if dir.file_exists(auto_save_path):
 		var _x = dir.rename(auto_save_path, old_save_backup)
@@ -478,11 +478,7 @@ func load_sync(reload := true, save_path: String = auto_save_path):
 
 	if reload:
 		var _x = get_tree().reload_current_scene()
-	else:
-		var i := 0
-		for e in game_state.journal:
-			add_tagged_entries(i, e[1])
-			i += 1
+	reset_state()
 
 func save_async(save_path := auto_save_path):
 	if test_scene:

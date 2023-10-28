@@ -13,9 +13,6 @@ func swap():
 
 func toggle(should_open, ready := false):
 	open = should_open
-	if !ready:
-		print_debug(name, ": ", should_open)
-		print_stack()
 
 	if ready and !open:
 		anim.start("Closed")
@@ -23,6 +20,3 @@ func toggle(should_open, ready := false):
 		anim.travel("Opened")
 	else:
 		anim.travel("Closed")
-
-func debug_log():
-	print_debug("open: ", open)

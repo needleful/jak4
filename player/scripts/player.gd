@@ -1692,6 +1692,7 @@ func respawn():
 	set_saved_transform(Global.game_state.checkpoint_position)
 	TimeManagement.resume()
 	ui.hide_prompt()
+	best_floor = null
 	emit_signal("died")
 
 func disable_collision():

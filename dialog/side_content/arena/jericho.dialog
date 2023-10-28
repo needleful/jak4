@@ -13,7 +13,7 @@
 	Nothing you want to see.
 	You -- ...
 	[stat?: bairo/sacrifices] 
-		[note: arena137/locked | There's a strange door in the caves, guarded by a man. He insisted it was nothing. |+ jericho unwanted_visitors actual_cliff_village]
+		[note: arena137/locked | There's a strange door in the caves, guarded by a man. He insisted it was nothing. |+ jericho unwanted_visitors serubikir]
 		* Was Bairo right about the inhabitants of the village? Something strange is going on here.
 
 [otherwise][! $arena completed]
@@ -96,21 +96,22 @@ You -- Yes, I did sign a waiver... of some sort.
 [goto: arena_entry]
 [back]
 
-:@item(fake_arena_access) :- !Global.stat("arena13/entered")
+:@item(fake_arena_access) :- Global.task_is_active("unwanted_visitors")  and !Global.stat("arena13/entered") -> fake_access
+:item(fake_arena_access) :- !Global.stat("arena13/entered") -> fake_access
 [$: name | Kara]
-* You show him the paper you received from Lia.
+* You show him the paper you found.
 You -- Is this what I need to show you?
-* He takes the paper. [Global remove_item: arena_access]
+* He takes it. [Global remove_item: fake_arena_access]
 You are #{$name}? Waiver, you signed it?
-You -- #{$name}? Uh... yes. I did sign a waiver... I guess.
+You -- #{$name}? Uh... sure.
 [goto: arena_entry]
 [back]
 
 :arena_entry
 [Global set_stat: arena137/name | $name]
 Well, #{$name}, welcome to the arena!
-[note: arena137/entered | There's an arena down in the caves here. |+ actual_cliff_village]
-[stat?: arena137/escape]
+[note: arena137/entered | There's an arena down in the caves here. |+ serubikir]
+[! stat?: arena137/escape]
 	You -- Arena? You play sports down here?
 	What exciting! Never has Vaeler seen this! Ever!
 	You -- But what sort of sport is it?
@@ -145,11 +146,7 @@ You -- Really?
 There are creatures roaming at night. Perhaps those are what you hear?
 [exit]
 
-:@note(arena137/escape) :- Global.task_exists("unwelcome_visitors") -> pen_access
-:@note(bairo/sacrifices) :- Global.task_exists("unwelcome_visitors") -> pen_access
-:@note(bairo/conspiracy)  :- Global.task_exists("unwelcome_visitors")-> pen_access
-:@note(visited/abandoned_village) :- Global.task_exists("unwelcome_visitors") -> pen_access
-:@note(the_village_gate) :- Global.task_exists("unwelcome_visitors") -> pen_access
+:@note(unwanted_visitors) -> pen_access
 // TODO: what to say here after you visit the pen
 [stat?: arena137/entered]
 	You -- So does this arena have anything to do with those troublesome spectres roaming everywhere outside?
@@ -167,7 +164,7 @@ There are creatures roaming at night. Perhaps those are what you hear?
 			[stat?: visited/abandoned_village]
 				You -- There's an entire abandoned village outside the nearby tower.
 			[Global task_exists: the_village_gate]
-				You -- I had to clear the gate outside Hideaway just to leave the village.
+				You -- I had to clear the gate outside Veshar just to leave the village.
 			[stat?: arena137/escape]
 				You -- Someone in town told me spectres are escaping the arena somehow.
 			[stat?: bairo/conspiracy]
