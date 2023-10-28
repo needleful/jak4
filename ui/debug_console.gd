@@ -171,11 +171,19 @@ func sss(val: bool):
 	show_stats = val
 	Global.get_player().debug.visible = show_stats
 
-func save():
-	Global.save_checkpoint(Global.get_player().get_save_transform())
+func save(save_id := ""):
+	var path := Global.auto_save_path
+	if save_id != "":
+		path = Global.custom_save_path_f % save_id
+	echo("Saving to: "+ path)
+	Global.save_checkpoint(Global.get_player().get_save_transform(), false, path)
 
-func load_game():
-	Global.load_sync()
+func load_game(save_id := ""):
+	var path := Global.auto_save_path
+	if save_id != "":
+		path = Global.custom_save_path_f % save_id
+	echo("Loading from: "+ path)
+	Global.load_sync(true, path)
 
 func load_chunk(chunk_name: String):
 	var scene := get_tree().current_scene

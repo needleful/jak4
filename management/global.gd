@@ -15,7 +15,8 @@ export(Array, Texture) var coat_textures: Array
 export(Texture) var coat_detail: Texture
 export(Dictionary) var stories
 
-const save_path := "user://autosave.tres"
+const auto_save_path := "user://autosave.tres"
+const custom_save_path_f := "user://save.%s.tres"
 const old_save_backup := "user://autosave.backup.tres"
 var valid_game_state := false setget set_valid_game_state, get_valid_game_state
 var player_spawned := false
@@ -440,76 +441,80 @@ func reset_game():
 	journal_by_tag = {}
 	reset_mum()
 	var dir := Directory.new()
-	if dir.file_exists(save_path):
-		var _x = dir.rename(save_path, old_save_backup)
+	if dir.file_exists(auto_save_path):
+		var _x = dir.rename(auto_save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
 
-func save_checkpoint(pos: Transform, sleeping := false):
+func save_checkpoint(pos: Transform, sleeping := false, path := auto_save_path):
 	set_stat("player_sleeping", sleeping)
 	game_state.checkpoint_position = pos
-	save_async()
+	save_async(path)
 
-func save_game():
-	save_async()
+func save_game(path:= auto_save_path):
+	save_async(path)
 
-func load_sync(reload := true):
+func load_sync(reload := true, save_path: String = auto_save_path):
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
-	if ResourceLoader.exists(save_path):
-		game_state = ResourceLoader.load(save_path, "", true)
-		if !game_state:
-			print_debug("ERROR: failed to load file: ", save_path)
-			reset_game()
-			return
-		if !(game_state.version is GameVersion):
-			game_state.version = GameVersion.new()
-		if !game_state.version.compatible(version):
-			print_debug("Warning: version loaded (%s) is not compatible with game version (%s). Data may get corrupted!" % 
-				[game_state.version, version])
-		game_state.version = version
-		valid_game_state = true
-
-		if has_stat("mum/outfit"):
-			mum.set_outfit(stat("mum/outfit"))
-
-		if reload:
-			var _x = get_tree().reload_current_scene()
-		else:
-			var i := 0
-			for e in game_state.journal:
-				add_tagged_entries(i, e[1])
-				i += 1
-	else:
+	if !ResourceLoader.exists(save_path):
 		print_debug("Tried to load with no save at ", save_path)
 		valid_game_state = false
+		return
+	game_state = ResourceLoader.load(save_path, "", true)
+	if !game_state:
+		print_debug("ERROR: failed to load file: ", save_path)
+		reset_game()
+		return
+	if !(game_state.version is GameVersion):
+		game_state.version = GameVersion.new()
+	if !game_state.version.compatible(version):
+		print_debug("Warning: version loaded (%s) is not compatible with game version (%s). Data may get corrupted!" % 
+			[game_state.version, version])
+	game_state.version = version
+	valid_game_state = true
 
-func save_async():
+	if has_stat("mum/outfit"):
+		mum.set_outfit(stat("mum/outfit"))
+
+	if reload:
+		var _x = get_tree().reload_current_scene()
+	else:
+		var i := 0
+		for e in game_state.journal:
+			add_tagged_entries(i, e[1])
+			i += 1
+
+func save_async(save_path := auto_save_path):
 	if test_scene:
 		return
 	if save_thread.is_active():
 		return
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
-	var res = save_thread.start(self, "_save_sync", game_state.duplicate(false))
+	var res = save_thread.start(self, "_save_sync",
+		{"state":game_state.duplicate(false), "path":save_path})
 	if res != OK:
 		print_debug("ERROR: Save failed with error code ", res)
 
-func save_sync():
+func save_sync(save_path := auto_save_path):
 	if test_scene:
 		return
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "pre_save_object", "prepare_save")
 	var res = ResourceSaver.save(save_path, game_state)
-	save_complete(res)
+	save_complete(res, save_path)
 
-func save_complete(result):
+func _save_sync(p_data: Dictionary):
+	var r = ResourceSaver.save(p_data.path, p_data.state)
+	call_deferred("save_complete", r, p_data.path)
+
+func save_complete(result, save_path):
 	# Investigate: could the player accidentally save again before post_save_object groups are updated?
 	if save_thread.is_active():
 		save_thread.wait_to_finish()
-	if result == OK:
-		valid_game_state = true
+	if result != OK:
+		print_debug("ERROR: FAILED to save to `%s` with error code: %d" %[
+			save_path, result
+		])
+	valid_game_state = result == OK
 	get_tree().call_group_flags(SceneTree.GROUP_CALL_REALTIME, "post_save_object", "complete_save")
-
-func _save_sync(p_state : GameState):
-	var r = ResourceSaver.save(save_path, p_state)
-	call_deferred("save_complete", r)

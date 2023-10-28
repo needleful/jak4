@@ -77,7 +77,7 @@ func _input(event):
 			$mapcam.current = true
 
 func _enter_tree():
-	if !Global.valid_game_state and ResourceLoader.exists(Global.save_path):
+	if !Global.valid_game_state and ResourceLoader.exists(Global.auto_save_path):
 		Global.load_sync(false)
 		
 func _exit_tree():
