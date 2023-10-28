@@ -2,11 +2,13 @@
 	{talked == 0}
 		Help! Monsters have taken over my home!
 		You -- I suppose I'll do what I can.
+		If you can clear them off my farm, I would be in your debt!
 		[Global create_task: unwanted_visitors]
 		[Global mark_map: bairo_farm | A small farm run by a man named Bairo.]
 		[note: bairo/helping | I met a distressed man on the roof of his home, being harassed by monsters. |+ unwanted_visitors bairo_farm bairo]
 	[otherwise]
-		Help!
+		There are still monsters roaming the farm!
+		You -- I'll see if I can take care of them.
 [otherwise][! stat?: bairo/conspiracy]
 	You have saved my life! Thank you!
 	[Global task_exists: unwanted_visitors]
@@ -116,17 +118,35 @@ You -- Have you noticed anything different with me carrying the tablet?
 Not yet, but the attacks are rare. I hope my bad luck does not catch up to me without it...
 [back]
 
-:@note(cave137/podium) :- Global.stat('bairo/skull_tablet') and !Global.task_is_complete("unwanted_visitors") -> skull
+:@note(cave137/podium) :- !Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") -> skull
+[! completed]
+	You -- Bairo, I found a massive underground structure with a skull emblem. I think it's related to your spectre issue.
+		There was a podium inside with a slot for something.
+	I can believe it. There are many strange things in the caves around here. Was it a black skull?
+	You -- Yes. How did you know? Have you seen it before.
+	* Bairo goes to his table and gets a small tablet. It has the same skull emblem.
+	It was a gift from years ago. It has brought me good luck. Do you think it could be related?
+	You -- I have no doubt whatsoever.
+	[Global set_item_count: skull_tablet | #1]
+	[note: bairo/give_tablet | Bairo gave me a tablet marked with the same skull as that underground structure. I should see if I can insert it into that podium. |+ serubikir bairo unwanted_visitors bairo/skull_tablet]
+[otherwise]
+	I hope the tablet can still give me luck from so far away...
+[back]
+
+:@note(cave137/podium) :- Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") -> skull
 :@note(bairo/skull_tablet) :- Global.stat('cave137/podium') or Global.stat('visited/hive137') -> skull
-You -- I know that skull tablet's a problem, Bairo.
-What do you mean?
-You -- There's some sort of structure in the caves with that same skull emblem. We need to take that back to where it came from.
-But it was a gift! And I got it years ago. Why would it only cause problems now?
-You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
-* Bairo sighs. He takes the skull tablet and gives it to you.
-[Global set_item_count: skull_tablet | #1]
-[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ serubikir bairo unwanted_visitors bairo/skull_tablet]
-I hope it still gives me luck....
+[! completed]
+	You -- I know that skull tablet's a problem, Bairo.
+	What do you mean?
+	You -- There's some sort of structure in the caves with that same skull emblem. We need to take that back to where it came from.
+	But it was a gift! And I got it years ago. Why would it only cause problems now?
+	You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
+	* Bairo sighs. He takes the skull tablet and gives it to you.
+	[Global set_item_count: skull_tablet | #1]
+	[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ serubikir bairo unwanted_visitors bairo/skull_tablet]
+	I hope it still gives me luck....
+[otherwise]
+	I hope the tablet can still give me luck from so far away...
 [back]
 
 :note(bairo/skull_tablet) :- Global.stat("bairo/saved")
