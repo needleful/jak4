@@ -1097,3 +1097,10 @@ func note(stat: String, text: String, tags: Array, allow_duplicates := false):
 		var _x = Global.add_stat(stat)
 		tags.append(stat)
 	return Global.add_note(text, tags)
+
+func stat_is(stat: String, value):
+	var val = Global.stat(stat)
+	if typeof(val) != typeof(value):
+		return false
+	else:
+		return val == value

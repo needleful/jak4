@@ -22,7 +22,7 @@ func _ready():
 			"She left without a trace when I was barely a toddler. According to my father, she only took a small suitcase with two changes of clothing.",
 			["mum", "mum/left"])
 		Global.mark_map(
-			"hideaway",
+			"veshar",
 			"My landing point on this excursion. Not much to look at aside from the Medium.")
 		var p = get_player()
 		if p:

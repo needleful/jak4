@@ -1650,14 +1650,18 @@ func go_to_sleep():
 	yield(get_tree().create_timer(.25), "timeout")
 	_wake_up()
 
-func _slow_wake():
+func _slow_wake(always_heal := false):
 	lock(false)
 	mesh.force_play("SleepEnd")
 	yield(get_tree().create_timer(0.1), "timeout")
-	_wake_up()
+	_wake_up(always_heal)
 
-func _wake_up():
-	if !empty(sleep_zone):
+func awake_at(t: Transform):
+	set_saved_transform(t)
+	_slow_wake(true)
+
+func _wake_up(always_heal := false):
+	if always_heal or !empty(sleep_zone):
 		heal()
 		Global.save_checkpoint(get_save_transform(), true)
 	else:

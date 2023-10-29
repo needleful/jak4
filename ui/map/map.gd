@@ -23,6 +23,8 @@ func _input(event):
 
 func _ready():
 	set_active(false)
+	for m in $scrollable_map.get_children():
+		Global.remember(m.name, "places")
 
 func _process(delta: float):
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:

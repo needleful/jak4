@@ -121,24 +121,24 @@ func populate_list(type: int):
 			category = "people"
 			var s = Global.stat(category)
 			if s:
-				ids = s
+				ids = s.duplicate()
 		NoteType.Places:
 			category = "places"
 			var s = Global.stat(category)
 			if s:
-				ids = s
+				ids = s.duplicate()
 		NoteType.ActiveTasks:
 			category = "tasks"
 			ids = Global.game_state.active_tasks.duplicate()
 		NoteType.CompletedTasks:
 			category = "completed"
 			ids = Global.game_state.completed_tasks.duplicate()
-	for tag in ids:
+	for tag in ids.duplicate():
 		if Global.get_notes_by_tag(tag).empty():
 			ids.erase(tag)
 	if ids.empty():
 		return
-	
+	print(ids)
 	var label := Label.new()
 	label.text = category.capitalize()
 	list.add_child(label)

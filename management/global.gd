@@ -66,9 +66,6 @@ func _init():
 	pause_mode = Node.PAUSE_MODE_PROCESS
 	reset_state()
 
-func _ready():
-	reset_state()
-
 func reset_state():
 	randomize()
 	call_deferred("place_flags")
@@ -173,6 +170,12 @@ func abolish_notes(tags: Array):
 	if !(initial_tag in journal_by_tag):
 		return false
 	for n in journal_by_tag[initial_tag]:
+		if n >= game_state.journal.size():
+			print_debug("AAAAAAAAHHHHH!!!! I HATE THIS STUPID BUG!!!")
+			print_stack()
+			set_stat("bugged_"+initial_tag, journal_by_tag)
+			save_async("bugged_"+initial_tag)
+			break
 		var note:Array = game_state.journal[n]
 		var matched := true
 		for t in tags:
@@ -188,6 +191,12 @@ func get_notes_by_tag(id: String, include_abolished := false):
 	var result := []
 	if id in journal_by_tag:
 		for note_index in journal_by_tag[id]:
+			if note_index >= game_state.journal.size():
+				print_debug("AAAAAAAAHHHHH!!!! I HATE THIS STUPID BUG!!!")
+				print_stack()
+				set_stat("bugged_"+id, journal_by_tag)
+				save_async("bugged_"+id)
+				break
 			var text_plus_tags = game_state.journal[note_index]
 			if !include_abolished and "abolished" in text_plus_tags[1]:
 				continue
@@ -423,16 +432,20 @@ func request_rescue():
 
 	var best_dist := INF
 	var closest_transform := Transform()
-	for t in r.values():
+	var closest_node := ""
+	for k in r:
+		var t: Transform = r[k]
 		var d :float = (p.global_transform.origin - t.origin).length_squared()
 		if d < best_dist:
 			closest_transform = t
+			closest_node = k
 	var g := count("gem")
 	if g:
 		# warning-ignore:integer_division
 		var _x = remove_item("gem", g/2)
+	var _x = set_stat("last_rescue", closest_node.split('.')[0])
 	save_checkpoint(closest_transform)
-	p.respawn()
+	p.awake_at(closest_transform)
 
 #Saving and loading
 func reset_game():

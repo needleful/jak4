@@ -1,0 +1,39 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=1]
+[ext_resource path="res://_glb/env/city/wall_sign_large.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/env/foundry/metal_generic.png" type="Texture" id=3]
+[ext_resource path="res://entities/env/city/sign.gd" type="Script" id=4]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=5]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 5 )
+shader_param/wall_scale = 1.0
+shader_param/ground_scale = 1.0
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 2.0
+shader_param/specularity_wall = 2.0
+shader_param/specularity_ceiling = 2.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/wall = ExtResource( 3 )
+shader_param/ground = ExtResource( 3 )
+shader_param/ceiling = ExtResource( 3 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 3.783
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+
+[node name="wall_sign_large" instance=ExtResource( 2 )]
+script = ExtResource( 4 )
+sign_mesh = NodePath("wall_sign_large-kine/mesh")
+
+[node name="mesh" parent="wall_sign_large-kine" index="0"]
+material/0 = SubResource( 1 )
+material/1 = SubResource( 2 )

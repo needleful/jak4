@@ -1,0 +1,48 @@
+[stat_is: last_rescued | rescue_137]
+	Pleased be careful in the caves! It's easy to get hurt.
+[! stat?: rescue_tutorial]
+	Hi! Are you going into the caves?
+	You -- At some point I may.
+	Well, if you get stuck, we'll be here to help. Just call for help and we'll come get you!
+	* (HINT: The "Request Rescue" button in the pause menu will bring you here, with half your gems gone. This is a last resort if you're stuck somewhere.)
+	* (Caves in the area run deep, and it's possible to climb into places you don't yet have the equipment to climb out of.)
+	* (Rescues are available almost everywhere. Almost.)
+	[+stat: rescue_tutorial]
+[otherwise]
+	Hello! How can we help you?
+[! stat: flag_tutorial]
+	Do you need flags for the cave? I'll give you a few. You can buy some more if you need them.
+	[Global add_item: flag | #5]
+	[+stat: flag_tutorial]
+:shop_loop
+> What are flags for?
+	Flags are very useful for caves and other uncharted areas. They'll help you track where you've been.
+	* (HINT: Flags are consumable checkpoints. Once placed, they'll save your location until you get another checkpoint.)
+	[goto: shop_loop]
+> Can you tell me about the caves here?
+	This cave leads up out of the valley. It's the fastest way up, but most people take the long way north, all the way to the bridge.
+	There's an especially dangerous cavern with deep water. It's easy to drown if you lose your footing.
+	[goto: shop_loop]
+> Do you have supplies I can buy?
+	Yes, we do!
+	[shop]
+	You -- [exiting] Thank you.
+> Bye.
+	Be safe!
+[exit]
+
+:_coat
+[traded_coats]
+	You -- Could we trade coats again?
+	Again? Uh... Sure.
+	[swap_coats]
+	You -- Excellent, thank you!
+[otherwise]
+	You -- I couldn't help but notice that beautiful fabric you're wearing.
+	Oh, this? It is just my normal clothes.
+	You -- I'd like to trade my jacket for yours.
+	Really?
+	You -- Of course! If you don't mind...
+	[swap_coats] I guess it's fine.
+	You -- Wonderful! Thank you!
+[back]
