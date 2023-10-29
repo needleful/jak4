@@ -1,9 +1,9 @@
 [! stat?: bairo/saved]
 	{talked == 0}
+		[Global create_task: unwanted_visitors]
 		Help! Monsters have taken over my home!
 		You -- I suppose I'll do what I can.
 		If you can clear them off my farm, I would be in your debt!
-		[Global create_task: unwanted_visitors]
 		[Global mark_map: bairo_farm | A small farm run by a man named Bairo.]
 		[note: bairo/helping | I met a distressed man on the roof of his home, being harassed by monsters. |+ unwanted_visitors bairo_farm bairo]
 	[otherwise]
@@ -23,25 +23,40 @@
 	You -- Those are serious allegations. Is it the whole town? Why would they want to harm you?
 	The natural spring watering my crops is very valuable. Many would kill to have it.
 	But those on the cliff are especially evil! They hold blood sacrifices in the cave near their village! I have heard the screams! They feed ancient evils...
-	[stat?: aren137/entered]
+	[stat?: arena137/entered]
 		You -- Oh, that. They have a sort of gladiatorial arena in the cave.
 		What? You have seen it?
-		[stat?: aren137/coat]
+		[stat?: arena137/coat]
 			You -- I've competed, even. In fact, I did so well in their games I won a jacket.
-		[otherwise][stat?: aren137/completed]
+		[otherwise][stat?: games/arena137/completed]
 			You -- I've competed in their games, in fact. Too much excitement for me, personally.
+			[stat?: games/arena137/failed]
+				You -- I'm still a little sore from a particularly bad round.
 		You -- Wait, was that supposed to be a secret?
 			Well, I don't care that much. It's not sacrifices, though I don't think it's entirely ethical. I believe your fears are unwarranted.
 		This is insanity! They still released the monsters into my home!
-		You -- Perhaps some of their spectres had escaped on accident? Would you like me to ask?
-		No! Do not “ask” those people if they are intending to murder me! 
+		[stat?: arena137/escape]
+			You -- Somebody in the village suspected spectres were being released on accident. I can mention your having problems, as well.
+			No! Do not “mention” me to those heathens! They are trying to murder me! 
+		[otherwise]
+			You -- Perhaps some of their spectres had escaped on accident? Would you like me to ask?
+			No! Do not “ask” those people if they are intending to murder me! 
 		You -- Alright, I won't say it was from you. If I see anything of note, I'll let you know, alright?
 		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
 		If you do, I can reward you.
 		[+stat: bairo/arena]
-		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. |+ unwanted_visitors bairo serubikir]
+		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. He's promised to reward me if I put a stop to it. |+ unwanted_visitors bairo serubikir]
 		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
-		[Global add_note: There's a rope ladder up the cliff here. |+ bairo_farm]
+	[otherwise][stat?: arena137/escape]
+		You -- Someone up in Serubikir told me they have some sort of combat arena in those caves, and that spectres are escaping from it.
+		An arena? My God! They are training the beasts to kill me!
+		You -- She seemed to think they were escaping on accident. I've been investigating, if you want me to ask.
+		No! Do not “ask” those people if they are intending to murder me! 
+		You -- Alright, I won't say it was from you. If I see anything of note, I'll let you know, alright?
+		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
+		If you do, I can reward you.
+		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. He's promised to reward me if I put a stop to it. |+ unwanted_visitors bairo serubikir]
+		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
 	[otherwise]
 		You -- What? Are you terribly sure?
 		Yes! But it is no use. Nobody shall listen until poor Bairo is dead.
@@ -115,10 +130,12 @@ I suppose it was not that big a deal. I have not been eaten by monsters... yet.
 :note(bairo/skull_tablet) :- Global.stat("bairo/give_tablet")
 // By default, blocks are optional.
 You -- Have you noticed anything different with me carrying the tablet?
-Not yet, but the attacks are rare. I hope my bad luck does not catch up to me without it...
+Not yet, but new attacks could happen any day now. I hope my bad luck does not catch up to me without it...
 [back]
 
-:@note(cave137/podium) :- !Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") -> skull
+:@note(jericho/skull_tablet) :- !Global.stat("bairo/skull_tablet") and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
+:@note(somo/skull_tablet) :- !Global.stat("bairo/skull_tablet") and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
+:@note(cave137/podium) :- !Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
 [! completed]
 	You -- Bairo, I found a massive underground structure with a skull emblem. I think it's related to your spectre issue.
 		There was a podium inside with a slot for something.
@@ -133,8 +150,10 @@ Not yet, but the attacks are rare. I hope my bad luck does not catch up to me wi
 	I hope the tablet can still give me luck from so far away...
 [back]
 
-:@note(cave137/podium) :- Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") -> skull
-:@note(bairo/skull_tablet) :- Global.stat('cave137/podium') or Global.stat('visited/hive137') -> skull
+:@note(jericho/skull_tablet) :- Global.stat("bairo/skull_tablet") and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
+:@note(somo/skull_tablet) :- Global.stat("bairo/skull_tablet") and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
+:@note(cave137/podium) :- Global.stat('bairo/skull_tablet') and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
+:@note(bairo/skull_tablet) :- (Global.stat('cave137/podium') or Global.stat('visited/hive137')) and Global.task_is_active("unwanted_visitors") and Global.stat("bairo/saved") -> skull
 [! completed]
 	You -- I know that skull tablet's a problem, Bairo.
 	What do you mean?
@@ -143,10 +162,24 @@ Not yet, but the attacks are rare. I hope my bad luck does not catch up to me wi
 	You -- I have no idea, but that place is flooded with spectres. We have to try something to fix it. 
 	* Bairo sighs. He takes the skull tablet and gives it to you.
 	[Global set_item_count: skull_tablet | #1]
+	[+stat: bairo/skull_tablet]
 	[note: bairo/give_tablet | Bairo gave me that skull tablet. I need to bring it back to that underground... whatever it was, and see if I can fix this mess. |+ serubikir bairo unwanted_visitors bairo/skull_tablet]
 	I hope it still gives me luck....
 [otherwise]
 	I hope the tablet can still give me luck from so far away...
+[back]
+
+:@note(jericho/denied_suspicion) :- Global.task_is_active("unwanted_visitors") and !Global.stat("arena137/pen_access")  and Global.stat("bairo/saved")
+You -- I talked to the host of the arena, Jericho, and he's convinced this is all a coincidence. Do you know anyone else experiencing these problems?
+I knew they would not help! They want poor Bairo dead...
+* It doesn't seem like he'll be much help with this. You're not sure he even knows other people exist.
+You -- I don't think- Well, I've thought of something just now.
+	I bet he would let me investigate further if I did well in his arena.
+	I bring him an audience to watch me fight, and in exchange I get the information I want.
+Yes... You can rise to the top of his ranks, from the inside! As my double agent!
+You -- That's not a double agent, that's just a spy.
+My triple agent!
+[note: arena137/rank_access | I assume if I compete in all the arena's games well enough, Jericho will let me investigate the arena for escaped spectres. |+ bairo unwanted_visitors]
 [back]
 
 :note(bairo/skull_tablet) :- Global.stat("bairo/saved")

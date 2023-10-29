@@ -15,12 +15,34 @@
 	[stat?: bairo/sacrifices] 
 		[note: arena137/locked | There's a strange door in the caves, guarded by a man. He insisted it was nothing. |+ jericho unwanted_visitors serubikir]
 		* Was Bairo right about the inhabitants of the village? Something strange is going on here.
-
+[otherwise][stat?: visited/hive137][! stat?: jericho/discussed/hive]
+	Oh my God! You are alive! I was told you dove into the chasm at the back of the pens.
+	You -- Well, that was exactly what I needed to do. There's some sort of hive at the bottom.
+	A /hive/? Is that what was bringing more specters here?
+	[stat?: cave137/locked]
+		You -- I suspect it was. I've deactivated it, I think.
+		That is a relief!
+	You -- I thought you were convinced it was all a coincidence? 
+	Well... I had my doubts. We were capture more and more specters every day. I thought... why let a good thing go to waste?
+	You -- So you /knew/ there was something off this whole time!
+	This is my living! I cannot give it up just because some specters are excited! And as you could see, it was not the arena!
+	[! stat?: cave137/locked]
+		You -- Well it's still a problem! As we speak, it's spitting out more spectres! How did you not notice them crawling out of the chasm?
+		They never have. I've only ever seen specters crawl /into/ the caves. They never returned.
+		You -- Well, we need to do something about it.
+		We are catching them wherever they emerge! Is that not enough?
+	You -- Ugh.
+	[+stat: jericho/discussed/hive]
+	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) While I'm here, can I compete in the arenas?
+		[$: cost | #25]
+		You -- While I'm here, can I compete in the arenas?
+		[goto: scenario_pick]
+	> I'll see you later.
 [otherwise][! $arena completed]
 	Good to see you again, #{$name}! Do you want to hunt? It's only 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Yes, throw me in the chasm.
 		[$: cost | #25]
-		Yes, throw me in the chasm.
+		You -- Yes, throw me in the chasm.
 		[goto: scenario_pick]
 	> [otherwise] I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
@@ -29,7 +51,7 @@
 	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[$: cost | #25]
-		Sure, I'll try again.
+		You -- Sure, I'll try again.
 		[goto: scenario_pick]
 	> [otherwise] I don't have the money for it.
 		What? You should get money, then!
@@ -90,27 +112,29 @@ What do you want to fight?
 [$: name | Jaki]
 * You show him the paper you received from Lia.
 You -- Is this what I need to show you?
-* He takes the paper. [Global remove_item: arena_access]
+* He reads the paper.
 You are #{$name}? Waiver, you signed it?
 You -- Yes, I did sign a waiver... of some sort.
+[Global remove_item: arena_access]
 [goto: arena_entry]
 [back]
 
-:@item(fake_arena_access) :- Global.task_is_active("unwanted_visitors")  and !Global.stat("arena13/entered") -> fake_access
-:item(fake_arena_access) :- !Global.stat("arena13/entered") -> fake_access
+:@item(fake_arena_access) :- Global.task_is_active("unwanted_visitors")  and !Global.stat("arena137/entered") -> fake_access
+:item(fake_arena_access) :- !Global.stat("arena137/entered") -> fake_access
 [$: name | Kara]
 * You show him the paper you found.
 You -- Is this what I need to show you?
-* He takes it. [Global remove_item: fake_arena_access]
+* He looks at it.
 You are #{$name}? Waiver, you signed it?
 You -- #{$name}? Uh... sure.
+[Global remove_item: fake_arena_access]
 [goto: arena_entry]
 [back]
 
 :arena_entry
+[note: arena137/entered | There's an arena down in the caves here. |+ serubikir]
 [Global set_stat: arena137/name | $name]
 Well, #{$name}, welcome to the arena!
-[note: arena137/entered | There's an arena down in the caves here. |+ serubikir]
 [! stat?: arena137/escape]
 	You -- Arena? You play sports down here?
 	What exciting! Never has Vaeler seen this! Ever!
@@ -139,53 +163,169 @@ You did! If you want to hunt, we will prepare the chasm! The entry is only twent
 	[goto: loop_choice]
 [exit]
 
-:note(bairo/sacrifices) :- !Global.stat("arena137/entered")
+:note(arena137/escape) :- !Global.stat("arena137/entered")
+You -- I'd like to enter the arena.
+You would? A Vaeler? You talked to Lia?
+[stat?: talked/lia]
+	You -- I have.
+	[Global count: arena_access]
+		You -- I have the arena access she gave me right here.
+		[$: name | Jaki]
+		* He reads the paper. 
+		You are #{$name}? Waiver, you signed it?
+		You -- I did sign a waiver, of some sort...
+		[Global remove_item: arena_access]
+		[complete_block]
+		[goto: arena_entry]
+	[otherwise]
+		You -- She didn't seem very helpful.
+		You should ask her about arena. She handles the legals.
+[otherwise]
+	You -- Who's that?
+	She handles the legals. She's at the mouth of the cave, in Serubikir. Ask her about the arena and she'll give you the papers.
+[note: jericho/arena_access | If I want into the arena, I should talk to Lia at the mouth of the cave and ask her about it. |+ lia jericho unwanted_visitors serubikir]
+We don't let people in unless they already know about it. No tourists, you know?
+You -- Right...
+[exit]
+
+:note(bairo/sacrifices) :- !Global.stat("arena137/entered") -> noises
+:note(bairo/arena) :- !Global.stat("arena137/entered") -> noises
 You -- Have you heard any strange noises in the caves?
 Hm.... nope.
 You -- Really?
 There are creatures roaming at night. Perhaps those are what you hear?
-[exit]
+[back]
 
-:@note(unwanted_visitors) -> pen_access
-// TODO: what to say here after you visit the pen
-[stat?: arena137/entered]
+:note(somo/skull_tablet) :- Global.stat("visited/hive137") and Global.stat("jericho/discussed/hive") and !Global.stat("cave137/locked") -> skull
+:item(skull_tablet) :- Global.stat("visited/hive137") and Global.stat("jericho/discussed/hive") and !Global.stat("cave137/locked") -> skull
+:note(bairo/skull_tablet) :- Global.stat("visited/hive137") and Global.stat("jericho/discussed/hive") and !Global.stat("cave137/locked") -> skull
+:note(cave137/podium) :- Global.stat("jericho/discussed/hive") and !Global.stat("cave137/locked") -> skull
+:note(visited/hive137) :- Global.stat("jericho/discussed/hive") and !Global.stat("cave137/locked") -> skull
+You -- That hive I mentioned before had a black skull above the entrance. Have you ever seen anything like that?
+I mean, I have seen skulls before. It was a door?
+You -- No, just an open entry. Why do you ask?
+Usually the ancient caves, they have a sign above the locked doors, with a key tablet.
+[Global count: skull_tablet]
+	* You pull out Bairo's skull tablet.
+	You -- Like this one?
+	What? Why are you asking me these questions when you have the tablet?
+	Go lock the door!
+	[note: jericho/skull_tablet | Jericho says the skull tablet could lock the hive. |+ unwanted_visitors serubikir]
+	[complete_block: skull_tablet]
+[stat?: bairo/skull_tablet]
+	You -- I have seen a skull tablet before. At that farmer Bairo's home.
+	Well why are you asking me about it then? Ask him!
+	[note: jericho/skull_tablet | Jericho says I should ask Bairo about the skull tablet. It could be a key to lock the hive. |+ unwanted_visitors bairo bairo_farm]
+	[complete_block: skull_tablet]
+[otherwise]
+	You -- So you think there might be a matching tablet?
+	I would think so.
+	You -- But how would I even find such a thing?
+	I have no idea. Maybe some crazy rich guy collects them.
+	[note: jericho/skull_tablet | Jericho says there may be a tablet with a skull on it to lock the hive. He said wealthy people in the area might collect tablets like it. |+ unwanted_visitors]
+	[complete_block: skull_tablet]
+[back]
+
+:item(skull_tablet) -> skull_tablet
+You -- Have you ever seen a tablet like this?
+Hm. That goes to a door.
+You -- It does?
+Yes. I seen it before. They control ancient doors.
+You -- Drat. I was assuming it attracted the spectres to Bairo's farm. It's just a key?
+Well, clearly not just key. Look at it. It must be an evil door.
+[note: jericho/skull_tablet1 | Jericho thinks Bairo's skull tablet controls an “evil door”. I was clearly right to take it. But where's this door? Is it related to this? |+ unwanted_visitors jericho bairo]
+[back]
+
+:note(unwanted_visitors) :- Global.stat('cave137/locked') -> hive_locked
+You -- Have you noticed anything since I deactivated the hive?
+[completed]
+	The number of specters we are catching is down a little.
+	Perhaps with time we will see more dramatic changes.
+	[back]
+[! stat: jericho/skull_tablet]
+	You did what?
+	You -- There was some sort of hive of spectres in the bottom of the cave.
+		I inserted a skull tablet and it seemed to kill the spectres around me.
+[otherwise]
+	That skull door you told me about? It's locked?
+	You -- It didn't control a door. It seemed to control the spectres. They died when I inserted the tablet.
+It /killed/ them? I have never seen that before.
+Very strange things are in those caves. We find new oddities every day...
+It is for the best to stop them. There are enough specters for the arena without hives in the caves.
+[back]
+
+:note(unwanted_visitors) :- !Global.stat("arena137/entered")
+You -- Do you know anything about the spectres roaming the area recently?
+Ah, they are nasty creatures. Don't touch them.
+You -- I mean, have you noticed more of them?
+More? No.
+[+stat: arena137/ignored]
+[back]
+
+:@note(visited/abandoned_village) :- Global.task_is_active("unwanted_visitors") and !Global.stat("arena137/pen_access") -> pen_access
+:@note(arena137/entered) :- Global.task_is_active("unwanted_visitors") and !Global.stat("arena137/pen_access") -> pen_access
+:@note(unwanted_visitors) :- Global.stat("arena137/entered") and !Global.stat("arena137/pen_access") -> pen_access
+[stat?: jericho/pen_rank][$arena rank: #3]
+	You -- Do you remember our deal, Jericho? I get three silver medals, and you let me see the pens for my investigation.
+	Well, I am a man of my words. I will tell the boys to let you in. It is the door at the very bottom of the arena.
+	You -- Excellent. Thank you, Jericho.
+	I am saying, though. You will not find any escape possible! We are the safest arena in the whole world!
+	[Global abolish_notes:+ arena137/rank_access]
+	[note: arena137/pen_access | Jericho gave me access to the arena's pens to see if anything is suspicious. It's the door at the bottom of the arena. |+ unwanted_visitors]
+	[back]
+[discussed]
+	You -- I'm still convinced this arena has something to do with the spectres.
+	And I am still sure you are wrong.
+[otherwise]
 	You -- So does this arena have anything to do with those troublesome spectres roaming everywhere outside?
 	Hm? No, we are hunting them. If anything, the number is going down.
-	[stat?: visited/abandoned_village]
-		[++: sus]
-	[stat?: bairo/conspiracy]
-		[++: sus | #2]
-	[stat?: arena137/escape]
-		[++: sus | #2]
-	[Global task_exists: the_village_gate]
-		[++: sus]
-	{$sus > 2}
-		You -- I don't believe you. I've seen them everywhere.
-			[stat?: visited/abandoned_village]
-				You -- There's an entire abandoned village outside the nearby tower.
-			[Global task_exists: the_village_gate]
-				You -- I had to clear the gate outside Veshar just to leave the village.
-			[stat?: arena137/escape]
-				You -- Someone in town told me spectres are escaping the arena somehow.
-			[stat?: bairo/conspiracy]
-				You -- They've been invading people's homes, for God's sake.
-			You -- You're telling me those are just a coincidence?
-		Hm... Well, perhaps there are more around than usual. But the arena is very secure. We are not responsible for this.
-		You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
-		I'll tell somebody to unlock the door for you. It's at the bottom of the arena. Check for yourself and see we are very secure.
-		[+stat: arena137/pen_access]
-		[+stat: arena137/show_pen]
-		[complete_block]
-		[exit]
-	[otherwise]
-		They come and go. Whatever you seen was coincidence. Nothing more.
-		* You've seen spectres everywhere, but what you've seen may well be a coincidence.
-		* Perhaps you need to find more specific examples of unusual activity.
-		[+stat: arena/denied_suspicion]
+[$arena rank: #3]
+	You -- Jericho, you've seen me in the arena. I know what I'm talking about when I say something suspicious is going on.
+	Hm... You are good fighter.
+	How about this? I let you see the pens. No escapes possible. It is the door at the bottom of the arena. I will tell the guard to unlock it.
+	You -- That's good enough for me. I'll see it.
+	[note: arena137/pen_access | Jericho gave me access to the arena's pens to see if anything is suspicious. It's the door at the bottom of the arena. |+ unwanted_visitors]
+	[back]
+[stat?: visited/abandoned_village]
+	[++: sus]
+[stat?: bairo/conspiracy]
+	[++: sus | #2]
+[stat?: arena137/escape]
+	[++: sus | #2]
+[Global task_exists: the_village_gate]
+	[++: sus]
+{$sus > 2}
+	You -- I don't believe you. I've seen them everywhere.
+		[stat?: visited/abandoned_village]
+			You -- There's an entire abandoned village outside the nearby tower.
+		[Global task_exists: the_village_gate]
+			You -- I had to clear the gate outside Veshar just to leave the village.
+		[stat?: arena137/escape]
+			You -- Someone in town told me spectres are escaping the arena somehow.
+		[stat?: bairo/conspiracy]
+			You -- They've been invading people's homes, for God's sake.
+		You -- You're telling me those are just a coincidence?
+	Hm... Well, perhaps there are more around than usual. But the arena is very secure. We are not responsible for this.
+	You -- Where do you keep the creatures? Are you sure they can't get out of whatever holding pen you keep them in?
+	I'll tell somebody to unlock the door for you. It's at the bottom of the arena. Check for yourself and see we are very secure.
+	[Global abolish_notes:+ arena137/rank_access]
+	[note: arena137/pen_access | Jericho gave me access to the arena's pens to see if anything is suspicious. It's the door at the bottom of the arena. |+ unwanted_visitors]
+	[complete_block]
+	[exit]
 [otherwise]
-	You -- Do you know anything about the spectres roaming the area recently?
-	Ah, they are nasty creatures. Don't touch them.
-	You -- I mean, have you noticed more of them?
-	More? No.
-	[+stat: arena/ignored]
+	They come and go. Whatever you seen was coincidence. Nothing more.
+	* You've seen spectres everywhere, but what you've seen may well be a coincidence.
+	* Perhaps you need to find more specific examples of unusual activity.
+	[note: jericho/denied_suspicion | Jericho is unconvinced that the arena has anything to do with the increased spectres. If I want to see the arena's inner workings for myself, I'll need more evidence to convince him. |+ jericho unwanted_visitors]
 [back: #false]
+
+:note(arena137/rank_access) :- Global.task_is_active("unwanted_visitors") and !Global.stat("arena137/pen_access") -> pen_rank
+You -- I thought of a deal, Jericho.
+	Will you let me properly investigate for escaped spectres if I compete in your games?
+What do you mean?
+You -- I impress the audience with my fighting, and in exchange you let me see where the creatures are kept.
+Hm... That is not a bad deal.
+How about this: you get three silver medals, and I let you see the pens.
+You -- It's a deal.
+[note: jericho/pen_rank | If I get a silver medal or better in three separate arena games, Jericho will let me see the pens. |+ unwanted_visitors jericho arena137/rank_access]
+[back]

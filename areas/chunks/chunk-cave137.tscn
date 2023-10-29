@@ -1,4 +1,4 @@
-[gd_scene load_steps=109 format=2]
+[gd_scene load_steps=112 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -72,6 +72,8 @@
 [ext_resource path="res://entities/env/copper/platform_small.tscn" type="PackedScene" id=70]
 [ext_resource path="res://dialog/side_content/arena/pen_guard.dialog" type="Resource" id=71]
 [ext_resource path="res://dialog/side_content/arena/arena_worker.dialog" type="Resource" id=72]
+[ext_resource path="res://material/death_plane.shader" type="Shader" id=73]
+[ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=74]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -137,6 +139,12 @@ points = PoolVector3Array( -49.9825, -210.066, -284.34, -50.0505, -209.79, -284.
 
 [sub_resource type="SphereShape" id=276]
 radius = 68.2188
+
+[sub_resource type="ShaderMaterial" id=280]
+resource_local_to_scene = true
+shader = ExtResource( 73 )
+shader_param/max_depth = 30.0
+shader_param/depth_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="BoxShape" id=25]
 extents = Vector3( 45, 24, 56 )
@@ -362,6 +370,7 @@ custom_neighbors = {
 }
 
 [node name="env" type="Area" parent="active_entities" index="0"]
+visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 9 )
@@ -614,6 +623,11 @@ origin_offset = Vector3( 2.23517e-10, 0, -2.23517e-10 )
 interior_enable = true
 
 [node name="reaction" type="Node" parent="active_entities/env_evil" index="3"]
+
+[node name="death_plane" parent="active_entities/env_evil" index="4" instance=ExtResource( 74 )]
+transform = Transform( 203.964, 144.678, 8.38702e-07, 0, -1.4136e-05, 42.8885, 102.028, -289.225, -1.67665e-06, 78.3552, -89.6495, -140.568 )
+skeleton = NodePath("../../zone_spawn")
+material/0 = SubResource( 280 )
 
 [node name="reflections" type="Spatial" parent="active_entities" index="2"]
 
@@ -947,7 +961,7 @@ root_node = NodePath("../arena")
 anims/Activate = SubResource( 272 )
 anims/RESET = SubResource( 273 )
 script = ExtResource( 46 )
-tracked_stat = "arena137/show_pen"
+tracked_stat = "arena137/pen_access"
 
 [node name="door_upper" type="AnimationPlayer" parent="active_entities/zone_arena" index="2"]
 anims/Activate = SubResource( 278 )
@@ -965,6 +979,7 @@ transform = Transform( 0.964479, 0, -0.26416, 0, 1, 0, 0.26416, 0, 0.964479, 0.0
 [node name="arena" type="Spatial" parent="active_entities/zone_arena" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.295486, -22.9784, -1.59966 )
 script = ExtResource( 32 )
+friendly_id = "arena137"
 
 [node name="crawlies" type="Spatial" parent="active_entities/zone_arena/arena" index="0"]
 visible = false
@@ -1523,6 +1538,9 @@ spot_angle = 37.0838
 [node name="bug_pickup" parent="active_entities/zone_arena/pens_area" index="21" instance=ExtResource( 5 )]
 transform = Transform( -0.72824, 0, 0.685322, 0, 1, 0, -0.685322, 0, -0.728239, -15.4302, -1.85243, 34.734 )
 
+[node name="copper_fountain2" parent="active_entities/zone_arena/pens_area" index="22" instance=ExtResource( 63 )]
+transform = Transform( 0.995014, 0, -0.0997308, 0, 1, 0, 0.0997308, 0, 0.995014, -0.962372, -2.55556, 4.14951 )
+
 [node name="arena_entry" parent="active_entities/zone_arena" index="8"]
 material/0 = ExtResource( 45 )
 
@@ -1617,6 +1635,9 @@ material/1 = SubResource( 271 )
 [node name="StaticBody" parent="active_entities/zone_arena/upper_entry/upper_fence" index="0"]
 collision_layer = 16
 collision_mask = 10
+
+[node name="light_hang1" parent="active_entities/zone_arena" index="14" instance=ExtResource( 68 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.3561, 20.2467, 38.7326 )
 
 [node name="emblem" parent="active_entities/zone_spawn" index="0"]
 material/0 = ExtResource( 58 )

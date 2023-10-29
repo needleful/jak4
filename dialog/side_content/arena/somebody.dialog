@@ -7,7 +7,7 @@
 [otherwise][! Global task_is_complete: unwanted_visitors]
 	Have you found out anything about the arena?
 	You -- I've been looking into it. How about you?
-	They don't let me in the arena anymore.
+	I've been doing what I can, which isn't much with Lia and Jericho keeping me out.
 [otherwise]
 	[subtopic: arena_completed]
 [exit]
@@ -17,9 +17,13 @@
 	Thanks again for helping find out where those creatures were coming from.
 	Hopefully we can still get the arena to stop.
 [otherwise]
-	You -- I found out where the spectres were coming from.
-		There was some sort of hive deeper in the caves controlled by a tablet key.
-		That farmer Bairo was holding onto it for some reason, but returning it seems to have made some of the creatures go away.
+	[completed: skull]
+		You -- It turned out to be that structure with the skull emblem, I think.
+			I deactivated it and the spectres around me dropped dead.
+	[otherwise]
+		You -- I found out where the spectres were coming from.
+			There was some sort of hive deeper in the caves controlled by a tablet key.
+			That farmer Bairo was holding onto it for some reason, but returning it seems to have made some of the creatures go away.
 	Really? They weren't escaping from the arena?
 	You -- Not that I know of.
 	Hm... Hopefully you're right. It would be nice if it gets safer around here.
@@ -44,27 +48,97 @@ Yes. Have you met Jericho, down in the caves?
 	He's guarding the entrance to the arena.
 [otherwise]
 	You -- I haven't.
-	Well, down in the caves, there's a man guarding a door to the arenas.
+	Well, down in the caves, there's a man guarding a door to the arena.
 [subtopic: arena]
 [back]
 
 :arena
-You -- An arena? For sports?
-Bloodsports. They kill specters in battles.
-You -- That sounds dangerous.
-It is. Everybody is fine with it, because it brings money into town. But there are more specters around than ever. They are escaping from the arena, I know it.
+[stat?: arena137/entered]
+	You -- The arena in the cave?
+	You've already been inside?
+	[stat?: games/arena137/completed]
+		You -- I've competed in their games.
+		[stat?: games/arena137/failed]
+			You -- I'm still recovering from a particularly bad round. I'm not sure this is entirely safe.
+			It's not.	
+		[otherwise]
+			You -- I can't lie, it's a bit of fun, but it seems awfully dangerous.
+			It is.
+	[otherwise]
+		You -- That man Jericho explained the arena to me.
+			It seems quite dangerous.
+		It is.
+[otherwise]
+	You -- An arena? For sports?
+	Bloodsports. They kill specters in battles.
+	You -- That sounds dangerous.
+	It is.
+Everybody is fine with it, because it brings money into town. But there are more specters around than ever. They are escaping from the arena, I know it.
 [! Global task_exists: unwanted_visitors]
 	[Global create_task: unwanted_visitors]
 	You -- Really? What can we do to stop it?
 [otherwise]
 	You -- I'd heard a rumor there were spectres coming from this village. That could explain them. What can we do, though?
-They don't let me in the arenas anymore. But maybe you can get access? If you talk to Lia, at the mouth of the cave, and tell her about the arena, she'll let you in.
-[note: arena137/escape | Somebody told me there's an arena deep in the caves, and spectres are escaping from it. She wants me to mention the arenas to Lia to get access. |+ unwanted_visitors serubikir somo lia]
-You -- It's that simple?
-The arena is open to anyone who knows about it.
+[stat?: arena137/entered]
+	They don't let me in the arena anymore. But if you already have access, maybe you can find out how the specters are getting out.
+	[note: arena137/escape | Somebody told me there's an arena deep in the caves, and spectres are escaping from it. She wants me to investigate. |+ unwanted_visitors serubikir somo]
+[otherwise]
+	They don't let me in the arena anymore. But maybe you can get access? If you talk to Lia, at the mouth of the cave, and tell her about the arena, she'll let you in.
+	[note: arena137/escape | Somebody told me there's an arena deep in the caves, and spectres are escaping from it. She wants me to mention the arena to Lia to get access. |+ unwanted_visitors serubikir somo lia]
+	You -- It's that simple?
+	The arena is open to anyone who knows about it.
 [back]
 
-[exit]
+:note(jericho/denied_suspicion) :- Global.task_is_active("unwanted_visitors") and !Global.stat("arena137/pen_access") -> jericho_evidence
+You -- Jericho isn't letting me investigate. He insists the roaming spectres are just a coincidence.
+That's not true at all. I used to live in a village north of here, near the tower. We were overrun by specters about four months ago. You should look for yourself.
+[note: somo/tower | Somo says there's an overrun village by the tower north of Serubikir. I should check it out for myself and tell Jericho. |+ unwanted_visitors somo village_tower]
+[back]
+
+:note(jericho/skull_tablet) :- !Global.stat("cave137/locked") -> skull
+:note(cave137/podium) :- !Global.stat("cave137/locked") -> skull
+:note(visited/hive137) :- !Global.stat("cave137/locked") -> skull
+You -- I found some sort of hive in the caves. It was marked with a black skull.
+It was one of those ancient doors, with the white metal?
+[stat?: jericho/skull_tablet]
+	You -- You must be thinking the same thing as Jericho, that there's a tablet to lock it?
+	Yes. That would be my thinking. Those emblems are above doors. A tablet with the same emblem would control it.
+[otherwise]
+	You -- It was just an open entrance, as far as I could tell.
+	Hm.. Those emblems are above doors. A tablet with the same emblem would control it.
+	You -- So there's a tablet somewhere to lock it?
+	Yes. That would be my thinking.
+[Global count: skull_tablet]
+	* You bring out Bairo's skull tablet.
+	You -- Like this one?
+	You have the tablet? If it closes the door, I would close it.
+	[note: somo/skull_tablet | Somo believe's Bairo's skull tablet could close the hive. I should go back there and try it. |+ unwanted_visitors serubikir]
+[otherwise][stat?: bairo/skull_tablet]
+	You -- I remember that farmer Bairo in the valley had a tablet like this.
+	Really? You should get the tablet and lock the door. Nothing good can come from it.
+	[note: somo/skull_tablet | According to Somo, Bairo's skull tablet is a key controlling the hive's entrance. I should get it and lock the door. |+ unwanted_visitors bairo_farm]
+[otherwise]
+	You -- So where on earth would such a tablet be?
+	They're sometimes kept as charms. Someone with money might have it in a collection.
+	[note: somo/skull_tablet | Somo believes the hive's door would be controlled by a tablet with a skull. Wealthy people in the area sometimes keep them as charms, so I may need to look around. |+ unwanted_visitors]
+[back]
+
+:item(skull_tablet)
+You -- Have you ever seen something like this before?
+Hm... It's like the tablet keys, but why is it such a dark gemstone?
+[stat?: jericho/skull_tablet]
+	You -- Right. So Jericho and you both think it's a key?
+[otherwise]
+	You -- Tablet key?
+	The ancient structures in the caves use them to control the doors.
+[Global task_is_active: unwanted_visitors]
+	You -- Do you think it has anything to do with the spectres roaming around?
+	I would not rule it out. This is a malevolent artifact, whatever it is.
+	[note: somo/skull_tablet | Somo thinks the skull tablet is a key to something. I suspect nothing good. |+ unwanted_visitors]
+	[back]
+[back: #false]
+
+
 :_coat
 [traded_coats]
 	You -- Could we trade coats again?

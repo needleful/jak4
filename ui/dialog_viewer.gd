@@ -1093,13 +1093,16 @@ func control_screen(val := true):
 	emit_signal("control_screen", val)
 	return true
 
-func note(stat: String, text: String, tags: Array, allow_duplicates := false):
+func note(stat: String, text: String, tags, allow_duplicates := false):
+	var t = tags
+	if tags is String:
+		t = tags.split(" ")
 	if not allow_duplicates and Global.stat(stat):
 		return false
 	if stat != "":
 		var _x = Global.add_stat(stat)
-		tags.append(stat)
-	return Global.add_note(text, tags)
+		t.append(stat)
+	return Global.add_note(text, t)
 
 func stat_is(stat: String, value):
 	var val = Global.stat(stat)
@@ -1107,3 +1110,9 @@ func stat_is(stat: String, value):
 		return false
 	else:
 		return val == value
+
+func any_stat(stats: Array):
+	for s in stats:
+		if Global.stat(s):
+			return true
+	return false

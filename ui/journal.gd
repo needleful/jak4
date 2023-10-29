@@ -134,7 +134,7 @@ func populate_list(type: int):
 			category = "completed"
 			ids = Global.game_state.completed_tasks.duplicate()
 	for tag in ids.duplicate():
-		if Global.get_notes_by_tag(tag).empty():
+		if Global.get_notes_by_tag(tag, type == NoteType.CompletedTasks).empty():
 			ids.erase(tag)
 	if ids.empty():
 		return
