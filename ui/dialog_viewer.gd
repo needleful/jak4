@@ -49,6 +49,7 @@ const RESULT_NOSKIP := {"result":"noskip"}
 var r_interpolate := RegEx.new()
 var r_italics := RegEx.new()
 var r_special_label := RegEx.new()
+var r_label_type := RegEx.new()
 
 var _otherwise := false
 var talked := 0
@@ -104,6 +105,7 @@ func _init():
 	var _x = r_interpolate.compile("#\\{([^\\}]+)\\}")
 	_x = r_italics.compile("/")
 	_x = r_special_label.compile("@?(item|note)\\(\\s*([^)]+)\\s*\\)\\s*")
+	_x = r_label_type.compile("[a-zA-Z_0-9]+")
 
 func _ready():
 	ui_settings_apply()
@@ -800,7 +802,8 @@ func _find_item(type:String, items = null, fallthrough : bool = true) -> Array:
 		var l: String = label
 		if l.begins_with('@'):
 			l = l.substr(1)
-		if !l.begins_with(type):
+		var l_type := r_label_type.search(l).get_string()
+		if l_type != type:
 			continue
 		if label in label_states and !label_states[label]:
 			continue

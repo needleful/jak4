@@ -74,11 +74,13 @@ func reset_state():
 	stats_temp = {}
 	gravity_stunned_bodies = {}
 	reset_mum()
+	var d := {}
 	if valid_game_state:
 		var i := 0
 		for entry in game_state.journal:
-			add_tagged_entries(i, entry[1])
+			add_tagged_entries(i, entry[1], d)
 			i += 1
+	journal_by_tag = d
 
 func _physics_process(delta):
 	for b in gravity_stunned_bodies.keys():
@@ -151,17 +153,17 @@ func map_marked(id: String):
 func add_note(text: String, tags: Array):
 	game_state.journal.push_back([text, tags])
 	var index := game_state.journal.size() - 1
-	add_tagged_entries(index, tags)
+	add_tagged_entries(index, tags, journal_by_tag)
 	emit_signal("journal_updated", tags)
 	emit_signal("anything_changed")
 	return true
 
-func add_tagged_entries(index: int, tags:Array):
+func add_tagged_entries(index: int, tags:Array, dict: Dictionary):
 	for t in tags:
-		if t in journal_by_tag:
-			journal_by_tag[t].push_back(index)
+		if t in dict:
+			dict[t].push_back(index)
 		else:
-			journal_by_tag[t] = [index]
+			dict[t] = [index]
 
 func abolish_notes(tags: Array):
 	if tags.size() == 0:
@@ -449,7 +451,6 @@ func request_rescue():
 
 #Saving and loading
 func reset_game():
-	reset_state()
 	valid_game_state = false
 	player_spawned = false
 	game_state = GameState.new(version)
@@ -457,6 +458,7 @@ func reset_game():
 	if dir.file_exists(auto_save_path):
 		var _x = dir.rename(auto_save_path, old_save_backup)
 	var _x = get_tree().reload_current_scene()
+	reset_state()
 
 func save_checkpoint(pos: Transform, sleeping := false, path := auto_save_path):
 	set_stat("player_sleeping", sleeping)

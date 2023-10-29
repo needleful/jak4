@@ -138,7 +138,6 @@ func populate_list(type: int):
 			ids.erase(tag)
 	if ids.empty():
 		return
-	print(ids)
 	var label := Label.new()
 	label.text = category.capitalize()
 	list.add_child(label)
