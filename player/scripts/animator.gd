@@ -148,6 +148,8 @@ func enter_state(state):
 			play_deferred("Dash"); gun.unlock()
 		S.WallCling:
 			transition_to("WallCling"); gun.lock()
+		S.Locked, S.LockedWaiting:
+			gun.lock()
 
 func blend_run_animation(movement: Vector3):
 	var speed: float = movement.length()

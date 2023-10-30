@@ -231,7 +231,7 @@ func die():
 				drop_item(ammo, drop_dir, drop_angle)
 		drop_angle += rand_range(1, 2)
 	if drops_health > 0:
-		Global.health_drop_pity += drops_health
+		Global.health_drop_pity += drops_health*Global.get_player().health_drop_bonus()
 		if Global.health_drop_pity >= 1:
 			Global.health_drop_pity -= 1
 			drop_item(health_scene.instance(), drop_dir, drop_angle)

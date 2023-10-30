@@ -371,6 +371,7 @@ var normal_layer := collision_layer
 var normal_mask := collision_mask
 var running_ground := PoolVector3Array()
 var ground_index := 0
+var initialized := false
 
 const TIMERS_MAX := 3
 
@@ -399,12 +400,17 @@ func _ready():
 		# default coat shape
 		var _x = Global.add_item("double-breasted")
 		set_state(State.Ground)
-	health = max_health
-	stamina = max_stamina
 	gun.camera = cam_rig.camera
 	last_ground_origin = global_transform.origin
 	running_ground = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 	ui.activate()
+	health = max_health
+	stamina = max_stamina
+	talk_ready()
+
+func talk_ready():
+	yield(get_tree().create_timer(0.1), "timeout")
+	initialized = true
 
 func _input(event):
 	if can_talk() and event.is_action_pressed("dialog_item") and !empty(coat_zone):
@@ -437,6 +443,8 @@ func _input(event):
 func _physics_process(delta):
 	if velocity.y < TERMINAL_VELOCITY:
 		velocity.y = TERMINAL_VELOCITY
+	if !is_instance_valid(best_floor):
+		best_floor = null
 	for i in range(timers.size()):
 		timers[i] += delta
 	stamina = clamp(stamina, 0.0, max_stamina)
@@ -1206,6 +1214,9 @@ func set_visual_position(new_transform:Transform):
 	set_saved_transform(new_transform)
 	rotate_mesh(-new_transform.basis.z)
 
+func health_drop_bonus():
+	return clamp(float(max_health)/float(health), 1, 3)
+
 func is_dead():
 	return state == State.Dead or state == State.FallingDeath
 
@@ -1685,6 +1696,7 @@ func crushing_death():
 	die()
 
 func respawn():
+	initialized = false
 	if game_ui.in_game and !CustomGames.respawn():
 		game_ui.cancel_game()
 	cam_rig.reset()
@@ -1698,6 +1710,7 @@ func respawn():
 	ui.hide_prompt()
 	best_floor = null
 	emit_signal("died")
+	talk_ready()
 
 func disable_collision():
 	collision_layer = 0
@@ -1763,7 +1776,7 @@ func can_save():
 	return !game_ui.in_game
 
 func can_talk():
-	return state == State.Ground or state == State.Crouch
+	return initialized and (state == State.Ground or state == State.Crouch)
 
 func get_dialog_viewer() -> Node:
 	return $ui/dialog/dialog/viewer

@@ -301,7 +301,7 @@ func remove_item(item: String, amount := 1) -> bool:
 func set_item_count(item: String, amount: int) -> bool:
 	var old_amount = count(item)
 	if item in tracked_items:
-		add_stat(item, amount - old_amount)
+		var _x = add_stat(item, amount - old_amount)
 	elif amount > old_amount:
 		set_item_recency(item)
 	game_state.inventory[item] = amount

@@ -143,6 +143,7 @@ func process_crash(delta):
 	if ( flight_time > 1.0 
 		and !laili.is_inside_tree()
 		and temp_p.can_talk()
+		and !temp_p.best_floor.is_in_group("plane_parts")
 	):
 		player = temp_p
 		spawn_laili()
@@ -287,6 +288,7 @@ func break_wing(right: bool):
 	var wing = wing_right if right else wing_left
 	
 	var body := RigidBody.new()
+	body.add_to_group("plane_parts")
 	body.mass = wing_mass
 	get_tree().current_scene.add_child(body)
 	body.global_transform = wing.mesh.global_transform

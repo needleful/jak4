@@ -67,6 +67,7 @@ func _physics_process(delta):
 				next_state = AI.Chasing
 		AI.Dead:
 			mode = RigidBody.MODE_RIGID
+			linear_velocity = Vector3.ZERO
 			sleeping = false
 			set_physics_process(false)
 		AI.GravityStunDead:

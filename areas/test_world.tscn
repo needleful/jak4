@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=2]
+[gd_scene load_steps=99 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -34,6 +34,11 @@
 [ext_resource path="res://entities/env/ancient/falling_platform.tscn" type="PackedScene" id=32]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=33]
 [ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=34]
+[ext_resource path="res://entities/env/stone/fountain2.tscn" type="PackedScene" id=35]
+[ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=36]
+[ext_resource path="res://entities/env/ancient/fountainA.tscn" type="PackedScene" id=37]
+[ext_resource path="res://entities/env/copper/copper_fountain.tscn" type="PackedScene" id=38]
+[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=39]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -1407,7 +1412,6 @@ anims/test = SubResource( 9 )
 
 [node name="rail_cart" parent="KinematicBody" index="2" instance=ExtResource( 6 )]
 transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.6335, 0, 1.22332 )
-script = null
 
 [node name="KinematicBody2" type="KinematicBody" parent="." index="25"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2302, 0, 5.87592 )
@@ -2321,6 +2325,21 @@ hologram_material = SubResource( 65 )
 
 [node name="mum" parent="." index="84" instance=ExtResource( 34 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.49826, 0, 1.82775 )
+
+[node name="fountainA" parent="." index="85" instance=ExtResource( 37 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.46921, -4.76837e-07, -3.22363 )
+
+[node name="fountainA_large" parent="." index="86" instance=ExtResource( 36 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.46845, -9.53674e-07, -6.68068 )
+
+[node name="copper_fountain" parent="." index="87" instance=ExtResource( 38 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.14567, 0.804409, -12.4195 )
+
+[node name="fountain2" parent="copper_fountain" index="3" instance=ExtResource( 35 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.12487, -0.804409, 29.7714 )
+
+[node name="fountain" parent="copper_fountain" index="4" instance=ExtResource( 39 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.44717, -0.80441, 29.2042 )
 
 [connection signal="activated" from="player_activation" to="KinematicBody3" method="_on_activated"]
 [connection signal="activated" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 2 ]]

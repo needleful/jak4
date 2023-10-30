@@ -9,6 +9,11 @@ var done_loading := false
 func _enter_tree():
 	loader = ResourceLoader.load_interactive("res://areas/world.tscn")
 
+func _ready():
+	for surface in Bumps.emitters:
+		for impact in Bumps.emitters[surface]:
+			Bumps.impact_particles(surface, impact, $every_impact.global_transform.origin, Vector3.UP)
+
 func _process(_delta):
 	$"lights/glass-furnace".light_enabled = flags & 1
 	$lights/OmniLight.visible = flags & 2

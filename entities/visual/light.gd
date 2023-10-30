@@ -17,22 +17,23 @@ func _notification(what):
 
 func set_light_enabled(e):
 	light_enabled = e
-	if is_inside_tree():
-		for c in get_children():
-			if c is Light:
-				c.visible = light_enabled
-		if m.get_surface_material_count() < 2:
-			print_debug("Two materials expected: ", get_path())
-			return
-		if dark_material:
-			if light_enabled:
-				m.set_surface_material(1, light_material)
-			else:
-				m.set_surface_material(1, dark_material)
+	for c in get_children():
+		if c is Light:
+			c.visible = light_enabled
+	if !m:
+		return
+	if m.get_surface_material_count() < 2:
+		print_debug("Two materials expected: ", get_path())
+		return
+	if dark_material:
+		if light_enabled:
+			m.set_surface_material(1, light_material)
 		else:
-			var mat := m.get_surface_material(1) as SpatialMaterial
-			if mat:
-				mat.emission_enabled = light_enabled
+			m.set_surface_material(1, dark_material)
+	else:
+		var mat := m.get_surface_material(1) as SpatialMaterial
+		if mat:
+			mat.emission_enabled = light_enabled
 
 func enable():
 	set_light_enabled(true)

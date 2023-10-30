@@ -68,6 +68,7 @@ func _init():
 func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
 	_x = Global.connect("journal_updated", self, "on_journal_updated")
+	_x = Global.connect("task_completed", self, "on_task_completed")
 	set_mode(Mode.Gameing)
 	set_process_input(true)
 	InputManagement.ui = self
@@ -273,6 +274,9 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 						show_prompt(["use_item"], tr("Use Item"))
 					else:
 						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
+
+func on_task_completed(id: String):
+	write_log("Task Completed: "+ id.capitalize())
 
 func on_journal_updated(tags: Array):
 	var t := PoolStringArray()

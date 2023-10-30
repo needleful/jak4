@@ -22,13 +22,7 @@ func apply(c):
 		AudioServer.set_bus_volume_db(bi, percent_to_db(vol))
 
 func percent_to_db(percent):
-	if percent >= 1:
-		return lerp(0, 6, percent - 1)
-	else:
-		return lerp(-60, 0, percent)
+	return 50*log(0.99*percent + 0.01)/log(10)
 
 func db_to_percent(db):
-	if db > 0:
-		return db/6.0 + 1
-	else:
-		return (db + 60)/60
+	return (pow(10, db/50) - 0.01) /0.99

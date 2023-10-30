@@ -3,6 +3,8 @@ extends VBoxContainer
 signal item_focused(item)
 signal item_pressed(id, item)
 
+export(bool) var redraw_on_shown := false
+
 onready var list:Container = $ScrollContainer.container
 
 const DEFAULT_ICONS := {
@@ -42,6 +44,8 @@ func _notification(what):
 		set_process_input(is_visible_in_tree())
 		if !is_visible_in_tree():
 			clear()
+		elif redraw_on_shown:
+			view_items(Global.get_fancy_inventory())
 
 func _input(event):
 	if !is_visible_in_tree():

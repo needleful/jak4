@@ -93,7 +93,6 @@ func _on_item_pressed(id, item):
 	use_item(id, item)
 
 func _on_show_inventory_pressed():
-	item_list.view_items(Global.get_fancy_inventory())
 	item_list.show()
 	button_box.hide()
 

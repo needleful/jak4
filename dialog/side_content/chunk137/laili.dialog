@@ -1,8 +1,3 @@
-
-// Rollin' around at the speed of sound up to some neat platforming place or whatever.
-// I'd like some way to hint to the player where she is.
-// She's at the top of the monument and there's a fun way to get up there.
-
 :laili
 [! Global task_exists: flight_test]
 	[Global task_is_active: strange_girl]
@@ -90,6 +85,10 @@
 [exit]
 
 :@note(strange_girl) :- Global.stat("laili/friendship") -> tirus
+[completed]
+	You -- How are you doing?
+	I'm doing okay. Thanks
+	[back]
 You -- That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
 He did?
 You -- Does that surprise you? He was worried. He's the reason I went looking for you.
@@ -186,10 +185,6 @@ You -- I found this bolt. Is it from the plane?
 * You show her an item.
 Neat.
 [back]
-
-// The flight would have Jackie on a flying thing.
-// If they land in on the wheels, it's considered a success.
-// Otherwise, they "crashed" and they have like 1 health point.
 
 :laili_post_flight
 [Global task_is_complete: flight_test]

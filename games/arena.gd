@@ -63,6 +63,7 @@ func clear_scenarios(clear_base: bool):
 func start_game(p_scenario: String):
 	if CustomGames.is_active():
 		return
+	Music.play_track("tension2.ogg")
 	current_wave = 0
 	scenario = scenarios[p_scenario]
 	player = Global.get_player()
@@ -208,6 +209,7 @@ func _end():
 		CustomGames.end(false)
 
 func end():
+	Music.stop_music()
 	var previous_best = CustomGames.stat(self, best_stat())
 	if score > previous_best:
 		CustomGames.set_stat(self, best_stat(), score)
