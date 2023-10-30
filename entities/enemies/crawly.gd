@@ -204,7 +204,6 @@ func set_state(new_ai, force := false):
 			angular_damp = 10
 			linear_damp = 5
 			gravity_scale = 8
-			collision_layer = 0
 			anim.play("Die")
 			anim.queue("Dead-loop")
 			sound.stream = death_audio

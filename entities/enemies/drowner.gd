@@ -18,7 +18,7 @@ func _physics_process(delta):
 	point_check = point_check % get_child_count()
 	
 	submerged = !space.intersect_point(
-		get_child(point_check).global_transform.origin, 4, [], 8192
+		get_child(point_check).global_transform.origin, 1, [], 8192
 	).empty()
 	point_check += 1
 	

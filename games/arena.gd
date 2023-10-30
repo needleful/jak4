@@ -106,8 +106,10 @@ func _process(delta):
 		overlay.combo = 0
 
 func add_points(points: int):
-	score += int(points*max(overlay.combo, 1))
-	player.game_ui.set_value(score)
+	var combo_mult := 1 + 0.12*max(overlay.combo, 0)
+	var added_points := int(points*combo_mult)
+	score += added_points
+	player.game_ui.add_value(added_points)
 	if score > scenario.bronze_score:
 		overlay.color_bronze(WON_COLOR)
 	if score > scenario.silver_score:
@@ -197,16 +199,16 @@ func _end():
 		award = CustomGames.Award.Silver
 	elif score > scenario.bronze_score:
 		award = CustomGames.Award.Bronze
-	
+	print_debug()
 	var previous_award = CustomGames.stat(self, award_stat())
 	if award > previous_award:
 		CustomGames.add_stat(self, ["bronze", "silver", "gold"][award - 1])
 		CustomGames.set_stat(self, award_stat(), award)
 
 	if award:
-		CustomGames.end(true)
+		CustomGames.end(true, "Final Score: "+ str(score))
 	else:
-		CustomGames.end(false)
+		CustomGames.end(false, "Final Score: "+ str(score))
 
 func end():
 	Music.stop_music()

@@ -1,8 +1,8 @@
 extends Node
 
 signal game_started
-signal game_failed
-signal game_completed
+signal game_failed(custom_message)
+signal game_completed(custom_message)
 
 var active_game = null
 
@@ -33,13 +33,13 @@ func can_talk():
 		"dialog_allowed" in active_game 
 		and active_game.dialog_allowed)
 
-func end(success: bool):
+func end(success: bool, custom_message := ""):
 	if success:
 		add_stat(active_game, "completed")
-		emit_signal("game_completed")
+		emit_signal("game_completed", custom_message)
 	else:
 		add_stat(active_game, "failed")
-		emit_signal("game_failed")
+		emit_signal("game_failed", custom_message)
 	active_game.end()
 	active_game = null
 

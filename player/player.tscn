@@ -1,4 +1,4 @@
-[gd_scene load_steps=138 format=2]
+[gd_scene load_steps=133 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -11,7 +11,7 @@
 [ext_resource path="res://ui/options_menu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/components/alert_prompt.tscn" type="PackedScene" id=10]
 [ext_resource path="res://entities/visual/flag.tscn" type="PackedScene" id=11]
-[ext_resource path="res://ui/diagetic/target.png" type="Texture" id=12]
+[ext_resource path="res://ui/custom_game.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/icons/wep_grav_gun.svg" type="Texture" id=13]
 [ext_resource path="res://ui/weapon.gd" type="Script" id=14]
 [ext_resource path="res://ui/arrow_up.svg" type="Texture" id=15]
@@ -23,7 +23,6 @@
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://ui/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
-[ext_resource path="res://ui/game_ui.gd" type="Script" id=24]
 [ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=25]
 [ext_resource path="res://ui/icons/item_gem.png" type="Texture" id=26]
 [ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=27]
@@ -360,201 +359,6 @@ width = 8
 shader = ExtResource( 43 )
 shader_param/value = 1.0
 shader_param/gradient = SubResource( 181 )
-
-[sub_resource type="Animation" id=67]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("values/Label:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("values/spacer:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("values/number:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("values/Label:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("values/Label:text")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ "Challenge Failed" ]
-}
-
-[sub_resource type="Animation" id=70]
-resource_name = "completed"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("values/Label:text")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ "Challenge Completed" ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("values/Label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 4 ),
-"transitions": PoolRealArray( 1.86607, 1 ),
-"update": 0,
-"values": [ Color( 1, 0.890196, 0.470588, 1 ), Color( 1, 1, 1, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("values/spacer:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("values/number:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-
-[sub_resource type="Animation" id=69]
-resource_name = "fail"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("values/Label:text")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ "Challenge Failed" ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("values/Label:modulate")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 4 ),
-"transitions": PoolRealArray( 4.59479, 0.0915055 ),
-"update": 0,
-"values": [ Color( 1, 0.611765, 0.611765, 1 ), Color( 1, 0.611765, 0.611765, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("values/spacer:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("values/number:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
-}
-
-[sub_resource type="Animation" id=68]
-resource_name = "start"
-length = 0.02
-tracks/0/type = "value"
-tracks/0/path = NodePath("values/Label:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("values/Label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
 
 [sub_resource type="Animation" id=50]
 length = 0.001
@@ -1200,7 +1004,6 @@ margin_bottom = 1079.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="gameing" type="AspectRatioContainer" parent="ui"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778
@@ -1520,59 +1323,7 @@ time_scale_response = false
 wait_time = 6.0
 one_shot = true
 
-[node name="custom_game" type="Control" parent="ui/gameing/gameing"]
-time_scale_response = false
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 24 )
-
-[node name="values" type="HBoxContainer" parent="ui/gameing/gameing/custom_game"]
-pause_mode = 1
-time_scale_response = false
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = -218.0
-margin_right = -20.0
-margin_bottom = -164.0
-custom_constants/separation = 25
-
-[node name="Label" type="Label" parent="ui/gameing/gameing/custom_game/values"]
-time_scale_response = false
-margin_right = 366.0
-margin_bottom = 54.0
-custom_fonts/font = ExtResource( 6 )
-text = "Challenge Failed"
-
-[node name="spacer" type="Label" parent="ui/gameing/gameing/custom_game/values"]
-time_scale_response = false
-margin_left = 391.0
-margin_right = 406.0
-margin_bottom = 54.0
-custom_fonts/font = ExtResource( 6 )
-text = ":"
-
-[node name="number" type="Label" parent="ui/gameing/gameing/custom_game/values"]
-time_scale_response = false
-margin_left = 431.0
-margin_right = 552.0
-margin_bottom = 54.0
-custom_fonts/font = ExtResource( 6 )
-text = "Value"
-
-[node name="marker_ref" type="Sprite" parent="ui/gameing/gameing/custom_game"]
-time_scale_response = false
-position = Vector2( 379, 356 )
-texture = ExtResource( 12 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ui/gameing/gameing/custom_game"]
-time_scale_response = false
-anims/RESET = SubResource( 67 )
-anims/completed = SubResource( 70 )
-anims/fail = SubResource( 69 )
-anims/start = SubResource( 68 )
+[node name="custom_game" parent="ui/gameing/gameing" instance=ExtResource( 12 )]
 
 [node name="weapon" type="TextureRect" parent="ui/gameing/gameing"]
 pause_mode = 1
@@ -1658,7 +1409,6 @@ flip_h = true
 [node name="inventory" type="GridContainer" parent="ui/gameing/gameing"]
 pause_mode = 1
 time_scale_response = false
-visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -1915,6 +1665,7 @@ alignment = 2
 
 [node name="dialog" type="AspectRatioContainer" parent="ui"]
 pause_mode = 2
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 ratio = 1.7778

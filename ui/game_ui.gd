@@ -77,11 +77,19 @@ func set_overlay(overlay: Node):
 	custom_overlay = overlay
 	add_child(custom_overlay)
 
-func complete_game():
+func complete_game(custom_message:= ""):
+	var message := "Challenge Completed"
+	if custom_message != "":
+		message = custom_message
+	$values/Label.text = message
 	if _end_game(false):
 		$AnimationPlayer.play("completed")
 
-func fail_game():
+func fail_game(custom_message:= ""):
+	var message := "Challenge Completed"
+	if custom_message != "":
+		message = custom_message
+	$values/Label.text = message
 	if _end_game(false):
 		$AnimationPlayer.play("fail")
 
@@ -114,6 +122,14 @@ func set_value(val):
 	value = val
 	set_value_visible(true)
 	$values/number.text = str(val)
+
+func add_value(change_amount: int):
+	set_value(value + change_amount)
+	if change_amount != 0:
+		if $values/AnimationPlayer.is_playing():
+			$values/AnimationPlayer.stop()
+		$values/number2.text = ("+ " if change_amount > 0 else '- ') + str(change_amount)
+		$values/AnimationPlayer.play("ValueChanged")
 
 func get_value() -> String:
 	return value

@@ -204,6 +204,8 @@ func kill():
 	set_state(AI.Dead)
 
 func die():
+	collision_layer = 0
+	collision_mask = 1
 	var _x = Global.add_stat("killed/"+id)
 	var drop_dir := Vector3(0, 4, 3)
 	var drop_angle := rand_range(0, 2*PI)

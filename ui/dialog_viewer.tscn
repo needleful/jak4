@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://ui/dialog_viewer.gd" type="Script" id=1]
 [ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://ui/fonts/font_bold.res" type="DynamicFont" id=9]
 [ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=10]
 [ext_resource path="res://ui/theming/aside_bar.png" type="Texture" id=11]
+[ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=12]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -19,6 +20,60 @@ font_data = ExtResource( 3 )
 [sub_resource type="DynamicFont" id=3]
 size = 20
 font_data = ExtResource( 2 )
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.329877, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="dialog_viewer" type="Panel" groups=["ui_settings_custom"]]
 anchor_right = 1.0
@@ -62,6 +117,36 @@ size_flags_vertical = 3
 [node name="RichTextLabel" type="RichTextLabel" parent="messages/messages/list"]
 margin_right = 1874.0
 text = "i am very ebic!!!"
+
+[node name="branch_finished" type="HBoxContainer" parent="messages"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 882.0
+margin_right = 1880.0
+margin_bottom = 946.0
+size_flags_horizontal = 3
+custom_constants/separation = 69
+alignment = 1
+
+[node name="input_prompt" parent="messages/branch_finished" instance=ExtResource( 12 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 817.0
+margin_right = 900.0
+margin_bottom = 64.0
+action = "ui_accept"
+small = true
+
+[node name="continue" type="Label" parent="messages/branch_finished"]
+margin_left = 969.0
+margin_top = 21.0
+margin_right = 1063.0
+margin_bottom = 43.0
+text = "Continue..."
+
+[node name="anim" type="AnimationPlayer" parent="messages/branch_finished"]
+anims/RESET = SubResource( 4 )
+anims/show = SubResource( 5 )
 
 [node name="replies" type="VBoxContainer" parent="messages"]
 margin_top = 950.0

@@ -1,0 +1,314 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://ui/theming/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://ui/dialog.gd" type="Script" id=2]
+[ext_resource path="res://ui/dialog/item_context.gd" type="Script" id=3]
+[ext_resource path="res://ui/game_log.gd" type="Script" id=4]
+[ext_resource path="res://ui/components/log_message.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/fonts/font_italics.res" type="DynamicFont" id=9]
+[ext_resource path="res://ui/fonts/font_bold.res" type="DynamicFont" id=10]
+[ext_resource path="res://ui/components/alert_prompt.tscn" type="PackedScene" id=12]
+[ext_resource path="res://ui/dialog/dialog_indicators.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/components/item_list.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/journal.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/dialog_viewer.tscn" type="PackedScene" id=16]
+[ext_resource path="res://ui/fonts/averia/Averia-Bold.ttf" type="DynamicFontData" id=18]
+[ext_resource path="res://ui/components/input_prompt.tscn" type="PackedScene" id=19]
+[ext_resource path="res://ui/icons/close_window.png" type="Texture" id=21]
+[ext_resource path="res://ui/icons/close_window_hover.png" type="Texture" id=22]
+[ext_resource path="res://ui/fonts/averia/Averia-LightItalic.ttf" type="DynamicFontData" id=23]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 23 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 18 )
+
+[sub_resource type="StyleBoxTexture" id=187]
+texture = ExtResource( 22 )
+region_rect = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="StyleBoxTexture" id=188]
+texture = ExtResource( 21 )
+region_rect = Rect2( 0, 0, 32, 32 )
+
+[node name="dialog" type="Control"]
+pause_mode = 1
+time_scale_response = false
+margin_left = -6.10352e-05
+margin_top = 0.00671387
+margin_right = 1920.0
+margin_bottom = 1079.99
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="viewer" parent="." instance=ExtResource( 16 )]
+pause_mode = 1
+time_scale_response = false
+anchor_left = 0.712
+margin_left = -152.371
+margin_top = 10.0
+margin_right = -20.0
+margin_bottom = -10.0
+rect_min_size = Vector2( 500, 0 )
+fonts = {
+"bold": ExtResource( 10 ),
+"italic": ExtResource( 9 ),
+"narration": SubResource( 1 ),
+"you": SubResource( 3 )
+}
+
+[node name="log" type="ScrollContainer" parent="viewer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = -657.0
+margin_top = -360.987
+margin_right = -6.0
+margin_bottom = -10.9866
+script = ExtResource( 4 )
+label_scene = ExtResource( 8 )
+
+[node name="vbox" type="VBoxContainer" parent="viewer/log"]
+margin_right = 645.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
+
+[node name="buttons" type="GridContainer" parent="."]
+time_scale_response = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 62.0
+margin_top = -307.0
+margin_right = 334.0
+margin_bottom = -21.0
+grow_vertical = 0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 15
+columns = 2
+
+[node name="input_prompt" parent="buttons" instance=ExtResource( 19 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 83.0
+margin_bottom = 64.0
+action = "ui_accept"
+small = true
+
+[node name="Label" type="Label" parent="buttons"]
+margin_left = 98.0
+margin_top = 21.0
+margin_right = 272.0
+margin_bottom = 43.0
+text = "Continue"
+
+[node name="prompt_trade" parent="buttons" instance=ExtResource( 19 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 74.0
+margin_right = 83.0
+margin_bottom = 138.0
+action = "dialog_item"
+small = true
+
+[node name="trade" type="HBoxContainer" parent="buttons"]
+margin_left = 98.0
+margin_top = 74.0
+margin_right = 272.0
+margin_bottom = 138.0
+
+[node name="label" type="Label" parent="buttons/trade"]
+margin_top = 21.0
+margin_right = 126.0
+margin_bottom = 43.0
+text = "Special Dialog"
+
+[node name="spacer" type="Control" parent="buttons/trade"]
+margin_left = 130.0
+margin_right = 150.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="indicators" parent="buttons/trade" instance=ExtResource( 13 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 154.0
+margin_top = 0.0
+margin_right = 154.0
+margin_bottom = 64.0
+
+[node name="input_prompt2" parent="buttons" instance=ExtResource( 19 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 148.0
+margin_right = 83.0
+margin_bottom = 212.0
+action = "skip_to_next_choice"
+small = true
+
+[node name="label_trade2" type="Label" parent="buttons"]
+margin_left = 98.0
+margin_top = 169.0
+margin_right = 272.0
+margin_bottom = 191.0
+text = "Skip to Next Choice"
+
+[node name="input_prompt3" parent="buttons" instance=ExtResource( 19 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 222.0
+margin_right = 83.0
+margin_bottom = 286.0
+action = "ui_cancel"
+small = true
+
+[node name="Label2" type="Label" parent="buttons"]
+margin_left = 98.0
+margin_top = 243.0
+margin_right = 272.0
+margin_bottom = 265.0
+text = "Exit"
+
+[node name="note_get" parent="." instance=ExtResource( 12 )]
+margin_left = 24.0
+margin_top = 19.0
+margin_right = 744.0
+margin_bottom = 73.0
+mouse_filter = 2
+format = "New Journal Entry: %s/%s"
+
+[node name="item_context" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -287.0
+margin_top = -250.0
+margin_right = 98.9999
+margin_bottom = 251.0
+script = ExtResource( 3 )
+
+[node name="item_list" parent="item_context" instance=ExtResource( 14 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 15.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = -15.0
+redraw_on_shown = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="item_context"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="Header" type="HBoxContainer" parent="item_context/VBoxContainer"]
+margin_right = 365.0
+margin_bottom = 32.0
+
+[node name="Label" type="Label" parent="item_context/VBoxContainer/Header"]
+margin_top = 5.0
+margin_right = 329.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Contextual Dialog"
+
+[node name="close" type="Button" parent="item_context/VBoxContainer/Header"]
+margin_left = 333.0
+margin_right = 365.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 9
+size_flags_vertical = 9
+custom_styles/hover = SubResource( 187 )
+custom_styles/pressed = SubResource( 187 )
+custom_styles/focus = SubResource( 187 )
+custom_styles/disabled = SubResource( 188 )
+custom_styles/normal = SubResource( 188 )
+
+[node name="HSeparator" type="HSeparator" parent="item_context/VBoxContainer"]
+margin_top = 36.0
+margin_right = 365.0
+margin_bottom = 40.0
+
+[node name="coat" type="Button" parent="item_context/VBoxContainer"]
+margin_top = 44.0
+margin_right = 365.0
+margin_bottom = 66.0
+text = "Trade Coats"
+
+[node name="bar_context" type="HSeparator" parent="item_context/VBoxContainer"]
+margin_top = 70.0
+margin_right = 365.0
+margin_bottom = 74.0
+
+[node name="bar_inventory" type="HSeparator" parent="item_context/VBoxContainer"]
+margin_top = 78.0
+margin_right = 365.0
+margin_bottom = 82.0
+
+[node name="show_inventory" type="Button" parent="item_context/VBoxContainer"]
+margin_top = 86.0
+margin_right = 365.0
+margin_bottom = 108.0
+text = "Use an Item"
+
+[node name="indicators" parent="item_context/VBoxContainer/show_inventory" instance=ExtResource( 13 )]
+
+[node name="HSeparator3" type="HSeparator" parent="item_context/VBoxContainer"]
+margin_top = 112.0
+margin_right = 365.0
+margin_bottom = 116.0
+
+[node name="show_journal" type="Button" parent="item_context/VBoxContainer"]
+margin_top = 120.0
+margin_right = 365.0
+margin_bottom = 142.0
+text = "Use a Note"
+
+[node name="indicators" parent="item_context/VBoxContainer/show_journal" instance=ExtResource( 13 )]
+
+[node name="HSeparator4" type="HSeparator" parent="item_context/VBoxContainer"]
+margin_top = 146.0
+margin_right = 365.0
+margin_bottom = 150.0
+
+[node name="cancel" type="Button" parent="item_context/VBoxContainer"]
+margin_top = 154.0
+margin_right = 365.0
+margin_bottom = 176.0
+text = "Cancel"
+
+[node name="mini_journal" parent="." instance=ExtResource( 15 )]
+visible = false
+anchor_left = 0.3
+anchor_top = 0.1
+anchor_right = 0.7
+anchor_bottom = 0.9
+margin_left = -190.0
+margin_right = 230.0
+rect_min_size = Vector2( 900, 0 )
+buttons = true
+
+[connection signal="pick_item" from="viewer" to="item_context" method="enter"]
+[connection signal="started" from="viewer" to="item_context" method="_on_dialog_started"]
+[connection signal="cancelled" from="item_context" to="viewer" method="_on_item_context_cancelled"]
+[connection signal="context_reply" from="item_context" to="viewer" method="show_context_reply"]
+[connection signal="item_picked" from="item_context" to="viewer" method="use_item"]
+[connection signal="note_picked" from="item_context" to="viewer" method="use_note"]
+[connection signal="item_pressed" from="item_context/item_list" to="item_context" method="_on_item_pressed"]
+[connection signal="pressed" from="item_context/VBoxContainer/Header/close" to="item_context" method="_on_cancel_pressed"]
+[connection signal="pressed" from="item_context/VBoxContainer/coat" to="item_context" method="_on_coat_pressed"]
+[connection signal="pressed" from="item_context/VBoxContainer/show_inventory" to="item_context" method="_on_show_inventory_pressed"]
+[connection signal="pressed" from="item_context/VBoxContainer/show_journal" to="item_context" method="_on_show_journal_pressed"]
+[connection signal="pressed" from="item_context/VBoxContainer/cancel" to="item_context" method="_on_cancel_pressed"]
+[connection signal="cancelled" from="mini_journal" to="item_context" method="_on_journal_cancelled"]
+[connection signal="note_chosen" from="mini_journal" to="item_context" method="_on_mini_journal_note_chosen"]
