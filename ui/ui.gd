@@ -83,7 +83,7 @@ func _input(event):
 			if event.is_action_pressed("pause"):
 				set_mode(Mode.Paused)
 				get_tree().set_input_as_handled()
-			elif event.is_action_pressed("debug_console"):
+			elif using_console(event):
 				set_mode(Mode.DebugConsole)
 				get_tree().set_input_as_handled()
 		Mode.Paused:
@@ -98,18 +98,18 @@ func _input(event):
 			elif event.is_action_pressed("ui_page_down"):
 				status.prev()
 				get_tree().set_input_as_handled()
-			elif event.is_action_pressed("debug_console"):
+			elif using_console(event):
 				set_mode(Mode.DebugConsole)
 				get_tree().set_input_as_handled()
 		Mode.Custom:
 			if event.is_action_pressed("pause"):
 				set_mode(Mode.Gameing)
 				get_tree().set_input_as_handled()
-			elif event.is_action_pressed("debug_console"):
+			elif using_console(event):
 				set_mode(Mode.DebugConsole)
 				get_tree().set_input_as_handled()
 		Mode.DebugConsole:
-			if event.is_action_pressed("debug_console"):
+			if using_console(event):
 				var _x = unpause()
 				get_tree().set_input_as_handled()
 		Mode.StoryTime:
@@ -137,6 +137,11 @@ func _process(delta):
 		if choosing_item and !player.holding("choose_item"):
 			choosing_item = false
 			equipment.close()
+
+func using_console(event: InputEvent):
+	 return (
+		Settings.sub_options["Difficulty"].enable_console
+		and event.is_action_pressed("debug_console"))
 
 func update_inventory(startup:= false):
 	for item in Global.game_state.inventory.keys():

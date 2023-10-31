@@ -25,6 +25,7 @@ export(DamageFactor) var enemy_damage = DamageFactor.NormalDamage
 export(DamageFactor) var player_damage = DamageFactor.NormalDamage
 export(Aggression) var aggression = Aggression.NormalAggression
 export(DialogHints) var dialog_hints = DialogHints.ItemsAndNotes
+export(bool) var enable_console := false
 
 func get_name():
 	return "Difficulty"
