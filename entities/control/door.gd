@@ -15,6 +15,7 @@ export(bool) var randomize_speed := false
 export(float, 0.1, 4.0) var min_speed := 0.8
 export(float, 0.1, 4.0) var max_speed := 1.2
 
+var was_in_tree := false
 var open_stat := ""
 
 var power := 0
@@ -45,8 +46,13 @@ func _ready():
 			anim.play("Deactivate")
 			anim.advance(anim.current_animation_length)
 	if deactivate_upon_death:
-		var _x = Global.get_player().connect("died", self, "clear_power", [true])
+		var p := Global.get_player()
+		if !p.is_connected("died", self, "clear_power"):
+			var _x = p.connect("died", self, "clear_power", [true])
 	assert(anim != null, get_path())
+	if was_in_tree:
+		anim.play("RESET")
+	was_in_tree = true
 
 func _on_stat_changed(stat, value):
 	if stat == tracked_stat:

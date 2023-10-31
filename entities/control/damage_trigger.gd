@@ -8,6 +8,11 @@ export(String) var ignored_tag := ""
 
 var damage_count := 0
 
+func _ready():
+	damage_count = 0
+	if !is_in_group("target"):
+		add_to_group("target")
+
 func get_target_ref() -> Vector3:
 	if has_node("target_ref"):
 		return $target_ref.global_transform.origin

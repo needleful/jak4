@@ -2,8 +2,8 @@ extends Spatial
 class_name ArenaScenario
 
 export(int) var bronze_score := 1000
-export(int) var silver_score := 7500
-export(int) var gold_score := 15000
+export(int) var silver_score := 2000
+export(int) var gold_score := 3000
 export(float) var time_limit := 60.0
 export(int) var min_enemies := 2
 export(bool) var aggro_automatically := true

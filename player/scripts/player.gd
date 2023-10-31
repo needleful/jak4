@@ -393,7 +393,7 @@ func _ready():
 	else:
 		Global.game_state.checkpoint_position = global_transform
 		# Generate three random Common coats
-		for _x in range(3):
+		for _x in 3:
 			var coat = Coat.new(true, Coat.Rarity.Common, Coat.Rarity.Common)
 			Global.add_coat(coat)
 		set_current_coat(Global.game_state.all_coats[0], false)
@@ -406,11 +406,7 @@ func _ready():
 	ui.activate()
 	health = max_health
 	stamina = max_stamina
-	talk_ready()
-
-func talk_ready():
-	yield(get_tree().create_timer(0.1), "timeout")
-	initialized = true
+	initialized = false
 
 func _input(event):
 	if can_talk() and event.is_action_pressed("dialog_item") and !empty(coat_zone):
@@ -445,8 +441,12 @@ func _physics_process(delta):
 		velocity.y = TERMINAL_VELOCITY
 	if !is_instance_valid(best_floor):
 		best_floor = null
-	for i in range(timers.size()):
+	for i in timers.size():
 		timers[i] += delta
+	if !initialized:
+		for t in timers:
+			if t > 0.1:
+				initialized = true
 	stamina = clamp(stamina, 0.0, max_stamina)
 	
 	var movement := Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down")
@@ -1710,7 +1710,7 @@ func respawn():
 	ui.hide_prompt()
 	best_floor = null
 	emit_signal("died")
-	talk_ready()
+	initialized = false
 
 func disable_collision():
 	collision_layer = 0
@@ -1932,10 +1932,8 @@ func is_ground(p_state):
 
 func set_state(next_state: int):
 	#print_debug(State.keys()[state], " -> ", State.keys()[next_state])
-	var i = 0
-	while i < min(timers.size(), TIMERS_MAX):
+	for i in min(timers.size(), TIMERS_MAX):
 		timers[i] = 0.0
-		i += 1
 	
 	# Default properties
 	mesh.stop_particles()

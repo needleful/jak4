@@ -25,11 +25,11 @@ var current_wave := 0
 const PLAYER_DEATH_PENALTY := -500
 const POINTS_PER_HP := {
 	"default":1,
-	"deathgnat":1.5
+	"deathgnat":2.5
 }
 
-const COMBO_DRAIN := 0.1
-const COMBO_DAMAGE_DRAIN := 0.5
+const COMBO_DRAIN := 0.07
+const COMBO_DAMAGE_DRAIN := 0.25
 const WON_COLOR := Color.aquamarine
 
 var scenes := {
@@ -75,6 +75,7 @@ func start_game(p_scenario: String):
 	
 	clear_scenarios(true)
 	cs = scenario.scenario
+	_recursive_ready(scenario)
 	add_child(scenario)
 	scenario.show()
 	spawns = scenario.get_node("spawns")
@@ -99,6 +100,11 @@ func start_game(p_scenario: String):
 	spawn_wave()
 	emit_signal("game_started")
 
+func _recursive_ready(n: Node):
+	n.request_ready()
+	for c in n.get_children():
+		_recursive_ready(c)
+
 func _process(delta):
 	overlay.time_remaining = timer.time_left
 	overlay.combo_countdown -= COMBO_DRAIN*delta
@@ -119,22 +125,24 @@ func add_points(points: int):
 
 func _on_enemy_died(enemy_id, path):
 	var e:EnemyBody = get_tree().current_scene.get_node(path)
-	if e:
-		var p:int = POINTS_PER_HP["default"]
-		if enemy_id in POINTS_PER_HP:
-			p = POINTS_PER_HP[enemy_id]
-		var hp := e.starting_health
-		add_points(hp*p)
+	var p:int = POINTS_PER_HP["default"]
+	if enemy_id in POINTS_PER_HP:
+		p = POINTS_PER_HP[enemy_id]
+	var hp := e.starting_health
+	add_points(hp*p)
+	e.remove_from_group("arena_enemy")
 	overlay.combo_countdown = 1
 	overlay.combo += 1
-	
-	var active_enemies := 0
-	for en in get_tree().get_nodes_in_group("arena_enemy"):
-		if en.is_inside_tree() and !en.is_dead():
-			active_enemies += 1
+	var active_enemies := get_tree().get_nodes_in_group("arena_enemy").size()
 	if active_enemies <= scenario.min_enemies:
 		current_wave += 1
 		spawn_wave()
+	call_deferred("_free_after_wait", e)
+
+func _free_after_wait(e):
+	yield(get_tree().create_timer(8), "timeout")
+	if is_instance_valid(e) and CustomGames.active_game == self:
+		e.queue_free()
 
 func spawn_wave():
 	var wave = scenario.get_wave(current_wave)
@@ -179,6 +187,7 @@ func spawn_wave():
 			var _x = node.connect("died", self, "_on_enemy_died")
 
 func _on_player_died():
+	overlay.combo = 0
 	add_points(PLAYER_DEATH_PENALTY)
 	_end()
 
@@ -189,6 +198,7 @@ func _on_timeout():
 	player.celebrate()
 	overlay.time_remaining = 0
 	_end()
+	player.teleport_to($base/player_start.global_transform)
 
 func _end():
 	CustomGames.add_stat(self, "completed")
@@ -199,16 +209,15 @@ func _end():
 		award = CustomGames.Award.Silver
 	elif score > scenario.bronze_score:
 		award = CustomGames.Award.Bronze
-	print_debug()
 	var previous_award = CustomGames.stat(self, award_stat())
 	if award > previous_award:
 		CustomGames.add_stat(self, ["bronze", "silver", "gold"][award - 1])
 		CustomGames.set_stat(self, award_stat(), award)
 
 	if award:
-		CustomGames.end(true, "Final Score: "+ str(score))
+		CustomGames.end(true)
 	else:
-		CustomGames.end(false, "Final Score: "+ str(score))
+		CustomGames.end(false)
 
 func end():
 	Music.stop_music()
@@ -226,9 +235,11 @@ func end():
 	overlay = null
 	timer.stop()
 	clear_scenarios(true)
-	add_child(scenarios["base"])
+	call_deferred("add_child", scenarios["base"])
 	emit_signal("game_ended")
-	player.teleport_to($base/player_start.global_transform)
+
+func get_custom_message():
+	return "Final Score: "+ str(score)
 
 func award_stat():
 	return "award/"+scenario.name

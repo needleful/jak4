@@ -124,6 +124,18 @@ Thanks.
 [note: laili/tirus | I've talked with Laili about asking for food if she needs it. I suppose all there is to do now is let Tirus know. |+ laili tirus strange_girl]
 [back]
 
+:@note(strange_girl)
+You -- That tavern-keeper, Tirus, wanted me to make sure you're eating enough.
+...
+Eh. I'm doing okay.
+You -- Are you sure?
+[Global task_is_active: flight_test]
+	... Let's stay focused on the task at hand here. I need a flight tester, not a therapist.
+[otherwise]
+	....
+[exit]
+
+
 :laili_climb
 [! stat?: laili/climb]
 	Are you ready?
@@ -227,12 +239,41 @@ You -- I heard you moved here. How exciting! Do you like it?
 I could take it or leave it, personally. The bed is nice.
 	So when should we fly next?
 	The plane's still up on the cliff if you want another go. Maybe next time you can try a loop.
-You -- Uh, I'll let you know.
-
+You -- Uh, I'll let you know...
 [exit]
 
 :_coat
-* I didn't implement it yet.
+[completed]
+	You -- Do you want to trade coats again?
+	You seem indecisive.
+	You -- I just care about fashion is all.
+	[swap_coats] Alright, I don't mind.
+	You -- Thank you, Laili.
+[otherwise][stat?: laili/friendship]
+	[discussed]
+		You -- So, Laili, about your coat...
+		You still want to trade?
+		You -- Yes.
+		[swap_coats] Well, alright. I'll humor you.
+		You -- Thank you.
+	[otherwise]
+		You -- Say, Laili. I couldn't help but notice that pattern on your coat.
+		Hm? What about it?
+		You -- I was wondering if you'd like to trade for mine.
+		Really? Well, you did risk your life on my plane, I could swap.
+		You -- [swap_coats] Thank you, Laili.
+[otherwise]
+	You -- I couldn't help but notice that lovely pattern on your coat.
+	Hm? What about it?
+	You -- I was wondering if you'd like to trade for mine.
+	[Global task_is_active: flight_test]
+		Maybe when we get the flight test done.
+		You -- Ah, I see. Bribing me with more coats.
+	[otherwise]
+		Hm... nah.
+		You -- Just like that? Do you even like that pattern?
+		I'm not trading coats with a stranger. That's how you get lice.
+		You -- I do /not/ have lice!
 [back]
 
 // Next up: Laili disappears! You find her in maslikir making her plane out of copper.

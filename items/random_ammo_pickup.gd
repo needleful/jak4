@@ -13,7 +13,7 @@ func _ready():
 		generate()
 	elif !ignore_parent:
 		var p = get_parent()
-		if p is Door:
+		if p is Door and !p.is_connected("opened", self, "generate"):
 			p.connect("opened", self, "generate")
 
 func generate(force := false):

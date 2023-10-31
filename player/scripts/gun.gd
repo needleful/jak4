@@ -166,6 +166,8 @@ func _process(delta):
 			var score: float = lockon_weight_distance*dist + lockon_weight_angle*abs(angle)
 			if g.is_in_group("enemy"):
 				score /= enemy_bias
+				if "can_fly" in g and g.can_fly:
+					score *= 0.8
 			if score < best_score:
 				# new target
 				var cast_end: Vector3

@@ -157,7 +157,6 @@ func set_state(new_state, force:=false):
 			axis_lock_angular_z = false
 			gravity_scale = 1
 			$AnimationPlayer.stop()
-			collision_layer = 0
 		AI.Damaged:
 			$AudioStreamPlayer3D.stream = damaged_sound
 			$AudioStreamPlayer3D.play()

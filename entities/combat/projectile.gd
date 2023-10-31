@@ -46,7 +46,7 @@ func fire(p_target: Spatial, p_offset := Vector3.ZERO, p_time := 6.0):
 
 func _physics_process(delta):
 	timer += delta
-	if target:
+	if is_instance_valid(target):
 		var dir = (
 			target.global_transform.origin + offset
 			 - global_transform.origin)

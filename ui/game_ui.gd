@@ -86,7 +86,7 @@ func complete_game(custom_message:= ""):
 		$AnimationPlayer.play("completed")
 
 func fail_game(custom_message:= ""):
-	var message := "Challenge Completed"
+	var message := "Challenge Failed"
 	if custom_message != "":
 		message = custom_message
 	$values/Label.text = message
@@ -128,7 +128,7 @@ func add_value(change_amount: int):
 	if change_amount != 0:
 		if $values/AnimationPlayer.is_playing():
 			$values/AnimationPlayer.stop()
-		$values/number2.text = ("+ " if change_amount > 0 else '- ') + str(change_amount)
+		$values/number2.text = ("+ " if change_amount > 0 else '- ') + str(abs(change_amount))
 		$values/AnimationPlayer.play("ValueChanged")
 
 func get_value() -> String:

@@ -81,7 +81,18 @@ What do you want to fight?
 	You -- A bunch of crawlers.
 	Alright, let's do it!
 	[$: scenario | crawlies]
-> [skip] Giant deathgnats. #{$arena.scenario_text("deathgnats")}
+> [skip] A basic mix of enemies. #{$arena.scenario_text("basic_mix")}
+	You -- A basic mix of enemies.
+	[! Global count: wep_pistol] That includes flying enemies. They can be a hassle without a gun. Are you sure you want to try anyway?
+		> Yes.
+			Alright, you're the boss.
+		> Never mind, you've got a point.
+			Come back if you get a gun and show us what you got!
+			[exit]
+	[otherwise]
+		Alright, let's do it!
+	[$: scenario | basic_mix]
+> [$arena rank: #1][skip] Giant deathgnats. #{$arena.scenario_text("deathgnats")}
 	You -- Giant deathgnats.
 	[! Global count: wep_pistol] Usually we only let people with guns fight them. Are you sure you want to?
 		> Yes.
@@ -92,10 +103,12 @@ What do you want to fight?
 	[otherwise]
 		Have fun!
 	[$: scenario | deathgnats]
-> [$arena rank: #1][skip] A basic mix of crawlers and deathgnats. #{$arena.scenario_text("basic_mix")}
-	Alright, let's do it!
-	[$: scenario | basic_mix]
+> [$arena rank: #2][skip] I want to try moving platforms. #[$arena scenario_text: flooded_basic]
+	You -- I want to try moving platforms.
+	Good thing you signed a waiver!
+	[$: scenario | moving_platforms]
 > [$arena rank: #2][skip] Flood the whole chasm with water! #{$arena.scenario_text("flooded_basic")}
+	You -- Flood the whole chasm with water!
 	You're crazy! Let's do it!
 	[$: scenario | flooded_basic]
 > Do you have more options?
@@ -328,4 +341,36 @@ Hm... That is not a bad deal.
 How about this: you get three silver medals, and I let you see the pens.
 You -- It's a deal.
 [note: jericho/pen_rank | If I get a silver medal or better in three separate arena games, Jericho will let me see the pens. |+ unwanted_visitors jericho arena137/rank_access]
+[back]
+
+:_coat
+[traded_coats]
+	You -- Could we trade coats again?
+	Really? You just gave me this one.
+	You -- My tastes are ever-evolving.
+	[swap_coats] Well, I see no reason why to /not/ trade.
+	You -- Thank you!
+[discussed]
+	[$arena rank: #3]
+		You -- Do you remember our deal? I've gotten three silver medals.
+		What, the jacket? You really want it?
+		You -- It's a lovely pattern.
+		[swap_coats] Alright, I am an honest man. You can have it.
+		You -- Thank you!
+	[otherwise]
+		You -- Could we trade coats?
+		Did you forget our deal. If you get three silver medals in the arenas, I will trade with you.
+[otherwise]
+	You -- That's a lovely material you're wearing.
+	It is?
+	You -- I was wondering if we could trade coats.
+	Would my coat fit you?
+	You -- I'll make it work.
+	[$arena rank: #3]
+		You know what? You have been in the arenas doing good work. Why not?
+		[swap_coats] Consider it a gift.
+		You -- Thank you!
+	[otherwise]
+		Hm.. How about this: you get three silver medals in the arenas, and I will give you my jacket.
+		You -- That sounds like a deal.
 [back]

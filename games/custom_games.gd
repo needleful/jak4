@@ -33,7 +33,10 @@ func can_talk():
 		"dialog_allowed" in active_game 
 		and active_game.dialog_allowed)
 
-func end(success: bool, custom_message := ""):
+func end(success: bool):
+	var custom_message := ""
+	if active_game and active_game.has_method("get_custom_message"):
+		custom_message = active_game.get_custom_message()
 	if success:
 		add_stat(active_game, "completed")
 		emit_signal("game_completed", custom_message)
