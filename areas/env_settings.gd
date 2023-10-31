@@ -40,6 +40,7 @@ func set_sun_visible(sv: bool):
 		# Sun is hidden in any environment when it's night
 		if no("show_sun") or !sv:
 			sun.visible = sv
+			sun.light_energy = 1
 
 func set_indirect_light_color(ic: Color):
 	indirect_light_color = ic

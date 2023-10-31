@@ -9,6 +9,11 @@ export(int) var min_enemies := 2
 export(bool) var aggro_automatically := true
 export(Resource) var scenario 
 
+func _ready():
+	for spawn in $spawns.get_children():
+		for c in spawn.get_children():
+			c.queue_free()
+
 func get_wave(wave: int):
 	if wave < scenario.waves.size():
 		return scenario.waves[wave]

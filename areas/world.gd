@@ -423,14 +423,10 @@ func set_sun_enabled(enabled:bool):
 	if !enabled and sun.visible:
 		_x = sun_tween.interpolate_callback(sun, 
 			FOG_TWEEN_TIME + 0.1, "hide")
-		_x = sun_tween.interpolate_callback(stars,
-			FOG_TWEEN_TIME + 0.1, "hide"
-		)
 	elif enabled:
 		if !sun.visible:
 			sun.light_energy = 0
 		sun.show()
-		stars.show()
 	_x = sun_tween.start()
 
 func indirect_light_override(light: Color):

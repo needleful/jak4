@@ -97,7 +97,7 @@ func start_game(p_scenario: String):
 	overlay.combo = 0
 	overlay.combo_countdown = 0
 	player.game_ui.set_value(0)
-	spawn_wave()
+	call_deferred("spawn_wave")
 	emit_signal("game_started")
 
 func _recursive_ready(n: Node):

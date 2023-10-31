@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=2]
+[gd_scene load_steps=121 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -390,11 +390,22 @@ tracks/2/keys = {
 "values": [ Transform( 0.288257, 0, -0.957553, 0, 1, 0, 0.957553, 0, 0.288257, 1.10772, 5.09303, 9.16148 ), Transform( -0.287828, -0.0157238, -0.957553, 0.0545476, -0.998511, 9.43323e-08, -0.956127, -0.0522321, 0.288257, 1.10772, 27.6954, 9.16148 ), Transform( 0.285515, 0.0396703, -0.957553, -0.137621, 0.990485, 1.15088e-08, 0.948442, 0.131779, 0.288257, 1.10772, 6.59985, 9.16148 ) ]
 }
 
-[sub_resource type="Curve3D" id=284]
-_data = {
-"points": PoolVector3Array( 0.453587, -0.56142, 2.60689, -0.453587, 0.56142, -2.60689, 2.00177, 5.6053, -0.136749, 0, 0, 0, 0, 0, 0, 2.10944, 17.7957, -0.692268, -0.555882, -0.338459, -2.90228, 0.555882, 0.338459, 2.90228, 2.24237, 28.1052, 0.991241, 0, 0, 0, 0, 0, 0, 2.63412, 16.4039, 1.45474, 1.50944, -0.468494, 3.69931, -1.50944, 0.468494, -3.69931, 2.00177, 5.6053, -0.136749 ),
-"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
-}
+[sub_resource type="CubeMesh" id=285]
+material = ExtResource( 49 )
+size = Vector3( 0.6, 20, 1 )
+
+[sub_resource type="ConvexPolygonShape" id=286]
+points = PoolVector3Array( 0.3, 10, 0.5, -0.3, 10, 0.5, 0.3, -10, 0.5, 0.3, 10, -0.5, -0.3, 10, -0.5, -0.3, -10, 0.5, 0.3, -10, -0.5, -0.3, -10, -0.5 )
+
+[sub_resource type="CubeMesh" id=287]
+material = ExtResource( 49 )
+size = Vector3( 0.7, 40, 2.2 )
+
+[sub_resource type="ConvexPolygonShape" id=288]
+points = PoolVector3Array( 0.349932, 20, 1.1, -0.35, 20, 1.1, 0.349932, -20, 1.1, 0.349932, 20, -1.1, -0.35, 20, -1.1, -0.35, -20, 1.1, 0.349932, -20, -1.1, -0.35, -20, -1.1 )
+
+[sub_resource type="ConvexPolygonShape" id=289]
+points = PoolVector3Array( 0.349932, 20, 1.1, -0.35, 20, 1.1, 0.349932, -20, 1.1, 0.349932, 20, -1.1, -0.35, 20, -1.1, -0.35, -20, 1.1, 0.349932, -20, -1.1, -0.35, -20, -1.1 )
 
 [sub_resource type="QuadMesh" id=21]
 
@@ -1536,105 +1547,107 @@ transform = Transform( -0.192536, 0.0973366, 0.976451, 0.0188302, 0.995252, -0.0
 [node name="scrap5" parent="active_entities/zone_arena/arena/moving_platforms" index="19" instance=ExtResource( 42 )]
 transform = Transform( 0.998341, -0.0575836, 0, 0.0575836, 0.998341, 0, 0, 0, 1, -0.252087, 33.4171, 1.9017 )
 
-[node name="CSGBox" type="CSGBox" parent="active_entities/zone_arena/arena/moving_platforms" index="20"]
-transform = Transform( 0.975981, 0, 0.217855, 0, 1, 0, -0.217855, 0, 0.975981, -20.4806, -2.17259, 8.34521 )
-use_collision = true
-collision_layer = 257
-width = 0.762262
-height = 19.4184
-depth = 0.483546
-material = ExtResource( 49 )
-
-[node name="CSGBox2" type="CSGBox" parent="active_entities/zone_arena/arena/moving_platforms" index="21"]
-transform = Transform( 0.979832, 0, 0.199822, 0, 1, 0, -0.199822, 0, 0.979832, -14.2474, -1.33457, 7.07404 )
-use_collision = true
-collision_layer = 257
-width = 0.762262
-height = 21.6925
-depth = 0.483546
-material = ExtResource( 49 )
-
-[node name="CSGBox3" type="CSGBox" parent="active_entities/zone_arena/arena/moving_platforms" index="22"]
-transform = Transform( 0.979832, 0, 0.199822, 0, 1, 0, -0.199822, 0, 0.979832, -15.7388, -0.87952, 2.64782 )
-use_collision = true
-collision_layer = 257
-width = 0.762262
-height = 20.7886
-depth = 0.483546
-material = ExtResource( 49 )
-
-[node name="CSGBox4" type="CSGBox" parent="active_entities/zone_arena/arena/moving_platforms" index="23"]
-transform = Transform( 0.979832, 0, 0.199822, 0, 1, 0, -0.199822, 0, 0.979832, -21.8756, -1.65882, 3.89932 )
-use_collision = true
-collision_layer = 257
-width = 0.762262
-height = 19.7867
-depth = 0.483546
-material = ExtResource( 49 )
-
-[node name="rail" type="Path" parent="active_entities/zone_arena/arena/moving_platforms" index="24"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6895, 0.0213871, 7.83752 )
-curve = SubResource( 284 )
-
-[node name="CSGPolygon" type="CSGPolygon" parent="active_entities/zone_arena/arena/moving_platforms/rail" index="0"]
-use_collision = true
-collision_layer = 257
-mode = 2
-path_node = NodePath("..")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-smooth_faces = true
-material = ExtResource( 49 )
-
-[node name="rail2" type="Path" parent="active_entities/zone_arena/arena/moving_platforms" index="25"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.74718, 0.0213871, 9.8979 )
-curve = SubResource( 284 )
-
-[node name="CSGPolygon" type="CSGPolygon" parent="active_entities/zone_arena/arena/moving_platforms/rail2" index="0"]
-use_collision = true
-collision_layer = 257
-mode = 2
-path_node = NodePath("..")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-smooth_faces = true
-material = ExtResource( 49 )
-
-[node name="scrap6" parent="active_entities/zone_arena/arena/moving_platforms" index="26" instance=ExtResource( 24 )]
+[node name="scrap6" parent="active_entities/zone_arena/arena/moving_platforms" index="20" instance=ExtResource( 24 )]
 transform = Transform( 0.114513, 0, 0.993422, 0, 1, 0, -0.993422, 0, 0.114513, -1.89039, 24.4762, 6.61157 )
 
-[node name="scrap7" parent="active_entities/zone_arena/arena/moving_platforms" index="27" instance=ExtResource( 24 )]
+[node name="scrap7" parent="active_entities/zone_arena/arena/moving_platforms" index="21" instance=ExtResource( 24 )]
 transform = Transform( -0.550161, 0, 0.835058, 0, 1, 0, -0.835058, 0, -0.550161, 3.05869, 24.6876, 5.60425 )
 
-[node name="scrap8" parent="active_entities/zone_arena/arena/moving_platforms" index="28" instance=ExtResource( 24 )]
+[node name="scrap8" parent="active_entities/zone_arena/arena/moving_platforms" index="22" instance=ExtResource( 24 )]
 transform = Transform( -0.550161, 0, 0.835058, 0, 1, 0, -0.835058, 0, -0.550161, 3.05869, 5.38074, 5.60425 )
 
-[node name="scrap9" parent="active_entities/zone_arena/arena/moving_platforms" index="29" instance=ExtResource( 42 )]
+[node name="scrap9" parent="active_entities/zone_arena/arena/moving_platforms" index="23" instance=ExtResource( 42 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.2572, -9.7124, -1.61088 )
 
-[node name="scrap10" parent="active_entities/zone_arena/arena/moving_platforms" index="30" instance=ExtResource( 24 )]
+[node name="scrap10" parent="active_entities/zone_arena/arena/moving_platforms" index="24" instance=ExtResource( 24 )]
 transform = Transform( 0.910134, 0.414313, -2.67623e-08, 0.0734322, -0.161311, -0.984168, -0.407753, 0.895725, -0.177239, -13.8644, 6.59946, -8.61245 )
 
-[node name="scrap_pile1" parent="active_entities/zone_arena/arena/moving_platforms" index="31" instance=ExtResource( 19 )]
+[node name="scrap_pile1" parent="active_entities/zone_arena/arena/moving_platforms" index="25" instance=ExtResource( 19 )]
 transform = Transform( 0.328153, -0.903445, -0.275866, -0.677957, -0.0218876, -0.734775, 0.65779, 0.428144, -0.619679, 16.73, -4.98762, 15.9266 )
 
-[node name="scrap11" parent="active_entities/zone_arena/arena/moving_platforms" index="32" instance=ExtResource( 24 )]
+[node name="scrap11" parent="active_entities/zone_arena/arena/moving_platforms" index="26" instance=ExtResource( 24 )]
 transform = Transform( 0.974593, -0.0615101, 0.21537, 0.0396981, 0.993766, 0.10418, -0.220435, -0.0929829, 0.97096, -6.35282, 6.67148, 17.0005 )
 
 [node name="scrap4" parent="active_entities/zone_arena/arena/moving_platforms/scrap11" index="1" instance=ExtResource( 21 )]
 transform = Transform( 0.217774, -0.975739, -0.0225445, -0.129488, -0.00599019, -0.991563, 0.967371, 0.218856, -0.127651, 20.206, 1.26815, -16.2822 )
+
+[node name="StaticBody" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="27"]
+transform = Transform( 0.982539, 0, 0.186057, 0, 1, 0, -0.186057, 0, 0.982539, -20.5958, -1.39389, 8.20498 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody" index="0"]
+mesh = SubResource( 285 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody" index="1"]
+shape = SubResource( 286 )
+
+[node name="StaticBody3" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="28"]
+transform = Transform( 0.982539, 0, 0.186057, 0, 1, 0, -0.186057, 0, 0.982539, -21.7932, -1.39389, 4.0493 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody3" index="0"]
+mesh = SubResource( 285 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody3" index="1"]
+shape = SubResource( 286 )
+
+[node name="StaticBody4" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="29"]
+transform = Transform( 0.982539, 0, 0.186057, 0, 1, 0, -0.186057, 0, 0.982539, -15.5947, -1.39389, 2.87553 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody4" index="0"]
+mesh = SubResource( 285 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody4" index="1"]
+shape = SubResource( 286 )
+
+[node name="StaticBody2" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="30"]
+transform = Transform( 0.982539, 0, 0.186057, 0, 1, 0, -0.186057, 0, 0.982539, -14.3102, -1.97926, 7.05988 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody2" index="0"]
+mesh = SubResource( 285 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody2" index="1"]
+shape = SubResource( 286 )
+
+[node name="StaticBody5" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="31"]
+transform = Transform( 0.965517, 0, 0.260339, 0, 1, 0, -0.260339, 0, 0.965517, -1.90863, 9.15666, 10.9901 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody5" index="0"]
+mesh = SubResource( 287 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody5" index="1"]
+shape = SubResource( 288 )
+
+[node name="StaticBody6" type="StaticBody" parent="active_entities/zone_arena/arena/moving_platforms" index="32"]
+transform = Transform( 0.965517, 0, 0.260339, 0, 1, 0, -0.260339, 0, 0.965517, 4.13496, 9.15666, 7.67918 )
+collision_layer = 257
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MeshInstance" type="MeshInstance" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody6" index="0"]
+mesh = SubResource( 287 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_arena/arena/moving_platforms/StaticBody6" index="1"]
+shape = SubResource( 289 )
 
 [node name="flooded_basic" type="Spatial" parent="active_entities/zone_arena/arena" index="5"]
 visible = false
