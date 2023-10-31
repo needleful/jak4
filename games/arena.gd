@@ -235,7 +235,7 @@ func end():
 	overlay = null
 	timer.stop()
 	clear_scenarios(true)
-	call_deferred("add_child", scenarios["base"])
+	add_child(scenarios["base"])
 	emit_signal("game_ended")
 
 func get_custom_message():
