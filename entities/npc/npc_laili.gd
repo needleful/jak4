@@ -13,7 +13,7 @@ var crashed := false
 
 class LailiGame:
 	const title := "Climb to the Top"
-	const friendly_id := ""
+	const friendly_id := "laili"
 	const respawn := true
 	const dialog_allowed := true
 	var id: int
@@ -58,13 +58,13 @@ func cancel_climb() -> bool:
 	CustomGames.end(false)
 	return true
 
-func _on_game_completed():
-	if CustomGames.active_game == climb_game:
+func _on_game_completed(_message):
+	if CustomGames.active_game.friendly_id == "laili":
 		var _x = Global.add_stat("laili/pre_flight")
 	custom_entry = "laili"
 	_disconnect_game()
 
-func _on_game_failed():
+func _on_game_failed(_message):
 	get_node(climbing_path).cancel()
 	custom_entry = "laili"
 	_disconnect_game()
