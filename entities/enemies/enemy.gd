@@ -202,6 +202,7 @@ func rotate_up(speed: float, up := Vector3.UP):
 
 func kill():
 	set_state(AI.Dead)
+	die()
 
 func die():
 	collision_layer = 0

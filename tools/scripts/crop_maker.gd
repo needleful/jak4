@@ -1,7 +1,7 @@
 tool
 extends EditorScript
 
-var multiMesh := "active_entities/hut_area/corn2"
+var multiMesh := "action/corn"
 
 var step_size := 0.2
 var buffer := 1.0

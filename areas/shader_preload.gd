@@ -10,6 +10,9 @@ func _enter_tree():
 	loader = ResourceLoader.load_interactive("res://areas/world.tscn")
 
 func _ready():
+	for c in $action.get_children():
+		if c is Particles:
+			c.emitting = true
 	for surface in Bumps.emitters:
 		for impact in Bumps.emitters[surface]:
 			Bumps.impact_particles(surface, impact, $every_impact.global_transform.origin, Vector3.UP)
