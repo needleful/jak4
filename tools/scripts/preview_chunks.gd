@@ -3,7 +3,7 @@ extends EditorScript
 
 const path_f := "res://areas/chunks/%s.tscn"
 
-var load_chunks := true
+var load_chunks := false
 var take_photo := true
 
 func _run():
