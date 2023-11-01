@@ -211,7 +211,11 @@ func _end():
 		award = CustomGames.Award.Bronze
 	var previous_award = CustomGames.stat(self, award_stat())
 	if award > previous_award:
-		CustomGames.add_stat(self, ["bronze", "silver", "gold"][award - 1])
+		# Add awards for every rank
+		for i in range(previous_award+1, award+1):
+			var a = ["bronze", "silver", "gold"][i-1]
+			print_debug("Awarded: ", a)
+			CustomGames.add_stat(self, a)
 		CustomGames.set_stat(self, award_stat(), award)
 
 	if award:
