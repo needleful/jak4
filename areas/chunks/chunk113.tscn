@@ -1870,7 +1870,6 @@ interior_ambient_color = Color( 0.172549, 0.231373, 0.231373, 1 )
 
 [node name="env_tower" type="Area" parent="active_entities" index="4"]
 transform = Transform( 0.92197, 0, 0.387261, 0, 1, 0, -0.387261, 0, 0.92197, 77.3625, 159.698, 27.3544 )
-visible = false
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 32 )
@@ -1889,13 +1888,15 @@ origin_offset = Vector3( 0, 13.5137, -17.7622 )
 cull_mask = 1047551
 interior_enable = true
 interior_ambient_color = Color( 0.172549, 0.231373, 0.231373, 1 )
+interior_dark_ambient_color = Color( 0.294118, 0.333333, 0.313726, 1 )
 
 [node name="int3" type="ReflectionProbe" parent="active_entities/env_tower" index="1" groups=["powered_probe_113"]]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.6656, -55.5028, -3.04078 )
 extents = Vector3( 54.3558, 24.5151, 42.7955 )
 cull_mask = 1047551
 interior_enable = true
-interior_ambient_color = Color( 0.533333, 0.533333, 0.431373, 1 )
+interior_ambient_color = Color( 0.733333, 0.733333, 0.615686, 1 )
+interior_dark_ambient_color = Color( 0.329412, 0.427451, 0.356863, 1 )
 
 [node name="int4" type="ReflectionProbe" parent="active_entities/env_tower" index="2" groups=["powered_probe_113"]]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.6656, 8.11516, -3.04078 )
@@ -1903,6 +1904,7 @@ extents = Vector3( 54.3558, 39.4201, 42.7955 )
 cull_mask = 1047551
 interior_enable = true
 interior_ambient_color = Color( 0.431373, 0.356863, 0.435294, 1 )
+interior_dark_ambient_color = Color( 0.290196, 0.52549, 0.411765, 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/env_tower" index="3"]
 transform = Transform( 1, 0, 3.57628e-07, 0, 1, 0, -3.57628e-07, 0, 1, 2.28882e-05, -0.000152588, -1.14441e-05 )
@@ -1921,14 +1923,15 @@ spot_range = 17.0
 spot_angle = 25.2296
 
 [node name="OmniLight" type="OmniLight" parent="active_entities/env_tower" index="6"]
-transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, 9.03157, -85.7822, 8.90507 )
+transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, 25.1786, -82.3363, -2.53523 )
 light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
-omni_range = 26.25
+omni_range = 8.88977
 
 [node name="OmniLight8" type="OmniLight" parent="active_entities/env_tower" index="7"]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -2.46524, -105.271, 18.9915 )
 light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
-omni_range = 26.25
+omni_range = 12.3813
+omni_attenuation = 2.21914
 
 [node name="OmniLight9" type="OmniLight" parent="active_entities/env_tower" index="8"]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, 22.0841, -105.271, 4.01375 )
@@ -1940,60 +1943,51 @@ transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.
 light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
 omni_range = 14.7297
 
-[node name="OmniLight2" type="OmniLight" parent="active_entities/env_tower" index="10"]
-transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -7.13517, 20.2216, -0.746513 )
-light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
-omni_range = 33.0203
-
-[node name="OmniLight7" type="OmniLight" parent="active_entities/env_tower" index="11"]
-transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.91363, -9.01956, -3.46019 )
-light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
-omni_range = 33.0203
-
-[node name="OmniLight14" type="OmniLight" parent="active_entities/env_tower" index="12"]
-transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -9.84609, -46.2103, -5.94227 )
-light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
-omni_range = 33.0203
-
-[node name="OmniLight15" type="OmniLight" parent="active_entities/env_tower" index="13"]
+[node name="OmniLight15" type="OmniLight" parent="active_entities/env_tower" index="10"]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -8.4067, -41.3679, 8.426 )
 light_color = Color( 0.592157, 0.819608, 0.776471, 1 )
 omni_range = 33.0203
 
-[node name="OmniLight3" type="OmniLight" parent="active_entities/env_tower" index="14"]
+[node name="OmniLight3" type="OmniLight" parent="active_entities/env_tower" index="11"]
 transform = Transform( 0.555071, -0.0165288, -0.831639, 0, 0.999803, -0.019871, 0.831803, 0.0110298, 0.554961, -1.4201, -40.6469, -25.6267 )
 light_color = Color( 0.737255, 1, 0.980392, 1 )
 light_energy = 0.5
 omni_range = 10.0
 
-[node name="OmniLight4" type="OmniLight" parent="active_entities/env_tower" index="15"]
+[node name="OmniLight4" type="OmniLight" parent="active_entities/env_tower" index="12"]
 transform = Transform( 0.555071, -0.0165288, -0.831639, 0, 0.999803, -0.019871, 0.831803, 0.0110298, 0.554961, -33.8509, -41.4218, -3.98525 )
 light_color = Color( 0.737255, 1, 0.980392, 1 )
 light_energy = 0.5
 omni_range = 10.0
 
-[node name="OmniLight5" type="OmniLight" parent="active_entities/env_tower" index="16"]
+[node name="OmniLight7" type="OmniLight" parent="active_entities/env_tower" index="13"]
+transform = Transform( 0.555071, -0.0165288, -0.831639, 0, 0.999803, -0.019871, 0.831803, 0.0110298, 0.554962, -8.5286, 6.18707, -16.6446 )
+light_color = Color( 0.737255, 1, 0.980392, 1 )
+light_energy = 0.5
+omni_range = 10.0
+
+[node name="OmniLight5" type="OmniLight" parent="active_entities/env_tower" index="14"]
 transform = Transform( 0.554972, -0.0198292, -0.831632, 0.0099355, 0.999803, -0.0172088, 0.831809, 0.00128772, 0.55506, -15.4128, -42.6776, -13.103 )
 light_color = Color( 0.737255, 1, 0.980392, 1 )
 light_energy = 0.5
 omni_range = 10.0
 
-[node name="OmniLight6" type="OmniLight" parent="active_entities/env_tower" index="17"]
+[node name="OmniLight6" type="OmniLight" parent="active_entities/env_tower" index="15"]
 transform = Transform( 0.554972, -0.0198292, -0.831632, 0.00993549, 0.999803, -0.0172088, 0.831809, 0.00128773, 0.55506, 7.37324, -40.4406, 6.5167 )
 light_color = Color( 0.737255, 1, 0.980392, 1 )
 light_energy = 0.5
 omni_range = 9.18547
 
-[node name="OmniLight12" type="OmniLight" parent="active_entities/env_tower" index="18"]
+[node name="OmniLight12" type="OmniLight" parent="active_entities/env_tower" index="16"]
 transform = Transform( 2.18119e-08, -0.406316, 0.913733, -1, -4.37113e-08, 4.43374e-09, 3.8139e-08, -0.913733, -0.406316, 7.10057, -106.912, 5.57978 )
 light_color = Color( 0.627451, 0.862745, 1, 1 )
 
-[node name="OmniLight11" type="OmniLight" parent="active_entities/env_tower" index="19"]
+[node name="OmniLight11" type="OmniLight" parent="active_entities/env_tower" index="17"]
 transform = Transform( 0.798674, 0, 0.601765, 0, 1, 0, -0.601765, 0, 0.798674, -6.70296, -70.0749, 7.13685 )
 light_color = Color( 0.8, 1, 0.972549, 1 )
 light_energy = 0.5
 
-[node name="red_lights" type="Spatial" parent="active_entities/env_tower" index="20"]
+[node name="red_lights" type="Spatial" parent="active_entities/env_tower" index="18"]
 visible = false
 
 [node name="OmniLight" type="OmniLight" parent="active_entities/env_tower/red_lights" index="0"]
@@ -2037,6 +2031,11 @@ omni_range = 1.9961
 transform = Transform( 0.761414, 0, -0.648266, 0, 1, 0, 0.648266, 0, 0.761414, 31.0142, -91.8167, -2.20215 )
 light_color = Color( 1, 0.0509804, 0.0509804, 1 )
 omni_range = 1.9961
+
+[node name="OmniLight2" type="OmniLight" parent="active_entities/env_tower" index="19"]
+transform = Transform( 1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, -8.9706, -88.1773, 26.9728 )
+light_color = Color( 0.396078, 0.470588, 0.494118, 1 )
+omni_range = 4.21346
 
 [node name="door_vent_exit" type="AnimationPlayer" parent="active_entities" index="5"]
 anims/Activate = SubResource( 304 )
