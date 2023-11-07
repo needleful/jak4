@@ -20,16 +20,17 @@ void vertex() {
 }
 
 void fragment() {
-	vec4 color_x = texture(wall, position.zy*uv_scale);
-	vec4 color_z = texture(wall, position.xy*uv_scale);
+	vec3 n = normalize(normal);
+	vec4 color_x = texture(wall, vec2(position.z, -position.y)*uv_scale);
+	vec4 color_z = texture(wall,vec2(position.x, -position.y)*uv_scale);
 	vec4 color_y_up = texture(ground, position.xz*uv_scale);
 	vec4 color_y_down = texture(ceiling, position.xz*uv_scale);
 	
-	float y_pow = sign(normal.y)*pow(abs(normal.y), power);
+	float y_pow = sign(n.y)*pow(abs(n.y), power);
 	
 	vec4 color =
-		color_x*pow(normal.x, 2) 
-		+ color_z*pow(normal.z, 2)
+		color_x*pow(n.x, 2) 
+		+ color_z*pow(n.z, 2)
 		+ color_y_up*max(y_pow, 0.0)
 		+ color_y_down*max(-y_pow, 0.0);
 	ALBEDO = clamp(color.rgb, vec3(0.0), vec3(1.0));

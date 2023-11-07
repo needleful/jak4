@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=2]
+[gd_scene load_steps=105 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -77,6 +77,10 @@
 [ext_resource path="res://entities/env/electrical/outlet_box.tscn" type="PackedScene" id=75]
 [ext_resource path="res://material/env/putkela/information.png" type="Texture" id=76]
 [ext_resource path="res://entities/env/city/wall_sign_large.tscn" type="PackedScene" id=77]
+[ext_resource path="res://material/env/stone/monument_brick1.png" type="Texture" id=78]
+[ext_resource path="res://material/env/stone/monument_stone.png" type="Texture" id=79]
+[ext_resource path="res://material/env/stone/monument_floor.png" type="Texture" id=80]
+[ext_resource path="res://material/env/stone/monument_glyphs.png" type="Texture" id=81]
 
 [sub_resource type="ShaderMaterial" id=12]
 shader = ExtResource( 39 )
@@ -119,21 +123,27 @@ shader_param/wall = ExtResource( 63 )
 shader_param/ground = ExtResource( 63 )
 shader_param/ceiling = ExtResource( 63 )
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 32 )
-shader_param/wall_scale = 0.5
-shader_param/ground_scale = 0.5
-shader_param/power = 2.0
+[sub_resource type="ShaderMaterial" id=24]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 0.5
+shader_param/power = 1.0
 shader_param/softness = 0.5
-shader_param/specularity_ground = 2.0
-shader_param/specularity_wall = 2.0
-shader_param/specularity_ceiling = 2.0
+shader_param/specularity = 1.0
 shader_param/light_bias = 0.0
-shader_param/shadow_normal_offset = 0.2
-shader_param/albedo = Color( 0.733333, 0.701961, 0.556863, 1 )
-shader_param/wall = ExtResource( 63 )
-shader_param/ground = ExtResource( 63 )
-shader_param/ceiling = ExtResource( 63 )
+shader_param/wall = ExtResource( 78 )
+shader_param/ground = ExtResource( 80 )
+shader_param/ceiling = ExtResource( 79 )
+
+[sub_resource type="ShaderMaterial" id=25]
+shader = ExtResource( 10 )
+shader_param/uv_scale = 0.565
+shader_param/power = 1.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 81 )
+shader_param/ground = ExtResource( 80 )
+shader_param/ceiling = ExtResource( 79 )
 
 [sub_resource type="ShaderMaterial" id=21]
 shader = ExtResource( 32 )
@@ -442,10 +452,11 @@ collision_layer = 257
 collision_layer = 257
 
 [node name="protector" parent="city" index="5"]
-material/0 = SubResource( 3 )
+material/0 = SubResource( 24 )
+material/1 = SubResource( 25 )
 
 [node name="pedestal" parent="city/protector" index="0"]
-material/0 = SubResource( 3 )
+material/0 = SubResource( 24 )
 
 [node name="StaticBody" parent="city/protector/pedestal" index="0"]
 collision_layer = 257
