@@ -56,11 +56,11 @@ var hv := H_CORRECTION
 var aiming := false
 var locked := false
 var zoomed := false
-var fov_tween := Tween.new()
 var close_cam := false
 var dialog_locked := false
 var fixed := false
 
+var fov_tween := Tween.new()
 onready var cam_basis = camera.transform.basis
 
 func _ready():
@@ -203,6 +203,8 @@ func start_wardrobe():
 func end_wardrobe():
 	if close_cam:
 		tween_to(ANGLE_CLOSE, SPRING_CLOSE, TWEEN_TIME_WARDROBE)
+	elif dialog_locked:
+		start_dialog()
 	else:
 		tween_to(ANGLE_DEFAULT, SPRING_DEFAULT, TWEEN_TIME_WARDROBE)
 

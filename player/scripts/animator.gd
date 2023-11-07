@@ -139,7 +139,7 @@ func enter_state(state):
 		S.PlaceFlag:
 			play_single("PlaceFlag"); gun.aim_lock()
 		S.GetItem:
-			play_single("ItemGet"); gun.aim_lock()
+			play_single("ItemGet"); gun.lock()
 		S.Hover:
 			start_hover(); gun.unlock()
 		S.Sitting:
@@ -151,12 +151,12 @@ func enter_state(state):
 		S.Locked, S.LockedWaiting:
 			gun.lock()
 
-func blend_run_animation(movement: Vector3):
+func blend_run_animation(movement: Vector3, instant := false):
 	var speed: float = movement.length()
 	if speed < 0.01:
 		speed = 0
 	var a = anim["parameters/WholeBody/Walk/blend_position"]
-	speed = lerp(a, speed, 0.3)
+	speed = speed if instant else lerp(a, speed, 0.3)
 	anim["parameters/WholeBody/Walk/blend_position"] = speed
 	anim["parameters/WholeBody/Crouch/blend_position"] = speed
 	anim["parameters/WholeBody/Slide/blend_position"] = speed
@@ -223,11 +223,15 @@ func step(right: bool, slide := false):
 			foot = $Armature/Skeleton/footLeft
 		Bumps.step_on(player.best_floor, foot.global_transform.origin, slide, player.ground_normal)
 
-func play_single(a: String):
+func play_single(a: String, graceful := true):
 	if !anim_player.has_animation(a):
 		print_debug("MISSING: ", a)
 	single_custom.animation = a
-	body.start("Single")
+	if graceful:
+		body.travel("Single")
+	else:
+		body.start("Single")
+	blend_run_animation(Vector3.ZERO, true)
 
 func exit_custom_loop(transition:String):
 	if !anim_player.has_animation(transition):
@@ -462,9 +466,19 @@ func play_fire():
 	anim["parameters/Fire/active"] = true
 
 func hold_item(node: Spatial):
+	_disable_collision(node)
 	held_item = node
 	$Armature/Skeleton/handRight/ref.add_child(held_item)
 	held_item.transform = Transform.IDENTITY
+
+func _disable_collision(n: Spatial):
+	if n is CollisionObject:
+		n.collision_layer = 0
+		n.collision_mask = 0
+	else:
+		for c in n.get_children():
+			if c is Spatial:
+				_disable_collision(c)
 
 func release_item() -> Spatial:
 	var h = held_item
