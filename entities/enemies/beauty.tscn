@@ -335,7 +335,7 @@ nodes/Movement/position = Vector2( -300, 220 )
 nodes/WalkSpeed/node = SubResource( 16 )
 nodes/WalkSpeed/position = Vector2( -60, 220 )
 nodes/output/position = Vector2( 680, 220 )
-node_connections = [ "WalkSpeed", 0, "Movement", "HalfBody", 0, "WalkSpeed", "HalfBody", 1, "MoveHalfBody", "FullBody", 0, "HalfBody", "FullBody", 1, "MoveFullBody", "output", 0, "FullBody" ]
+node_connections = [ "FullBody", 0, "HalfBody", "FullBody", 1, "MoveFullBody", "HalfBody", 0, "WalkSpeed", "HalfBody", 1, "MoveHalfBody", "WalkSpeed", 0, "Movement", "output", 0, "FullBody" ]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=29]
 
@@ -354,15 +354,22 @@ shape = SubResource( 1 )
 
 [node name="body" parent="." instance=ExtResource( 2 )]
 
+[node name="Skeleton" parent="body/Armature" index="0"]
+bones/4/bound_children = [ NodePath("chest") ]
+bones/11/bound_children = [ NodePath("forearm_l") ]
+bones/22/bound_children = [ NodePath("ulna_l") ]
+bones/25/bound_children = [ NodePath("forearm_r") ]
+bones/36/bound_children = [ NodePath("ulna_r") ]
+
 [node name="beauty" parent="body/Armature/Skeleton" index="0"]
 material/0 = ExtResource( 3 )
 
 [node name="chest" type="BoneAttachment" parent="body/Armature/Skeleton" index="1"]
-transform = Transform( 1, -6.2544e-05, 0.000141142, 3.58884e-05, 0.983392, 0.181496, -0.000150149, -0.181496, 0.983392, 0.000145356, 2.38738, -0.0411997 )
+transform = Transform( 1, -6.2544e-05, 0.000141142, 3.58884e-05, 0.983392, 0.181496, -0.000150149, -0.181496, 0.983392, 0.000145356, 2.38738, -0.0411996 )
 bone_name = "Chest"
 
 [node name="forearm_l" type="BoneAttachment" parent="body/Armature/Skeleton" index="2"]
-transform = Transform( -0.482629, 0.223187, 0.846911, 0.0580688, -0.956704, 0.285212, 0.873898, 0.186831, 0.448772, 0.347414, 2.06422, -0.182372 )
+transform = Transform( -0.482766, 0.223184, 0.846833, 0.0580888, -0.95669, 0.285253, 0.873821, 0.186902, 0.448893, 0.347447, 2.06422, -0.182326 )
 bone_name = "Radius.L"
 
 [node name="hitbox" type="Area" parent="body/Armature/Skeleton/forearm_l"]
@@ -378,7 +385,7 @@ disabled = true
 transform = Transform( 1, -2.98023e-08, 7.45058e-08, -1.49012e-07, 2.23517e-08, 1, -8.9407e-08, -1, 8.9407e-08, -4.61936e-07, 0.647203, -2.98023e-07 )
 
 [node name="forearm_r" type="BoneAttachment" parent="body/Armature/Skeleton" index="3"]
-transform = Transform( -0.48175, -0.215878, -0.849302, -0.0800448, -0.954289, 0.287968, -0.872645, 0.206711, 0.442449, -0.339196, 2.05401, -0.148128 )
+transform = Transform( -0.481651, -0.215981, -0.849331, -0.0802286, -0.954219, 0.28815, -0.872683, 0.206929, 0.442272, -0.339227, 2.054, -0.148018 )
 bone_name = "Radius.R"
 
 [node name="gun" type="Position3D" parent="body/Armature/Skeleton/forearm_r"]
@@ -394,14 +401,14 @@ shape = SubResource( 24 )
 disabled = true
 
 [node name="ulna_l" type="BoneAttachment" parent="body/Armature/Skeleton" index="4"]
-transform = Transform( -0.489779, 0.186342, 0.8517, 0.101434, -0.958079, 0.267947, 0.865926, 0.217626, 0.450345, 0.347414, 2.06422, -0.182373 )
+transform = Transform( -0.489916, 0.186335, 0.851623, 0.101453, -0.958066, 0.267988, 0.865846, 0.217692, 0.450467, 0.347447, 2.06422, -0.182326 )
 bone_name = "Ulna.L"
 
 [node name="gun" type="Position3D" parent="body/Armature/Skeleton/ulna_l"]
 transform = Transform( 1, 0, 0, 0, -2.23517e-08, 1, 0, -1, -8.19564e-08, -5.51343e-07, 0.648916, -5.96046e-07 )
 
 [node name="ulna_r" type="BoneAttachment" parent="body/Armature/Skeleton" index="5"]
-transform = Transform( -0.488569, -0.179039, -0.853959, -0.123288, -0.954736, 0.270703, -0.863771, 0.23754, 0.444381, -0.339196, 2.05401, -0.148128 )
+transform = Transform( -0.488474, -0.179146, -0.85399, -0.123469, -0.95466, 0.270886, -0.863799, 0.237762, 0.444208, -0.339227, 2.054, -0.148018 )
 bone_name = "Ulna.R"
 
 [node name="gun" type="Position3D" parent="body/Armature/Skeleton/ulna_r"]
