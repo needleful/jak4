@@ -4,7 +4,7 @@ onready var line_edit := $VBoxContainer/LineEdit
 onready var logs := $VBoxContainer/ScrollContainer/logs
 onready var scroll := $VBoxContainer/ScrollContainer
 
-var show_stats := false setget sss
+var show_stats := false
 
 var history: Array
 var index := 0
@@ -167,8 +167,8 @@ func stats():
 		s += k + "    =>    " + str(Global.stat(k)) + "\n"
 	return s
 
-func sss(val: bool):
-	show_stats = val
+func tss():
+	show_stats = !show_stats
 	Global.get_player().debug.visible = show_stats
 
 func save(save_id := ""):
