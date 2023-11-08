@@ -217,13 +217,13 @@ func die():
 	if drops_coat:
 		var c = coat_scene.instance()
 		c.coat = coat
-		drop_item(c, drop_dir, drop_angle)
+		drop_item(c, drop_dir, drop_angle, 0.0)
 		drop_angle += rand_range(1, 2)
 	var gems = int(rand_range(0, gem_drop_max))
 	if gems > 0:
 		var g = gem_scene.instance()
 		g.quantity = gems
-		drop_item(g, drop_dir, drop_angle)
+		drop_item(g, drop_dir, drop_angle, 30)
 		drop_angle += rand_range(1, 2)
 	if drops_ammo > 0:
 		Global.ammo_drop_pity += drops_ammo
@@ -231,20 +231,20 @@ func die():
 			Global.ammo_drop_pity -= 1
 			var ammo = AmmoSpawner.get_random_ammo()
 			if ammo:
-				drop_item(ammo, drop_dir, drop_angle)
+				drop_item(ammo, drop_dir, drop_angle, 45)
 		drop_angle += rand_range(1, 2)
 	if drops_health > 0:
 		Global.health_drop_pity += drops_health*Global.get_player().health_drop_bonus()
 		if Global.health_drop_pity >= 1:
 			Global.health_drop_pity -= 1
-			drop_item(health_scene.instance(), drop_dir, drop_angle)
+			drop_item(health_scene.instance(), drop_dir, drop_angle, 20)
 			drop_angle += rand_range(1, 2)
 	if !respawns:
 		Global.mark_picked(get_path())
 	emit_signal("died", id, get_path())
 	set_physics_process(false)
 
-func drop_item(item: ItemPickup, dir:Vector3, angle:float):
+func drop_item(item: ItemPickup, dir:Vector3, angle:float, time: float):
 	item.persistent = false
 	item.from_kill = true
 	item.gravity = true
@@ -252,6 +252,8 @@ func drop_item(item: ItemPickup, dir:Vector3, angle:float):
 	
 	get_tree().current_scene.add_child(item)
 	item.global_transform.origin = global_transform.origin
+	if time > 0:
+		ObjectPool.timed_delete(item.get_path(), time)
 
 func take_damage(damage: int, dir: Vector3, source: Node, _tag := ""):
 	if is_dead():

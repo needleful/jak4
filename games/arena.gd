@@ -137,12 +137,7 @@ func _on_enemy_died(enemy_id, path):
 	if active_enemies <= scenario.min_enemies:
 		current_wave += 1
 		spawn_wave()
-	call_deferred("_free_after_wait", e)
-
-func _free_after_wait(e):
-	yield(get_tree().create_timer(8), "timeout")
-	if is_instance_valid(e) and CustomGames.active_game == self:
-		e.queue_free()
+	ObjectPool.timed_delete(e.get_path(), 10)
 
 func spawn_wave():
 	var wave = scenario.get_wave(current_wave)
