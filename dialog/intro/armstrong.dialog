@@ -33,37 +33,12 @@
 	You -- Where do we get it?
 	If anyone found one, they would have stored it in the cave at the back of the village. You can check there if you want.
 	[Global create_task: activate_the_medium]
-	[Global add_note: Armstrong says I need to find a capacitor to activate the medium. He things there's one in the cave in the village. |+ activate_the_medium veshar]
-	>[stat?: cave_capacitor_124] Is it this white thing I found?
+	[node: medium/capacitor | Armstrong says I need to find a capacitor to activate the medium. He things there's one in the cave in the village. |+ activate_the_medium veshar]
+	[stat?: cave_capacitor_124]
+		You -- Is it this white thing I found?
 		Fantastic! In the wall here is the receptor. You can plug it in and we'll see if that works!
-	> Why would one of these just be lying in a cave?
-		It's where we store scrap for transport to Maslikir.
-		> “Scrap”? This capacitor sounds important, though.
-			The capacitors are very impressive, but they are also seventy thousand Volts, thirty Farads.
-			You -- What does that mean?
-			It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are eventually exported I assume.
-			:l_power
-			> [! stat?: armstrong/discussed/medium_capacitor] Why would the Medium need one of these, if they're so strong?
-				[+stat: armstrong/discussed/medium_capacitor]
-				I would not know. The Medium is almost magical in nature. Presumably it burns through them quite quickly, given these are the only exposed parts of the machine.
-				[goto: l_power]
-			> [! stat?: armstrong/discussed/maslikir] Where is this “Maslikir”?
-				[+stat: armstrong/discussed/maslikir]
-				[Global mark_map: maslikir | A town that makes its money melting down scrap.]
-				It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
-				We sell them scrap and they make useful things from it. Mostly copper wire.
-				If you like melted metal, it could be a fun stop on your visit.
-				[goto: l_power]
-			> [! stat?: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
-				[+stat: armstrong/discussed/capacitor_export]
-				I would assume so. Maybe they are good for big power grids or labs, though I do not get much news of it.
-				[goto: l_power]
-			> Well, I suppose that's clear enough. I'll take a look in the cave.
-				Hopefully there is one. Save you a trip out of town.
-				[+stat: armstrong/discussed/capacitor_scrap_pre]
-		> Alright, I'll take a look in there.
-			Hopefully there is one. Save you a trip out of town.
-	> I'll look there. Thanks.
+	[otherwise]
+		You -- I'll look there. Thanks.
 		Excellent!  And I will be here if you need any advice.
 	[exit]
 [otherwise][! stat?: medium/activated]
@@ -172,47 +147,6 @@
 		He was me, yes. Thought I could make the hole bigger. Good thing I wore my goggles!
 		[back]
 	[+stat: armstrong/discussed/medium_hole]
-> [stat?: capacitor_124][! stat?: armstrong/discussed/capacitor_scrap] Why was there a capacitor in the cave with the scrap, if they're so valuable?
-	[stat?: armstrong/discussed/capacitor_scrap_pre]
-		I distinctly remember you asking this before.
-		You -- Have I?
-		Yes. Basically, the capacitors are too powerful for us to use. The wind generators are enough.
-		So we just sell them in Maslikir, and they put them on the train to who-knows-where.
-	[otherwise]
-		The capacitors are very impressive, but they are also seventy thousand Volts, thirty Farads.
-		You -- What does that mean?
-		It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are shipped off on the train I assume.
-	:l_power2
-	> [! stat?: armstrong/discussed/medium_capacitor] Why would the Medium need two of these, if they're so strong?
-		[+stat: armstrong/discussed/medium_capacitor]
-		I would not know. Computers are power-hungry, and it is far stronger than normal computers.
-		[goto: l_power2]
-	> [! stat?: armstrong/discussed/maslikir] Where is this “Maslikir”?
-		[+stat: armstrong/discussed/maslikir]
-		[Global mark_map: maslikir | A town that makes its money melting down scrap.]
-		It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
-		We sell them scrap and they make useful things from it. Mostly copper wire.
-		If you like melted metal, it could be a fun stop on your visit.
-		[goto: l_power2]
-	> [! stat?: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
-		[+stat: armstrong/discussed/capacitor_export]
-		I would assume so. Maybe they are good for big power grids or labs, but I do not get news of such things.
-		[goto: l_power2]
-	> Well, I suppose that all makes sense.
-		Clear as mud, yes?
-		[+stat: armstrong/discussed/capacitor_scrap]
-> [! stat?: armstrong/discussed/medium][stat?: mum/true_talked] Why do people around here not care about the Medium?
-	You -- It's such an incredible piece of technology, but it was just sitting here in disrepair for years.
-	Well, it is merely a reflection of our minds. It tells us what we already thought.
-	You -- It's more powerful than you're giving it credit. The Medium has been doing much more than simply reflecting my biases back at me.
-	Are you sure? It does not know the subject of its communion, but it knows the user: you.
-	It may be asking itself “what will Jackie find most convincing?”
-	“What can I say that Jackie will believe, regardless of its truth?”
-	It has a great deal of power over ones who speak to it.
-	You -- I'm capable of sorting its guesswork from the truth. As I learn more, I can simply ask questions again.
-	Ergh, if you say so...
-	Just remember it is a very good storyteller, not a psychic.
-	[+stat: armstrong/discussed/medium]
 > See you.
 	Take care, Jackie.
 	[exit]
@@ -286,6 +220,47 @@ Hm... that would do it. Perhaps when there was water.
 	> How deep are we into this cycle? If the rivers came, I imagine this place would be flooded.
 	[note: armstrong/water_cycle | Armstrong says water comes to this province in cycles: a century of rain and rivers, then five centuries of drought. | armstrong water_cycle]
 	[back]
+[back]
+
+:note(medium/natives) :- Global.stat("mum/true_talked")
+You -- Why do people around here not care about the Medium?
+	It's such an incredible piece of technology, but it was just sitting here in disrepair for years.
+Well, it is merely a reflection of our minds. It tells us what we already thought.
+You -- It's more powerful than you're giving it credit. The Medium has been doing much more than simply reflecting my biases back at me.
+Are you sure? It does not know the subject of its communion, but it knows the user: you.
+It may be asking itself “what will Jackie find most convincing?”
+“What can I say that Jackie will believe, regardless of its truth?”
+It has a great deal of power over ones who speak to it.
+You -- I'm capable of sorting its guesswork from the truth. As I learn more, I can simply ask questions again.
+Ergh, if you say so...
+Just remember it is a very good storyteller, not a psychic.
+[back]
+
+:note(medium/capacitor)
+You -- Why would one of these capacitors just be lying in a cave?
+It's where we store scrap for transport to Maslikir.
+You -- “Scrap”? This capacitor sounds important, though.
+The capacitors are very impressive, but they are also seventy thousand Volts, thirty Farads.
+You -- What does that mean?
+It means we can't generate enough electricity to charge one of them, let alone have a use for discharging it. We just sell them in Maslikir, where they are eventually exported I assume.
+:l_power
+> [! stat?: armstrong/discussed/medium_capacitor] Why would the Medium need one of these, if they're so strong?
+	[+stat: armstrong/discussed/medium_capacitor]
+	I would not know. The Medium is almost magical in nature. Presumably it burns through them quite quickly, given these are the only exposed parts of the machine.
+	[goto: l_power]
+> [! stat?: armstrong/discussed/maslikir] Where is this “Maslikir”?
+	[+stat: armstrong/discussed/maslikir]
+	[Global mark_map: maslikir | A town that makes its money melting down scrap.]
+	It is a junk town at the base of the plateau, further down the valley. Do you have a map? I will mark it.
+	We sell them scrap and they make useful things from it. Mostly copper wire.
+	If you like melted metal, it could be a fun stop on your visit.
+	[goto: l_power]
+> [! stat?: armstrong/discussed/capacitor_export] So these capacitors are leaving the country?
+	[+stat: armstrong/discussed/capacitor_export]
+	I would assume so. Maybe they are good for big power grids or labs, though I do not get much news of it.
+	[goto: l_power]
+> Well, I suppose that's clear enough. I'll take a look in the cave.
+	Hopefully there is one. Save you a trip out of town.
 [back]
 
 :note(armstrong/coats_girl)
