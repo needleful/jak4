@@ -14,6 +14,9 @@ var sounds := {
 	"crouch_jump": [
 		preload("res://audio/player/crouch_jump1.wav")
 	],
+	"rolling_bonk": [
+		preload("res://audio/player/rolling_bonk.ogg")
+	],
 	"jump": [
 		preload("res://audio/player/jump1.wav")
 	],
@@ -97,7 +100,10 @@ func enter_state(state):
 	match state:
 		S.Ground:
 			ground_transition("Walk"); gun.unlock()
-		S.Fall, S.LedgeFall, S.BonkFall, S.WadingFall, S.WaveJump, S.FallingDeath:
+		S.BonkFall:
+			play_sound("attack", "rolling_bonk")
+			continue
+		S.Fall, S.LedgeFall, S.WadingFall, S.WaveJump, S.FallingDeath, S.BonkFall:
 			transition_to("Fall"); gun.unlock()
 		S.CrouchJump:
 			play_crouch_jump(); gun.unlock()
@@ -114,8 +120,7 @@ func enter_state(state):
 		S.LedgeHang:
 			play_ledge_grab(); gun.lock()
 		S.Climb:
-			ground_transition("Climb"); 
-			gun.lock()
+			ground_transition("Climb"); gun.lock()
 		S.Roll:
 			play_roll(); gun.lock()
 		S.RollFall:
@@ -147,7 +152,8 @@ func enter_state(state):
 		S.Dash:
 			play_deferred("Dash"); gun.unlock()
 		S.WallCling:
-			transition_to("WallCling"); gun.lock()
+			transition_to("WallCling");
+			gun.lock()
 		S.Locked, S.LockedWaiting:
 			gun.lock()
 
