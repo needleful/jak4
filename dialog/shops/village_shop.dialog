@@ -51,15 +51,15 @@
 	* [otherwise]{talked > 4} The incense is strong.
 	* [otherwise] The bitter incense burns at your sinuses.
 
-	{Global.stat("current_day") > 1}{talked > 0}[! Global task_exists: fridge_conspiracy]
-		[mention: bother]
-		* The shopkeeper seems bothered by something.
+	//{Global.stat("current_day") > 1}{talked > 0}[! Global task_exists: fridge_conspiracy]
+	//	[mention: bother]
+	//	* The shopkeeper seems bothered by something.
 	
 	[stat?: left_village] I am glad you have returned safely.
 	Do let me know if you need anything.
 
 :shop_replies
-> [mentioned: bother,removed] Is there something the matter?
+> [mentioned: bother] Is there something the matter?
 	Oh, it's nothing to worry about. Though...
 	You may actually be the person to help. Would you be interested in some work?
 	> Not really, sorry.
@@ -137,7 +137,8 @@
 			Hahaha!
 			You do not need to keep it alive. It would be quite unbearable carrying dozens of live deathgnats.
 			The one I keep is quite a handful.
-			[otherwise] You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
+		[otherwise] 
+			You have #{say_number(Global.count('bug'))} gnats on your person, and have found a total of #{say_number(Global.stat('bug'))}.
 			Commendable work!
 		> Where do I find deathgnats?
 			Ha! Where can you not find them? They are pervasive!
@@ -151,11 +152,11 @@
 	> [! mentioned: bother] [! Global task_exists: fridge_conspiracy] What's that drinks fridge in the corner?
 		Ah, they're very popular! A merchant from Kiper sold it to me. I've actually ordered another. It should be here soon.
 	> Do you sell any coats? So many people are wearing lovely fabrics.
-		They are not usually sold... We get our clothes from hunting alpha specters. It is too dangerous to hunt for profit.
+		I don't have any spares to sell, unfortunately.
 		You may be able to trade with people. They won't mind losing an outfit if they get another.
-		* (HINT: You can trade coats from the “Use Item” menu in dialog.)
+		* (HINT: You can trade coats from the “Special Dialog” menu.)
 	> Ah okay, that makes sense.
-		It does!
+		It does.
 		[goto: shop_replies]
 	[goto: sell_loop]
 > I'll see you around!
