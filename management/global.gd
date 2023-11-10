@@ -489,6 +489,9 @@ func load_sync(reload := true, save_path: String = auto_save_path):
 	if !game_state.version.compatible(version):
 		print_debug("Warning: version loaded (%s) is not compatible with game version (%s). Data may get corrupted!" % 
 			[game_state.version, version])
+	if !game_state.version.bounds_compatible(version):
+		print_debug("Version change, updating chunk bounding volumes")
+		var _x = remove_stat("_bounds_cache")
 	game_state.version = version
 	valid_game_state = true
 

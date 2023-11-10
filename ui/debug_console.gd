@@ -202,3 +202,10 @@ func map(list, f: String):
 	for l in list:
 		result.append(l.call(f))
 	return result
+
+func chunk_debug():
+	if !get_tree().current_scene.has_node("debug"):
+		echo("No debug UI")
+		return
+	var n = get_tree().current_scene.get_node("debug")
+	n.visible = !n.visible

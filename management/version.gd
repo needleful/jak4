@@ -17,5 +17,12 @@ func compatible(rhs:GameVersion) -> bool:
 		return false
 	return true
 
+func bounds_compatible(rhs: GameVersion) -> bool:
+	if major != rhs.major or minor != rhs.minor:
+		return false
+	elif major == 0:
+		return patch == rhs.patch
+	return true
+
 func _to_string():
 	return "v%d.%d.%d" % [major, minor, patch]
