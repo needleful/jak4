@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://_glb/env/city/payphone.glb" type="PackedScene" id=1]
 [ext_resource path="res://material/triplanar.shader" type="Shader" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://entities/persephone/payphone.gd" type="Script" id=6]
 [ext_resource path="res://dialog/side_content/persephone/persephone.dialog" type="Resource" id=7]
 [ext_resource path="res://audio/env/phone/ringing_by_audacitier.ogg" type="AudioStream" id=8]
+[ext_resource path="res://entities/polyphonic.gd" type="Script" id=9]
+[ext_resource path="res://audio/env/phone/pickup.ogg" type="AudioStream" id=10]
+[ext_resource path="res://audio/env/phone/hang_up.ogg" type="AudioStream" id=11]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
@@ -64,7 +67,7 @@ radius = 0.383797
 [sub_resource type="Animation" id=5]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("AudioStreamPlayer3D:playing")
+tracks/0/path = NodePath("ring_sound:playing")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -81,7 +84,7 @@ resource_name = "Ring"
 length = 5.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("AudioStreamPlayer3D:playing")
+tracks/0/path = NodePath("ring_sound:playing")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -124,9 +127,21 @@ shape = SubResource( 4 )
 anims/RESET = SubResource( 5 )
 anims/Ring = SubResource( 6 )
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="3"]
+[node name="ring_sound" type="AudioStreamPlayer3D" parent="." index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13422, 0 )
 stream = ExtResource( 8 )
 unit_size = 10.0
+max_db = -2.0
+bus = "SFX"
+
+[node name="other_sound" type="AudioStreamPlayer3D" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13422, 0 )
+unit_db = -2.0
+unit_size = 10.0
 max_db = 0.0
 bus = "SFX"
+script = ExtResource( 9 )
+sound_streams = {
+"hang_up": ExtResource( 11 ),
+"pick_up": ExtResource( 10 )
+}

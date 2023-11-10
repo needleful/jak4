@@ -7,7 +7,7 @@
 	* A payphone rings. Nobody seems interested in answering.
 	* You pick up the receiver.
 [+stat: talked/persephone]
-[Global set_stat: persephone/calling | #0]
+[main_speaker pick_up]
 [! Global task_exists: gift_from_persephone]
 	Jackie, love! How's the signal?
 	[note: persephone/intro | My old friend Persephone somehow called me by payphone? |+ persephone]
@@ -83,7 +83,7 @@
 				If you get there and still can't find the flat, call me again.
 		> No, I'm just calling to say hello.
 			We've already had our hellos, call me once you get my present!
-			[exit]
+			[goto: _exit]
 	[otherwise][! Global count: triangles_tablet]
 		Did you find my gift on the coffee table?
 		You -- I guess I didn't.
@@ -124,6 +124,10 @@
 	* (HINT: use items or journal notes to choose a topic)
 	You -- See you later, Persephone.
 	Bye!
+[goto: _exit]
+
+:_exit
+[main_speaker hang_up]
 [exit]
 
 :player_calling

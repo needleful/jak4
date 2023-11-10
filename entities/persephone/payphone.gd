@@ -60,6 +60,13 @@ func disable():
 		remove_child(dialog_circle)
 	stop_ring()
 
+func pick_up():
+	$other_sound.play_one("pick_up")
+	Global.set_stat("persephone/calling", 0)
+
+func hang_up():
+	$other_sound.play_one("hang_up")
+
 func ring():
 	set_process(true)
 	dialog_trigger.custom_entry = "called"
