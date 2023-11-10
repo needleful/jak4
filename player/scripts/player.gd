@@ -371,6 +371,7 @@ var normal_layer := collision_layer
 var normal_mask := collision_mask
 var running_ground := PoolVector3Array()
 var ground_index := 0
+var dialog_ready := false
 
 const TIMERS_MAX := 3
 
@@ -405,6 +406,8 @@ func _ready():
 	ui.activate()
 	health = max_health
 	stamina = max_stamina
+	dialog_ready = false
+	$dialog_timer.start()
 
 func _input(event):
 	if can_talk() and event.is_action_pressed("dialog_item") and !empty(coat_zone):
@@ -1673,6 +1676,8 @@ func _wake_up(always_heal := false):
 		Global.save_game()
 	$fade/AnimationPlayer.play("fadein")
 	unlock(State.Sitting)
+	dialog_ready = false
+	$dialog_timer.start()
 
 func fade_in():
 	$fade/AnimationPlayer.play("fadein")
@@ -1702,6 +1707,8 @@ func respawn():
 	TimeManagement.resume()
 	ui.hide_prompt()
 	best_floor = null
+	dialog_ready = false
+	$dialog_timer.start()
 	emit_signal("died")
 
 func disable_collision():
@@ -1768,7 +1775,7 @@ func can_save():
 	return !game_ui.in_game
 
 func can_talk():
-	return (state == State.Ground or state == State.Crouch)
+	return dialog_ready and (state == State.Ground or state == State.Crouch)
 
 func get_dialog_viewer() -> Node:
 	return $ui/dialog/dialog/viewer
@@ -1921,6 +1928,9 @@ func start_jump(vel:float):
 
 func is_ground(p_state):
 	return p_state in ground_states
+
+func _on_dialog_timer_timeout():
+	dialog_ready = true
 
 func set_state(next_state: int):
 	#print_debug(State.keys()[state], " -> ", State.keys()[next_state])
@@ -2105,3 +2115,4 @@ func set_state(next_state: int):
 			collision_mask = 0
 	state = next_state
 	debug.get_node("stats/a1").text = "State: %s" % State.keys()[state]
+

@@ -2089,6 +2089,10 @@ mesh = SubResource( 96 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 98 )
 
+[node name="dialog_timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="damaged" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
 [connection signal="show_stats" from="." to="ui" method="show_inventory"]
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
@@ -2123,3 +2127,4 @@ material/0 = SubResource( 98 )
 [connection signal="note_chosen" from="ui/dialog/dialog/mini_journal" to="ui/dialog/dialog/item_context" method="_on_mini_journal_note_chosen"]
 [connection signal="text_entered" from="ui/debug_console/VBoxContainer/LineEdit" to="ui/debug_console" method="_on_text_entered"]
 [connection signal="timeout" from="ui/story_time/timer" to="ui/story_time" method="_on_timer_timeout"]
+[connection signal="timeout" from="dialog_timer" to="." method="_on_dialog_timer_timeout"]
