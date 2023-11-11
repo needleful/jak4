@@ -3,11 +3,7 @@ extends Node
 enum Surface {
 	Sand,
 	Rock,
-	Metal,
-	Glass,
-	Grass,
-	Wood,
-	Bubble
+	Metal
 }
 
 enum Impact {
@@ -86,12 +82,6 @@ func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vect
 		surf = Surface.Sand 
 	elif surface.is_in_group("metal") or surface.is_in_group("enemy"):
 		surf = Surface.Metal
-	elif surface.is_in_group("glass"):
-		surf = Surface.Glass
-	elif surface.is_in_group("wood"):
-		surf = Surface.Wood
-	elif surface.is_in_group("grass"):
-		surf = Surface.Grass
 	impact(surf, impact, position, normal)
 
 func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):
