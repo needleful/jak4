@@ -25,6 +25,7 @@ func _ready():
 	sort_by_height()
 	top = stairs[0].global_transform.origin
 
+# TODO: just use the built-in sort, dummy
 # Bubble sort
 # O(n^2) in general, but good for mostly sorted lists
 # also very simple to implement

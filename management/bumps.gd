@@ -3,7 +3,8 @@ extends Node
 enum Surface {
 	Sand,
 	Rock,
-	Metal
+	Metal,
+	Enemy
 }
 
 enum Impact {
@@ -31,13 +32,17 @@ onready var emitters := {
 	},
 	Surface.Metal: {
 		Impact.ImpactStrong:$sparks1
+	},
+	Surface.Enemy: {
+		Impact.ImpactStrong: $sparks1
 	}
 }
 
 onready var audio_players := {
 	Impact.Footstep:$sound_footstep,
 	Impact.ImpactLight:$sound_footstep,
-	Impact.SlidingStep:$sound_footstep
+	Impact.SlidingStep:$sound_footstep,
+	Impact.ImpactStrong:$sound_strong_impact
 }
 
 const low_rock_sounds := [
@@ -54,6 +59,18 @@ const sliding_rock_sounds := [
 	preload("res://audio/player/stepsteep4.wav")
 ]
 
+const hard_steps := [
+	preload("res://audio/player/step_hard1.wav"),
+	preload("res://audio/player/step_hard2.wav"),
+	preload("res://audio/player/step_hard3.wav")
+]
+
+const hard_impacts := [
+	preload("res://audio/player/impact_hard1.wav"),
+	preload("res://audio/player/impact_hard2.wav"),
+	preload("res://audio/player/impact_hard3.wav")
+]
+
 const sounds := {
 	Surface.Rock : {
 		Impact.Footstep: low_rock_sounds,
@@ -62,6 +79,15 @@ const sounds := {
 	},
 	Surface.Sand : {
 		Impact.SlidingStep:sliding_rock_sounds
+	},
+	Surface.Metal : {
+		Impact.Footstep: hard_steps,
+		Impact.ImpactLight: hard_steps,
+		Impact.ImpactStrong: hard_impacts
+	},
+	Surface.Enemy: {
+		Impact.Footstep: hard_steps,
+		Impact.ImpactLight: hard_steps,
 	}
 }
 
@@ -71,22 +97,25 @@ func step_on(surface: Node, position:Vector3, sliding := false, normal := Vector
 	var impact = Impact.Footstep if !sliding else Impact.SlidingStep
 	impact_on(surface, impact, position, normal)
 
-func impact_on(surface:Node, impact: int, position: Vector3, normal := Vector3.UP):
-	call_deferred("immediate_impact_on", surface, impact, position, normal)
+func impact_on(surface:Node, impact: int, position: Vector3, normal := Vector3.UP, sound := true):
+	call_deferred("immediate_impact_on", surface, impact, position, normal, sound)
 
-func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vector3):
+func immediate_impact_on(surface:Node, impact:int, position:Vector3, normal:Vector3, sound := true):
 	if !surface:
 		return
 	var surf = Surface.Rock
 	if surface.is_in_group("terrain") and normal.y > MIN_DOT_TERRAIN_SAND:
 		surf = Surface.Sand 
-	elif surface.is_in_group("metal") or surface.is_in_group("enemy"):
+	elif surface.is_in_group("enemy"):
+		surf = Surface.Enemy
+	elif surface.is_in_group("hard"):
 		surf = Surface.Metal
-	impact(surf, impact, position, normal)
+	impact(surf, impact, position, normal, sound)
 
-func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP):
+func impact(surf:int, impact:int, position: Vector3, normal := Vector3.UP, sound := true):
 	impact_particles(surf, impact, position, normal)
-	impact_sound(surf, impact, position)
+	if sound:
+		impact_sound(surf, impact, position)
 	
 func impact_particles(surf:int, impact:int, position: Vector3, normal:Vector3):
 	if !(surf in emitters):

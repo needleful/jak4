@@ -241,8 +241,8 @@ func step(leftForward: bool):
 	else:
 		leg0 = $Armature/Skeleton/legfr.global_transform.origin
 		leg1 = $Armature/Skeleton/legbl.global_transform.origin
-	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg0, best_floor_normal)
-	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg1, best_floor_normal)
+	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg0, best_floor_normal, false)
+	Bumps.impact_on(best_floor, Bumps.Impact.ImpactLight, leg1, best_floor_normal, false)
 
 func _reset():
 	._ready()

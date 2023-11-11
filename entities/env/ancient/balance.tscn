@@ -14,11 +14,11 @@ script = ExtResource( 6 )
 material/0 = ExtResource( 5 )
 material/1 = ExtResource( 4 )
 
-[node name="balance-kine" parent="fulcrum" index="0"]
+[node name="balance-kine" parent="fulcrum" index="0" groups=["hard"]]
 script = ExtResource( 3 )
 max_rotation_degrees = 25.0
 
-[node name="end1-kine" parent="fulcrum/balance-kine" index="0"]
+[node name="end1-kine" parent="fulcrum/balance-kine" index="0" groups=["hard"]]
 script = ExtResource( 2 )
 
 [node name="mesh" parent="fulcrum/balance-kine/end1-kine" index="0"]
@@ -28,7 +28,7 @@ material/1 = ExtResource( 4 )
 [node name="Timer" type="Timer" parent="fulcrum/balance-kine/end1-kine" index="2"]
 one_shot = true
 
-[node name="end2-kine" parent="fulcrum/balance-kine" index="1"]
+[node name="end2-kine" parent="fulcrum/balance-kine" index="1" groups=["hard"]]
 script = ExtResource( 2 )
 positive = false
 
@@ -42,6 +42,8 @@ one_shot = true
 [node name="mesh" parent="fulcrum/balance-kine" index="2"]
 material/0 = ExtResource( 5 )
 material/1 = ExtResource( 4 )
+
+[node name="StaticBody" parent="fulcrum" index="1" groups=["hard"]]
 
 [connection signal="timeout" from="fulcrum/balance-kine/end1-kine/Timer" to="fulcrum/balance-kine/end1-kine" method="_on_timeout"]
 [connection signal="timeout" from="fulcrum/balance-kine/end2-kine/Timer" to="fulcrum/balance-kine/end2-kine" method="_on_timeout"]
