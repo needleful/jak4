@@ -20,6 +20,9 @@ var sounds := {
 	"jump": [
 		preload("res://audio/player/jump1.wav")
 	],
+	'damaged': [
+		preload('res://audio/player/damaged.ogg')
+	],
 	"gem": [
 		preload("res://audio/pickup/gem1.wav"),
 		preload("res://audio/pickup/gem2.wav"),
@@ -101,8 +104,7 @@ func enter_state(state):
 		S.Ground:
 			ground_transition("Walk"); gun.unlock()
 		S.BonkFall:
-			play_sound("attack", "rolling_bonk")
-			continue
+			play_sound("attack", "rolling_bonk"); continue
 		S.Fall, S.LedgeFall, S.WadingFall, S.WaveJump, S.FallingDeath, S.BonkFall:
 			transition_to("Fall"); gun.unlock()
 		S.CrouchJump:
@@ -139,6 +141,8 @@ func enter_state(state):
 			play_dive_start(player.max_damage); gun.lock()
 		S.DiveEnd:
 			play_dive_end(player.max_damage); gun.aim_lock()
+		S.Damaged:
+			play_sound("attack", "damaged"); continue
 		S.Damaged, S.GravityStun:
 			play_deferred("Damaged"); gun.unlock()
 		S.PlaceFlag:
