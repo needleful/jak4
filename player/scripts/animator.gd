@@ -211,6 +211,9 @@ func step(right: bool, slide := false):
 	if player.water_depth > 0:
 		player.water_cast.play_sound(player.water_depth > player.DEPTH_WATER_WADE)
 		return
+		
+	if slide and player.is_climbing_ladder():
+		slide = false
 
 	if step_played[int(right)]:
 		return

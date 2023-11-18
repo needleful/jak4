@@ -1193,6 +1193,9 @@ func get_target_ref():
 func is_crouching():
 	return state == State.Crouch or state == State.Roll or state == State.RollJump or state == State.RollFall or state == State.Climb 
 
+func is_climbing_ladder():
+	return state == State.Climb and best_floor and best_floor.is_in_group('ladder')
+
 func lock_in_animation(anim:String):
 	mesh.play_single(anim)
 	set_state(State.LockedWaiting)

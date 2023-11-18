@@ -82,6 +82,7 @@ const sounds := {
 	},
 	Surface.Metal : {
 		Impact.Footstep: hard_steps,
+		Impact.SlidingStep: sliding_rock_sounds,
 		Impact.ImpactLight: hard_steps,
 		Impact.ImpactStrong: hard_impacts
 	},
