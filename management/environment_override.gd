@@ -22,6 +22,13 @@ func _ready():
 		hide()
 
 func _on_body_entered(_body):
+	var overrides := get_environment()
+	get_tree().current_scene.apply_environment(overrides)
+	show()
+	if visited_stat != "":
+		var _x = Global.add_stat(visited_stat)
+
+func get_environment() -> Dictionary:
 	var overrides := {
 		"wind_reduction_db": wind_reduction_db
 	}
@@ -40,10 +47,11 @@ func _on_body_entered(_body):
 	overrides["id"] = hash(get_path())
 	overrides["rescue_available"] = rescue_available
 	overrides["priority"] = override_priority
-	get_tree().current_scene.apply_environment(overrides)
-	show()
-	if visited_stat != "":
-		var _x = Global.add_stat(visited_stat)
+	return overrides
+
+func update_environment():
+	var overrides := get_environment()
+	get_tree().current_scene.update_environment(overrides)
 
 func _on_body_exited(_body):
 	if is_inside_tree():

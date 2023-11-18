@@ -310,7 +310,7 @@ func _on_tutorial_swap_timeout():
 # Environment
 func apply_environment(p_env: Dictionary):
 	var insert_index := env_overrides.size()
-	for i in range(env_overrides.size()):
+	for i in env_overrides.size():
 		if p_env.priority >= env_overrides[i].priority:
 			insert_index = i
 			break
@@ -321,9 +321,23 @@ func apply_environment(p_env: Dictionary):
 	env_overrides.push_front(p_env)
 	_set_env(p_env)
 
+func update_environment(p_env: Dictionary):
+	var update_index := -1
+	for i in env_overrides.size():
+		if env_overrides[i].id == p_env.id:
+			update_index = i
+	if update_index < 0:
+		# Nothing to update
+		return
+	else:
+		env_overrides[update_index] = p_env
+		if update_index == 0:
+			# Update immediately
+			_set_env(p_env)
+
 func remove_environment(id:int):
 	var remove_index := -1
-	for i in range(env_overrides.size()):
+	for i in env_overrides.size():
 		if env_overrides[i].id == id:
 			remove_index = i
 	if remove_index < 0:

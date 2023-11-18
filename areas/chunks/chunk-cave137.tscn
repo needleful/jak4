@@ -1,4 +1,4 @@
-[gd_scene load_steps=121 format=2]
+[gd_scene load_steps=123 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -76,6 +76,8 @@
 [ext_resource path="res://entities/death_plane.tscn" type="PackedScene" id=74]
 [ext_resource path="res://items/random_ammo_pickup.tscn" type="PackedScene" id=75]
 [ext_resource path="res://entities/env/copper/crate1.tscn" type="PackedScene" id=76]
+[ext_resource path="res://areas/chunks/chunk-cave137.gd" type="Script" id=77]
+[ext_resource path="res://audio/music/hive.ogg" type="AudioStream" id=78]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -468,6 +470,9 @@ script = ExtResource( 1 )
 preview_neighbors = true
 custom_neighbors = [ "chunk137", "chunk125" ]
 
+[node name="active_entities" parent="." index="0"]
+script = ExtResource( 77 )
+
 [node name="OmniLight7" type="OmniLight" parent="active_entities" index="0"]
 transform = Transform( 0.941815, -0.0276309, -0.334995, 0.0877719, -0.941823, 0.324447, -0.324471, -0.334972, -0.884597, -41.2149, 75.9476, -147.785 )
 light_color = Color( 0.466667, 0.352941, 0.266667, 1 )
@@ -666,6 +671,8 @@ fog_start = 0.0
 fog_end = 320.69
 indirect_light = Color( 0.164706, 0.00784314, 0.00784314, 1 )
 show_sun = false
+override_music = true
+default_music = ExtResource( 78 )
 visited_stat = "visited/hive137"
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/env_evil" index="0"]
