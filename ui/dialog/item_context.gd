@@ -54,7 +54,8 @@ func list_contextual_replies():
 	wipe(reply_buttons)
 	for list in viewer.contextual_replies.values():
 		for c in list:
-			var button:Button = Util.multiline_button("“" + c.text + "”")
+			var button:Button = Util.multiline_button(
+				"“" + $'../viewer'.interpolate(c.text) + "”")
 			reply_buttons.append(button)
 			button_box.add_child_below_node(bar_context, button)
 			var _x = button.connect("pressed", self, "context_reply", [c])

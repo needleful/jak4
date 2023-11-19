@@ -47,7 +47,7 @@
 	> [otherwise] I don't have that much money.
 	> No, I'd rather not be gored by wild animals today.
 
-[otherwise]{Global.stat("arena137/gold") < 3}
+[otherwise]{Global.stat("games/arena137/gold") < 2}
 	Hello killer! Want to hunt again? It's still 25 gems.
 	> {Global.count("gem") >= 25}[skip] (Pay 25 gems) Sure, I'll try again.
 		[$: cost | #25]
@@ -59,7 +59,12 @@
 	> No, thank you. I still have puncture wounds from last time.
 
 [otherwise]
-	The queen bee herself! #{$name}! Want to show the kids how it's done? I drop price to 50 gems.
+	The queen bee herself! #{$name}!
+	[! Global count: tanktop]
+		I wanted to give you something. You always fight in a big heavy coat, why not try something lighter?
+		[Global add_item: tanktop]
+		You -- Hm. I feel rather exposed without sleeves... I'll consider it.
+	Want to show the kids how it's done? I drop price to 50 gems.
 	?> Isn't that /higher/ than it was before?
 		Well, a pro gets the pro rate!
 		You -- I don't even win anything if I win!

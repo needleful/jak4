@@ -211,7 +211,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		if !startup and change > 0:
 			write_log("Found: "+item.capitalize()+" Ammo")
 	elif item in player.mesh.coat_mesh.meshes:
-		player.mesh.coat_mesh.set_coat_type(item)
+		player.mesh.set_coat_type(item)
 		if !startup and change > 0:
 			write_log("New Coat: "+item.capitalize())
 	else:
