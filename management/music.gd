@@ -82,16 +82,24 @@ func play_next():
 func reset():
 	set_music(default_explore_music, default_combat_music)
 
-func play_track(track: String):
+func play_track(track: String, instant_start := false):
 	var path:String = "res://audio/music/"+track
 	if !ResourceLoader.exists(path):
 		print_debug("Music not found: ", path)
 		return
 	else:
-		play_music(load(path) as AudioStream)
+		play_music(load(path) as AudioStream, instant_start)
 
-func play_music(music: AudioStream):
-	set_music(music, null)
+func play_music(music: AudioStream, instant_start := false):
+	if instant_start:
+		stop()
+		stream = music
+		volume_db = 0.0
+		play()
+		combat.playing = false
+		fadeout = false
+	else:
+		set_music(music, null)
 
 func stop_music():
 	reset()

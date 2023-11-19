@@ -74,6 +74,7 @@ func activate():
 	player.mesh.transform = Transform()
 	player.mesh.start_hover(false)
 	var _x = player.connect("died", self, "_on_player_died", [], CONNECT_ONESHOT)
+	Music.play_track("flight.ogg", true)
 	
 	set_physics_process(true)
 	velocity = global_transform.basis.z*start_speed
@@ -83,6 +84,7 @@ func _on_player_died():
 	reset()
 
 func exit():
+	Music.stop_music()
 	if !player:
 		return
 	if player.is_connected("died", self, "exit"):
@@ -284,6 +286,7 @@ func reset():
 	set_physics_process(false)
 
 func break_wing(right: bool):
+	Music.stop_music()
 	wing_broken[int(right)] = true
 	var wing = wing_right if right else wing_left
 	

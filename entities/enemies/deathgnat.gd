@@ -151,6 +151,7 @@ func set_state(new_state, force:=false):
 			quit_timer = 0
 			orb_timer = orb_cooldown
 		AI.Dead:
+			mode = MODE_RIGID
 			$AudioStreamPlayer3D.stream = death_sound
 			$AudioStreamPlayer3D.play()
 			axis_lock_angular_x = false
