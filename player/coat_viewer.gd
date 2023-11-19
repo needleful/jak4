@@ -2,7 +2,8 @@ extends MeshInstance
 
 var meshes := {
 	"double-breasted": preload("res://_glb/characters/jackie/base_mesh_coat.mesh"),
-	"flight_jacket": preload("res://_glb/characters/jackie/coats/flight-jacket_mesh.mesh")
+	"flight_jacket": preload("res://_glb/characters/jackie/coats/flight-jacket_mesh.mesh"),
+	"tanktop": preload("res://_glb/characters/jackie/coats/tanktop_coat.mesh")
 }
 
 onready var skin_material:Material = $"../jackie".get_surface_material(0)
@@ -12,7 +13,8 @@ onready var materials := {
 	"flight_jacket": [
 		preload("res://material/coat/mat2/flight_jacket.material"),
 		skin_material
-	]
+	],
+	"tanktop": preload("res://_glb/characters/jackie/coats/sleeveless.tres")
 }
 
 func set_coat_type(type: String):
