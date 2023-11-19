@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=2]
+[gd_scene load_steps=134 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://ui/journal.tscn" type="PackedScene" id=21]
 [ext_resource path="res://ui/debug_fps.gd" type="Script" id=22]
 [ext_resource path="res://ui/inventory.tscn" type="PackedScene" id=23]
+[ext_resource path="res://entities/enemies/drowner.gd" type="Script" id=24]
 [ext_resource path="res://ui/icons/item_bug.png" type="Texture" id=25]
 [ext_resource path="res://ui/icons/item_gem.png" type="Texture" id=26]
 [ext_resource path="res://ui/icons/item_capacitor.png" type="Texture" id=27]
@@ -509,6 +510,7 @@ lifetime = 5.0
 local_coords = false
 process_material = SubResource( 83 )
 draw_pass_1 = SubResource( 174 )
+script = ExtResource( 24 )
 
 [node name="MeshInstance" type="MeshInstance" parent="base_mesh/water_cast/standing_ripple"]
 visible = false
@@ -2098,6 +2100,7 @@ one_shot = true
 [connection signal="show_stats" from="." to="ui" method="show_inventory"]
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
 [connection signal="show_stats" from="." to="ui/gameing/gameing/stats/stamina" method="queue_show"]
+[connection signal="drowned" from="base_mesh/water_cast/standing_ripple" to="." method="_on_drowned"]
 [connection signal="active" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_active"]
 [connection signal="exited" from="ui/status_menu/AspectRatioContainer/sized/tabs/Wardrobe" to="ui/status_menu" method="_on_wardrobe_exited"]
 [connection signal="request_show" from="ui/gameing/gameing/stats/health/armor_bar" to="ui/gameing/gameing/stats/health" method="queue_show"]

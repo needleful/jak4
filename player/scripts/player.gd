@@ -500,7 +500,7 @@ func _physics_process(delta):
 	
 	if water_cast.is_colliding():
 		water_depth = water_cast.get_collision_point().y - global_transform.origin.y
-		if water_depth > DEPTH_WATER_DROWN and !is_dead():
+		if water_depth > DEPTH_WATER_DROWN and !is_dead() and state != State.NoClip:
 			fall_to_death()
 		elif water_depth > DEPTH_WATER_WADE:
 			debug.get_node("stats/a8").text = "Wading"
@@ -1935,6 +1935,10 @@ func is_ground(p_state):
 func _on_dialog_timer_timeout():
 	dialog_ready = true
 
+func _on_drowned():
+	if !is_dead() and state != State.NoClip:
+		fall_to_death()
+
 func set_state(next_state: int):
 	#print_debug(State.keys()[state], " -> ", State.keys()[next_state])
 	for i in min(timers.size(), TIMERS_MAX):
@@ -2118,4 +2122,3 @@ func set_state(next_state: int):
 			collision_mask = 0
 	state = next_state
 	debug.get_node("stats/a1").text = "State: %s" % State.keys()[state]
-

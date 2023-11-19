@@ -1,4 +1,4 @@
-[gd_scene load_steps=123 format=2]
+[gd_scene load_steps=127 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -150,8 +150,9 @@ shader = ExtResource( 73 )
 shader_param/max_depth = 30.0
 shader_param/depth_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="BoxShape" id=25]
-extents = Vector3( 45, 24, 56 )
+[sub_resource type="CylinderShape" id=290]
+height = 42.5873
+radius = 64.82
 
 [sub_resource type="BoxShape" id=9]
 extents = Vector3( 57, 12, 56 )
@@ -462,6 +463,46 @@ shader_param/light_bias = 0.0
 shader_param/wall = ExtResource( 50 )
 shader_param/ground = ExtResource( 50 )
 shader_param/ceiling = ExtResource( 50 )
+
+[sub_resource type="SpatialMaterial" id=291]
+resource_local_to_scene = true
+albedo_color = Color( 0.203922, 0.164706, 0.164706, 1 )
+roughness = 0.52
+emission_enabled = true
+emission = Color( 0.839216, 0.8, 0.584314, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SpatialMaterial" id=292]
+resource_local_to_scene = true
+albedo_color = Color( 0.203922, 0.164706, 0.164706, 1 )
+roughness = 0.52
+emission_enabled = true
+emission = Color( 0.839216, 0.8, 0.584314, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SpatialMaterial" id=293]
+resource_local_to_scene = true
+albedo_color = Color( 0.203922, 0.164706, 0.164706, 1 )
+roughness = 0.52
+emission_enabled = true
+emission = Color( 0.839216, 0.8, 0.584314, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SpatialMaterial" id=294]
+resource_local_to_scene = true
+albedo_color = Color( 0.203922, 0.164706, 0.164706, 1 )
+roughness = 0.52
+emission_enabled = true
+emission = Color( 0.839216, 0.8, 0.584314, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
 
 [sub_resource type="SphereShape" id=277]
 
@@ -888,8 +929,8 @@ collision_layer = 8192
 collision_mask = 0
 
 [node name="CollisionShape2" type="CollisionShape" parent="active_entities/cave_center/water" index="0"]
-transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, -35, 0 )
-shape = SubResource( 25 )
+transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, -41.305, 0 )
+shape = SubResource( 290 )
 
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/cave_center/water" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0 )
@@ -2097,11 +2138,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22.3561, 20.2467, 38.7326 )
 [node name="light_hang2" parent="active_entities/zone_arena" index="15" instance=ExtResource( 68 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8682, -11.5313, 39.1735 )
 
+[node name="mesh" parent="active_entities/zone_arena/light_hang2/light-kine" index="0"]
+material/1 = SubResource( 291 )
+
 [node name="SpotLight" parent="active_entities/zone_arena/light_hang2" index="2"]
 spot_range = 14.0239
 
 [node name="light_hang3" parent="active_entities/zone_arena" index="16" instance=ExtResource( 68 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 45.2941, 1.32028, 36.7548 )
+
+[node name="mesh" parent="active_entities/zone_arena/light_hang3/light-kine" index="0"]
+material/1 = SubResource( 292 )
 
 [node name="SpotLight" parent="active_entities/zone_arena/light_hang3" index="2"]
 spot_range = 14.0239
@@ -2109,11 +2156,17 @@ spot_range = 14.0239
 [node name="light_hang4" parent="active_entities/zone_arena" index="17" instance=ExtResource( 68 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.4581, 15.7231, -2.25523 )
 
+[node name="mesh" parent="active_entities/zone_arena/light_hang4/light-kine" index="0"]
+material/1 = SubResource( 293 )
+
 [node name="SpotLight" parent="active_entities/zone_arena/light_hang4" index="2"]
 spot_range = 14.0239
 
 [node name="light_hang5" parent="active_entities/zone_arena" index="18" instance=ExtResource( 68 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.841885, 25.8954, -26.7259 )
+
+[node name="mesh" parent="active_entities/zone_arena/light_hang5/light-kine" index="0"]
+material/1 = SubResource( 294 )
 
 [node name="SpotLight" parent="active_entities/zone_arena/light_hang5" index="2"]
 spot_range = 14.0239
