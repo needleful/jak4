@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=221 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=223 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=110]
 animation = "AimF"
@@ -59,6 +59,9 @@ blend_point_10/pos = Vector2( -2, 1 )
 min_space = Vector2( -2, -1 )
 max_space = Vector2( 2, 1 )
 
+[sub_resource type="AnimationNodeAnimation" id=309]
+animation = "HeadShrink"
+
 [sub_resource type="AnimationNodeAnimation" id=125]
 animation = "AimF"
 
@@ -77,6 +80,8 @@ filters = [ "Armature/Skeleton:BackLower", "Armature/Skeleton:BackUpper", "Armat
 [sub_resource type="AnimationNodeBlend2" id=126]
 filter_enabled = true
 filters = [ "Armature/Skeleton:C_Fingers.L", "Armature/Skeleton:C_Index.L", "Armature/Skeleton:C_Thumb.L", "Armature/Skeleton:Fingers1.L", "Armature/Skeleton:Fingers2.L", "Armature/Skeleton:Fingers3.L", "Armature/Skeleton:Index1.L", "Armature/Skeleton:Index2.L", "Armature/Skeleton:Index3.L", "Armature/Skeleton:Thumb1.L", "Armature/Skeleton:Thumb2.L", "Armature/Skeleton:Thumb3.L" ]
+
+[sub_resource type="AnimationNodeAdd2" id=310]
 
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "BaseJump"
@@ -781,11 +786,13 @@ start_node = "Walk"
 graph_offset = Vector2( -198, -877 )
 
 [resource]
-graph_offset = Vector2( -629, -108 )
+graph_offset = Vector2( -282, 85 )
 nodes/Aim/node = SubResource( 115 )
 nodes/Aim/position = Vector2( -540, 160 )
 nodes/Animation/node = SubResource( 125 )
 nodes/Animation/position = Vector2( 60, 180 )
+"nodes/Animation 2/node" = SubResource( 309 )
+"nodes/Animation 2/position" = Vector2( 240, 200 )
 nodes/Fire/node = SubResource( 124 )
 nodes/Fire/position = Vector2( -300, 180 )
 nodes/FireAnim/node = SubResource( 123 )
@@ -794,7 +801,9 @@ nodes/Gun/node = SubResource( 109 )
 nodes/Gun/position = Vector2( -100, 80 )
 nodes/GunHold/node = SubResource( 126 )
 nodes/GunHold/position = Vector2( 160, -40 )
+nodes/HeadAdjust/node = SubResource( 310 )
+nodes/HeadAdjust/position = Vector2( 360, 20 )
 nodes/WholeBody/node = SubResource( 6 )
 nodes/WholeBody/position = Vector2( -340, -80 )
-nodes/output/position = Vector2( 380, 40 )
-node_connections = [ "Gun", 0, "WholeBody", "Gun", 1, "Fire", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation", "output", 0, "GunHold" ]
+nodes/output/position = Vector2( 520, 40 )
+node_connections = [ "HeadAdjust", 0, "GunHold", "HeadAdjust", 1, "Animation 2", "output", 0, "HeadAdjust", "Gun", 0, "WholeBody", "Gun", 1, "Fire", "Fire", 0, "Aim", "Fire", 1, "FireAnim", "GunHold", 0, "Gun", "GunHold", 1, "Animation" ]
