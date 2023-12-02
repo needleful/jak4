@@ -20,4 +20,5 @@ func _on_power_deactivated():
 	$active_entities/tower_interior3/dswitch_a2.deactivate()
 	var env := $active_entities/env_tower
 	env.default_music = null
+	env.rescue_available = false
 	env.update_environment()
