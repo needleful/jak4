@@ -45,6 +45,7 @@
 		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
 		If you do, I can reward you.
 		[+stat: bairo/arena]
+		[complete_block: arena]
 		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. He's promised to reward me if I put a stop to it. |+ unwanted_visitors bairo serubikir]
 		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
 	[otherwise][stat?: arena137/escape]
@@ -55,6 +56,8 @@
 		You -- Alright, I won't say it was from you. If I see anything of note, I'll let you know, alright?
 		Ergh... alright. You can certainly fight specters, so perhaps you can help me.
 		If you do, I can reward you.
+		[+stat: bairo/arena]
+		[complete_block: arena]
 		[note: bairo/conspiracy | Bairo thinks the people running the arena are intending to kill him. He's promised to reward me if I put a stop to it. |+ unwanted_visitors bairo serubikir]
 		[Global add_note: To ease Bairo's fears, I shouldn't directly mention him if I investigate this. |+ unwanted_visitors bairo]
 	[otherwise]
@@ -81,21 +84,13 @@
 		[back]
 	[! stat?: bairo/arena]
 		Have you found anything?
-		[stat?: arena137/entered]
-			You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
-				No sacrifices or anything like that, though I question the ethics of such blood sport.
-			But why? Are they training soldiers to take my home?
-			You -- It seemed like it was strictly for entertainment.
-			But why send the specters to my home, then?
-			You -- If they did, I assume it was an accident.
-			[+stat: bairo/arena]
-		[otherwise]
-			You -- Not yet.
-			In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
-	[otherwise][! stat?: cave137/locked]
+	[otherwise]
 		Have you stopped that dastardly arena?
 		You -- Not yet, I'm still figuring out what the problem is.
 		Drat! And I broke my stick trying to lean on it. I am defenseless!
+	* (HINT: Use a note or item to discuss recent events)
+	> I'll keep investigating.
+		In the meantime, I have found a large stick, so any specters they send now shall be in a world of pain!
 [otherwise]
 	[subtopic: task_completed]
 [exit]
@@ -120,6 +115,20 @@
 	No attacks yet, though I am missing my lucky tablet.
 	You -- It was not lucky in the slightest.
 	You have no way of proving that. It can be a key /and/ lucky.
+[back]
+
+:note(arena137/escape) :- Global.task_is_active("unwanted_visitors") -> arena 
+:note(arena137/entered) :- Global.task_is_active("unwanted_visitors") -> arena
+You -- I have, in fact. That cave you mentioned? They have a fighting arena inside.
+	No sacrifices or anything like that, though I question the ethics of such blood sport.
+But why? Are they training soldiers to take my home?
+[stat?: arena137/entered]
+	You -- It seemed like it was strictly for entertainment.
+[otherwise]
+	You -- I don't think so. I was told they were taking money for entry.
+But why send the specters to my home, then?
+You -- If they did, I assume it was an accident.
+[+stat: bairo/arena]
 [back]
 
 :note(bairo/skull_tablet) :- Global.task_is_complete("unwanted_visitors")
