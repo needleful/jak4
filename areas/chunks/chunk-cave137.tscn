@@ -1,4 +1,4 @@
-[gd_scene load_steps=127 format=2]
+[gd_scene load_steps=129 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -117,23 +117,31 @@ radius = 122.033
 [sub_resource type="BoxShape" id=14]
 extents = Vector3( 37.6534, 20.2968, 99.2074 )
 
-[sub_resource type="CylinderShape" id=15]
-height = 91.2403
-radius = 49.4206
-
 [sub_resource type="CapsuleShape" id=18]
-radius = 3.10328
-height = 37.1136
+radius = 3.39761
+height = 39.2237
 
 [sub_resource type="CapsuleShape" id=19]
 radius = 4.87326
 height = 39.5406
 
 [sub_resource type="BoxShape" id=17]
-extents = Vector3( 3.26146, 3.18396, 10.2579 )
+extents = Vector3( 3.26146, 3.18396, 12.2106 )
 
 [sub_resource type="BoxShape" id=20]
 extents = Vector3( 7.47879, 6.12893, 24.7253 )
+
+[sub_resource type="CapsuleShape" id=295]
+radius = 4.44377
+height = 32.8638
+
+[sub_resource type="CapsuleShape" id=296]
+radius = 4.44377
+height = 32.8638
+
+[sub_resource type="CapsuleShape" id=297]
+radius = 4.44377
+height = 32.8638
 
 [sub_resource type="BoxShape" id=24]
 extents = Vector3( 12.2412, 7.64039, 17.0837 )
@@ -581,7 +589,7 @@ interior_ambient_color = Color( 0.129412, 0.0666667, 0.141176, 1 )
 
 [node name="refl_int8" type="ReflectionProbe" parent="active_entities/env" index="5"]
 transform = Transform( 0.611678, 0.154716, -0.775831, -0.328298, 0.941902, -0.0710017, 0.719771, 0.298134, 0.626933, 188.141, -41.1693, 17.7706 )
-intensity = 0.31
+intensity = 0.16
 extents = Vector3( 106.915, 21.2608, 39.3737 )
 origin_offset = Vector3( -46.5708, -20.6323, 14.7949 )
 cull_mask = 1015807
@@ -644,54 +652,62 @@ shape = SubResource( 12 )
 transform = Transform( 0.811461, -0.159055, 0.562345, 0.0341004, 0.973498, 0.22614, -0.583411, -0.164328, 0.795379, 126.568, -168.792, 52.5881 )
 shape = SubResource( 14 )
 
-[node name="CollisionShape11" type="CollisionShape" parent="active_entities/env" index="18"]
-transform = Transform( -1, 8.74228e-08, -8.74228e-08, 8.74228e-08, 1, -1.50996e-07, 8.74228e-08, -1.50996e-07, -1, 197.635, -111.77, 74.7386 )
-shape = SubResource( 15 )
-
-[node name="CollisionShape12" type="CollisionShape" parent="active_entities/env" index="19"]
-transform = Transform( 0.608422, 0.219205, 0.76274, 0.0263443, 0.954989, -0.29547, -0.793177, 0.199864, 0.575261, 205.819, -32.4334, 17.2025 )
+[node name="CollisionShape12" type="CollisionShape" parent="active_entities/env" index="18"]
+transform = Transform( 0.608422, 0.219205, 0.76274, 0.0263443, 0.954989, -0.29547, -0.793177, 0.199864, 0.575261, 205.974, -32.4934, 17.3193 )
 shape = SubResource( 18 )
 
-[node name="CollisionShape15" type="CollisionShape" parent="active_entities/env" index="20"]
+[node name="CollisionShape15" type="CollisionShape" parent="active_entities/env" index="19"]
 transform = Transform( 0.422441, -0.145986, 0.894557, 0.00323207, 0.98718, 0.159575, -0.906385, -0.0645196, 0.417497, 170.563, -30.8782, -2.94639 )
 shape = SubResource( 19 )
 
-[node name="light_wall" parent="active_entities/env" index="21" instance=ExtResource( 52 )]
+[node name="light_wall" parent="active_entities/env" index="20" instance=ExtResource( 52 )]
 transform = Transform( 0.963746, -0.266821, 4.48761e-10, 0.00723507, 0.0261327, -0.999632, 0.266723, 0.963392, 0.0271158, 29.7113, -23.67, -128.982 )
 
-[node name="light_wall2" parent="active_entities/env" index="22" instance=ExtResource( 52 )]
+[node name="light_wall2" parent="active_entities/env" index="21" instance=ExtResource( 52 )]
 transform = Transform( 0.970829, 0.239774, 1.04809e-08, 0, -4.37114e-08, 1, 0.239774, -0.970829, -4.24363e-08, 25.4158, -23.7868, -130.721 )
 
-[node name="CollisionShape13" type="CollisionShape" parent="active_entities/env" index="23"]
-transform = Transform( 0.831877, 0.282523, 0.477661, 0.029326, 0.837132, -0.546214, -0.554183, 0.468391, 0.688106, 225.169, -43.5466, 35.3616 )
+[node name="CollisionShape13" type="CollisionShape" parent="active_entities/env" index="22"]
+transform = Transform( 0.831877, 0.282523, 0.477661, 0.029326, 0.837132, -0.546214, -0.554183, 0.468391, 0.688106, 225.764, -44.2274, 36.2193 )
 shape = SubResource( 17 )
 
-[node name="CollisionShape14" type="CollisionShape" parent="active_entities/env" index="24"]
-transform = Transform( 0.918604, 0.282523, 0.27631, -0.0954565, 0.837132, -0.538607, -0.383477, 0.468391, 0.795961, 239.918, -63.3227, 61.8099 )
+[node name="CollisionShape14" type="CollisionShape" parent="active_entities/env" index="23"]
+transform = Transform( 0.778983, 0.562883, 0.27631, -0.359554, 0.761986, -0.538607, -0.513717, 0.320217, 0.795961, 239.918, -63.3227, 61.8099 )
 shape = SubResource( 20 )
 
-[node name="CollisionShape16" type="CollisionShape" parent="active_entities/env" index="25"]
+[node name="CollisionShape19" type="CollisionShape" parent="active_entities/env" index="24"]
+transform = Transform( 0.893427, -0.34063, -0.292845, 0.0977904, 0.783765, -0.613309, 0.438434, 0.51931, 0.733547, 238.777, -82.7382, 90.9677 )
+shape = SubResource( 295 )
+
+[node name="CollisionShape20" type="CollisionShape" parent="active_entities/env" index="25"]
+transform = Transform( 0.676556, -0.301013, -0.672059, -0.179215, 0.817894, -0.546746, 0.714251, 0.490347, 0.499404, 221.571, -103.018, 110.289 )
+shape = SubResource( 296 )
+
+[node name="CollisionShape21" type="CollisionShape" parent="active_entities/env" index="26"]
+transform = Transform( 0.334467, -0.505913, -0.795099, -0.390982, 0.693163, -0.605522, 0.857475, 0.513397, 0.0340374, 196.493, -121.577, 118.394 )
+shape = SubResource( 297 )
+
+[node name="CollisionShape16" type="CollisionShape" parent="active_entities/env" index="27"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.1429, 27.8618, -122.108 )
 shape = SubResource( 24 )
 
-[node name="light_wall4" parent="active_entities/env" index="26" instance=ExtResource( 52 )]
+[node name="light_wall4" parent="active_entities/env" index="28" instance=ExtResource( 52 )]
 transform = Transform( -5.46392e-08, -0.5, 0.866025, 1, -4.37114e-08, 3.78552e-08, 1.89276e-08, 0.866025, 0.5, 77.9184, -37.6771, -104.679 )
 mesh_instance = NodePath("../light_wall/Sphere")
 
-[node name="light_wall3" parent="active_entities/env" index="27" instance=ExtResource( 52 )]
+[node name="light_wall3" parent="active_entities/env" index="29" instance=ExtResource( 52 )]
 transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 76.8963, -35.1631, -93.4014 )
 
-[node name="light_wall5" parent="active_entities/env" index="28" instance=ExtResource( 52 )]
+[node name="light_wall5" parent="active_entities/env" index="30" instance=ExtResource( 52 )]
 transform = Transform( 0.746221, -0.665699, -2.90986e-08, 0, -4.37114e-08, 1, -0.665699, -0.746221, -3.26183e-08, 76.4248, -37.894, -82.3622 )
 
-[node name="OmniLight6" type="OmniLight" parent="active_entities/env" index="29"]
+[node name="OmniLight6" type="OmniLight" parent="active_entities/env" index="31"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.8039, -30.4843, -96.9045 )
 light_color = Color( 0.643137, 0.552941, 0.403922, 1 )
 omni_range = 24.7973
 script = ExtResource( 31 )
 distance = 40.0
 
-[node name="SpotLight" type="SpotLight" parent="active_entities/env" index="30"]
+[node name="SpotLight" type="SpotLight" parent="active_entities/env" index="32"]
 transform = Transform( 0.946254, -0.011599, -0.323218, 0.0977258, -0.942391, 0.319921, -0.308308, -0.334313, -0.890607, -46.5727, 75.6322, -162.951 )
 light_color = Color( 0.592157, 0.396078, 0.223529, 1 )
 light_energy = 0.327
@@ -700,11 +716,11 @@ spot_attenuation = 0.574351
 spot_angle = 5.36801
 spot_angle_attenuation = 1.07178
 
-[node name="CollisionShape17" type="CollisionShape" parent="active_entities/env" index="31"]
+[node name="CollisionShape17" type="CollisionShape" parent="active_entities/env" index="33"]
 transform = Transform( 0.887502, 0, -0.460805, 0, 1, 0, 0.460805, 0, 0.887502, 18.9472, 4.8741, -24.7178 )
 shape = SubResource( 275 )
 
-[node name="CollisionShape18" type="CollisionShape" parent="active_entities/env" index="32"]
+[node name="CollisionShape18" type="CollisionShape" parent="active_entities/env" index="34"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.07314, 0 )
 shape = SubResource( 276 )
 
@@ -771,9 +787,9 @@ interior_ambient_color = Color( 0.192157, 0.164706, 0.247059, 1 )
 
 [node name="refl_int2" type="ReflectionProbe" parent="active_entities/reflections" index="4"]
 transform = Transform( 0.632537, -0.169065, 0.755853, 0.0880101, 0.985254, 0.146725, -0.769514, -0.0262861, 0.638089, 134.733, -66.5129, -7.50725 )
-intensity = 0.44
+intensity = 0.22
 extents = Vector3( 126.445, 19.8493, 31.3881 )
-origin_offset = Vector3( -18.1465, -3.35498, 4.44141 )
+origin_offset = Vector3( -18.1465, -5.00391, 4.44141 )
 cull_mask = 1015807
 interior_enable = true
 interior_ambient_color = Color( 0.192157, 0.164706, 0.247059, 1 )
