@@ -1,10 +1,30 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://_glb/env/stone/cup.glb" type="PackedScene" id=1]
-[ext_resource path="res://material/env/wood1.png" type="Texture" id=2]
+[ext_resource path="res://entities/visual/random_color.gd" type="Script" id=2]
+[ext_resource path="res://material/triplanar.shader" type="Shader" id=3]
+[ext_resource path="res://material/env/noise.jpg" type="Texture" id=4]
 
-[sub_resource type="SpatialMaterial" id=2]
-albedo_texture = ExtResource( 2 )
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/wall_scale = 0.125
+shader_param/ground_scale = 0.125
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity_ground = 1.0
+shader_param/specularity_wall = 1.0
+shader_param/specularity_ceiling = 1.0
+shader_param/light_bias = 0.0
+shader_param/shadow_normal_offset = 0.2
+shader_param/albedo = Color( 0.619608, 0.823529, 0.827451, 1 )
+shader_param/wall = ExtResource( 4 )
+shader_param/ground = ExtResource( 4 )
+shader_param/ceiling = ExtResource( 4 )
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0, 0.178744, 0.357488, 0.512077, 0.68599, 1 )
+colors = PoolColorArray( 0.90625, 0.438965, 0.438965, 1, 0.374949, 0.355164, 0.988281, 1, 0.690832, 0.994381, 0.980153, 1, 0.368866, 0.925781, 0.560306, 1, 0.945312, 0.938389, 0.834534, 1, 0.851562, 0.72994, 0.612061, 1 )
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.0840197
@@ -14,6 +34,9 @@ radius = 0.0731561
 
 [node name="cup" parent="." index="0"]
 material/0 = SubResource( 2 )
+script = ExtResource( 2 )
+palette = SubResource( 3 )
+mesh_instance = NodePath(".")
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00408882, 0.0237151, 0 )

@@ -386,9 +386,10 @@ func start_heal_particle():
 func start_roll_particles():
 	pass
 
-func set_coat_type(type: String):
+func set_coat_type(type: String, play_sound := true):
 	coat_mesh.set_coat_type(type)
-	play_pickup_sound("coat")
+	if play_sound:
+		play_pickup_sound("coat")
 
 func play_pickup_sound(item):
 	var part = "item_sound"+str(item_sound)

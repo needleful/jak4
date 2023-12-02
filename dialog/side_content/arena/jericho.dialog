@@ -137,6 +137,18 @@ You -- Yes, I did sign a waiver... of some sort.
 [goto: arena_entry]
 [back]
 
+:item(arena_access) -> real_access_rename
+You -- Jericho, I have to come clean. I gave you a fake arena access before.
+What!? I am so cheated...
+You -- To make it up to you, I signed you waiver to get a real arena pass.
+* You hand him your real arena access.
+[Global remove_item: arena_access]
+[$: name | Jaki]
+[Global set_stat: arena137/name | $name]
+Your real name is #{$name}? It is like I did not even know you...
+But you have real access now. All is good. I suppose.
+[back]
+
 :@item(fake_arena_access) :- Global.task_is_active("unwanted_visitors")  and !Global.stat("arena137/entered") -> fake_access
 :item(fake_arena_access) :- !Global.stat("arena137/entered") -> fake_access
 [$: name | Kara]
@@ -147,6 +159,18 @@ You are #{$name}? Waiver, you signed it?
 You -- #{$name}? Uh... sure.
 [Global remove_item: fake_arena_access]
 [goto: arena_entry]
+[back]
+
+:item(fake_arena_access)
+You -- I found what looks like one of those arena access papers.
+You did? where?
+You -- In the caves. Do you know who this “Kara” is?
+I do not. I can take the access if you want.
+> Of course. I can't imagine what use I'd have for it.
+	[Global remove_item: fake_arena_access]
+	If any Kara shows up, I will let her know she is allowed in.
+> I'll hold onto it for now.
+	If you find this Kara, give it to her.
 [back]
 
 :arena_entry

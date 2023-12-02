@@ -1,6 +1,16 @@
+[stat?: lia/fake_access]
+	Hmph. If you die in there, it's your own fault.
 [! stat?: lia/waiver]
 	Uh, this place ain't for no tourists! Scram please!
-	You -- ...
+	[stat?: arena137/entered]
+		You -- I already got into the arena. I'm not as dumb as I look.
+		What? Uh, no. I give the waivers. You didn't sign it.
+		You -- Ask your friend Jericho, then. I've been in the arena.
+		* She fumes.
+		You didn't sign the waiver!
+		[+stat: lia/fake_access]
+	[otherwise]
+		You -- ...
 [otherwise]
 	Have fun in there!
 [exit]
@@ -8,8 +18,12 @@
 :@note(arena137/entered) :- !Global.stat("lia/waiver") -> waiver
 :@note(arena137/escape) :- !Global.stat("lia/waiver") -> waiver
 :@note(jericho/arena_access) :- !Global.stat("lia/waiver") -> waiver
-You -- I'd like to get into the arena.
-What? You know about it? You want to sign the waiver?
+[stat?: lia/fake_access]
+	You -- Alright, I'll sign your waver and get a real pass.
+	Hmph. Okay, I'll give you one. No funny business from you, though.
+[otherwise]
+	You -- I'd like to get into the arena.
+	What? You know about it? You want to sign the waiver?
 [goto: waiver]
 [back]
 
@@ -25,6 +39,7 @@ What? You know about it? You want to sign the waiver?
 	Huh? Me? I don't know who that is.
 	You -- He meant the entire village, I think. He was quite suspicious of everyone here.
 	I ain't the village. He's probably crazy.
+[note: lia/suspicion | I talked with a woman named Lia at the mouth of the cave. She denied any suspicion. | unwanted_visitors]
 [back]
 
 :waiver	

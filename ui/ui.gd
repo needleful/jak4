@@ -24,6 +24,7 @@ var equipment_path_f := "res://items/usable/%s.gd"
 var custom_ui : Control
 var loaded_ui : PackedScene
 var input_blocked := false
+var prompt_queue : Array
 
 const VISIBLE_ITEMS := [
 	"bug",
@@ -64,6 +65,7 @@ var choosing_item := false
 
 func _init():
 	equipment_inventory = {}
+	prompt_queue = []
 
 func _ready():
 	var _x = Global.connect("item_changed", self, "on_item_changed")
@@ -177,6 +179,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 	elif item in WEAPONS:
 		var wep_select := ""
 		var wep_name := ""
+		var already_has_wep:bool = Global.stat("weapon") > 0
 		match item:
 			"wep_pistol":
 				wep_select = "wep_1"
@@ -197,6 +200,10 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 			show_ammo()
 			if !startup:
 				show_prompt([wep_select], wep_name)
+				if item == "wep_wave_shot":
+					queue_prompt(['combat_shoot'], "(Hold) Charge Bubble")
+				elif !already_has_wep:
+					queue_prompt(['combat_shoot'], "Fire Weapon")
 		else:
 			player.gun.remove_weapon(item)
 		if !startup:
@@ -211,7 +218,7 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 		if !startup and change > 0:
 			write_log("Found: "+item.capitalize()+" Ammo")
 	elif item in player.mesh.coat_mesh.meshes:
-		player.mesh.set_coat_type(item)
+		player.mesh.set_coat_type(item, !startup)
 		if !startup and change > 0:
 			write_log("New Coat: "+item.capitalize())
 	else:
@@ -450,12 +457,23 @@ func show_prompt(actions: Array, text: String, joiner := "+"):
 	tut.show()
 	tut.get_node("prompt_timer").start()
 
+func queue_prompt(actions:Array, text: String, joiner := "+"):
+	prompt_queue.append({
+		'actions':actions,
+		'text':text,
+		'joiner':joiner
+	})
+
 func hide_prompt():
 	game.get_node("tutorial").hide()
 	game.get_node("tutorial/prompt_timer").stop()
 
 func _on_prompt_timer_timeout():
-	game.get_node("tutorial").hide()
+	if prompt_queue.empty():
+		game.get_node("tutorial").hide()
+	else:
+		var prompt : Dictionary = prompt_queue.pop_front()
+		show_prompt(prompt.actions, prompt.text, prompt.joiner)
 
 # TODO: fix in multi-threaded rendering
 func take_screen_shot():

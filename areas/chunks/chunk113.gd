@@ -18,3 +18,6 @@ func _on_power_deactivated():
 			c.hide()
 	get_node(inactive_lights).show()
 	$active_entities/tower_interior3/dswitch_a2.deactivate()
+	var env := $active_entities/env_tower
+	env.default_music = null
+	env.update_environment()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/enemies/deathgnat.tscn" type="PackedScene" id=2]
@@ -44,7 +44,12 @@
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=42]
 [ext_resource path="res://entities/env/furniture/sofa.tscn" type="PackedScene" id=43]
 [ext_resource path="res://entities/env/copper/table2.tscn" type="PackedScene" id=44]
-[ext_resource path="res://dialog/side_content/arena/somebody.dialog" type="Resource" id=47]
+[ext_resource path="res://entities/env/furniture/carpet.tscn" type="PackedScene" id=45]
+[ext_resource path="res://entities/env/furniture/table_low.tscn" type="PackedScene" id=46]
+[ext_resource path="res://dialog/side_content/arena/somo.dialog" type="Resource" id=47]
+[ext_resource path="res://entities/env/stone/cup.tscn" type="PackedScene" id=48]
+[ext_resource path="res://entities/env/furniture/stump_table.tscn" type="PackedScene" id=49]
+[ext_resource path="res://dialog/side_content/arena/ladder_person.dialog" type="Resource" id=50]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 40 )
@@ -117,94 +122,133 @@ material/0 = SubResource( 2 )
 [node name="zone_cliffs" type="MultiMeshSystem" parent="active_entities" index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.2532, -21.7226, -61.562 )
 
-[node name="hut" type="Spatial" parent="active_entities/zone_cliffs" index="0"]
+[node name="ladder_hut" type="Spatial" parent="active_entities/zone_cliffs" index="0"]
+transform = Transform( 0.666539, 0, -0.745469, 0, 1, 0, 0.745469, 0, 0.666539, -206.678, -2.22763, 45.2292 )
+
+[node name="carpet2" parent="active_entities/zone_cliffs/ladder_hut" index="0" instance=ExtResource( 45 )]
+transform = Transform( 0.585877, 0, -0.810399, 0, 1, 0, 0.810399, 0, 0.585877, 1.20872, 4.12493, 0.563011 )
+
+[node name="bed_native" parent="active_entities/zone_cliffs/ladder_hut" index="1" instance=ExtResource( 35 )]
+transform = Transform( -0.428752, 0, -0.903421, 0, 1, 0, 0.903421, 0, -0.428752, 1.89937, 0.959999, -2.56371 )
+
+[node name="table_low" parent="active_entities/zone_cliffs/ladder_hut" index="2" instance=ExtResource( 46 )]
+transform = Transform( 0.982386, 0, -0.186858, 0, 1, 0, 0.186858, 0, 0.982386, -0.310928, 0.937731, 0.927803 )
+
+[node name="sitting_pillow" parent="active_entities/zone_cliffs/ladder_hut/table_low" index="1" instance=ExtResource( 36 )]
+transform = Transform( 0.682785, 0, -0.730616, 0, 1, 0, 0.730616, 0, 0.682785, -0.879898, 0.0136032, 0.98378 )
+
+[node name="sitting_pillow2" parent="active_entities/zone_cliffs/ladder_hut/table_low" index="2" instance=ExtResource( 36 )]
+transform = Transform( 0.0648246, 0, 0.997894, 0, 1, 0, -0.997894, 0, 0.0648246, 0.259727, 0.0136032, -1.46677 )
+
+[node name="npc" parent="active_entities/zone_cliffs/ladder_hut/table_low/sitting_pillow2" index="1" instance=ExtResource( 17 )]
+transform = Transform( -0.0324845, 0, -0.999463, 0, 1, 0, 0.999463, 0, -0.0324845, -0.0397568, 0.103979, 0.0183258 )
+dialog = ExtResource( 50 )
+visual_name = "Cliff Villager"
+sitting = true
+
+[node name="sitting_pillow3" parent="active_entities/zone_cliffs/ladder_hut/table_low" index="3" instance=ExtResource( 36 )]
+transform = Transform( 0.999997, 0, 0, 0, 1, 0, 0, 0, 0.999997, 1.18718, 0.0136032, 0.567238 )
+
+[node name="cup" parent="active_entities/zone_cliffs/ladder_hut/table_low" index="4" instance=ExtResource( 48 )]
+transform = Transform( 0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0.127548, 0.299927, -0.623451 )
+
+[node name="incense" parent="active_entities/zone_cliffs/ladder_hut/table_low" index="5" instance=ExtResource( 33 )]
+transform = Transform( 0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, -0.0148544, 0.283852, -0.00193024 )
+
+[node name="hut" type="Spatial" parent="active_entities/zone_cliffs" index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -97.497, 5.82305, -2.71206 )
 
-[node name="bed_native" parent="active_entities/zone_cliffs/hut" index="0" instance=ExtResource( 35 )]
+[node name="stump_table" parent="active_entities/zone_cliffs/hut" index="0" instance=ExtResource( 49 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -112.451, -7.09068, 45.8872 )
+
+[node name="cup" parent="active_entities/zone_cliffs/hut/stump_table" index="1" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.213295, 1, 0.280342 )
+
+[node name="cup2" parent="active_entities/zone_cliffs/hut/stump_table" index="2" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.212997, 1.05732, 0.28001 )
+
+[node name="cup3" parent="active_entities/zone_cliffs/hut/stump_table" index="3" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.212997, 1.11751, 0.28001 )
+
+[node name="cup4" parent="active_entities/zone_cliffs/hut/stump_table" index="4" instance=ExtResource( 48 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.169426, 1.00093, 0.0792656 )
+
+[node name="bed_native" parent="active_entities/zone_cliffs/hut" index="1" instance=ExtResource( 35 )]
 transform = Transform( -0.981581, 0, 0.191044, 0, 1, 0, -0.191044, 0, -0.981581, 3.49229, -0.0315876, 1.04393 )
 
-[node name="table2" parent="active_entities/zone_cliffs/hut" index="1" instance=ExtResource( 44 )]
+[node name="table2" parent="active_entities/zone_cliffs/hut" index="2" instance=ExtResource( 44 )]
 transform = Transform( 0.444169, 0, 0.895943, 0, 1, 0, -0.895943, 0, 0.444169, -1.46383, 0, 3.29143 )
 
-[node name="sitting_pillow" parent="active_entities/zone_cliffs/hut" index="2" instance=ExtResource( 36 )]
+[node name="sitting_pillow" parent="active_entities/zone_cliffs/hut" index="3" instance=ExtResource( 36 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98072, -0.0346069, -3.12811 )
 
-[node name="sitting_pillow2" parent="active_entities/zone_cliffs/hut" index="3" instance=ExtResource( 36 )]
+[node name="sitting_pillow2" parent="active_entities/zone_cliffs/hut" index="4" instance=ExtResource( 36 )]
 transform = Transform( 0.461006, 0, -0.887397, 0, 1, 0, 0.887397, 0, 0.461006, 3.24665, -0.0377121, -2.01772 )
 
-[node name="sofa" parent="active_entities/zone_cliffs/hut" index="4" instance=ExtResource( 43 )]
+[node name="sofa" parent="active_entities/zone_cliffs/hut" index="5" instance=ExtResource( 43 )]
 transform = Transform( -0.998212, 0, 0.0597761, 0, 1, 0, -0.0597761, 0, -0.998212, 0.348875, -3.16092, -3.99634 )
 
-[node name="incense" parent="active_entities/zone_cliffs/hut" index="5" instance=ExtResource( 33 )]
+[node name="incense" parent="active_entities/zone_cliffs/hut" index="6" instance=ExtResource( 33 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.915641, -3.16092, -3.68311 )
 
-[node name="table3" parent="active_entities/zone_cliffs/hut" index="6" instance=ExtResource( 44 )]
+[node name="table3" parent="active_entities/zone_cliffs/hut" index="7" instance=ExtResource( 44 )]
 transform = Transform( -0.86388, 0, 0.503697, 0, 1, 0, -0.503697, 0, -0.86388, 3.89563, -3.16092, 1.5103 )
 
-[node name="fountain" parent="active_entities/zone_cliffs" index="1" instance=ExtResource( 31 )]
+[node name="fountain" parent="active_entities/zone_cliffs" index="2" instance=ExtResource( 31 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 88.8501, 19.8555, -103.562 )
 
-[node name="bug_pickup" parent="active_entities/zone_cliffs" index="2" instance=ExtResource( 7 )]
+[node name="bug_pickup" parent="active_entities/zone_cliffs" index="3" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 85.4413, -142.725, 77.9688 )
 
-[node name="bug_pickup2" parent="active_entities/zone_cliffs" index="3" instance=ExtResource( 7 )]
+[node name="bug_pickup2" parent="active_entities/zone_cliffs" index="4" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100.366, -111.495, 12.2473 )
 quantity = 2
 
-[node name="bug_pickup3" parent="active_entities/zone_cliffs" index="4" instance=ExtResource( 7 )]
+[node name="bug_pickup3" parent="active_entities/zone_cliffs" index="5" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102.1, -136.227, 22.5882 )
 
-[node name="bug_pickup4" parent="active_entities/zone_cliffs" index="5" instance=ExtResource( 7 )]
+[node name="bug_pickup4" parent="active_entities/zone_cliffs" index="6" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -85.3002, -88.9298, 11.3266 )
 quantity = 3
 
-[node name="gem_pickup4" parent="active_entities/zone_cliffs" index="6" instance=ExtResource( 8 )]
+[node name="gem_pickup4" parent="active_entities/zone_cliffs" index="7" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.2902, -99.5132, 8.23647 )
 
-[node name="gem_pickup5" parent="active_entities/zone_cliffs" index="7" instance=ExtResource( 8 )]
+[node name="gem_pickup5" parent="active_entities/zone_cliffs" index="8" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -103.971, -113.962, 11.2326 )
 
-[node name="gem_pickup7" parent="active_entities/zone_cliffs" index="8" instance=ExtResource( 8 )]
+[node name="gem_pickup7" parent="active_entities/zone_cliffs" index="9" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -101.586, -123.022, 23.6688 )
 
-[node name="gem_pickup8" parent="active_entities/zone_cliffs" index="9" instance=ExtResource( 8 )]
+[node name="gem_pickup8" parent="active_entities/zone_cliffs" index="10" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -104.466, -130.898, 27.2504 )
 
-[node name="gem_pickup9" parent="active_entities/zone_cliffs" index="10" instance=ExtResource( 8 )]
+[node name="gem_pickup9" parent="active_entities/zone_cliffs" index="11" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -70.2559, -152.751, 30.6888 )
 
-[node name="gem_pickup10" parent="active_entities/zone_cliffs" index="11" instance=ExtResource( 8 )]
+[node name="gem_pickup10" parent="active_entities/zone_cliffs" index="12" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -63.2776, -152.751, 30.1895 )
 
-[node name="gem_pickup11" parent="active_entities/zone_cliffs" index="12" instance=ExtResource( 8 )]
+[node name="gem_pickup11" parent="active_entities/zone_cliffs" index="13" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40.9351, -145.692, 27.2428 )
 
-[node name="gem_pickup12" parent="active_entities/zone_cliffs" index="13" instance=ExtResource( 8 )]
+[node name="gem_pickup12" parent="active_entities/zone_cliffs" index="14" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -48.9525, -192.811, 75.9583 )
 
-[node name="gem_pickup13" parent="active_entities/zone_cliffs" index="14" instance=ExtResource( 8 )]
+[node name="gem_pickup13" parent="active_entities/zone_cliffs" index="15" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -45.2163, -191.891, 78.7141 )
 
-[node name="bug_pickup5" parent="active_entities/zone_cliffs" index="15" instance=ExtResource( 7 )]
+[node name="bug_pickup5" parent="active_entities/zone_cliffs" index="16" instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 74.4144, -99.1099, 55.6371 )
 
-[node name="crawly" parent="active_entities/zone_cliffs" index="16" instance=ExtResource( 6 )]
+[node name="crawly" parent="active_entities/zone_cliffs" index="17" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 78.2394, -96.7843, 59.5322 )
 
-[node name="npc" parent="active_entities/zone_cliffs" index="17" instance=ExtResource( 17 )]
+[node name="npc" parent="active_entities/zone_cliffs" index="18" instance=ExtResource( 17 )]
 transform = Transform( 0.0169751, 0, 0.999856, 0, 1, 0, -0.999856, 0, 0.0169751, 96.0622, 18.8003, -115.252 )
 dialog = ExtResource( 47 )
 visual_name = "Somo"
 friendly_id = "somo"
-
-[node name="scrap1" parent="active_entities/zone_cliffs" index="18" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -236.283, -27.1519, 78.0498 )
-
-[node name="scrap2" parent="active_entities/zone_cliffs" index="19" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -240.685, -25.774, 83.2278 )
-
-[node name="scrap3" parent="active_entities/zone_cliffs" index="20" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -224.694, -14.8169, 60.7221 )
 
 [node name="rocks_area" type="MultiMeshSystem" parent="active_entities" index="4"]
 transform = Transform( 0.995635, 0, 0.0933352, 0, 1, 0, -0.0933352, 0, 0.995635, 5.58275, -216.96, 174.81 )
@@ -455,100 +499,139 @@ transform = Transform( 0.232936, 0, -0.972492, 0, 1, 0, 0.972492, 0, 0.232936, 2
 [node name="zone_cliffs" type="Spatial" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.2532, -21.7226, -61.562 )
 
-[node name="hut2" parent="zone_cliffs" index="0" instance=ExtResource( 4 )]
+[node name="hut_near_ladder" type="Spatial" parent="zone_cliffs" index="0"]
+transform = Transform( 0.666539, 0, -0.745469, 0, 1, 0, 0.745469, 0, 0.666539, -206.678, -2.22763, 45.2292 )
+
+[node name="scrap1" parent="zone_cliffs/hut_near_ladder" index="0" instance=ExtResource( 42 )]
+transform = Transform( 0.66654, 0.243469, 0.704591, 0, 0.945163, -0.326598, -0.74547, 0.217691, 0.629989, -0.883408, -17.9167, 44.076 )
+
+[node name="scrap2" parent="zone_cliffs/hut_near_ladder" index="1" instance=ExtResource( 42 )]
+transform = Transform( 0.66654, 0, 0.74547, 0, 1, 0, -0.74547, 0, 0.66654, 1.23866, -21.1447, 48.6558 )
+
+[node name="scrap3" parent="zone_cliffs/hut_near_ladder" index="2" instance=ExtResource( 42 )]
+transform = Transform( -0.997535, 0.0636322, 0.0295805, 0.0682626, 0.977621, 0.19899, -0.0162563, 0.200519, -0.979555, -4.65361, -4.08532, 17.4069 )
+
+[node name="scrap4" parent="zone_cliffs/hut_near_ladder" index="3" instance=ExtResource( 42 )]
+transform = Transform( 0.661575, 0.0496955, 0.748232, 0.121833, 0.977421, -0.17264, -0.739917, 0.205373, 0.640582, -5.25535, -6.08928, 23.041 )
+
+[node name="scrap5" parent="zone_cliffs/hut_near_ladder" index="4" instance=ExtResource( 42 )]
+transform = Transform( -0.983538, 0.14497, 0.107876, 0.141947, 0.989247, -0.0352363, -0.111824, -0.0193436, -0.99354, -4.42757, -8.18887, 28.6422 )
+
+[node name="scrap7" parent="zone_cliffs/hut_near_ladder" index="5" instance=ExtResource( 42 )]
+transform = Transform( -0.992886, 0.053709, 0.10627, 0.0584603, 0.997401, 0.0421093, -0.103732, 0.0480223, -0.993446, -3.16956, -9.95036, 33.5134 )
+
+[node name="scrap8" parent="zone_cliffs/hut_near_ladder" index="6" instance=ExtResource( 42 )]
+transform = Transform( -0.994458, 0, 0.105138, 0, 1, 0, -0.105138, 0, -0.994458, 0.283958, -15.0482, 38.1112 )
+
+[node name="scrap6" parent="zone_cliffs/hut_near_ladder" index="7" instance=ExtResource( 42 )]
+transform = Transform( -0.976489, 0.183554, 0.113042, 0.184345, 0.982855, -0.00350934, -0.111748, 0.0174119, -0.993585, -0.184792, -12.4225, 33.5613 )
+
+[node name="hut" parent="zone_cliffs/hut_near_ladder" index="8" instance=ExtResource( 4 )]
+
+[node name="rock8" parent="zone_cliffs/hut_near_ladder" index="9" instance=ExtResource( 30 )]
+transform = Transform( 0.999999, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 0.999999, 5.96667, -10.9486, -3.26617 )
+
+[node name="rock9" parent="zone_cliffs/hut_near_ladder" index="10" instance=ExtResource( 30 )]
+transform = Transform( 0.929482, 0, -0.368865, 0, 1, 0, 0.368865, 0, 0.929482, 4.83389, -10.9486, 2.83818 )
+
+[node name="rock10" parent="zone_cliffs/hut_near_ladder" index="11" instance=ExtResource( 30 )]
+transform = Transform( -0.191259, 0, -0.981539, 0, 1, 0, 0.981539, 0, -0.191259, -3.11774, -10.9486, 6.21897 )
+
+[node name="rock7" parent="zone_cliffs/hut_near_ladder/rock10" index="1" instance=ExtResource( 28 )]
+transform = Transform( 0.999997, -2.98023e-08, 2.98023e-08, 0, -0.853858, -0.520505, 2.98023e-08, 0.520506, -0.853855, -1.76178, 3.90411, -5.96064 )
+
+[node name="scrap9" parent="zone_cliffs/hut_near_ladder" index="12" instance=ExtResource( 9 )]
+transform = Transform( 0.64277, -0.524528, -0.558316, 0.691733, 0.710576, 0.128795, 0.329169, -0.468991, 0.81957, 0.640869, -12.5414, 35.4265 )
+
+[node name="scrap10" parent="zone_cliffs/hut_near_ladder" index="13" instance=ExtResource( 9 )]
+transform = Transform( 0.706086, 0.355245, 0.612572, 0.691733, -0.160959, -0.703987, -0.15149, 0.920811, -0.359385, 2.20285, -12.5414, 34.1228 )
+
+[node name="hut2" parent="zone_cliffs" index="1" instance=ExtResource( 4 )]
 transform = Transform( 0.180613, 0, -0.983554, 0, 1, 0, 0.983554, 0, 0.180613, -75.2532, -0.277369, -0.438072 )
 
-[node name="hut7" parent="zone_cliffs" index="1" instance=ExtResource( 4 )]
+[node name="hut7" parent="zone_cliffs" index="2" instance=ExtResource( 4 )]
 transform = Transform( 0.996986, 0, -0.0775833, 0, 1, 0, 0.0775833, 0, 0.996986, -96.9478, 1.70213, -2.84768 )
 
-[node name="hut3" parent="zone_cliffs" index="2" instance=ExtResource( 4 )]
+[node name="hut3" parent="zone_cliffs" index="3" instance=ExtResource( 4 )]
 transform = Transform( 0.356698, 0, -0.93422, 0, 1, 0, 0.93422, 0, 0.356698, 59.7468, -4.27737, 2.56193 )
 
-[node name="hut4" parent="zone_cliffs" index="3" instance=ExtResource( 4 )]
+[node name="hut4" parent="zone_cliffs" index="4" instance=ExtResource( 4 )]
 transform = Transform( -0.887785, 0, -0.460259, 0, 1, 0, 0.460259, 0, -0.887785, 115.996, -34.2774, 49.0206 )
 
-[node name="hut5" parent="zone_cliffs" index="4" instance=ExtResource( 4 )]
+[node name="hut5" parent="zone_cliffs" index="5" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.7468, -5.27737, 2.56193 )
 
-[node name="rock14" parent="zone_cliffs" index="5" instance=ExtResource( 13 )]
+[node name="rock14" parent="zone_cliffs" index="6" instance=ExtResource( 13 )]
 transform = Transform( -0.985857, -0.118329, -0.118679, 0.00664545, -0.735195, 0.677824, -0.167458, 0.667448, 0.725583, -116.826, -15.5615, 6.61283 )
 
-[node name="hut6" parent="zone_cliffs" index="6" instance=ExtResource( 4 )]
+[node name="hut6" parent="zone_cliffs" index="7" instance=ExtResource( 4 )]
 transform = Transform( 0.824428, 0, 0.565966, 0, 1, 0, -0.565966, 0, 0.824428, -118.891, -5.27737, 9.19628 )
 
-[node name="hut_bath" parent="zone_cliffs" index="7" instance=ExtResource( 11 )]
+[node name="hut_bath" parent="zone_cliffs" index="8" instance=ExtResource( 11 )]
 transform = Transform( -0.916725, 0, 0.399519, 0, 1, 0, -0.399519, 0, -0.916725, 113.596, 20.9174, -41.248 )
 
-[node name="hut_bath2" parent="zone_cliffs" index="8" instance=ExtResource( 11 )]
+[node name="hut_bath2" parent="zone_cliffs" index="9" instance=ExtResource( 11 )]
 transform = Transform( -0.415806, 0, 0.909453, 0, 1, 0, -0.909453, 0, -0.415806, 102.198, 18.3526, -33.7797 )
 
-[node name="hut_bath3" parent="zone_cliffs" index="9" instance=ExtResource( 11 )]
+[node name="hut_bath3" parent="zone_cliffs" index="10" instance=ExtResource( 11 )]
 transform = Transform( -0.415806, 0, 0.909453, 0, 1, 0, -0.909453, 0, -0.415806, 108.372, 19.3764, -36.1871 )
 
-[node name="rock9" parent="zone_cliffs" index="10" instance=ExtResource( 13 )]
+[node name="rock9" parent="zone_cliffs" index="11" instance=ExtResource( 13 )]
 transform = Transform( -0.963657, 0, -0.267144, 0, 1, 0, 0.267144, 0, -0.963657, 94.633, 18.2322, -51.145 )
 
-[node name="rock10" parent="zone_cliffs" index="11" instance=ExtResource( 3 )]
+[node name="rock10" parent="zone_cliffs" index="12" instance=ExtResource( 3 )]
 transform = Transform( 0.00612521, -0.77495, -0.631993, 0.997962, -0.035404, 0.0530845, -0.0635128, -0.631031, 0.773154, 112.372, -37.2921, 46.5468 )
 
-[node name="rock11" parent="zone_cliffs" index="12" instance=ExtResource( 3 )]
+[node name="rock11" parent="zone_cliffs" index="13" instance=ExtResource( 3 )]
 transform = Transform( -0.0626508, -0.385993, 0.920372, 0.187372, 0.901237, 0.390722, -0.980289, 0.196931, 0.0158612, 119.366, -41.3543, 51.5294 )
 
-[node name="rock12" parent="zone_cliffs" index="13" instance=ExtResource( 13 )]
+[node name="rock12" parent="zone_cliffs" index="14" instance=ExtResource( 13 )]
 transform = Transform( 0.993064, 0.117579, 0, -0.116625, 0.985005, 0.127136, 0.0149486, -0.126254, 0.991885, 53.5668, -13.9401, 1.15693 )
 
-[node name="rock18" parent="zone_cliffs" index="14" instance=ExtResource( 13 )]
+[node name="rock18" parent="zone_cliffs" index="15" instance=ExtResource( 13 )]
 transform = Transform( 0.0969236, -0.766474, -0.634919, 0.823328, 0.420177, -0.381552, 0.559229, -0.485766, 0.671785, 77.9658, -110.44, 49.0818 )
 
-[node name="rock7" parent="zone_cliffs" index="15" instance=ExtResource( 28 )]
+[node name="rock7" parent="zone_cliffs" index="16" instance=ExtResource( 28 )]
 transform = Transform( -0.603697, -1.49012e-08, 0.797214, -0.0216563, -0.999631, -0.0163995, 0.796919, -0.0271651, 0.603475, 91.6115, -149.04, 74.0978 )
 
-[node name="rock13" parent="zone_cliffs" index="16" instance=ExtResource( 12 )]
+[node name="rock13" parent="zone_cliffs" index="17" instance=ExtResource( 12 )]
 transform = Transform( 0.0493957, -0.215597, -0.975232, -0.0121845, -0.976482, 0.215257, -0.998705, 0.00124994, -0.0508609, -94.5703, -3.89087, -0.929474 )
 
-[node name="rock15" parent="zone_cliffs" index="17" instance=ExtResource( 3 )]
+[node name="rock15" parent="zone_cliffs" index="18" instance=ExtResource( 3 )]
 transform = Transform( -0.00385717, -0.999993, 0, 0.999993, -0.00385717, 0, 0, 0, 1, -73.1507, -3.28827, -2.92958 )
 
-[node name="rock16" parent="zone_cliffs" index="18" instance=ExtResource( 3 )]
+[node name="rock16" parent="zone_cliffs" index="19" instance=ExtResource( 3 )]
 transform = Transform( -0.987841, -0.141884, 0.0635552, -0.0642402, 0.000247787, -0.997934, 0.141575, -0.989883, -0.00935942, -73.1507, -4.08837, 2.05083 )
 
-[node name="rock17" parent="zone_cliffs" index="19" instance=ExtResource( 3 )]
+[node name="rock17" parent="zone_cliffs" index="20" instance=ExtResource( 3 )]
 transform = Transform( 0.21289, 0.481624, -0.850127, -0.43951, -0.729874, -0.523559, -0.872645, 0.4851, 0.0562954, -76.9915, -5.17787, 1.45213 )
 
-[node name="rock19" parent="zone_cliffs" index="20" instance=ExtResource( 3 )]
+[node name="rock19" parent="zone_cliffs" index="21" instance=ExtResource( 3 )]
 transform = Transform( 0.506708, -0.862118, 0, 0.862118, 0.506708, 0, 0, 0, 1, -37.9404, -150.492, 25.7389 )
 
-[node name="rock20" parent="zone_cliffs" index="21" instance=ExtResource( 30 )]
+[node name="rock20" parent="zone_cliffs" index="22" instance=ExtResource( 30 )]
 transform = Transform( -0.979486, -0.201511, 0, 0.200302, -0.973606, -0.109409, 0.0220471, -0.107165, 0.993997, -102.119, -124.356, 23.0072 )
 
-[node name="rock21" parent="zone_cliffs" index="22" instance=ExtResource( 28 )]
+[node name="rock21" parent="zone_cliffs" index="23" instance=ExtResource( 28 )]
 transform = Transform( 0.456617, -0.879923, -0.131288, -0.879124, -0.468915, 0.0852059, -0.136537, 0.0765117, -0.987676, -85.2381, -94.6734, 7.2548 )
 
-[node name="rock22" parent="zone_cliffs" index="23" instance=ExtResource( 28 )]
+[node name="rock22" parent="zone_cliffs" index="24" instance=ExtResource( 28 )]
 transform = Transform( -0.809906, 0.29854, -0.504903, -0.416303, 0.31383, 0.853348, 0.413212, 0.901324, -0.129889, -102.799, -116.248, 1.55046 )
 
-[node name="rock23" parent="zone_cliffs" index="24" instance=ExtResource( 29 )]
+[node name="rock23" parent="zone_cliffs" index="25" instance=ExtResource( 29 )]
 transform = Transform( -0.60042, -0.798897, -0.0354888, 0.634323, -0.44877, -0.629476, 0.48696, -0.400461, 0.776209, -47.2062, -207.814, 95.4978 )
 
-[node name="rock24" parent="zone_cliffs" index="25" instance=ExtResource( 29 )]
+[node name="rock24" parent="zone_cliffs" index="26" instance=ExtResource( 29 )]
 transform = Transform( -0.436358, 0.36119, 0.824095, 0.885159, 0.336721, 0.321111, -0.161508, 0.869575, -0.466641, -98.9901, -137.779, 14.7068 )
 
-[node name="rock1" parent="zone_cliffs" index="26" instance=ExtResource( 3 )]
+[node name="rock1" parent="zone_cliffs" index="27" instance=ExtResource( 3 )]
 transform = Transform( 0.971334, -7.63685e-08, -0.237719, -0.237716, -0.0051036, -0.971321, -0.00121315, 0.999987, -0.00495732, 81.0446, -101.119, 59.9508 )
 
-[node name="hut8" parent="zone_cliffs" index="27" instance=ExtResource( 4 )]
+[node name="hut8" parent="zone_cliffs" index="28" instance=ExtResource( 4 )]
 transform = Transform( -0.487513, 0, -0.873116, 0, 1, 0, 0.873116, 0, -0.487513, 104.531, 18.9965, -106.834 )
 
-[node name="hut" parent="zone_cliffs" index="28" instance=ExtResource( 4 )]
+[node name="hut" parent="zone_cliffs" index="29" instance=ExtResource( 4 )]
 transform = Transform( 0.351976, 0, -0.936009, 0, 1, 0, 0.936009, 0, 0.351976, 96.8198, 18.563, -124.816 )
 
-[node name="hut9" parent="zone_cliffs" index="29" instance=ExtResource( 4 )]
+[node name="hut9" parent="zone_cliffs" index="30" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 77.8439, 21.9916, -118.499 )
-
-[node name="active_entities2" type="Spatial" parent="." index="3"]
-
-[node name="scrap2" parent="." index="4" instance=ExtResource( 9 )]
-transform = Transform( 0.183046, 0, -0.983104, 0.691733, 0.710576, 0.128795, 0.69857, -0.703621, 0.130068, -133.819, -37.9332, 8.18064 )
-
-[node name="scrap3" parent="." index="5" instance=ExtResource( 9 )]
-transform = Transform( 0.583565, -0.449652, 0.676214, 0.691733, -0.160959, -0.703987, 0.425392, 0.878581, 0.217109, -131.806, -37.9332, 8.47607 )

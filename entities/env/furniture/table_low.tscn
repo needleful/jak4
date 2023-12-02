@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material/triplanar_local_coords.shader" type="Shader" id=1]
+[ext_resource path="res://_glb/env/furniture/table_low.glb" type="PackedScene" id=2]
+[ext_resource path="res://material/env/wood1.png" type="Texture" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/uv_scale = 1.5
+shader_param/power = 5.0
+shader_param/softness = 0.5
+shader_param/specularity = 1.0
+shader_param/light_bias = 0.0
+shader_param/wall = ExtResource( 3 )
+shader_param/ground = ExtResource( 3 )
+shader_param/ceiling = ExtResource( 3 )
+
+[node name="table_low" instance=ExtResource( 2 )]
+
+[node name="table_low" parent="." index="0"]
+material/0 = SubResource( 1 )

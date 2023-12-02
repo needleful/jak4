@@ -3,8 +3,6 @@ extends Spatial
 signal activated(chunk)
 signal deactivated(chunk)
 
-var air_tutorial := false
-
 # Distance from the bounding box edge
 const DIST_LOAD := 400
 const DIST_UNLOAD := 450
@@ -285,8 +283,7 @@ func is_active(chunk: Spatial):
 func show_combat_tutorial():
 	var _x = Global.add_stat("combat_tutorial")
 	player.ui.show_prompt(["combat_lunge"], "Lunge Kick")
-	air_tutorial = false
-	$tutorial_swap.start()
+	player.ui.queue_prompt(["combat_spin"], "Spin Kick")
 
 func show_cloaked_combat_tutorial():
 	var _x = Global.add_stat("cloaked_combat_tutorial")
@@ -298,14 +295,7 @@ func show_cloaked_combat_tutorial():
 func show_air_combat_tutorial():
 	var _x = Global.add_stat("air_combat_tutorial")
 	player.ui.show_prompt(["mv_crouch", "combat_lunge"], "Uppercut")
-	air_tutorial = true
-	$tutorial_swap.start()
-
-func _on_tutorial_swap_timeout():
-	if air_tutorial:
-		player.ui.show_prompt(["mv_jump", "combat_lunge"], "Diving Kick", ",")
-	else:
-		player.ui.show_prompt(["combat_spin"], "Spin Kick")
+	player.ui.queue_prompt(["mv_jump", "combat_lunge"], "Diving Kick", ",")
 
 # Environment
 func apply_environment(p_env: Dictionary):
