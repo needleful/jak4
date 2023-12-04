@@ -31,6 +31,9 @@ var sounds := {
 		preload("res://audio/pickup/coat1.wav"),
 		preload("res://audio/pickup/coat2.wav"),
 	],
+	"holster": [
+		preload("res://audio/player/weapon_holster.ogg")
+	],
 	"wep_pistol": [
 		preload("res://audio/pickup/wep_pistol.wav")
 	],

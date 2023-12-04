@@ -391,6 +391,8 @@ func set_state(new_state, force := false):
 		State.Hidden, State.HiddenLocked, State.ComboReadyHidden:
 			aim_toggle = false
 			holder.aim_gun(Vector3.ZERO, false)
+			if current_weapon and state == State.Free:
+				holder.play_pickup_sound("holster")
 			if !charging():
 				set_process(false)
 				visible = false
