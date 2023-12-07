@@ -33,7 +33,7 @@ void fragment() {
 	vec4 wpos = CAMERA_MATRIX*upos;
 	vec3 pixel_position = wpos.xyz / wpos.w;
 	
-	float diffy = pos.y - pixel_position.y;
+	float diffy = length(pos - pixel_position);
 	vec2 foam_sample_offset = 0.5*vec2(sin(TIME*0.05 + 0.2+pos.x + 0.1*pos.z), cos(TIME*0.02 + 0.16*pos.x));
 	float foam_factor = texture(foam_noise, pos.xz*foam_noise_scale + foam_sample_offset).r;
 	foam_factor *= texture(foam_noise, pos.xz*foam_noise_scale2).r;

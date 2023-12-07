@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=2]
+[gd_scene load_steps=115 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -55,6 +55,7 @@
 [ext_resource path="res://areas/visit_area.gd" type="Script" id=53]
 [ext_resource path="res://material/env/copper/copper_corroded.material" type="Material" id=54]
 [ext_resource path="res://audio/music/ancient_caverns.ogg" type="AudioStream" id=55]
+[ext_resource path="res://material/water.shader" type="Shader" id=56]
 [ext_resource path="res://material/env/ancient/white_metal_interior.material" type="Material" id=58]
 [ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=59]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=60]
@@ -68,17 +69,29 @@ shader_param/specularity = 1.0
 shader_param/alpha_clip = 0.75
 shader_param/main_texture = ExtResource( 25 )
 
-[sub_resource type="ShaderMaterial" id=282]
-shader = ExtResource( 12 )
-shader_param/albedo = Color( 0.827451, 0.705882, 0.788235, 1 )
-shader_param/refraction = 0.01
-shader_param/brightness = null
+[sub_resource type="ShaderMaterial" id=317]
+shader = ExtResource( 56 )
+shader_param/surface_albedo = Color( 0.772549, 0.439216, 0.67451, 1 )
+shader_param/deep_albedo = Color( 0.0470588, 0.00392157, 0.00392157, 1 )
+shader_param/max_depth = 10.0
+shader_param/foam_color = null
+shader_param/refraction = 0.004
+shader_param/foam_distance = null
+shader_param/foam_noise_scale = 1.0
+shader_param/foam_noise_scale2 = 0.2
+
+[sub_resource type="SpatialMaterial" id=318]
+params_cull_mode = 1
+albedo_color = Color( 0, 0, 0, 1 )
+metallic = 1.0
+roughness = 0.0
 
 [sub_resource type="ShaderMaterial" id=283]
+next_pass = SubResource( 318 )
 shader = ExtResource( 7 )
 shader_param/surface_albedo = Color( 0.615686, 0.862745, 0.709804, 1 )
 shader_param/deep_albedo = Color( 0, 0, 0, 1 )
-shader_param/max_depth = 2.5
+shader_param/max_depth = 5.0
 shader_param/foam_color = Color( 0.796078, 0.733333, 0.733333, 0.788235 )
 shader_param/refraction = 0.004
 shader_param/foam_distance = 0.974
@@ -97,6 +110,12 @@ shader_param/foam_distance = 0.424
 shader_param/foam_noise_scale = 0.587
 shader_param/foam_noise_scale2 = 0.15
 shader_param/foam_noise = ExtResource( 9 )
+
+[sub_resource type="ShaderMaterial" id=282]
+shader = ExtResource( 12 )
+shader_param/albedo = Color( 0.827451, 0.705882, 0.788235, 1 )
+shader_param/refraction = 0.01
+shader_param/brightness = null
 
 [sub_resource type="ConvexPolygonShape" id=309]
 points = PoolVector3Array( -36.7409, -119.589, -5.09655, -2.91819, -119.589, -29.7164, -12.1253, -119.589, 28.735, -17.243, 13.5158, 23.0993, -23.1043, 15.5144, 15.0491, -36.7409, 34.4768, -5.09655, 35.5635, -119.589, -2.01263, -2.91819, 43.7341, -29.7164, 44.0666, -119.589, 4.10944, -12.1253, 25.2034, 28.735, -17.243, 26.8822, 23.0993, -23.1043, 29.0886, 15.0491, 35.5635, 36.1556, -2.01263, 44.0666, 34.4768, 4.10944 )
@@ -1610,7 +1629,7 @@ material/0 = ExtResource( 21 )
 [node name="room" parent="active_entities/interior/wall1/floor1" index="4"]
 material/0 = ExtResource( 58 )
 material/1 = ExtResource( 1 )
-material/2 = SubResource( 282 )
+material/2 = SubResource( 317 )
 
 [node name="window_edges" parent="active_entities/interior/wall1/floor1/room" index="0"]
 material/0 = ExtResource( 21 )
@@ -1886,6 +1905,7 @@ default_music = ExtResource( 55 )
 
 [node name="refl_int1" type="ReflectionProbe" parent="active_entities/env_tower" index="0" groups=["powered_probe_113"]]
 transform = Transform( 0.811848, 0, -0.583869, 0, 1, 0, 0.583869, 0, 0.811848, -15.8652, -107.508, 13.6462 )
+intensity = 0.44
 max_distance = 68.5
 extents = Vector3( 54.3558, 27.7349, 42.7955 )
 origin_offset = Vector3( 0, 13.5137, -17.7622 )
@@ -1896,6 +1916,7 @@ interior_dark_ambient_color = Color( 0.294118, 0.333333, 0.313726, 1 )
 
 [node name="refl_int3" type="ReflectionProbe" parent="active_entities/env_tower" index="1" groups=["powered_probe_113"]]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.6656, -55.5028, -3.04078 )
+intensity = 0.46
 extents = Vector3( 54.3558, 24.5151, 42.7955 )
 cull_mask = 1047551
 interior_enable = true
@@ -1904,6 +1925,7 @@ interior_dark_ambient_color = Color( 0.329412, 0.427451, 0.356863, 1 )
 
 [node name="refl_int4" type="ReflectionProbe" parent="active_entities/env_tower" index="2" groups=["powered_probe_113"]]
 transform = Transform( 0.92197, 0, -0.387261, 0, 1, 0, 0.387261, 0, 0.92197, -1.6656, 8.11516, -3.04078 )
+intensity = 0.46
 extents = Vector3( 54.3558, 39.4201, 42.7955 )
 cull_mask = 1047551
 interior_enable = true
