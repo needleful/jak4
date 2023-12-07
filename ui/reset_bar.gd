@@ -15,17 +15,19 @@ onready var label := $Label
 var sleep := false
 var vis_sleep := sleep
 
-func _process(delta):
+func _physics_process(delta):
 	if value < 0.01 and sleep != vis_sleep:
 		label.text = sleep_text if sleep else reset_text
 		vis_sleep = sleep
 	var change := 0.0
 	if Input.is_action_pressed("reset"):
 		change = INCREASE * delta
-		show()
+		if !visible:
+			show()
 	elif sleep and Input.is_action_pressed("mv_crouch"):
 		change = INCREASE * delta
-		show()
+		if !visible:
+			show()
 	else:
 		change = -DECREASE * delta
 	

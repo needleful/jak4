@@ -171,27 +171,28 @@ func fly(pitch: float, roll: float, delta: float):
 		
 	var total_roll := delta*roll*roll_speed
 	
-	global_rotate(global_transform.basis.x, total_pitch)
-	global_rotate(global_transform.basis.z, total_roll)
+	var b := global_transform.basis.orthonormalized()
+	
+	global_rotate(b.x, total_pitch)
+	global_rotate(b.z, total_roll)
 	
 	velocity = velocity.rotated(
-		global_transform.basis.x, total_pitch).rotated(
-			global_transform.basis.z, total_roll)
-
+		b.x, total_pitch).rotated(
+			b.z, total_roll)
 	var lift := clamp(
 		wings_lift*lift_factor * velocity.dot(global_transform.basis.z),
 		-15, 15
-	) * global_transform.basis.y
+	) * b.y
 
-	var hvel := velocity.slide(global_transform.basis.y)
-	var yvel := velocity.project(global_transform.basis.y)
+	var hvel := velocity.slide(b.y)
+	var yvel := velocity.project(b.y)
 	var drag := -drag_factor*(hvel.length()*hvel)
 	var drag_y := -drag_y_factor*(yvel.length()*yvel)
 	
 	velocity += (gravity + lift + drag + drag_y)*delta
 	velocity = move_and_slide(velocity)
 	
-	var forward := global_transform.basis.z
+	var forward := b.z
 	var v := velocity.normalized()
 	if v.is_normalized():
 		var axis = forward.cross(v).normalized()
