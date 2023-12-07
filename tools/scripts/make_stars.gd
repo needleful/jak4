@@ -5,8 +5,8 @@ var gradient: Gradient = load("res://material/sky/star_gradient.tres")
 const star_count := 45000
 const min_distance := 10000
 const distance_range := 400
-const min_scale := 150.0
-const max_scale := 1000.0
+const min_scale := 100.0
+const max_scale := 800.0
 
 func _run():
 	var star_mesh = get_scene().get_node("stars") as MultiMeshInstance
