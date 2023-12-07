@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://entities/env/medium/hologram.gd" type="Script" id=1]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=2]
@@ -33,6 +33,9 @@
 [ext_resource path="res://_glb/env/furniture/pillow_small_mesh.mesh" type="ArrayMesh" id=31]
 [ext_resource path="res://audio/medium/medium_activated.ogg" type="AudioStream" id=32]
 [ext_resource path="res://audio/medium/medium_deactivated.ogg" type="AudioStream" id=33]
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = ExtResource( 11 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=306]
 
@@ -197,7 +200,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 1.5, 3 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 0, 0, 0, 1 ), Color( 0.764706, 0.937255, 0.94902, 1 ), Color( 0.392157, 0.458824, 0.466667, 1 ) ]
+"values": [ Color( 0.129412, 0.14902, 0.192157, 1 ), Color( 0.764706, 0.937255, 0.94902, 1 ), Color( 0.392157, 0.458824, 0.466667, 1 ) ]
 }
 
 [sub_resource type="Animation" id=281]
@@ -248,7 +251,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 1.2, 2.5 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 0.392157, 0.458824, 0.466667, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+"values": [ Color( 0.392157, 0.458824, 0.466667, 1 ), Color( 1, 1, 1, 1 ), Color( 0.129412, 0.14902, 0.192157, 1 ) ]
 }
 
 [sub_resource type="Animation" id=280]
@@ -411,6 +414,27 @@ transform = Transform( -4.37069e-08, 0, 0.999898, 0, 1, 0, -0.999898, 0, -4.3706
 path_node = NodePath("../intro_path")
 path_amount = 1.0
 
+[node name="Skeleton" parent="mum/Armature" index="0"]
+bones/6/bound_children = [ NodePath("head_attach") ]
+
+[node name="eyebrows" parent="mum/Armature/Skeleton" index="0"]
+material_override = SubResource( 8 )
+
+[node name="fullbody" parent="mum/Armature/Skeleton" index="1"]
+material_override = SubResource( 8 )
+
+[node name="hat" parent="mum/Armature/Skeleton" index="2"]
+material_override = SubResource( 8 )
+
+[node name="head" parent="mum/Armature/Skeleton" index="3"]
+material_override = SubResource( 8 )
+
+[node name="pants" parent="mum/Armature/Skeleton" index="4"]
+material_override = SubResource( 8 )
+
+[node name="shirt" parent="mum/Armature/Skeleton" index="5"]
+material_override = SubResource( 8 )
+
 [node name="head_attach" parent="mum/Armature/Skeleton" index="6"]
 transform = Transform( 1.08, 1.98952e-13, 7.72478e-07, 7.56241e-07, 0.220271, -1.0573, -1.5755e-07, 1.0573, 0.220271, -2.10913e-14, 1.38066, -0.00689602 )
 
@@ -547,6 +571,7 @@ shape = SubResource( 1 )
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.520651, 0.0393349 )
 layers = 65536
+intensity = 0.34
 extents = Vector3( 4.20511, 1.73285, 4.19788 )
 origin_offset = Vector3( 0.0356445, 0, -0.0307617 )
 cull_mask = 65536
