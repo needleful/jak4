@@ -597,9 +597,12 @@ func use_item(id:String, desc: ItemDescription = null):
 	if !by_item.empty():
 		_goto_special(by_item[0], by_item[1])
 		return
-	var by_tag := _find_item("item", desc.tags if desc else [], true)
-	if !by_tag.empty():
-		_goto_special(by_tag[0], by_tag[1])
+	if desc and !desc.tags.empty():
+		var by_tag := _find_item("item", desc.tags if desc else [], true)
+		if !by_tag.empty():
+			_goto_special(by_tag[0], by_tag[1])
+		else:
+			_no_label()
 	else:
 		_no_label()
 
