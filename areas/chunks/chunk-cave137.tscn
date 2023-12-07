@@ -1,4 +1,4 @@
-[gd_scene load_steps=129 format=2]
+[gd_scene load_steps=131 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://items/usable/lantern.tscn" type="PackedScene" id=2]
@@ -78,6 +78,8 @@
 [ext_resource path="res://entities/env/copper/crate1.tscn" type="PackedScene" id=76]
 [ext_resource path="res://areas/chunks/chunk-cave137.gd" type="Script" id=77]
 [ext_resource path="res://audio/music/hive.ogg" type="AudioStream" id=78]
+[ext_resource path="res://entities/env/stone/rock7.tscn" type="PackedScene" id=79]
+[ext_resource path="res://entities/env/stone/rock6.tscn" type="PackedScene" id=80]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 65.8805
@@ -846,6 +848,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.4968, -76.8707, 8.27191 )
 [node name="bug_pickup" parent="active_entities/cave1" index="11" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0537, -52.4768, -35.381 )
 
+[node name="gem_pickup" parent="active_entities/cave1" index="12" instance=ExtResource( 28 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 111.142, -35.1248, -97.0942 )
+
 [node name="cave2" type="Spatial" parent="active_entities" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 27.2983, -74.5096, 114.055 )
 
@@ -983,7 +988,7 @@ transform = Transform( 0.253288, -0.940803, -0.225242, 0.965617, 0.259968, 0, 0.
 transform = Transform( 0.974303, -0.0128871, 0.224873, 0, -0.998362, -0.0572146, 0.225242, 0.0557443, -0.972707, 16.7363, -13.0374, 13.3171 )
 
 [node name="rock14" parent="active_entities/cave_center" index="5" instance=ExtResource( 7 )]
-transform = Transform( 0.788839, 0.0128871, 0.614465, -0.0444095, 0.998362, 0.0360736, -0.612993, -0.0557443, 0.788119, 1.69131, -11.8255, -3.59484 )
+transform = Transform( 0.788839, -0.0331088, 0.613707, -0.0444095, 0.992867, 0.110647, -0.612993, -0.114537, 0.781742, 1.69779, -11.3236, -3.62287 )
 
 [node name="rock9" parent="active_entities/cave_center" index="6" instance=ExtResource( 13 )]
 transform = Transform( 0.974303, -0.224887, -0.0126419, 0, 0.056126, -0.998424, 0.225242, 0.972767, 0.0546837, -8.17221, -1.0362, -3.13006 )
@@ -1049,7 +1054,7 @@ transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, -10.157, 0.304836, -3.8141 )
 
 [node name="stamina_up_pickup" parent="active_entities/cave_center" index="27" instance=ExtResource( 25 )]
-transform = Transform( 0.974303, 0.223896, 0.0245864, 0, -0.109156, 0.994025, 0.225242, -0.968481, -0.106351, -9.51597, 10.8565, -0.487911 )
+transform = Transform( 0.974303, 0.223896, 0.0245864, 0, -0.109156, 0.994025, 0.225242, -0.968481, -0.106351, -8.30345, 10.3826, -6.34528 )
 
 [node name="gem_pickup" parent="active_entities/cave_center" index="28" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 35.8325, 17.5681, -31.7416 )
@@ -1083,6 +1088,9 @@ transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 9
 
 [node name="gem_pickup10" parent="active_entities/cave_center" index="38" instance=ExtResource( 28 )]
 transform = Transform( 0.974303, 0, -0.225242, 0, 1, 0, 0.225242, 0, 0.974303, 7.22888, 37.4559, -39.8589 )
+
+[node name="scrap3" parent="active_entities/cave_center" index="39" instance=ExtResource( 34 )]
+transform = Transform( -0.41671, -0.906394, -0.0692887, -0.173106, 0.153949, -0.972797, 0.892405, -0.39338, -0.221055, 12.0558, -3.95983, 25.8166 )
 
 [node name="door_entry" type="AnimationPlayer" parent="active_entities/zone_arena" index="0"]
 anims/Activate = SubResource( 26 )
@@ -2278,6 +2286,18 @@ mesh_node = NodePath("../deathgnat/Armature/Skeleton/bug")
 
 [node name="crawly3" parent="active_entities/zone_spawn/when_spawning" index="10" groups=["enemy137"] instance=ExtResource( 11 )]
 transform = Transform( 0.575972, 0, -0.817469, 0, 1, 0, 0.817469, 0, 0.575972, 19.3336, 6.80708, -13.2267 )
+
+[node name="rock1" parent="active_entities" index="10" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 257.038, -39.4585, -95.5364 )
+
+[node name="rock7" parent="active_entities" index="11" instance=ExtResource( 79 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 245.955, -43.8796, -98.1956 )
+
+[node name="rock6" parent="active_entities" index="12" instance=ExtResource( 80 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 233.804, -45.4703, -83.3687 )
+
+[node name="rock2" parent="active_entities" index="13" instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, -0.91157, 0.411145, 0, -0.411145, -0.91157, 247.664, -40.3941, -75.5228 )
 
 [node name="spawning_chamber" parent="izone_spawn" index="0"]
 material/0 = ExtResource( 57 )

@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://player/base_mesh.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/items/vis/coat.gd" type="Script" id=2]
 [ext_resource path="res://ui/items/vis/jackie_preview.gd" type="Script" id=3]
-[ext_resource path="res://player/materials/jackie_base.tres" type="Material" id=4]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=2]
 
@@ -13,47 +12,59 @@ script = ExtResource( 3 )
 [node name="Armature" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.485731, 0 )
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/2/bound_children = [  ]
+bones/3/bound_children = [  ]
+bones/4/bound_children = [  ]
+bones/6/bound_children = [  ]
+bones/29/bound_children = [  ]
+bones/48/bound_children = [  ]
+bones/52/bound_children = [  ]
+bones/58/bound_children = [  ]
+bones/60/bound_children = [  ]
+bones/62/bound_children = [  ]
+bones/64/bound_children = [  ]
+
 [node name="coat" parent="Armature/Skeleton" index="0"]
-material/1 = ExtResource( 4 )
 script = ExtResource( 2 )
 
 [node name="footLeft" parent="Armature/Skeleton" index="4"]
-transform = Transform( 0.0649371, 0.0457722, -0.996839, -0.759354, -0.645851, -0.0791222, -0.64743, 0.762092, -0.00718242, 0.118933, 0.108842, -0.0029966 )
+transform = Transform( 0.0610292, 0.0446531, -0.997137, -0.761391, -0.643891, -0.0754347, -0.645415, 0.763814, -0.00529778, 0.118805, 0.108815, -0.00336724 )
 
 [node name="footRight" parent="Armature/Skeleton" index="5"]
-transform = Transform( 0.064823, -0.0460268, 0.996834, 0.760975, -0.643927, -0.0792173, 0.645534, 0.763702, -0.00671603, -0.1185, 0.10881, -0.00250044 )
+transform = Transform( 0.0608697, -0.0446781, 0.997145, 0.763713, -0.641144, -0.0753471, 0.642679, 0.76612, -0.0049049, -0.118678, 0.108781, -0.00167888 )
 
 [node name="chest" parent="Armature/Skeleton" index="6"]
-transform = Transform( 1, 1.23954e-06, -0.000107063, 1.51474e-05, 0.988238, 0.152923, 0.000105993, -0.152923, 0.988238, -0.00114369, 1.01887, -0.00272434 )
+transform = Transform( 1, 3.07199e-06, -0.000222046, 3.092e-05, 0.988238, 0.152923, 0.000219904, -0.152923, 0.988238, 1.14434e-05, 1.01884, -0.00911283 )
 
 [node name="head" parent="Armature/Skeleton" index="7"]
-transform = Transform( 0.909533, -0.000991319, -0.000751326, -0.000545832, 0.175575, -0.892426, 0.00111771, 0.892426, 0.175574, -0.00110629, 1.20541, -0.00250599 )
+transform = Transform( 0.933262, -0.000418933, -0.000256083, -0.000167226, 0.186447, -0.914449, 0.000461647, 0.914449, 0.186447, 2.14122e-05, 1.20695, -0.00928591 )
 
 [node name="hair" parent="Armature/Skeleton/head" index="2"]
 player_velocity_influence = false
 
 [node name="gun" parent="Armature/Skeleton" index="8"]
-transform = Transform( 0.746393, -0.115384, 0.655427, -0.0993021, -0.99314, -0.0617533, 0.658056, -0.018993, -0.75273, 0.210156, 0.702639, 0.000598487 )
+transform = Transform( 0.722954, -0.116922, 0.680931, -0.0516609, -0.991966, -0.115481, 0.688963, 0.0483098, -0.723186, 0.210088, 0.702826, 0.0215668 )
 visible = false
 script = null
 
 [node name="handRight" parent="Armature/Skeleton" index="10"]
-transform = Transform( 0.735418, 0.0732545, -0.673643, -0.0146222, -0.992192, -0.123858, -0.677456, 0.100937, -0.728605, -0.212625, 0.716585, 0.0222911 )
+transform = Transform( 0.71901, 0.0740273, -0.691046, -0.0374265, -0.988744, -0.144858, -0.693992, 0.130018, -0.708147, -0.212631, 0.716787, 0.0344815 )
 
 [node name="knee_left" parent="Armature/Skeleton" index="11"]
-transform = Transform( -0.0459581, 0.0631412, -0.996946, -0.0455245, -0.997097, -0.0610519, -0.997906, 0.0425796, 0.0486989, 0.0855215, 0.775603, 0.017702 )
+transform = Transform( -0.0382346, 0.0617108, -0.997362, -0.0601496, -0.996424, -0.0593468, -0.997457, 0.0577218, 0.0418096, 0.0866772, 0.775573, 0.0113146 )
 
 [node name="knee_right" parent="Armature/Skeleton" index="12"]
-transform = Transform( -0.0402882, -0.0590658, 0.997441, 0.0483258, -0.997198, -0.0570994, 0.998019, 0.0459017, 0.0430298, -0.0878216, 0.775626, 0.0176962 )
+transform = Transform( -0.0383038, -0.061444, 0.997375, 0.0621225, -0.996324, -0.0589933, 0.997333, 0.0596998, 0.0419801, -0.0866659, 0.775601, 0.0113068 )
 
 [node name="coat_tails" parent="Armature/Skeleton" index="13"]
-transform = Transform( -0.000191396, 0.000164074, -1, 0.000480086, -1, -0.000164155, -1, -0.000480086, 0.000191275, -0.00386236, 0.917745, 0.0276829 )
+transform = Transform( -0.000165203, 0.000195326, -1, 0.000483096, -1, -0.000195395, -1, -0.000483155, 0.000165066, -0.00270772, 0.917718, 0.0212942 )
 
 [node name="lumbar" parent="Armature/Skeleton" index="14"]
-transform = Transform( 1, -2.03905e-05, -3.47163e-05, 7.73819e-06, 0.943531, -0.331283, 3.95109e-05, 0.331283, 0.943531, -0.00114145, 0.840857, -0.0247966 )
+transform = Transform( 1, -4.14359e-05, -7.16658e-05, 1.53544e-05, 0.943531, -0.331283, 8.13459e-05, 0.331283, 0.943531, 1.59631e-05, 0.84083, -0.031185 )
 
 [node name="backLower" parent="Armature/Skeleton" index="15"]
-transform = Transform( 1, -3.13826e-06, -7.35714e-05, 1.13994e-05, 0.993645, 0.112559, 7.27506e-05, -0.112559, 0.993645, -0.00114342, 0.931809, 0.0071374 )
+transform = Transform( 1, -5.9975e-06, -0.000152272, 2.30989e-05, 0.993645, 0.112559, 0.000150629, -0.112559, 0.993645, 1.19689e-05, 0.931781, 0.000748901 )
 
 [node name="anim" parent="." index="1"]
 autoplay = "Sitting_Floor-loop"

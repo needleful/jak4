@@ -16,7 +16,7 @@ export(NodePath) var cutscene_player
 
 var last_animation := ""
 
-const anim_range := 20*20
+var anim_range := 20*20
 
 const coat_dialog := "res://dialog/_coat.dialog"
 

@@ -282,10 +282,9 @@ func on_item_changed(item: String, change: int, count: int, startup := false):
 							player.equipped_item.equip()
 							update_equipment()
 				if !startup and equipment_inventory.size() > old_item_count:
-					if equipment_inventory.size() == 1:
-						show_prompt(["use_item"], tr("Use Item"))
-					else:
-						show_prompt(["choose_item"], tr("(Hold) Swap Item"))
+					show_prompt(["use_item"], tr("Use " + item.capitalize()))
+					if equipment_inventory.size() > 1:
+						queue_prompt(["choose_item"], tr("(Hold) Swap Item"))
 
 func on_task_completed(id: String):
 	write_log("Task Completed: "+ id.capitalize())

@@ -19,7 +19,7 @@ func _process(delta):
 		return
 	var current_position := global_transform.origin
 	var dir : Vector3
-	if look_at_player:
+	if look_at_player and player:
 		dir = player.global_transform.origin - current_position
 	else:
 		dir = (current_position - last_position)
@@ -66,6 +66,7 @@ func fall():
 	anim.play("Air")
 
 func start_tutorial():
+	anim_range = 200*200
 	set_process(true)
 	chase = true
 	disable_dialog()
@@ -73,6 +74,7 @@ func start_tutorial():
 	$tutorial_area.next_stage()
 
 func end_tutorial():
+	anim_range = 20*20
 	chase = false
 
 func disable_dialog():
