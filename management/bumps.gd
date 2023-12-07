@@ -94,6 +94,8 @@ const sounds := {
 
 const MIN_DOT_TERRAIN_SAND := 0.85
 
+onready var generic_sfx := $generic_sfx
+
 func step_on(surface: Node, position:Vector3, sliding := false, normal := Vector3.UP):
 	var impact = Impact.Footstep if !sliding else Impact.SlidingStep
 	impact_on(surface, impact, position, normal)
@@ -177,6 +179,20 @@ func emit_particles_once(ename: String, e: Particles, position: Vector3, normal:
 		e.emitting = false
 		remove_child(e)
 		ObjectPool.put(ename, e)
+
+func emit_sound(stream: AudioStream, position: Vector3, volume_db := 0.0, randomize_pitch := true):
+	var s: AudioStreamPlayer3D
+	if ObjectPool.has("generic_sfx"):
+		s = ObjectPool.get("generic_sfx")
+	else:
+		s = generic_sfx.duplicate()
+	s.stream = stream
+	s.unit_db = volume_db
+	if randomize_pitch:
+		s.pitch_scale = rand_range(0.9, 1.1)
+	else:
+		s.pitch_scale = 1.0
+	play_sound_once("generic_sfx", s, position)
 
 func play_sound_once(type: String, s: AudioStreamPlayer3D, position: Vector3):
 	add_child(s)

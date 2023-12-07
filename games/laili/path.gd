@@ -7,6 +7,8 @@ export(Mesh) var rope_knot:Mesh
 export(Mesh) var rope_segment:Mesh
 export(ShaderMaterial) var rope_material:ShaderMaterial
 
+const click := preload("res://audio/games/laili_segment_click.wav")
+
 var active_segment:Spatial = null
 var previous_node:Spatial = null
 var previous_checkpoint:Spatial = null
@@ -123,3 +125,4 @@ func tie_rope(point:Vector3):
 	k.material_override = rope_material
 	rope_compositor.add_child(k)
 	k.global_transform.origin = point
+	Bumps.emit_sound(click, point)
