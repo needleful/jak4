@@ -7,7 +7,6 @@ signal show_stats
 signal damaged
 
 const GRAVITY := Vector3.DOWN*24.0
-export(bool) var doppleganger := false
 
 # Movement
 const SPEED_WALK := 1.5
@@ -378,11 +377,6 @@ const TIMERS_MAX := 3
 onready var debug = ui.game.get_node("debug")
 
 func _ready():
-	if doppleganger:
-		set_process_input(false)
-		set_process(false)
-		set_physics_process(false)
-		return
 	if Global.valid_game_state:
 		set_saved_transform(Global.game_state.checkpoint_position)
 		set_current_coat(Global.game_state.current_coat, false)
