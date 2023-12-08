@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://areas/chunk_content.gd" type="Script" id=1]
 [ext_resource path="res://entities/env/copper/palace1.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/env/copper/palace2.tscn" type="PackedScene" id=3]
 [ext_resource path="res://entities/env/copper/palace_roof1.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/env/copper/scrap_pile1.tscn" type="PackedScene" id=5]
+[ext_resource path="res://areas/test/reflection_probes.tscn" type="PackedScene" id=6]
 [ext_resource path="res://entities/env/copper/scrap1.tscn" type="PackedScene" id=7]
 [ext_resource path="res://entities/env/copper/scrap_pile2.tscn" type="PackedScene" id=8]
 [ext_resource path="res://items/gem_pickup.tscn" type="PackedScene" id=9]
@@ -13,12 +14,18 @@
 [ext_resource path="res://items/bug_pickup.tscn" type="PackedScene" id=12]
 [ext_resource path="res://entities/enemies/crawly.tscn" type="PackedScene" id=13]
 [ext_resource path="res://entities/env/ancient/ascrap1.tscn" type="PackedScene" id=14]
+[ext_resource path="res://management/environment_override.gd" type="Script" id=15]
 [ext_resource path="res://entities/env/copper/scrap3.tscn" type="PackedScene" id=16]
 [ext_resource path="res://ui/items/vis/mesh_hover_scooter.tscn" type="PackedScene" id=17]
 [ext_resource path="res://items/item_pickup.tscn" type="PackedScene" id=18]
 
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 30.9927, 35.5397, 24.2729 )
+
 [node name="chunk126" type="MultiMeshSystem"]
 script = ExtResource( 1 )
+custom_neighbors = {
+}
 
 [node name="zone_tower" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 130.951, 0, 72.1417 )
@@ -296,3 +303,20 @@ transform = Transform( -0.997786, 0, 0.0665003, 0, 1, 0, -0.0665003, 0, -0.99778
 
 [node name="gem_pickup102" parent="active_entities/zone_tower" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.19527, 1.89951, 40.6623 )
+
+[node name="CSGBox" type="CSGBox" parent="active_entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 47.2512, 0 )
+width = 120.151
+height = 96.6924
+
+[node name="env" type="Area" parent="active_entities/CSGBox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5793, -6.04673 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 15 )
+
+[node name="set1" parent="active_entities/CSGBox/env" instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 25.9813 )
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/CSGBox/env"]
+shape = SubResource( 1 )

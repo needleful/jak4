@@ -50,11 +50,11 @@ func _on_text_entered(new_text):
 	index = history.size()
 	line_edit.text = ""
 	var ex = Expression.new()
-	var res = ex.parse(new_text, ["Global"])
+	var res = ex.parse(new_text, ["Global", "VisualServer"])
 	if res != OK:
 		echo(ex.get_error_text())
 		return
-	var output = ex.execute([Global], self)
+	var output = ex.execute([Global, VisualServer], self)
 	if ex.has_execute_failed():
 		echo(ex.get_error_text() + str(output))
 	else:
