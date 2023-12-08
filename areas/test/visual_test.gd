@@ -1,30 +1,25 @@
 extends Spatial
 
-export(PackedScene) var probes: PackedScene
+onready var scn : Node
 
-onready var node1: Node = $set1
-onready var node2: Node = $set2
+func _on_load_toggled(on):
+	if on:
+		scn = load("res://areas/test/reflection_probes.tscn").instance()
+		print("LOADED")
+	elif scn:
+		print("UNLOADED")
+		scn.queue_free()
+		scn = null
 
-onready var probe_scene1 := probes.instance()
-onready var probe_scene2 := probes.instance()
+func _on_activate_toggled(on):
+	if on and scn:
+		print("ACTIVATED")
+		add_child(scn)
+	elif scn and scn.is_inside_tree():
+		print("DEACTIVATED")
+		remove_child(scn)
 
-func _on_toggled1(toggled: bool):
-	if !node1:
-		return
-	elif toggled:
-		if not probe_scene1.is_inside_tree():
-			node1.add_child(probe_scene1)
-		node1.show()
-	else:
-		node1.hide()
-	probe_scene1.visible = toggled
-
-func _on_toggled2(toggled: bool):
-	if !node2:
-		return
-	elif toggled:
-		node2.add_child(probe_scene2)
-	else:
-		node2.remove_child(probe_scene2)
-	probe_scene2.visible = toggled
-
+func _on_show_toggled(on):
+	if scn and scn.is_inside_tree():
+		scn.visible = on
+		print("SHOWN" if on else "HIDDEN")

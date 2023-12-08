@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://areas/test/visual_test.gd" type="Script" id=1]
-[ext_resource path="res://areas/test/reflection_probes.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/components/monitor_label.gd" type="Script" id=3]
 [ext_resource path="res://entities/control/dswitch.tscn" type="PackedScene" id=4]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=5]
@@ -75,8 +74,6 @@ extents = Vector3( 5, 25, 5 )
 size = Vector3( 10, 50, 10 )
 
 [node name="Spatial" type="Spatial"]
-script = ExtResource( 1 )
-probes = ExtResource( 2 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
 use_collision = true
@@ -305,15 +302,35 @@ property = "player/body_mesh/Armature/Skeleton/ik_break/booba_ik_target.velocity
 format = "Booba: %s"
 
 [node name="set1" type="Spatial" parent="."]
+script = ExtResource( 1 )
+
+[node name="load" parent="set1" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.87978, 1, 11.5827 )
+
+[node name="activate" parent="set1" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7329, 1, 11.2496 )
+
+[node name="show" parent="set1" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3105, 1, 11.2496 )
+on = true
 
 [node name="set2" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.599, 0 )
+script = ExtResource( 1 )
 
-[node name="dswitch" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0898, 1, 11.5827 )
+[node name="load" parent="set2" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 0.998435, 0.0559248, 0, -0.0559248, 0.998435, -7.87978, -22.5094, 0.779094 )
 
-[node name="dswitch2" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.01537, 1, 11.8874 )
+[node name="activate" parent="set2" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 0.998435, 0.0559248, 0, -0.0559248, 0.998435, -10.7329, -22.5094, 0.445983 )
 
-[connection signal="toggled" from="dswitch" to="." method="_on_toggled1"]
-[connection signal="toggled" from="dswitch2" to="." method="_on_toggled2"]
+[node name="show" parent="set2" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 0.998435, 0.0559248, 0, -0.0559248, 0.998435, -13.3105, -22.5094, 0.445983 )
+on = true
+
+[connection signal="toggled" from="set1/load" to="set1" method="_on_load_toggled"]
+[connection signal="toggled" from="set1/activate" to="set1" method="_on_activate_toggled"]
+[connection signal="toggled" from="set1/show" to="set1" method="_on_show_toggled"]
+[connection signal="toggled" from="set2/load" to="set2" method="_on_load_toggled"]
+[connection signal="toggled" from="set2/activate" to="set2" method="_on_activate_toggled"]
+[connection signal="toggled" from="set2/show" to="set2" method="_on_show_toggled"]
