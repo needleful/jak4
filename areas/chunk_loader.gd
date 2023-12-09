@@ -101,6 +101,7 @@ func _add_content(chunk: Spatial, content: PackedScene, active: bool = false):
 		n.set_active(active)
 		chunk.add_child(n)
 		_status[chunk.name] = Status.Loaded
+		print("LOADED: ", chunk.name)
 
 func is_alive():
 	return _load_thread.is_alive()
@@ -152,6 +153,7 @@ func unload(chunk: Spatial):
 	_status[chunk.name] = Status.Unloaded
 	if chunk.has_node("dynamic_content"):
 		chunk.get_node("dynamic_content").queue_free()
+		print("UNLOADED: ", chunk.name)
 	if chunk.name in _hires:
 		var r = _hires[chunk.name]
 		if r is Resource:
@@ -167,10 +169,14 @@ func unload(chunk: Spatial):
 
 func activate(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
+		if !chunk.get_node("dynamic_content").is_active():
+			print("ACTIVATED: ", chunk.name)
 		chunk.get_node("dynamic_content").set_active(true)
 
 func deactivate(chunk: Spatial):
 	if chunk.has_node("dynamic_content"):
+		if chunk.get_node("dynamic_content").is_active():
+			print("DEACTIVATED: ", chunk.name)
 		chunk.get_node("dynamic_content").set_active(false)
 
 func is_loaded(chunk: Spatial):
