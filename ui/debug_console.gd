@@ -121,7 +121,6 @@ func echo(text):
 	label.autowrap = true
 	logs.add_child(label)
 	label.text = text
-	print("CONSOLE: ", text)
 
 func view_history(offset):
 	if history.size() == 0:
@@ -192,14 +191,6 @@ func load_chunk(chunk_name: String):
 	scene.chunk_loader.queue_load(chunk, false)
 	echo("Loading "+ chunk_name)
 
-func active_chunks():
-	var result := []
-	var loader: ChunkLoader = get_tree().current_scene.chunk_loader
-	for chunk in loader._nodes.values():
-		if loader.is_active(chunk):
-			result.append(chunk.name)
-	return result
-
 func activate_chunk(chunk_name: String):
 	var scene := get_tree().current_scene
 	var chunk := scene.get_node(chunk_name)
@@ -218,12 +209,3 @@ func chunk_debug():
 		return
 	var n = get_tree().current_scene.get_node("debug")
 	n.visible = !n.visible
-
-func a():
-	if !"attempt" in dict:
-		dict.attempt = 1
-	else:
-		dict.attempt += 1
-	echo("Repro attempt "+ str(dict.attempt))
-	noclip()
-	echo("Active chunks: "+str(active_chunks()))
