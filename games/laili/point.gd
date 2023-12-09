@@ -1,9 +1,23 @@
 extends Area
 
+const booster_color := Color.darkorange
+const checkpoint_color := Color.aqua
+
 export(bool) var checkpoint
 export(int, 0, 10) var extra_stamina
 
 var active:bool = false setget set_active
+
+func _ready():
+	if has_node("MeshInstance"):
+		if extra_stamina:
+			var m:ShaderMaterial = $MeshInstance.get_surface_material(0).duplicate()
+			m.set_shader_param("color", booster_color)
+			$MeshInstance.set_surface_material(0, m)
+		elif checkpoint:
+			var m:ShaderMaterial = $MeshInstance.get_surface_material(0).duplicate()
+			m.set_shader_param("color", checkpoint_color)
+			$MeshInstance.set_surface_material(0, m)
 
 func set_active(a):
 	active = a

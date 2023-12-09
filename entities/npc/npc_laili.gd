@@ -47,6 +47,7 @@ func start_climb() -> bool:
 	get_node(climbing_path).start()
 	global_transform = get_node(laili_start).global_transform
 	Global.get_player().teleport_to(get_node(player_start).global_transform)
+	Global.get_player().ui.show_prompt(["reset"], "(Hold) Reset to Checkpoint when Stuck")
 	return true
 
 func show_plane() -> bool:
@@ -91,3 +92,4 @@ func reset_flight():
 		var p := Global.get_player()
 		if p:
 			p.fade_in()
+			p.ui.show_prompt(["reset"], "(Hold) Spawn at Glider")
