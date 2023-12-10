@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://areas/test/streamer.gd" type="Script" id=1]
 [ext_resource path="res://areas/world.gd" type="Script" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://areas/env_settings.gd" type="Script" id=26]
 [ext_resource path="res://areas/stars.multimesh" type="MultiMesh" id=27]
 [ext_resource path="res://material/debug/demo_border.gdshader" type="Shader" id=28]
+[ext_resource path="res://areas/world_env.tres" type="Environment" id=29]
 [ext_resource path="res://material/demo_boundary.material" type="Material" id=101]
 [ext_resource path="res://areas/test/demo_fence.gd" type="Script" id=102]
 [ext_resource path="res://entities/control/conditional.gd" type="Script" id=105]
@@ -518,35 +519,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 30000.0 ]
 }
-
-[sub_resource type="ProceduralSky" id=2]
-radiance_size = 0
-sky_top_color = Color( 0.360784, 0.866667, 1, 1 )
-sky_curve = 0.0998612
-ground_bottom_color = Color( 0.215686, 0.25098, 0.321569, 1 )
-ground_horizon_color = Color( 1.2, 1.2, 1.2, 1 )
-ground_curve = 0.226274
-sun_color = Color( 5.2, 2.33, 0.05, 1 )
-sun_latitude = 49.55
-sun_longitude = 69.09
-texture_size = 0
-
-[sub_resource type="Environment" id=3]
-background_mode = 1
-background_sky = SubResource( 2 )
-background_color = Color( 0.286275, 0.223529, 0.54902, 1 )
-ambient_light_color = Color( 0.27451, 0.294118, 0.388235, 1 )
-indirect_light_color = Color( 0.380392, 0.556863, 0.784314, 1 )
-fog_enabled = true
-fog_color = Color( 1, 1.5, 2.5, 1 )
-fog_depth_end = 12000.0
-fog_transmit_enabled = true
-fog_height_min = 4000.0
-fog_height_max = -4000.0
-auto_exposure_scale = 1.0
-auto_exposure_min_luma = 0.0
-glow_enabled = true
-glow_strength = 0.82
 
 [sub_resource type="DynamicFont" id=4]
 size = 108
@@ -2545,7 +2517,7 @@ anims/day_night_normal = SubResource( 79 )
 anims/map_screenshot = SubResource( 102 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="417"]
-environment = SubResource( 3 )
+environment = ExtResource( 29 )
 
 [node name="env_settings" type="Node" parent="." index="418"]
 script = ExtResource( 26 )

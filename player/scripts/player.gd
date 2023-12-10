@@ -1018,7 +1018,7 @@ func _physics_process(delta):
 			rotate_to_velocity(desired_velocity)
 		State.RollJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
-			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity.normalized(), "rolljump")
+			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, velocity.normalized(), "movement")
 			rotate_to_velocity(desired_velocity)
 		State.RollFall, State.WallJump:
 			accel_air(delta, desired_velocity*SPEED_ROLL, av, ACCEL_ROLL_AIR)
@@ -1073,10 +1073,10 @@ func _physics_process(delta):
 			if average_normal.dot(Vector3.UP) > MIN_DOT_SLIDE:
 				ground_normal = average_normal
 			accel(delta, desired_velocity*SPEED_RUN, av)
-			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "spin")
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "movement")
 		State.AirSpinKick:
 			accel_low_gravity(delta, desired_velocity*SPEED_RUN, av, 0.75)
-			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "spin")
+			damage_point(spin_hitbox, DAMAGE_SPIN, global_transform.origin, "movement")
 		State.UppercutWindup:
 			accel(delta, 0.5*desired_velocity*SPEED_CROUCH, av)
 			rotate_to_velocity(desired_velocity)

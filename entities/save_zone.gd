@@ -1,5 +1,6 @@
 extends Area
 
+signal saved
 export(bool) var heal := true
 
 func _ready():
@@ -10,3 +11,7 @@ func _on_body_entered(body):
 		if heal:
 			body.call_deferred("heal")
 		Global.call_deferred("save_checkpoint", body.get_save_transform())
+		if get_parent().has_method("signal_saved"):
+			get_parent().signal_saved()
+		else:
+			emit_signal("saved")

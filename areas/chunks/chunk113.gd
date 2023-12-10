@@ -12,6 +12,7 @@ func _on_power_deactivated():
 		var _x = Global.add_stat("capacitor_113")
 		_x = Global.abolish_notes(["the_tree_tower", "village_tower"])
 		$active_entities/shutdown.play()
+	get_tree().call_group("reset_tutorial", "queue_free")
 	get_tree().call_group(reflection_group, "set", "interior_ambient_color", deactivated_color)
 	get_tree().call_group(reflection_group, "set", "interior_dark_ambient_color", deactivated_dark_color)
 	for c in get_node(active_lights).get_children():
