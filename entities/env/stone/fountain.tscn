@@ -1,10 +1,20 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://material/env/stone/bricks.material" type="Material" id=1]
+[ext_resource path="res://material/main_spatial.shader" type="Shader" id=1]
 [ext_resource path="res://_glb/entities/fountain.glb" type="PackedScene" id=2]
 [ext_resource path="res://entities/save_zone.gd" type="Script" id=3]
 [ext_resource path="res://material/water_surface.material" type="Material" id=4]
 [ext_resource path="res://entities/fountain.gd" type="Script" id=5]
+[ext_resource path="res://_glb/env/stone/stone_fountain_albedo.png" type="Texture" id=6]
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 1 )
+shader_param/subsurface_scattering = -1.0
+shader_param/softness = 1.0
+shader_param/specularity = 1.0
+shader_param/uv_scale = Vector2( 1, 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/main_texture = ExtResource( 6 )
 
 [sub_resource type="SphereShape" id=2]
 radius = 5.15605
@@ -31,7 +41,7 @@ script = ExtResource( 5 )
 water = NodePath("water/circle")
 
 [node name="fountain" parent="." index="0"]
-material/0 = ExtResource( 1 )
+material/0 = SubResource( 4 )
 
 [node name="save_zone" type="Area" parent="." index="1"]
 collision_layer = 0
