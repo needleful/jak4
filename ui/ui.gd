@@ -421,7 +421,7 @@ func set_mode(m):
 	if should_pause and $story_time.queued_story:
 		m = Mode.StoryTime
 		$story_time.start_countdown()
-	
+
 	if m != Mode.Paused:
 		Global.get_player().set_camera_render(true)
 	elif toggled_pause:
@@ -434,9 +434,14 @@ func set_mode(m):
 			continue
 		c.visible = i == mode
 		i += 1
+	if mode == Mode.Gameing and !prompt_queue.empty():
+		_on_prompt_timer_timeout()
 
 func show_prompt(actions: Array, text: String, joiner := "+"):
 	var tut := game.get_node("tutorial")
+	if mode != Mode.Gameing or tut.visible:
+		queue_prompt(actions, text, joiner)
+		return
 	tut.get_node("prompt_timer").stop()
 	tut.get_node("joiner").text = joiner
 	if actions.size() >= 1:
@@ -468,9 +473,10 @@ func hide_prompt():
 	game.get_node("tutorial/prompt_timer").stop()
 
 func _on_prompt_timer_timeout():
-	if prompt_queue.empty():
-		game.get_node("tutorial").hide()
-	else:
+	if mode != Mode.Gameing:
+		return
+	game.get_node("tutorial").hide()
+	if !prompt_queue.empty():
 		var prompt : Dictionary = prompt_queue.pop_front()
 		show_prompt(prompt.actions, prompt.text, prompt.joiner)
 
