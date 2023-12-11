@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=2]
+[gd_scene load_steps=116 format=2]
 
 [ext_resource path="res://entities/one_time/chunks/chunk112.gd" type="Script" id=1]
 [ext_resource path="res://entities/npc/npc_shop.tscn" type="PackedScene" id=2]
@@ -140,8 +140,14 @@ tracks/0/keys = {
 [sub_resource type="SphereShape" id=235]
 radius = 7.23317
 
+[sub_resource type="SphereShape" id=256]
+radius = 2.06627
+
 [sub_resource type="BoxShape" id=254]
 extents = Vector3( 19.8624, 8.63695, 7.71012 )
+
+[sub_resource type="SphereShape" id=255]
+radius = 2.50619
 
 [sub_resource type="BoxShape" id=253]
 extents = Vector3( 8.75734, 6.41667, 13.7732 )
@@ -734,6 +740,9 @@ transform = Transform( -0.439641, 0, 0.898174, 0, 1, 0, -0.898174, 0, -0.439641,
 [node name="pail5" parent="zone_village_vis/hut_bath2" index="1" instance=ExtResource( 44 )]
 transform = Transform( -0.242387, 0, -0.970179, 0, 1, 0, 0.970179, 0, -0.242387, 1.58387, -0.293991, -2.29094 )
 
+[node name="rock4" parent="zone_village_vis" index="20" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 0.930254, 0.366916, 0, -0.366916, 0.930254, -86.974, -20.5041, -43.914 )
+
 [node name="zone_valley_vis" type="Spatial" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 154.17, -239.567, -181.209 )
 
@@ -1298,7 +1307,23 @@ mode = 1
 [node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/tutorial_prompts/spinkick" index="0"]
 shape = SubResource( 235 )
 
-[node name="climb" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="4"]
+[node name="spinkick2" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -96.6962, 21.2485, -17.6406 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+enabled = false
+input_actions = [ "mv_jump", "combat_spin" ]
+text = "Air Kick"
+mode = 1
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/tutorial_prompts/spinkick2" index="0"]
+shape = SubResource( 256 )
+
+[node name="climb" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="5"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -106.602, 10.7453, -3.78624 )
 collision_layer = 0
 collision_mask = 2
@@ -1317,7 +1342,22 @@ shape = SubResource( 235 )
 transform = Transform( 0.830266, 0.267941, 0.48874, -0.30712, 0.951671, 0, -0.465119, -0.150102, 0.87243, 6.33115, -8.11493, 5.96843 )
 shape = SubResource( 254 )
 
-[node name="failsafe" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="5"]
+[node name="crouchJump2" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -103.794, 16.9107, -12.3709 )
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+enabled = false
+input_actions = [ "mv_crouch", "mv_jump" ]
+text = "Crouch Jump"
+
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/zone_village/tutorial_prompts/crouchJump2" index="0"]
+shape = SubResource( 255 )
+
+[node name="failsafe" type="Area" parent="active_entities/zone_village/tutorial_prompts" index="7"]
 transform = Transform( 0.923351, 0, 0.383956, 0, 1, 0, -0.383956, 0, 0.923351, -85.4542, -6.80855, -34.0354 )
 collision_layer = 0
 collision_mask = 2
