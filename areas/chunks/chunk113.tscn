@@ -1,4 +1,4 @@
-[gd_scene load_steps=121 format=2]
+[gd_scene load_steps=120 format=2]
 
 [ext_resource path="res://material/env/ancient/gem_emissive.tres" type="Material" id=1]
 [ext_resource path="res://_glb/chunks/chunk113.glb" type="PackedScene" id=2]
@@ -62,7 +62,6 @@
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=60]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=61]
 [ext_resource path="res://tutorial_prompt.gd" type="Script" id=62]
-[ext_resource path="res://entities/control/spawner.gd" type="Script" id=63]
 
 [sub_resource type="ShaderMaterial" id=284]
 shader = ExtResource( 13 )
@@ -2381,18 +2380,14 @@ respawn_on_player_death = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.71434, -3.15977, -13.002 )
 respawn_on_player_death = true
 
-[node name="spawner" type="Spatial" parent="active_entities/tower_exterior" index="23"]
+[node name="exterior_save" type="Area" parent="active_entities/tower_exterior" index="23"]
 transform = Transform( 0.971839, 0, -0.235646, 0, 1, 0, 0.235646, 0, 0.971839, -47.7446, 20.2775, 6.63054 )
-script = ExtResource( 63 )
-listened_stat = "capacitor_113"
-
-[node name="exterior_save" type="Area" parent="active_entities/tower_exterior/spawner" index="0"]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource( 30 )
 heal = false
 
-[node name="CollisionShape" type="CollisionShape" parent="active_entities/tower_exterior/spawner/exterior_save" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="active_entities/tower_exterior/exterior_save" index="0"]
 shape = SubResource( 321 )
 
 [node name="tower_interior1" type="MultiMeshSystem" parent="active_entities" index="9"]
@@ -2706,6 +2701,9 @@ shape = SubResource( 319 )
 [node name="CollisionShape3" type="CollisionShape" parent="active_entities/tower_interior2/reset_tutorial" index="2"]
 transform = Transform( 0.999624, 0, 0.0274112, 0, 1, 0, -0.0274112, 0, 0.999624, -2.18375, 0, -13.8543 )
 shape = SubResource( 319 )
+
+[node name="gem_pickup" parent="active_entities/tower_interior2" index="36" instance=ExtResource( 42 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99886, -3.68034, -22.0873 )
 
 [node name="tower_interior3" type="MultiMeshSystem" parent="active_entities" index="11"]
 transform = Transform( 0.833884, 0, -0.55194, 0, 1, 0, 0.55194, 0, 0.833884, 76.0261, 85.4723, 22.0558 )
