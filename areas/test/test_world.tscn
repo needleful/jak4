@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://_glb/test_world.glb" type="PackedScene" id=2]
@@ -27,18 +27,15 @@
 [ext_resource path="res://entities/control/trigger_zone.gd" type="Script" id=25]
 [ext_resource path="res://entities/visual/material_swap.gd" type="Script" id=26]
 [ext_resource path="res://entities/control/door.gd" type="Script" id=27]
-[ext_resource path="res://items/coat_pickup.tscn" type="PackedScene" id=28]
+[ext_resource path="res://entities/env/ancient/platform_square.tscn" type="PackedScene" id=28]
 [ext_resource path="res://entities/control/rot_switch.gd" type="Script" id=29]
 [ext_resource path="res://entities/env/ancient/target_flower.tscn" type="PackedScene" id=30]
 [ext_resource path="res://material/hologram.shader" type="Shader" id=31]
 [ext_resource path="res://entities/env/ancient/falling_platform.tscn" type="PackedScene" id=32]
 [ext_resource path="res://material/env/medium/hologram_grid.png" type="Texture" id=33]
-[ext_resource path="res://entities/visual/mum.tscn" type="PackedScene" id=34]
-[ext_resource path="res://entities/env/stone/fountain2.tscn" type="PackedScene" id=35]
 [ext_resource path="res://entities/env/ancient/fountainA_large.tscn" type="PackedScene" id=36]
 [ext_resource path="res://entities/env/ancient/fountainA.tscn" type="PackedScene" id=37]
 [ext_resource path="res://entities/env/copper/copper_fountain.tscn" type="PackedScene" id=38]
-[ext_resource path="res://entities/env/stone/fountain.tscn" type="PackedScene" id=39]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.294118, 0.294118, 0.294118, 1 )
@@ -58,16 +55,6 @@ fog_color = Color( 1, 1.5, 2.5, 1 )
 fog_depth_end = 8192.0
 glow_enabled = true
 glow_strength = 0.82
-
-[sub_resource type="CubeMesh" id=4]
-size = Vector3( 2000, 2000, 2000 )
-
-[sub_resource type="SpatialMaterial" id=5]
-albedo_texture = ExtResource( 3 )
-
-[sub_resource type="SpatialMaterial" id=62]
-albedo_texture = ExtResource( 3 )
-uv1_scale = Vector3( 8, 8, 8 )
 
 [sub_resource type="BoxShape" id=6]
 
@@ -956,42 +943,6 @@ extents = Vector3( 2, 2, 2 )
 [sub_resource type="CubeMesh" id=45]
 size = Vector3( 4, 4, 4 )
 
-[sub_resource type="Animation" id=63]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( -13.6598, 4.53268, 11.0948 ) ]
-}
-
-[sub_resource type="Animation" id=64]
-resource_name = "crush"
-length = 2.0
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( -13.6598, 4.53268, 11.0948 ), Vector3( -13.6598, 1.80606, 11.0948 ) ]
-}
-
-[sub_resource type="BoxShape" id=46]
-
-[sub_resource type="CubeMesh" id=47]
-
 [sub_resource type="BoxShape" id=48]
 extents = Vector3( 0.5, 1, 0.25 )
 
@@ -1051,48 +1002,12 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=53]
 resource_name = "Activate"
 tracks/0/type = "value"
-tracks/0/path = NodePath("KinematicBody:translation")
+tracks/0/path = NodePath("KinematicBody5:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, -3.09478 ), Vector3( 0, -1.06772, -2.53654 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("KinematicBody2:translation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, -1.86022, -5.42821 ), Vector3( 0, 1.08865, -4.77723 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("KinematicBody3:translation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( -0.474344, -2.22263, -7.47841 ), Vector3( -0.474344, 3.10235, -7.00266 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("KinematicBody5:translation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
@@ -1102,48 +1017,12 @@ tracks/3/keys = {
 [sub_resource type="Animation" id=54]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("KinematicBody:translation")
+tracks/0/path = NodePath("KinematicBody5:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, -3.09478 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("KinematicBody2:translation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, -1.86022, -5.42821 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("KinematicBody3:translation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( -0.474344, -2.22263, -7.47841 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("KinematicBody5:translation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
@@ -1154,133 +1033,11 @@ tracks/3/keys = {
 
 [sub_resource type="CubeMesh" id=56]
 
-[sub_resource type="SpatialMaterial" id=57]
-albedo_color = Color( 0.752941, 0.243137, 0.243137, 1 )
-
-[sub_resource type="Animation" id=58]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
-}
-
-[sub_resource type="Animation" id=59]
-resource_name = "rotate"
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -180, 0 ) ]
-}
-tracks/1/type = "method"
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"values": [ {
-"args": [  ],
-"method": "start"
-}, {
-"args": [  ],
-"method": "end"
-} ]
-}
-
 [sub_resource type="Animation" id=60]
 resource_name = "Activate"
-tracks/0/type = "value"
-tracks/0/path = NodePath("KinematicBody2:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, -4.22533, -5.42821 ), Vector3( 0, -6.68368, -10.4321 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("KinematicBody3:translation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( -2.37224, -2.22263, -11.8803 ), Vector3( 3.1636, -2.62997, -11.5283 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("KinematicBody5:translation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 7.1111, -2.24123, -16.5972 ), Vector3( -6.51775, -2.57264, -17.7797 ) ]
-}
 
 [sub_resource type="Animation" id=61]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("KinematicBody2:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, -1.86022, -5.42821 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("KinematicBody3:translation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( -0.474344, -2.22263, -7.47841 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("KinematicBody5:translation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 2.67061, 0.853984, -7.27437 ) ]
-}
 
 [sub_resource type="ShaderMaterial" id=65]
 resource_local_to_scene = true
@@ -1289,6 +1046,50 @@ shader_param/realness = 0.0
 shader_param/hologram_uv_scale = 15.0
 shader_param/hologram_emission = Color( 1, 1.36471, 1.45882, 1 )
 shader_param/hologram = ExtResource( 33 )
+
+[sub_resource type="Animation" id=66]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.90306, 12.8668 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=67]
+resource_name = "spin"
+length = 3.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 360 ) ]
+}
 
 [node name="test_world" instance=ExtResource( 2 )]
 
@@ -1314,58 +1115,19 @@ near = 0.1
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="4"]
 environment = SubResource( 3 )
 
-[node name="MeshInstance" type="MeshInstance" parent="." index="5"]
-transform = Transform( 0.894722, -0.0251325, 0.445917, 0.0280787, 0.999606, 0, -0.445741, 0.0125207, 0.895074, 0, 0, -4208.7 )
-mesh = SubResource( 4 )
-material/0 = SubResource( 5 )
-
-[node name="MeshInstance2" type="MeshInstance" parent="." index="6"]
-transform = Transform( 0.999378, 0.0298597, 0.0187801, -0.0290658, 0.998728, -0.041213, -0.0199868, 0.0406415, 0.998974, 0, -1200, -2000 )
-mesh = SubResource( 4 )
-material/0 = SubResource( 1 )
-
-[node name="CSGBox" type="CSGBox" parent="." index="7"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2049, 4.03063 )
-use_collision = true
-
-[node name="CSGBox9" type="CSGBox" parent="." index="8"]
-transform = Transform( -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -4.61319, 1, 4.03063 )
-use_collision = true
-material = SubResource( 62 )
-
-[node name="CSGBox5" type="CSGBox" parent="." index="9"]
-transform = Transform( 0.842447, -0.53878, 0, 0.525042, 0.820967, -0.224377, 0.12089, 0.189025, 0.974503, 9.46754, 0.54681, 4.03063 )
-use_collision = true
-
-[node name="CSGBox10" type="CSGBox" parent="." index="10"]
-transform = Transform( 0.752865, 0.621507, -0.216618, -0.636623, 0.771176, 0, 0.167051, 0.137904, 0.976256, 10.9978, 0.54681, 4.03063 )
-use_collision = true
-
-[node name="CSGBox6" type="CSGBox" parent="." index="11"]
-transform = Transform( -0.152141, -0.988359, 0, 0.988359, -0.152141, 0, 0, 0, 1, 7, 3.2049, 7.00582 )
-use_collision = true
-
-[node name="CSGBox7" type="CSGBox" parent="." index="12"]
-transform = Transform( 0.0989377, -0.995094, 0, 0.995094, 0.0989377, 0, 0, 0, 1, 8.87209, 3.21523, 7.00582 )
-use_collision = true
-
-[node name="CSGBox2" type="CSGBox" parent="." index="13"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0251, 6.04852 )
-use_collision = true
-
-[node name="dswitch" parent="." index="14" instance=ExtResource( 4 )]
+[node name="dswitch" parent="." index="5" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2059, 0.07076, -7.17792 )
 
-[node name="pistol_pickup" parent="." index="15" instance=ExtResource( 5 )]
+[node name="pistol_pickup" parent="." index="6" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.93245, 0, -8.69339 )
 
-[node name="pistol_pickup2" parent="." index="16" instance=ExtResource( 5 )]
+[node name="pistol_pickup2" parent="." index="7" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.96897, 0, -7.48036 )
 
-[node name="pistol_pickup3" parent="." index="17" instance=ExtResource( 5 )]
+[node name="pistol_pickup3" parent="." index="8" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.93424, 0, -6.18525 )
 
-[node name="KinematicBody" type="KinematicBody" parent="." index="18"]
+[node name="KinematicBody" type="KinematicBody" parent="." index="9"]
 transform = Transform( -0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, 21.2302, 0, 1.81196 )
 motion/sync_to_physics = true
 
@@ -1384,7 +1146,7 @@ anims/test = SubResource( 9 )
 [node name="rail_cart" parent="KinematicBody" index="2" instance=ExtResource( 6 )]
 transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.6335, 0, 1.22332 )
 
-[node name="KinematicBody2" type="KinematicBody" parent="." index="19"]
+[node name="KinematicBody2" type="KinematicBody" parent="." index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2302, 0, 5.87592 )
 motion/sync_to_physics = true
 
@@ -1433,198 +1195,190 @@ material/0 = SubResource( 13 )
 [node name="shape_" type="CollisionShape" parent="KinematicBody2/rail2-kine" index="1"]
 shape = SubResource( 16 )
 
-[node name="arena1" parent="." index="20" instance=ExtResource( 11 )]
+[node name="arena1" parent="." index="11" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 90, -24, 15 )
 
 [node name="deathgnat" parent="arena1" index="0" instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 44, -40 )
 shielded = true
 
-[node name="deathgnat2" parent="arena1" index="1" groups=["far_enemy"] instance=ExtResource( 12 )]
-transform = Transform( 0.203352, 0, -0.979106, 0, 1, 0, 0.979106, 0, 0.203352, -103.769, 34.6283, -71.6031 )
-shielded = true
-
-[node name="deathgnat3" parent="arena1" index="2" groups=["far_enemy"] instance=ExtResource( 12 )]
-transform = Transform( 0.203352, 0, -0.979106, 0, 1, 0, 0.979106, 0, 0.203352, -103.769, 34.6283, -57.1931 )
-shielded = true
-
-[node name="scrap1" parent="arena1" index="3" instance=ExtResource( 9 )]
+[node name="scrap1" parent="arena1" index="1" instance=ExtResource( 9 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 15, -29 )
 
-[node name="scrap_pile1" parent="arena1" index="4" instance=ExtResource( 10 )]
+[node name="scrap_pile1" parent="arena1" index="2" instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 11, 23 )
 
-[node name="CSGBox" type="CSGBox" parent="arena1" index="6"]
+[node name="CSGBox" type="CSGBox" parent="arena1" index="4"]
 transform = Transform( 0.949626, 0, -0.313386, 0, 1, 0, 0.313386, 0, 0.949626, 0, 0, 0 )
 use_collision = true
 width = 116.0
 height = 14.0
 depth = 94.0
 
-[node name="scrap_pile2" parent="arena1" index="7" instance=ExtResource( 13 )]
+[node name="scrap_pile2" parent="arena1" index="5" instance=ExtResource( 13 )]
 transform = Transform( 0.960571, 0, -0.278035, 0.147934, 0.846701, 0.511089, 0.235413, -0.532068, 0.813317, -16.8618, 36.8258, 40.2238 )
 
-[node name="gunner" parent="arena1" index="8" instance=ExtResource( 7 )]
+[node name="gunner" parent="arena1" index="6" instance=ExtResource( 7 )]
 transform = Transform( -0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -22.5752, 39.6924, 12.1781 )
 
-[node name="gunner2" parent="arena1" index="9" instance=ExtResource( 7 )]
+[node name="gunner2" parent="arena1" index="7" instance=ExtResource( 7 )]
 transform = Transform( -0.864978, 0, 0.50181, 0, 1, 0, -0.50181, 0, -0.864978, 3.44374, 22.4332, 26.2351 )
 
-[node name="gunner3" parent="arena1" index="10" instance=ExtResource( 7 )]
+[node name="gunner3" parent="arena1" index="8" instance=ExtResource( 7 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 27, 22.4332, 6 )
 
-[node name="crawly" parent="arena1" index="11" instance=ExtResource( 14 )]
+[node name="crawly" parent="arena1" index="9" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.99998, 7.54691, 3.00001 )
 shielded = true
 
-[node name="crawly2" parent="arena1" index="12" instance=ExtResource( 14 )]
+[node name="crawly2" parent="arena1" index="10" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 11.5686, 25 )
 
-[node name="crawly3" parent="arena1" index="13" instance=ExtResource( 14 )]
+[node name="crawly3" parent="arena1" index="11" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 22.9852, -5 )
 shielded = true
 
-[node name="crawly4" parent="arena1" index="14" instance=ExtResource( 14 )]
+[node name="crawly4" parent="arena1" index="12" instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 11.5686, -24 )
 
-[node name="item_pickup" parent="." index="21" instance=ExtResource( 15 )]
+[node name="item_pickup" parent="." index="12" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.17735, 0, -9.45586 )
 item_id = "wep_pistol"
 preview = ExtResource( 17 )
 
-[node name="item_pickup2" parent="." index="22" instance=ExtResource( 15 )]
+[node name="item_pickup2" parent="." index="13" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.16675, 0, -8.27191 )
 item_id = "wep_wave_shot"
 preview = ExtResource( 19 )
 
-[node name="item_pickup3" parent="." index="23" instance=ExtResource( 15 )]
+[node name="item_pickup3" parent="." index="14" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.09227, 0, -7.19897 )
 item_id = "wep_grav_gun"
 preview = ExtResource( 21 )
 
-[node name="item_pickup4" parent="." index="24" instance=ExtResource( 15 )]
+[node name="item_pickup4" parent="." index="15" instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.03253, 4.76837e-07, -6.32855 )
 item_id = "wep_time_gun"
 preview = ExtResource( 16 )
 
-[node name="pistol_pickup4" parent="." index="25" instance=ExtResource( 5 )]
+[node name="pistol_pickup4" parent="." index="16" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.83621, 0, -9.44693 )
 
-[node name="pistol_pickup5" parent="." index="26" instance=ExtResource( 5 )]
+[node name="pistol_pickup5" parent="." index="17" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4505, 0, -9.48639 )
 
-[node name="pistol_pickup6" parent="." index="27" instance=ExtResource( 5 )]
+[node name="pistol_pickup6" parent="." index="18" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0939, 0, -9.51001 )
 
-[node name="pistol_pickup7" parent="." index="28" instance=ExtResource( 5 )]
+[node name="pistol_pickup7" parent="." index="19" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9963, 0, -10.1005 )
 
-[node name="pistol_pickup8" parent="." index="29" instance=ExtResource( 5 )]
+[node name="pistol_pickup8" parent="." index="20" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6106, 0, -10.14 )
 
-[node name="pistol_pickup9" parent="." index="30" instance=ExtResource( 5 )]
+[node name="pistol_pickup9" parent="." index="21" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.254, 0, -10.1636 )
 
-[node name="pistol_pickup10" parent="." index="31" instance=ExtResource( 5 )]
+[node name="pistol_pickup10" parent="." index="22" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1002, 0, -9.10444 )
 
-[node name="pistol_pickup11" parent="." index="32" instance=ExtResource( 5 )]
+[node name="pistol_pickup11" parent="." index="23" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.7145, 0, -9.1439 )
 
-[node name="pistol_pickup12" parent="." index="33" instance=ExtResource( 5 )]
+[node name="pistol_pickup12" parent="." index="24" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.3579, 0, -9.16752 )
 
-[node name="pistol_pickup13" parent="." index="34" instance=ExtResource( 5 )]
+[node name="pistol_pickup13" parent="." index="25" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0136, 0, -8.47252 )
 
-[node name="pistol_pickup14" parent="." index="35" instance=ExtResource( 5 )]
+[node name="pistol_pickup14" parent="." index="26" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6279, 0, -8.51198 )
 
-[node name="pistol_pickup15" parent="." index="36" instance=ExtResource( 5 )]
+[node name="pistol_pickup15" parent="." index="27" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2713, 0, -8.5356 )
 
-[node name="pistol_pickup16" parent="." index="37" instance=ExtResource( 5 )]
+[node name="pistol_pickup16" parent="." index="28" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9967, 0, -7.78254 )
 
-[node name="pistol_pickup17" parent="." index="38" instance=ExtResource( 5 )]
+[node name="pistol_pickup17" parent="." index="29" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.611, 0, -7.822 )
 
-[node name="pistol_pickup18" parent="." index="39" instance=ExtResource( 5 )]
+[node name="pistol_pickup18" parent="." index="30" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2544, 0, -7.84562 )
 
-[node name="pistol_pickup19" parent="." index="40" instance=ExtResource( 5 )]
+[node name="pistol_pickup19" parent="." index="31" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.011, 0, -6.99098 )
 
-[node name="pistol_pickup20" parent="." index="41" instance=ExtResource( 5 )]
+[node name="pistol_pickup20" parent="." index="32" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6253, 0, -7.03044 )
 
-[node name="pistol_pickup21" parent="." index="42" instance=ExtResource( 5 )]
+[node name="pistol_pickup21" parent="." index="33" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2687, 0, -7.05406 )
 
-[node name="pistol_pickup22" parent="." index="43" instance=ExtResource( 5 )]
+[node name="pistol_pickup22" parent="." index="34" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.797, 0, -7.60001 )
 
-[node name="pistol_pickup23" parent="." index="44" instance=ExtResource( 5 )]
+[node name="pistol_pickup23" parent="." index="35" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4113, 0, -7.63947 )
 
-[node name="pistol_pickup24" parent="." index="45" instance=ExtResource( 5 )]
+[node name="pistol_pickup24" parent="." index="36" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0547, 0, -7.66309 )
 
-[node name="pistol_pickup25" parent="." index="46" instance=ExtResource( 5 )]
+[node name="pistol_pickup25" parent="." index="37" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.848, 0, -8.42489 )
 
-[node name="pistol_pickup26" parent="." index="47" instance=ExtResource( 5 )]
+[node name="pistol_pickup26" parent="." index="38" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4623, 0, -8.46435 )
 
-[node name="pistol_pickup27" parent="." index="48" instance=ExtResource( 5 )]
+[node name="pistol_pickup27" parent="." index="39" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1057, 0, -8.48797 )
 
-[node name="pistol_pickup28" parent="." index="49" instance=ExtResource( 5 )]
+[node name="pistol_pickup28" parent="." index="40" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.846, 0, -9.27973 )
 
-[node name="pistol_pickup29" parent="." index="50" instance=ExtResource( 5 )]
+[node name="pistol_pickup29" parent="." index="41" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4603, 0, -9.31919 )
 
-[node name="pistol_pickup30" parent="." index="51" instance=ExtResource( 5 )]
+[node name="pistol_pickup30" parent="." index="42" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1037, 0, -9.34281 )
 
-[node name="pistol_pickup31" parent="." index="52" instance=ExtResource( 5 )]
+[node name="pistol_pickup31" parent="." index="43" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.7952, 0, -9.89151 )
 
-[node name="pistol_pickup32" parent="." index="53" instance=ExtResource( 5 )]
+[node name="pistol_pickup32" parent="." index="44" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4095, 0, -9.93097 )
 
-[node name="pistol_pickup33" parent="." index="54" instance=ExtResource( 5 )]
+[node name="pistol_pickup33" parent="." index="45" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.0529, 0, -9.95459 )
 
-[node name="wave_shot_pickup" parent="." index="55" instance=ExtResource( 20 )]
+[node name="wave_shot_pickup" parent="." index="46" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.88364, 0, -8.23728 )
 respawn_on_player_death = false
 enabled = true
 
-[node name="wave_shot_pickup2" parent="." index="56" instance=ExtResource( 20 )]
+[node name="wave_shot_pickup2" parent="." index="47" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3816, 0, -8.19347 )
 respawn_on_player_death = false
 enabled = true
 
-[node name="wave_shot_pickup3" parent="." index="57" instance=ExtResource( 20 )]
+[node name="wave_shot_pickup3" parent="." index="48" instance=ExtResource( 20 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9663, -4.76837e-07, -8.18305 )
 respawn_on_player_death = false
 enabled = true
 
-[node name="grav_gun_pickup" parent="." index="58" instance=ExtResource( 18 )]
+[node name="grav_gun_pickup" parent="." index="49" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.72278, 4.76837e-07, -7.14934 )
 enabled = true
 
-[node name="grav_gun_pickup2" parent="." index="59" instance=ExtResource( 18 )]
+[node name="grav_gun_pickup2" parent="." index="50" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3146, 0, -7.09462 )
 enabled = true
 
-[node name="grav_gun_pickup3" parent="." index="60" instance=ExtResource( 18 )]
+[node name="grav_gun_pickup3" parent="." index="51" instance=ExtResource( 18 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0018, 0, -7.00371 )
 enabled = true
 
-[node name="CSGBox8" type="CSGBox" parent="." index="61"]
+[node name="CSGBox8" type="CSGBox" parent="." index="52"]
 transform = Transform( 0.702862, 0, 0.711326, 0, 1, 0, -0.711326, 0, 0.702862, -27.5449, -1.23398, 27.474 )
 use_collision = true
 width = 24.6837
@@ -1650,16 +1404,13 @@ height = 9.60319
 depth = 20.7917
 material = SubResource( 1 )
 
-[node name="tentpole" parent="." index="62" instance=ExtResource( 22 )]
+[node name="tentpole" parent="." index="53" instance=ExtResource( 22 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 87.52, -16.9947, 12.7332 )
 
-[node name="turtle" parent="." index="63" instance=ExtResource( 23 )]
+[node name="turtle" parent="." index="54" instance=ExtResource( 23 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 267.673, 0.0486965, -42.472 )
 
-[node name="coat_pickup" parent="." index="64" instance=ExtResource( 28 )]
-transform = Transform( -0.69094, 0, 0.722912, 0, 1, 0, -0.722912, 0, -0.69094, 12.8769, -9.53674e-07, -11.482 )
-
-[node name="KinematicBody3" type="KinematicBody" parent="." index="65"]
+[node name="KinematicBody3" type="KinematicBody" parent="." index="55"]
 transform = Transform( 0.755844, 0, -0.654751, 0, 1, 0, 0.654751, 0, 0.755844, -17.1429, 4.15614, 22.3176 )
 script = ExtResource( 27 )
 
@@ -1674,7 +1425,7 @@ playback_process_mode = 0
 anims/Activate = SubResource( 31 )
 anims/RESET = SubResource( 32 )
 
-[node name="player_activation" type="Area" parent="." index="66"]
+[node name="player_activation" type="Area" parent="." index="56"]
 transform = Transform( -0.69094, 0, 0.722912, 0, 1, 0, -0.722912, 0, -0.69094, -17.026, 6.25121, 20.3739 )
 collision_layer = 0
 collision_mask = 2
@@ -1694,13 +1445,7 @@ shape = SubResource( 27 )
 [node name="Timer" type="Timer" parent="player_activation" index="2"]
 one_shot = true
 
-[node name="coat_pickup2" parent="." index="67" instance=ExtResource( 28 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2569, 9.53674e-07, -13.4197 )
-
-[node name="coat_pickup3" parent="." index="68" instance=ExtResource( 28 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.467, 0, -12.5334 )
-
-[node name="bridge" type="StaticBody" parent="." index="69"]
+[node name="bridge" type="StaticBody" parent="." index="57"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.3354, 0, -13.0228 )
 script = ExtResource( 27 )
 
@@ -1965,7 +1710,7 @@ shape = SubResource( 37 )
 
 [node name="Timer" type="Timer" parent="bridge/player_trigger" index="1"]
 
-[node name="StaticBody" type="StaticBody" parent="." index="70"]
+[node name="StaticBody" type="StaticBody" parent="." index="58"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -48.4002, -28.2208, -16.8088 )
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
@@ -1974,7 +1719,7 @@ shape = SubResource( 40 )
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody/CollisionShape" index="0"]
 mesh = SubResource( 41 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="71"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="59"]
 root_node = NodePath("../CSGBox8")
 autoplay = "test"
 playback_process_mode = 0
@@ -2022,64 +1767,7 @@ shape = SubResource( 44 )
 mesh = SubResource( 45 )
 material/0 = ExtResource( 24 )
 
-[node name="KinematicBody8" type="KinematicBody" parent="AnimationPlayer" index="3"]
-transform = Transform( 0.715458, 0, 0.698656, 0, 1, 0, -0.698656, 0, 0.715458, -13.6598, 4.53268, 11.0948 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="AnimationPlayer/KinematicBody8" index="0"]
-shape = SubResource( 44 )
-
-[node name="MeshInstance" type="MeshInstance" parent="AnimationPlayer/KinematicBody8/CollisionShape" index="0"]
-mesh = SubResource( 45 )
-material/0 = ExtResource( 24 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationPlayer/KinematicBody8" index="1"]
-autoplay = "crush"
-anims/RESET = SubResource( 63 )
-anims/crush = SubResource( 64 )
-
-[node name="KinematicBody9" type="KinematicBody" parent="AnimationPlayer" index="4"]
-transform = Transform( 0.0118808, 0, 0.99993, 0, 1, 0, -0.99993, 0, 0.0118808, -6.37654, 1.93685, 15.6401 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="AnimationPlayer/KinematicBody9" index="0"]
-shape = SubResource( 44 )
-
-[node name="MeshInstance" type="MeshInstance" parent="AnimationPlayer/KinematicBody9/CollisionShape" index="0"]
-mesh = SubResource( 45 )
-material/0 = ExtResource( 24 )
-
-[node name="KinematicBody10" type="KinematicBody" parent="AnimationPlayer" index="5"]
-transform = Transform( 0.0118808, 0, 0.99993, 0, 1, 0, -0.99993, 0, 0.0118808, -6.37654, 5.93685, 15.6401 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="AnimationPlayer/KinematicBody10" index="0"]
-shape = SubResource( 44 )
-
-[node name="MeshInstance" type="MeshInstance" parent="AnimationPlayer/KinematicBody10/CollisionShape" index="0"]
-mesh = SubResource( 45 )
-material/0 = ExtResource( 24 )
-
-[node name="KinematicBody11" type="KinematicBody" parent="AnimationPlayer" index="6"]
-transform = Transform( 0.0118808, 0, 0.99993, 0, 1, 0, -0.99993, 0, 0.0118808, -5.37661, 9.93685, 15.652 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="AnimationPlayer/KinematicBody11" index="0"]
-shape = SubResource( 44 )
-
-[node name="MeshInstance" type="MeshInstance" parent="AnimationPlayer/KinematicBody11/CollisionShape" index="0"]
-mesh = SubResource( 45 )
-material/0 = ExtResource( 24 )
-
-[node name="KinematicBody7" type="KinematicBody" parent="AnimationPlayer" index="7"]
+[node name="KinematicBody7" type="KinematicBody" parent="AnimationPlayer" index="3"]
 transform = Transform( 0.715458, 0, 0.698656, 0, 1, 0, -0.698656, 0, 0.715458, -35.8863, 2.77001, 26.9141 )
 __meta__ = {
 "_edit_group_": true
@@ -2092,26 +1780,7 @@ shape = SubResource( 44 )
 mesh = SubResource( 45 )
 material/0 = ExtResource( 24 )
 
-[node name="RigidBody" type="RigidBody" parent="." index="72"]
-transform = Transform( 0.278032, 0, 0.960572, 0, 1, 0, -0.960572, 0, 0.278032, -8.70365, 2.48851, 2.70264 )
-mass = 100.0
-
-[node name="CollisionShape" type="CollisionShape" parent="RigidBody" index="0"]
-shape = SubResource( 46 )
-
-[node name="MeshInstance" type="MeshInstance" parent="RigidBody/CollisionShape" index="0"]
-mesh = SubResource( 47 )
-
-[node name="RigidBody2" type="RigidBody" parent="." index="73"]
-transform = Transform( 0.278032, 0, 0.960572, 0, 1, 0, -0.960572, 0, 0.278032, -13.099, 6.04409, -2.10111 )
-
-[node name="CollisionShape" type="CollisionShape" parent="RigidBody2" index="0"]
-shape = SubResource( 46 )
-
-[node name="MeshInstance" type="MeshInstance" parent="RigidBody2/CollisionShape" index="0"]
-mesh = SubResource( 47 )
-
-[node name="rotating_switch" type="Spatial" parent="." index="74"]
+[node name="rotating_switch" type="Spatial" parent="." index="60"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.078, 0.0176327, -19.3835 )
 
 [node name="challenge_1" type="Spatial" parent="rotating_switch" index="0"]
@@ -2146,43 +1815,7 @@ one_shot = true
 anims/Activate = SubResource( 53 )
 anims/RESET = SubResource( 54 )
 
-[node name="KinematicBody" type="KinematicBody" parent="rotating_switch/challenge_1" index="2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.09478 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_1/KinematicBody" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_1/KinematicBody/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="KinematicBody2" type="KinematicBody" parent="rotating_switch/challenge_1" index="3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.86022, -5.42821 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_1/KinematicBody2" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_1/KinematicBody2/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="KinematicBody3" type="KinematicBody" parent="rotating_switch/challenge_1" index="4"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.474344, -2.22263, -7.47841 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_1/KinematicBody3" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_1/KinematicBody3/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="KinematicBody5" type="KinematicBody" parent="rotating_switch/challenge_1" index="5"]
+[node name="KinematicBody5" type="KinematicBody" parent="rotating_switch/challenge_1" index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67061, 0.853984, -7.27437 )
 __meta__ = {
 "_edit_group_": true
@@ -2194,131 +1827,46 @@ shape = SubResource( 55 )
 [node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_1/KinematicBody5/CollisionShape" index="0"]
 mesh = SubResource( 56 )
 
-[node name="KinematicBody6" type="KinematicBody" parent="rotating_switch" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.12914, -12.2406 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/KinematicBody6" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/KinematicBody6/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-material/0 = SubResource( 57 )
-
-[node name="KinematicBody7" type="KinematicBody" parent="rotating_switch" index="2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.7967, 8.12914, -12.2406 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/KinematicBody7" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/KinematicBody7/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-material/0 = SubResource( 57 )
-
-[node name="challenge_2" type="Spatial" parent="rotating_switch" index="3"]
+[node name="challenge_2" type="Spatial" parent="rotating_switch" index="1"]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.569595, 9.17833, -12.7566 )
 
-[node name="rswitch" type="KinematicBody" parent="rotating_switch/challenge_2" index="0" groups=["target"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735653, 0 )
-collision_layer = 5
-script = ExtResource( 29 )
-__meta__ = {
-"_edit_group_": true
-}
-world_animations = NodePath("../AnimationPlayer")
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_2/rswitch" index="0"]
-shape = SubResource( 48 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_2/rswitch/CollisionShape" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0.10813 )
-mesh = SubResource( 49 )
-material/0 = SubResource( 52 )
-
-[node name="MeshInstance2" type="MeshInstance" parent="rotating_switch/challenge_2/rswitch/CollisionShape" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, -0.130959 )
-mesh = SubResource( 49 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="rotating_switch/challenge_2/rswitch" index="1"]
-playback_process_mode = 0
-anims/RESET = SubResource( 58 )
-anims/rotate = SubResource( 59 )
-
-[node name="Timer" type="Timer" parent="rotating_switch/challenge_2/rswitch" index="2"]
-one_shot = true
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="rotating_switch/challenge_2" index="1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="rotating_switch/challenge_2" index="0"]
 anims/Activate = SubResource( 60 )
 anims/RESET = SubResource( 61 )
 
-[node name="KinematicBody2" type="KinematicBody" parent="rotating_switch/challenge_2" index="2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.86022, -5.42821 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_2/KinematicBody2" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_2/KinematicBody2/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="KinematicBody3" type="KinematicBody" parent="rotating_switch/challenge_2" index="3"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.474344, -2.22263, -7.47841 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_2/KinematicBody3" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_2/KinematicBody3/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="KinematicBody5" type="KinematicBody" parent="rotating_switch/challenge_2" index="4"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.67061, 0.853984, -7.27437 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="CollisionShape" type="CollisionShape" parent="rotating_switch/challenge_2/KinematicBody5" index="0"]
-shape = SubResource( 55 )
-
-[node name="MeshInstance" type="MeshInstance" parent="rotating_switch/challenge_2/KinematicBody5/CollisionShape" index="0"]
-mesh = SubResource( 56 )
-
-[node name="target_flower" parent="." index="75" instance=ExtResource( 30 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.548, 0.596466, 9.25414 )
-
-[node name="target_flower2" parent="." index="76" instance=ExtResource( 30 )]
+[node name="target_flower2" parent="." index="61" instance=ExtResource( 30 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.49874, 1.28336, -6.35873 )
 
-[node name="falling_platform" parent="." index="77" instance=ExtResource( 32 )]
+[node name="falling_platform" parent="." index="62" instance=ExtResource( 32 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.40461, 5, -4.94782 )
 hologram_material = SubResource( 65 )
 
-[node name="mum" parent="." index="78" instance=ExtResource( 34 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.49826, 0, 1.82775 )
-
-[node name="fountainA" parent="." index="79" instance=ExtResource( 37 )]
+[node name="fountainA" parent="." index="63" instance=ExtResource( 37 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.46921, -4.76837e-07, -3.22363 )
 
-[node name="fountainA_large" parent="." index="80" instance=ExtResource( 36 )]
+[node name="fountainA_large" parent="." index="64" instance=ExtResource( 36 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.46845, -9.53674e-07, -6.68068 )
 
-[node name="copper_fountain" parent="." index="81" instance=ExtResource( 38 )]
+[node name="copper_fountain" parent="." index="65" instance=ExtResource( 38 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.14567, 0.804409, -12.4195 )
 
-[node name="fountain2" parent="copper_fountain" index="3" instance=ExtResource( 35 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.12487, -0.804409, 29.7714 )
+[node name="Spatial" type="Spatial" parent="." index="66"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.90306, 12.8668 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="fountain" parent="copper_fountain" index="4" instance=ExtResource( 39 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.44717, -0.80441, 29.2042 )
+[node name="platform_square" parent="Spatial" index="0" instance=ExtResource( 28 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0 )
+
+[node name="platform_square2" parent="Spatial" index="1" instance=ExtResource( 28 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Spatial" index="2"]
+autoplay = "spin"
+playback_process_mode = 0
+anims/RESET = SubResource( 66 )
+anims/spin = SubResource( 67 )
 
 [connection signal="activated" from="player_activation" to="KinematicBody3" method="_on_activated"]
 [connection signal="activated" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 2 ]]
@@ -2327,4 +1875,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.44717, -0.80441, 29.2042 )
 [connection signal="deactivated" from="player_activation" to="player_activation/MeshInstance" method="pick_material" binds= [ 0 ]]
 [connection signal="activated" from="bridge/player_trigger" to="bridge" method="_on_activated"]
 [connection signal="timeout" from="rotating_switch/challenge_1/KinematicBody4/Timer" to="rotating_switch/challenge_1/KinematicBody4" method="_on_Timer_timeout"]
-[connection signal="timeout" from="rotating_switch/challenge_2/rswitch/Timer" to="rotating_switch/challenge_2/rswitch" method="_on_Timer_timeout"]

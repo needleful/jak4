@@ -121,6 +121,7 @@ func echo(text):
 	label.autowrap = true
 	logs.add_child(label)
 	label.text = text
+	print("CONSOLE: ", text)
 
 func view_history(offset):
 	if history.size() == 0:
