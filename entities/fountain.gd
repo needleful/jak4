@@ -1,5 +1,7 @@
 extends Spatial
 
+signal saved
+
 export(NodePath) var water := NodePath("circle")
 
 func _ready():
@@ -10,3 +12,6 @@ func _ready():
 		if axis.is_normalized():
 			var angle := water_up.angle_to(Vector3.UP)
 			w.global_rotate(axis, angle)
+
+func signal_saved():
+	emit_signal("saved")

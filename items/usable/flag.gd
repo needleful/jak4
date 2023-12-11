@@ -7,16 +7,13 @@ func _init():
 
 func use():
 	if !player.best_floor.is_in_group("flag_surface"):
-		print_debug("Flag: bad floor")
 		player.mesh.hold_item(player.flag.instance())
 		player.lock_in_animation("PlaceFlag_Failed")
 	else:
-		print_debug("Using flag")
 		.use()
 		player.set_state(player.State.PlaceFlag)
 
 func can_use():
-	if !player.best_floor:
-		print_debug("Flag: no floor")
+	if !player.best_floor or !player.is_grounded():
 		return false
 	return .can_use()

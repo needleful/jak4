@@ -415,8 +415,9 @@ func _input(event):
 			if new_dist < current_dist:
 				best_trade = b
 		best_trade.start_coat_trade(self)
-	elif !ui.choosing_item and event.is_action_released("use_item") and equipped_item and equipped_item.can_use():
-		equipped_item.use()
+	elif !ui.choosing_item and event.is_action_released("use_item"):
+		if equipped_item and equipped_item.can_use():
+			equipped_item.use()
 	elif event.is_action_pressed("show_inventory"):
 		emit_signal("show_stats")
 	elif state == State.Sitting and event.is_action("mv_crouch"):
@@ -1750,8 +1751,12 @@ func can_dash() -> bool:
 
 func place_flag():
 	var f = mesh.release_item()
-	Global.place_flag(f, $base_mesh/flag_ref.global_transform)
+	var t:Transform = $base_mesh/flag_ref.global_transform
+	Global.place_flag(f, t)
 	Global.save_checkpoint(get_save_transform())
+	var bubble = $bubble_spawn/checkpoint_bubble
+	bubble.global_transform = t
+	bubble._on_saved()
 	held_item = null
 
 func get_save_transform() -> Transform:
@@ -1769,7 +1774,7 @@ func set_saved_transform(t:Transform):
 	mesh.transform.basis = Basis(Vector3.UP.cross(forward), Vector3.UP, forward)
 
 func can_save():
-	return !game_ui.in_game
+	return !game_ui.in_game and dialog_ready
 
 func can_talk():
 	return dialog_ready and (state == State.Ground or state == State.Crouch)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=134 format=2]
+[gd_scene load_steps=137 format=2]
 
 [ext_resource path="res://player/scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://player/scripts/camera_rig.gd" type="Script" id=2]
@@ -66,6 +66,8 @@
 [ext_resource path="res://ui/game_log.gd" type="Script" id=64]
 [ext_resource path="res://ui/components/log_message.tscn" type="PackedScene" id=65]
 [ext_resource path="res://ui/components/scroll_to_focused.gd" type="Script" id=66]
+[ext_resource path="res://entities/visual/checkpoint_bubble.tscn" type="PackedScene" id=67]
+[ext_resource path="res://material/bubble.shader" type="Shader" id=68]
 
 [sub_resource type="Gradient" id=173]
 offsets = PoolRealArray( 0, 0.239216, 1 )
@@ -482,6 +484,11 @@ height = 0.2
 
 [sub_resource type="SpatialMaterial" id=98]
 flags_unshaded = true
+
+[sub_resource type="ShaderMaterial" id=196]
+resource_local_to_scene = true
+shader = ExtResource( 68 )
+shader_param/color = Color( 0.2793, 0.57, 0.43434, 1 )
 
 [node name="player" type="KinematicBody" groups=["player", "post_save_object", "pre_save_object", "push"]]
 time_scale_response = false
@@ -2093,6 +2100,11 @@ material/0 = SubResource( 98 )
 [node name="dialog_timer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="bubble_spawn" type="Node" parent="."]
+
+[node name="checkpoint_bubble" parent="bubble_spawn" instance=ExtResource( 67 )]
+material/0 = SubResource( 196 )
 
 [connection signal="damaged" from="." to="ui/gameing/gameing/stats/health" method="queue_show"]
 [connection signal="show_stats" from="." to="ui" method="show_inventory"]

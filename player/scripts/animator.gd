@@ -487,6 +487,8 @@ func play_fire():
 	anim["parameters/Fire/active"] = true
 
 func hold_item(node: Spatial):
+	if held_item:
+		held_item.queue_free()
 	_disable_collision(node)
 	held_item = node
 	$Armature/Skeleton/handRight/ref.add_child(held_item)

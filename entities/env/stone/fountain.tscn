@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://material/main_spatial.shader" type="Shader" id=1]
 [ext_resource path="res://_glb/entities/fountain.glb" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://material/water_surface.material" type="Material" id=4]
 [ext_resource path="res://entities/fountain.gd" type="Script" id=5]
 [ext_resource path="res://_glb/env/stone/stone_fountain_albedo.png" type="Texture" id=6]
+[ext_resource path="res://material/bubble.shader" type="Shader" id=7]
+[ext_resource path="res://entities/visual/checkpoint_bubble.tscn" type="PackedScene" id=8]
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 1 )
@@ -36,6 +38,11 @@ surfaces/0 = {
 [sub_resource type="ConvexPolygonShape" id=3]
 points = PoolVector3Array( -0.000194907, 0, -1, -0.361412, 0, -0.932646, 0.361217, 0, -0.932646, -0.673699, 0, -0.739123, 0.673505, 0, -0.739123, -0.895342, 0, -0.445831, 0.895147, 0, -0.445831, -0.995734, 0, -0.0923666, 0.995734, 0, -0.0923666, -0.96201, 0, 0.273521, 0.961815, 0, 0.273521, -0.798069, 0, 0.602528, 0.797874, 0, 0.602528, -0.526523, 0, 0.850206, 0.526328, 0, 0.850206, -0.183825, 0, 0.982973, 0.18363, 0, 0.982973 )
 
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = ExtResource( 7 )
+shader_param/color = Color( 0.494118, 1, 0.760784, 1 )
+
 [node name="fountain" instance=ExtResource( 2 )]
 script = ExtResource( 5 )
 water = NodePath("water/circle")
@@ -65,3 +72,7 @@ material/0 = ExtResource( 4 )
 [node name="CollisionShape" type="CollisionShape" parent="water" index="1"]
 transform = Transform( 2.28528, 0, 0, 0, 1, 0, 0, 0, 2.28528, 0, 0.870918, 0 )
 shape = SubResource( 3 )
+
+[node name="checkpoint_bubble" parent="." index="3" instance=ExtResource( 8 )]
+visible = false
+material/0 = SubResource( 5 )

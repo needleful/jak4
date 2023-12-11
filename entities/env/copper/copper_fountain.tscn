@@ -1,9 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://material/water_surface.material" type="Material" id=1]
 [ext_resource path="res://entities/save_zone.gd" type="Script" id=2]
 [ext_resource path="res://material/env/copper/copper_cleaned.tres" type="Material" id=3]
 [ext_resource path="res://_glb/env/copper/copper_fountain.glb" type="PackedScene" id=4]
+[ext_resource path="res://entities/fountain.gd" type="Script" id=5]
+[ext_resource path="res://entities/visual/checkpoint_bubble.tscn" type="PackedScene" id=6]
+[ext_resource path="res://material/bubble.shader" type="Shader" id=7]
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 2.49946, 1.34591, 2.41167 )
@@ -13,7 +16,14 @@ points = PoolVector3Array( 0.5, 0.5, 0, 0.5, -0.5, 0, -0.5, 0.5, 0, -0.5, -0.5, 
 
 [sub_resource type="QuadMesh" id=1]
 
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = ExtResource( 7 )
+shader_param/color = Color( 0.494118, 1, 0.760784, 1 )
+
 [node name="copper_fountain" instance=ExtResource( 4 )]
+script = ExtResource( 5 )
+water = NodePath("water")
 
 [node name="copper_fountain" parent="." index="0"]
 material/0 = ExtResource( 3 )
@@ -43,3 +53,8 @@ transform = Transform( 2.42161, 0, 0, 0, -1.05852e-07, 1, 0, -2.42161, -4.37114e
 mesh = SubResource( 1 )
 skeleton = NodePath("../../copper_fountain")
 material/0 = ExtResource( 1 )
+
+[node name="checkpoint_bubble" parent="." index="3" instance=ExtResource( 6 )]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.323941, 0 )
+visible = false
+material/0 = SubResource( 4 )
