@@ -686,6 +686,8 @@ func evaluate(ex_text: String):
 	return r
 
 func end():
+	if main_speaker.has_method("end_dialog"):
+		main_speaker.end_dialog()
 	main_speaker = null
 	set_process_input(false)
 	Global.can_pause = true

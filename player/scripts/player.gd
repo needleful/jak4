@@ -1053,7 +1053,7 @@ func _physics_process(delta):
 				ledge_last_transform = new_transform
 		State.Dash:
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta, DECEL_DASH)
+			accel_lunge(delta, av, DECEL_DASH)
 			damage_directed(roll_hitbox, DAMAGE_ROLL_JUMP, get_visual_forward(), "dash")
 			rotate_to_velocity(desired_velocity)
 		State.LungeKick, State.SlideLungeKick:
@@ -1066,7 +1066,7 @@ func _physics_process(delta):
 			):
 				gun.start_combo()
 			rotate_intention(velocity.normalized())
-			accel_lunge(delta)
+			accel_lunge(delta, av)
 			damage_directed(lunge_hitbox, DAMAGE_LUNGE, get_visual_forward(), "lunge")
 			rotate_to_velocity(desired_velocity)
 		State.SpinKick:
@@ -1340,10 +1340,11 @@ func accel_slide(delta: float, desired_velocity: Vector3, applied_ground: Vector
 		hvel.z)
 	velocity = move(velocity + delta*GRAVITY)
 
-func accel_lunge(delta: float, decel := DECEL_KICK):
+func accel_lunge(delta: float, applied_ground: Vector3, decel := DECEL_KICK):
 	if water_depth > DEPTH_WATER_WADE:
 		decel *= DECEL_FACTOR_WATER
 	var v2 := move(velocity + GRAVITY*delta, true)
+	velocity = v2.move_toward(applied_ground, decel*delta)
 	velocity.y = v2.y
 
 func accel_hover(delta: float, desired_velocity: Vector3, grounded: bool):
@@ -1790,7 +1791,7 @@ func start_dialog(source: Node, sequence: Resource, speaker: Node, starting_labe
 	ui.start_dialog(source, sequence, speaker, starting_label)
 
 func _on_dialog_exited(new_state := State.Ground):
-	Global.save_game()
+	Global.save_checkpoint(get_save_transform())
 	ui.play_game()
 	unlock(new_state)
 	cam_rig.end_dialog()

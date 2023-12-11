@@ -36,6 +36,12 @@ func _on_dialog_body_entered(body, force := false):
 	if body is PlayerBody and (force or body.can_talk()):
 		body.start_dialog(self, dialog, self, custom_entry)
 
+func end_dialog():
+	if sitting:
+		anim.play("Sitting-loop")
+	else:
+		anim.play("Idle-loop")
+
 func get_coat() -> Coat:
 	return Global.stat(lil_man.coat_stat())
 
