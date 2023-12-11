@@ -13,5 +13,5 @@ func _on_body_entered(b):
 			b.ui.queue_prompt(["use_item"], "Place Flag")
 		else:
 			b.ui.show_prompt(["use_item"], "Place Flag")
-		Global.add_stat("cave137/flag_prompt")
+		var _x = Global.add_stat("cave137/flag_prompt")
 		queue_free()

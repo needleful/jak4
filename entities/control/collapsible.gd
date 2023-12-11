@@ -30,7 +30,7 @@ func _physics_process(delta):
 			velocity = velocity.slide(col.normal)
 
 func take_damage(damage, dir, _source: Node, tag := ""):
-	if tag == "spin":
+	if tag == "movement":
 		return
 	falling = true
 	set_physics_process(true)

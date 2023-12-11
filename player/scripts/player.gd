@@ -142,7 +142,7 @@ const VEL_DAMAGED_V := 6
 const TERMINAL_VELOCITY := -300
 
 # Hover board
-const SPEED_HOVER := SPEED_RUN*2.5
+const SPEED_HOVER := SPEED_RUN*3.2
 const ACCEL_HOVER := 8.0
 const DECEL_HOVER := 0.01
 const ACCEL_STEER_HOVER := 2.75
